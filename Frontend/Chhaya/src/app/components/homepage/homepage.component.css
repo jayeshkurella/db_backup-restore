@@ -1,0 +1,524 @@
+/* Sidebar Styles */
+
+.d-flex {
+    display: flex;
+    height: 100vh; /* Ensure the layout takes up the full viewport height */
+}
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    width: 16%;
+    height: 100vh;
+    background-color: #2c2c2c;
+    transition: width 0.6s ease-in-out, transform 0.8s ease-in-out, opacity 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    overflow: auto;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color: white;
+}
+
+
+
+
+.sidebar-header{
+    position: sticky;
+    top: 0; 
+}
+/* Sidebar Title */
+.sidebar-title {
+   
+    margin: 0;
+    color: #FA813D;
+    font-size: 18px;
+    font-weight: bold;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+    width: 80px; /* Narrow width when collapsed */
+}
+
+/* Sidebar Links */
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 25px;
+}
+
+/* Sidebar Item */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+}
+
+.sidebar-item a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    transition: all 0.4s ease-in-out;
+}
+
+.sidebar-item a:hover {
+    background-color: #444444;
+}
+
+/* Icons */
+.sidebar-item i {
+    font-size: 24px;
+    margin-right: 15px;
+    transition: margin-right 0.4s ease-in-out;
+}
+
+/* Text */
+.link-text {
+    font-size: 16px;
+    white-space: nowrap;
+    transition: opacity 0.4s ease-in-out;
+}
+
+/* When Sidebar is Collapsed */
+.sidebar.collapsed .sidebar-item i {
+    color: #FA813D;
+    margin-right: 0; /* Remove margin when collapsed */
+}
+
+.sidebar.collapsed .link-text {
+    opacity: 0; /* Hide the text when collapsed */
+    pointer-events: none; /* Prevent interaction with the text */
+}
+
+/* Expand Button */
+.expand-btn {
+    position: absolute;
+    top: 15px;
+    left: calc(230px - 30px); /* Adjust for expanded sidebar width */
+    z-index: 10;
+    border: none;
+    background: none;
+    color: #ffffff;
+    cursor: pointer;
+    transition: left 0.4s ease-in-out, color 0.3s ease-in-out;
+}
+
+.expand-btn:hover {
+    color: #ffffff;
+}
+
+/* Adjust for collapsed sidebar */
+.sidebar.collapsed ~ .expand-btn {
+    left: calc(80px - 30px); /* Adjust for collapsed sidebar width */
+}
+
+/* Main Content Styling */
+.header-content {
+    flex-grow: 1;
+    margin-left: 250px; /* Default space for expanded sidebar */
+    transition: margin-left 0.4s ease-in-out;
+}
+
+.sidebar.collapsed .expand-btn {
+    left: calc(60px - 25px); /* Adjust for collapsed sidebar width */
+    z-index: 9999; /* Ensure it's always above the sidebar */
+}
+
+.sidebar.collapsed + .header-content {
+    margin-left: 60px; /* Adjust space for collapsed sidebar */
+}
+
+.sidebar.collapsed .sidebar-profile-info {
+    display: none; /* Hide profile info when collapsed */
+}
+
+.sidebar.collapsed .logout-icon{
+    display: none; /* Hide profile info when collapsed */
+}
+/* Active link highlighting */
+.sidebar-links a.active {
+    background-color: #444444;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 15px;
+    text-align: center;
+    background-color: #2c2c2c;
+    color: white;
+    border-bottom: 1px solid #eeeeee; /* Optional for a subtle divider */
+}
+
+/* Sidebar Profile */
+.sidebar-profile {
+    margin-top: 70px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ffffff; 
+}
+
+.sidebar-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.sidebar-profile-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.sidebar-profile-info span {
+    color: #ffffff;
+}
+
+.logout-icon {
+    margin-left: auto;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.logout-icon:hover {
+    color: #ff4c4c;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .header-content {
+        margin-left: 220px;
+    }
+
+    .sidebar.collapsed + .header-content {
+        margin-left: 60px;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Tablet Devices */
+    .sidebar {
+        width: 200px;
+    }
+
+    .header-content {
+        margin-left: 200px;
+    }
+
+    .sidebar.collapsed + .header-content {
+        margin-left: 60px;
+    }
+
+    .sidebar-profile img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .sidebar-profile-info {
+        font-size: 12px;
+    }
+
+    .expand-btn {
+        top: 10px;
+        left: calc(200px - 30px); /* Adjust for smaller width */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile Devices */
+    .sidebar {
+        width: 180px;
+    }
+
+    .header-content {
+        margin-left: 180px;
+    }
+
+    .sidebar.collapsed + .header-content {
+        margin-left: 60px;
+    }
+
+    .expand-btn {
+        top: 10px;
+        left: calc(180px - 30px); /* Adjust for smaller width */
+    }
+
+    .sidebar-profile img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .sidebar-profile-info {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-item i {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Small Mobile Devices */
+    .sidebar {
+        width: 150px;
+    }
+
+    .header-content {
+        margin-left: 150px;
+    }
+
+    .sidebar.collapsed + .header-content {
+        margin-left: 60px;
+    }
+
+    .sidebar-profile img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .sidebar-profile-info {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-item i {
+        font-size: 16px;
+    }
+
+    .expand-btn {
+        left: calc(150px - 30px); /* Adjust for smaller sidebar */
+        top: 10px; /* Adjust vertical position */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra Small Mobile Devices */
+    .sidebar {
+        width: 140px;
+    }
+
+    .header-content {
+        margin-left: 140px;
+    }
+
+    .sidebar.collapsed + .header-content {
+        margin-left: 60px;
+    }
+
+    .expand-btn {
+        left: calc(140px - 30px); /* Adjust for smaller sidebar */
+        top: 10px;
+    }
+}
+
+.headerss{
+    background-color:#2c2c2c;
+    
+}
+
+.navmaiitem{
+    color: white;
+    font-size: 20px;
+}
+
+/* Ensure the navbar is flush with the top */
+.manicontentnav {
+    position: sticky;
+    top: 0; 
+    z-index: 1000;
+    height: 50px; 
+    line-height: 50px; 
+    margin-top: 0; 
+    
+}
+
+.maincontent{
+    width: 84%;
+}
+
+/* Navbar Content (to ensure it's vertically centered) */
+.manicontentnav .container-fluid {
+    display: flex;
+    justify-content: space-between; /* Push the logo to the left and the logout to the right */
+    align-items: center; /* Vertically center the navbar content */
+}
+
+/* Optional: If you want to adjust logo size */
+.manicontentnav .navbar-brand {
+    font-size: 30px; /* Adjust this according to your design */
+}
+
+/* Optional: Adjust for mobile view */
+@media (max-width: 768px) {
+    .manicontentnav {
+        height: 50px; /* Match the sidebar header height */
+        line-height: 50px;
+    }
+}
+
+.content-area {
+    flex-grow: 1; /* Make content take up the remaining space */
+    padding-bottom: 20px;
+    overflow-y: auto; /* Allow scrolling */
+    transition: margin-left 0.4s ease-in-out, max-height 0.4s ease-in-out;
+}
+
+.sidebar.collapsed + .content-area {
+    margin-left: 60px; /* Adjust content area position when sidebar is collapsed */
+}
+
+/* Adjust content area height based on the sidebar's state */
+.content-area {
+    max-height: 100vh; /* Make the content area take full remaining height */
+}
+
+/* Adjust when the sidebar is collapsed */
+.sidebar.collapsed ~ .content-area {
+    max-height: calc(100vh - 50px); /* Adjust for the navbar height */
+}
+
+/* Optional: Set a default max-height for normal (expanded) sidebar state */
+.sidebar:not(.collapsed) ~ .content-area {
+    max-height: calc(100vh - 56px); /* Adjust for navbar height */
+}
+
+
+
+
+/* Main Content Styling */
+.header-content {
+    flex-grow: 1;
+    margin-left: 250px; /* Space for expanded sidebar */
+    transition: margin-left 0.4s ease-in-out;
+    background-color: #f4f4f4; /* Background color for the content area */
+    padding: 20px; /* Padding around content */
+    border-radius: 8px; /* Optional rounded corners */
+}
+
+/* When Sidebar is Collapsed */
+.sidebar.collapsed + .header-content {
+    margin-left: 60px; /* Adjust for collapsed sidebar */
+}
+
+.header-content h1 {
+    font-size: 32px; /* Main heading font size */
+    color: #333; /* Dark color for the heading */
+    font-weight: bold; /* Make heading bold */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+/* For smaller screens (Tablets, Mobile Devices) */
+@media (max-width: 992px) {
+    .header-content {
+        margin-left: 200px; /* Adjust for smaller sidebar width */
+        padding: 15px; /* Slightly reduce padding for smaller screens */
+    }
+
+    .header-content h1 {
+        font-size: 28px; /* Slightly smaller heading on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    /* For Tablets and Mobile */
+    .header-content {
+        margin-left: 180px; /* Adjust for smaller sidebar width */
+        padding: 10px; /* Less padding on smaller screens */
+    }
+
+    .header-content h1 {
+        font-size: 24px; /* Reduce font size for smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    /* For Mobile */
+    .header-content {
+        margin-left: 140px; /* Adjust for very narrow sidebar */
+        padding: 8px; /* Less padding on small mobile screens */
+    }
+
+    .header-content h1 {
+        font-size: 20px; /* Smaller font size on small devices */
+    }
+}
+
+/* Responsive Card-like Content Box */
+.content-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.content-box h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.content-box p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .header-content {
+        margin-left: 120px; /* Adjust for the smallest sidebar width */
+        padding: 5px; /* Minimal padding */
+    }
+
+    .header-content h1 {
+        font-size: 18px; /* Further reduce font size for small screens */
+    }
+
+    .content-box {
+        padding: 15px; /* Less padding for small screens */
+    }
+}
+
+
+
+
+/* for loader */
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loader {
+    border: 10px solid transparent;
+    border-top: 10px solid #ff9d00;
+    border-bottom: 10px solid #ffc400;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1.5s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

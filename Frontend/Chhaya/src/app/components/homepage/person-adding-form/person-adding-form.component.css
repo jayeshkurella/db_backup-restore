@@ -1,0 +1,36 @@
+/* Style for the navbar */
+.navbar {
+    background: linear-gradient(90deg, rgba(255, 153, 51, 1) 0%, rgba(255, 87, 34, 1) 100%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    border-radius: 0 0 15px 15px; /* Rounded corners at the bottom */
+  }
+  
+  .navbar-brand {
+    font-size: 2rem; /* Larger font size */
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: rgba(0, 0, 0, 0.3); /* Slight background to make the text stand out */
+    border-radius: 10px; /* Rounded corners for the title box */
+    transition: all 0.3s ease; /* Smooth hover transition */
+  }
+  
+  /* Hover effect for the navbar title */
+  .navbar-brand:hover {
+    color: #ff5722 !important;
+    background: rgba(255, 255, 255, 0.2); /* Lighten background on hover */
+  }
+  
+  @media (max-width: 767px) {
+    .navbar-brand {
+      font-size: 1.5rem; /* Smaller font size on mobile */
+      letter-spacing: 1px;
+    }
+  }
+  

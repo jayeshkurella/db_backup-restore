@@ -1,0 +1,168 @@
+<!-- <nav class="sidebar" [class.active]="isSidebarActive">
+    <div class="sidebar-header"></div>
+    <ul class="sidebar-menu">
+        <li><a routerLink="dashboard"><i class="fab fa-tachometer"></i> Dashboard</a></li>
+        <li><a routerLink="missingperson"><i class="fab fa-user"></i> Missing-Person</a></li>
+        <li><a routerLink="unidentified-person"><i class="fab fa-user"></i> Unidentified-Person</a></li>
+        <li><a routerLink="unidentified-bodies"><i class="fab fa-user"></i> Unidentified-Bodies</a></li>
+        <li><a routerLink="volunteers"><i class="fab fa-hands-helping"></i> Volunteer</a></li>
+        <li><a routerLink="policestation"><i class="fab fa-hands-helping"></i>Police-stations</a></li>
+        <li><a routerLink="Hospitals"><i class="fab fa-hands-helping"></i>Hospitals</a></li>
+    </ul>
+</nav>
+
+<div class="main-content" [ngClass]="{'active': isSidebarActive}">
+    <header class="topbar" [ngClass]="{'active': isSidebarActive}">
+        <button class="toggle-sidebar" (click)="toggleSidebar()">☰</button>
+        <span class="backnt">
+            <h4>Admin Panel</h4>
+        </span>
+        <div class="user-section">
+            <a routerLink="/newdashboard">
+                <i class="fad fa-user"></i> <span>User</span>
+            </a>
+        </div>
+    </header>
+    <div class="content">
+        <div class="card">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar" [ngClass]="{ collapsed: isCollapsed, closing: isClosing }">
+        <!-- Sidebar Header for Chhaya Foundation -->
+        <div class="sidebar-header">
+            <h4 class="sidebar-title" *ngIf="!isCollapsed">Chhaya Foundation</h4>
+             <!-- Toggle Button -->
+    <button class="expand-btn btn btn-dark" (click)="toggleSidebar()">
+        <i class="bi" [ngClass]="isCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+    </button>
+            <!-- <i class="bi bi-lightbulb" *ngIf="isCollapsed"></i> -->
+            <img *ngIf="isCollapsed" src="assets/images/favicon-32x32.png" alt="Favicon">
+        </div>
+        
+        <!-- Sidebar Links -->
+        <ul class="sidebar-links">
+            <!-- Dashboard Link -->
+            <li class="sidebar-item" data-tooltip="Person-add">
+                <a routerLink="Add-person">
+                    <i class="bi bi-folder-plus"></i> <!-- Bootstrap icon for house -->
+                    <span class="link-text" *ngIf="!isCollapsed">
+                        Add Persons
+                    </span>
+                </a>
+            </li>
+            <li class="sidebar-item" data-tooltip="Dashboard">
+                <a routerLink="missingperson-search">
+                    <i class="bi bi-search"></i> <!-- Bootstrap icon for house -->
+                    <span class="link-text" *ngIf="!isCollapsed">
+                        search Person
+                    </span>
+                </a>
+            </li>
+            <li class="sidebar-item" data-tooltip="Bodies-search">
+                <a routerLink="bodies-search">
+                    <i class="bi bi-search-heart"></i> <!-- Bootstrap icon for house -->
+                    <span class="link-text" *ngIf="!isCollapsed">
+                        search Body
+                    </span>
+                </a>
+            </li>
+            <!-- Missing Person Link -->
+            <li class="sidebar-item" data-tooltip="Missing Person">
+                <a routerLink="missingperson">
+                    <i class="bi bi-person"></i> <!-- Bootstrap icon for user -->
+                    <span class="link-text" *ngIf="!isCollapsed">Missing Person</span>
+                </a>
+            </li>
+            <!-- Unidentified Person Link -->
+            <li class="sidebar-item" data-tooltip="Unidentified Person">
+                <a routerLink="unidentified-person">
+                    <i class="bi bi-person-fill-exclamation"></i> <!-- Bootstrap icon for user -->
+                    <span class="link-text" *ngIf="!isCollapsed">Unidentified Person</span>
+                </a>
+            </li>
+            <!-- Unidentified Bodies Link -->
+            <li class="sidebar-item" data-tooltip="Unidentified Bodies">
+                <a routerLink="unidentified-bodies">
+                    <i class="bi bi-person-slash"></i> <!-- Bootstrap icon for user -->
+                    <span class="link-text" *ngIf="!isCollapsed">Unidentified Bodies</span>
+                </a>
+            </li>
+            <!-- Volunteer Link -->
+            <li class="sidebar-item" data-tooltip="Volunteer">
+                <a routerLink="volunteers">
+                    <i class="bi bi-hand-thumbs-up"></i> <!-- Bootstrap icon for thumbs up -->
+                    <span class="link-text" *ngIf="!isCollapsed">Volunteer</span>
+                </a>
+            </li>
+            <!-- Police Station Link -->
+            <li class="sidebar-item" data-tooltip="Police Stations">
+                <a routerLink="policestation">
+                    <i class="bi bi-shield-lock"></i> <!-- Bootstrap icon for shield lock -->
+                    <span class="link-text" *ngIf="!isCollapsed">Police Stations</span>
+                </a>
+            </li>
+            <!-- Hospitals Link -->
+            <li class="sidebar-item" data-tooltip="Hospitals">
+                <a routerLink="Hospitals">
+                    <i class="bi bi-hospital"></i> <!-- Bootstrap icon for hospital -->
+                    <span class="link-text" *ngIf="!isCollapsed">Hospitals</span>
+                </a>
+            </li>
+            <li class="sidebar-item" data-tooltip="reports">
+                <a routerLink="reports">
+                    <i class="bi-file-earmark-text"></i> <!-- Bootstrap icon for hospital -->
+                    <span class="link-text" *ngIf="!isCollapsed">Reports</span>
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Sidebar Profile -->
+        <div class="sidebar-profile">
+            <img src="assets/images/user.png" alt="Profile Picture" />
+            <div class="sidebar-profile-info">
+                <strong>Sanket Lodhe</strong>
+                <span>Coderize Technologies</span>
+            </div>
+            <i class="bi bi-box-arrow-right logout-icon" title="Logout"></i>
+        </div>
+    </div>
+    
+
+   
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 bg-light maincontent">
+        <!-- Navbar Section (Sticky Navbar) -->
+        <nav class="navbar manicontentnav navbar-expand-lg navbar-light bg-dark sticky-top">
+            <div class="container-fluid headerss">
+                <a class="navbar-brand navmaiitem" href="">CodeRize</a>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item " href=''>
+                        <a class="nav-link navmaiitem">
+                            <i class="bi bi-skip-backward-btn"(click)="onNavigate()"></i>
+                            
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="isLoading" class="loader-overlay">
+                <div class="loader"></div>
+              </div>
+        </nav>
+    
+        <!-- Content Section (Main Content Area) -->
+        <div class="content-area">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    
+</div>

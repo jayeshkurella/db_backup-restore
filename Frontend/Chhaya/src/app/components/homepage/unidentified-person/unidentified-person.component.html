@@ -1,0 +1,421 @@
+<div class="container-fluid mt-2">
+  <!-- Filter Section -->
+  <div *ngIf="loading" class="fullscreen-loader">
+    <div class="loader"></div>
+  </div>
+  <div class="row g-2 align-items-center mt-2 mb-2 bg-dark">
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.gender" (ngModelChange)="applyFilters()">
+        <option value="all">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Transgender">Transgender</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.city" placeholder="City" (ngModelChange)="applyFilters()">
+        <option value="all">Select city</option>
+        <option *ngFor="let city of allcities" [value]="city">{{ city }}</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.state" placeholder="State" (ngModelChange)="applyFilters()">
+        <option value="all">Select state</option>
+        <option *ngFor="let state of allstates" [value]="state">{{ state }}</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.district" placeholder="District" (ngModelChange)="applyFilters()">
+        <option value="all">Select district</option>
+        <option *ngFor="let district of alldistricts" [value]="district">{{ district }}</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.year" (ngModelChange)="applyFilters()">
+        <option value="" selected>Select Year</option>
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.month" (ngModelChange)="applyFilters()">
+        <option value="" selected>Select Month</option>
+        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      </select>
+    </div>
+
+    <div class="row g-2 align-items-center mt-2 mb-2">
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.caste" (ngModelChange)="applyFilters()">
+          <option value="all">Select Caste</option>
+          <option value="Open">Open</option>
+          <option value="OBC">OBC</option>
+          <option value="SC">SC</option>
+          <option value="ST">ST</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      
+      <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="Enter Age and search" [(ngModel)]="filters.age"/>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.marital_status" (ngModelChange)="applyFilters()">
+          <option value="all">Select Marital Status</option>
+          <option *ngFor="let Marital of allmarital" [value]="Marital">{{ Marital }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.blood_group" (ngModelChange)="applyFilters()">
+          <option value="all">Select Blood group</option> 
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+      </div>
+      
+      <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="Enter Height and search" [(ngModel)]="filters.height"/>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-outline-light w-100" (click)="applyFilters()">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Sr No.</th>
+          <th>Photo</th>
+          <th>Full Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Blood Group</th>
+          <th>Marital Status</th>
+          <th>Missing Date</th>
+          <th>Condition</th>
+          <th>Last Seen Location</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let person of unidentifiedPersons; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <div class="image-container">
+              <img [src]="person.photo_upload ? (environment.apiUrl + person.photo_upload) : 'assets/images/pngwing.com.png'" alt="person Photo" class="img-fluid rounded" />
+            </div>
+          </td>
+          <td>{{ person.full_name || 'N/A' }}</td>
+          <td>{{ person.estimated_age }}</td>
+          <td>{{ person.gender }}</td>
+          <td>{{ person.blood_group || 'N/A' }}</td>
+          <td>{{ person.marital_status || 'N/A' }}</td>
+          <td>{{ person.last_seen_date }}</td>
+          <td>{{ person.condition_at_discovery }}</td>
+          <td>{{ person.last_location }}</td>
+          <td>
+            <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Section -->
+  <div *ngIf="unidentifiedPersons?.length > 0">
+    <app-pagination
+      [currentPage]="pagination.current_page"
+      [totalPages]="pagination.total_pages"
+      [hasPrevious]="pagination.has_previous"
+      [hasNext]="pagination.has_next"
+      (pageChange)="onPageChangeevent($event)">
+    </app-pagination>
+  </div>
+  
+  <!-- No Persons Found Message -->
+  <div *ngIf="unidentifiedPersons?.length === 0">
+    <p>No Persons Available.</p>
+  </div>
+</div>
+
+      
+    <!-- Modal to see data of unidentified persons-->
+    <div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="personModalLabel">Unidentified Person Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Person Details -->
+            <div *ngIf="selectedPerson" class="container">
+              
+              <!-- Person Overview Section -->
+              <div class="row mb-4">
+                <div class="col-md-5 text-center">
+                  <img [src]="selectedPerson.photo_upload ? (environment.apiUrl + selectedPerson.photo_upload) : 'assets/images/pngwing.com.png'" alt="Person Photo" class="img-fluid rounded">
+                </div>
+                <div class="col-md-7">
+                  <h4>{{ selectedPerson.full_name || 'N/A' }}</h4>
+                  <p><strong>Age:</strong> {{ selectedPerson.estimated_age || 'N/A' }}</p>
+                  <p><strong>Gender:</strong> {{ selectedPerson.gender || 'N/A' }}</p>
+                  <p><strong>Blood Group:</strong> {{ selectedPerson.blood_group || 'N/A' }}</p>
+                  <p><strong>Condition:</strong> {{ selectedPerson.condition_at_discovery || 'N/A' }}</p>
+                  <p><strong>Last Seen Location:</strong> {{ selectedPerson.last_location || 'N/A' }}</p>
+                </div>
+              </div>
+
+              <!-- personal info Section -->
+              <h5 class="mb-3 text-primary">Appearance Information</h5>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Height:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.height || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Weight:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.weight || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>complexion:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.complexion || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Hair color:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.hair_color || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Hair type:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.hair_type || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Eye color:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.eye_color || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Birth Mark:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.birth_mark|| 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Distinctive mark:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.distinctive_mark|| 'N/A' }}</div>
+              </div>
+              
+    
+              <!-- Contact Information Section -->
+              <h5 class="mb-3 text-primary">Contact Information</h5>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Phone Number:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.contact?.phone_number || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Email:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.contact?.email || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Social Media:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.contact?.social_media_handles || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Contact Type:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.contact?.type || 'N/A' }} ({{ selectedPerson.contact?.subtype || 'N/A' }})</div>
+              </div>
+    
+              <!-- Address Information Section -->
+              <h5 class="mb-3 text-primary">Address Information</h5>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Street:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.street || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Apartment:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.apartment_number || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>City:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.city || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Village:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.village || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Landmark:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.landmark_details || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Location:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.location || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Address Type:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.address_type || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>State:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.state || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Country:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.country || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Postal Code:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.postal_code || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Address Subtype:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.address?.subtype || 'N/A' }}</div>
+              </div>
+    
+              <!-- Identification and Missing Details -->
+              <h5 class="mb-3 text-primary">Identification & Missing Information</h5>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>caste :</strong></div>
+                <div class="col-md-9">{{ selectedPerson.caste || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>sub caste:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.sub_caste || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>religion:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.religion|| 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>mother tongue:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.mother_tongue|| 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>other known Languages:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.other_known_languages|| 'N/A' }}</div>
+              </div>
+
+
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Identification Type:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.identification_details || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Identification Card Number:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.identification_card_no || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Missing Date:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.last_seen_date || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Missing Time:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.last_seen_details || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Missing Location:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.last_location || 'N/A' }}</div>
+              </div>
+    
+              <!-- Reporting Person Details -->
+              <h5 class="mb-3 text-primary">Reporting Person Details</h5>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Reporting Person:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.reporting_person_name || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Relationshiop with Victim:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.relationship_with_victim || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Phone:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.reporting_person_contact_number || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Email:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.reporting_person_email || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Availability forvsearch operations:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.availability_for_search_operations || 'N/A' }}</div>
+              </div> 
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>preferred mode of communication:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.preferred_mode_of_communication || 'N/A' }}</div>
+              </div>
+              
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>access to vehicle:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.access_to_vehicle || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Special skills:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.special_skills || 'N/A' }}</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>previous search experience:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.previous_search_experience || 'N/A' }}</div>
+              </div>
+
+              <!-- <div class="row mb-3">
+                <div class="col-md-3"><strong>upload_evidence:</strong></div>
+                <img [src]="environment.apiUrl + selectedPerson.upload_evidence" alt="No evidence" width="200px" class="img-fluid rounded">
+              </div> -->
+
+              <!-- Investigation Details -->
+              <h5 class="mb-3 text-primary">Investigation Details</h5>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Investigation Officer:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.investigating_officer_name || 'N/A' }} ({{ selectedPerson.investigating_officer_contact_number || 'N/A' }})</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Investigation Officer contact:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.investigating_officer_contact_number || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Police Station:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.police_station_name_and_address?.name || 'N/A' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3"><strong>Police Station Address:</strong></div>
+                <div class="col-md-9">{{ selectedPerson.police_station_name_and_address?.address || 'N/A' }}</div>
+              </div>
+              <h5 class="mb-3 text-primary">Location of missing Person</h5>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <div id="map"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  
+      
+      
+

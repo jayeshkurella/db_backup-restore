@@ -1,0 +1,148 @@
+
+
+.container-fluid {
+    background-color: #ffffff; 
+  }
+
+
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+.custom-card {
+    position: relative;
+    border-radius: 10px;
+    color: #fff;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-height: 150px;
+  }
+  
+  .custom-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .custom-card-body {
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .custom-card-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .custom-card-text {
+    font-size: 1.3rem;
+    margin: 0;
+    line-height: 1.5; 
+  }
+  
+  /* Gradient Backgrounds */
+  .bg-gradient-primary {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+  }
+  
+  .bg-gradient-success {
+    background: linear-gradient(45deg, #28a745, #1d7431);
+  }
+  
+  .bg-gradient-info {
+    background: linear-gradient(45deg, #17a2b8, #125f6a);
+  }
+  
+  .bg-gradient-warning {
+    background: linear-gradient(45deg, #ffc107, #b38600);
+  }
+  
+  .bg-gradient-danger {
+    background: linear-gradient(45deg, #dc3545, #a71d2a);
+  }
+  
+  .bg-gradient-secondary {
+    background: linear-gradient(45deg, #6c757d, #495057);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .custom-card-title {
+      font-size: 1.8rem;
+    }
+  }
+  
+  /* Map styling */
+  #map {
+    height: 350px;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 5px;
+  }
+  
+
+  .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loader {
+    border: 10px solid transparent;
+    border-top: 10px solid #ff9d00;
+    border-bottom: 10px solid #ffc400;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1.5s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.hover-image {
+  transition: transform 0.3s ease; 
+  width: 50px; /* Initial width */
+  height: 50px; /* Initial height */
+  position: relative; /* Position relative to enable z-index */
+  z-index: 10;
+}
+
+.hover-image:hover {
+  transform: scale(5); 
+  cursor: pointer;
+  z-index: 9999; 
+}
+
+
+/* .dropdown-menu li {
+  position: relative;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.dropdown-menu {
+  padding: 10px;
+} */

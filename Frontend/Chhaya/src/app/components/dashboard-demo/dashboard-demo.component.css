@@ -1,0 +1,501 @@
+
+
+/* Title style */
+.navbar-title {
+  font-size: 2rem; /* Larger font size for more impact */
+  font-weight: bold;
+  color: #fff; /* White text */
+  text-transform: uppercase; /* Make text uppercase for a bold look */
+  background: linear-gradient(45deg, #ff7f50, #ff1493, #00bfff); /* Gradient effect */
+  background-clip: text; /* Apply gradient only to the text */
+  -webkit-background-clip: text; /* For Safari */
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5); /* Adding more depth to the text */
+  padding: 10px 20px; /* Add padding to create space around the text */
+  border-radius: 8px; /* Rounded corners for the text background */
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+  letter-spacing: 1px; /* Slightly increase the space between letters */
+}
+
+/* Hover effect on navbar title */
+.navbar-title:hover {
+  color: #fff; /* Maintain the color on hover */
+  text-shadow: 6px 6px 8px rgba(0, 0, 0, 0.6); /* Stronger shadow on hover */
+}
+
+/* Navbar icons */
+.navbar-icons {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust the navbar items on different screen sizes */
+@media (max-width: 991px) {
+  /* Center the title on smaller screens */
+  .navbar-center {
+    display: none;
+  }
+
+  /* Show the center text in a smaller size on mobile */
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-center {
+    display: block;
+  }
+
+  .navbar-brand {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 10px 0;
+  }
+}
+
+
+.icon {
+  font-size: 20px;
+  color: #444;
+  padding: 5px;
+}
+
+.icon-person {
+  color: #4CAF50; /* Green color for Person Data */
+}
+
+.icon-map {
+  color: #2196F3; /* Blue color for Operational Layers */
+}
+
+.overlay-group {
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+.overlay-group.collapsed {
+  background-color: #e0e0e0;
+}
+
+.layer-item {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.layer-item.active {
+  background-color: #c8e6c9; /* Green for active */
+}
+
+.layer-item.inactive {
+  background-color: #f8d7da; /* Red for inactive */
+}
+
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader {
+  border: 10px solid transparent;
+  border-top: 10px solid #ff9d00;
+  border-bottom: 10px solid #ffc400;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  animation: spin 1.5s linear infinite;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* navbar style */
+.navbar-custom {
+background: linear-gradient(to right, #eda126ec, rgb(234, 160, 50));
+color: white;
+padding: 10px;
+}
+
+/* Logo styles */
+.navbar-brand img {
+width: 90px;
+height: 40px;
+color: rgb(3, 2, 2);
+}
+
+/* Center text for large screens */
+.navbar-center {
+flex-grow: 1;
+text-align: center;
+}
+
+
+.user-icon {
+  font-size: 1.5rem;
+}
+
+canvas {
+  width: 100% !important;
+  height: 150px !important;
+}
+
+
+
+
+
+/* card styles */
+.bg-purple {
+  background-color: #d63384;
+}
+.bg-greenmen{
+  background-color: rgb(110, 226, 110);
+}
+
+.bg-lightxpurple{
+  background-color: #dc8bb4;
+}
+
+.bg-prplemale{
+  background-color: #e7a1c4;
+}
+
+.bg-bluemale{
+  background-color: rgb(149, 149, 228);
+}
+
+.bg-dangermale{
+  background-color:rgb(231, 124, 124);
+}
+
+.bg-lightinfo{
+  background-color: rgb(150, 224, 227);
+
+}
+.text-purple {
+  color: #d63384;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.card-number {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.shadow-sm {
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.progress-bar {
+  transition: width 0.3s ease; /* Smooth width transition */
+}
+
+.containerx{
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* For smaller screens */
+@media (max-width: 767px) {
+  .card-body {
+    padding: 15px;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-number {
+    font-size: 1.5rem;
+  }
+}
+
+/* For medium to large screens */
+@media (min-width: 768px) {
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+  }
+
+  .card-number {
+    font-size: 2rem;
+  }
+}
+
+.card-colour {
+  border-radius: 8px;
+}
+
+.card-body {
+  padding: 20px;
+  color: #000000;
+}
+
+.card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+.card-number {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.card-colour {
+  background: linear-gradient(135deg, rgba(241, 159, 77, 0.7), rgba(255, 102, 204, 0.5));
+  background-size: cover;
+  background-position: center;
+  animation: backgroundAnimation 3s ease-in-out infinite;
+}
+
+
+
+
+
+
+
+
+/* Container for both filter and map sections */
+.containerx {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Custom styling for the filter dropdowns */
+.form-select-sg {
+  width: 100%; /* Full width for small devices */
+  max-width: 350px;
+  margin: 5px 0;
+}
+
+/* Gauge card */
+.containerpp {
+  width: 100%;
+  max-width: 350px;
+  margin: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gauge-card h4 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.gauge {
+  position: relative;
+  margin: 20px auto;
+  width: 120px;
+  height: 60px;
+}
+
+.gauge svg {
+  width: 120px;
+  height: 120px;
+  transform: rotate(-90deg);
+}
+
+.gauge-value {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.gauge p {
+  font-size: 1rem;
+  color: #666;
+  margin-top: -10px;
+}
+
+.values {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
+.values div {
+  text-align: center;
+}
+
+.count {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #6a0dad;
+}
+
+.label {
+  font-size: 1rem;
+  color: #666;
+}
+
+@keyframes backgroundAnimation {
+  0% { background-color: #f1f1f1; }
+  50% { background-color: #e0f7fa; }
+  100% { background-color: #f1f1f1; }
+}
+
+/* Progress Bar Custom Colors */
+.progress-bar.bg-lightgreen { background-color: #A8E6CF; }
+.progress-bar.bg-lightpurple { background-color: #D1C4E9; }
+.progress-bar.bg-lightblue { background-color: #BBDEFB; }
+.progress-bar.bg-lightblddue { background-color: #710456; }
+.progress-bar.bg-lightred { background-color: #FFCDD2; }
+.progress-bar.bg-lightredd { background-color: #d00cfc; }
+
+/* Hover effect for cards */
+.card:hover {
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Global map container */
+#map {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+/* Media Query for tablets and smaller devices */
+@media (max-width: 992px) {
+  .row {
+    flex-direction: column;
+  }
+  .col-md-9, .col-md-3 {
+    width: 100%;
+    max-width: 100%;
+  }
+  .containerx, .containerpp {
+    padding: 10px;
+  }
+
+  .form-select-sg {
+    max-width: 100%;
+  }
+
+  /* Adjust the map for smaller screens */
+  #map {
+    height: 50vh;
+  }
+}
+
+/* Media Query for small devices (mobile phones) */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col-md-9, .col-md-3 {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Adjust dropdowns for smaller screens */
+  .form-select-sg {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .gauge-card {
+    width: 100%;
+    padding: 15px;
+  }
+
+  /* Make map half height for mobile screens */
+  #map {
+    height: 40vh;
+  }
+
+  /* Adjust table layout for mobile screens */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  /* Adjust table cells for smaller screens */
+  .table td, .table th {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* For mobile and smaller screens */
+@media (max-width: 576px) {
+  .form-select-sg {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .cardm {
+    padding: 15px;
+  }
+
+  .containerpp {
+    max-width: 100%;
+  }
+
+  /* Adjust the font sizes */
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .gauge-card h4 {
+    font-size: 1.2rem;
+  }
+
+  /* Ensure images in tables are responsive */
+  .image-container img {
+    width: 80px;
+    height: 80px;
+  }
+
+  /* Change the height of map */
+  #map {
+    height: 300px;
+  }
+}

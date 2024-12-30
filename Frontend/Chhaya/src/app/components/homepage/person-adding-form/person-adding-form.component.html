@@ -1,0 +1,573 @@
+
+  
+<div class="container-fluid mt-3">
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="missing-person-tab" data-bs-toggle="tab" href="#missing-person" role="tab" aria-controls="missing-person" aria-selected="true">Add Missing Person</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="unidentified-person-tab" data-bs-toggle="tab" href="#unidentified-person" role="tab" aria-controls="unidentified-person" aria-selected="false">Add Unidentified Person</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="unidentified-dead-body-tab" data-bs-toggle="tab" href="#unidentified-dead-body" role="tab" aria-controls="unidentified-dead-body" aria-selected="false">Add Unidentified Dead Body</a>
+      </li>
+    </ul>
+  
+    <!-- Tab Content -->
+    <div class="tab-content" id="myTabContent">
+      <!-- Missing Person Tab -->
+      <div class="tab-pane fade show active" id="missing-person" role="tabpanel" aria-labelledby="missing-person-tab">
+        <div class="mt-4">
+          <h3>Add Missing Person</h3>
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+   
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active " id="personal-details-tab" data-bs-toggle="tab" href="#personal-details" role="tab" aria-controls="personal-details" aria-selected="true">Personal Details</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="additional_info-tab" data-bs-toggle="tab" href="#additional_info" role="tab" aria-controls="additional_info" aria-selected="false">Additional Info</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="missingdata-tab" data-bs-toggle="tab" href="#missingdata" role="tab" aria-controls="clothing" aria-selected="false">Missing Data</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="legal_info-tab" data-bs-toggle="tab" href="#legal_info" role="tab" aria-controls="clothing" aria-selected="false">Legal Info</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link " id="reportingPerson-tab" data-bs-toggle="tab" href="#reportingPerson" role="tab" aria-controls="reportingPerson" aria-selected="false">Reporting Person</a>
+            </li>
+            
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="consent-pane-tab" data-bs-toggle="tab" href="#consent-pane" role="tab" aria-controls="consent-pane" aria-selected="false">Consent</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+    
+            <!-- personal details -->
+            <div class="tab-pane fade show active " id="personal-details" role="tabpanel" aria-labelledby="personal-details-tab">
+              <div class="container mt-3">
+                <p class="mb-4">Provide details of the missing person</p>
+                <form>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="fullName" class="form-label">Full Name</label>
+                      <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="gender" class="form-label">Gender</label>
+                      <select class="form-select" id="gender">
+                        <option selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="gender" class="form-label">Blood Group</label>
+                      <select class="form-select" id="gender">
+                        <option selected>Select blood group</option>
+                        <option value="A+">A+</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="dob" class="form-label">Date of Birth</label>
+                      <input type="date" class="form-control" id="dob">
+                    </div>
+                    
+                  </div>
+              
+                  <div class="row mb-3">
+                    
+                    <div class="col-md-2">
+                      <label for="age" class="form-label">Age</label>
+                      <input type="number" class="form-control" id="age" placeholder="age" readonly>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="dob" class="form-label">Time of Birth</label>
+                      <input type="time" class="form-control" id="tob">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="place_of_birth" class="form-label">Place of Birth</label>
+                      <input type="text" class="form-control" id="age" placeholder="Enter place of birth">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="height" class="form-label">Height</label>
+                      <input type="text" class="form-control" id="height" placeholder="e.g., 5'10">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="weight" class="form-label">Weight</label>
+                      <input type="text" class="form-control" id="weight" placeholder="e.g., 160 lbs or 73 kg">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="complexion" class="form-label">Complexion</label>
+                      <input type="text" class="form-control" id="complexion" placeholder="e.g., Fair, Medium, Dark">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                      <div class="col-md-2">
+                        <label for="hairColor" class="form-label">Hair Color</label>
+                        <select class="form-select" id="hairColor">
+                          <option selected>Select hair color</option>
+                          <option value="black">Black</option>
+                          <option value="brown">Brown</option>
+                          <option value="blonde">Blonde</option>
+                          <option value="red">Red</option>
+                        </select>
+                      </div>
+                    <div class="col-md-2">
+                      <label for="hairType" class="form-label">Hair Type</label>
+                      <select class="form-select" id="hairType">
+                        <option selected>Select hair type</option>
+                        <option value="straight">Straight</option>
+                        <option value="wavy">Wavy</option>
+                        <option value="curly">Curly</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="eyeColor" class="form-label">Eye Color</label>
+                      <select class="form-select" id="eyeColor">
+                        <option selected>Select eye color</option>
+                        <option value="brown">Brown</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="hazel">Hazel</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="birthmark" class="form-label">Birthmark</label>
+                      <textarea type="text" class="form-control" id="birthmark" placeholder="Describe any birthmarks"></textarea>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="distinctiveMarks" class="form-label">Other Distinctive Marks</label>
+                      <textarea type="text" class="form-control" id="distinctiveMarks" placeholder="Scars, tattoos, etc."></textarea>
+                    </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="address" class="form-label">Address</label>
+                      <textarea class="form-control" id="address" placeholder="Enter address"></textarea>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="phone" class="form-label">Phone Number</label>
+                      <input type="text" class="form-control" id="phone" placeholder="Enter phone number">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="city" class="form-label">Village/City</label>
+                      <input type="text" class="form-control" id="city" placeholder="Enter city/village">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="pincode" class="form-label">Pincode</label>
+                      <input type="text" class="form-control" id="pincode" placeholder="Enter pincode">
+                    </div>
+                  </div>
+            
+                  <!-- City and State -->
+                  <div class="row mb-3">
+                    <div class="col-md-3">
+                      <label for="state" class="form-label">Taluka</label>
+                      <input type="text" class="form-control" id="Taluka" placeholder="Enter Taluka">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="district" class="form-label">District</label>
+                      <input type="text" class="form-control" id="district" placeholder="Enter district">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="state" class="form-label">State</label>
+                      <input type="text" class="form-control" id="state" placeholder="Enter state">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text" class="form-control" id="country" placeholder="Enter country">
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end mt-3">
+                    <!-- <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('reportingPerson')">Back</button> -->
+                    <button type="button" class="btn btn-dark" (click)="goToNextTab('additional_info')">Next</button>
+                  </div>
+                </form>
+              </div>
+              
+            </div>
+        
+            <!-- additonal info -->
+            <div class="tab-pane fade" id="additional_info" role="tabpanel" aria-labelledby="additional_info-tab">
+              <div class="container mt-2">
+                <h2 class="mb-3">Additional Details</h2>
+                <p class="mb-4">Provide additional information about the missing person.</p>
+            
+                <form>
+                  <!-- Existing fields -->
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="caste" class="form-label">Caste</label>
+                      <input type="text" class="form-control" id="caste" placeholder="Enter caste">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="subCaste" class="form-label">Sub-caste</label>
+                      <input type="text" class="form-control" id="subCaste" placeholder="Enter sub-caste">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="maritalStatus" class="form-label">Marital Status</label>
+                      <select class="form-select" id="maritalStatus">
+                        <option selected>Select Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                      </select>
+                    </div>
+                  </div>
+            
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="religion" class="form-label">Religion</label>
+                      <input type="text" class="form-control" id="religion" placeholder="Enter religion">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="motherTongue" class="form-label">Mother Tongue</label>
+                      <input type="text" class="form-control" id="motherTongue" placeholder="Enter mother tongue">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="knownLanguages" class="form-label">Other Known Languages</label>
+                      <input type="text" class="form-control" id="knownLanguages" placeholder="Enter other known languages">
+                    </div>
+                  </div>
+            
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="educationalDetails" class="form-label">Educational Details</label>
+                      <input type="text" class="form-control" id="educationalDetails" placeholder="Enter educational details">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="occupation" class="form-label">Occupation</label>
+                      <input type="text" class="form-control" id="occupation" placeholder="Enter occupation">
+                    </div>
+                  </div>
+            
+                  <!-- New Financial Issues Section -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="medicalCondition" class="form-label">Medical Condition</label>
+                      <input type="text" class="form-control" id="medicalCondition" placeholder="Enter medical condition">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="financialIssues" class="form-label">Financial Issues</label>
+                      <select class="form-select" id="financialIssues">
+                        <option selected>Select Financial Issue</option>
+                        <option value="No Issues">No Issues</option>
+                        <option value="Debt Avoidance">Debt Avoidance</option>
+                        <option value="Bankruptcy">Bankruptcy</option>
+                        <option value="Unemployment">Unemployment</option>
+                        <option value="Loss of Assets">Loss of Assets</option>
+                      </select>
+                    </div>
+                  </div>
+            
+                 
+            
+                  <!-- Navigation Buttons -->
+                  <div class="d-flex justify-content-between mt-3">
+                    <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('personal-details')">Back</button>
+                    <button type="button" class="btn btn-outline-dark" (click)="goToNextTab('missingdata')">Next</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            
+            
+        
+            <!-- address -->
+            <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
+              <div class="container mt-2">
+                <p class="mb-4">Enter details about the location of the missing person.</p>
+                <form>
+                  <!-- Address and Phone Number -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="address" class="form-label">Address</label>
+                      <textarea class="form-control" id="address" placeholder="Enter address"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="phone" class="form-label">Phone Number</label>
+                      <input type="text" class="form-control" id="phone" placeholder="Enter phone number">
+                    </div>
+                  </div>
+            
+                  <!-- City and State -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="city" class="form-label">Village/City</label>
+                      <input type="text" class="form-control" id="city" placeholder="Enter city/village">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="state" class="form-label">State</label>
+                      <input type="text" class="form-control" id="state" placeholder="Enter state">
+                    </div>
+                  </div>
+            
+                  <!-- Country and District -->
+                  <div class="row mb-3">
+                    
+                    <div class="col-md-6">
+                      <label for="district" class="form-label">District</label>
+                      <input type="text" class="form-control" id="district" placeholder="Enter district">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="state" class="form-label">Taluka</label>
+                      <input type="text" class="form-control" id="Taluka" placeholder="Enter Taluka">
+                    </div>
+                    
+                  </div>
+            
+                  <!-- Pincode -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text" class="form-control" id="country" placeholder="Enter country">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="pincode" class="form-label">Pincode</label>
+                      <input type="text" class="form-control" id="pincode" placeholder="Enter pincode">
+                    </div>
+                  </div>
+            
+                  <!-- Navigation Buttons -->
+                  <div class="d-flex justify-content-between mt-3">
+                    <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('additional_info')">Back</button>
+                    <button type="button" class="btn btn-outline-dark" (click)="goToNextTab('missingdata')">Next</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            
+        
+             <!-- missing data -->
+             <div class="tab-pane fade" id="missingdata" role="tabpanel" aria-labelledby="last-seen-tab">
+              <div class="container mt-5">
+                <h2 class="mb-3">Last Seen Details</h2>
+                <p class="mb-4">Provide information about the last known details of the missing person</p>
+                <form>
+        
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="missingTime" class="form-label">Missing Time</label>
+                      <input type="time" class="form-control" id="missingTime" placeholder="Enter the time when the person was last seen">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="missingDate" class="form-label">Missing Date</label>
+                      <input type="date" class="form-control" id="missingDate" placeholder="Select the date when the person was last seen">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="lastSeenDetails" class="form-label">Map Location</label>
+                      <textarea type="number" class="form-control" id="Latitude" placeholder="location details"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="lastLocation" class="form-label">Last Location of Missing Person</label>
+                      <textarea type="text" class="form-control" id="lastLocation" placeholder="Enter the last known location"></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    
+                    <div class="col-md-12">
+                      <label for="sightingsContainer" class="form-label">Last Seen Details</label>
+                      <div id="sightingsContainer">
+                        <div class="sighting-entry mb-3">
+                          <textarea type="text" class="form-control" placeholder="Enter details of the last sighting"></textarea>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-outline-dark mt-2" id="addSighting">Add Another Sighting</button>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-3">
+                    <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('additional_info')">Back</button>
+                    <button type="button" class="btn btn-outline-dark" (click)="goToNextTab('legal_info')">Next</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        
+            <!-- legal info -->
+            <div class="tab-pane fade" id="legal_info" role="tabpanel" aria-labelledby="legal_info-tab">
+              <div class="container mt-5">
+                  <h2 class="mb-3">FIR Information</h2>
+                  <p class="mb-4">Provide details about the FIR and investigating officer</p>
+                  
+                  <form>
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                              <label for="firNumber" class="form-label">FIR Number</label>
+                              <input type="text" class="form-control" id="firNumber" placeholder="Enter FIR number">
+                          </div>
+                          <div class="col-md-6">
+                            <label for="photo1" class="form-label">Upload Fir</label>
+                            <input type="file" class="form-control" id="photo1" accept="image/*">
+                          </div>
+                          
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                              <label for="stationAddress" class="form-label">Police Station Address</label>
+                              <input type="text" class="form-control" id="stationAddress" placeholder="Enter police station address">
+                          </div>
+                          <div class="col-md-6">
+                            <label for="policeStation" class="form-label">Police Station Name</label>
+                            <select class="form-control" id="policeStation">
+                                <option value="" disabled selected>Select a police station</option>
+                                <option value="station1">Police Station 1</option>
+                                <option value="station2">Police Station 2</option>
+                                <option value="station3">Police Station 3</option>
+                            </select>
+                        </div>
+                        
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                              <label for="officerName" class="form-label">Investigating Officer's Name</label>
+                              <input type="text" class="form-control" id="officerName" placeholder="Enter officer's name">
+                          </div>
+                          <div class="col-md-6">
+                              <label for="officerContact" class="form-label">Investigating Officer's Contact Number</label>
+                              <input type="text" class="form-control" id="officerContact" placeholder="Enter officer's contact number">
+                          </div>
+                      </div>
+                      <div class="d-flex justify-content-between mt-3">
+                          <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('missingdata')">Back</button>
+                          <button type="button" class="btn btn-dark" (click)="goToNextTab('reportingPerson')">Next</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          
+            <!-- reporting person -->
+            <div class="tab-pane fade " id="reportingPerson" role="tabpanel" aria-labelledby="reportingPerson-tab">
+              <div class="container mt-5">
+                <h2 class="mb-3">Contact Details of Reporting Person</h2>
+                <p class="mb-4">Enter your contact details as the person reporting the missing person</p>
+                
+                <form>
+                  <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number">
+                      </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    
+                    <div class="col-md-4">
+                      <label for="altPhoneNumber" class="form-label">Alternate Phone Number</label>
+                      <input type="tel" class="form-control" id="altPhoneNumber" placeholder="Enter your alternate phone number">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="emailAddress" class="form-label">Email Address</label>
+                      <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address">
+                    </div>
+                  </div>
+            
+                  <!-- Additional Information for Reporting Person -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="address" class="form-label">Address</label>
+                      <input type="text" class="form-control" id="address" placeholder="Enter your address">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" class="form-control" id="city" placeholder="Enter your city">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="state" class="form-label">State</label>
+                      <input type="text" class="form-control" id="state" placeholder="Enter your state">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="zipCode" class="form-label">ZIP Code</label>
+                      <input type="text" class="form-control" id="zipCode" placeholder="Enter your ZIP code">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text" class="form-control" id="country" placeholder="Enter your country">
+                    </div>
+                  </div>
+            
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="reportingDate" class="form-label">Date of Report</label>
+                      <input type="date" class="form-control" id="reportingDate">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="reportingTime" class="form-label">Time of Report</label>
+                      <input type="time" class="form-control" id="reportingTime">
+                    </div>
+                  </div>
+            
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <label for="additionalInfo" class="form-label">Additional Information</label>
+                      <textarea class="form-control" id="additionalInfo" rows="3" placeholder="Enter any additional information that may help in finding the missing person"></textarea>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-between mt-3">
+                    <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('legal_info')">Back</button>
+                    <button type="button" class="btn btn-outline-dark" (click)="goToNextTab('consent-pane')">Next</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            
+        
+            <!-- consent -->
+            <div class="tab-pane fade" id="consent-pane" role="tabpanel" aria-labelledby="consent-tab">
+              <div class="container mt-5">
+                <h2 class="mb-3">Consent and Declaration</h2>
+                <p class="mb-4">Read and agree to the terms before submitting the report.</p>
+              
+                <form>
+                  <div class="mb-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="consentCheckbox" required>
+                      <label class="form-check-label" for="consentCheckbox">
+                        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge. I consent to the use of this information for the purpose of locating the missing person.
+                      </label>
+                    </div>
+                  </div>
+              
+                    <div class="d-flex justify-content-between mt-3">
+                      <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('reportingPerson')">Back</button>
+                      <button type="submit" class="btn btn-outline-success">Submit Report</button>
+                    </div>
+                  
+                </form>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Unidentified Person Tab -->
+      <div class="tab-pane fade" id="unidentified-person" role="tabpanel" aria-labelledby="unidentified-person-tab">
+        <div class="mt-4">
+          <h3>Add Unidentified Person</h3>
+          
+        </div>
+      </div>
+  
+      <!-- Unidentified Dead Body Tab -->
+      <div class="tab-pane fade" id="unidentified-dead-body" role="tabpanel" aria-labelledby="unidentified-dead-body-tab">
+        <div class="mt-4">
+          <h3>Add Unidentified Dead Body</h3>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  

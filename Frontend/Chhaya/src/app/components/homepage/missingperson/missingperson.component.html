@@ -1,0 +1,782 @@
+<div class="container-fluid mt-2">
+  <div *ngIf="loading" class="fullscreen-loader">
+    <div class="loader"></div>
+  </div>
+  <div class="row g-2 align-items-center mt-2 mb-2 bg-dark">
+    <div class="col-md-2">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Enter Full Name and search"
+        [(ngModel)]="filters.full_name"
+     
+      />
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.city" placeholder="City" (ngModelChange)="applyFilters()">
+        <option value="all">Select city</option>
+        <option *ngFor="let city of allcities" [value]="city">{{ city }}</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.state" placeholder="State" (ngModelChange)="applyFilters()">
+        <option value="all">Select state</option>
+        <option *ngFor="let state of allstates" [value]="state">{{ state }}</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.district" placeholder="District"(ngModelChange)="applyFilters()">
+        <option value="all">Select distict</option>
+        <option *ngFor="let district of alldistricts" [value]="district">{{ district }}</option>
+      </select>
+    </div>
+    
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.year"(ngModelChange)="applyFilters()">
+        <option value="" selected>Select Year</option>
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" [(ngModel)]="filters.month"(ngModelChange)="applyFilters()">
+        <option value="" selected>Select Month</option>
+        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      </select>
+    </div>
+    
+
+    <div class="row g-2 align-items-center mt-2 mb-2">
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.caste" (ngModelChange)="applyFilters()">
+          <option value="all">Select Caste</option>
+          <option value="Open">Open</option>
+          <option value="OBC">OBC</option>
+          <option value="SC">SC</option>
+          <option value="ST">ST</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      
+      <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="Enter Age and search" [(ngModel)]="filters.age"/>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.marital_status"(ngModelChange)="applyFilters()">
+          <option value="all">Select Marital Status</option>
+          <option *ngFor="let Marital of allmarital" [value]="Marital">{{ Marital }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.blood_group" (ngModelChange)="applyFilters()">
+          <option value="all">Select Blood group</option> 
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+      </div>
+      
+      
+          
+      <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="Enter Height and search" [(ngModel)]="filters.height"/>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-outline-light w-100" (click)="applyFilters()">Search</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Sr No.</th>
+          <th>Photo</th>
+          <th>Full Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Blood Group</th>
+          <th>Marital Status</th>
+          <th>Missing Date</th>
+          <th>Condition</th>
+          <th>Last Seen Location</th>
+          <th>Action</th>
+          <th style="width: 150px;">Match With</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let person of filteredPersons; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <div class="image-container">
+              <img
+                [src]="person.photo_upload ? (environment.apiUrl + person.photo_upload) : 'assets/images/pngwing.com.png'"
+                alt="person Photo"
+                class="img-fluid rounded"
+              />
+            </div>
+          </td>
+          <td>{{ person.full_name }}</td>
+          <td>{{ person.age }}</td>
+          <td>{{ person.gender }}</td>
+          <td>{{ person.blood_group }}</td>
+          <td>{{ person.marital_status }}</td>
+          <td>{{ person.missing_date }}</td>
+          <td>{{ person.condition }}</td>
+          <td>{{ person.last_seen_location }}</td>
+          <td>
+            <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+          </td>
+          <td>
+            <button class="btn btn-outline-success" style="margin-right: 10px;" (click)="matchWithUP(person)" (click)="viewDetailsmatch(person)">UP</button>
+            <button class="btn btn-outline-dark" (click)="matchWithUB(person)"(click)="viewDetailsmatch(person)">UB</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="filteredPersons.length === 0">
+    <p>No Persons Available.</p>
+  </div>
+</div>
+
+  
+      
+<!-- Modal to see data of missing persons-->
+<div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="personModalLabel">Missing Person Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Person Details -->
+        <div *ngIf="selectedPerson" class="container">
+          
+          <!-- Person Overview Section -->
+          <div class="row mb-4">
+            <div class="col-md-5 text-center">
+              <img [src]="selectedPerson.photo_upload ? (environment.apiUrl + selectedPerson.photo_upload) : 'assets/images/pngwing.com.png'" alt="Person Photo" class="img-fluid rounded">
+
+            </div>
+            <div class="col-md-7">
+              <h4>{{ selectedPerson.full_name }}</h4>
+              <p><strong>Age:</strong> {{ selectedPerson.age }}</p>
+              <p><strong>Gender:</strong> {{ selectedPerson.gender }}</p>
+              <p><strong>Blood Group:</strong> {{ selectedPerson.blood_group }}</p>
+              <p><strong>Condition:</strong> {{ selectedPerson.condition }}</p>
+              <p><strong>Last Seen Location:</strong> {{ selectedPerson.last_seen_location }}</p>
+            </div>
+          </div>
+
+          <!-- personal info Section -->
+        <h5 class="mb-3 text-primary">Appearance Information</h5>
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Height:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.height || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Weight:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.weight || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>complexion:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.complexion || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Hair color:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.hair_color || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Hair type:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.hair_type || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Eye color:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.eye_color || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Birth Mark:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.birth_mark|| 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><strong>Distinctive mark:</strong></div>
+          <div class="col-md-9">{{ selectedPerson.distinctive_mark|| 'N/A' }}</div>
+        </div>
+
+          <!-- Contact Information Section -->
+          <h5 class="mb-3 text-primary">Contact Information</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Phone Number:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.contact.phone_number }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Email:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.contact.email }}</div>
+          </div>
+          <div class="row mb-3">
+              <div class="col-md-3"><strong>Social Media:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.contact.social_media_handles }}</div>
+            </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Contact Type:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.contact.type }}({{ selectedPerson.contact.subtype }})</div>
+          </div>
+
+          <!-- Address Information Section -->
+          <h5 class="mb-3 text-primary">Address Information</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Street:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.street }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Apartment:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.apartment_number }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>City:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.city }}</div>
+          </div>
+          <div class="row mb-3">
+              <div class="col-md-3"><strong>Village:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.address.village }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3"><strong>landmark:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.address.landmark }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3"><strong>location:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.address.location }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3"><strong>location:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.address.address_type }}</div>
+            </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>State:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.state }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Country:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.country }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Postal Code:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.postal_code }}</div>
+          </div>
+          <div class="row mb-3">
+              <div class="col-md-3"><strong>Address subtype:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.address.subtype }}</div>
+            </div>
+
+          <!-- Educational and Occupation Information -->
+          <h5 class="mb-3 text-primary">Educational & Occupation Details</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>caste :</strong></div>
+            <div class="col-md-9">{{ selectedPerson.caste || 'N/A' }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>sub caste:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.sub_caste || 'N/A' }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>religion:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.religion|| 'N/A' }}</div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>mother tongue:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.mother_tongue|| 'N/A' }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>other known Languages:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.other_known_languages|| 'N/A' }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Educational Details:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.educational_details }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Occupation:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.occupation }}</div>
+          </div>
+
+          <!-- Identification and Missing Details -->
+          <h5 class="mb-3 text-primary">Identification & Missing Information</h5>
+          <div class="row mb-3">
+              <div class="col-md-3"><strong>Identification Type:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.identification_details }}</div>
+            </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Identification Card Number:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.identification_card_no }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Missing Date:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.missing_date }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Missing Time:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.missing_time }}</div>
+            
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>missing_location:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.missing_location }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Location Details:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.location_details }}</div>
+          </div>
+          <!-- Investigating Officer & Reporting Person Details -->
+          <h5 class="mb-3 text-primary">Investigation Details</h5>
+          <div class="row mb-3">
+              <div class="col-md-3"><strong>Police station :</strong></div>
+              <div class="col-md-9">{{ selectedPerson.police_station_name_and_address.name}} </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3"><strong>Police station address:</strong></div>
+              <div class="col-md-9">{{ selectedPerson.police_station_name_and_address.address }} </div>
+            </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Investigating Officer:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.investigating_officer_name }} ({{ selectedPerson.investigating_officer_contact_number }})</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Reporting Person:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.reportingperson_name }} ({{ selectedPerson.relationship_with_victim }})</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Willing to Volunteer:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.willing_to_volunteer ? 'Yes' : 'No' }}</div>
+          </div>
+          <!-- Map Section -->
+        <h5 class="mb-3 text-primary">Location of missing Person</h5>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div id="map"></div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+      
+
+
+<!-- Modal to see short data in cards -->
+<div *ngIf="!showConfirmModal" class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewDetailsModalLabel">Match Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="matchTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="newlyMatchedTab" data-bs-toggle="tab" href="#newlyMatched" role="tab"
+              aria-controls="newlyMatched" aria-selected="true">Newly Matched</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="previouslyMatchedTab" data-bs-toggle="tab" href="#previouslyMatched" role="tab"
+              aria-controls="previouslyMatched" aria-selected="false">Previously Matched</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="previouslyRejectedTab" data-bs-toggle="tab" href="#previouslyRejected" role="tab"
+              aria-controls="previouslyRejected" aria-selected="false">Previously Rejected</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="confirmedMatchedTab" data-bs-toggle="tab" href="#confirmedMatched" role="tab"
+              aria-controls="confirmedMatched" aria-selected="false">Confirmed Matches</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="reportsTab" data-bs-toggle="tab" href="#reports" role="tab" aria-controls="reports" aria-selected="false">Reports</a>
+          </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-3" id="matchTabsContent">
+
+          <!-- Newly Matched Section -->
+          <div class="tab-pane fade" id="newlyMatched" role="tabpanel" aria-labelledby="newlyMatchedTab">
+            <div *ngIf="selectedMatch && selectedMatch.newly_matched && selectedMatch.newly_matched.length > 0 && selectedMatch.newly_matched[0] !== 'No newly matched persons found.'; else nonewlymatched">
+              <div class="row">
+                <!-- Loop through the 'newly_matched' array -->
+                <div *ngFor="let match of selectedMatch.newly_matched; let i = index" class="col-md-4">
+                  <div class="card border-primary mb-3 mt-2" style="max-width: 100%;" [ngStyle]="{'--delay': (i * 0.5) + 's'}">
+                    <div class="card-header">Match ID: {{ match.match_id }}</div>
+                    <div class="px-3 py-2 border-bottom">
+                      <strong>Previously Attempted Count:</strong> {{ match.missing_person.rematch_attempt }}
+                    </div>
+                    <div class="card-body d-flex">
+                      <!-- Left Column: Missing Person -->
+                      <div class="w-50 pe-3">
+                        <h6 class="card-title">Missing Person</h6>
+                        <p><strong>Name:</strong> {{ match.missing_person.full_name }}</p>
+                        <p><strong>Age:</strong> {{ match.missing_person.age }}</p>
+                      </div>
+                      <!-- Right Column: Matched Entity -->
+                      <div class="w-50 ps-3">
+                        <h6 class="card-title">{{ match.match_data.matched_entity?.address?.type || 'Address not available' }}</h6>
+                        <p class="card-text mb-1"><strong>Name:</strong> {{ match.match_data.matched_entity?.full_name }}</p>
+                        <p class="card-text mb-1"><strong>Age:</strong> {{ match.match_data.matched_entity?.estimated_age }}</p>
+                      </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                      <button class="btn btn-primary btn-sm" (click)="openNestedModal(match)">View Details</button>
+                      <button type="button" class="btn btn-danger" (click)="openRejectModal(match?.missing_person?.unique_id, match?.match_data?.match_id)">Reject Match</button>
+                      <button type="button" class="btn btn-success" (click)="openConfirmMatchModal(match,match.match_data?.match_id)">Confirm Match</button> <!-- Confirm Match button -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #nonewlymatched>
+              <p class="text-muted">No newly matched persons found.</p>
+            </ng-template>
+          </div>
+
+          <!-- Previously Matched Section -->
+          <div class="tab-pane fade" id="previouslyMatched" role="tabpanel" aria-labelledby="previouslyMatchedTab">
+            <div *ngIf="selectedMatch?.previously_matched && selectedMatch.previously_matched.length > 0 && selectedMatch.previously_matched[0] !== 'No previously matched persons found.'; else noPreviouslyMatched">
+              <div class="row">
+                <!-- Loop through the 'previously_matched' array -->
+                <div *ngFor="let match of selectedMatch.previously_matched; let i = index" class="col-md-4">
+                  <div class="card border-success mb-3 mt-2" style="max-width: 100%;" [ngStyle]="{'--delay': (i * 0.5) + 's'}"> 
+                    <div class="card-header">
+                      Match ID: {{ match.match_data?.match_id }}
+                    </div>
+                    <!-- <div class="px-3 py-2 border-bottom">
+                      <strong>Previously Attempted Count:</strong> {{ match.match_data?.rematch_attempt }}
+                    </div> -->
+                    <div class="card-body d-flex flex-column">
+                      <div class="d-flex">
+                        <!-- Left Column: Missing Person -->
+                        <div class="w-50 pe-3">
+                          <h6 class="card-title">Missing Person</h6>
+                          <p class="card-text mb-1"><strong>Name:</strong> {{ match.missing_person?.full_name || 'No name available' }}</p>
+                          <p class="card-text mb-1"><strong>Age:</strong> {{ match.missing_person?.age || 'Age not available' }}</p>
+                        </div>
+                        <!-- Right Column: Matched Entity -->
+                        <div class="w-50 ps-3">
+                          <h6 class="card-title">{{ match.match_data?.matched_entity?.address?.type || 'Type not available' }}</h6>
+                          <p class="card-text mb-1"><strong>Name:</strong> {{ match.match_data?.matched_entity?.full_name || 'No name available' }}</p>
+                          <p class="card-text mb-1"><strong>Age:</strong> {{ match.match_data?.matched_entity?.estimated_age || 'Age not available' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                      <button class="btn btn-primary btn-sm" (click)="openNestedModal(match)">View Details</button>
+                      <button type="button" class="btn btn-danger" (click)="openRejectModal(match?.missing_person?.unique_id, match?.match_data?.match_id)">Reject Match</button>
+                      <button type="button" class="btn btn-success" (click)="openConfirmMatchModal(match,match.match_data?.match_id)">Confirm Match</button> <!-- Confirm Match button -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noPreviouslyMatched>
+              <p class="text-muted">No previously matched persons found.</p>
+            </ng-template>
+          </div>
+          
+          <!-- Previously Rejected Section -->
+          <div class="tab-pane fade" id="previouslyRejected" role="tabpanel" aria-labelledby="previouslyRejectedTab">
+            <div *ngIf="selectedMatch?.previously_rejected?.length > 0 && selectedMatch.previously_rejected[0] !== 'No previously rejected persons found.'; else noPreviouslyRejected">
+              <div class="row">
+                <div *ngFor="let rejected of selectedMatch.previously_rejected; let i = index" class="col-md-4">
+                  <div class="card border-danger mb-3 mt-2" style="max-width: 100%;" [ngStyle]="{'--delay': (i * 0.5) + 's'}">
+                    <div class="card-header">
+                      Match ID: {{ rejected.match_data?.match_id }}
+                    </div>
+                    <div class="px-3 py-2 border-bottom">
+                      <strong>Previously Attempted Count:</strong> {{ selectedMatch.match_data?.rematch_attempt }}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                      <div class="d-flex">
+                        <!-- Left Column: Missing Person -->
+                        <div class="w-50 pe-3">
+                          <h6 class="card-title">Missing Person</h6>
+                          <p class="card-text mb-1"><strong>Name:</strong> {{ rejected.missing_person?.full_name || 'No name available' }}</p>
+                          <p class="card-text mb-1"><strong>Age:</strong> {{ rejected.missing_person?.age || 'Age not available' }}</p>
+                        </div>
+                        <!-- Right Column: Matched Entity -->
+                        <div class="w-50 ps-3">
+                          <h6 class="card-title">{{ rejected.match_data?.matched_entity?.address?.type || 'Type not available' }}</h6>
+                          <p class="card-text mb-1"><strong>Name:</strong> {{ rejected.match_data?.matched_entity?.full_name || 'No name available' }}</p>
+                          <p class="card-text mb-1"><strong>Age:</strong> {{ rejected.match_data?.matched_entity?.estimated_age || 'Age not available' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                      <button class="btn btn-primary btn-sm" (click)="openNestedModal(rejected)">View Details</button>
+                      <button class="btn btn-warning btn-sm" (click)="unrejectMatch(rejected.missing_person?.unique_id, rejected.match_data?.match_id)">Unreject</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noPreviouslyRejected>
+              <p class="text-muted">No previously rejected persons found.</p>
+            </ng-template>
+          </div>
+          
+          <!-- Confirmed Matches Section -->
+          <div class="tab-pane fade" id="confirmedMatched" role="tabpanel" aria-labelledby="confirmedMatchedTab">
+            <div *ngIf="selectedMatch?.confirmed_matched?.length > 0 && selectedMatch.confirmed_matched[0] !== 'No confirmed matches found.'; else noConfirmedMatches">
+              <div class="row">
+                <div *ngFor="let match of selectedMatch.confirmed_matched; let i = index" class="col-md-4">
+                  <div class="card border-success mb-3 mt-2" style="max-width: 100%;" [ngStyle]="{'--delay': (i * 0.5) + 's'}">
+                    <div class="card-header">
+                      Match ID: {{ match.match_data?.match_id }}
+                    </div>
+                    <div class="px-3 py-2 border-bottom">
+                      <strong>Match Percentage:</strong> {{ match.match_data?.match_percentage }}%
+                    </div>
+                    <div class="card-body d-flex">
+                      <div class="w-50 pe-3">
+                        <h6 class="card-title">Missing Person</h6>
+                        <p class="card-text mb-1"><strong>Name:</strong> {{ match.missing_person.full_name }}</p>
+                        <p class="card-text mb-1"><strong>Age:</strong> {{ match.missing_person.age }}</p>
+                      </div>
+                      <div class="w-50 ps-3">
+                        <h6 class="card-title">Matched Entity</h6>
+                        <p class="card-text mb-1"><strong>Name:</strong> {{ match.match_data?.matched_entity?.full_name }}</p>
+                        <p class="card-text mb-1"><strong>Age:</strong> {{ match.match_data?.matched_entity?.estimated_age }}</p>
+                      </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                      <button class="btn btn-primary btn-sm" (click)="openNestedModal(match)">View Details</button>
+                      <button class="btn btn-danger btn-sm" (click)="unmatchConfirmedMatch(match?.match_data?.match_id)">Unmatch</button>
+                      <button class="btn btn-info btn-sm" (click)="getReport(match.missing_person?.full_name)">Get Report</button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noConfirmedMatches>
+              <p class="text-muted">No confirmed matches found.</p>
+            </ng-template>
+          </div>
+          <!-- to see reports -->
+          <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reportsTab">
+            <!-- Display Existing Reports -->
+            <div *ngIf="existing_reports && existing_reports.length > 0; else noExistingReports">
+              <h4>Existing Reports</h4>
+              <div class="list-group">
+                <div *ngFor="let report of existing_reports" class="list-group-item">
+                  <h5>{{ report.report_number }}</h5>
+                  <p><strong>Status:</strong> {{ report.status || 'Not Available' }}</p>
+                  <p><strong>Date Reported:</strong> {{ report.date_reported || 'Not Available' }}</p>
+                  <p><strong>Reported By:</strong> {{ report.reported_by || 'Not Available' }}</p>
+                  <p><strong>Case Duration:</strong> {{ report.case_duration || 'Not Available' }} days</p>
+                  <p><strong>Resolution Summary:</strong> {{ report.resolution_summary || 'Not Available' }}</p>
+                  <p><strong>Match Type:</strong> {{ report.match_type || 'Not Available' }}</p>
+                  <button class="btn btn-info btn-sm" (click)="viewReportDetails(report)">View Details</button>
+                </div>
+              </div>
+            </div>
+            <ng-template #noExistingReports>
+              <p class="text-muted">No existing reports available.</p>
+            </ng-template>
+          
+            <!-- Display New Reports -->
+            <div *ngIf="report_data && report_data.length > 0; else noNewReports">
+              <h4>New Reports</h4>
+              <div class="list-group">
+                <div *ngFor="let report of report_data" class="list-group-item">
+                  <h5>{{ report.report_number }}</h5>
+                  <p><strong>Status:</strong> {{ report.status || 'Not Available' }}</p>
+                  <p><strong>Date Reported:</strong> {{ report.date_reported || 'Not Available' }}</p>
+                  <p><strong>Reported By:</strong> {{ report.reported_by || 'Not Available' }}</p>
+                  <p><strong>Case Duration:</strong> {{ report.case_duration || 'Not Available' }} days</p>
+                  <p><strong>Resolution Summary:</strong> {{ report.resolution_summary || 'Not Available' }}</p>
+                  <p><strong>Match Type:</strong> {{ report.match_type || 'Not Available' }}</p>
+                  <button class="btn btn-info btn-sm" (click)="viewReportDetails(report)">View Details</button>
+                </div>
+              </div>
+            </div>
+            <ng-template #noNewReports>
+              <p class="text-muted">No new reports available.</p>
+            </ng-template>
+          </div>
+          
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+     
+<!-- Nested Modal (This will show when "View Details" is clicked) -->
+<div class="modal fade" id="nestedModal" tabindex="-1" aria-labelledby="nestedModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="nestedModalLabel">Detailed Match Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Detail</th>
+              <th scope="col">Missing Person</th>
+              <th scope="col">Matched Person</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>{{ selectedMatched?.missing_person?.full_name || 'Not available' }}</td>
+              <td>{{ selectedMatched?.match_data?.matched_entity?.full_name || 'Not available' }}</td>
+            </tr>
+            <tr>
+              <td>Age</td>
+              <td>{{ selectedMatched?.missing_person?.age || 'Not available' }}</td>
+              <td>{{ selectedMatched?.match_data?.matched_entity?.estimated_age || 'Not available' }}</td>
+            </tr>
+            <tr>
+              <td>Address</td>
+              <td>{{ selectedMatched?.missing_person?.address.city || 'Address not available' }}</td>
+              <td>{{ selectedMatched?.match_data?.matched_entity?.address?.city || 'Address not available' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <!-- Pass matchId and uniqueId to openRejectModal -->
+        <!-- <button type="button" class="btn btn-danger" (click)="openRejectModal(selectedMatched?.missing_person?.unique_id, selectedMatched?.match_data?.match_id)">Reject Match</button> -->
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Nested Modal for Rejecting Match (Reason Input) -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rejectModalLabel">Reject Match</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="rejectionReason">Rejection Reason</label>
+          <textarea id="rejectionReason" class="form-control" [(ngModel)]="rejectionReason" placeholder="Please provide a reason for rejecting the match..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="submitRejection()">Confirm Reject</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Match Modal -->
+<div *ngIf="showConfirmModal" class="modal fade show confirm-modal" style="display: block;" data-bs-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Match</h5>
+        <button type="button" class="close" (click)="closeConfirmModal()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="confirmMatchForm" (ngSubmit)="confirmMatch()">
+          <div class="form-group">
+            <label for="missingPersonName">Missing Person Name</label>
+            <input type="text" id="missingPersonName" class="form-control" formControlName="missing_person_name" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmedByName">Confirmed By</label>
+            <input type="text" id="confirmedByName" class="form-control" formControlName="confirmed_by_name" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmedByContact">Contact</label>
+            <input type="text" id="confirmedByContact" class="form-control" formControlName="confirmed_by_contact" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmedByRelationship">Relationship</label>
+            <input type="text" id="confirmedByRelationship" class="form-control" formControlName="confirmed_by_relationship" required>
+          </div>
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" class="form-control" formControlName="notes"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeConfirmModal()">Cancel</button>
+            <button type="submit" class="btn btn-success" [disabled]="confirmMatchForm.invalid">Confirm Match</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for Viewing Report Details -->
+<div *ngIf="isModalOpen" class="modal fade show" id="reportDetailsModal" tabindex="-1" role="dialog" aria-labelledby="reportDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportDetailsModalLabel">Report Details</h5>
+        <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Display detailed report data -->
+        <p><strong>Report Number:</strong> {{ selectedReport?.report_number || 'Not Available' }}</p>
+        <p><strong>Status:</strong> {{ selectedReport?.status || 'Not Available' }}</p>
+        <p><strong>Date Reported:</strong> {{ selectedReport?.date_reported || 'Not Available' }}</p>
+        <p><strong>Reported By:</strong> {{ selectedReport?.reported_by || 'Not Available' }}</p>
+        <p><strong>Case Duration:</strong> {{ selectedReport?.case_duration || 'Not Available' }} days</p>
+        <p><strong>Resolution Summary:</strong> {{ selectedReport?.resolution_summary || 'Not Available' }}</p>
+        <p><strong>Match Type:</strong> {{ selectedReport?.match_type || 'Not Available' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModals()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

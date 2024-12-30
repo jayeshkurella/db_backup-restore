@@ -1,0 +1,242 @@
+/* Container and row styling */
+.container {
+    padding: 10px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    /* gap: 05px !important;  */
+    justify-content: flex-start; 
+  }
+  
+  /* Volunteer Card */
+  .volunteer-card {
+    max-width: 280px; 
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease;
+    margin: 5px; /* Very small margin between cards */
+  }
+  
+  .volunteer-card:hover {
+    transform: translateY(-5px); /* Subtle hover effect */
+  }
+  
+  
+  /* Card Content */
+  .card-body {
+    padding: 10px; /* Reduced padding */
+    text-align: center;
+  }
+  
+  .card-title {
+    font-size: 1rem; /* Slightly smaller font size */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .card-subtitle {
+    font-size: 1.3rem;
+    color: #ff6700;
+    margin-bottom: 8px; /* Reduced spacing */
+  }
+  .card-details {
+    margin-top: 05px;
+  }
+  
+  .details-table {
+    width: 100%; /* Make the table full-width */
+    border-collapse: collapse; /* Remove space between table cells */
+  }
+  
+  .details-table td {
+    padding: 8px; /* Padding for each cell */
+    border-bottom: 1px solid #ddd; /* Light border for rows */
+    font-size: 0.85rem;
+    color: #666;
+  }
+  
+  .details-table td:first-child {
+    font-weight: bold; /* Bold labels */
+    color: #333; /* Darker color for labels */
+  }
+  
+  .details-table tr:last-child td {
+    border-bottom: none; /* Remove border from the last row */
+  }
+  
+
+  
+
+  body {
+    background-color: #f5f7fa;
+  }
+  
+  .testimonial-card .card-up {
+    height: 100px;
+    overflow: hidden;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+  }
+  
+  .aqua-gradient {
+    background: linear-gradient(40deg, #2096ff, #05ffa3) !important;
+  }
+  
+  .testimonial-card .avatar {
+    width: 150px;
+    margin-top: -60px;
+    overflow: hidden;
+    border: 5px solid #fff;
+    border-radius: 50%;
+  }
+  
+
+  
+    /* Card Footer */
+  .card-footer {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+    text-align: center;
+  }
+
+  .footer-icons {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-icons li {
+    margin: 0 25px;
+  }
+
+  .footer-icons a {
+    font-size: 20px;
+    color: #000000;
+    transition: color 0.3s ease;
+  }
+
+  .footer-icons a:hover {
+    color: #333;
+  }
+
+  body {
+    background-color: #f5f7fa;
+  }
+
+
+
+  /* Button Styling */
+  .card-footer .btn {
+    width: 100%;
+    padding: 5px; 
+    margin-top: 5px; 
+    border-radius: 8px;
+  }
+
+  .card-body .btn {
+    width: 100%; 
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background-color: #ff6700; 
+    color: white;
+  }
+
+  .card-body .btn:hover {
+    background-color: #e55e00; 
+  }
+
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .volunteer-card {
+      max-width: 45%;
+      margin: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .volunteer-card {
+      max-width: 48%;
+  }
+}
+
+@media (max-width: 576px) {
+  .volunteer-card {
+      max-width: 100%;
+      margin: 5px auto;
+  }
+
+  .profile-img {
+      width: 60px;
+      height: 60px;
+  }
+
+  .card-title {
+      font-size: 1rem;
+  }
+
+  .card-subtitle {
+      font-size: 0.9rem;
+  }
+
+  .details-table td {
+      font-size: 0.8rem;
+  }
+}
+
+
+  
+
+ 
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  }
+  .modal.show .modal-dialog {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  
+ 
+  h5.text-primary {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  
+  .modal-body .row {
+    margin-bottom: 1rem;
+  }
+  
+  
+  
+  .modal-body .row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .modal-body .row .col-md-3 {
+    font-weight: 600;
+  }
+  
+  .modal-body .row .col-md-9 {
+    font-style: italic;
+    color: #555;
+  }
+  
+
+  #map{
+    height: 400px;
+    width: 100%;
+  }
+   
