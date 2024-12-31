@@ -121,7 +121,7 @@
             <td>{{ i + 1 }}</td>
             <td>
               <div class="image-container">
-                <img [src]="person.body_photo_upload ? (environment.apiUrl + person.body_photo_upload) : 'assets/images/pngwing.com.png'" alt="Body Photo" class="img-fluid rounded" />
+                <img [src]="person.body_photo_upload ? (environment.apiUrl + person.body_photo_upload) : 'assets/images/Nophoto.png'" alt=" No Body Photo" class="img-fluid rounded" />
               </div>
             </td>
             <td>{{ person?.full_name || 'Unknown' }}</td>
@@ -166,7 +166,7 @@
             <!-- Person Overview Section -->
             <div class="row mb-4">
               <div class="col-md-5 text-center">
-                <img [src]="selectedPerson.body_photo_upload ? (environment.apiUrl + selectedPerson.body_photo_upload) : 'assets/images/pngwing.com.png'" alt="Person Photo" class="img-fluid rounded">
+                <img [src]="selectedPerson.body_photo_upload ? (environment.apiUrl + selectedPerson.body_photo_upload) : 'assets/images/Nophoto.png'" alt="No body photo" class="img-fluid rounded">
               </div>
               <div class="col-md-7">
                 <h4>{{ selectedPerson.full_name }}</h4>

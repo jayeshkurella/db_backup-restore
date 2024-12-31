@@ -140,6 +140,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     private fitereddataapi :MainDashserviceService,
     private cdr: ChangeDetectorRef,
   ) {this.geo_url = "https://products.coderize.in/geoserver/GeoFlow_WCD/wms/",
+
       this.local_url = "http://localhost:8080/geoserver/WS_Chhay_foundation/wms/"
   }
 
@@ -312,8 +313,11 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
               Gender: ${person.gender || 'Not specified'}<br>
               Age: ${person.age || 'Not specified'}<br>
               Location: ${person.address.city || 'Not specified'}<br>
-              <img src="${environment.apiUrl + (person.photo_upload || '/assets/images/noPhoto.png')}" alt="Photo" style="width: 250px; height: 150px;">
-            `;
+              <img 
+                src="${person.photo_upload ? environment.apiUrl + person.photo_upload : '/assets/images/Chhaya.png'}" 
+                alt="No Photo Updated" 
+                style="width: 200px; height: 100px;"
+              >            `;
   
             const customIcon = L.icon({
               iconUrl: 'assets/leaflet/images/green_marker.png',
@@ -572,7 +576,11 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
             Age: ${person.estimated_age || 'Not specified'}<br>
             Gender: ${person.gender || 'Not specified'}<br>
             Location: ${person.address.city || 'Not specified'}<br>
-            <img src="${environment.apiUrl + (person.photo_upload || '/assets/images/noPhoto.png')}" alt="Photo" style="width: 250px; height: 150px;">
+             <img 
+                src="${person.photo_upload ? environment.apiUrl + person.photo_upload : '/assets/images/Chhaya.png'}" 
+                alt="No Photo Updated" 
+                style="width: 200px; height: 100px;"
+              >    
           `;
   
           const customIcon = L.icon({
@@ -751,9 +759,14 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
           // Prepare popup content
           const popupContent = `
             <strong>Person Type: Unidentified Body</strong><br>
+            Estimated Age: ${body.estimated_age || 'Not specified'}<br>
             Location: ${body.body_seen_details || 'Not specified'}<br>
-            <img src="${environment.apiUrl + (body.body_photo_upload || '/assets/images/noPhoto.png')}" alt="Photo" style="width: 250px; height: 150px;">
-          `;
+            Body found city: ${body.address.city || 'Not specified'}<br>
+            <img 
+                src="${body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : '/assets/images/Chhaya.png'}" 
+                alt="No Photo Updated" 
+                style="width: 200px; height: 100px;"
+              >              `;
   
           // Create a custom marker for Leaflet
           const customIcon = L.icon({

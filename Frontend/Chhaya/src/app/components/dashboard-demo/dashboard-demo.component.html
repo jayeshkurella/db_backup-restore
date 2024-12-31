@@ -5,14 +5,10 @@
       <img src="assets/images/Chhaya.png" alt="Logo" class="navbar-logo" />
     </a>
 
-    <!-- Center Text -->
-    <div class="navbar-center text-center d-none d-lg-block">
-      <h1 class="navbar-title mb-0">Chhaya Foundation</h1>
-    </div>
 
     <!-- Right Section with User Icon -->
     <div class="d-flex align-items-center">
-      <a class="text-light">
+      <a class="text-dark">
         <i class="bi bi-person-circle user-icon" (click)="onNavigate()"></i>
       </a>
     </div>
@@ -24,103 +20,111 @@
   <div class="loader"></div>
 </div>
 
-<div class="container-fluid">
+
+<div class="container-fluid" style="background-color: #f9fafc;">
   <!-- cards -->
-  <div class="my-2 row">
-    <!-- Card 2 -->
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <div class="card shadow-lg card-colour" style="background: linear-gradient(135deg, rgba(241, 159, 77, 0.7), rgba(255, 102, 204, 0.5)), url('your-background-image.jpg'); background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
+  <div class="my-2 row" style="padding-top: 20px;">
+    
+    <div class="col-12 col-md-6 col-lg-4  mb-2">
+      <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: bold; color: #000000;">Missing Persons</h5>
-            <span class="text-light" style="font-size: 25px; font-weight: bold;"><i class="bi bi-people"></i></span>
+            <h5 class="card-title" style="font-size: 1.25rem;  color: #000000;">Missing Persons</h5>
+            <span style="font-size: 25px; font-weight: bold; color: #ff00fb;"><i class="bi bi-people"></i></span>
           </div>
-          <h3 class="card-number" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #000000;">{{ missingPersontotalcount || 0 }}</h3>
-          <div class="progress mt-3" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#FF6F61'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#2D93B7'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
+          <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ missingPersontotalcount || 0 }}</h3>
+          <div class="progress" style="height: 10px; border-radius: 5px;">
+            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#a31e98'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
+            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#ff60f2'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
             <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> <!-- Purple for Other -->
           </div>
           <div class="d-flex justify-content-between mt-2">
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #FF6F61;">{{ missingPersonGenderCountss.Female || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">{{ ((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Female</small>
+              <h6 class="text-dark mb-0" style=" font-weight: bold; color: #a31e98;">{{ missingPersonGenderCountss.Female || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">
+                {{ ((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Female
+              </small>
             </div>
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #2D93B7;">{{ missingPersonGenderCountss.Male || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">{{ ((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Male</small>
+              <h6 class=" mb-0" style="font-weight: bold; color: #ff60f2;">{{ missingPersonGenderCountss.Male || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #ff60f2;">
+                {{ ((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Male
+              </small>
             </div>
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #8E44AD;">{{ missingPersonGenderCountss.Other || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">{{ ((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Other</small>
+              <h6 class=" mb-0" style=" font-weight: bold; color: #3f1f4d;">{{ missingPersonGenderCountss.Other || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">
+                {{ ((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Other
+              </small>
             </div>
           </div>
         </div>
       </div>
     </div>
-  
+    
     <!-- Card 3 -->
     <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <div class="card shadow-lg card-colour" style="background: linear-gradient(135deg, rgba(241, 159, 77, 0.7), rgba(255, 102, 204, 0.5)), url('your-background-image.jpg'); background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
+      <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: bold; color: #000000;">Unidentified Persons</h5>
-            <span class="text-light" style="font-size: 25px; font-weight: bold;"><i class="bi bi-info-circle"></i></span>
+            <h5 class="card-title" style=" font-size: 1.25rem;  color: #000000;">Unidentified Persons</h5>
+            <span  style="font-size: 25px; font-weight: bold; color: #7b61ff;"><i class="bi bi-info-circle"></i></span>
           </div>
-          <h3 class="card-number" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #000000;">{{ unidentifiedPersonTotalCounts || 0 }}</h3>
-          <div class="progress mt-3" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#FF6F61'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#2D93B7'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
+          <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ unidentifiedPersonTotalCounts || 0 }}</h3>
+          <div class="progress" style="height: 10px; border-radius: 5px;">
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#2e16a9'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#7b61ff'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
             <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> <!-- Purple for Other -->
           </div>
           <div class="d-flex justify-content-between mt-2">
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #FF6F61;">{{ unidentifiedPersonGenderCounts.Female || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">{{ ((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Female</small>
+              <h6 class=" mb-0" style="font-weight: bold; color: #2e16a9;">{{ unidentifiedPersonGenderCounts.Female || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #2e16a9;">{{ ((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Female</small>
             </div>
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #2D93B7;">{{ unidentifiedPersonGenderCounts.Male || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">{{ ((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Male</small>
+              <h6 class=" mb-0" style="font-weight: bold; color: #7b61ff;">{{ unidentifiedPersonGenderCounts.Male || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #7b61ff;">{{ ((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Male</small>
             </div>
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #8E44AD;">{{ unidentifiedPersonGenderCounts.Other || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">{{ ((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Other</small>
+              <h6 class=" mb-0" style=" font-weight: bold; color: #8E44AD;">{{ unidentifiedPersonGenderCounts.Other || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">{{ ((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Other</small>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
   
     <!-- Card 4 -->
     <div class="col-12 col-md-6 col-lg-4 mb-3">
-      <div class="card shadow-lg card-colour" style="background: linear-gradient(135deg, rgba(241, 159, 77, 0.7), rgba(255, 102, 204, 0.5)), url('your-background-image.jpg'); background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
+      <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: bold; color: #000000;">Unidentified Bodies</h5>
-            <span class="text-light" style="font-size: 25px; font-weight: bold;"><i class="bi bi-eye-slash"></i></span>
+            <h5 class="card-title" style=" font-size: 1.25rem;  color: #000000;">Unidentified Bodies</h5>
+            <span  style="font-size: 25px; font-weight: bold; color: #ff0000;"><i class="bi bi-eye-slash" style="fill: #ff0000;"></i></span>
           </div>
-          <h3 class="card-number" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #000000;">{{ unidentifiedBodyTotalCount || 0 }}</h3>
-          <div class="progress mt-3" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#FF6F61'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#2D93B7'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
+          <h3 class="card-number" style=" font-weight: bold; color: #000000;">{{ unidentifiedBodyTotalCount || 0 }}</h3>
+          <div class="progress" style="height: 10px; border-radius: 5px;">
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#b02a2a'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#ff3f3f'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
             <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Other || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> <!-- Purple for Other -->
           </div>
           <div class="d-flex justify-content-between mt-2">
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #FF6F61;">{{ unidentifiedBodyGenderCounts.Female || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">
+              <h6 class=" mb-0" style=" font-weight: bold; color: #b02a2a;">{{ unidentifiedBodyGenderCounts.Female || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #bf1616;">
                 {{ ((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100).toFixed(1) }}% Female
               </small>
             </div>
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #2D93B7;">{{ unidentifiedBodyGenderCounts.Male || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">
+              <h6 class=" mb-0" style=" font-weight: bold; color: #ff3f3f;">{{ unidentifiedBodyGenderCounts.Male || 0 }}</h6>
+              <small class="text-muted" style="font-size: 0.875rem; color: #ff3f3f;">
                 {{ ((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100).toFixed(1) }}% Male
               </small>
             </div>
             <div>
-              <h6 class="text-dark mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: #8E44AD;">{{ unidentifiedBodyGenderCounts.Other || 0 }}</h6>
-              <small class="text-muted" style="font-family: 'Poppins', sans-serif; font-size: 0.875rem; color: #000000;">
+              <h6 class=" mb-0" style=" font-weight: bold; color: #8E44AD;">{{ unidentifiedBodyGenderCounts.Other || 0 }}</h6>
+              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">
                 {{ ((unidentifiedBodyGenderCounts.Other || 0) / (unidentifiedBodyTotalCount || 1) * 100).toFixed(1) }}% Other
               </small>
             </div>
@@ -128,664 +132,521 @@
         </div>
       </div>
     </div>
-  </div>
-  
-  
-  
-
-  <!-- staticstic cards -->
-  <div class="my-2">
-    <div class="row g-3">
-        <!-- Card 1: Missing Person -->
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card border-0 shadow rounded">
-                <div class="card-header bg-primary text-white rounded-top d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Missing Person</h5>
-                    <i class="bi bi-people fs-4"></i>
-                </div>
-                <div class="card-body p-1">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered text-center mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th colspan="2">Resolved Cases</th>
-                                    <th colspan="3">{{ Found_alivecount + Deceasedcount || 0 }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Male</th>
-                                    <th>Female</th>
-                                    <th>Transgender</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>UB Found</td>
-                                    <td>{{ deceasedCountgendercount.Male ? ((deceasedCountgendercount.Male / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ deceasedCountgendercount.Female ? ((deceasedCountgendercount.Female / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ deceasedCountgendercount.Other ? ((deceasedCountgendercount.Other / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>UP Matched</td>
-                                    <td>{{ found_alivegendercount.Male ? ((found_alivegendercount.Male / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ found_alivegendercount.Female ? ((found_alivegendercount.Female / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ found_alivegendercount.Other ? ((found_alivegendercount.Other / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Pending</td>
-                                    <td>{{ pendingGendercounts.Male ? ((pendingGendercounts.Male / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ pendingGendercounts.Female ? ((pendingGendercounts.Female / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ pendingGendercounts.Other ? ((pendingGendercounts.Other / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 2: Unidentified Person -->
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card border-0 shadow rounded">
-                <div class="card-header bg-success text-white rounded-top d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Unidentified Person</h5>
-                    <i class="bi bi-info-circle fs-4"></i>
-                </div>
-                <div class="card-body p-1">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered text-center mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th colspan="2">Resolved Cases</th>
-                                    <th colspan="3">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Male</th>
-                                    <th>Female</th>
-                                    <th>Transgender</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>MP Matched</td>
-                                    <td>{{ UPfound_alivegendercount.Male ? ((UPfound_alivegendercount.Male / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UPfound_alivegendercount.Female ? ((UPfound_alivegendercount.Female / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UPfound_alivegendercount.Other ? ((UPfound_alivegendercount.Other / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>UB Found</td>
-                                    <td>{{ UPdeceasedCountgendercount.Male ? ((UPdeceasedCountgendercount.Male / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UPdeceasedCountgendercount.Female ? ((UPdeceasedCountgendercount.Female / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UPdeceasedCountgendercount.Other ? ((UPdeceasedCountgendercount.Other / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Pending</td>
-                                    <td>{{ UPpendingGendercounts.Male ? ((UPpendingGendercounts.Male / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UPpendingGendercounts.Female ? ((UPpendingGendercounts.Female / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UPpendingGendercounts.Other ? ((UPpendingGendercounts.Other / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 3: Unidentified Dead Bodies -->
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card border-0 shadow rounded">
-                <div class="card-header bg-danger text-white rounded-top d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Unidentified Dead Bodies</h5>
-                    <i class="bi bi-eye-slash fs-4"></i>
-                </div>
-                <div class="card-body p-1">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered text-center mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th colspan="2">Resolved Cases</th>
-                                    <th colspan="3">{{ UBDeceasedcount + UBFound_alivecount }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Male</th>
-                                    <th>Female</th>
-                                    <th>Transgender</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>MP Matched</td>
-                                    <td>{{ UBfound_alivegendercount.Male? ((UBfound_alivegendercount.Male /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UBfound_alivegendercount.Female? ((UBfound_alivegendercount.Female /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UBfound_alivegendercount.Other? ((UBfound_alivegendercount.Other /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>UP Matched</td>
-                                    <td>{{ UBdeceasedCountgendercount.Male? ((UBdeceasedCountgendercount.Male /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UBdeceasedCountgendercount.Female? ((UBdeceasedCountgendercount.Female /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UBdeceasedCountgendercount.Other? ((UBdeceasedCountgendercount.Other /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Pending</td>
-                                    <td>{{ UBpendingGendercounts.Male? ((UBpendingGendercounts.Male /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UBpendingGendercounts.Female? ((UBpendingGendercounts.Female /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                    <td>{{ UBpendingGendercounts.Other? ((UBpendingGendercounts.Other /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
-
-
-  <!-- map -->
-  <div class="mt-2">
-    <div class="row">
-      <div class="col-md-9">
-        <div class="containerx">
-          <!-- Filters Section -->
-          <div class="row g-3">
-            <!-- State, District, City, Village, Police Station -->
-            <div class="col-12">
-              <div class="row g-2">
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedState"
-                    (change)="filterDataByFilters()"
-                    aria-label="State"
-                  >
-                    <option value="All States">All States</option>
-                    <option *ngFor="let state of allstates" [value]="state">
-                      {{ state }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedDistrict"
-                    (change)="filterDataByFilters()"
-                    aria-label="District"
-                  >
-                    <option value="All Districts">All Districts</option>
-                    <option
-                      *ngFor="let district of alldistricts"
-                      [value]="district"
-                    >
-                      {{ district }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedCity"
-                    (change)="filterDataByFilters()"
-                    aria-label="City"
-                  >
-                    <option value="All Cities">All Cities</option>
-                    <option *ngFor="let city of allcities" [value]="city">
-                      {{ city }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedVillage"
-                    (change)="filterDataByFilters()"
-                    aria-label="Village"
-                  >
-                    <option value="All Villages">All Villages</option>
-                    <option
-                      *ngFor="let village of allVillages"
-                      [value]="village"
-                    >
-                      {{ village }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedPoliceStation"
-                    (change)="filterDataByFilters()"
-                    aria-label="Police"
-                  >
-                    <option value="All Police Stations">
-                      All Police Stations
-                    </option>
-                    <option
-                      *ngFor="let station of allpolicestations"
-                      [value]="station.id"
-                    >
-                      {{ station.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <!-- Gender, Height, Age, Marital Status -->
-            <div class="col-12">
-              <div class="row g-2">
-                <!-- Gender Filter -->
-                <div class="col-lg col-md-6">
-                  <label for="gender" class="form-label">Gender</label>
-                  <select
-                    id="gender"
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedgender"
-                    (change)="filterDataByFilters()"
-                    aria-label="Gender"
-                  >
-                    <option value="All Genders">All Genders</option>
-                    <option *ngFor="let gender of allgenders" [value]="gender">
-                      {{ gender }}
-                    </option>
-                  </select>
-                </div>
-            
-                <!-- Height Range Filter -->
-                <div class="col-lg col-md-6">
-                  <label for="heightRange" class="form-label">Height Range</label>
-                  <select
-                    id="heightRange"
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedHeightRange"
-                    (change)="filterDataByFilters()"
-                    aria-label="Height Range"
-                  >
-                    <option value="All Heights">All Heights</option>
-                    <option value="133-150">133-150 cm</option>
-                    <option value="151-180">151-180 cm</option>
-                    <option value="Above 180">Above 180 cm</option>
-                  </select>
-                </div>
-            
-                <!-- Age Range Filter -->
-                <div class="col-lg col-md-6">
-                  <label for="ageRange" class="form-label">Age Range</label>
-                  <select
-                    id="ageRange"
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedAgeRange"
-                    (change)="filterDataByFilters()"
-                    aria-label="Age Range"
-                  >
-                    <option value="All Ages">All Ages</option>
-                    <option value="0-18">0-18</option>
-                    <option value="18-30">18-30</option>
-                    <option value="30-50">30-50</option>
-                    <option value="50-70">50-70</option>
-                    <option value="Above 70">Above 70</option>
-                  </select>
-                </div>
-            
-                <!-- Marital Status Filter -->
-                <div class="col-lg col-md-6">
-                  <label for="maritalStatus" class="form-label">Marital Status</label>
-                  <select
-                    id="maritalStatus"
-                    class="form-select form-select-sg"
-                    [(ngModel)]="selectedmarital"
-                    (change)="filterDataByFilters()"
-                    aria-label="Marital Status"
-                  >
-                    <option value="Marital status">Marital Status</option>
-                    <option value="Single">Single</option>
-                    <option value="Married">Married</option>
-                    <option value="Widowed">Widowed</option>
-                  </select>
-                </div>
-            
-                <!-- Start Date Filter -->
-                <div class="col-lg col-md-6">
-                  <label for="startDate" class="form-label">Start Date</label>
-                  <input 
-                    id="startDate"
-                    type="date" 
-                    class="form-control form-select-sg" 
-                    [(ngModel)]="selectedStartDate"
-                    (change)="filterDataByFilters()"
-                    aria-label="Start Date"
-                  />
-                </div>
-            
-                <!-- End Date Filter -->
-                <div class="col-lg col-md-6">
-                  <label for="endDate" class="form-label">End Date</label>
-                  <input 
-                    id="endDate"
-                    type="date" 
-                    class="form-control form-select-sg" 
-                    [(ngModel)]="selectedEndDate"
-                    (change)="filterDataByFilters()"
-                    aria-label="End Date"
-                  />
-                </div>
-                
-              </div>
-            </div>
-            
-          </div>
-
-          <!-- Map Section -->
-          <div class="row mt-1">
-            <div class="col">
-              <div class="p-1 bg-light">
-                <div
-                  id="map"
-                  style="
-                    height: 400px;
-                    border: 1px solid #000000;
-                    border-radius: 5px;
-                  "
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 mt-3">
-        <!-- Unidentified Persons -->
-        <div class="containerpp">
-          <div class="gauge-card">
-            <h4>Unidentified Persons</h4>
-            <canvas id="unidentifiedPersonsChart"></canvas>
-            <!-- <div class="values mt-4">
-              <div>
-                <span class="count">{{ unidentifiedPersonGenderCounts.Male || 0 }}</span>
-                <span class="label">Male</span>
-              </div>
-              <div>
-                <span class="count">{{ unidentifiedPersonGenderCounts.Female || 0 }}</span>
-                <span class="label">Female</span>
-              </div>
-            </div> -->
-          </div>
-        </div>
-        <!-- Unidentified Bodies -->
-        <div class="containerpp mt-1">
-          <div class="gauge-card">
-            <h4>Unidentified Bodies</h4>
-            <canvas id="unidentifiedBodiesChart"></canvas>
-            <!-- <div class="values mt-4">
-              <div>
-                <span class="count">{{ unidentifiedBodyGenderCounts.Male || 0 }}</span>
-                <span class="label">Male</span>
-              </div>
-              <div>
-                <span class="count">{{ unidentifiedBodyGenderCounts.Female || 0 }}</span>
-                <span class="label">Female</span>
-              </div>
-            </div> -->
-          </div>
-        </div>
-      </div>
-      
-    </div>
-
     
-
-    <!-- filtered data -->
-    <div class="row mt-4">
-      <div class="col">
-        <div class="cardm rounded-3 shadow-lg">
-          <div class="card-header border-bottom-0">
-            <h5 class="card-title text-primary fw-bold">Filtered Persons</h5>
+  </div>
+  
+  
+  <div class="row">
+    <!-- Map Section -->
+    <div class="col-lg-8 col-md-12 mb-2">
+      <div class="containerx">
+        <!-- Filters Section -->
+        <div class="row g-3">
+          <!-- State, District, City, Village, Police Station -->
+          <div class="col-12">
+            <div class="row g-2">
+              <span style="color: #ff8642; font-weight: bold;font-size: 25px;">Search Here! </span>
+              <div class="col-lg col-md-6">
+                <select
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedState"
+                  (change)="filterDataByFilters()"
+                  aria-label="State"
+                >
+                  <option value="All States">All States</option>
+                  <option *ngFor="let state of allstates" [value]="state">
+                    {{ state }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg col-md-6">
+                <select
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedDistrict"
+                  (change)="filterDataByFilters()"
+                  aria-label="District"
+                >
+                  <option value="All Districts">All Districts</option>
+                  <option
+                    *ngFor="let district of alldistricts"
+                    [value]="district"
+                  >
+                    {{ district }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg col-md-6">
+                <select
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedCity"
+                  (change)="filterDataByFilters()"
+                  aria-label="City"
+                >
+                  <option value="All Cities">All Cities</option>
+                  <option *ngFor="let city of allcities" [value]="city">
+                    {{ city }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg col-md-6">
+                <select
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedVillage"
+                  (change)="filterDataByFilters()"
+                  aria-label="Village"
+                >
+                  <option value="All Villages">All Villages</option>
+                  <option
+                    *ngFor="let village of allVillages"
+                    [value]="village"
+                  >
+                    {{ village }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg col-md-6">
+                <select
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedPoliceStation"
+                  (change)="filterDataByFilters()"
+                  aria-label="Police"
+                >
+                  <option value="All Police Stations">
+                    All Police Stations
+                  </option>
+                  <option
+                    *ngFor="let station of allpolicestations"
+                    [value]="station.id"
+                  >
+                    {{ station.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="card-body px-4 py-4">
-            <!-- Tab navigation -->
-            <ul class="nav nav-tabs mb-4" id="filteredTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <a
-                  class="nav-link active"
-                  id="missingss-tab"
-                  data-bs-toggle="tab"
-                  href="#missingss"
-                  role="tab"
-                  aria-controls="missing"
-                  aria-selected="true"
+          <!-- Gender, Height, Age, Marital Status -->
+          <div class="col-12">
+            <span>Personal Specilization </span>
+            <div class="row g-2">
+              
+              <!-- Gender Filter -->
+              <div class="col-lg col-md-6">
+                <select
+                  id="gender"
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedgender"
+                  (change)="filterDataByFilters()"
+                  aria-label="Gender"
                 >
-                  <i class="bi bi-person-bounding-box me-2"></i>Missing Persons
-                </a>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a
-                  class="nav-link"
-                  id="unidentifiedss-tab"
-                  data-bs-toggle="tab"
-                  href="#unidentifiedss"
-                  role="tab"
-                  aria-controls="unidentified"
-                  aria-selected="false"
-                >
-                  <i class="bi bi-person-lines-fill me-2"></i>Unidentified
-                  Persons
-                </a>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a
-                  class="nav-link"
-                  id="bodiessss-tab"
-                  data-bs-toggle="tab"
-                  href="#bodiessss"
-                  role="tab"
-                  aria-controls="bodies"
-                  aria-selected="false"
-                >
-                  <i class="bi bi-person-x-fill me-2"></i>Unidentified Bodies
-                </a>
-              </li>
-            </ul>
-
-            <!-- Tab content -->
-            <div class="tab-content" id="filteredTabContent">
-              <!-- Missing Persons Tab -->
-              <div
-                class="tab-pane fade show active"
-                id="missingss"
-                role="tabpanel"
-                aria-labelledby="missingss-tab"
-              >
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr No.</th>
-                        <th>Photo</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>Location</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="
-                          let person of filteredMissingPersonssss;
-                          let i = index
-                        "
-                      >
-                        <td>{{ i + 1 }}</td>
-                        <td>
-                          <div class="image-container">
-                            <img
-                              [src]="
-                                person.photo_upload
-                                  ? environment.apiUrl + person.photo_upload
-                                  : 'assets/images/pngwing.com.png'
-                              "
-                              alt="Person Photo"
-                              class="img-fluid rounded"
-                              style="height: 100px; width: 100px"
-                            />
-                          </div>
-                        </td>
-                        <td>{{ person.full_name || "Unknown" }}</td>
-                        <td>{{ person.age || "Not specified" }}</td>
-                        <td>{{ person.gender || "Not specified" }}</td>
-                        <td>
-                          {{ person.location_metadata || "Not specified" }}
-                        </td>
-                        <td>
-                          <button
-                            class="btn btn-outline-dark"
-                            (click)="viewDetails(person)"
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                  <option value="All Genders">All Genders</option>
+                  <option *ngFor="let gender of allgenders" [value]="gender">
+                    {{ gender }}
+                  </option>
+                </select>
               </div>
-
-              <!-- Unidentified Persons Tab -->
-              <div
-                class="tab-pane fade"
-                id="unidentifiedss"
-                role="tabpanel"
-                aria-labelledby="unidentifiedss-tab"
-              >
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr No.</th>
-                        <th>Photo</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>Location</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="
-                          let person of filteredUnidentifiedPersonssss;
-                          let i = index
-                        "
-                      >
-                        <td>{{ i + 1 }}</td>
-                        <td>
-                          <div class="image-container">
-                            <img
-                              [src]="
-                                person.photo_upload
-                                  ? environment.apiUrl + person.photo_upload
-                                  : 'assets/images/pngwing.com.png'
-                              "
-                              alt="Person Photo"
-                              class="img-fluid rounded"
-                              style="height: 100px; width: 100px"
-                            />
-                          </div>
-                        </td>
-                        <td class="text-center">
-                          {{ person.full_name || "Unknown" }}
-                        </td>
-                        <td class="text-center">
-                          {{ person.estimated_age || "Not specified" }}
-                        </td>
-                        <td class="text-center">
-                          {{ person.gender || "Not specified" }}
-                        </td>
-                        <td class="text-center">
-                          {{ person.location_metadata || "Not specified" }}
-                        </td>
-                        <td class="text-center">
-                          <button
-                            class="btn btn-outline-dark"
-                            (click)="viewDetails(person)"
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+          
+              <!-- Height Range Filter -->
+              <div class="col-lg col-md-6">
+                <!-- <label for="heightRange" class="form-label">Height Range</label> -->
+                <select
+                  id="heightRange"
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedHeightRange"
+                  (change)="filterDataByFilters()"
+                  aria-label="Height Range"
+                >
+                  <option value="All Heights">All Heights</option>
+                  <option value="133-150">133-150 cm</option>
+                  <option value="151-180">151-180 cm</option>
+                  <option value="Above 180">Above 180 cm</option>
+                </select>
               </div>
-
-              <!-- Unidentified Bodies Tab -->
+          
+              <!-- Age Range Filter -->
+              <div class="col-lg col-md-6">
+                <!-- <label for="ageRange" class="form-label">Age Range</label> -->
+                <select
+                  id="ageRange"
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedAgeRange"
+                  (change)="filterDataByFilters()"
+                  aria-label="Age Range"
+                >
+                  <option value="All Ages">All Ages</option>
+                  <option value="0-18">0-18</option>
+                  <option value="18-30">18-30</option>
+                  <option value="30-50">30-50</option>
+                  <option value="50-70">50-70</option>
+                  <option value="Above 70">Above 70</option>
+                </select>
+              </div>
+          
+              <!-- Marital Status Filter -->
+              <div class="col-lg col-md-6">
+                <!-- <label for="maritalStatus" class="form-label">Marital Status</label> -->
+                <select
+                  id="maritalStatus"
+                  class="form-select form-select-sg"
+                  [(ngModel)]="selectedmarital"
+                  (change)="filterDataByFilters()"
+                  aria-label="Marital Status"
+                >
+                  <option value="Marital status">Marital Status</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Widowed">Widowed</option>
+                </select>
+              </div>
+          
+              <!-- Start Date Filter -->
+              <div class="col-lg col-md-6">
+                <!-- <label for="startDate" class="form-label">Start Date</label> -->
+                <input 
+                  id="startDate"
+                  type="date" 
+                  class="form-control form-select-sg" 
+                  [(ngModel)]="selectedStartDate"
+                  (change)="filterDataByFilters()"
+                  aria-label="Start Date"
+                />
+              </div>
+          
+              <!-- End Date Filter -->
+              <!-- <div class="col-lg col-md-6">
+                <label for="endDate" class="form-label">End Date</label>
+                <input 
+                  id="endDate"
+                  type="date" 
+                  class="form-control form-select-sg" 
+                  [(ngModel)]="selectedEndDate"
+                  (change)="filterDataByFilters()"
+                  aria-label="End Date"
+                />
+              </div> -->
+              
+            </div>
+          </div>
+          
+        </div>
+        <!-- Map Section -->
+        <div class="row">
+          <div class="col">
+            <div class="p-1 ">
               <div
-                class="tab-pane fade"
-                id="bodiessss"
-                role="tabpanel"
-                aria-labelledby="bodiessss-tab"
-              >
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr No.</th>
-                        <th>Photo</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>Location</th>
-                        <th>Action</th>
+                id="map"
+                style="
+                  height: 500px;
+                  border: 1px solid #000000;
+                  border-radius: 5px;
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Cards Section -->
+    <div class="col-lg-4 col-md-12">
+      <div class="row">
+        <!-- Card 1: Missing Person -->
+        <div class="col-12  mb-3">
+          <div class="card border rounded bg-white">
+            <div class="card-header rounded-top d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Missing Person</h5>
+              <i class="bi bi-people fs-4" style="color: #60d960;"></i>
+            </div>
+            <div class="card-body p-1">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered text-center mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="2" style="font-size: 18px;">Resolved Cases</td>
+                            <th colspan="3">{{ Found_alivecount + Deceasedcount || 0 }}</th>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 18px;">Type</td>
+                            <td style="font-size: 18px;">Male</td>
+                            <td style="font-size: 18px;">Female</td>
+                            <td style="font-size: 18px;">Transgender</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>UB Found</td>
+                            <td>{{ deceasedCountgendercount.Male ? ((deceasedCountgendercount.Male / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ deceasedCountgendercount.Female ? ((deceasedCountgendercount.Female / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ deceasedCountgendercount.Other ? ((deceasedCountgendercount.Other / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                        <tr>
+                            <td>UP Matched</td>
+                            <td>{{ found_alivegendercount.Male ? ((found_alivegendercount.Male / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ found_alivegendercount.Female ? ((found_alivegendercount.Female / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ found_alivegendercount.Other ? ((found_alivegendercount.Other / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Pending</td>
+                            <td>{{ pendingGendercounts.Male ? ((pendingGendercounts.Male / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ pendingGendercounts.Female ? ((pendingGendercounts.Female / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ pendingGendercounts.Other ? ((pendingGendercounts.Other / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Card 2: Unidentified Person -->
+        <div class="col-12 mb-3">
+          <div class="card border-1 rounded">
+            <div class="card-header text-white rounded-top d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Unidentified Person</h5>
+              <i class="bi bi-info-circle fs-4" style="color: #60d960;"></i>
+            </div>
+            <div class="card-body p-1">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered text-center mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="2" style="font-size: 18px;">Resolved Cases</td>
+                            <th colspan="3">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</th>
+                        </tr>
+                        <tr>
+                          <td style="font-size: 18px;">Type</td>
+                          <td style="font-size: 18px;">Male</td>
+                          <td style="font-size: 18px;">Female</td>
+                          <td style="font-size: 18px;">Transgender</td>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr
-                        *ngFor="
-                          let body of filteredunidentifiedboidessss;
-                          let i = index
-                        "
-                      >
-                        <td>{{ i + 1 }}</td>
-                        <td class="text-center">
-                          <div
-                            class="image-container d-flex justify-content-center"
-                          >
-                            <img
-                              [src]="
-                                body.body_photo_upload
-                                  ? environment.apiUrl + body.body_photo_upload
-                                  : 'assets/images/pngwing.com.png'
-                              "
-                              alt="Body Photo"
-                              class="img-fluid rounded"
-                              style="height: 100px; width: 100px"
-                            />
-                          </div>
-                        </td>
-                        <td class="text-center">
-                          {{ body.full_name || "Unknown" }}
-                        </td>
-                        <td class="text-center">
-                          {{ body.estimated_age || "Not specified" }}
-                        </td>
-                        <td class="text-center">
-                          {{ body.gender || "Not specified" }}
-                        </td>
-                        <td class="text-center">
-                          {{ body.location_metadata || "Not specified" }}
-                        </td>
-                        <td class="text-center">
-                          <button
-                            class="btn btn-outline-dark"
-                            (click)="viewDetails(body)"
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
+                        <tr>
+                            <td>MP Matched</td>
+                            <td>{{ UPfound_alivegendercount.Male ? ((UPfound_alivegendercount.Male / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UPfound_alivegendercount.Female ? ((UPfound_alivegendercount.Female / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UPfound_alivegendercount.Other ? ((UPfound_alivegendercount.Other / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                        <tr>
+                            <td>UB Found</td>
+                            <td>{{ UPdeceasedCountgendercount.Male ? ((UPdeceasedCountgendercount.Male / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UPdeceasedCountgendercount.Female ? ((UPdeceasedCountgendercount.Female / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UPdeceasedCountgendercount.Other ? ((UPdeceasedCountgendercount.Other / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Pending</td>
+                            <td>{{ UPpendingGendercounts.Male ? ((UPpendingGendercounts.Male / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UPpendingGendercounts.Female ? ((UPpendingGendercounts.Female / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UPpendingGendercounts.Other ? ((UPpendingGendercounts.Other / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
                     </tbody>
-                  </table>
-                </div>
+                </table>
+            </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Card 3: Unidentified Bodies -->
+        <div class="col-12">
+          <div class="card border-1 rounded">
+            <div class="card-header rounded-top d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Unidentified Bodies</h5>
+              <i class="bi bi-eye-slash fs-4" style="color: #60d960;"></i>
+            </div>
+            <div class="card-body p-1">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered text-center mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="2" style="font-size: 18px;">Resolved Cases</td>
+                            <th colspan="3">{{ UBDeceasedcount + UBFound_alivecount }}</th>
+                        </tr>
+                        <tr>
+                          <td style="font-size: 18px;">Type</td>
+                          <td style="font-size: 18px;">Male</td>
+                          <td style="font-size: 18px;">Female</td>
+                          <td style="font-size: 18px;">Transgender</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MP Matched</td>
+                            <td>{{ UBfound_alivegendercount.Male? ((UBfound_alivegendercount.Male /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UBfound_alivegendercount.Female? ((UBfound_alivegendercount.Female /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UBfound_alivegendercount.Other? ((UBfound_alivegendercount.Other /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                        <tr>
+                            <td>UP Matched</td>
+                            <td>{{ UBdeceasedCountgendercount.Male? ((UBdeceasedCountgendercount.Male /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UBdeceasedCountgendercount.Female? ((UBdeceasedCountgendercount.Female /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UBdeceasedCountgendercount.Other? ((UBdeceasedCountgendercount.Other /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Pending</td>
+                            <td>{{ UBpendingGendercounts.Male? ((UBpendingGendercounts.Male /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UBpendingGendercounts.Female? ((UBpendingGendercounts.Female /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                            <td>{{ UBpendingGendercounts.Other? ((UBpendingGendercounts.Other /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+  <!-- filtered data -->
+  <div class="row mt-2">
+    <div class="col">
+      <div class="card rounded-3 shadow-lg">
+        <div class="card-header border-bottom-0">
+          <h5 class="card-title text-primary fw-bold">Filtered Persons</h5>
+        </div>
+        <div class="card-body px-4 py-4">
+          <!-- Tab navigation (Responsive) -->
+          <ul class="nav nav-tabs mb-4" id="filteredTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="missingss-tab" data-bs-toggle="tab" href="#missingss" role="tab" aria-controls="missingss" aria-selected="true">
+                <i class="bi bi-person-bounding-box me-2"></i>Missing Persons
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="unidentifiedss-tab" data-bs-toggle="tab" href="#unidentifiedss" role="tab" aria-controls="unidentifiedss" aria-selected="false">
+                <i class="bi bi-person-lines-fill me-2"></i>Unidentified Persons
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="bodiessss-tab" data-bs-toggle="tab" href="#bodiessss" role="tab" aria-controls="bodiessss" aria-selected="false">
+                <i class="bi bi-person-x-fill me-2"></i>Unidentified Bodies
+              </a>
+            </li>
+          </ul>
+  
+          <!-- Tab content -->
+          <div class="tab-content" id="filteredTabContent">
+            <!-- Missing Persons Tab -->
+            <div class="tab-pane fade show active" id="missingss" role="tabpanel" aria-labelledby="missingss-tab">
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr No.</th>
+                      <th>Photo</th>
+                      <th>Full Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Location</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let person of filteredMissingPersonssss; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <div class="image-container">
+                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
+                               alt="Person Photo" class="img-fluid rounded" style="height: 100px; width: 100px"/>
+                        </div>
+                      </td>
+                      <td>{{ person.full_name || 'Unknown' }}</td>
+                      <td>{{ person.age || 'Not specified' }}</td>
+                      <td>{{ person.gender || 'Not specified' }}</td>
+                      <td>{{ person.location_metadata || 'Not specified' }}</td>
+                      <td>
+                        <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+  
+            <!-- Unidentified Persons Tab -->
+            <div class="tab-pane fade" id="unidentifiedss" role="tabpanel" aria-labelledby="unidentifiedss-tab">
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr No.</th>
+                      <th>Photo</th>
+                      <th>Full Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Location</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let person of filteredUnidentifiedPersonssss; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <div class="image-container">
+                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
+                               alt="Person Photo" class="img-fluid rounded" style="height: 100px; width: 100px"/>
+                        </div>
+                      </td>
+                      <td class="text-center">{{ person.full_name || 'Unknown' }}</td>
+                      <td class="text-center">{{ person.estimated_age || 'Not specified' }}</td>
+                      <td class="text-center">{{ person.gender || 'Not specified' }}</td>
+                      <td class="text-center">{{ person.location_metadata || 'Not specified' }}</td>
+                      <td class="text-center">
+                        <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+  
+            <!-- Unidentified Bodies Tab -->
+            <div class="tab-pane fade" id="bodiessss" role="tabpanel" aria-labelledby="bodiessss-tab">
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr No.</th>
+                      <th>Photo</th>
+                      <th>Full Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Location</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let body of filteredunidentifiedboidessss; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td class="text-center">
+                        <div class="image-container d-flex justify-content-center">
+                          <img [src]="body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : 'assets/images/Nophoto.png'"
+                               alt="Body Photo" class="img-fluid rounded" style="height: 100px; width: 100px"/>
+                        </div>
+                      </td>
+                      <td class="text-center">{{ body.full_name || 'Unknown' }}</td>
+                      <td class="text-center">{{ body.estimated_age || 'Not specified' }}</td>
+                      <td class="text-center">{{ body.gender || 'Not specified' }}</td>
+                      <td class="text-center">{{ body.location_metadata || 'Not specified' }}</td>
+                      <td class="text-center">
+                        <button class="btn btn-outline-dark" (click)="viewDetails(body)">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -793,11 +654,7 @@
       </div>
     </div>
   </div>
-
-  
- 
 </div>
-
 
 
 
@@ -834,9 +691,9 @@ aria-hidden="true"
               [src]="
                 selectedPerson.photo_upload
                   ? environment.apiUrl + selectedPerson.photo_upload
-                  : 'assets/images/pngwing.com.png'
+                  : 'assets/images/Nophoto.png'
               "
-              alt="Person Photo"
+              alt="No Photo uploaded"
               class="img-fluid rounded"
             />
           </div>
