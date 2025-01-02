@@ -347,10 +347,7 @@ canvas {
 
 
 
-  /* Adjust the font sizes */
-  .card-title {
-    font-size: 1.1rem;
-  }
+ 
 
   .gauge-card h4 {
     font-size: 1.2rem;
@@ -367,3 +364,79 @@ canvas {
     height: 300px;
   }
 }
+
+
+/* filtered data */
+.cardff {
+  border: 1px solid #e7e7e7;
+}
+
+.card-headerff {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.tableff {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableff th,
+.tableff td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px;
+}
+
+.tableff th {
+  background-color: #f8f9fa;
+}
+
+.tableff-responsive {
+  max-height: 250px; /* Adjust this value based on your needs */
+  overflow-y: auto;
+}
+
+.tableff thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Ensures headers appear above table body content */
+  background-color: #f8f9fa; /* Matches the header background */
+  border-bottom: 2px solid #dee2e6; /* Keeps the border consistent */
+}
+.table-hover tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+.img-fluid {
+  border: 1px solid #ddd;
+  padding: 2px;
+  object-fit: cover;
+}
+
+.nav-tabs .nav-link {
+  color: #ffc800;
+}
+
+.nav-tabs .nav-link.active {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

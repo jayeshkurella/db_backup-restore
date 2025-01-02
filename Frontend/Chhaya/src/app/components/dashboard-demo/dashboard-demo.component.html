@@ -29,7 +29,7 @@
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style="font-size: 1.25rem;  color: #000000;">Missing Persons</h5>
+            <h5 class="card-title" style="font-size:18px;  color: #000000;">Missing Persons</h5>
             <span style="font-size: 25px; font-weight: bold; color: #ff00fb;"><i class="bi bi-people"></i></span>
           </div>
           <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ missingPersontotalcount || 0 }}</h3>
@@ -67,7 +67,7 @@
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style=" font-size: 1.25rem;  color: #000000;">Unidentified Persons</h5>
+            <h5 class="card-title" style=" font-size:18px;  color: #000000;">Unidentified Persons</h5>
             <span  style="font-size: 25px; font-weight: bold; color: #7b61ff;"><i class="bi bi-info-circle"></i></span>
           </div>
           <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ unidentifiedPersonTotalCounts || 0 }}</h3>
@@ -100,7 +100,7 @@
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style=" font-size: 1.25rem;  color: #000000;">Unidentified Bodies</h5>
+            <h5 class="card-title" style=" font-size: 18px;  color: #000000;">Unidentified Bodies</h5>
             <span  style="font-size: 25px; font-weight: bold; color: #ff0000;"><i class="bi bi-eye-slash" style="fill: #ff0000;"></i></span>
           </div>
           <h3 class="card-number" style=" font-weight: bold; color: #000000;">{{ unidentifiedBodyTotalCount || 0 }}</h3>
@@ -353,185 +353,200 @@
         <div class="col-12  mb-3">
           <div class="card border rounded bg-white">
             <div class="card-header rounded-top d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0">Missing Person</h5>
+              <h5 class="card-title mb-0" style="font-size: 18px;">Missing Person</h5>
               <i class="bi bi-people fs-4" style="color: #60d960;"></i>
             </div>
             <div class="card-body p-1">
               <div class="table-responsive">
                 <table class="table table-sm table-bordered text-center mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <td colspan="2" style="font-size: 18px;">Resolved Cases</td>
-                            <th colspan="3">{{ Found_alivecount + Deceasedcount || 0 }}</th>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 18px;">Type</td>
-                            <td style="font-size: 18px;">Male</td>
-                            <td style="font-size: 18px;">Female</td>
-                            <td style="font-size: 18px;">Transgender</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>UB Found</td>
-                            <td>{{ deceasedCountgendercount.Male ? ((deceasedCountgendercount.Male / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ deceasedCountgendercount.Female ? ((deceasedCountgendercount.Female / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ deceasedCountgendercount.Other ? ((deceasedCountgendercount.Other / (deceasedCountgendercount.Male + deceasedCountgendercount.Female + deceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                        <tr>
-                            <td>UP Matched</td>
-                            <td>{{ found_alivegendercount.Male ? ((found_alivegendercount.Male / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ found_alivegendercount.Female ? ((found_alivegendercount.Female / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ found_alivegendercount.Other ? ((found_alivegendercount.Other / (found_alivegendercount.Male + found_alivegendercount.Female + found_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                        <tr>
-                            <td>Pending</td>
-                            <td>{{ pendingGendercounts.Male ? ((pendingGendercounts.Male / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ pendingGendercounts.Female ? ((pendingGendercounts.Female / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ pendingGendercounts.Other ? ((pendingGendercounts.Other / (pendingGendercounts.Male + pendingGendercounts.Female + pendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                    </tbody>
+                  <thead class="table-light">
+                    <tr>
+                      <td colspan="2" style="font-size: 17px;">Resolved Cases</td>
+                      <th colspan="3">{{ Found_alivecount + Deceasedcount || 0 }}</th>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 16px;">Type</td>
+                      <td style="font-size: 16px;">Male</td>
+                      <td style="font-size: 16px;">Female</td>
+                      <td style="font-size: 16px;">Transgender</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-size: 15px;">UB Found</td>
+                      <td>{{ deceasedCountgendercount.Male || 0 }}</td>
+                      <td>{{ deceasedCountgendercount.Female || 0 }}</td>
+                      <td>{{ deceasedCountgendercount.Other || 0 }}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 15px;">UP Matched</td>
+                      <td>{{ found_alivegendercount.Male || 0 }}</td>
+                      <td>{{ found_alivegendercount.Female || 0 }}</td>
+                      <td>{{ found_alivegendercount.Other || 0 }}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 15px;">Pending</td>
+                      <td>{{ pendingGendercounts.Male || 0 }}</td>
+                      <td>{{ pendingGendercounts.Female || 0 }}</td>
+                      <td>{{ pendingGendercounts.Other || 0 }}</td>
+                    </tr>
+                    <tr style="background-color: #f0f8ff; font-weight: bold; font-size: 16px;">
+                      <td>All Counts</td>
+                      <td>{{ deceasedCountgendercount.Male + found_alivegendercount.Male + pendingGendercounts.Male || 0 }}</td>
+                      <td>{{ deceasedCountgendercount.Female + found_alivegendercount.Female + pendingGendercounts.Female || 0 }}</td>
+                      <td>{{ deceasedCountgendercount.Other + found_alivegendercount.Other + pendingGendercounts.Other || 0 }}</td>
+                    </tr>
+                  </tbody>
                 </table>
-            </div>
+              </div>
             </div>
           </div>
         </div>
-  
+        
+        
+        
+        
+       
+        
+        
+
         <!-- Card 2: Unidentified Person -->
         <div class="col-12 mb-3">
           <div class="card border-1 rounded">
             <div class="card-header text-white rounded-top d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0">Unidentified Person</h5>
+              <h5 class="card-title mb-0" style="font-size: 18px;">Unidentified Person</h5>
               <i class="bi bi-info-circle fs-4" style="color: #60d960;"></i>
             </div>
             <div class="card-body p-1">
               <div class="table-responsive">
                 <table class="table table-sm table-bordered text-center mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <td colspan="2" style="font-size: 18px;">Resolved Cases</td>
-                            <th colspan="3">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</th>
-                        </tr>
-                        <tr>
-                          <td style="font-size: 18px;">Type</td>
-                          <td style="font-size: 18px;">Male</td>
-                          <td style="font-size: 18px;">Female</td>
-                          <td style="font-size: 18px;">Transgender</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>MP Matched</td>
-                            <td>{{ UPfound_alivegendercount.Male ? ((UPfound_alivegendercount.Male / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UPfound_alivegendercount.Female ? ((UPfound_alivegendercount.Female / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UPfound_alivegendercount.Other ? ((UPfound_alivegendercount.Other / (UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                        <tr>
-                            <td>UB Found</td>
-                            <td>{{ UPdeceasedCountgendercount.Male ? ((UPdeceasedCountgendercount.Male / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UPdeceasedCountgendercount.Female ? ((UPdeceasedCountgendercount.Female / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UPdeceasedCountgendercount.Other ? ((UPdeceasedCountgendercount.Other / (UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                        <tr>
-                            <td>Pending</td>
-                            <td>{{ UPpendingGendercounts.Male ? ((UPpendingGendercounts.Male / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UPpendingGendercounts.Female ? ((UPpendingGendercounts.Female / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UPpendingGendercounts.Other ? ((UPpendingGendercounts.Other / (UPpendingGendercounts.Male + UPpendingGendercounts.Female + UPpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                    </tbody>
+                  <thead class="table-light">
+                    <tr>
+                      <td colspan="2" style="font-size: 17px;">Resolved Cases</td>
+                      <th colspan="3">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</th>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 16px;">Type</td>
+                      <td style="font-size: 16px;">Male</td>
+                      <td style="font-size: 16px;">Female</td>
+                      <td style="font-size: 16px;">Transgender</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-size: 15px;">MP Matched</td>
+                      <td>{{ UPfound_alivegendercount.Male || 0 }}</td>
+                      <td>{{ UPfound_alivegendercount.Female || 0 }}</td>
+                      <td>{{ UPfound_alivegendercount.Other || 0 }}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 15px;">UB Found</td>
+                      <td>{{ UPdeceasedCountgendercount.Male || 0 }}</td>
+                      <td>{{ UPdeceasedCountgendercount.Female || 0 }}</td>
+                      <td>{{ UPdeceasedCountgendercount.Other || 0 }}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 15px;">Pending</td>
+                      <td>{{ UPpendingGendercounts.Male || 0 }}</td>
+                      <td>{{ UPpendingGendercounts.Female || 0 }}</td>
+                      <td>{{ UPpendingGendercounts.Other || 0 }}</td>
+                    </tr>
+                    <tr style="background-color: #f0f8ff; font-weight: bold; font-size: 16px;">
+                      <td>All Counts</td>
+                      <td>{{ UPfound_alivegendercount.Male + UPdeceasedCountgendercount.Male + UPpendingGendercounts.Male || 0 }}</td>
+                      <td>{{ UPfound_alivegendercount.Female + UPdeceasedCountgendercount.Female + UPpendingGendercounts.Female || 0 }}</td>
+                      <td>{{ UPfound_alivegendercount.Other + UPdeceasedCountgendercount.Other + UPpendingGendercounts.Other || 0 }}</td>
+                    </tr>
+                  </tbody>
                 </table>
-            </div>
+              </div>
             </div>
           </div>
         </div>
+        
   
         <!-- Card 3: Unidentified Bodies -->
         <div class="col-12">
           <div class="card border-1 rounded">
             <div class="card-header rounded-top d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0">Unidentified Bodies</h5>
+              <h5 class="card-title mb-0" style="font-size: 18px;">Unidentified Bodies</h5>
               <i class="bi bi-eye-slash fs-4" style="color: #60d960;"></i>
             </div>
             <div class="card-body p-1">
               <div class="table-responsive">
                 <table class="table table-sm table-bordered text-center mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <td colspan="2" style="font-size: 18px;">Resolved Cases</td>
-                            <th colspan="3">{{ UBDeceasedcount + UBFound_alivecount }}</th>
-                        </tr>
-                        <tr>
-                          <td style="font-size: 18px;">Type</td>
-                          <td style="font-size: 18px;">Male</td>
-                          <td style="font-size: 18px;">Female</td>
-                          <td style="font-size: 18px;">Transgender</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>MP Matched</td>
-                            <td>{{ UBfound_alivegendercount.Male? ((UBfound_alivegendercount.Male /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UBfound_alivegendercount.Female? ((UBfound_alivegendercount.Female /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UBfound_alivegendercount.Other? ((UBfound_alivegendercount.Other /(UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                        <tr>
-                            <td>UP Matched</td>
-                            <td>{{ UBdeceasedCountgendercount.Male? ((UBdeceasedCountgendercount.Male /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UBdeceasedCountgendercount.Female? ((UBdeceasedCountgendercount.Female /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UBdeceasedCountgendercount.Other? ((UBdeceasedCountgendercount.Other /(UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                        <tr>
-                            <td>Pending</td>
-                            <td>{{ UBpendingGendercounts.Male? ((UBpendingGendercounts.Male /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UBpendingGendercounts.Female? ((UBpendingGendercounts.Female /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                            <td>{{ UBpendingGendercounts.Other? ((UBpendingGendercounts.Other /(UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other)) * 100).toFixed(2) : 0 }}%</td>
-                        </tr>
-                    </tbody>
+                  <thead class="table-light">
+                    <tr>
+                      <td colspan="2" style="font-size: 17px;">Resolved Cases</td>
+                      <th colspan="3">{{ UBDeceasedcount + UBFound_alivecount || 0 }}</th>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 16px;">Type</td>
+                      <td style="font-size: 16px;">Male</td>
+                      <td style="font-size: 16px;">Female</td>
+                      <td style="font-size: 16px;">Transgender</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-size: 15px;">MP Matched</td>
+                      <td>{{ UBfound_alivegendercount.Male || 0 }}</td>
+                      <td>{{ UBfound_alivegendercount.Female || 0 }}</td>
+                      <td>{{ UBfound_alivegendercount.Other || 0 }}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 15px;">UP Matched</td>
+                      <td>{{ UBdeceasedCountgendercount.Male || 0 }}</td>
+                      <td>{{ UBdeceasedCountgendercount.Female || 0 }}</td>
+                      <td>{{ UBdeceasedCountgendercount.Other || 0 }}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 15px;">Pending</td>
+                      <td>{{ UBpendingGendercounts.Male || 0 }}</td>
+                      <td>{{ UBpendingGendercounts.Female || 0 }}</td>
+                      <td>{{ UBpendingGendercounts.Other || 0 }}</td>
+                    </tr>
+                    <tr style="background-color: #f0f8ff; font-weight: bold; font-size: 16px;">
+                      <td>All Counts</td>
+                      <td>{{ UBfound_alivegendercount.Male + UBdeceasedCountgendercount.Male + UBpendingGendercounts.Male || 0 }}</td>
+                      <td>{{ UBfound_alivegendercount.Female + UBdeceasedCountgendercount.Female + UBpendingGendercounts.Female || 0 }}</td>
+                      <td>{{ UBfound_alivegendercount.Other + UBdeceasedCountgendercount.Other + UBpendingGendercounts.Other || 0 }}</td>
+                    </tr>
+                  </tbody>
                 </table>
-            </div>
+              </div>
             </div>
           </div>
         </div>
+        
       </div>
     </div>
+
   </div>
   
 
-
-
-
-
-
-
-
-
-
-
-
-
- 
   <!-- filtered data -->
   <div class="row mt-2">
     <div class="col">
-      <div class="card rounded-3 shadow-lg">
-        <div class="card-header border-bottom-0">
-          <h5 class="card-title text-primary fw-bold">Filtered Persons</h5>
+      <div class="card cardff rounded-3 shadow-lg">
+        <div class="card-header card-headerff border-bottom-0">
+          <h5 class="card-title text-warning fw-bold">Filtered Persons</h5>
         </div>
         <div class="card-body px-4 py-4">
-          <!-- Tab navigation (Responsive) -->
+          <!-- Tab navigation -->
           <ul class="nav nav-tabs mb-4" id="filteredTab" role="tablist">
             <li class="nav-item" role="presentation">
-              <a class="nav-link active" id="missingss-tab" data-bs-toggle="tab" href="#missingss" role="tab" aria-controls="missingss" aria-selected="true">
+              <a class="nav-link active" id="missing-tab" data-bs-toggle="tab" href="#missing" role="tab" aria-controls="missing" aria-selected="true">
                 <i class="bi bi-person-bounding-box me-2"></i>Missing Persons
               </a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="unidentifiedss-tab" data-bs-toggle="tab" href="#unidentifiedss" role="tab" aria-controls="unidentifiedss" aria-selected="false">
+              <a class="nav-link" id="unidentified-tab" data-bs-toggle="tab" href="#unidentified" role="tab" aria-controls="unidentified" aria-selected="false">
                 <i class="bi bi-person-lines-fill me-2"></i>Unidentified Persons
               </a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="bodiessss-tab" data-bs-toggle="tab" href="#bodiessss" role="tab" aria-controls="bodiessss" aria-selected="false">
+              <a class="nav-link" id="bodies-tab" data-bs-toggle="tab" href="#bodies" role="tab" aria-controls="bodies" aria-selected="false">
                 <i class="bi bi-person-x-fill me-2"></i>Unidentified Bodies
               </a>
             </li>
@@ -540,17 +555,20 @@
           <!-- Tab content -->
           <div class="tab-content" id="filteredTabContent">
             <!-- Missing Persons Tab -->
-            <div class="tab-pane fade show active" id="missingss" role="tabpanel" aria-labelledby="missingss-tab">
-              <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                  <thead>
+            <div class="tab-pane fade show active" id="missing" role="tabpanel" aria-labelledby="missing-tab">
+              <div class="tableff-responsive">
+                <table class="table tableff table-hover align-middle">
+                  <thead class="table-light">
                     <tr>
                       <th>Sr No.</th>
                       <th>Photo</th>
                       <th>Full Name</th>
                       <th>Age</th>
                       <th>Gender</th>
-                      <th>Location</th>
+                      <th>Blood Group</th>
+                      <th>City</th>
+                      <th>District</th>
+                      <th>State</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -558,17 +576,19 @@
                     <tr *ngFor="let person of filteredMissingPersonssss; let i = index">
                       <td>{{ i + 1 }}</td>
                       <td>
-                        <div class="image-container">
-                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
-                               alt="Person Photo" class="img-fluid rounded" style="height: 100px; width: 100px"/>
-                        </div>
+                        <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
+                             alt="Person Photo" class="img-fluid rounded" style="height: 80px; width: 80px; object-fit: cover;" />
                       </td>
                       <td>{{ person.full_name || 'Unknown' }}</td>
                       <td>{{ person.age || 'Not specified' }}</td>
                       <td>{{ person.gender || 'Not specified' }}</td>
-                      <td>{{ person.location_metadata || 'Not specified' }}</td>
+                      <td>{{ person.blood_group || 'Not specified' }}</td>
+                      <td>{{ person.address.city || 'Not specified' }}</td>
+                      <td>{{ person.address.district || 'Not specified' }}</td>
+                      <td>{{ person.address.state || 'Not specified' }}</td>
+                      
                       <td>
-                        <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+                        <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(person)">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -577,17 +597,20 @@
             </div>
   
             <!-- Unidentified Persons Tab -->
-            <div class="tab-pane fade" id="unidentifiedss" role="tabpanel" aria-labelledby="unidentifiedss-tab">
-              <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                  <thead>
+            <div class="tab-pane fade" id="unidentified" role="tabpanel" aria-labelledby="unidentified-tab">
+              <div class="tableff-responsive">
+                <table class="table tableff table-hover align-middle">
+                  <thead class="table-light">
                     <tr>
                       <th>Sr No.</th>
                       <th>Photo</th>
                       <th>Full Name</th>
                       <th>Age</th>
                       <th>Gender</th>
-                      <th>Location</th>
+                      <th>Blood Group</th>
+                      <th>City</th>
+                      <th>Distict</th>
+                      <th>State</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -595,17 +618,19 @@
                     <tr *ngFor="let person of filteredUnidentifiedPersonssss; let i = index">
                       <td>{{ i + 1 }}</td>
                       <td>
-                        <div class="image-container">
-                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
-                               alt="Person Photo" class="img-fluid rounded" style="height: 100px; width: 100px"/>
-                        </div>
+                        <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
+                             alt="Person Photo" class="img-fluid rounded" style="height: 80px; width: 80px; object-fit: cover;" />
                       </td>
-                      <td class="text-center">{{ person.full_name || 'Unknown' }}</td>
-                      <td class="text-center">{{ person.estimated_age || 'Not specified' }}</td>
-                      <td class="text-center">{{ person.gender || 'Not specified' }}</td>
-                      <td class="text-center">{{ person.location_metadata || 'Not specified' }}</td>
-                      <td class="text-center">
-                        <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+                      <td>{{ person.full_name || 'Unknown' }}</td>
+                      <td>{{ person.estimated_age || 'Not specified' }}</td>
+                      <td>{{ person.gender || 'Not specified' }}</td>
+                      <td>{{ person.blood_group || 'Not specified' }}</td>
+                      <td>{{ person.address.city || 'Not specified' }}</td>
+                      <td>{{ person.address.district || 'Not specified' }}</td>
+                      <td>{{ person.address.state || 'Not specified' }}</td>
+                      
+                      <td>
+                        <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(person)">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -614,35 +639,39 @@
             </div>
   
             <!-- Unidentified Bodies Tab -->
-            <div class="tab-pane fade" id="bodiessss" role="tabpanel" aria-labelledby="bodiessss-tab">
-              <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                  <thead>
+            <div class="tab-pane fade" id="bodies" role="tabpanel" aria-labelledby="bodies-tab">
+              <div class="tableff-responsive">
+                <table class="table tableff table-hover align-middle">
+                  <thead class="table-light">
                     <tr>
                       <th>Sr No.</th>
                       <th>Photo</th>
                       <th>Full Name</th>
                       <th>Age</th>
                       <th>Gender</th>
-                      <th>Location</th>
+                      <th>Blood Group</th>
+                      <th>City</th>
+                      <th>District</th>
+                      <th>State</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let body of filteredunidentifiedboidessss; let i = index">
                       <td>{{ i + 1 }}</td>
-                      <td class="text-center">
-                        <div class="image-container d-flex justify-content-center">
-                          <img [src]="body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : 'assets/images/Nophoto.png'"
-                               alt="Body Photo" class="img-fluid rounded" style="height: 100px; width: 100px"/>
-                        </div>
+                      <td>
+                        <img [src]="body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : 'assets/images/Nophoto.png'"
+                             alt="Body Photo" class="img-fluid rounded" style="height: 80px; width: 80px; object-fit: cover;" />
                       </td>
-                      <td class="text-center">{{ body.full_name || 'Unknown' }}</td>
-                      <td class="text-center">{{ body.estimated_age || 'Not specified' }}</td>
-                      <td class="text-center">{{ body.gender || 'Not specified' }}</td>
-                      <td class="text-center">{{ body.location_metadata || 'Not specified' }}</td>
-                      <td class="text-center">
-                        <button class="btn btn-outline-dark" (click)="viewDetails(body)">View</button>
+                      <td>{{ body.full_name || 'Unknown' }}</td>
+                      <td>{{ body.estimated_age || 'Not specified' }}</td>
+                      <td>{{ body.gender || 'Not specified' }}</td>
+                      <td>{{ body.blood_group || 'Not specified' }}</td>
+                      <td>{{ body.address.city|| 'Not specified' }}</td>
+                      <td>{{ body.address.district || 'Not specified' }}</td>
+                      <td>{{ body.address.state || 'Not specified' }}</td>
+                      <td>
+                        <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(body)">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -654,8 +683,20 @@
       </div>
     </div>
   </div>
+  
+  
 </div>
 
+<div class="col-12 mt-3">
+  <ngx-charts-pie-chart
+    [results]="chartData"
+    [scheme]="colorScheme"
+    [legend]="true"
+    [labels]="true"
+    [doughnut]="true"
+    [arcWidth]="0.25">
+  </ngx-charts-pie-chart>
+</div>
 
 
 

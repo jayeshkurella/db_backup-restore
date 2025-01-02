@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { DashboardComponent } from './components/homepage/dashboard/dashboard.component';
@@ -27,7 +26,7 @@ import { DashboardDemoComponent } from './components/dashboard-demo/dashboard-de
 import { InnerDashboadrdComponent } from './components/inner-dashboadrd/inner-dashboadrd.component';
 import { BodiesSearchComponent } from './components/homepage/bodies-search/bodies-search.component';
 import { PersonAddingFormComponent } from './components/homepage/person-adding-form/person-adding-form.component';
-
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +54,10 @@ import { PersonAddingFormComponent } from './components/homepage/person-adding-f
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxChartsModule  
+    
+      
     
   
   ],

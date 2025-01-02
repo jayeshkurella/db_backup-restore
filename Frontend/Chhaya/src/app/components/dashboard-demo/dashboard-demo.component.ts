@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AllcountServiceService } from 'src/app/services/allcount-service.service';
 import { environment } from 'src/envirnments/envirnment';
@@ -6,8 +6,9 @@ import { MissingpersonapiService } from '../homepage/missingperson/missingperson
 import { UnidentifiedPersonapiService } from '../homepage/unidentified-person/unidentified-personapi.service';
 import { UnidentifiedbodiesapiService } from '../homepage/unidentified-bodies/unidentifiedbodiesapi.service';
 import { PoliceStationaoiService } from 'src/app/services/police-stationaoi.service';
+import { ChartData, ChartOptions } from 'chart.js';
+import { Color ,ScaleType  } from '@swimlane/ngx-charts';
 declare var bootstrap: any;
-import Chart, { ChartConfiguration } from 'chart.js/auto';
 import * as L from 'leaflet';
 import 'leaflet-panel-layers';
 // import '../../../../src/leaflet-panel-layers'
@@ -115,20 +116,18 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   UBpendingGendercounts: { Male: number; Female: number ; Other: number } = { Male: 0, Female: 0, Other:0};
   UBsolvedGenderCounts: { Male: number; Female: number; Other: number } = { Male: 0, Female: 0, Other: 0};
   
-
-
- 
-
-  // Function to calculate percentage
-  calculatePercentage(count: number, total: number): string {
-    return total > 0 ? ((count / total) * 100).toFixed(2) : '0';
-  }
-
-  calculateStrokeDashoffset(count: number, total: number): number {
-    const percentage = (count / total) * 100;
-    const dashArray = 150; // Total circle circumference
-    return dashArray - (dashArray * percentage) / 100;
-  }
+  chartData = [
+    { name: 'UB Found', value: this.deceasedCountgendercount.Male + this.deceasedCountgendercount.Female + this.deceasedCountgendercount.Other },
+    { name: 'UP Matched', value: this.found_alivegendercount.Male + this.found_alivegendercount.Female + this.found_alivegendercount.Other },
+    { name: 'Pending', value: this.pendingGendercounts.Male + this.pendingGendercounts.Female + this.pendingGendercounts.Other }
+  ];
+  
+  colorScheme: Color = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C'],
+    name: 'custom',
+    selectable: true,
+    group: ScaleType.Ordinal
+  };
 
   constructor(
     private router: Router, 
@@ -139,12 +138,35 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     private policestationapi :PoliceStationaoiService,
     private fitereddataapi :MainDashserviceService,
     private cdr: ChangeDetectorRef,
-  ) {this.geo_url = "https://products.coderize.in/geoserver/GeoFlow_WCD/wms/",
+  ) {
+    this.prepareChartData();
+    this.geo_url = "https://products.coderize.in/geoserver/GeoFlow_WCD/wms/",
 
       this.local_url = "http://localhost:8080/geoserver/WS_Chhay_foundation/wms/"
   }
 
-  
+  prepareChartData() {
+    const maleCount =
+      this.deceasedCountgendercount.Male +
+      this.found_alivegendercount.Male +
+      this.pendingGendercounts.Male;
+
+    const femaleCount =
+      this.deceasedCountgendercount.Female +
+      this.found_alivegendercount.Female +
+      this.pendingGendercounts.Female;
+
+    const otherCount =
+      this.deceasedCountgendercount.Other +
+      this.found_alivegendercount.Other +
+      this.pendingGendercounts.Other;
+
+    this.chartData = [
+      { name: 'Male', value: maleCount },
+      { name: 'Female', value: femaleCount },
+      { name: 'Transgender', value: otherCount }
+    ];
+  }
 
   pagination: any = {
     current_page: 1,
@@ -186,6 +208,8 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     this.getgenderst()
     this.getvillage()
     this.filterDataByFilters()
+    
+    
     
   }
 
@@ -411,7 +435,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
           this.found_alivegendercount = {Male:foundalivemale , Female :foundalivefemale, Other :foundalivother}
           this.deceasedCountgendercount ={ Male: 0, Female: 0 , Other : 0 };
           this.deceasedCountgendercount = {Male:deceasedmale , Female :deceasedfemale, Other :deceasedother}
-
+          this.prepareChartData();
 
         } else {
           this.missingPersontotalcount = 0;
@@ -619,7 +643,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
         this.resetCounts();
       }
   
-      this.renderUnidentifiedPersonsChart();
+      
     }, error => {
       this.resetCounts();
     });
@@ -807,7 +831,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
         this.unidentifiedBodyGenderCounts = { Male: 0, Female: 0, Other: 0};
         this.resetBodyCounts()
       }
-      this.renderUnidentifiedBodiesChart()
+      
     }, error => {
       console.error('Error fetching unidentified persons data:', error);
       this.unidentifiedBodyTotalCount = 0;
@@ -872,7 +896,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
       groupMaxHeight: 50,
     });
     this.map.addControl(panelLayers);
-}
+ }
 
   toggleLayer(layer: string, event: any): void {
     switch (layer) {
@@ -1212,119 +1236,11 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   
 
  
-  private unidentifiedPersonsChart: Chart | null = null;
-  private unidentifiedBodiesChart: Chart | null = null;
+
   
 
-  renderUnidentifiedPersonsChart() {
-    // Set transparent color if count is 0, otherwise set a visible color
-    const maleColor = (this.unidentifiedPersonGenderCounts.Male ?? 0) > 0 ? '#6a0dad' : 'rgba(0, 0, 0, 0)'; // Transparent if Male count is 0
-    const femaleColor = (this.unidentifiedPersonGenderCounts.Female ?? 0) > 0 ? '#4caf50' : 'rgba(0, 0, 0, 0)'; // Transparent if Female count is 0
+ 
   
-    // Data for Unidentified Persons
-    const unidentifiedPersonsData = {
-      labels: ['Male', 'Female'],
-      datasets: [{
-        label: 'Unidentified Persons',
-        data: [
-          this.unidentifiedPersonGenderCounts.Male ?? 0,
-          this.unidentifiedPersonGenderCounts.Female ?? 0,
-        ],
-        backgroundColor: [maleColor, femaleColor], // Use dynamic colors
-      }],
-    };
-  
-    // If the chart already exists, update it
-    if (this.unidentifiedPersonsChart) {
-      this.unidentifiedPersonsChart.data = unidentifiedPersonsData;
-      this.unidentifiedPersonsChart.update(); // Update the chart
-    } else {
-      // Configuration for Unidentified Persons Chart
-      const unidentifiedPersonsConfig: ChartConfiguration<'bar', number[], string> = {
-        type: 'bar',
-        data: unidentifiedPersonsData,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-            },
-            y: {
-              beginAtZero: true,
-              suggestedMax: Math.max(...unidentifiedPersonsData.datasets[0].data) + 10,
-            },
-          },
-        },
-      };
-  
-      // Render the Unidentified Persons Chart
-      const personsChartEl = document.getElementById('unidentifiedPersonsChart') as HTMLCanvasElement;
-      if (personsChartEl) {
-        this.unidentifiedPersonsChart = new Chart(personsChartEl, unidentifiedPersonsConfig);
-      }
-    }
-  }
-  
-  
-  
-  renderUnidentifiedBodiesChart() {
-    // Set transparent color if count is 0, otherwise set a visible color
-    const maleColor = (this.unidentifiedBodyGenderCounts.Male ?? 0) > 0 ? '#d32f2f' : 'rgba(0, 0, 0, 0)'; // Transparent if Male count is 0
-    const femaleColor = (this.unidentifiedBodyGenderCounts.Female ?? 0) > 0 ? '#1976d2' : 'rgba(0, 0, 0, 0)'; // Transparent if Female count is 0
-  
-    // Data for Unidentified Bodies
-    const unidentifiedBodiesData = {
-      labels: ['Male', 'Female'],
-      datasets: [{
-        label: 'Unidentified Bodies',
-        data: [
-          this.unidentifiedBodyGenderCounts.Male || 0,
-          this.unidentifiedBodyGenderCounts.Female || 0,
-        ],
-        backgroundColor: [maleColor, femaleColor], // Use dynamic colors
-      }],
-    };
-  
-    // If the chart already exists, update it
-    if (this.unidentifiedBodiesChart) {
-      this.unidentifiedBodiesChart.data = unidentifiedBodiesData;
-      this.unidentifiedBodiesChart.update(); // Update the chart
-    } else {
-      // Configuration for Unidentified Bodies Chart
-      const unidentifiedBodiesConfig: ChartConfiguration<'bar', number[], string> = {
-        type: 'bar',
-        data: unidentifiedBodiesData,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-            },
-            y: {
-              beginAtZero: true,
-              suggestedMax: Math.max(...unidentifiedBodiesData.datasets[0].data) + 20,
-            },
-          },
-        },
-      };
-  
-      // Render the Unidentified Bodies Chart
-      const bodiesChartEl = document.getElementById('unidentifiedBodiesChart') as HTMLCanvasElement;
-      if (bodiesChartEl) {
-        this.unidentifiedBodiesChart = new Chart(bodiesChartEl, unidentifiedBodiesConfig);
-      }
-    }
-  }
   
 
 }
