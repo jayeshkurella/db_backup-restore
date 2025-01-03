@@ -89,27 +89,73 @@ class MissingPersonGenderCount(APIView):
             "gender_counts": gender_count_dict,
         }, status=status.HTTP_200_OK)
    
+   
 class StateListView(APIView):
     def get(self, request):
         states = Address.objects.values_list('state', flat=True).distinct()
-        return Response(list(states), status=status.HTTP_200_OK) 
+        state_list = list(states)
+        return Response(state_list, status=status.HTTP_200_OK)
 
-class CitiesListView(APIView):
+class PoliceStationListView(APIView):
     def get(self, request):
-        cities = Address.objects.values_list('city', flat=True).distinct()
-        return Response(list(cities), status=status.HTTP_200_OK) 
+        city = request.query_params.get('city', None)
+        if not city:
+            return Response({"detail": "City parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Fetch police stations for the selected city
+        police_stations = PoliceStation.objects.filter(city=city).values('id', 'name').distinct()
+        
+        if not police_stations:
+            return Response({"detail": "No police stations found for the selected city."}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(list(police_stations), status=status.HTTP_200_OK)
 
+class CityListView(APIView):
+    def get(self, request):
+        district = request.query_params.get('district', None)
+        if not district:
+            return Response({"detail": "District parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        cities = (
+            Address.objects.filter(district=district)
+            .values_list('city', flat=True)
+            .distinct()
+        )
+        return Response(list(cities), status=status.HTTP_200_OK)
+    
+    
+class villageListView(APIView):
+    def get(self, request):
+        city = request.query_params.get('city', None)
+        if not city:
+            return Response({"detail": "City parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+                 
+        villages = (
+            Address.objects.filter(city=city)
+            .values_list('village', flat=True)
+            .distinct()
+        )
+        return Response(list(villages), status=status.HTTP_200_OK)
+   
+    
 class maritallistview(APIView):
     def get(self, request):
         marital = MissingPerson.objects.values_list('marital_status', flat=True).distinct()
         return Response(list(marital), status=status.HTTP_200_OK) 
 
-
-class districtListView(APIView):
+class DistrictListView(APIView):
     def get(self, request):
-        district = Address.objects.values_list('district', flat=True).distinct()
-        return Response(list(district), status=status.HTTP_200_OK) 
-    
+        state = request.query_params.get('state', None)
+        if not state:
+            return Response({"detail": "State parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        districts = (
+            Address.objects.filter(state=state)
+            .values_list('district', flat=True)
+            .distinct()
+        )
+        return Response(list(districts), status=status.HTTP_200_OK)
+     
 class GenderApiView(APIView):
     def get(self, request):
         districts = (
@@ -122,20 +168,9 @@ class GenderApiView(APIView):
         
         return Response(list(districts), status=status.HTTP_200_OK)
     
-@api_view(['GET'])
-def village_list(request):
-    village_list = Address.objects.exclude(village__isnull=True).values_list('village', flat=True).distinct()
-    
-    filtered_villages = [
-        village for village in village_list
-        if village.strip().lower() not in ['na'] and len(village.strip()) >= 3
-    ]
-    if not filtered_villages:
-        return Response({"detail": "No valid villages found."}, status=status.HTTP_400_BAD_REQUEST)
-    return Response(filtered_villages, status=status.HTTP_200_OK)
+
    
-   
-   
+
    
    
    

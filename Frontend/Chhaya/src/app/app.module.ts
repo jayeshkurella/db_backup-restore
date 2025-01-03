@@ -13,7 +13,6 @@ import { UnidentifiedPersonComponent } from './components/homepage/unidentified-
 import { UnidentifiedBodiesComponent } from './components/homepage/unidentified-bodies/unidentified-bodies.component';
 import { VolunteersComponent } from './components/homepage/volunteers/volunteers.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
-import { MainDashboardComponent } from './components/main-dashboard/main-dashboard.component';
 import { PoliceStationComponent } from './components/homepage/police-station/police-station.component';
 import { HospitalsComponent } from './components/homepage/hospitals/hospitals.component'; 
 import { SearchpersonAPIService } from './components/homepage/dashboard/searchperson-api.service';
@@ -37,7 +36,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     UnidentifiedBodiesComponent,
     VolunteersComponent,
     PaginationComponent,
-    MainDashboardComponent,
     PoliceStationComponent,
     HospitalsComponent,
     DashboardDemoComponent,

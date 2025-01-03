@@ -11,7 +11,8 @@ import { Color ,ScaleType  } from '@swimlane/ngx-charts';
 declare var bootstrap: any;
 import * as L from 'leaflet';
 import 'leaflet-panel-layers';
-// import '../../../../src/leaflet-panel-layers'
+import 'leaflet-panel-layers';
+import '../../../../src/leaflet-panel-layers'
 import 'leaflet-basemaps/L.Control.Basemaps'; 
 import { MainDashserviceService } from './main-dashservice.service';
 @Component({
@@ -35,10 +36,10 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   unidentifiedpersonscount: any[] = [];
   unidentifiedbodiescount: any[] = [];
   missingPersonGenderCounts: any[] = [];
-  allpolicestations: any;
-  allstates: any;
-  allcities: any;
-  alldistricts: any;
+  allpolicestations: any[] = [];
+  allstates: string[] = [];
+  allcities: string[] = [];
+  alldistricts: string[] = [];
   selectedCity = 'All Cities';
   selectedState= 'All States';
   selectedDistrict= 'All Districts';
@@ -201,12 +202,12 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     this.getunidentifiedpersoncount()
     this.getunidentifiedbodiescount()
     this.getmissingPersonGenderCount()
-    this.getallpolicestation()
+    // this.getallpolicestation()
     this.getallstates()
-    this.getallcities()
-    this.getalldistricts()
+    // this.getallcities()
+    // this.getalldistricts()
     this.getgenderst()
-    this.getvillage()
+    // this.getallvillges()
     this.filterDataByFilters()
     
     
@@ -244,6 +245,35 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     this.getFilteredUnidentifiedPersonsData(state, district, city, policeStationId ,gender,blood_group,village,heightRange,AgeRange,marital,startDate, endDate);
     this.getFilteredUnidentifiedBodiesData(state, district, city, policeStationId,gender,blood_group,village,heightRange,AgeRange,marital,startDate, endDate);
     
+    this.getDistrictsByState('Maharashtra'); 
+    this.getCitiesByDistrict('All Cities')
+    this.getvillagesbyCity('All Villages')
+    this.getpolicestationbycity("All Police Stations")
+
+    if (this.selectedState !== 'All States') {
+      this.getDistrictsByState(this.selectedState);
+    } else {
+      this.alldistricts = [];
+    }
+
+    // Check if district is selected, then get the cities for that district
+    if (this.selectedDistrict !== 'All Districts') {
+      this.getCitiesByDistrict(this.selectedDistrict);
+    } else {
+      this.allcities = [];
+    }
+
+    // Check if city is selected, then and villages for that city
+    if (this.selectedCity !== 'All Cities') {
+      this.getvillagesbyCity(this.selectedCity);
+    } else {
+      this.allVillages = [];
+    }
+    if (this.selectedCity !== 'All Cities') {
+      this.getpolicestationbycity(this.selectedCity);
+    } else {
+      this.allpolicestations = [];
+    }
   }
     
 
@@ -1150,11 +1180,11 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
 
  
 
-  getallpolicestation(){
-    this.policestationapi.getallpolicestations().subscribe(data => {
-      this.allpolicestations = data.data
-    });
-  }
+  // getallpolicestation(){
+  //   this.policestationapi.getallpolicestations().subscribe(data => {
+  //     this.allpolicestations = data.data
+  //   });
+  // }
 
   getallstates(){
     this.policestationapi.getallstates().subscribe(data => {
@@ -1162,17 +1192,68 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     });
   }
 
-  getallcities(){
-    this.policestationapi.getallcities().subscribe(data => {
-      this.allcities = data
+  // getallcities(){
+  //   this.policestationapi.getallcities().subscribe(data => {
+  //     this.allcities = data
+  //   });
+  // }
+
+  // getalldistricts(){
+  //   this.policestationapi.getalldistricts().subscribe(data => {
+  //     this.alldistricts = data
+  //   });
+  // }
+
+  getallvillges(){
+    this.policestationapi.getvillagelist().subscribe(data=>{
+      this.allVillages =data
+    })
+  }
+
+  getDistrictsByState(state: string) {
+    console.log('Fetching districts for state:', state);
+    if (state && state !== 'All States') {
+      this.policestationapi.getDistrictsByState(state).subscribe(data => {
+        this.alldistricts = data;
+      });
+    } else {
+      // Handle the case where 'state' is not selected or is 'All States'
+      this.alldistricts = [];
+    }
+  }
+  
+
+  getCitiesByDistrict(district: string) {
+    this.policestationapi.getCitiesByDistrict(district).subscribe(data => {
+      this.allcities = data;
     });
   }
 
-  getalldistricts(){
-    this.policestationapi.getalldistricts().subscribe(data => {
-      this.alldistricts = data
+
+
+  getvillagesbyCity(city: string) {
+    this.policestationapi.getvillegesbycity(city).subscribe(data => {
+      this.allVillages = data;
     });
   }
+  
+  getpolicestationbycity(city: string): void {
+    if (city !== 'All Police Stations') {
+        this.policestationapi.getPoliceStationsByCity(city).subscribe({
+            next: (data) => {
+                this.allpolicestations = data;
+                console.log(this.allpolicestations)
+            },
+            error: (error) => {
+                console.error('Error fetching police stations:', error);
+            }
+        });
+    } else {
+        this.allpolicestations = []; // Clear the list if "All stations" is selected
+    }
+}
+
+
 
 
   isLoading = false;
@@ -1227,7 +1308,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   }
 
   getvillage() {
-    this.allcountapi.getvillagelist().subscribe(data => {
+    this.policestationapi.getvillagelist().subscribe(data => {
       this.allVillages = data
     }, error => {
       console.error('Error fetching gender count:', error); 

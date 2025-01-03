@@ -6,7 +6,6 @@ import { MissingpersonComponent } from './components/homepage/missingperson/miss
 import { UnidentifiedPersonComponent } from './components/homepage/unidentified-person/unidentified-person.component';
 import { UnidentifiedBodiesComponent } from './components/homepage/unidentified-bodies/unidentified-bodies.component';
 import { VolunteersComponent } from './components/homepage/volunteers/volunteers.component';
-import { MainDashboardComponent } from './components/main-dashboard/main-dashboard.component';
 import { PoliceStationComponent } from './components/homepage/police-station/police-station.component';
 import { HospitalsComponent } from './components/homepage/hospitals/hospitals.component';
 import { DashboardDemoComponent } from './components/dashboard-demo/dashboard-demo.component';
@@ -18,7 +17,6 @@ import { PersonAddingFormComponent } from './components/homepage/person-adding-f
 const routes: Routes = [
   { path: '', redirectTo: 'Main-dashboard', pathMatch: 'full' },
   {path :"Main-dashboard", component:DashboardDemoComponent},
-  {path :"2", component:MainDashboardComponent},
   { path: 'homepage', component: HomepageComponent,
      children: [
    

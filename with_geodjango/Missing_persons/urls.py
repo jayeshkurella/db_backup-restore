@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from .views import CaseReportView, ChowkiAPIView, ConfirmMatchView, DivisionAPIView, HospitalAPIView, HospitalDivisionAPIView, HospitalZoneAPIView, MatchUnidentifiedBodyWithMissingPerson, MissingPersonAPIView, PoliceStationAPIView, RejectMatch, SearchAllMatches, SearchUndefinedMissingPersonMatches, SearchUnidentifiedBodyMatches, UnidentifiedBodyAPIView, UnidentifiedMissingperson, UnmatchConfirmedMatch, VolunteerAPIView, ZoneAPIView
-from .allcounts import CitiesListView, GenderApiView, MissingPersonGenderCount, StateListView, districtListView, maritallistview, missingpersoncount, unidentifiedbodiescount, unidentifiedpersoncount
+from .allcounts import CityListView, DistrictListView, GenderApiView, MissingPersonGenderCount, PoliceStationListView, StateListView, DistrictListView, maritallistview, missingpersoncount, unidentifiedbodiescount, unidentifiedpersoncount, villageListView
 from  . import allcounts
 
 urlpatterns = [
@@ -65,14 +65,16 @@ urlpatterns = [
     path('unidentifiedbodiescount/', unidentifiedbodiescount.as_view(), name='person-list'),
     path('countbygender/', MissingPersonGenderCount.as_view(), name='person-list'),
     path('StateList/', StateListView.as_view()),
-    path('CitiesList/', CitiesListView.as_view()),
-    path('districtList/', districtListView.as_view()),
+    path('CitiesList/', CityListView.as_view()),
+    path('districtList/', DistrictListView.as_view()),
     path('genderList/', GenderApiView.as_view()),
     path('maritallist/', maritallistview.as_view()),
-    path('villages/', allcounts.village_list, name='village-list'),
+    path('villages/', villageListView.as_view()),
     path('filtered-unidentified-bodies/', allcounts.get_filtered_unidentified_bodies),
     path('filtered-unidentified-person/', allcounts.get_filtered_unidentified_persons),
     path('filtered-missing-person/', allcounts.get_filtered_missing_persons),
+    path('policeStationList/', PoliceStationListView.as_view(), name='police-station-list'),
+
 
     path('search/undefined_missing_person_matches/<int:id>/', SearchUndefinedMissingPersonMatches.as_view(), name='search_undefined_missing_person_matches'),
     path('search/unidentified_body_matches/<int:id>/', SearchUnidentifiedBodyMatches.as_view(), name='search_unidentified_body_matches'),
