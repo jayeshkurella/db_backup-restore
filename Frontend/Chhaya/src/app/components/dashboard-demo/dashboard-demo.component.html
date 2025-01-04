@@ -5,8 +5,61 @@
       <img src="assets/images/Chhaya.png" alt="Logo" class="navbar-logo" />
     </a>
 
+    <!-- Toggle button for mobile -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarFilters"
+      aria-controls="navbarFilters"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="bi bi-funnel"></i>
+    </button>
 
-    <!-- Right Section with User Icon -->
+    <!-- Filters and user icon -->
+    <div
+      class="collapse navbar-collapse flex-column align-items-center"
+      id="navbarFilters"
+    >
+      <!-- Selected Filters -->
+      <div class="filters-wrapper d-flex flex-wrap justify-content-center mt-2">
+        <div
+          *ngIf="selectedState !== 'All States'"
+          class="filter-chip me-2 mb-2"
+        >
+          <i class="bi bi-geo-alt me-1"></i> State: {{ selectedState }}
+        </div>
+        <div
+          *ngIf="selectedDistrict !== 'All Districts'"
+          class="filter-chip me-2 mb-2"
+        >
+          <i class="bi bi-geo me-1"></i> District: {{ selectedDistrict }}
+        </div>
+        <div
+          *ngIf="selectedCity !== 'All Cities'"
+          class="filter-chip me-2 mb-2"
+        >
+          <i class="bi bi-building me-1"></i> City: {{ selectedCity }}
+        </div>
+        <div
+          *ngIf="selectedVillage !== 'All Villages'"
+          class="filter-chip me-2 mb-2"
+        >
+          <i class="bi bi-tree me-1"></i> Village: {{ selectedVillage }}
+        </div>
+        <div
+          *ngIf="selectedPoliceStation !== 'All Police Stations'"
+          class="filter-chip mb-2"
+        >
+          <i class="bi bi-shield me-1"></i> Police Station:
+          {{ selectedPoliceStation }}
+        </div>
+      </div>
+    </div>
+
+    <!-- User Icon -->
     <div class="d-flex align-items-center">
       <a class="text-dark">
         <i class="bi bi-person-circle user-icon" (click)="onNavigate()"></i>
@@ -14,6 +67,11 @@
     </div>
   </div>
 </nav>
+
+
+
+
+
 
 
 <div *ngIf="isLoading" class="loader-overlay">
@@ -26,9 +84,6 @@
 
   <div class="my-2 row" style="padding-top: 20px;">
 
-    
-    
-    
     <div class="col-12 col-md-6 col-lg-4  mb-2">
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
@@ -354,6 +409,7 @@
     <div class="col-lg-6 col-md-12">
       <div class="row">
 
+        <!-- missing person statistics -->
         <div class="my-1">
           <div class="card ">
             <div class="card-header bg-gradient border-bottom-0" style="background: linear-gradient(to bottom right, #faf5ff, #ffe4f0);">
@@ -377,7 +433,7 @@
                 <div class="col-sm-4">
                   <div class="card shadow border-0" style="background: #eff6ff;">
                     <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
                         <h5 class="text-primary fw-semibold">Male</h5>
                         <span class="fs-3 fw-bold text-primary">{{ deceasedCountgendercount.Male + found_alivegendercount.Male + pendingGendercounts.Male || 0 }}</span>
                       </div>
@@ -403,7 +459,7 @@
                 <div class="col-sm-4">
                   <div class="card shadow border-0" style="background: #fdf2f8;">
                     <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
                         <h5 class="text-danger fw-semibold">Female</h5>
                         <span class="fs-3 fw-bold text-danger">{{ deceasedCountgendercount.Female + found_alivegendercount.Female + pendingGendercounts.Female || 0 }}</span>
                       </div>
@@ -429,7 +485,7 @@
                 <div class="col-sm-4">
                   <div class="card shadow border-0" style="background: #f5f3ff;">
                     <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
                         <h5 class="text-purple fw-semibold">Total</h5>
                         <span class="fs-3 fw-bold text-purple">{{ deceasedCountgendercount.Male + deceasedCountgendercount.Female + found_alivegendercount.Male + found_alivegendercount.Female + pendingGendercounts.Male + pendingGendercounts.Female || 0 }}</span>
                       </div>
@@ -453,14 +509,14 @@
               </div>
         
               <!-- Status Summary -->
-              <div class="row g-4 mt-1">
+              <div class="row g-4 m-1">
                 <div class="col-sm-4">
                   <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #d1fae5, #34d399);">
                     <div class="card-body d-flex align-items-center gap-3">
                       <i class="bi bi-check-circle-fill fs-3 text-success"></i>
                       <div>
                         <p class="text-success mb-0">UB Found</p>
-                        <h4 class="fw-bold text-success mb-0">0</h4>
+                        <h4 class="fw-bold text-success mb-0">{{ deceasedCountgendercount.Male + deceasedCountgendercount.Female || 0 }}</h4>
                       </div>
                     </div>
                   </div>
@@ -471,7 +527,7 @@
                       <i class="bi bi-people-fill fs-3 text-primary"></i>
                       <div>
                         <p class="text-primary mb-0">UP Matched</p>
-                        <h4 class="fw-bold text-primary mb-0">0</h4>
+                        <h4 class="fw-bold text-primary mb-0">{{ found_alivegendercount.Male + found_alivegendercount.Female || 0 }}</h4>
                       </div>
                     </div>
                   </div>
@@ -482,7 +538,7 @@
                       <i class="bi bi-clock-fill fs-3 text-warning"></i>
                       <div>
                         <p class="text-warning mb-0">Pending</p>
-                        <h4 class="fw-bold text-warning mb-0">2</h4>
+                        <h4 class="fw-bold text-warning mb-0">{{ pendingGendercounts.Male + pendingGendercounts.Female || 0 }}</h4>
                       </div>
                     </div>
                   </div>
@@ -492,172 +548,284 @@
           </div>
         </div>
 
-        <!-- Card 1: Missing Person -->
-        <div class="col-12  mb-3">
-          <div class="card border rounded bg-white">
-            <div class="card-header rounded-top d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0" style="font-size: 18px;">Missing Person</h5>
-              <i class="bi bi-people fs-4" style="color: #60d960;"></i>
+        <!-- unidentified person statistics -->
+        <div class="my-1">
+          <div class="card">
+            <div class="card-header bg-gradient border-bottom-0" style="background: linear-gradient(to bottom right, #faf5ff, #ffe4f0);">
+              <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between">
+                <div>
+                  <h2 class="card-title text-center text-sm-start fw-bold" style="background: linear-gradient(to right, #4ade80, #22c55e); -webkit-background-clip: text; color: transparent;">Unidentified Person</h2>
+                  <p class="text-muted mt-1">Statistics Overview</p>
+                </div>
+                <div class="d-flex align-items-center gap-3 bg-white px-4 py-3 rounded shadow">
+                  <i class="bi bi-person-bounding-box fs-4 text-success"></i>
+                  <div>
+                    <p class="text-muted mb-0">Resolved Cases</p>
+                    <h3 class="fw-bold text-success mb-0">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</h3>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card-body p-1">
-              <div class="table-responsive">
-                <table class="table table-sm table-bordered text-center mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <td colspan="2" style="font-size: 17px;">Resolved Cases</td>
-                      <th colspan="3">{{ Found_alivecount + Deceasedcount || 0 }}</th>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 16px;">Type</td>
-                      <td style="font-size: 16px;">Male</td>
-                      <td style="font-size: 16px;">Female</td>
-                      <td style="font-size: 16px;">Transgender</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-size: 15px;">UB Found</td>
-                      <td>{{ deceasedCountgendercount.Male || 0 }}</td>
-                      <td>{{ deceasedCountgendercount.Female || 0 }}</td>
-                      <td>{{ deceasedCountgendercount.Other || 0 }}</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 15px;">UP Matched</td>
-                      <td>{{ found_alivegendercount.Male || 0 }}</td>
-                      <td>{{ found_alivegendercount.Female || 0 }}</td>
-                      <td>{{ found_alivegendercount.Other || 0 }}</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 15px;">Pending</td>
-                      <td>{{ pendingGendercounts.Male || 0 }}</td>
-                      <td>{{ pendingGendercounts.Female || 0 }}</td>
-                      <td>{{ pendingGendercounts.Other || 0 }}</td>
-                    </tr>
-                    <tr style="background-color: #f0f8ff; font-weight: bold; font-size: 16px;">
-                      <td>All Counts</td>
-                      <td>{{ deceasedCountgendercount.Male + found_alivegendercount.Male + pendingGendercounts.Male || 0 }}</td>
-                      <td>{{ deceasedCountgendercount.Female + found_alivegendercount.Female + pendingGendercounts.Female || 0 }}</td>
-                      <td>{{ deceasedCountgendercount.Other + found_alivegendercount.Other + pendingGendercounts.Other || 0 }}</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div class="card-body">
+              <div class="row g-4">
+                <!-- Male Stats -->
+                <div class="col-sm-4">
+                  <div class="card shadow border-0" style="background: #d1fae5;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="text-success fw-semibold">Male</h5>
+                        <span class="fs-3 fw-bold text-success">{{ UPdeceasedCountgendercount.Male + UPfound_alivegendercount.Male + UPpendingGendercounts.Male || 0 }}</span>
+                      </div>
+                      <div>
+                        <div class="d-flex justify-content-between text-success">
+                          <span>UB Found</span>
+                          <span>{{ UPdeceasedCountgendercount.Male || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-success">
+                          <span>MP Matched</span>
+                          <span>{{ UPfound_alivegendercount.Male || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-success">
+                          <span>Pending</span>
+                          <span>{{ UPpendingGendercounts.Male || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        
+                <!-- Female Stats -->
+                <div class="col-sm-4">
+                  <div class="card shadow border-0" style="background: #fdf2f8;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="text-pink fw-semibold">Female</h5>
+                        <span class="fs-3 fw-bold text-pink">{{ UPdeceasedCountgendercount.Female + UPfound_alivegendercount.Female + UPpendingGendercounts.Female || 0 }}</span>
+                      </div>
+                      <div>
+                        <div class="d-flex justify-content-between text-pink">
+                          <span>UB Found</span>
+                          <span>{{ UPdeceasedCountgendercount.Female || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-pink">
+                          <span>MP Matched</span>
+                          <span>{{ UPfound_alivegendercount.Female || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-pink">
+                          <span>Pending</span>
+                          <span>{{ UPpendingGendercounts.Female || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        
+                <!-- Total Counts -->
+                <div class="col-sm-4">
+                  <div class="card shadow border-0" style="background: #e0f2fe;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="text-blue fw-semibold">Total</h5>
+                        <span class="fs-3 fw-bold text-blue">{{ UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female + UPfound_alivegendercount.Male + UPfound_alivegendercount.Female + UPpendingGendercounts.Male + UPpendingGendercounts.Female || 0 }}</span>
+                      </div>
+                      <div>
+                        <div class="d-flex justify-content-between text-blue">
+                          <span>UB Found</span>
+                          <span>{{ UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-blue">
+                          <span>MP Matched</span>
+                          <span>{{ UPfound_alivegendercount.Male + UPfound_alivegendercount.Female || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-blue">
+                          <span>Pending</span>
+                          <span>{{ UPpendingGendercounts.Male + UPpendingGendercounts.Female || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <!-- Status Summary -->
+              <div class="row g-4 m-1">
+                <div class="col-sm-4">
+                  <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f7fa, #4caf50);">
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <i class="bi bi-check-circle-fill fs-3 text-success"></i>
+                      <div>
+                        <p class="text-success mb-0">UB Found</p>
+                        <h4 class="fw-bold text-success mb-0">{{ UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female || 0 }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <i class="bi bi-person-check-fill fs-3 text-primary"></i>
+                      <div>
+                        <p class="text-primary mb-0">MP Matched</p>
+                        <h4 class="fw-bold text-primary mb-0">{{ UPfound_alivegendercount.Male + UPfound_alivegendercount.Female || 0 }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fff3e0, #ff9800);">
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <i class="bi bi-clock-fill fs-3 text-warning"></i>
+                      <div>
+                        <p class="text-warning mb-0">Pending</p>
+                        <h4 class="fw-bold text-warning mb-0">{{ UPpendingGendercounts.Male + UPpendingGendercounts.Female || 0 }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        
-  
-        
-        
 
-        <!-- Card 2: Unidentified Person -->
-        <div class="col-12 mb-3">
-          <div class="card border-1 rounded">
-            <div class="card-header text-white rounded-top d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0" style="font-size: 18px;">Unidentified Person</h5>
-              <i class="bi bi-info-circle fs-4" style="color: #60d960;"></i>
-            </div>
-            <div class="card-body p-1">
-              <div class="table-responsive">
-                <table class="table table-sm table-bordered text-center mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <td colspan="2" style="font-size: 17px;">Resolved Cases</td>
-                      <th colspan="3">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</th>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 16px;">Type</td>
-                      <td style="font-size: 16px;">Male</td>
-                      <td style="font-size: 16px;">Female</td>
-                      <td style="font-size: 16px;">Transgender</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-size: 15px;">MP Matched</td>
-                      <td>{{ UPfound_alivegendercount.Male || 0 }}</td>
-                      <td>{{ UPfound_alivegendercount.Female || 0 }}</td>
-                      <td>{{ UPfound_alivegendercount.Other || 0 }}</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 15px;">UB Found</td>
-                      <td>{{ UPdeceasedCountgendercount.Male || 0 }}</td>
-                      <td>{{ UPdeceasedCountgendercount.Female || 0 }}</td>
-                      <td>{{ UPdeceasedCountgendercount.Other || 0 }}</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 15px;">Pending</td>
-                      <td>{{ UPpendingGendercounts.Male || 0 }}</td>
-                      <td>{{ UPpendingGendercounts.Female || 0 }}</td>
-                      <td>{{ UPpendingGendercounts.Other || 0 }}</td>
-                    </tr>
-                    <tr style="background-color: #f0f8ff; font-weight: bold; font-size: 16px;">
-                      <td>All Counts</td>
-                      <td>{{ UPfound_alivegendercount.Male + UPdeceasedCountgendercount.Male + UPpendingGendercounts.Male || 0 }}</td>
-                      <td>{{ UPfound_alivegendercount.Female + UPdeceasedCountgendercount.Female + UPpendingGendercounts.Female || 0 }}</td>
-                      <td>{{ UPfound_alivegendercount.Other + UPdeceasedCountgendercount.Other + UPpendingGendercounts.Other || 0 }}</td>
-                    </tr>
-                  </tbody>
-                </table>
+        <!-- unidentifed bodies statistics -->
+        <div class="my-1">
+          <div class="card">
+            <div class="card-header bg-gradient border-bottom-0" style="background: linear-gradient(to bottom right, #e0f7fa, #e3f2fd);">
+              <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between">
+                <div>
+                  <h2 class="card-title text-center text-sm-start fw-bold" style="background: linear-gradient(to right, #0288d1, #d81b60); -webkit-background-clip: text; color: transparent;">Unidentified Bodies</h2>
+                  <p class="text-muted mt-1">Statistics Overview</p>
+                </div>
+                <div class="d-flex align-items-center gap-3 bg-white px-4 py-3 rounded shadow">
+                  <i class="bi bi-eye-slash fs-4 text-success"></i>
+                  <div>
+                    <p class="text-muted mb-0">Resolved Cases</p>
+                    <h3 class="fw-bold text-success mb-0">{{ UBFound_alivecount + UBDeceasedcount || 0 }}</h3>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+            <div class="card-body">
+              <div class="row g-4">
+                <!-- Male Stats -->
+                <div class="col-sm-4">
+                  <div class="card shadow border-0" style="background: #f1f8e9;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="text-success fw-semibold">Male</h5>
+                        <span class="fs-3 fw-bold text-success">{{ UBdeceasedCountgendercount.Male + UBfound_alivegendercount.Male + UBpendingGendercounts.Male || 0 }}</span>
+                      </div>
+                      <div>
+                        <div class="d-flex justify-content-between text-success">
+                          <span>UP Matched</span>
+                          <span>{{ UBdeceasedCountgendercount.Male || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-success">
+                          <span>MP Matched</span>
+                          <span>{{ UBfound_alivegendercount.Male || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-success">
+                          <span>Pending</span>
+                          <span>{{ UBpendingGendercounts.Male || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
         
-  
-        <!-- Card 3: Unidentified Bodies -->
-        <div class="col-12">
-          <div class="card border-1 rounded">
-            <div class="card-header rounded-top d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0" style="font-size: 18px;">Unidentified Bodies</h5>
-              <i class="bi bi-eye-slash fs-4" style="color: #60d960;"></i>
-            </div>
-            <div class="card-body p-1">
-              <div class="table-responsive">
-                <table class="table table-sm table-bordered text-center mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <td colspan="2" style="font-size: 17px;">Resolved Cases</td>
-                      <th colspan="3">{{ UBDeceasedcount + UBFound_alivecount || 0 }}</th>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 16px;">Type</td>
-                      <td style="font-size: 16px;">Male</td>
-                      <td style="font-size: 16px;">Female</td>
-                      <td style="font-size: 16px;">Transgender</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-size: 15px;">MP Matched</td>
-                      <td>{{ UBfound_alivegendercount.Male || 0 }}</td>
-                      <td>{{ UBfound_alivegendercount.Female || 0 }}</td>
-                      <td>{{ UBfound_alivegendercount.Other || 0 }}</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 15px;">UP Matched</td>
-                      <td>{{ UBdeceasedCountgendercount.Male || 0 }}</td>
-                      <td>{{ UBdeceasedCountgendercount.Female || 0 }}</td>
-                      <td>{{ UBdeceasedCountgendercount.Other || 0 }}</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size: 15px;">Pending</td>
-                      <td>{{ UBpendingGendercounts.Male || 0 }}</td>
-                      <td>{{ UBpendingGendercounts.Female || 0 }}</td>
-                      <td>{{ UBpendingGendercounts.Other || 0 }}</td>
-                    </tr>
-                    <tr style="background-color: #f0f8ff; font-weight: bold; font-size: 16px;">
-                      <td>All Counts</td>
-                      <td>{{ UBfound_alivegendercount.Male + UBdeceasedCountgendercount.Male + UBpendingGendercounts.Male || 0 }}</td>
-                      <td>{{ UBfound_alivegendercount.Female + UBdeceasedCountgendercount.Female + UBpendingGendercounts.Female || 0 }}</td>
-                      <td>{{ UBfound_alivegendercount.Other + UBdeceasedCountgendercount.Other + UBpendingGendercounts.Other || 0 }}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <!-- Female Stats -->
+                <div class="col-sm-4">
+                  <div class="card shadow border-0" style="background: #fbe9e7;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="text-danger fw-semibold">Female</h5>
+                        <span class="fs-3 fw-bold text-danger">{{ UBdeceasedCountgendercount.Female + UBfound_alivegendercount.Female + UBpendingGendercounts.Female || 0 }}</span>
+                      </div>
+                      <div>
+                        <div class="d-flex justify-content-between text-danger">
+                          <span>UP Matched</span>
+                          <span>{{ UBdeceasedCountgendercount.Female || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-danger">
+                          <span>MP Matched</span>
+                          <span>{{ UBfound_alivegendercount.Female || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-danger">
+                          <span>Pending</span>
+                          <span>{{ UBpendingGendercounts.Female || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        
+                <!-- Total Counts -->
+                <div class="col-sm-4">
+                  <div class="card shadow border-0" style="background: #ede7f6;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="text-purple fw-semibold">Total</h5>
+                        <span class="fs-3 fw-bold text-purple">{{ UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other + UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other + UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other || 0 }}</span>
+                      </div>
+                      <div>
+                        <div class="d-flex justify-content-between text-purple">
+                          <span>UP Matched</span>
+                          <span>{{ UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-purple">
+                          <span>MP Matched</span>
+                          <span>{{ UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other || 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-purple">
+                          <span>Pending</span>
+                          <span>{{ UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <!-- Status Summary -->
+              <div class="row g-4 m-1">
+                <div class="col-sm-4">
+                  <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #a5d6a7, #43a047);">
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <i class="bi bi-check-circle-fill fs-3 text-success"></i>
+                      <div>
+                        <p class="text-success mb-0">UP Matched</p>
+                        <h4 class="fw-bold text-success mb-0">{{ UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other || 0 }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #90caf9, #1e88e5);">
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <i class="bi bi-people-fill fs-3 text-primary"></i>
+                      <div>
+                        <p class="text-primary mb-0">MP Matched</p>
+                        <h4 class="fw-bold text-primary mb-0">{{ UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other || 0 }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffcc80, #fb8c00);">
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <i class="bi bi-clock-fill fs-3 text-warning"></i>
+                      <div>
+                        <p class="text-warning mb-0">Pending</p>
+                        <h4 class="fw-bold text-warning mb-0">{{ UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other || 0 }}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      
         
       </div>
     </div>
