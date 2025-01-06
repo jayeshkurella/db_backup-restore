@@ -227,7 +227,7 @@ def get_filtered_missing_persons(request):
 
     # Police Station ID filter
     police_station_id = handle_null(request.query_params.get('policeStationId', None))
-    if police_station_id is not None:  # Ensure it's not None before applying the filter
+    if police_station_id is not None:  
         filters &= Q(police_station_name_and_address__id=police_station_id)
 
     # Height Range filter

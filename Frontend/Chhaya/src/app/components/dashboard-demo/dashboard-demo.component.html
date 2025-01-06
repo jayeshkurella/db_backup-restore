@@ -50,12 +50,13 @@
           <i class="bi bi-tree me-1"></i> Village: {{ selectedVillage }}
         </div>
         <div
-          *ngIf="selectedPoliceStation !== 'All Police Stations'"
+          *ngIf="selectedPoliceStation !== 'All Police Stations' && selectedPoliceStation?.name"
           class="filter-chip mb-2"
         >
           <i class="bi bi-shield me-1"></i> Police Station:
-          {{ selectedPoliceStation }}
+          {{ selectedPoliceStation.name }}
         </div>
+
       </div>
     </div>
 
@@ -265,17 +266,13 @@
                   (change)="filterDataByFilters()"
                   aria-label="Police"
                 >
-                  <option value="All Police Stations">
-                    All Police Stations
-                  </option>
-                  <option
-                    *ngFor="let station of allpolicestations"
-                    [value]="station.id"
-                  >
+                  <option value="All Police Stations">All Police Stations</option>
+                  <option *ngFor="let station of allpolicestations" [value]="station.id">
                     {{ station.name }}
                   </option>
                 </select>
               </div>
+              
             </div>
           </div>
           <!-- Gender, Height, Age, Marital Status -->

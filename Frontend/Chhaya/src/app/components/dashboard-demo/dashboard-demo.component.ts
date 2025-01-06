@@ -43,7 +43,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   selectedCity = 'All Cities';
   selectedState= 'All States';
   selectedDistrict= 'All Districts';
-  selectedPoliceStation='All Police Stations';
+  selectedPoliceStation: { id: number; name: string } | 'All Police Stations' = 'All Police Stations';
   selectedgender='All Genders';
   allBloodGroups = ['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-']; 
   missingPersonsCount: number = 0;
@@ -229,7 +229,11 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     const district = this.selectedDistrict !== 'All Districts' ? this.selectedDistrict : null;
     const city = this.selectedCity !== 'All Cities' ? this.selectedCity : null;
     const gender =this.selectedgender !== 'All Genders' ? this.selectedgender : null;
-    const policeStationId = this.selectedPoliceStation !== 'All Police Stations' ? this.selectedPoliceStation : null;
+    const policeStationId = this.selectedPoliceStation !== 'All Police Stations' && this.selectedPoliceStation && this.selectedPoliceStation.id
+    ? this.selectedPoliceStation.id.toString()
+    : null;
+    console.log('Selected Police Station:', this.selectedPoliceStation);
+
 
     const blood_group = this.selectedBloodGroup !== 'All Blood Groups' ? this.selectedBloodGroup : null;
     const village = this.selectedVillage !== 'All Villages' ? this.selectedVillage : null;
@@ -240,6 +244,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     const marital = this.selectedmarital !== 'Marital status' ? this.selectedmarital : null;
     const startDate = this.selectedStartDate ? this.selectedStartDate : null;
     const endDate = this.selectedEndDate ? this.selectedEndDate : null;
+
     // Fetch filtered data based on the selected filters
     this.getFilteredMissingPersonsData(state, district, city, policeStationId ,gender,blood_group,village,heightRange,AgeRange ,marital,startDate, endDate);
     this.getFilteredUnidentifiedPersonsData(state, district, city, policeStationId ,gender,blood_group,village,heightRange,AgeRange,marital,startDate, endDate);
