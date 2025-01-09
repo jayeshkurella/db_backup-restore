@@ -367,16 +367,20 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
             const lng = coordinates[0];
   
             const popupContent = `
-              <strong>Person Type: Missing</strong><br>
+              <strong><i class="fa fa-exclamation-circle" style="font-size: 20px; color: red; margin-right: 5px;"></i>Person Type: Missing</strong><br>
               <strong>${person.full_name || 'Unknown'}</strong><br>
               Gender: ${person.gender || 'Not specified'}<br>
               Age: ${person.age || 'Not specified'}<br>
               Location: ${person.address.city || 'Not specified'}<br>
               <img 
-                src="${person.photo_upload ? environment.apiUrl + person.photo_upload : '/assets/images/Chhaya.png'}" 
-                alt="No Photo Updated" 
-                style="width: 200px; height: 100px;"
-              >            `;
+                  src="${person.photo_upload ? environment.apiUrl + person.photo_upload : '/assets/images/Chhaya.png'}" 
+                  alt="No Photo Updated" 
+                  style="width: 200px; height: 100px;"
+                  onerror="this.onerror=null; this.src='/assets/images/Chhaya.png';"
+              /><br>
+              <button (click)="viewDetails(person)">View</button>
+          `;
+
   
             const customIcon = L.icon({
               iconUrl: 'assets/leaflet/images/green_marker.png',
@@ -636,10 +640,12 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
             Gender: ${person.gender || 'Not specified'}<br>
             Location: ${person.address.city || 'Not specified'}<br>
              <img 
-                src="${person.photo_upload ? environment.apiUrl + person.photo_upload : '/assets/images/Chhaya.png'}" 
-                alt="No Photo Updated" 
-                style="width: 200px; height: 100px;"
-              >    
+              src="${person.photo_upload ? environment.apiUrl + person.photo_upload : '/assets/images/Chhaya.png'}" 
+              alt="No Photo Updated" 
+              style="width: 200px; height: 100px;"
+              onerror="this.onerror=null; this.src='/assets/images/Chhaya.png';"
+          />
+   
           `;
   
           const customIcon = L.icon({
@@ -822,10 +828,12 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
             Location: ${body.body_seen_details || 'Not specified'}<br>
             Body found city: ${body.address.city || 'Not specified'}<br>
             <img 
-                src="${body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : '/assets/images/Chhaya.png'}" 
-                alt="No Photo Updated" 
-                style="width: 200px; height: 100px;"
-              >              `;
+              src="${body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : '/assets/images/Chhaya.png'}" 
+              alt="No Photo Updated" 
+              style="width: 200px; height: 100px;"
+              onerror="this.onerror=null; this.src='/assets/images/Chhaya.png';"
+          />
+            `;
   
           // Create a custom marker for Leaflet
           const customIcon = L.icon({
@@ -888,7 +896,9 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   
   
   viewDetails(person: any): void {
+    console.log(person)
     this.selectedPerson = person;
+    
 
     // Open the modal
     const modal = new bootstrap.Modal(document.getElementById('filteredDataModal'));

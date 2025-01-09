@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from .views import CaseReportView, ChowkiAPIView, ConfirmMatchView, DivisionAPIView, HospitalAPIView, HospitalDivisionAPIView, HospitalZoneAPIView, MatchUnidentifiedBodyWithMissingPerson, MissingPersonAPIView, PoliceStationAPIView, RejectMatch, SearchAllMatches, SearchUndefinedMissingPersonMatches, SearchUnidentifiedBodyMatches, UnidentifiedBodyAPIView, UnidentifiedMissingperson, UnmatchConfirmedMatch, VolunteerAPIView, ZoneAPIView
-from .allcounts import CityListView, DistrictListView, GenderApiView, MissingPersonGenderCount, PoliceStationListView, StateListView, DistrictListView, maritallistview, missingpersoncount, unidentifiedbodiescount, unidentifiedpersoncount, villageListView
+from .allcounts import CityListView, DistrictListView, GenderApiView, MissingPersonGenderCount, PoliceStationListView, StateListView, DistrictListView, VillageListView, maritallistview, missingpersoncount, unidentifiedbodiescount, unidentifiedpersoncount
 from  . import allcounts
 
 urlpatterns = [
@@ -69,7 +69,7 @@ urlpatterns = [
     path('districtList/', DistrictListView.as_view()),
     path('genderList/', GenderApiView.as_view()),
     path('maritallist/', maritallistview.as_view()),
-    path('villages/', villageListView.as_view()),
+    path('villages/', VillageListView.as_view()),
     path('filtered-unidentified-bodies/', allcounts.get_filtered_unidentified_bodies),
     path('filtered-unidentified-person/', allcounts.get_filtered_unidentified_persons),
     path('filtered-missing-person/', allcounts.get_filtered_missing_persons),

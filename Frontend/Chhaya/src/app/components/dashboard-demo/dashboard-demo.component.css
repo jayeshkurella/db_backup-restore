@@ -267,7 +267,7 @@ canvas {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 /* For smaller screens */
 @media (max-width: 767px) {
@@ -515,7 +515,7 @@ canvas {
 }
 
 .nav-tabs .nav-link {
-  color: #ffc800;
+  color: #000000;
 }
 
 .nav-tabs .nav-link.active {

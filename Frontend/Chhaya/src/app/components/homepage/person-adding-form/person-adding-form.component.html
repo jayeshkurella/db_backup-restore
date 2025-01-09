@@ -50,14 +50,14 @@
                 <p class="mb-4">Provide details of the missing person</p>
                 <form>
                   <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-1">
                       <label for="fullName" class="form-label">Full Name</label>
-                      <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
+                      <input type="text" class="form-control" id="fullName" placeholder="Enter full name" [(ngModel)]="missingPerson.full_name" name="full_name">
                     </div>
                     <div class="col-md-2">
                       <label for="gender" class="form-label">Gender</label>
-                      <select class="form-select" id="gender">
-                        <option selected>Select gender</option>
+                      <select class="form-select" id="gender" [(ngModel)]="missingPerson.gender" name="gender">
+                        <option value="" selected>Select gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
@@ -65,50 +65,62 @@
                     </div>
                     <div class="col-md-2">
                       <label for="gender" class="form-label">Blood Group</label>
-                      <select class="form-select" id="gender">
-                        <option selected>Select blood group</option>
+                      <select class="form-select" id="bloodGroup" [(ngModel)]="missingPerson.blood_group" name="blood_group">
+                        <option value="" selected>Select blood group</option>
                         <option value="A+">A+</option>
+                        <option value="O+">O+</option>
+                        <option value="B+">B+</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB+</option>
                       </select>
                     </div>
                     <div class="col-md-2">
                       <label for="dob" class="form-label">Date of Birth</label>
-                      <input type="date" class="form-control" id="dob">
+                      <input type="date" class="form-control" id="dob" [(ngModel)]="missingPerson.date_of_birth" name="date_of_birth"
+                        (change)="calculateAge()"/>
                     </div>
-                    
                   </div>
-              
                   <div class="row mb-3">
-                    
                     <div class="col-md-2">
                       <label for="age" class="form-label">Age</label>
-                      <input type="number" class="form-control" id="age" placeholder="age" readonly>
+                      <input type="number" class="form-control" id="age" [value]="missingPerson.age"placeholder="age"
+                        readonly />
                     </div>
+                    
                     <div class="col-md-2">
                       <label for="dob" class="form-label">Time of Birth</label>
-                      <input type="time" class="form-control" id="tob">
+                      <input type="time" class="form-control" id="tob" [(ngModel)]="missingPerson.time_of_birth" name="time of birth">
                     </div>
                     <div class="col-md-2">
                       <label for="place_of_birth" class="form-label">Place of Birth</label>
-                      <input type="text" class="form-control" id="age" placeholder="Enter place of birth">
+                      <input type="text" class="form-control" id="age" placeholder="Enter place of birth" [(ngModel)]="missingPerson.place_of_birth" name="place of birth">
                     </div>
                     <div class="col-md-2">
                       <label for="height" class="form-label">Height</label>
-                      <input type="text" class="form-control" id="height" placeholder="e.g., 5'10">
+                      <input type="text" class="form-control" id="height" placeholder="e.g., 5'10" [(ngModel)]="missingPerson.height" name="'height">
                     </div>
                     <div class="col-md-2">
                       <label for="weight" class="form-label">Weight</label>
-                      <input type="text" class="form-control" id="weight" placeholder="e.g., 160 lbs or 73 kg">
+                      <input type="text" class="form-control" id="weight" placeholder="e.g., 160 lbs or 73 kg" [(ngModel)]="missingPerson.weight" name="weight">
                     </div>
                     <div class="col-md-2">
                       <label for="complexion" class="form-label">Complexion</label>
-                      <input type="text" class="form-control" id="complexion" placeholder="e.g., Fair, Medium, Dark">
+                      <select
+                        class="form-select"id="complexion"[(ngModel)]="missingPerson.complexion"name="complexion" >
+                        <option value="" disabled>Select complexion</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Dark">Dark</option>
+                      </select>
                     </div>
+                    
                   </div>
-                  <div class="row mb-3">
+
+                  <div class="row mt-2 mb-3">
                       <div class="col-md-2">
                         <label for="hairColor" class="form-label">Hair Color</label>
-                        <select class="form-select" id="hairColor">
-                          <option selected>Select hair color</option>
+                        <select class="form-select" id="hairColor" [(ngModel)]="missingPerson.hair_color" name="hair_color">
+                          <option value="" selected>Select hair color</option>
                           <option value="black">Black</option>
                           <option value="brown">Brown</option>
                           <option value="blonde">Blonde</option>
@@ -117,8 +129,8 @@
                       </div>
                     <div class="col-md-2">
                       <label for="hairType" class="form-label">Hair Type</label>
-                      <select class="form-select" id="hairType">
-                        <option selected>Select hair type</option>
+                      <select class="form-select" id="hairType" [(ngModel)]="missingPerson.hair_type" name="hair_type">
+                        <option value="" selected>Select hair type</option>
                         <option value="straight">Straight</option>
                         <option value="wavy">Wavy</option>
                         <option value="curly">Curly</option>
@@ -126,8 +138,8 @@
                     </div>
                     <div class="col-md-2">
                       <label for="eyeColor" class="form-label">Eye Color</label>
-                      <select class="form-select" id="eyeColor">
-                        <option selected>Select eye color</option>
+                      <select class="form-select" id="eyeColor" [(ngModel)]="missingPerson.eye_color" name="eyeColor" >
+                        <option value="" selected>Select eye color</option>
                         <option value="brown">Brown</option>
                         <option value="blue">Blue</option>
                         <option value="green">Green</option>
@@ -136,56 +148,64 @@
                     </div>
                     <div class="col-md-3">
                       <label for="birthmark" class="form-label">Birthmark</label>
-                      <textarea type="text" class="form-control" id="birthmark" placeholder="Describe any birthmarks"></textarea>
+                      <textarea type="text" class="form-control" id="birthmark" placeholder="Describe any birthmarks" placeholder="Enter Other Distinctive Marks" [(ngModel)]="missingPerson.birth_mark" name="birthmark"></textarea>
                     </div>
                     <div class="col-md-3">
                       <label for="distinctiveMarks" class="form-label">Other Distinctive Marks</label>
-                      <textarea type="text" class="form-control" id="distinctiveMarks" placeholder="Scars, tattoos, etc."></textarea>
+                      <textarea type="text" class="form-control" id="distinctiveMarks" placeholder="Enter Other Distinctive Marks" [(ngModel)]="missingPerson.distinctive_mark" name="distinctiveMarks"></textarea>
                     </div>
                   </div>
                   
                   <div class="row mb-3">
-                    <div class="col-md-4">
-                      <label for="address" class="form-label">Address</label>
-                      <textarea class="form-control" id="address" placeholder="Enter address"></textarea>
+                    <div class="col-md-3">
+                      <label for="address" class="form-label">street</label>
+                      <textarea type="text" class="form-control" id="street" placeholder="Enter street" [(ngModel)]="missingPerson.address.street" name="address.street"></textarea>
                     </div>
                     <div class="col-md-3">
                       <label for="phone" class="form-label">Phone Number</label>
-                      <input type="text" class="form-control" id="phone" placeholder="Enter phone number">
+                      <input type="text" class="form-control" id="city" placeholder="Enter Phone number" [(ngModel)]="missingPerson.contact.phone_number" name="contact.phone_numbe">
                     </div>
                     <div class="col-md-3">
-                      <label for="city" class="form-label">Village/City</label>
-                      <input type="text" class="form-control" id="city" placeholder="Enter city/village">
+                      <label for="city" class="form-label">Village</label>
+                      <input type="text" class="form-control" id="village" placeholder="Enter viilage" [(ngModel)]="missingPerson.address.village" name="address.village">
                     </div>
-                    <div class="col-md-2">
-                      <label for="pincode" class="form-label">Pincode</label>
-                      <input type="text" class="form-control" id="pincode" placeholder="Enter pincode">
+                    <div class="col-md-3">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" class="form-control" id="city" placeholder="Enter city" [(ngModel)]="missingPerson.address.city" name="address.city">
                     </div>
+                    
                   </div>
             
                   <!-- City and State -->
                   <div class="row mb-3">
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                       <label for="state" class="form-label">Taluka</label>
                       <input type="text" class="form-control" id="Taluka" placeholder="Enter Taluka">
-                    </div>
+                    </div> -->
                     <div class="col-md-3">
                       <label for="district" class="form-label">District</label>
-                      <input type="text" class="form-control" id="district" placeholder="Enter district">
+                      <input type="text" class="form-control" id="District" placeholder="Enter District" [(ngModel)]="missingPerson.address.district" name="address.district">
                     </div>
                     <div class="col-md-3">
                       <label for="state" class="form-label">State</label>
-                      <input type="text" class="form-control" id="state" placeholder="Enter state">
+                      <input type="text" class="form-control" id="state" placeholder="Enter state" [(ngModel)]="missingPerson.address.state" name="address.state">
                     </div>
                     <div class="col-md-3">
                       <label for="country" class="form-label">Country</label>
-                      <input type="text" class="form-control" id="country" placeholder="Enter country">
+                      <input type="text" class="form-control" id="country" placeholder="Enter country" [(ngModel)]="missingPerson.address.country" name="address.country">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="pincode" class="form-label">Pincode</label>
+                      <input type="text" class="form-control" id="Pincode" placeholder="Enter Pincode" [(ngModel)]="missingPerson.address.postal_code" name="address.postal_code">
                     </div>
                   </div>
                   <div class="d-flex justify-content-end mt-3">
                     <!-- <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('reportingPerson')">Back</button> -->
                     <button type="button" class="btn btn-dark" (click)="goToNextTab('additional_info')">Next</button>
                   </div>
+                  <br>
+                  <br>
+                  <br>
                 </form>
               </div>
               
@@ -542,7 +562,7 @@
               
                     <div class="d-flex justify-content-between mt-3">
                       <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('reportingPerson')">Back</button>
-                      <button type="submit" class="btn btn-outline-success">Submit Report</button>
+                      <button type="button" class="btn btn-dark" (click)="submitForm()">Submit</button>
                     </div>
                   
                 </form>

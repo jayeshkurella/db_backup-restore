@@ -145,7 +145,7 @@ class ContactAdmin(LeafletGeoAdmin):
     
 
 class AddressAdmin(LeafletGeoAdmin):
-    list_display = ('street', 'city','district', 'state', 'postal_code', 'country', 'type', 'subtype', 'is_active')
+    list_display = ('street', 'village','city','district', 'state', 'postal_code', 'country', 'type', 'subtype', 'is_active')
     list_filter = ('type', 'subtype', 'is_active', 'country', 'state', 'city')
     search_fields = ('street', 'city', 'state', 'postal_code', 'country')
     fieldsets = (

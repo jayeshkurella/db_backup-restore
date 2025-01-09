@@ -124,19 +124,25 @@ class CityListView(APIView):
         return Response(list(cities), status=status.HTTP_200_OK)
     
     
-class villageListView(APIView):
+class VillageListView(APIView):
     def get(self, request):
         city = request.query_params.get('city', None)
         if not city:
             return Response({"detail": "City parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
-                 
+
+        # Fetch the distinct village names from the database for the given city
         villages = (
             Address.objects.filter(city=city)
             .values_list('village', flat=True)
             .distinct()
         )
-        return Response(list(villages), status=status.HTTP_200_OK)
-   
+
+        # Filter out None values and empty strings
+        villages = [
+            village for village in villages if village not in [None, '']
+        ]
+
+        return Response(villages, status=status.HTTP_200_OK)
     
 class maritallistview(APIView):
     def get(self, request):

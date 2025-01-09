@@ -3658,15 +3658,21 @@ class ConfirmMatchView(APIView):
                         is_confirmed=True
                     )
 
-                    # Assign the matched entity
+                    # Assign the matched entity and update missing_person's status
                     if match.undefined_missing_person:
                         resolved_case.unidentified_missing_person = match.undefined_missing_person
+                        # Update status: Found alive
+                        missing_person.case_status = 'Found alive'
                     elif match.unidentified_body:
                         resolved_case.unidentified_body = match.unidentified_body
+                        # Update status: Deceased
+                        missing_person.case_status = 'Deceased'
                     else:
                         return Response({'message': 'Neither undefined_missing_person nor unidentified_body exists for this match.'}, status=status.HTTP_400_BAD_REQUEST)
 
+                    # Save changes
                     resolved_case.save()
+                    missing_person.save()
 
                     # Set the match as confirmed
                     match.is_confirmed = True
@@ -3702,7 +3708,7 @@ class ConfirmMatchView(APIView):
                 # Rollback in case of any error
                 return Response({"message": "An error occurred during confirmation.", "error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        
+            
         return Response({"message": "Please specify if the match is confirmed."}, status=status.HTTP_400_BAD_REQUEST)
 
 # to unconfirmed the rejected data
