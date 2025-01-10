@@ -45,18 +45,19 @@
           <div class="tab-content" id="myTabContent">
     
             <!-- personal details -->
-            <div class="tab-pane fade show active " id="personal-details" role="tabpanel" aria-labelledby="personal-details-tab">
+            <div class="tab-pane fade show active" id="personal-details" role="tabpanel" aria-labelledby="personal-details-tab">
               <div class="container mt-3">
                 <p class="mb-4">Provide details of the missing person</p>
-                <form>
+                
+                <form [formGroup]="missingPersonForm">
                   <div class="row mb-3">
                     <div class="col-md-6 mb-1">
                       <label for="fullName" class="form-label">Full Name</label>
-                      <input type="text" class="form-control" id="fullName" placeholder="Enter full name" [(ngModel)]="missingPerson.full_name" name="full_name">
+                      <input type="text" class="form-control" id="fullName" formControlName="full_name" placeholder="Enter full name">
                     </div>
                     <div class="col-md-2">
                       <label for="gender" class="form-label">Gender</label>
-                      <select class="form-select" id="gender" [(ngModel)]="missingPerson.gender" name="gender">
+                      <select class="form-select" id="gender" formControlName="gender">
                         <option value="" selected>Select gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -64,72 +65,68 @@
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <label for="gender" class="form-label">Blood Group</label>
-                      <select class="form-select" id="bloodGroup" [(ngModel)]="missingPerson.blood_group" name="blood_group">
+                      <label for="bloodGroup" class="form-label">Blood Group</label>
+                      <select class="form-select" id="bloodGroup" formControlName="blood_group">
                         <option value="" selected>Select blood group</option>
                         <option value="A+">A+</option>
                         <option value="O+">O+</option>
                         <option value="B+">B+</option>
                         <option value="AB+">AB+</option>
-                        <option value="AB-">AB+</option>
+                        <option value="AB-">AB-</option>
                       </select>
                     </div>
                     <div class="col-md-2">
                       <label for="dob" class="form-label">Date of Birth</label>
-                      <input type="date" class="form-control" id="dob" [(ngModel)]="missingPerson.date_of_birth" name="date_of_birth"
-                        (change)="calculateAge()"/>
+                      <input type="date" class="form-control" id="dob" formControlName="date_of_birth" (change)="calculateAge()">
                     </div>
                   </div>
+            
                   <div class="row mb-3">
                     <div class="col-md-2">
                       <label for="age" class="form-label">Age</label>
-                      <input type="number" class="form-control" id="age" [value]="missingPerson.age"placeholder="age"
-                        readonly />
+                      <input type="number" class="form-control" id="age" formControlName="age" placeholder="Age" readonly>
                     </div>
-                    
                     <div class="col-md-2">
-                      <label for="dob" class="form-label">Time of Birth</label>
-                      <input type="time" class="form-control" id="tob" [(ngModel)]="missingPerson.time_of_birth" name="time of birth">
+                      <label for="tob" class="form-label">Time of Birth</label>
+                      <input type="time" class="form-control" id="tob" formControlName="time_of_birth">
                     </div>
                     <div class="col-md-2">
                       <label for="place_of_birth" class="form-label">Place of Birth</label>
-                      <input type="text" class="form-control" id="age" placeholder="Enter place of birth" [(ngModel)]="missingPerson.place_of_birth" name="place of birth">
+                      <input type="text" class="form-control" id="place_of_birth" formControlName="place_of_birth" placeholder="Enter place of birth">
                     </div>
                     <div class="col-md-2">
                       <label for="height" class="form-label">Height</label>
-                      <input type="text" class="form-control" id="height" placeholder="e.g., 5'10" [(ngModel)]="missingPerson.height" name="'height">
+                      <input type="text" class="form-control" id="height" formControlName="height" placeholder="e.g., 5'10">
                     </div>
                     <div class="col-md-2">
                       <label for="weight" class="form-label">Weight</label>
-                      <input type="text" class="form-control" id="weight" placeholder="e.g., 160 lbs or 73 kg" [(ngModel)]="missingPerson.weight" name="weight">
+                      <input type="text" class="form-control" id="weight" formControlName="weight" placeholder="e.g., 160 lbs or 73 kg">
                     </div>
                     <div class="col-md-2">
                       <label for="complexion" class="form-label">Complexion</label>
-                      <select
-                        class="form-select"id="complexion"[(ngModel)]="missingPerson.complexion"name="complexion" >
+                      <select class="form-select" id="complexion" formControlName="complexion">
                         <option value="" disabled>Select complexion</option>
                         <option value="Fair">Fair</option>
                         <option value="Medium">Medium</option>
                         <option value="Dark">Dark</option>
                       </select>
                     </div>
-                    
                   </div>
-
+            
                   <div class="row mt-2 mb-3">
-                      <div class="col-md-2">
-                        <label for="hairColor" class="form-label">Hair Color</label>
-                        <select class="form-select" id="hairColor" [(ngModel)]="missingPerson.hair_color" name="hair_color">
-                          <option value="" selected>Select hair color</option>
-                          <option value="black">Black</option>
-                          <option value="brown">Brown</option>
-                          <option value="blonde">Blonde</option>
-                          <option value="red">Red</option>
-                        </select>
-                      </div>
+                    <div class="col-md-2">
+                      <label for="hairColor" class="form-label">Hair Color</label>
+                      <select class="form-select" id="hairColor" formControlName="hair_color">
+                        <option value="" selected>Select hair color</option>
+                        <option value="black">Black</option>
+                        <option value="brown">Brown</option>
+                        <option value="blonde">Blonde</option>
+                        <option value="red">Red</option>
+                      </select>
+                    </div>
                     <div class="col-md-2">
                       <label for="hairType" class="form-label">Hair Type</label>
-                      <select class="form-select" id="hairType" [(ngModel)]="missingPerson.hair_type" name="hair_type">
+                      <select class="form-select" id="hairType" formControlName="hair_type">
                         <option value="" selected>Select hair type</option>
                         <option value="straight">Straight</option>
                         <option value="wavy">Wavy</option>
@@ -138,7 +135,7 @@
                     </div>
                     <div class="col-md-2">
                       <label for="eyeColor" class="form-label">Eye Color</label>
-                      <select class="form-select" id="eyeColor" [(ngModel)]="missingPerson.eye_color" name="eyeColor" >
+                      <select class="form-select" id="eyeColor" formControlName="eye_color">
                         <option value="" selected>Select eye color</option>
                         <option value="brown">Brown</option>
                         <option value="blue">Blue</option>
@@ -148,68 +145,51 @@
                     </div>
                     <div class="col-md-3">
                       <label for="birthmark" class="form-label">Birthmark</label>
-                      <textarea type="text" class="form-control" id="birthmark" placeholder="Describe any birthmarks" placeholder="Enter Other Distinctive Marks" [(ngModel)]="missingPerson.birth_mark" name="birthmark"></textarea>
+                      <textarea type="text" class="form-control" id="birthmark" formControlName="birth_mark" placeholder="Describe any birthmarks"></textarea>
                     </div>
                     <div class="col-md-3">
                       <label for="distinctiveMarks" class="form-label">Other Distinctive Marks</label>
-                      <textarea type="text" class="form-control" id="distinctiveMarks" placeholder="Enter Other Distinctive Marks" [(ngModel)]="missingPerson.distinctive_mark" name="distinctiveMarks"></textarea>
+                      <textarea type="text" class="form-control" id="distinctiveMarks" formControlName="distinctive_mark" placeholder="Enter Other Distinctive Marks"></textarea>
                     </div>
                   </div>
-                  
-                  <div class="row mb-3">
+            
+                  <div formGroupName="address" class="row mb-3">
                     <div class="col-md-3">
-                      <label for="address" class="form-label">street</label>
-                      <textarea type="text" class="form-control" id="street" placeholder="Enter street" [(ngModel)]="missingPerson.address.street" name="address.street"></textarea>
-                    </div>
-                    <div class="col-md-3">
-                      <label for="phone" class="form-label">Phone Number</label>
-                      <input type="text" class="form-control" id="city" placeholder="Enter Phone number" [(ngModel)]="missingPerson.contact.phone_number" name="contact.phone_numbe">
+                      <label for="street" class="form-label">Street</label>
+                      <textarea type="text" class="form-control" id="street" formControlName="street" placeholder="Enter street"></textarea>
                     </div>
                     <div class="col-md-3">
                       <label for="city" class="form-label">Village</label>
-                      <input type="text" class="form-control" id="village" placeholder="Enter viilage" [(ngModel)]="missingPerson.address.village" name="address.village">
+                      <input type="text" class="form-control" formControlName="village" placeholder="Enter village">
                     </div>
-                    <div class="col-md-3">
-                      <label for="city" class="form-label">City</label>
-                      <input type="text" class="form-control" id="city" placeholder="Enter city" [(ngModel)]="missingPerson.address.city" name="address.city">
-                    </div>
-                    
-                  </div>
-            
-                  <!-- City and State -->
-                  <div class="row mb-3">
-                    <!-- <div class="col-md-3">
-                      <label for="state" class="form-label">Taluka</label>
-                      <input type="text" class="form-control" id="Taluka" placeholder="Enter Taluka">
-                    </div> -->
                     <div class="col-md-3">
                       <label for="district" class="form-label">District</label>
-                      <input type="text" class="form-control" id="District" placeholder="Enter District" [(ngModel)]="missingPerson.address.district" name="address.district">
+                      <input type="text" class="form-control" formControlName="district" placeholder="Enter district">
                     </div>
                     <div class="col-md-3">
                       <label for="state" class="form-label">State</label>
-                      <input type="text" class="form-control" id="state" placeholder="Enter state" [(ngModel)]="missingPerson.address.state" name="address.state">
-                    </div>
-                    <div class="col-md-3">
-                      <label for="country" class="form-label">Country</label>
-                      <input type="text" class="form-control" id="country" placeholder="Enter country" [(ngModel)]="missingPerson.address.country" name="address.country">
+                      <input type="text" class="form-control" formControlName="state" placeholder="Enter state">
                     </div>
                     <div class="col-md-2">
                       <label for="pincode" class="form-label">Pincode</label>
-                      <input type="text" class="form-control" id="Pincode" placeholder="Enter Pincode" [(ngModel)]="missingPerson.address.postal_code" name="address.postal_code">
+                      <input type="text" class="form-control" formControlName="postal_code" placeholder="Enter Pincode">
                     </div>
                   </div>
+                  <div formGroupName="contact" class="row mb-3">
+                    
+                    <div class="col-md-3">
+                      <label for="phone" class="form-label">Phone Number</label>
+                      <input type="text" class="form-control" formControlName="phone_number" placeholder="Enter phone number">
+                    </div>
+                  </div>
+            
                   <div class="d-flex justify-content-end mt-3">
-                    <!-- <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('reportingPerson')">Back</button> -->
                     <button type="button" class="btn btn-dark" (click)="goToNextTab('additional_info')">Next</button>
                   </div>
-                  <br>
-                  <br>
-                  <br>
                 </form>
               </div>
-              
             </div>
+            
         
             <!-- additonal info -->
             <div class="tab-pane fade" id="additional_info" role="tabpanel" aria-labelledby="additional_info-tab">
@@ -217,20 +197,20 @@
                 <h2 class="mb-3">Additional Details</h2>
                 <p class="mb-4">Provide additional information about the missing person.</p>
             
-                <form>
-                  <!-- Existing fields -->
+                <form [formGroup]="missingPersonForm">
+                  <!-- Caste and Sub-Caste -->
                   <div class="row mb-3">
                     <div class="col-md-4">
                       <label for="caste" class="form-label">Caste</label>
-                      <input type="text" class="form-control" id="caste" placeholder="Enter caste">
+                      <input type="text" class="form-control" id="caste" placeholder="Enter caste" formControlName="caste">
                     </div>
                     <div class="col-md-4">
                       <label for="subCaste" class="form-label">Sub-caste</label>
-                      <input type="text" class="form-control" id="subCaste" placeholder="Enter sub-caste">
+                      <input type="text" class="form-control" id="subCaste" placeholder="Enter sub-caste" formControlName="sub_caste">
                     </div>
                     <div class="col-md-4">
                       <label for="maritalStatus" class="form-label">Marital Status</label>
-                      <select class="form-select" id="maritalStatus">
+                      <select class="form-select" id="maritalStatus" formControlName="marital_status">
                         <option selected>Select Status</option>
                         <option value="Single">Single</option>
                         <option value="Married">Married</option>
@@ -239,41 +219,43 @@
                     </div>
                   </div>
             
+                  <!-- Religion and Languages -->
                   <div class="row mb-3">
                     <div class="col-md-4">
                       <label for="religion" class="form-label">Religion</label>
-                      <input type="text" class="form-control" id="religion" placeholder="Enter religion">
+                      <input type="text" class="form-control" id="religion" placeholder="Enter religion" formControlName="religion">
                     </div>
                     <div class="col-md-4">
                       <label for="motherTongue" class="form-label">Mother Tongue</label>
-                      <input type="text" class="form-control" id="motherTongue" placeholder="Enter mother tongue">
+                      <input type="text" class="form-control" id="motherTongue" placeholder="Enter mother tongue" formControlName="mother_tongue">
                     </div>
                     <div class="col-md-4">
                       <label for="knownLanguages" class="form-label">Other Known Languages</label>
-                      <input type="text" class="form-control" id="knownLanguages" placeholder="Enter other known languages">
+                      <input type="text" class="form-control" id="knownLanguages" placeholder="Enter other known languages" formControlName="known_languages">
                     </div>
                   </div>
             
+                  <!-- Educational Details and Occupation -->
                   <div class="row mb-3">
                     <div class="col-md-6">
                       <label for="educationalDetails" class="form-label">Educational Details</label>
-                      <input type="text" class="form-control" id="educationalDetails" placeholder="Enter educational details">
+                      <input type="text" class="form-control" id="educationalDetails" placeholder="Enter educational details" formControlName="educational_details">
                     </div>
                     <div class="col-md-6">
                       <label for="occupation" class="form-label">Occupation</label>
-                      <input type="text" class="form-control" id="occupation" placeholder="Enter occupation">
+                      <input type="text" class="form-control" id="occupation" placeholder="Enter occupation" formControlName="occupation">
                     </div>
                   </div>
             
-                  <!-- New Financial Issues Section -->
-                  <div class="row mb-3">
+                  <!-- Medical Condition and Financial Issues -->
+                  <!-- <div class="row mb-3">
                     <div class="col-md-6">
                       <label for="medicalCondition" class="form-label">Medical Condition</label>
-                      <input type="text" class="form-control" id="medicalCondition" placeholder="Enter medical condition">
+                      <input type="text" class="form-control" id="medicalCondition" placeholder="Enter medical condition" formControlName="medical_condition">
                     </div>
                     <div class="col-md-6">
                       <label for="financialIssues" class="form-label">Financial Issues</label>
-                      <select class="form-select" id="financialIssues">
+                      <select class="form-select" id="financialIssues" formControlName="financial_issues">
                         <option selected>Select Financial Issue</option>
                         <option value="No Issues">No Issues</option>
                         <option value="Debt Avoidance">Debt Avoidance</option>
@@ -282,9 +264,7 @@
                         <option value="Loss of Assets">Loss of Assets</option>
                       </select>
                     </div>
-                  </div>
-            
-                 
+                  </div> -->
             
                   <!-- Navigation Buttons -->
                   <div class="d-flex justify-content-between mt-3">
@@ -297,110 +277,68 @@
             
             
         
-            <!-- address -->
-            <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
-              <div class="container mt-2">
-                <p class="mb-4">Enter details about the location of the missing person.</p>
-                <form>
-                  <!-- Address and Phone Number -->
-                  <div class="row mb-3">
-                    <div class="col-md-6">
-                      <label for="address" class="form-label">Address</label>
-                      <textarea class="form-control" id="address" placeholder="Enter address"></textarea>
-                    </div>
-                    <div class="col-md-6">
-                      <label for="phone" class="form-label">Phone Number</label>
-                      <input type="text" class="form-control" id="phone" placeholder="Enter phone number">
-                    </div>
-                  </div>
-            
-                  <!-- City and State -->
-                  <div class="row mb-3">
-                    <div class="col-md-6">
-                      <label for="city" class="form-label">Village/City</label>
-                      <input type="text" class="form-control" id="city" placeholder="Enter city/village">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="state" class="form-label">State</label>
-                      <input type="text" class="form-control" id="state" placeholder="Enter state">
-                    </div>
-                  </div>
-            
-                  <!-- Country and District -->
-                  <div class="row mb-3">
-                    
-                    <div class="col-md-6">
-                      <label for="district" class="form-label">District</label>
-                      <input type="text" class="form-control" id="district" placeholder="Enter district">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="state" class="form-label">Taluka</label>
-                      <input type="text" class="form-control" id="Taluka" placeholder="Enter Taluka">
-                    </div>
-                    
-                  </div>
-            
-                  <!-- Pincode -->
-                  <div class="row mb-3">
-                    <div class="col-md-6">
-                      <label for="country" class="form-label">Country</label>
-                      <input type="text" class="form-control" id="country" placeholder="Enter country">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="pincode" class="form-label">Pincode</label>
-                      <input type="text" class="form-control" id="pincode" placeholder="Enter pincode">
-                    </div>
-                  </div>
-            
-                  <!-- Navigation Buttons -->
-                  <div class="d-flex justify-content-between mt-3">
-                    <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('additional_info')">Back</button>
-                    <button type="button" class="btn btn-outline-dark" (click)="goToNextTab('missingdata')">Next</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            
-        
              <!-- missing data -->
              <div class="tab-pane fade" id="missingdata" role="tabpanel" aria-labelledby="last-seen-tab">
               <div class="container mt-5">
                 <h2 class="mb-3">Last Seen Details</h2>
-                <p class="mb-4">Provide information about the last known details of the missing person</p>
-                <form>
-        
+                <p class="mb-4">Provide information about the last known details of the missing person.</p>
+            
+                <form [formGroup]="missingPersonForm">
+                  <!-- Missing Time and Date -->
                   <div class="row mb-3">
                     <div class="col-md-6">
+                      <label for="photo_upload" class="form-label">Upload person Photo</label>
+                      <input type="file" class="form-control" id="photo_upload" formControlName="photo_upload" accept="image/*" (change)="onFileChange($event)">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-4">
                       <label for="missingTime" class="form-label">Missing Time</label>
-                      <input type="time" class="form-control" id="missingTime" placeholder="Enter the time when the person was last seen">
+                      <input type="time" class="form-control" id="missingTime" formControlName="missing_time" placeholder="Enter the time when the person was last seen">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <label for="missingDate" class="form-label">Missing Date</label>
-                      <input type="date" class="form-control" id="missingDate" placeholder="Select the date when the person was last seen">
+                      <input type="date" class="form-control" id="missingDate" formControlName="missing_date" placeholder="Select the date when the person was last seen">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="location_details" class="form-label">Location Details</label>
+                      <input type="text" class="form-control" id="location_details" formControlName="location_details" placeholder="Enter location Details">
                     </div>
                   </div>
+            
+                  <!-- Map Location and Last Location -->
                   <div class="row mb-3">
-                    <div class="col-md-6">
-                      <label for="lastSeenDetails" class="form-label">Map Location</label>
-                      <textarea type="number" class="form-control" id="Latitude" placeholder="location details"></textarea>
+                    <div class="col-md-6 mb-3">
+                      <label for="mapLocation" class="form-label">Missing Person Location</label>
+                      <div id="map" style="height: 400px;"></div>
+                      <button type="button" class="btn btn-outline-dark mt-3" (click)="getCurrentLocation()">Get Current Location</button>
                     </div>
-                    <div class="col-md-6">
-                      <label for="lastLocation" class="form-label">Last Location of Missing Person</label>
-                      <textarea type="text" class="form-control" id="lastLocation" placeholder="Enter the last known location"></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
                     
+                    <div class="col-md-3">
+                      <label for="mapCoordinates" class="form-label">Location Coordinates</label>
+                      <input type="text" class="form-control" id="mapCoordinates" formControlName="missing_location" readonly placeholder="Latitude, Longitude">
+                    </div>
+
+                    <div class="col-md-3">
+                      <label for="lastLocation" class="form-label">Last Location of Missing Person</label>
+                      <textarea class="form-control" id="lastLocation" formControlName="last_seen_location" placeholder="Enter the last known location"></textarea>
+                    </div>
+                  </div>
+            
+                  <!-- Sightings Details -->
+                  <!-- <div class="row mb-3">
                     <div class="col-md-12">
                       <label for="sightingsContainer" class="form-label">Last Seen Details</label>
-                      <div id="sightingsContainer">
-                        <div class="sighting-entry mb-3">
-                          <textarea type="text" class="form-control" placeholder="Enter details of the last sighting"></textarea>
+                      <div id="sightingsContainer" formArrayName="sightings">
+                        <div *ngFor="let sighting of missingPersonForm.get('last_seen_details.sightings').controls; let i = index" [formGroupName]="i" class="sighting-entry mb-3">
+                          <textarea class="form-control" [formControlName]="i" placeholder="Enter details of the last sighting"></textarea>
                         </div>
                       </div>
-                      <button type="button" class="btn btn-outline-dark mt-2" id="addSighting">Add Another Sighting</button>
+                      <button type="button" class="btn btn-outline-dark mt-2" (click)="addSighting()">Add Another Sighting</button>
                     </div>
-                  </div>
+                  </div> -->
+            
+                  <!-- Navigation Buttons -->
                   <div class="d-flex justify-content-between mt-3">
                     <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('additional_info')">Back</button>
                     <button type="button" class="btn btn-outline-dark" (click)="goToNextTab('legal_info')">Next</button>
@@ -408,6 +346,7 @@
                 </form>
               </div>
             </div>
+            
         
             <!-- legal info -->
             <div class="tab-pane fade" id="legal_info" role="tabpanel" aria-labelledby="legal_info-tab">
@@ -415,26 +354,22 @@
                   <h2 class="mb-3">FIR Information</h2>
                   <p class="mb-4">Provide details about the FIR and investigating officer</p>
                   
-                  <form>
+                  <form [formGroup]="missingPersonForm">
                       <div class="row mb-3">
                           <div class="col-md-6">
                               <label for="firNumber" class="form-label">FIR Number</label>
-                              <input type="text" class="form-control" id="firNumber" placeholder="Enter FIR number">
+                              <input type="text" class="form-control" id="firNumber" formControlName="fir_number" placeholder="Enter FIR number">
                           </div>
                           <div class="col-md-6">
-                            <label for="photo1" class="form-label">Upload Fir</label>
-                            <input type="file" class="form-control" id="photo1" accept="image/*">
+                            <label for="fir_photo" class="form-label">Upload FIR Photo</label>
+                            <input type="file" class="form-control" id="fir_photo" formControlName="fir_photo" accept="image/*" (change)="onFileChange($event)">
                           </div>
                           
                       </div>
                       <div class="row mb-3">
                           <div class="col-md-6">
-                              <label for="stationAddress" class="form-label">Police Station Address</label>
-                              <input type="text" class="form-control" id="stationAddress" placeholder="Enter police station address">
-                          </div>
-                          <div class="col-md-6">
                             <label for="policeStation" class="form-label">Police Station Name</label>
-                            <select class="form-control" id="policeStation">
+                            <select class="form-control" id="policeStation" formControlName="police_station_name_and_address">
                                 <option value="" disabled selected>Select a police station</option>
                                 <option value="station1">Police Station 1</option>
                                 <option value="station2">Police Station 2</option>
@@ -446,11 +381,11 @@
                       <div class="row mb-3">
                           <div class="col-md-6">
                               <label for="officerName" class="form-label">Investigating Officer's Name</label>
-                              <input type="text" class="form-control" id="officerName" placeholder="Enter officer's name">
+                              <input type="text" class="form-control" id="officerName" formControlName="investigating_officer_name"  placeholder="Enter officer's name">
                           </div>
                           <div class="col-md-6">
                               <label for="officerContact" class="form-label">Investigating Officer's Contact Number</label>
-                              <input type="text" class="form-control" id="officerContact" placeholder="Enter officer's contact number">
+                              <input type="text" class="form-control" id="officerContact" formControlName="investigating_officer_contact_number" placeholder="Enter officer's contact number">
                           </div>
                       </div>
                       <div class="d-flex justify-content-between mt-3">
@@ -467,32 +402,42 @@
                 <h2 class="mb-3">Contact Details of Reporting Person</h2>
                 <p class="mb-4">Enter your contact details as the person reporting the missing person</p>
                 
-                <form>
+                <form [formGroup]="missingPersonForm">
                   <div class="row mb-3">
                       <div class="col-md-6">
                         <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                        <input type="text" class="form-control" id="fullName" formControlName='reportingperson_name' placeholder="Enter your full name">
                       </div>
                       <div class="col-md-6">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number">
+                        <input type="tel" class="form-control" id="phoneNumber" formControlName="contact_numbers" placeholder="Enter your phone number">
                       </div>
                   </div>
                   
                   <div class="row mb-3">
-                    
+
                     <div class="col-md-4">
-                      <label for="altPhoneNumber" class="form-label">Alternate Phone Number</label>
-                      <input type="tel" class="form-control" id="altPhoneNumber" placeholder="Enter your alternate phone number">
+                      <label for="Relationship_with_Victims" class="form-label">Relationship with Victims</label>
+                      <input type="tel" class="form-control" id="Relationship_with_Victims" formControlName="relationship_with_victim" placeholder="Enter your alternate phone number">
                     </div>
                     <div class="col-md-4">
                       <label for="emailAddress" class="form-label">Email Address</label>
-                      <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address">
+                      <input type="email" class="form-control" id="emailAddress" formControlName="email_address" placeholder="Enter your email address">
                     </div>
+                    <div class="col-md-4">
+                      <label for="willing_to_volunteer" class="form-label">Willing to Volunteer</label>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="willing_to_volunteer" formControlName="willing_to_volunteer">
+                        <label class="form-check-label" for="willing_to_volunteer">
+                          I am willing to volunteer
+                        </label>
+                      </div>
+                    </div>
+                    
                   </div>
             
                   <!-- Additional Information for Reporting Person -->
-                  <div class="row mb-3">
+                  <!-- <div class="row mb-3">
                     <div class="col-md-6">
                       <label for="address" class="form-label">Address</label>
                       <input type="text" class="form-control" id="address" placeholder="Enter your address">
@@ -533,7 +478,7 @@
                       <label for="additionalInfo" class="form-label">Additional Information</label>
                       <textarea class="form-control" id="additionalInfo" rows="3" placeholder="Enter any additional information that may help in finding the missing person"></textarea>
                     </div>
-                  </div>
+                  </div> -->
                   
                   <div class="d-flex justify-content-between mt-3">
                     <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('legal_info')">Back</button>
@@ -550,19 +495,20 @@
                 <h2 class="mb-3">Consent and Declaration</h2>
                 <p class="mb-4">Read and agree to the terms before submitting the report.</p>
               
-                <form>
+                <form [formGroup]="missingPersonForm">
                   <div class="mb-3">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="consentCheckbox" required>
+                      <input class="form-check-input" type="checkbox" id="consentCheckbox" formControlName="consent" required>
                       <label class="form-check-label" for="consentCheckbox">
                         I hereby declare that the information provided in this report is true and accurate to the best of my knowledge. I consent to the use of this information for the purpose of locating the missing person.
                       </label>
                     </div>
                   </div>
+                  
               
                     <div class="d-flex justify-content-between mt-3">
                       <button type="button" class="btn btn-outline-dark" (click)="goToPreviousTab('reportingPerson')">Back</button>
-                      <button type="button" class="btn btn-dark" (click)="submitForm()">Submit</button>
+                      <button type="button" class="btn btn-dark" (click)="submitMPForm()">Submit</button>
                     </div>
                   
                 </form>
@@ -572,6 +518,13 @@
           </div>
         </div>
       </div>
+
+
+
+
+
+
+
   
       <!-- Unidentified Person Tab -->
       <div class="tab-pane fade" id="unidentified-person" role="tabpanel" aria-labelledby="unidentified-person-tab">

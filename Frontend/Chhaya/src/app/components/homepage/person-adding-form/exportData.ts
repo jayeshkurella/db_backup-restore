@@ -23,9 +23,11 @@ export class MissingPerson {
       district?: string;
       state: string;
       postal_code: string;
+      country_code: string;
       country: string;
       type: string;
       subtype: string;
+      address_type: string;
       landmark_details?: string;
       location?: { lat: number; lon: number };
     } = {
@@ -33,14 +35,17 @@ export class MissingPerson {
       city: '',
       state: '',
       postal_code: '',
+      country_code: '',
       country: '',
       type: '',
-      subtype: ''
+      subtype: '',
+      address_type: ''
     };
   
     contact: {
       phone_number: string;
       email: string;
+      notes: string;
       type: string;
       subtype: string;
       subtype_detail?: string;
@@ -53,6 +58,7 @@ export class MissingPerson {
     } = {
       phone_number: '',
       email: '',
+      notes: '',
       type: '',
       subtype: '',
       is_primary: false

@@ -524,6 +524,7 @@ class MissingPerson(models.Model):
     willing_to_volunteer = models.BooleanField(db_index=True)
     is_deleted = models.BooleanField(default=False, db_index=True)
     rematch_attempt = models.IntegerField(null=True, blank=True, default=0)
+    consent = models.BooleanField(default=False)
     
     def generate_case_id(self):
         year_month = datetime.now().strftime("%Y-%m")  

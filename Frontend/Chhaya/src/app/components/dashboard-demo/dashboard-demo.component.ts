@@ -22,8 +22,7 @@ import { MainDashserviceService } from './main-dashservice.service';
 })
 export class DashboardDemoComponent implements OnInit ,AfterViewInit{
 
-  geo_url :any
-  local_url :any
+  geo_url =environment.geo_url
   stateLayer = "GeoFlow_WCD:tblstates";
   stateLayerName: any;
   distLayer="GeoFlow_WCD:tbldistricts";
@@ -141,9 +140,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     private cdr: ChangeDetectorRef,
   ) {
     this.prepareChartData();
-    this.geo_url = "https://products.coderize.in/geoserver/GeoFlow_WCD/wms/",
-
-      this.local_url = "http://localhost:8080/geoserver/WS_Chhay_foundation/wms/"
+   
   }
 
   prepareChartData() {
