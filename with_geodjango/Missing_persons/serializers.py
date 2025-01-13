@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import Address, CaseReport, Chowki, Contact, Division, Hospital, HospitalDivision, HospitalZone, MatchRejection, MissingPerson, PoliceStation, UnidentifiedBody, UnidentifiedMissingPerson, Volunteer,Match, Zone
 from django.contrib.gis.geos import Point, Polygon
 # from rest_framework_gis.fields import GeoField
+from django.db import transaction
+
   
      
 class ChowkiSerializer(serializers.ModelSerializer):
@@ -76,6 +78,21 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
+        
+    def get_location(self, obj):
+        return {"latitude": obj.location.y, "longitude": obj.location.x} if obj.location else None
+
+    def create(self, validated_data):
+        location_data = validated_data.pop('location', None)
+        if location_data:
+            validated_data['location'] = Point(location_data['longitude'], location_data['latitude'])
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        location_data = validated_data.pop('location', None)
+        if location_data:
+            instance.location = Point(location_data['longitude'], location_data['latitude'])
+        return super().update(instance, validated_data)
  
 class VolunteerSerializer(serializers.ModelSerializer):
     # Nested serializers for contacts and addresses
@@ -131,19 +148,23 @@ class MissingPersonSerializer(serializers.ModelSerializer):
         model = MissingPerson
         fields = '__all__'
 
+    @transaction.atomic
     def create(self, validated_data):
-        
-        # Handle nested fields for contact and address
         contact_data = validated_data.pop('contact', None)
         address_data = validated_data.pop('address', None)
         police_station_data = validated_data.pop('police_station_name_and_address', None)
 
-        # Create contact and address instances if present
+        # Create related instances if data is provided
         contact = Contact.objects.create(**contact_data) if contact_data else None
+        
+        if address_data and 'location' in address_data:
+            location = address_data.pop('location')
+            address_data['location'] = Point(location['longitude'], location['latitude'])
         address = Address.objects.create(**address_data) if address_data else None
+        
         police_station = PoliceStation.objects.create(**police_station_data) if police_station_data else None
 
-        # Create MissingPerson instance with nested data and Point field
+        # Create MissingPerson instance
         missing_person = MissingPerson.objects.create(
             contact=contact,
             address=address,
@@ -152,34 +173,39 @@ class MissingPersonSerializer(serializers.ModelSerializer):
         )
         return missing_person
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         contact_data = validated_data.pop('contact', None)
         address_data = validated_data.pop('address', None)
         police_station_data = validated_data.pop('police_station_name_and_address', None)
 
-        # Update contact and address if data is provided
+        # Update contact
         if contact_data:
             for attr, value in contact_data.items():
                 setattr(instance.contact, attr, value)
             instance.contact.save()
 
+        # Update address
         if address_data:
+            if 'location' in address_data:
+                location = address_data.pop('location')
+                address_data['location'] = Point(location['longitude'], location['latitude'])
             for attr, value in address_data.items():
                 setattr(instance.address, attr, value)
             instance.address.save()
-            
+
+        # Update police station
         if police_station_data:
             for attr, value in police_station_data.items():
                 setattr(instance.police_station_name_and_address, attr, value)
             instance.police_station_name_and_address.save()
 
-        # Update MissingPerson instance fields
+        # Update MissingPerson fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
         return instance
-    
 class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
     address = AddressSerializer()  
     contact = ContactSerializer() 

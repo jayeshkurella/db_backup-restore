@@ -375,7 +375,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
                   style="width: 200px; height: 100px;"
                   onerror="this.onerror=null; this.src='/assets/images/Chhaya.png';"
               /><br>
-              <button (click)="viewDetails(person)">View</button>
+              
           `;
 
   

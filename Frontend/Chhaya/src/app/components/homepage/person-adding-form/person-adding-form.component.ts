@@ -32,6 +32,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
   ngOnInit() {
     setTimeout(() => this.initMap(), 500); 
     this.missingPersonForm = this.fb.group({
+      
       full_name: ['', [Validators.required, Validators.minLength(3)]],
       gender: ['', Validators.required],
       blood_group: [''],
@@ -119,7 +120,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
 
 
 
-
+ // to init map
   initMap(): void {
     this.map = L.map('map').setView([19.7515, 75.7139], 6);
   

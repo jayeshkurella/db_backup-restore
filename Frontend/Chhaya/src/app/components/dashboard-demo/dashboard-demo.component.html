@@ -76,10 +76,9 @@
 
 
 <div class="container-fluid" style="background-color: #f9fafc;">
+
   <!-- cards -->
-
-  <div class="my-2 row" style="padding-top: 20px;">
-
+  <!-- <div class="my-2 row" style="padding-top: 20px;">
     <div class="col-12 col-md-6 col-lg-4  mb-2">
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
@@ -89,9 +88,9 @@
           </div>
           <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ missingPersontotalcount || 0 }}</h3>
           <div class="progress" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#a31e98'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#ff60f2'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> <!-- Purple for Other -->
+            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#a31e98'" style="margin-right: 3px; border-radius: 5px;"></div> 
+            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#ff60f2'" style="margin-right: 3px; border-radius: 5px;"></div> 
+            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> 
           </div>
           <div class="d-flex justify-content-between mt-2">
             <div>
@@ -117,7 +116,7 @@
       </div>
     </div>
     
-    <!-- Card 3 -->
+    
     <div class="col-12 col-md-6 col-lg-4 mb-2">
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
@@ -127,9 +126,9 @@
           </div>
           <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ unidentifiedPersonTotalCounts || 0 }}</h3>
           <div class="progress" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#2e16a9'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#7b61ff'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> <!-- Purple for Other -->
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#2e16a9'" style="margin-right: 3px; border-radius: 5px;"></div> 
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#7b61ff'" style="margin-right: 3px; border-radius: 5px;"></div> 
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div>
           </div>
           <div class="d-flex justify-content-between mt-2">
             <div>
@@ -150,7 +149,7 @@
     </div>
     
   
-    <!-- Card 4 -->
+   
     <div class="col-12 col-md-6 col-lg-4 mb-3">
       <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
         <div class="card-body">
@@ -160,9 +159,9 @@
           </div>
           <h3 class="card-number" style=" font-weight: bold; color: #000000;">{{ unidentifiedBodyTotalCount || 0 }}</h3>
           <div class="progress" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#b02a2a'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Coral for Female -->
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#ff3f3f'" style="margin-right: 3px; border-radius: 5px;"></div> <!-- Soft Blue for Male -->
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Other || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> <!-- Purple for Other -->
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#b02a2a'" style="margin-right: 3px; border-radius: 5px;"></div> 
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#ff3f3f'" style="margin-right: 3px; border-radius: 5px;"></div> 
+            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Other || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> 
           </div>
           <div class="d-flex justify-content-between mt-2">
             <div>
@@ -188,13 +187,13 @@
       </div>
     </div>
     
-  </div>
+  </div> -->
   
   <!-- map and statistics -->
   <div class="row">
 
     <!-- missing person statistics -->
-    <div class="col-lg-3 my-1">
+    <div class="col-lg-3 mt-1">
       <div class="card">
         <div class="card-header bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #faf5ff, #ffe4f0);">
           <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between">
@@ -298,7 +297,7 @@
     </div>
 
     <!-- Map Section -->
-    <div class="col-lg-6 col-md-12 mb-2">
+    <div class="col-lg-6 col-md-12 mt-1 mb-2">
       <div class="containerx">
         <!-- Filters Section -->
         <div class="row g-3">
