@@ -235,7 +235,7 @@ class Address(models.Model):
     ('Brazil', 'Brazil'),
     ('Australia', 'Australia'),
     ('Canada', 'Canada')
-]
+    ]
 
 
 
