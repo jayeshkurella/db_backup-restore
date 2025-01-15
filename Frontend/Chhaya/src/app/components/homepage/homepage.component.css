@@ -1,5 +1,3 @@
-/* Sidebar Styles */
-
 .d-flex {
     display: flex;
     height: 100vh; /* Ensure the layout takes up the full viewport height */
@@ -8,26 +6,22 @@
 .sidebar {
     position: sticky;
     top: 0;
-    width: 16%;
+    width: 250px; /* Default width for the expanded sidebar */
     height: 100vh;
     background-color: #2c2c2c;
     transition: width 0.6s ease-in-out, transform 0.8s ease-in-out, opacity 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
     overflow: auto;
-    font-family: 'Roboto', sans-serif;
     font-size: 18px;
     color: white;
 }
 
-
-
-
-.sidebar-header{
+/* .sidebar-header {
     position: sticky;
-    top: 0; 
-}
+    top: 0;
+} */
+
 /* Sidebar Title */
 .sidebar-title {
-   
     margin: 0;
     color: #FA813D;
     font-size: 18px;
@@ -50,10 +44,14 @@
 
 /* Sidebar Item */
 .sidebar-item {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    margin-bottom: 20px;
+    position: relative;
+    padding: 25px 15px;
+    display: block;
+    transition: margin-bottom 0.3s ease-in-out;
+}
+
+.sidebar-item.with-gap {
+    margin-bottom: 100px;
 }
 
 .sidebar-item a {
@@ -62,10 +60,7 @@
     display: flex;
     align-items: center;
     transition: all 0.4s ease-in-out;
-}
-
-.sidebar-item a:hover {
-    background-color: #444444;
+    cursor: pointer;
 }
 
 /* Icons */
@@ -73,6 +68,61 @@
     font-size: 24px;
     margin-right: 15px;
     transition: margin-right 0.4s ease-in-out;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    display: none;
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    z-index: 1000;
+    background: transparent;
+    border: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+/* Show Dropdown when Active */
+.sidebar-item .dropdown-menu.visible {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    animation: slideDown 0.3s ease-in-out;
+    color: white;
+}
+
+.dropdown-menu li {
+    padding: 8px 16px;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.sidebar-item.open ~ .sidebar-item {
+    margin-top: 70px;
+}
+
+.sidebar-links .dropdown-menu.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.sidebar-item.with-gap {
+    transition: margin-bottom 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Text */
@@ -115,29 +165,15 @@
     left: calc(80px - 30px); /* Adjust for collapsed sidebar width */
 }
 
-/* Main Content Styling */
-.header-content {
-    flex-grow: 1;
-    margin-left: 250px; /* Default space for expanded sidebar */
-    transition: margin-left 0.4s ease-in-out;
-}
+
 
 .sidebar.collapsed .expand-btn {
-    left: calc(60px - 25px); /* Adjust for collapsed sidebar width */
+    left: calc(60px - 15px); /* Adjust for collapsed sidebar width */
     z-index: 9999; /* Ensure it's always above the sidebar */
 }
 
-.sidebar.collapsed + .header-content {
-    margin-left: 60px; /* Adjust space for collapsed sidebar */
-}
 
-.sidebar.collapsed .sidebar-profile-info {
-    display: none; /* Hide profile info when collapsed */
-}
 
-.sidebar.collapsed .logout-icon{
-    display: none; /* Hide profile info when collapsed */
-}
 /* Active link highlighting */
 .sidebar-links a.active {
     background-color: #444444;
@@ -152,57 +188,13 @@
     border-bottom: 1px solid #eeeeee; /* Optional for a subtle divider */
 }
 
-/* Sidebar Profile */
-.sidebar-profile {
-    margin-top: 70px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    border-top: 1px solid #ffffff; 
-}
-
-.sidebar-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-}
-
-.sidebar-profile-info {
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-}
-
-.sidebar-profile-info span {
-    color: #ffffff;
-}
-
-.logout-icon {
-    margin-left: auto;
-    color: #e74c3c;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.logout-icon:hover {
-    color: #ff4c4c;
-}
-
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
     .sidebar {
-        width: 220px;
+        width: 220px; /* Adjust for medium screens */
     }
 
-    .header-content {
-        margin-left: 220px;
-    }
-
-    .sidebar.collapsed + .header-content {
-        margin-left: 60px;
-    }
+    
 }
 
 @media (max-width: 992px) {
@@ -211,22 +203,7 @@
         width: 200px;
     }
 
-    .header-content {
-        margin-left: 200px;
-    }
-
-    .sidebar.collapsed + .header-content {
-        margin-left: 60px;
-    }
-
-    .sidebar-profile img {
-        width: 35px;
-        height: 35px;
-    }
-
-    .sidebar-profile-info {
-        font-size: 12px;
-    }
+   
 
     .expand-btn {
         top: 10px;
@@ -240,26 +217,11 @@
         width: 180px;
     }
 
-    .header-content {
-        margin-left: 180px;
-    }
-
-    .sidebar.collapsed + .header-content {
-        margin-left: 60px;
-    }
-
+   
+   
     .expand-btn {
         top: 10px;
         left: calc(180px - 30px); /* Adjust for smaller width */
-    }
-
-    .sidebar-profile img {
-        width: 30px;
-        height: 30px;
-    }
-
-    .sidebar-profile-info {
-        display: none;
     }
 
     .sidebar.collapsed .sidebar-item i {
@@ -267,67 +229,30 @@
     }
 }
 
-@media (max-width: 576px) {
-    /* Small Mobile Devices */
+/* For very small screens (mobile) */
+@media (max-width: 480px) {
     .sidebar {
-        width: 150px;
+        width: 150px; /* Further narrowing for small screens */
     }
 
-    .header-content {
-        margin-left: 150px;
-    }
 
-    .sidebar.collapsed + .header-content {
-        margin-left: 60px;
-    }
-
-    .sidebar-profile img {
-        width: 28px;
-        height: 28px;
-    }
-
-    .sidebar-profile-info {
-        display: none;
+    .expand-btn {
+        top: 10px;
+        left: calc(150px - 30px);
     }
 
     .sidebar.collapsed .sidebar-item i {
         font-size: 16px;
     }
-
-    .expand-btn {
-        left: calc(150px - 30px); /* Adjust for smaller sidebar */
-        top: 10px; /* Adjust vertical position */
-    }
 }
 
-@media (max-width: 480px) {
-    /* Extra Small Mobile Devices */
-    .sidebar {
-        width: 140px;
-    }
 
-    .header-content {
-        margin-left: 140px;
-    }
 
-    .sidebar.collapsed + .header-content {
-        margin-left: 60px;
-    }
-
-    .expand-btn {
-        left: calc(140px - 30px); /* Adjust for smaller sidebar */
-        top: 10px;
-    }
-}
-
-.headerss{
-    background-color:#2c2c2c;
-    
-}
 
 .navmaiitem{
     color: white;
     font-size: 20px;
+   
 }
 
 /* Ensure the navbar is flush with the top */
@@ -335,11 +260,15 @@
     position: sticky;
     top: 0; 
     z-index: 1000;
-    height: 50px; 
-    line-height: 50px; 
+    height: 52px; /* Default height */
+    transition: height 0.3s ease-in-out; /* Smooth transition for height */
     margin-top: 0; 
-    
 }
+
+.sidebar.collapsed ~ .maincontent .manicontentnav {
+    height: 63px; /* Increased height for navbar when sidebar is collapsed */
+}
+
 
 .maincontent{
     width: 84%;
@@ -348,13 +277,14 @@
 /* Navbar Content (to ensure it's vertically centered) */
 .manicontentnav .container-fluid {
     display: flex;
-    justify-content: space-between; /* Push the logo to the left and the logout to the right */
-    align-items: center; /* Vertically center the navbar content */
+    justify-content: space-between;
+    align-items: center;
 }
+
 
 /* Optional: If you want to adjust logo size */
 .manicontentnav .navbar-brand {
-    font-size: 30px; /* Adjust this according to your design */
+    font-size: 30px; 
 }
 
 /* Optional: Adjust for mobile view */
@@ -366,10 +296,11 @@
 }
 
 .content-area {
-    flex-grow: 1; /* Make content take up the remaining space */
+    flex-grow: 1;
     padding-bottom: 20px;
-    overflow-y: auto; /* Allow scrolling */
+    overflow-y: auto;
     transition: margin-left 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    max-height: calc(100vh - 56px); /* Default height (navbar height) */
 }
 
 .sidebar.collapsed + .content-area {
@@ -383,74 +314,15 @@
 
 /* Adjust when the sidebar is collapsed */
 .sidebar.collapsed ~ .content-area {
-    max-height: calc(100vh - 50px); /* Adjust for the navbar height */
+    max-height: calc(100vh - 100px); /* Adjust content height to account for increased navbar height */
 }
+
 
 /* Optional: Set a default max-height for normal (expanded) sidebar state */
 .sidebar:not(.collapsed) ~ .content-area {
     max-height: calc(100vh - 56px); /* Adjust for navbar height */
 }
 
-
-
-
-/* Main Content Styling */
-.header-content {
-    flex-grow: 1;
-    margin-left: 250px; /* Space for expanded sidebar */
-    transition: margin-left 0.4s ease-in-out;
-    background-color: #f4f4f4; /* Background color for the content area */
-    padding: 20px; /* Padding around content */
-    border-radius: 8px; /* Optional rounded corners */
-}
-
-/* When Sidebar is Collapsed */
-.sidebar.collapsed + .header-content {
-    margin-left: 60px; /* Adjust for collapsed sidebar */
-}
-
-.header-content h1 {
-    font-size: 32px; /* Main heading font size */
-    color: #333; /* Dark color for the heading */
-    font-weight: bold; /* Make heading bold */
-    margin-bottom: 20px; /* Space below the heading */
-}
-
-/* For smaller screens (Tablets, Mobile Devices) */
-@media (max-width: 992px) {
-    .header-content {
-        margin-left: 200px; /* Adjust for smaller sidebar width */
-        padding: 15px; /* Slightly reduce padding for smaller screens */
-    }
-
-    .header-content h1 {
-        font-size: 28px; /* Slightly smaller heading on tablets */
-    }
-}
-
-@media (max-width: 768px) {
-    /* For Tablets and Mobile */
-    .header-content {
-        margin-left: 180px; /* Adjust for smaller sidebar width */
-        padding: 10px; /* Less padding on smaller screens */
-    }
-
-    .header-content h1 {
-        font-size: 24px; /* Reduce font size for smaller screens */
-    }
-}
-
-@media (max-width: 576px) {
-    /* For Mobile */
-    .header-content {
-        margin-left: 140px; /* Adjust for very narrow sidebar */
-        padding: 8px; /* Less padding on small mobile screens */
-    }
-
-    .header-content h1 {
-        font-size: 20px; /* Smaller font size on small devices */
-    }
-}
 
 /* Responsive Card-like Content Box */
 .content-box {
@@ -475,14 +347,7 @@
 
 /* For very small screens */
 @media (max-width: 480px) {
-    .header-content {
-        margin-left: 120px; /* Adjust for the smallest sidebar width */
-        padding: 5px; /* Minimal padding */
-    }
-
-    .header-content h1 {
-        font-size: 18px; /* Further reduce font size for small screens */
-    }
+    
 
     .content-box {
         padding: 15px; /* Less padding for small screens */

@@ -11,6 +11,8 @@ import { HospitalsComponent } from './components/homepage/hospitals/hospitals.co
 import { DashboardDemoComponent } from './components/dashboard-demo/dashboard-demo.component';
 import { BodiesSearchComponent } from './components/homepage/bodies-search/bodies-search.component';
 import { PersonAddingFormComponent } from './components/homepage/person-adding-form/person-adding-form.component';
+import { UnidentifiedPersonFormComponent } from './components/homepage/unidentified-person-form/unidentified-person-form.component';
+import { UnidentifiedbodyFormComponent } from './components/homepage/unidentifiedbody-form/unidentifiedbody-form.component';
 
 
 
@@ -21,7 +23,9 @@ const routes: Routes = [
      children: [
    
     { path: '', component: PersonAddingFormComponent },
-    { path: 'Add-person', component: PersonAddingFormComponent },
+    { path: 'Add-missing-person', component: PersonAddingFormComponent },
+    { path: 'add-unidentified-person', component: UnidentifiedPersonFormComponent},
+    { path: 'add-unidentified-body', component: UnidentifiedbodyFormComponent},
     { path: 'missingperson-search', component: DashboardComponent },
     { path: 'bodies-search', component: BodiesSearchComponent },
     { path: 'missingperson', component: MissingpersonComponent},
@@ -30,6 +34,7 @@ const routes: Routes = [
     { path: 'volunteers', component: VolunteersComponent},
     { path: 'policestation', component: PoliceStationComponent},
     { path: 'Hospitals', component: HospitalsComponent},
+    
   ]},
 ];
 

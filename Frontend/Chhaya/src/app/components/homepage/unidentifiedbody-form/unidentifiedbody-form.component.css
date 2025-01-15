@@ -1,0 +1,16 @@
+.heading-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 90px;           /* Ensure the container takes full viewport height */
+    text-align: center;      /* Center the text within the heading */
+}
+
+.main-heading {
+    font-size: 32px; /* Larger font size */
+    font-weight: bold; /* Make it bold */
+    color: #2c3e50; /* Dark color for contrast */
+    text-transform: uppercase; /* Make the text uppercase for added impact */
+    letter-spacing: 1.5px; /* Slightly increase letter spacing */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}

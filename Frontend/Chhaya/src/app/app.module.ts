@@ -26,6 +26,8 @@ import { InnerDashboadrdComponent } from './components/inner-dashboadrd/inner-da
 import { BodiesSearchComponent } from './components/homepage/bodies-search/bodies-search.component';
 import { PersonAddingFormComponent } from './components/homepage/person-adding-form/person-adding-form.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { UnidentifiedPersonFormComponent } from './components/homepage/unidentified-person-form/unidentified-person-form.component';
+import { UnidentifiedbodyFormComponent } from './components/homepage/unidentifiedbody-form/unidentifiedbody-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +44,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     InnerDashboadrdComponent,
     BodiesSearchComponent,
     PersonAddingFormComponent,
+    UnidentifiedPersonFormComponent,
+    UnidentifiedbodyFormComponent,
   
     
   ],

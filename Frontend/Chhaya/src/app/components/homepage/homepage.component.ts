@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 declare var  bootstrap :any
 @Component({
@@ -10,31 +10,20 @@ export class HomepageComponent implements  AfterViewInit{
 
   
  
-  isCollapsed: boolean = false;
+  isCollapsed: boolean = true;
   isClosing: boolean = false;
   activeIndex: number = -1; 
 
-  constructor(private router :Router){}
+  constructor(private router :Router,private cdr: ChangeDetectorRef){}
 
   ngAfterViewInit() {
-    
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl);
     });
   }
 
-  // Example sidebar links with titles and SVG paths
-  sidebarLinks = [
-    { title: 'Search Person', url: '/search', icon: 'bi-search', paths: ['M9 12c0 2.5...'] },
-    { title: 'Missing Person', url: '/missing', icon: 'bi-person', paths: ['M9 12c0 2.5...'] },
-    { title: 'Unidentified Person', url: '/unidentified', icon: 'bi-person-fill', paths: ['M9 12c0 2.5...'] },
-    { title: 'Unidentified Bodies', url: '/unidentified-bodies', icon: 'bi-question-circle', paths: ['M9 12c0 2.5...'] },
-    { title: 'Volunteers', url: '/volunteers', icon: 'bi-person-fill', paths: ['M9 12c0 2.5...'] },
-    { title: 'Police Stations', url: '/police-stations', icon: 'bi-house-door', paths: ['M9 12c0 2.5...'] },
-    { title: 'Hospitals', url: '/hospitals', icon: 'bi-hospital', paths: ['M9 12c0 2.5...'] },
-    { title: 'Reports', url: '/reports', icon: 'bi-file-earmark-text', paths: ['M9 12c0 2.5...'] },
-  ];
+ 
   
 
   // Toggle Sidebar: Handles collapsing/expanding
@@ -60,7 +49,26 @@ export class HomepageComponent implements  AfterViewInit{
       this.router.navigate(['/Main-dashboard']); 
     }, 3000); 
   }
- 
+
+  isDropdownOpen: { [key in 'reportCase' | 'searchCase' | 'resources']: boolean } = {
+    reportCase: false,
+    searchCase: false,
+    resources: false,
+  };
+  
+  
+  toggleDropdown(menu: 'reportCase' | 'searchCase' | 'resources'): void {
+    this.isDropdownOpen = {
+      ...this.isDropdownOpen,
+      [menu]: !this.isDropdownOpen[menu],
+    };
+    this.cdr.detectChanges(); // Trigger change detection manually
+  }
+  
+  
+  
+  
+  
 
 
 }
