@@ -30,14 +30,21 @@ export class HomepageComponent implements  AfterViewInit{
   toggleSidebar() {
     if (!this.isCollapsed) {
       this.isClosing = true;
+  
+      // Use `keyof` to type the keys properly
+      Object.keys(this.isDropdownOpen).forEach((key) => {
+        this.isDropdownOpen[key as keyof typeof this.isDropdownOpen] = false;
+      });
+  
       setTimeout(() => {
         this.isCollapsed = true;
         this.isClosing = false;
-      }, 200); 
+      }, 200);
     } else {
       this.isCollapsed = false;
     }
   }
+  
  
 
   isLoading = false;
@@ -64,8 +71,6 @@ export class HomepageComponent implements  AfterViewInit{
     };
     this.cdr.detectChanges(); // Trigger change detection manually
   }
-  
-  
   
   
   

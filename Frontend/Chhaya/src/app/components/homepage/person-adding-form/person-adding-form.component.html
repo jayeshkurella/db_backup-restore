@@ -36,8 +36,8 @@
     
             <!-- personal details -->
             <div class="tab-pane fade show active" id="personal-details" role="tabpanel" aria-labelledby="personal-details-tab">
-              <div class="container mt-3">
-                <p class="mb-4">Provide details of the missing person</p>
+              <div class="container-fluid mt-2">
+                <p class="mt-2 mb-3">Provide details of the missing person</p>
                 
                 <form [formGroup]="missingPersonForm">
                   <div class="row mb-3">
@@ -185,9 +185,9 @@
         
             <!-- additonal info -->
             <div class="tab-pane fade" id="additional_info" role="tabpanel" aria-labelledby="additional_info-tab">
-              <div class="container mt-2">
-                <h2 class="mb-3">Additional Details</h2>
-                <p class="mb-4">Provide additional information about the missing person.</p>
+              <div class="container-fluid mt-2">
+                <!-- <h2 class="mb-3">Additional Details</h2> -->
+                <p class="mt-2 mb-4">Provide additional information about the missing person.</p>
             
                 <form [formGroup]="missingPersonForm">
                   <!-- Caste and Sub-Caste -->
@@ -271,9 +271,9 @@
         
              <!-- missing data -->
              <div class="tab-pane fade" id="missingdata" role="tabpanel" aria-labelledby="last-seen-tab">
-              <div class="container mt-5">
-                <h2 class="mb-3">Last Seen Details</h2>
-                <p class="mb-4">Provide information about the last known details of the missing person.</p>
+              <div class="container-fluid ">
+                <!-- <h2 class="mb-3">Last Seen Details</h2> -->
+                <p class="mt-2 mb-4">Provide information about the last known details of the missing person.</p>
             
                 <form [formGroup]="missingPersonForm">
                   <!-- Missing Time and Date -->
@@ -342,9 +342,9 @@
         
             <!-- legal info -->
             <div class="tab-pane fade" id="legal_info" role="tabpanel" aria-labelledby="legal_info-tab">
-              <div class="container mt-5">
-                  <h2 class="mb-3">FIR Information</h2>
-                  <p class="mb-4">Provide details about the FIR and investigating officer</p>
+              <div class="container-fluid">
+                  <!-- <h2 class="mb-3">FIR Information</h2> -->
+                  <p class="mt-2 mb-4">Provide details about the FIR and investigating officer</p>
                   
                   <form [formGroup]="missingPersonForm">
                       <div class="row mb-3">
@@ -390,9 +390,9 @@
           
             <!-- reporting person -->
             <div class="tab-pane fade " id="reportingPerson" role="tabpanel" aria-labelledby="reportingPerson-tab">
-              <div class="container mt-5">
-                <h2 class="mb-3">Contact Details of Reporting Person</h2>
-                <p class="mb-4">Enter your contact details as the person reporting the missing person</p>
+              <div class="container-fluid">
+                <!-- <h2 class="mb-3">Contact Details of Reporting Person</h2> -->
+                <p class="mt-2 mb-4">Enter your contact details as the person reporting the missing person</p>
                 
                 <form [formGroup]="missingPersonForm">
                   <div class="row mb-3">
@@ -483,9 +483,8 @@
         
             <!-- consent -->
             <div class="tab-pane fade" id="consent-pane" role="tabpanel" aria-labelledby="consent-tab">
-              <div class="container mt-5">
-                <h2 class="mb-3">Consent and Declaration</h2>
-                <p class="mb-4">Read and agree to the terms before submitting the report.</p>
+              <div class="container-fluid">
+                <p class="mt-2 mb-4">Read and agree to the terms before submitting the report.</p>
               
                 <form [formGroup]="missingPersonForm">
                   <div class="mb-3">
@@ -518,21 +517,7 @@
 
 
   
-      <!-- Unidentified Person Tab -->
-      <div class="tab-pane fade" id="unidentified-person" role="tabpanel" aria-labelledby="unidentified-person-tab">
-        <div class="mt-4">
-          <h3>Add Unidentified Person</h3>
-          
-        </div>
-      </div>
-  
-      <!-- Unidentified Dead Body Tab -->
-      <div class="tab-pane fade" id="unidentified-dead-body" role="tabpanel" aria-labelledby="unidentified-dead-body-tab">
-        <div class="mt-4">
-          <h3>Add Unidentified Dead Body</h3>
-          
-        </div>
-      </div>
+      
     </div>
   </div>
   

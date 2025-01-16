@@ -53,7 +53,7 @@
         <!-- Sidebar Links -->
         <ul class="sidebar-links">
             <!-- Report Case Link -->
-            <li class="sidebar-item" [ngClass]="{'with-gap': isDropdownOpen.reportCase}">
+            <li class="sidebar-item" [ngClass]="{'with-gap-1': isDropdownOpen.reportCase}">
                 <a 
                     class="dropdown-toggle" 
                     (click)="toggleDropdown('reportCase'); $event.preventDefault()" 
@@ -61,42 +61,75 @@
                     <i class="bi bi-folder-plus"></i>
                     <span class="link-text" *ngIf="!isCollapsed">Report Case</span>
                 </a>
-                <ul [ngClass]="{'visible': isDropdownOpen.reportCase}" class="dropdown-menu">
-                    <li><a routerLink="Add-missing-person">Missing Person</a></li>
-                    <li><a routerLink="add-unidentified-person">Unidentified Person</a></li>
-                    <li><a routerLink="add-unidentified-body">Unidentified Body</a></li>
+                <ul *ngIf="!isCollapsed" [class.visible]="isDropdownOpen.reportCase" class="dropdown-menu">
+                    <li>
+                        <a routerLink="Add-missing-person">
+                            <i class="bi bi-person"></i> Missing Person
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="add-unidentified-person">
+                            <i class="bi bi-question-circle"></i> Unidentified Person
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="add-unidentified-body">
+                            <i class="bi bi-file-earmark-medical"></i> Unidentified Body
+                        </a>
+                    </li>
                 </ul>
+                
+                
             </li>
             
-    
             <!-- Search Case Dropdown -->
-            <li class="sidebar-item " [ngClass]="{'with-gap': isDropdownOpen.searchCase}" >
+            <li class="sidebar-item " [ngClass]="{'with-gap-1': isDropdownOpen.searchCase}" >
                 <a class="dropdown-toggle" (click)="toggleDropdown('searchCase'); $event.preventDefault()" 
                    [ngClass]="{ 'active': isDropdownOpen.searchCase }">
                   <i class="bi bi-search"></i>
                   <span class="link-text" *ngIf="!isCollapsed">Search Case</span>
                 </a>
-                <ul [class.visible]="isDropdownOpen.searchCase" class="dropdown-menu">
-                  <li><a routerLink="missingperson">Missing Person</a></li>
-                  <li><a routerLink="unidentified-person">Unidentified Person</a></li>
-                  <li><a routerLink="unidentified-bodies">Unidentified Bodies</a></li>
+                <ul *ngIf="!isCollapsed" [class.visible]="isDropdownOpen.searchCase" class="dropdown-menu">
+                    <li>
+                        <a routerLink="missingperson">
+                            <i class="bi bi-person"></i> Missing Person
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="unidentified-person">
+                            <i class="bi bi-question-diamond"></i> Unidentified Person
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="unidentified-bodies">
+                            <i class="bi bi-person-x"></i> Unidentified Bodies
+                        </a>
+                    </li>
                 </ul>
+                
               </li>
-              
-              
-              
-              
     
             <!-- Resources Dropdown -->
-            <li class="sidebar-item dropdown" [ngClass]="{'with-gap': isDropdownOpen.resources}">
+            <li class="sidebar-item dropdown" [ngClass]="{'with-gap-2': isDropdownOpen.resources}">
                 <a class="dropdown-toggle" (click)="toggleDropdown('resources')" [ngClass]="{ 'active': isDropdownOpen.resources }">
                     <i class="bi bi-briefcase"></i>
                     <span class="link-text" *ngIf="!isCollapsed">Resources</span>
                 </a>
-                <ul [class.visible]="isDropdownOpen.resources" class="dropdown-menu">
-                    <li><a routerLink="policestation">Police Stations</a></li>
-                    <li><a routerLink="Hospitals">Hospitals</a></li>
+                <ul *ngIf="!isCollapsed" [class.visible]="isDropdownOpen.resources" class="dropdown-menu">
+                    <li>
+                        <a routerLink="policestation">
+                            <i class="bi bi-shield-shaded"></i>
+                            <span>Police Stations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="Hospitals">
+                            <i class="bi bi-hospital"></i>
+                            <span>Hospitals</span>
+                        </a>
+                    </li>
                 </ul>
+                
             </li>
 
             <!-- volunteers -->
@@ -125,7 +158,7 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link navmaiitem" href="javascript:void(0)" (click)="onNavigate()">
-                                <i class="bi bi-skip-backward-btn"></i> 
+                                <i class="bi bi-person-circle"></i> 
                             </a>
                         </li>
                     </ul>
