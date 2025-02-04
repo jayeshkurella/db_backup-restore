@@ -18,12 +18,13 @@ from .models import BodyMatch, CaseReport, Chowki, Division, Hospital, HospitalD
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.core.paginator import Paginator
 from rest_framework.exceptions import NotFound
-
+import traceback
 # for redis cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
+import json
 
 CACHE_TTL = getattr(settings , 'CACHE_TTL',DEFAULT_TIMEOUT)
 
@@ -277,19 +278,27 @@ class MissingPersonAPIView(APIView):
             return Response({'msg': 'Something went wrong', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     def post(self, request):
-        try:
-            serializer = MissingPersonSerializer(data=request.data)
-            if serializer.is_valid():
-                try:
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                except Exception as e:
-                    return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data.copy()  # Make a mutable copy of the request data
 
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Parse JSON strings into dictionaries
+        if 'address' in data and isinstance(data['address'], str):
+            try:
+                data['address'] = json.loads(data['address'])
+            except json.JSONDecodeError:
+                return Response({"error": "Invalid JSON in 'address' field"}, status=400)
 
+        if 'contact' in data and isinstance(data['contact'], str):
+            try:
+                data['contact'] = json.loads(data['contact'])
+            except json.JSONDecodeError:
+                return Response({"error": "Invalid JSON in 'contact' field"}, status=400)
+
+        serializer = MissingPersonSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
     def put(self, request, missing_person_id):
         try:
             missing_person = MissingPerson.objects.get(pk=missing_person_id, is_deleted=False)

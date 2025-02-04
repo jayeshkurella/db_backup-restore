@@ -1,6 +1,6 @@
 .d-flex {
     display: flex;
-    height: 100vh; /* Ensure the layout takes up the full viewport height */
+    /* height: 100vh;  */
 }
 
 .sidebar {
@@ -186,34 +186,34 @@
 }
 
 /* Expand Button */
-.expand-btn {
+/* .expand-btn {
     position: absolute;
     top: 25px;
-    left: calc(230px - 20px); /* Adjust for expanded sidebar width */
+    left: calc(230px - 20px); 
     z-index: 10;
     border: none;
     background: none;
     color: #ffffff;
     cursor: pointer;
     transition: left 0.4s ease-in-out, color 0.3s ease-in-out;
-}
+} */
 
-.expand-btn:hover {
+/* .expand-btn:hover {
     color: #ffffff;
-}
+} */
 
 /* Adjust for collapsed sidebar */
-.sidebar.collapsed ~ .expand-btn {
-    left: calc(80px - 35px); /* Adjust for collapsed sidebar width */
+/* .sidebar.collapsed ~ .expand-btn {
+    left: calc(80px - 35px); 
     height: 40px;
-}
+} */
 
 
 
-.sidebar.collapsed .expand-btn {
-    left: calc(60px - 15px); /* Adjust for collapsed sidebar width */
-    z-index: 9999; /* Ensure it's always above the sidebar */
-}
+/* .sidebar.collapsed .expand-btn {
+    left: calc(60px - 15px); 
+    z-index: 9999; 
+} */
 
 
 
@@ -245,10 +245,10 @@
 
    
 
-    .expand-btn {
+    /* .expand-btn {
         top: 10px;
-        left: calc(200px - 30px); /* Adjust for smaller width */
-    }
+        left: calc(200px - 30px); 
+    } */
 }
 
 @media (max-width: 768px) {
@@ -259,13 +259,25 @@
 
    
    
-    .expand-btn {
+    /* .expand-btn {
         top: 10px;
-        left: calc(180px - 30px); /* Adjust for smaller width */
-    }
+        left: calc(180px - 30px); 
+    } */
 
     .sidebar.collapsed .sidebar-item i {
         font-size: 18px;
+    }
+    .navmaiitem {
+        font-size: 24px; /* Set a size for the icon */
+        padding: 0; /* Remove any extra padding */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navmaiitem i {
+        font-size: 30px; /* Adjust the icon size if needed */
+        line-height: 1; /* Ensure icon is aligned */
     }
 }
 
@@ -275,11 +287,19 @@
         width: 150px; /* Further narrowing for small screens */
     }
 
+    .navmaiitem {
+        font-size: 18px; /* Reduce icon size for very small screens */
+    }
 
-    .expand-btn {
+    .navmaiitem i {
+        font-size: 22px; /* Further reduce the icon size */
+    }
+
+
+    /* .expand-btn {
         top: 10px;
         left: calc(150px - 30px);
-    }
+    } */
 
     .sidebar.collapsed .sidebar-item i {
         font-size: 16px;

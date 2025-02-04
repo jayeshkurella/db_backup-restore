@@ -59,6 +59,7 @@ class PoliceStation(base_models.Model):
 
 class Chowki(base_models.Model):
     police_station = models.ForeignKey(PoliceStation, on_delete=models.CASCADE, related_name="chowkis")
+    police_station_name_and_address = models.CharField(max_length=255, db_index=True, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
     telephone_no = models.CharField(max_length=15)
     address = models.TextField()
@@ -151,8 +152,6 @@ class Contact(models.Model):
     email = models.CharField(max_length=255, db_index=True)
     type = models.CharField(max_length=50, choices=CONTACT_TYPE_CHOICES, db_index=True)
     subtype = models.CharField(max_length=50, choices=CONTACT_SUBTYPE_CHOICES, db_index=True)
-    subtype_detail = models.CharField(max_length=255, null=True, blank=True)
-    location = models.CharField(max_length=255, null=True, blank=True)
     company_name = models.CharField(max_length=255, null=True, blank=True)
     job_title = models.CharField(max_length=255, null=True, blank=True)
     website = models.CharField(max_length=255, null=True, blank=True)
@@ -167,7 +166,6 @@ class Contact(models.Model):
             models.Index(fields=['type', 'subtype']),
             models.Index(fields=['email', 'is_primary']),
             models.Index(fields=['phone_number']),
-            models.Index(fields=['location']),
             models.Index(fields=['company_name']),
             models.Index(fields=['job_title']),
         ]
@@ -188,7 +186,6 @@ class Address(models.Model):
         ('Permanent Address', 'Permanent Address'),
         ('Current Address', 'Current Address'),
         ('Emergency', 'Emergency'),
-        ('Current', 'Current'),
         ('Person Founded', 'Person Founded'),
         ('Body Founded', 'Body Founded'),
     ]
@@ -252,7 +249,6 @@ class Address(models.Model):
     landmark_details = models.CharField(max_length=255, null=True, blank=True)
     location = models.PointField(null=True, blank=True, db_index=True) 
 
-    address_type = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True, db_index=True)
     created_date = models.DateField(auto_now_add=True)
     last_updated = models.DateField(auto_now=True)
@@ -357,7 +353,7 @@ class MissingPerson(models.Model):
     GENDER_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female'),
-        ('Transgender', 'Transgender'),
+        ('Other', 'Other'),
     ]
     
     COMPLEXION_CHOICES = [
@@ -470,7 +466,7 @@ class MissingPerson(models.Model):
     unique_id = models.CharField(max_length=50, unique=True, blank=True, null=True, db_index=True)
 
     full_name = models.CharField(max_length=255, db_index=True)
-    age = models.PositiveIntegerField(db_index=True)
+    age = models.PositiveIntegerField(db_index=True,blank=True,null=True )
     date_of_birth = models.DateField(db_index=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, db_index=True)
     time_of_birth = models.TimeField(null=True, blank=True, db_index=True)
@@ -486,13 +482,13 @@ class MissingPerson(models.Model):
     blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES, db_index=True)
     photo_upload = models.ImageField(upload_to='ALLphotos/Missingperson/', null=True, blank=True, db_index=True)
     
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='missing_person', null=True, db_index=True)
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='missing_person', null=True, db_index=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='missing_person', null=True, db_index=True, blank=True,)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='missing_person', null=True, db_index=True, blank=True,)
     
     condition = models.CharField(max_length=20, choices=CONDITION_GROUP_CHOICES, null=True, blank=True, db_index=True)
     case_status = models.CharField(max_length=20, choices=CASE_STATUS_CHOICES, default='Pending', )
     # additional information
-    caste = models.CharField(max_length=50, choices=CASTE_CHOICES, db_index=True)
+    caste = models.CharField(max_length=50, choices=CASTE_CHOICES, db_index=True,null=True, blank=True,)
     sub_caste = models.CharField(max_length=100, null=True, blank=True, db_index=True)
     marital_status = models.CharField(max_length=20, choices=MARITAL_STATUS_CHOICES, db_index=True)
     religion = models.CharField(max_length=50, choices=RELIGION_CHOICES, db_index=True)
@@ -501,7 +497,8 @@ class MissingPerson(models.Model):
     educational_details = models.TextField(null=True, blank=True, db_index=True)
     occupation = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     identification_details = models.CharField(max_length=50, choices=IDENTIFICATION_CHOICES, db_index=True)
-    identification_card_no = models.BigIntegerField(db_index=True)
+    identification_card_no = models.CharField(null=True, blank=True, db_index=True)
+
     
     # missing details
     missing_time = models.TimeField(db_index=True)
@@ -512,7 +509,7 @@ class MissingPerson(models.Model):
     # police and legal info
     fir_number = models.PositiveIntegerField(db_index=True)
     fir_photo = models.BinaryField(null=True, blank=True, db_index=True)
-    police_station_name_and_address = models.ForeignKey(Chowki, on_delete=models.CASCADE, related_name='missing_person', null=True, db_index=True)
+    police_station_name_and_address = models.CharField(max_length=255, db_index=True,null=True, blank=True,)
     investigating_officer_name = models.CharField(max_length=255, db_index=True)
     investigating_officer_contact_number = models.CharField(max_length=15, db_index=True)
     

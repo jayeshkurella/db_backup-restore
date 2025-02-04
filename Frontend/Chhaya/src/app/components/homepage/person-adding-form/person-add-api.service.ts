@@ -14,7 +14,19 @@ export class PersonAddAPIService {
 
   constructor(private http: HttpClient) { }
 
-  postMissingPerson(missingPerson: MissingPerson): Observable<any> {
-    return this.http.post<any>(this.apiUrl + 'missing-person/', missingPerson);  
-    }
+//   postMissingPerson(payload: FormData): Observable<any> {
+//     console.log("form data in servece________",formData)
+//     formData.forEach((value, key) => {
+//       console.log(`${key}:`, value);
+//   });
+//     return this.http.post<any>(this.apiUrl + 'missing-person/', formData);  
+//     }
+// }
+
+postMissingPerson(payload: any): Observable<any> {
+  console.log('Form data being sent:', payload);
+  return this.http.post<any>(this.apiUrl + 'missing-person/', payload,{
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
 }

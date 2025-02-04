@@ -6,28 +6,31 @@ import { MissingpersonapiService } from '../homepage/missingperson/missingperson
 import { UnidentifiedPersonapiService } from '../homepage/unidentified-person/unidentified-personapi.service';
 import { UnidentifiedbodiesapiService } from '../homepage/unidentified-bodies/unidentifiedbodiesapi.service';
 import { PoliceStationaoiService } from 'src/app/services/police-stationaoi.service';
-import { ChartData, ChartOptions } from 'chart.js';
-import { Color ,ScaleType  } from '@swimlane/ngx-charts';
+
 declare var bootstrap: any;
 import * as L from 'leaflet';
 import 'leaflet-panel-layers';
 import 'leaflet-panel-layers';
 import '../../../../src/leaflet-panel-layers'
 import 'leaflet-basemaps/L.Control.Basemaps'; 
+import 'leaflet.markercluster/dist/leaflet.markercluster';
+import 'leaflet.markercluster';
+
 import { MainDashserviceService } from './main-dashservice.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-dashboard-demo',
   templateUrl: './dashboard-demo.component.html',
   styleUrls: ['./dashboard-demo.component.css']
 })
 export class DashboardDemoComponent implements OnInit ,AfterViewInit{
-
+  environment = environment;
   geo_url =environment.geo_url
   stateLayer = "GeoFlow_WCD:tblstates";
   stateLayerName: any;
   distLayer="GeoFlow_WCD:tbldistricts";
   distLayerName: any;
-  environment = environment;
+ 
   allmissingperson: any[] = [];
   allunidentifiedperson: any[] = [];
   allunidentiedbodies: any[] = [];
@@ -41,7 +44,9 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   alldistricts: string[] = [];
   selectedCity = 'All Cities';
   selectedState= 'All States';
+  stateCoordinates: any[] = []; // Array to hold state coordinates
   selectedDistrict= 'All Districts';
+  alldistrictss: string[] = [];
   selectedPoliceStation: { id: number; name: string } | 'All Police Stations' = 'All Police Stations';
   selectedgender='All Genders';
   allBloodGroups = ['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-']; 
@@ -116,21 +121,10 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   UBpendingGendercounts: { Male: number; Female: number ; Other: number } = { Male: 0, Female: 0, Other:0};
   UBsolvedGenderCounts: { Male: number; Female: number; Other: number } = { Male: 0, Female: 0, Other: 0};
   
-  chartData = [
-    { name: 'UB Found', value: this.deceasedCountgendercount.Male + this.deceasedCountgendercount.Female + this.deceasedCountgendercount.Other },
-    { name: 'UP Matched', value: this.found_alivegendercount.Male + this.found_alivegendercount.Female + this.found_alivegendercount.Other },
-    { name: 'Pending', value: this.pendingGendercounts.Male + this.pendingGendercounts.Female + this.pendingGendercounts.Other }
-  ];
   
-  colorScheme: Color = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C'],
-    name: 'custom',
-    selectable: true,
-    group: ScaleType.Ordinal
-  };
-
   constructor(
     private router: Router, 
+    private http: HttpClient,
     private allcountapi: AllcountServiceService, 
     private missingperonapi: MissingpersonapiService,
     private unidentifiedpersonapi: UnidentifiedPersonapiService,
@@ -139,32 +133,10 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     private fitereddataapi :MainDashserviceService,
     private cdr: ChangeDetectorRef,
   ) {
-    this.prepareChartData();
+    
    
   }
 
-  prepareChartData() {
-    const maleCount =
-      this.deceasedCountgendercount.Male +
-      this.found_alivegendercount.Male +
-      this.pendingGendercounts.Male;
-
-    const femaleCount =
-      this.deceasedCountgendercount.Female +
-      this.found_alivegendercount.Female +
-      this.pendingGendercounts.Female;
-
-    const otherCount =
-      this.deceasedCountgendercount.Other +
-      this.found_alivegendercount.Other +
-      this.pendingGendercounts.Other;
-
-    this.chartData = [
-      { name: 'Male', value: maleCount },
-      { name: 'Female', value: femaleCount },
-      { name: 'Transgender', value: otherCount }
-    ];
-  }
 
   pagination: any = {
     current_page: 1,
@@ -180,6 +152,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
  
   ngOnInit(): void {
     // Set default state to Maharashtra
+    this.loadStateData();
     this.selectedState = 'Maharashtra';  
     this.selectedDistrict = 'All Districts'; 
     this.selectedCity = 'All Cities';  
@@ -210,6 +183,78 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     
     
   }
+
+  ngOnDestroy(): void {
+    if (this.map) {
+      this.map.remove();
+    }
+  }
+
+  private loadStateData(): void {
+    this.http.get<any[]>('assets/state.json').subscribe(data => {
+      this.stateCoordinates = data;
+      this.allstates = data.map(state => state.name); // Populate the state dropdown
+    });
+  }
+
+  moveMapToState(stateCode: string): void {
+    const indiaCoordinates: [number, number] = [20.5937, 78.9629];  // Center of India (LatLngTuple)
+    const indiaZoomLevel = 6;  // Zoom level for the whole country
+    
+    if (stateCode === 'All States') {
+      // If 'All States' is selected, move the map to the center of India
+      if (this.map) {
+        this.map.flyTo(indiaCoordinates, indiaZoomLevel, {
+          duration: 3, // Duration of the animation (in seconds)
+          easeLinearity: 0.25 // Controls the easing of the transition
+        });
+      }
+    } else {
+      const state = this.stateCoordinates.find(s => s.name === stateCode);
+      if (this.map && state) {
+        // Fly to the center of the selected state with smooth transition
+        this.map.flyTo(state.coordinates, 7, {
+          duration: 2, // Duration of the animation (in seconds)
+          easeLinearity: 0.25 // Controls the easing of the transition
+        });
+      }
+    }
+  }
+  
+  
+  moveMapToDistrict(districtName: string): void {
+    // Find the district's coordinates
+    const state = this.stateCoordinates.find(s => s.districts && s.districts.some((d: { name: string; }) => d.name === districtName));
+    if (state) {
+      const district = state.districts.find((d: { name: string; }) => d.name === districtName);
+      if (district && this.map) {
+        this.map.setView(district.coordinates, 9); // Adjust zoom level for district
+      }
+    }
+  }
+
+  loadDistrictsForState(stateName: string): void {
+    if (!this.stateCoordinates) {
+      console.error('State coordinates are not defined');
+      return; // Return early to prevent further execution
+    }
+  
+    console.log('State Coordinates:', this.stateCoordinates); // Log the entire stateCoordinates array
+    console.log('Looking for state:', stateName); // Log the stateName being passed in
+  
+    const state = this.stateCoordinates.find(s => s.name === stateName);
+  
+    if (state) {
+      // Using setTimeout to mimic a delay in populating districts
+      setTimeout(() => {
+        this.alldistrictss = state.districts.map((d: { name: any; }) => d.name); // Populate district dropdown based on state
+      }, 300); // Delay to show the change smoothly (300ms delay, adjust as needed)
+    } else {
+      console.error('State not found in stateCoordinates:', stateName);
+    }
+  }
+  
+  
 
   filterDataByFilters(): void {
     // Clear any existing data before applying the new filter
@@ -253,17 +298,22 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     this.getpolicestationbycity("All Police Stations")
 
     if (this.selectedState !== 'All States') {
+      this.moveMapToState(this.selectedState);
       this.getDistrictsByState(this.selectedState);
+      this.loadDistrictsForState(this.selectedState);
     } else {
       this.alldistricts = [];
     }
 
     // Check if district is selected, then get the cities for that district
     if (this.selectedDistrict !== 'All Districts') {
+      this.moveMapToDistrict(this.selectedDistrict);
       this.getCitiesByDistrict(this.selectedDistrict);
     } else {
       this.allcities = [];
     }
+
+    
 
     // Check if city is selected, then and villages for that city
     if (this.selectedCity !== 'All Cities') {
@@ -276,6 +326,8 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     } else {
       this.allpolicestations = [];
     }
+
+    
   }
     
 
@@ -315,6 +367,10 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
           const persons = response;
           this.missingPersonLayer.clearLayers();
           this.filteredMissingPersonssss = [];
+
+          // const missingPersonClusterGroup = (L as any).markerClusterGroup({
+          //   zoomToBoundsOnClick: true,
+          // });
   
           let missingPersonsCount = 0;
           let maleCount = 0;
@@ -392,6 +448,11 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
             this.filteredMissingPersonssss.push(person);
             const marker = L.marker([lat, lng], { icon: customIcon }).bindPopup(popupContent);
             this.missingPersonLayer.addLayer(marker);
+
+
+            // const marker = L.marker([lat, lng], { icon: customIcon }).bindPopup(popupContent);
+            // missingPersonClusterGroup.addLayer(marker); // Add marker to cluster group
+
   
             // Update counts based on gender
             missingPersonsCount++;
@@ -453,6 +514,10 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
           }
 
           });
+
+          // this.missingPersonLayer.addLayer(missingPersonClusterGroup);
+          // this.map!.addLayer(this.missingPersonLayer);
+
   
           // Update the missing persons count and gender counts
           this.missingPersontotalcount = missingPersonsCount;
@@ -471,7 +536,6 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
           this.found_alivegendercount = {Male:foundalivemale , Female :foundalivefemale, Other :foundalivother}
           this.deceasedCountgendercount ={ Male: 0, Female: 0 , Other : 0 };
           this.deceasedCountgendercount = {Male:deceasedmale , Female :deceasedfemale, Other :deceasedother}
-          this.prepareChartData();
 
         } else {
           this.missingPersontotalcount = 0;
@@ -881,7 +945,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   }
 
  
-  
+
   private resetBodyCounts(): void {
     this.UBpendingcount = 0;
     this.UBFound_alivecount = 0;
@@ -939,6 +1003,52 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     });
     this.map.addControl(panelLayers);
  }
+
+
+
+
+
+  // private initMap(): void {
+  //   this.initOperationalLayers();
+  //   this.initOverlays();
+
+  //   // Initialize the map
+  //   this.map = L.map('map', {
+  //     center: [20.5937, 78.9629], // Centering the map on India
+  //     zoom: 6,
+  //   });
+
+  //   // Tile layer for the map
+  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     maxZoom: 19,
+  //     attribution: '&copy; OpenStreetMap contributors',
+  //   }).addTo(this.map);
+
+  //   // Panel control for layers
+  //   var panelLayers = new (L as any).Control.PanelLayers(null, this.overlays, {
+  //     collapsibleGroups: true,
+  //     collapsed: false,
+  //     groupMaxHeight: 50,
+  //   });
+  //   this.map.addControl(panelLayers);
+
+  //   // Create a marker cluster group
+  //   const markers = (L as any).markerClusterGroup();
+
+  //   // Example of adding 100 random markers (you can replace this with your own data)
+  //   for (let i = 0; i < 100; i++) {
+  //     const lat = 20.5 + (Math.random() - 0.5) * 2; // Random latitude
+  //     const lon = 78.5 + (Math.random() - 0.5) * 2; // Random longitude
+  //     const marker = L.marker([lat, lon]);
+
+  //     // Add the marker to the cluster group
+  //     markers.addLayer(marker);
+  //   }
+
+  //   // Add the marker cluster group to the map
+  //   this.map.addLayer(markers);
+  // }
+
 
   toggleLayer(layer: string, event: any): void {
     switch (layer) {

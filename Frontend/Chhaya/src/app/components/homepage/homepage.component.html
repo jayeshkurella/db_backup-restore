@@ -32,8 +32,6 @@
 
 
 
-
-
 <div class="d-flex">
     <!-- Sidebar -->
     <div class="sidebar" [ngClass]="{ collapsed: isCollapsed, closing: isClosing }">
@@ -43,9 +41,9 @@
             <h4 class="sidebar-title" *ngIf="!isCollapsed">Chhaya Foundation</h4>
             
             <!-- Toggle Button -->
-            <button class="expand-btn btn btn-dark" (click)="toggleSidebar()">
+            <!-- <button class="expand-btn btn btn-dark" (click)="toggleSidebar()">
                 <i class="bi" [ngClass]="isCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
-            </button>
+            </button> -->
             
             <img *ngIf="isCollapsed" src="assets/images/favicon-32x32.png" alt="Favicon">
         </div>
@@ -179,6 +177,134 @@
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- <nav class="navbar bg-dark manicontentnav  navbar-light  sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand navmaiitem" >CodeRize</a>
@@ -194,15 +320,6 @@
         <div class="loader"></div>
       </div>
 </nav> -->
-
-
-
-
-
-
-
-
-
 
             <!-- <li class="sidebar-item" data-tooltip="Dashboard">
                 <a routerLink="missingperson-search">
@@ -259,8 +376,6 @@
                   <span class="link-text" *ngIf="!isCollapsed">Hospitals</span>
                 </a>
             </li> -->
-            
-
             <!-- Sidebar Profile -->
         <!-- <div class="sidebar-profile">
             <img src="assets/images/user.png" alt="Profile Picture" />

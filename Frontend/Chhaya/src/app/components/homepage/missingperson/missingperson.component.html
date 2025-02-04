@@ -1,7 +1,7 @@
 <div class="container-fluid mt-2">
-  <div *ngIf="loading" class="fullscreen-loader">
+  <!-- <div *ngIf="loading" class="fullscreen-loader">
     <div class="loader"></div>
-  </div>
+  </div> -->
   <div class="row g-2 align-items-center mt-2 mb-2 bg-dark">
     <div class="col-md-2">
       <input
@@ -351,12 +351,12 @@
           <h5 class="mb-3 text-primary">Investigation Details</h5>
           <div class="row mb-3">
               <div class="col-md-3"><strong>Police station :</strong></div>
-              <div class="col-md-9">{{ selectedPerson.police_station_name_and_address.name}} </div>
+              <div class="col-md-9">{{ selectedPerson.police_station_name_and_address}} </div>
             </div>
-            <div class="row mb-3">
+            <!-- <div class="row mb-3">
               <div class="col-md-3"><strong>Police station address:</strong></div>
               <div class="col-md-9">{{ selectedPerson.police_station_name_and_address.address }} </div>
-            </div>
+            </div> -->
           <div class="row mb-3">
             <div class="col-md-3"><strong>Investigating Officer:</strong></div>
             <div class="col-md-9">{{ selectedPerson.investigating_officer_name }} ({{ selectedPerson.investigating_officer_contact_number }})</div>

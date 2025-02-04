@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center;     /* Center vertically */
-  height: 90px;       
+  height: 60px;       
   text-align: center;      /* Center the text within the heading */
 }
 
@@ -53,4 +53,44 @@
       letter-spacing: 1px;
     }
   }
+
+
+  .custom-width {
+    width: 80%;
+  }
+  
+  .custom-bold {
+    font-weight: bold;
+  }
+
+/* Initial hidden state of the modal */
+.modal {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1050; /* Ensure it stays on top */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Show the modal with a smooth slide-in effect */
+.modal.show {
+  display: block;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#loader {
+  width: 100%;
+  height: 20px;
+  background-color: #007bff; /* Customize color */
+  transition: width 0.5s ease-in-out;
+}
+
+#progressText {
+  font-size: 20px;
+}
+
   

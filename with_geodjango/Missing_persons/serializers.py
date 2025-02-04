@@ -8,11 +8,6 @@ from django.db import transaction
   
      
 class ChowkiSerializer(serializers.ModelSerializer):
-    police_station_name = serializers.CharField(source='police_station.name', read_only=True)  # Police Station Name
-    division_name = serializers.CharField(source='police_station.division.name', read_only=True)  # Division Name
-    zone_name = serializers.CharField(source='police_station.division.zone.name', read_only=True)  # Zone Name
-
-
     class Meta:
         model = Chowki
         fields = '__all__'
@@ -21,9 +16,7 @@ class PoliceStationNestedSerializer(serializers.ModelSerializer):
     division = serializers.PrimaryKeyRelatedField(read_only=True)
     zone_name = serializers.CharField(source='division.zone.name', read_only=True)  # Get zone name from division
     division_name = serializers.CharField(source='division.name', read_only=True)
-    chowkis = ChowkiSerializer(many=True, read_only=True) 
     
-  
     class Meta:
         model = PoliceStation
         fields = '__all__'
@@ -43,6 +36,9 @@ class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zone
         fields = ['id', 'name', 'divisions']
+
+        
+        
        
 
 # for the hospital entity
@@ -85,15 +81,16 @@ class AddressSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         location_data = validated_data.pop('location', None)
         if location_data:
-            validated_data['location'] = Point(location_data['longitude'], location_data['latitude'])
+            validated_data['location'] = Point(location_data['longitude'], location_data['latitude'])  # Convert to Point object
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
         location_data = validated_data.pop('location', None)
         if location_data:
-            instance.location = Point(location_data['longitude'], location_data['latitude'])
+            instance.location = Point(location_data['longitude'], location_data['latitude'])  # Convert to Point object
         return super().update(instance, validated_data)
- 
+
+
 class VolunteerSerializer(serializers.ModelSerializer):
     # Nested serializers for contacts and addresses
     contact = ContactSerializer()
@@ -139,36 +136,55 @@ class VolunteerSerializer(serializers.ModelSerializer):
         return instance
       
         
+
 class MissingPersonSerializer(serializers.ModelSerializer):
-    contact = ContactSerializer()
-    address = AddressSerializer()
-    police_station_name_and_address = PoliceStationNestedSerializer()
+    contact = ContactSerializer(required=True)
+    address = AddressSerializer(required=True)
 
     class Meta:
         model = MissingPerson
         fields = '__all__'
 
-    @transaction.atomic
+    def get_location(self, obj):
+        return {"latitude": obj.missing_location.y, "longitude": obj.missing_location.x} if obj.missing_location else None
+
     def create(self, validated_data):
-        contact_data = validated_data.pop('contact', None)
-        address_data = validated_data.pop('address', None)
-        police_station_data = validated_data.pop('police_station_name_and_address', None)
+        print("Validated Data:", validated_data)  # Add this line for debugging
+
+        contact_data = validated_data.pop('contact')
+        address_data = validated_data.pop('address')
+
+        # Ensure mandatory fields are provided
+        if not contact_data:
+            raise serializers.ValidationError("Contact data is required.")
+        if not address_data:
+            raise serializers.ValidationError("Address data is required.")
 
         # Create related instances if data is provided
-        contact = Contact.objects.create(**contact_data) if contact_data else None
-        
+        contact = Contact.objects.create(**contact_data)
+
         if address_data and 'location' in address_data:
             location = address_data.pop('location')
-            address_data['location'] = Point(location['longitude'], location['latitude'])
-        address = Address.objects.create(**address_data) if address_data else None
-        
-        police_station = PoliceStation.objects.create(**police_station_data) if police_station_data else None
+            address_data['location'] = Point(location['longitude'], location['latitude'])  # Convert location to Point object
+        address = Address.objects.create(**address_data)
 
+        # Handle missing_location field (convert to Point)
+        if 'missing_location' in validated_data:
+            missing_location_data = validated_data.pop('missing_location')
+            
+            # Check if missing_location_data is a string or dictionary
+            if isinstance(missing_location_data, dict):
+                validated_data['missing_location'] = Point(
+                    missing_location_data['longitude'], 
+                    missing_location_data['latitude']
+                )
+            else:
+                raise serializers.ValidationError("Invalid format for missing_location. Expected a dictionary with latitude and longitude.")
+        
         # Create MissingPerson instance
         missing_person = MissingPerson.objects.create(
             contact=contact,
             address=address,
-            police_station_name_and_address=police_station,
             **validated_data
         )
         return missing_person
@@ -177,7 +193,6 @@ class MissingPersonSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         contact_data = validated_data.pop('contact', None)
         address_data = validated_data.pop('address', None)
-        police_station_data = validated_data.pop('police_station_name_and_address', None)
 
         # Update contact
         if contact_data:
@@ -194,11 +209,10 @@ class MissingPersonSerializer(serializers.ModelSerializer):
                 setattr(instance.address, attr, value)
             instance.address.save()
 
-        # Update police station
-        if police_station_data:
-            for attr, value in police_station_data.items():
-                setattr(instance.police_station_name_and_address, attr, value)
-            instance.police_station_name_and_address.save()
+        # Update missing_location field if available
+        if 'missing_location' in validated_data:
+            missing_location_data = validated_data.pop('missing_location')
+            instance.missing_location = Point(missing_location_data['longitude'], missing_location_data['latitude'])
 
         # Update MissingPerson fields
         for attr, value in validated_data.items():
@@ -206,10 +220,10 @@ class MissingPersonSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+    
 class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
     address = AddressSerializer()  
     contact = ContactSerializer() 
-    police_station_name_and_address = ChowkiSerializer()
     hospital =HospitalSerializer()
     Volunteers =VolunteerSerializer()
      
@@ -221,14 +235,12 @@ class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         address_data = validated_data.pop('address')
         contact_data = validated_data.pop('contact')
-        police_station_data = validated_data.pop('police_station_name_and_address', None)
         Hospital_Data = validated_data.pop('hospital', None)
         Volunteer_Data =validated_data.pop('Volunteers')
 
         # Create Address instance
         address = Address.objects.create(**address_data)
         contact = Contact.objects.create(**contact_data)
-        police_station = Chowki.objects.create(**police_station_data) if police_station_data else None
         Hospital_Datas = Hospital.objects.create(**Hospital_Data) if Hospital_Data else None
         Volunteerss = Volunteer.objects.create(**Volunteer_Data) if Volunteer_Data else None
 
@@ -236,7 +248,6 @@ class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
         personal_details = UnidentifiedMissingPerson.objects.create(
             address=address,
             contact=contact,
-            police_station_name_and_address=police_station,
             hospital = Hospital_Datas,
             Volunteers = Volunteerss,
             **validated_data
@@ -247,7 +258,6 @@ class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         address_data = validated_data.pop('address', None)
         contact_data = validated_data.pop('contact', None)
-        police_station_data = validated_data.pop('police_station_name_and_address', None)
         Hospital_Data = validated_data.pop('hospital', None)
         Volunteers_Dataa = validated_data.pop('Volunteers', None)
 
@@ -263,10 +273,6 @@ class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
                 setattr(instance.contact, attr, value)
             instance.contact.save()
             
-        if police_station_data:
-            for attr, value in police_station_data.items():
-                setattr(instance.police_station_name_and_address, attr, value)
-            instance.police_station_name_and_address.save()
         
         if Hospital_Data:
             for attr, value in Hospital_Data.items():
@@ -288,7 +294,6 @@ class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
 class UnidentifiedBodySerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
     address = AddressSerializer()
-    police_station_name_and_address = ChowkiSerializer()
     hospital =HospitalSerializer()
     Volunteers =VolunteerSerializer()
     
@@ -299,14 +304,12 @@ class UnidentifiedBodySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         contact_data = validated_data.pop('contact')
         address_data = validated_data.pop('address')
-        police_station_data = validated_data.pop('police_station_name_and_address', None)
         Hospital_Data = validated_data.pop('hospital', None)
         Volunteer_Data =validated_data.pop('Volunteers')
 
         # Create the nested Contact and Address instances
         contact = Contact.objects.create(**contact_data)
         address = Address.objects.create(**address_data)
-        police_station = Chowki.objects.create(**police_station_data) if police_station_data else None
         Hospital_Datas = Hospital.objects.create(**Hospital_Data) if Hospital_Data else None
         Volunteerss = Volunteer.objects.create(**Volunteer_Data) if Volunteer_Data else None
 
@@ -314,7 +317,6 @@ class UnidentifiedBodySerializer(serializers.ModelSerializer):
         unidentified_body = UnidentifiedBody.objects.create(
             contact=contact,
             address=address,
-            police_station_name_and_address=police_station,
             hospital = Hospital_Datas,
             Volunteers = Volunteerss,
             **validated_data
@@ -325,7 +327,6 @@ class UnidentifiedBodySerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         contact_data = validated_data.pop('contact', None)
         address_data = validated_data.pop('address', None)
-        police_station_data = validated_data.pop('police_station_name_and_address', None)
         Hospital_Data = validated_data.pop('hospital', None)
         Volunteers_Dataa = validated_data.pop('Volunteers', None)
 
@@ -341,10 +342,6 @@ class UnidentifiedBodySerializer(serializers.ModelSerializer):
                 setattr(instance.address, attr, value)
             instance.address.save()
             
-        if police_station_data:
-            for attr, value in police_station_data.items():
-                setattr(instance.police_station_name_and_address, attr, value)
-            instance.police_station_name_and_address.save()
         
         if Hospital_Data:
             for attr, value in Hospital_Data.items():

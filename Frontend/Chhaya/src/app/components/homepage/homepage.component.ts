@@ -10,7 +10,7 @@ export class HomepageComponent implements  AfterViewInit{
 
   
  
-  isCollapsed: boolean = true;
+  isCollapsed: boolean = false;
   isClosing: boolean = false;
   activeIndex: number = -1; 
 

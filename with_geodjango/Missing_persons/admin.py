@@ -128,11 +128,11 @@ class VolunteerAdmin(LeafletGeoAdmin):
   
 class ContactAdmin(LeafletGeoAdmin):
     list_display = ('phone_number', 'email', 'type', 'subtype', 'is_primary')
-    list_filter = ('type', 'subtype', 'is_primary', 'location', 'company_name', 'job_title')
+    list_filter = ('type', 'subtype', 'is_primary',  'company_name', 'job_title')
     search_fields = ('phone_number', 'email', 'type', 'subtype', 'company_name', 'job_title')
     fieldsets = (
         (None, {
-            'fields': ('phone_number', 'email', 'type', 'subtype', 'subtype_detail', 'location')
+            'fields': ('phone_number', 'email', 'type', 'subtype', 'subtype_detail')
         }),
         ('Professional Details', {
             'fields': ('company_name', 'job_title', 'website', 'social_media_handles')
@@ -153,7 +153,7 @@ class AddressAdmin(LeafletGeoAdmin):
             'fields': ('street', 'apartment_number', 'village', 'city','district', 'state', 'postal_code', 'country', 'landmark_details', 'location')
         }),
         ('Address Type', {
-            'fields': ('type', 'subtype', 'address_type')
+            'fields': ('type', 'subtype')
         }),
         ('Status Information', {
             'fields': ('is_active', 'country_code')

@@ -25,9 +25,11 @@ import { DashboardDemoComponent } from './components/dashboard-demo/dashboard-de
 import { InnerDashboadrdComponent } from './components/inner-dashboadrd/inner-dashboadrd.component';
 import { BodiesSearchComponent } from './components/homepage/bodies-search/bodies-search.component';
 import { PersonAddingFormComponent } from './components/homepage/person-adding-form/person-adding-form.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 import { UnidentifiedPersonFormComponent } from './components/homepage/unidentified-person-form/unidentified-person-form.component';
 import { UnidentifiedbodyFormComponent } from './components/homepage/unidentifiedbody-form/unidentifiedbody-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,7 +59,8 @@ import { UnidentifiedbodyFormComponent } from './components/homepage/unidentifie
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    NgxChartsModule  
+  
+    BrowserAnimationsModule
     
       
     
