@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-custom">
+<nav class="navbar navbar-expand-lg navbar-custom mb-2">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <!-- Logo -->
     <a class="navbar-brand d-flex align-items-center" href="#">
@@ -76,237 +76,131 @@
 
 
 <div class="container-fluid" style="background-color: #f9fafc;">
-
-  <!-- cards -->
-  <!-- <div class="my-2 row" style="padding-top: 20px;">
-    <div class="col-12 col-md-6 col-lg-4  mb-2">
-      <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style="font-size:18px;  color: #000000;">Missing Persons</h5>
-            <span style="font-size: 25px; font-weight: bold; color: #ff00fb;"><i class="bi bi-people"></i></span>
-          </div>
-          <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ missingPersontotalcount || 0 }}</h3>
-          <div class="progress" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#a31e98'" style="margin-right: 3px; border-radius: 5px;"></div> 
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#ff60f2'" style="margin-right: 3px; border-radius: 5px;"></div> 
-            <div class="progress-bar" role="progressbar" [style.width]="((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> 
-          </div>
-          <div class="d-flex justify-content-between mt-2">
-            <div>
-              <h6 class="text-dark mb-0" style=" font-weight: bold; color: #a31e98;">{{ missingPersonGenderCountss.Female || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">
-                {{ ((missingPersonGenderCountss.Female || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Female
-              </small>
-            </div>
-            <div>
-              <h6 class=" mb-0" style="font-weight: bold; color: #ff60f2;">{{ missingPersonGenderCountss.Male || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #ff60f2;">
-                {{ ((missingPersonGenderCountss.Male || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Male
-              </small>
-            </div>
-            <div>
-              <h6 class=" mb-0" style=" font-weight: bold; color: #3f1f4d;">{{ missingPersonGenderCountss.Other || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">
-                {{ ((missingPersonGenderCountss.Other || 0) / (missingPersontotalcount || 1) * 100).toFixed(1) }}% Other
-              </small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style=" font-size:18px;  color: #000000;">Unidentified Persons</h5>
-            <span  style="font-size: 25px; font-weight: bold; color: #7b61ff;"><i class="bi bi-info-circle"></i></span>
-          </div>
-          <h3 class="card-number" style="font-weight: bold; color: #000000;">{{ unidentifiedPersonTotalCounts || 0 }}</h3>
-          <div class="progress" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#2e16a9'" style="margin-right: 3px; border-radius: 5px;"></div> 
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#7b61ff'" style="margin-right: 3px; border-radius: 5px;"></div> 
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div>
-          </div>
-          <div class="d-flex justify-content-between mt-2">
-            <div>
-              <h6 class=" mb-0" style="font-weight: bold; color: #2e16a9;">{{ unidentifiedPersonGenderCounts.Female || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #2e16a9;">{{ ((unidentifiedPersonGenderCounts.Female || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Female</small>
-            </div>
-            <div>
-              <h6 class=" mb-0" style="font-weight: bold; color: #7b61ff;">{{ unidentifiedPersonGenderCounts.Male || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #7b61ff;">{{ ((unidentifiedPersonGenderCounts.Male || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Male</small>
-            </div>
-            <div>
-              <h6 class=" mb-0" style=" font-weight: bold; color: #8E44AD;">{{ unidentifiedPersonGenderCounts.Other || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">{{ ((unidentifiedPersonGenderCounts.Other || 0) / (unidentifiedPersonTotalCounts || 1) * 100).toFixed(1) }}% Other</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-  
-   
-    <div class="col-12 col-md-6 col-lg-4 mb-3">
-      <div class="card  card-colour" style="background-color: white; background-size: cover; background-position: center; animation: backgroundAnimation 3s ease-in-out infinite;">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title" style=" font-size: 18px;  color: #000000;">Unidentified Bodies</h5>
-            <span  style="font-size: 25px; font-weight: bold; color: #ff0000;"><i class="bi bi-eye-slash" style="fill: #ff0000;"></i></span>
-          </div>
-          <h3 class="card-number" style=" font-weight: bold; color: #000000;">{{ unidentifiedBodyTotalCount || 0 }}</h3>
-          <div class="progress" style="height: 10px; border-radius: 5px;">
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#b02a2a'" style="margin-right: 3px; border-radius: 5px;"></div> 
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#ff3f3f'" style="margin-right: 3px; border-radius: 5px;"></div> 
-            <div class="progress-bar" role="progressbar" [style.width]="((unidentifiedBodyGenderCounts.Other || 0) / (unidentifiedBodyTotalCount || 1) * 100) + '%'" [style.backgroundColor]="'#8E44AD'" style="border-radius: 5px;"></div> 
-          </div>
-          <div class="d-flex justify-content-between mt-2">
-            <div>
-              <h6 class=" mb-0" style=" font-weight: bold; color: #b02a2a;">{{ unidentifiedBodyGenderCounts.Female || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #bf1616;">
-                {{ ((unidentifiedBodyGenderCounts.Female || 0) / (unidentifiedBodyTotalCount || 1) * 100).toFixed(1) }}% Female
-              </small>
-            </div>
-            <div>
-              <h6 class=" mb-0" style=" font-weight: bold; color: #ff3f3f;">{{ unidentifiedBodyGenderCounts.Male || 0 }}</h6>
-              <small class="text-muted" style="font-size: 0.875rem; color: #ff3f3f;">
-                {{ ((unidentifiedBodyGenderCounts.Male || 0) / (unidentifiedBodyTotalCount || 1) * 100).toFixed(1) }}% Male
-              </small>
-            </div>
-            <div>
-              <h6 class=" mb-0" style=" font-weight: bold; color: #8E44AD;">{{ unidentifiedBodyGenderCounts.Other || 0 }}</h6>
-              <small class="text-muted" style=" font-size: 0.875rem; color: #000000;">
-                {{ ((unidentifiedBodyGenderCounts.Other || 0) / (unidentifiedBodyTotalCount || 1) * 100).toFixed(1) }}% Other
-              </small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-  </div> -->
-  
-  <!-- map and statistics -->
-  <div class="row mt-2">
-
+ 
+  <div class="row g-1">
     <!-- missing person statistics -->
-    <div class="col-lg-2 mt-1">
-      <div class="card">
-        <!-- Card Title Row -->
-        <div class="card-header bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #faf5ff, #ffe4f0);">
-          <h2 class="card-title text-center fs-5 mb-1">Missing Person</h2>
+    <div class="col-lg-2">
+      <div class="card h-100  p-1">
+        <!-- Card Header -->
+        <div class=" bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #e0f7fa, #b2dfdb);">
+          <h6 class="text-center mb-0">Male Statistics</h6>
         </div>
         
-        <!-- Resolved Cases Row -->
-        <div class="d-flex justify-content-between align-items-center bg-white px-2 py-3 rounded shadow-sm mx-2" style="min-height: 40px;">
-          <div class="d-flex align-items-center gap-1">
-            <i class="bi bi-people fs-5 text-primary"></i>
-            <p class="text-muted mb-0 small">Resolved Cases:</p>
-          </div>
-          <strong class="text-primary">{{ Found_alivecount + Deceasedcount || 0 }}</strong>
-        </div>
-        
-        
-    
-        <!-- Card Body Content -->
-        <div class="card-body p-2">
-          <!-- Gender Stats -->
-          <div class="row g-1 mb-2">
-            <!-- Male Stats -->
+       
+          <div class="row g-1">
+            <!-- Male Stats from Missing Person -->
             <div class="col-12">
               <div class="card shadow-sm border-0">
                 <div class="card-body p-2">
-                  <h6 class="text-black fw-semibold mb-1">Male</h6>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Unidentified Bodies Found</span>
-                    <span class="fw-bold text-black">{{ deceasedCountgendercount.Male || 0 }}</span>
+                  <h6 class="text-black">Missing Person</h6>
+                  <div class="d-flex justify-content-between align-items-center ">
+                    <span class="medium text-black">Unidentified Bodies Found</span>
+                    <span class="text-black">{{ deceasedCountgendercount.Male || 0 }}</span>
                   </div>
                   <div class="d-flex justify-content-between align-items-center">
-                    <span class="small text-black">Unidentified Person Matched</span>
-                    <span class="fw-bold text-black">{{ found_alivegendercount.Male || 0 }}</span>
+                    <span class="medium text-black">Unidentified Person Matched</span>
+                    <span class="text-black">{{ found_alivegendercount.Male || 0 }}</span>
                   </div>
                   <div class="d-flex justify-content-between align-items-center">
-                    <span class="small text-black">Pending Persons</span>
-                    <span class="fw-bold text-black">{{ pendingGendercounts.Male || 0 }}</span>
+                    <span class="medium text-black">Pending Persons</span>
+                    <span class="text-black">{{ pendingGendercounts.Male || 0 }}</span>
                   </div>
                 </div>
               </div>
             </div>
     
-            <!-- Female Stats -->
+            <!-- Male Stats from Unidentified Person -->
             <div class="col-12">
               <div class="card shadow-sm border-0">
                 <div class="card-body p-2">
-                  <h6 class="text-black fw-semibold mb-1">Female</h6>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Unidentified Bodies Found</span>
-                    <span class="fw-bold text-black">{{ deceasedCountgendercount.Female || 0 }}</span>
+                  <h6 class="text-black">Unidentified Person</h6>
+                  <div class="d-flex justify-content-between align-items-center ">
+                    <span class="medium text-black">Unidentified Bodies Found</span>
+                    <span class="text-black">{{ UPdeceasedCountgendercount.Male || 0 }}</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Unidentified Persons Matched</span>
-                    <span class="fw-bold text-black">{{ found_alivegendercount.Female || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Missing Persons Matched</span>
+                    <span class="text-black">{{ UPfound_alivegendercount.Male || 0 }}</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Pending Persons</span>
-                    <span class="fw-bold text-black">{{ pendingGendercounts.Female || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Pending Males</span>
+                    <span class="text-black">{{ UPpendingGendercounts.Male || 0 }}</span>
                   </div>
                 </div>
               </div>
             </div>
+    
+            <!-- Male Stats from Unidentified Bodies -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0">
+                <div class="card-body p-2">
+                  <h6 class="text-black">Unidentified Bodies</h6>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="medium text-black">Unidentified person Matched</span>
+                    <span class="text-black">{{ UBdeceasedCountgendercount.Male || 0 }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Missing Males Matched</span>
+                    <span class="text-black">{{ UBfound_alivegendercount.Male || 0 }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Pending Males</span>
+                    <span class="text-black">{{ UBpendingGendercounts.Male || 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div> 
           </div>
     
-          <!-- Status Summary -->
+          <!-- Male Stats Summary -->
           <div class="row g-1">
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f7fa, #4caf50);">
                 <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-check-circle-fill fs-6 text-success"></i>
+                  <i class="bi bi-check-circle-fill fs-5 text-success"></i>
                   <div>
-                    <p class="text-black mb-0 small">Unidentified Bodies Found</p>
-                    <h6 class="fw-bold text-black mb-0">{{ deceasedCountgendercount.Male + deceasedCountgendercount.Female || 0 }}</h6>
+                    <p class="text-black mb-0 small">Resolved Unidentified Bodies </p>
+                    <h6 class="text-black mb-0">{{ deceasedCountgendercount.Male || 0 }}</h6>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f2fe, #60a5fa);">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
                 <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-people-fill fs-6 text-success"></i>
+                  <i class="bi bi-person-check-fill fs-5 text-success"></i>
                   <div>
-                    <p class="text-primary mb-0 small">Unidentified Persons Matched</p>
-                    <h6 class="fw-bold text-black mb-0">{{ found_alivegendercount.Male + found_alivegendercount.Female || 0 }}</h6>
+                    <p class="text-black mb-0 small">Missing Persons Mached</p>
+                    <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffedd5, #f97316);">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fff3e0, #ff9800);">
                 <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-clock-fill fs-6 text-warning"></i>
+                  <i class="bi bi-clock-fill fs-5 text-warning"></i>
                   <div>
-                    <p class="text-black mb-0 small">Pending Missing Persons</p>
-                    <h6 class="fw-bold text-black mb-0">{{ pendingGendercounts.Male + pendingGendercounts.Female || 0 }}</h6>
+                    <p class="text-black mb-0 small">Pending Persons</p>
+                    <h6 class="text-black mb-0">{{ pendingGendercounts.Male || 0 }}</h6>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        
       </div>
     </div>
-    
+
     <!-- Map Section -->
-    <div class="col-lg-8 col-md-12 mt-1">
-      <div class="containerx">
+    <div class="col-lg-8">
+      <div class="containerx h-100">
         <!-- Filters Section -->
-        <div class="row g-3">
+        <div class="row g-1">
           <!-- State, District, City, Village, Police Station -->
           <div class="col-12">
-            <div class="row g-2">
-              <span style="color: #ff8642; font-weight: bold;font-size: 25px;">Search Here! </span>
+            <div class="row">
+              <span style="color: #ff8642;font-size: 14px;">Search Here! </span>
               <div class="col-lg col-md-6">
                 <select
                   class="form-select form-select-sg"
@@ -314,7 +208,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="State"
                 >
-                  <option value="All States">All States</option>
+                  <option value="All States">State</option>
                   <option *ngFor="let state of allstates" [value]="state">
                     {{ state }}
                   </option>
@@ -327,7 +221,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="District"
                 >
-                  <option value="All Districts">All Districts</option>
+                  <option value="All Districts">District</option>
                   <option
                     *ngFor="let district of alldistricts"
                     [value]="district"
@@ -343,7 +237,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="City"
                 >
-                  <option value="All Cities">All Cities</option>
+                  <option value="All Cities">City</option>
                   <option *ngFor="let city of allcities" [value]="city">
                     {{ city }}
                   </option>
@@ -356,7 +250,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="Village"
                 >
-                  <option value="All Villages">All Villages</option>
+                  <option value="All Villages">Village</option>
                   <option
                     *ngFor="let village of allVillages"
                     [value]="village"
@@ -372,7 +266,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="Police"
                 >
-                  <option value="All Police Stations">All Police Stations</option>
+                  <option value="All Police Stations">Police Station</option>
                   <option *ngFor="let station of allpolicestations" [value]="station.id">
                     {{ station.name }}
                   </option>
@@ -384,7 +278,7 @@
           <!-- Gender, Height, Age, Marital Status -->
           <div class="col-12">
             <!-- <span>Personal Specilization </span> -->
-            <div class="row g-2">
+            <div class="row">
               
               <!-- Gender Filter -->
               <div class="col-lg col-md-6">
@@ -395,7 +289,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="Gender"
                 >
-                  <option value="All Genders">All Genders</option>
+                  <option value="All Genders">Gender</option>
                   <option *ngFor="let gender of allgenders" [value]="gender">
                     {{ gender }}
                   </option>
@@ -412,7 +306,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="Height Range"
                 >
-                  <option value="All Heights">All Heights</option>
+                  <option value="All Heights">Height</option>
                   <option value="133-150">133-150 cm</option>
                   <option value="151-180">151-180 cm</option>
                   <option value="Above 180">Above 180 cm</option>
@@ -429,7 +323,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="Age Range"
                 >
-                  <option value="All Ages">All Ages</option>
+                  <option value="All Ages">Age</option>
                   <option value="0-18">0-18</option>
                   <option value="18-30">18-30</option>
                   <option value="30-50">30-50</option>
@@ -469,8 +363,7 @@
               </div>
           
               <!-- End Date Filter -->
-              <div class="col-lg col-md-6">
-                <!-- <label for="endDate" class="form-label">End Date</label> -->
+              <!-- <div class="col-lg col-md-6">
                 <input 
                   id="endDate"
                   type="date" 
@@ -479,7 +372,7 @@
                   (change)="filterDataByFilters()"
                   aria-label="End Date"
                 />
-              </div>
+              </div> -->
               
             </div>
           </div>
@@ -492,7 +385,7 @@
               <div
                 id="map"
                 style="
-                  height: 440px;
+                  height: 416px;
                   border: 1px solid #000000;
                   border-radius: 5px;
                 "
@@ -502,287 +395,154 @@
         </div>
       </div>
     </div>
-   
-    <!-- unidentified person statistics -->
-    <div class="col-lg-2 mt-1">
-      <div class="card">
+
+    <div class="col-lg-2">
+      <div class="card h-100 p-1">
         <!-- Card Header -->
-        <div class="card-header bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #e0f7fa, #b2dfdb);">
-          <h2 class="card-title text-center fs-5 mb-0">Unidentified Person</h2> <!-- Removed bottom margin (mb-0) -->
+        <div class="bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #f8bbd0, #f48fb1);">
+          <h6 class="text-center mb-0">Female Statistics</h6>
         </div>
+        <div class="row g-1 mb-2">
+          <!-- Female Stats from Missing Person -->
+          <div class="col-12">
+            <div class="card shadow-sm border-0">
+              <div class="card-body p-2">
+                <h6 class="text-black">Missing Female</h6>
         
-        <!-- Resolved Cases Row -->
-        <div class="d-flex justify-content-between align-items-center bg-white px-2 py-3 rounded shadow-sm mt-1 mx-2" style="min-height: 40px;">
-          <div class="d-flex align-items-center gap-1">
-            <i class="bi bi-person-bounding-box fs-5 text-success"></i>
-            <p class="text-muted mb-0 small">Resolved Cases:</p>
-          </div>
-          <strong class="text-success">{{ UPFound_alivecount + UPDeceasedcount || 0 }}</strong>
-        </div>
-        
-    
-        <!-- Card Body -->
-        <div class="card-body p-2">
-          <!-- Gender Stats -->
-          <div class="row g-1 mb-2">
-            <!-- Male Stats -->
-            <div class="col-12">
-              <div class="card shadow-sm border-0">
-                <div class="card-body p-2">
-                  <h6 class="text-black fw-semibold mb-1">Males</h6>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Unidnetified Bodies Found</span>
-                    <span class="fw-bold text-black">{{ UPdeceasedCountgendercount.Male || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Unidentified Bodies Found</span>
+                    <span class="text-black">{{ deceasedCountgendercount.Female || 0 }}</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Missing Persons Matched</span>
-                    <span class="fw-bold text-black">{{ UPfound_alivegendercount.Male || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Unidentified Person Matched</span>
+                    <span class="text-black">{{ found_alivegendercount.Female || 0 }}</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Pending Males</span>
-                    <span class="fw-bold text-black">{{ UPpendingGendercounts.Male || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Pending Persons</span>
+                    <span class="text-black">{{ pendingGendercounts.Female || 0 }}</span>
                   </div>
                 </div>
               </div>
             </div>
     
-            <!-- Female Stats -->
+            <!-- Female Stats from Unidentified Person -->
             <div class="col-12">
               <div class="card shadow-sm border-0">
                 <div class="card-body p-2">
-                  <h6 class="text-pink fw-semibold mb-1">Females</h6>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Unidentified Bodies Found</span>
-                    <span class="fw-bold text-black">{{ UPdeceasedCountgendercount.Female || 0 }}</span>
+                  <h6 class="text-black mb-1">Unidentified Female</h6>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Unidentified Bodies Found</span>
+                    <span class="text-black">{{ UPdeceasedCountgendercount.Female || 0 }}</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Missing Females Matched</span>
-                    <span class="fw-bold text-black">{{ UPfound_alivegendercount.Female || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Missing Persons Matched</span>
+                    <span class="text-black">{{ UPfound_alivegendercount.Female || 0 }}</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small text-black">Pending Females</span>
-                    <span class="fw-bold text-black">{{ UPpendingGendercounts.Female || 0 }}</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Pending Females</span>
+                    <span class="text-black">{{ UPpendingGendercounts.Female || 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <!-- Female Stats from Unidentified Bodies -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0">
+                <div class="card-body p-2">
+                  <h6 class="text-black mb-1">Unidentified Bodies</h6>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Unidentified Bodies Matched</span>
+                    <span class="text-black">{{ UBdeceasedCountgendercount.Female || 0 }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Missing Females Matched</span>
+                    <span class="text-black">{{ UBfound_alivegendercount.Female || 0 }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="medium text-black">Pending Females</span>
+                    <span class="text-black">{{ UBpendingGendercounts.Female || 0 }}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
     
-          <!-- Status Summary -->
+          <!-- Female Stats Summary -->
           <div class="row g-1">
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f7fa, #4caf50);">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fce4ec, #f06292);">
                 <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-check-circle-fill fs-6 text-success"></i>
+                  <i class="bi bi-check-circle-fill fs-5 text-success"></i>
                   <div>
-                    <p class="text-black mb-0 small">Unidnetified Bodies Found</p>
-                    <h6 class="fw-bold text-black mb-0">{{ UPdeceasedCountgendercount.Male + UPdeceasedCountgendercount.Female || 0 }}</h6>
+                    <p class="text-black mb-0 small">Resolved Unidentified Bodies</p>
+                    <h6 class="text-black mb-0">{{ deceasedCountgendercount.Female || 0 }}</h6>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #f8bbd0, #e91e63);">
                 <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-person-check-fill fs-6 text-primary"></i>
+                  <i class="bi bi-person-check-fill fs-5 text-success"></i>
                   <div>
-                    <p class="text-black mb-0 small">Missing Persons<br> Matched</p>
-                    <h6 class="fw-bold text-black mb-0">{{ UPfound_alivegendercount.Male + UPfound_alivegendercount.Female || 0 }}</h6>
+                    <p class="text-black mb-0 small">Missing Female Matched</p>
+                    <h6 class="text-black mb-0">{{ found_alivegendercount.Female || 0 }}</h6>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fff3e0, #ff9800);">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffebee, #ff7043);">
                 <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-clock-fill fs-6 text-warning"></i>
+                  <i class="bi bi-clock-fill fs-5 text-warning"></i>
                   <div>
-                    <p class="text-black mb-0 small">Pending Unidentified Persons</p>
-                    <h6 class="fw-bold text-black mb-0">{{ UPpendingGendercounts.Male + UPpendingGendercounts.Female || 0 }}</h6>
+                    <p class="text-black mb-0 small">Pending Female</p>
+                    <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+       
       </div>
     </div>
-    
-    
-    <!-- unidentified bodies statistics -->
-    
-
-    <div class="my-1">
-      <div class="card">
-        <div class="card-header bg-gradient border-bottom-0" style="background: linear-gradient(to bottom right, #e0f7fa, #e3f2fd);">
-          <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between">
-            <div>
-              <h2 class="card-title text-center text-sm-start" >
-                 Unidentified Bodies
-              </h2>
-            </div>
-            <div class="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded shadow-sm">
-              <i class="bi bi-eye-slash fs-4 text-success"></i>
-              <p class="text-muted mb-0">Resolved Cases</p>
-              <h3 class="fw-bold text-dark mb-0 ms-2">{{ UBFound_alivecount + UBDeceasedcount || 0 }}</h3>
-            </div>
-            
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row g-4">
-            <!-- Male Stats -->
-            <div class="col-sm-4">
-              <div class="card shadow border-0">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h5 class="text-dark">Total Males</h5>
-                    <span class="fs-3 fw-bold text-dark">{{ UBdeceasedCountgendercount.Male + UBfound_alivegendercount.Male + UBpendingGendercounts.Male || 0 }}</span>
-                  </div>
-                  <div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Unidnetified Perons Matched</span>
-                      <span>{{ UBdeceasedCountgendercount.Male || 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Missing Persons Matched</span>
-                      <span>{{ UBfound_alivegendercount.Male || 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Pending Persons</span>
-                      <span>{{ UBpendingGendercounts.Male || 0 }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Female Stats -->
-            <div class="col-sm-4">
-              <div class="card shadow border-0">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h5 class="text-dark fw-semibold">Total Females</h5>
-                    <span class="fs-3 fw-bold text-dark">{{ UBdeceasedCountgendercount.Female + UBfound_alivegendercount.Female + UBpendingGendercounts.Female || 0 }}</span>
-                  </div>
-                  <div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Unidnetified Females Matched</span>
-                      <span>{{ UBdeceasedCountgendercount.Female || 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Missing Females Matched</span>
-                      <span>{{ UBfound_alivegendercount.Female || 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Pending Females</span>
-                      <span>{{ UBpendingGendercounts.Female || 0 }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Total Counts -->
-            <div class="col-sm-4">
-              <div class="card shadow border-0">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h5 class="text-dark fw-semibold">Total Males and Females</h5>
-                    <span class="fs-3 fw-bold text-dark">{{ UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other + UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other + UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other || 0 }}</span>
-                  </div>
-                  <div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Unidnetified Perons Matched</span>
-                      <span>{{ UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other || 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Missing Persons Matched</span>
-                      <span>{{ UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other || 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-dark">
-                      <span>Pending Bodies</span>
-                      <span>{{ UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other || 0 }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Status Summary -->
-          <div class="row g-4 m-1">
-            <div class="col-sm-4">
-              <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #a5d6a7, #43a047);">
-                <div class="card-body d-flex align-items-center gap-3">
-                  <i class="bi bi-check-circle-fill fs-3 text-dark"></i>
-                  <div>
-                    <p class="text-dark mb-0">Unidnetified Perons Matched</p>
-                    <h4 class="fw-bold text-dark mb-0">{{ UBdeceasedCountgendercount.Male + UBdeceasedCountgendercount.Female + UBdeceasedCountgendercount.Other || 0 }}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #90caf9, #1e88e5);">
-                <div class="card-body d-flex align-items-center gap-3">
-                  <i class="bi bi-people-fill fs-3 text-dark"></i>
-                  <div>
-                    <p class="text-dark mb-0">Missing Persons Matched</p>
-                    <h4 class="fw-bold text-dark mb-0">{{ UBfound_alivegendercount.Male + UBfound_alivegendercount.Female + UBfound_alivegendercount.Other || 0 }}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="card shadow border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffcc80, #fb8c00);">
-                <div class="card-body d-flex align-items-center gap-3">
-                  <i class="bi bi-clock-fill fs-3 text-dark"></i>
-                  <div>
-                    <p class="text-dark mb-0">Pending Persons</p>
-                    <h4 class="fw-bold text-dark mb-0">{{ UBpendingGendercounts.Male + UBpendingGendercounts.Female + UBpendingGendercounts.Other || 0 }}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    
-    
-    
+   
 
   </div>
   
 
   <!-- filtered data -->
-  <div class="row mt-2">
+  <div class="row mt-1">
     <div class="col">
       <div class="card cardff rounded-3 shadow-lg">
         <div class="card-header card-headerff border-bottom-0">
-          <h5 class="card-title text-warning fw-bold">Filtered Persons</h5>
+          <h6 class=" text-dark">Filtered Persons</h6>
         </div>
         <div class="card-body px-4 py-4">
           <!-- Tab navigation -->
-          <ul class="nav nav-tabs mb-4" id="filteredTab" role="tablist">
+          <ul class="nav nav-tabs mb-2" id="filteredTab" role="tablist">
             <li class="nav-item" role="presentation">
-              <a class="nav-link active" id="missing-tab" data-bs-toggle="tab" href="#missing" role="tab" aria-controls="missing" aria-selected="true">
+              <a class="nav-link active" id="missing-tab" data-bs-toggle="tab" href="#missing" 
+                 role="tab" aria-controls="missing" aria-selected="true">
                 <i class="bi bi-person-bounding-box me-2"></i>Missing Persons
               </a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="unidentified-tab" data-bs-toggle="tab" href="#unidentified" role="tab" aria-controls="unidentified" aria-selected="false">
+              <a class="nav-link" id="unidentified-tab" data-bs-toggle="tab" href="#unidentified" 
+                 role="tab" aria-controls="unidentified" aria-selected="false">
                 <i class="bi bi-person-lines-fill me-2"></i>Unidentified Persons
               </a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="bodies-tab" data-bs-toggle="tab" href="#bodies" role="tab" aria-controls="bodies" aria-selected="false">
+              <a class="nav-link" id="bodies-tab" data-bs-toggle="tab" href="#bodies" 
+                 role="tab" aria-controls="bodies" aria-selected="false">
                 <i class="bi bi-person-x-fill me-2"></i>Unidentified Bodies
               </a>
             </li>
           </ul>
+          
+          
   
           <!-- Tab content -->
           <div class="tab-content" id="filteredTabContent">
@@ -797,7 +557,6 @@
                       <th>Full Name</th>
                       <th>Age</th>
                       <th>Gender</th>
-                      <th>Blood Group</th>
                       <th>City</th>
                       <th>District</th>
                       <th>State</th>
@@ -813,12 +572,14 @@
                       </td>
                       <td>{{ person.full_name || 'Unknown' }}</td>
                       <td>{{ person.age || 'Not specified' }}</td>
-                      <td>{{ person.gender || 'Not specified' }}</td>
-                      <td>{{ person.blood_group || 'Not specified' }}</td>
+                      <td>
+                        <i class="bi bi-gender-male text-primary" *ngIf="person.gender === 'Male'"></i>
+                        <i class="bi bi-gender-female text-danger" *ngIf="person.gender === 'Female'"></i>
+                        <i class="bi bi-gender-ambiguous text-secondary" *ngIf="person.gender !== 'Male' && person.gender !== 'Female'"></i>
+                      </td>
                       <td>{{ person.address.city || 'Not specified' }}</td>
                       <td>{{ person.address.district || 'Not specified' }}</td>
                       <td>{{ person.address.state || 'Not specified' }}</td>
-                      
                       <td>
                         <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(person)">View</button>
                       </td>
@@ -827,7 +588,7 @@
                 </table>
               </div>
             </div>
-  
+          
             <!-- Unidentified Persons Tab -->
             <div class="tab-pane fade" id="unidentified" role="tabpanel" aria-labelledby="unidentified-tab">
               <div class="tableff-responsive">
@@ -839,9 +600,8 @@
                       <th>Full Name</th>
                       <th>Age</th>
                       <th>Gender</th>
-                      <th>Blood Group</th>
                       <th>City</th>
-                      <th>Distict</th>
+                      <th>District</th>
                       <th>State</th>
                       <th>Action</th>
                     </tr>
@@ -855,12 +615,14 @@
                       </td>
                       <td>{{ person.full_name || 'Unknown' }}</td>
                       <td>{{ person.estimated_age || 'Not specified' }}</td>
-                      <td>{{ person.gender || 'Not specified' }}</td>
-                      <td>{{ person.blood_group || 'Not specified' }}</td>
+                      <td>
+                        <i class="bi bi-gender-male text-primary" *ngIf="person.gender === 'Male'"></i>
+                        <i class="bi bi-gender-female text-danger" *ngIf="person.gender === 'Female'"></i>
+                        <i class="bi bi-gender-ambiguous text-secondary" *ngIf="person.gender !== 'Male' && person.gender !== 'Female'"></i>
+                      </td>
                       <td>{{ person.address.city || 'Not specified' }}</td>
                       <td>{{ person.address.district || 'Not specified' }}</td>
                       <td>{{ person.address.state || 'Not specified' }}</td>
-                      
                       <td>
                         <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(person)">View</button>
                       </td>
@@ -869,7 +631,7 @@
                 </table>
               </div>
             </div>
-  
+          
             <!-- Unidentified Bodies Tab -->
             <div class="tab-pane fade" id="bodies" role="tabpanel" aria-labelledby="bodies-tab">
               <div class="tableff-responsive">
@@ -881,7 +643,6 @@
                       <th>Full Name</th>
                       <th>Age</th>
                       <th>Gender</th>
-                      <th>Blood Group</th>
                       <th>City</th>
                       <th>District</th>
                       <th>State</th>
@@ -897,8 +658,11 @@
                       </td>
                       <td>{{ body.full_name || 'Unknown' }}</td>
                       <td>{{ body.estimated_age || 'Not specified' }}</td>
-                      <td>{{ body.gender || 'Not specified' }}</td>
-                      <td>{{ body.blood_group || 'Not specified' }}</td>
+                      <td>
+                        <i class="bi bi-gender-male text-primary" *ngIf="body.gender === 'Male'"></i>
+                        <i class="bi bi-gender-female text-danger" *ngIf="body.gender === 'Female'"></i>
+                        <i class="bi bi-gender-ambiguous text-secondary" *ngIf="body.gender !== 'Male' && body.gender !== 'Female'"></i>
+                      </td>
                       <td>{{ body.address.city|| 'Not specified' }}</td>
                       <td>{{ body.address.district || 'Not specified' }}</td>
                       <td>{{ body.address.state || 'Not specified' }}</td>
@@ -919,16 +683,7 @@
   
 </div>
 
-<!-- <div class="col-12 mt-3">
-  <ngx-charts-pie-chart
-    [results]="chartData"
-    [scheme]="colorScheme"
-    [legend]="true"
-    [labels]="true"
-    [doughnut]="true"
-    [arcWidth]="0.25">
-  </ngx-charts-pie-chart>
-</div> -->
+
 
 
 
@@ -1244,13 +999,7 @@ aria-hidden="true"
             {{ selectedPerson.willing_to_volunteer ? "Yes" : "No" }}
           </div>
         </div>
-        <!-- Map Section -->
-        <h5 class="mb-3 text-primary">Location of missing Person</h5>
-        <div class="row mb-3">
-          <div class="col-md-12">
-            <div id="map"></div>
-          </div>
-        </div>
+        
       </div>
     </div>
     <div class="modal-footer">
@@ -1265,3 +1014,6 @@ aria-hidden="true"
   </div>
 </div>
 </div>
+
+
+

@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+from tkinter import Image
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -11,8 +12,9 @@ from django.contrib.gis.geos import Point
 from .pagination import paginate
 from django.utils import timezone
 from django.db import transaction
+
 from django.utils.timezone import now
-from .serializers import CaseReportSerializer, ChowkiSerializer, DivisionNestedSerializer, HospitalDivisionSerializer, HospitalSerializer, HospitalZoneSerializer, MatchSerializer, MissingPersonSerializer, PoliceStationNestedSerializer, UndefinedMissingpersonSerializer, UnidentifiedBodySerializer, VolunteerSerializer, ZoneSerializer
+from .serializers import AddressSerializer, CaseReportSerializer, ChowkiSerializer, ContactSerializer, DivisionNestedSerializer, HospitalDivisionSerializer, HospitalSerializer, HospitalZoneSerializer, MatchSerializer, MissingPersonSerializer, PoliceStationNestedSerializer, UndefinedMissingpersonSerializer, UnidentifiedBodySerializer, VolunteerSerializer, ZoneSerializer
 from rest_framework import status
 from .models import BodyMatch, CaseReport, Chowki, Division, Hospital, HospitalDivision, HospitalZone, MatchRejection, MissingPerson, PoliceStation, PreviouslyMatched, ResolvedCase, UnidentifiedBody, UnidentifiedMissingPerson, Volunteer,Match, Zone
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -277,28 +279,28 @@ class MissingPersonAPIView(APIView):
         except Exception as e:
             return Response({'msg': 'Something went wrong', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-    def post(self, request):
-        data = request.data.copy()  # Make a mutable copy of the request data
-
-        # Parse JSON strings into dictionaries
-        if 'address' in data and isinstance(data['address'], str):
-            try:
-                data['address'] = json.loads(data['address'])
-            except json.JSONDecodeError:
-                return Response({"error": "Invalid JSON in 'address' field"}, status=400)
-
-        if 'contact' in data and isinstance(data['contact'], str):
-            try:
-                data['contact'] = json.loads(data['contact'])
-            except json.JSONDecodeError:
-                return Response({"error": "Invalid JSON in 'contact' field"}, status=400)
-
-        serializer = MissingPersonSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
     
+
+    def post(self, request, *args, **kwargs):
+        """Handles creating a new MissingPerson instance with Contact & Address"""
+
+        serializer = MissingPersonSerializer(data=request.data)
+
+        if serializer.is_valid():
+            missing_person = serializer.save()
+            return Response(
+                {
+                    "message": "Missing Person record created successfully!",
+                    "data": MissingPersonSerializer(missing_person).data,
+                }, 
+                status=status.HTTP_201_CREATED
+            )
+        
+        return Response(
+            {"errors": serializer.errors}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+         
     def put(self, request, missing_person_id):
         try:
             missing_person = MissingPerson.objects.get(pk=missing_person_id, is_deleted=False)

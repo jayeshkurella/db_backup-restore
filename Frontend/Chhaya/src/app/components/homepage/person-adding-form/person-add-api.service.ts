@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/envirnments/envirnment';
 import { MissingPerson } from './exportData';
 
@@ -24,9 +24,16 @@ export class PersonAddAPIService {
 // }
 
 postMissingPerson(payload: any): Observable<any> {
-  console.log('Form data being sent:', payload);
-  return this.http.post<any>(this.apiUrl + 'missing-person/', payload,{
-    headers: { 'Content-Type': 'application/json' }
-  });
+  console.log("📝 Form Data Before Sending:", JSON.stringify(payload, null, 2));
+
+  return this.http.post<any>(this.apiUrl + "missing-person/", payload).pipe(
+    tap(
+      (response: any) => console.log("✅ Response received:", response),
+      (error: any) => console.error("❌ Error occurred:", error)
+    )
+  );
 }
+
+
+
 }

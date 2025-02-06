@@ -9,9 +9,9 @@ import { PoliceStationaoiService } from 'src/app/services/police-stationaoi.serv
 
 declare var bootstrap: any;
 import * as L from 'leaflet';
-import 'leaflet-panel-layers';
-import 'leaflet-panel-layers';
+// import 'leaflet-panel-layers';
 import '../../../../src/leaflet-panel-layers'
+
 import 'leaflet-basemaps/L.Control.Basemaps'; 
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 import 'leaflet.markercluster';
@@ -44,7 +44,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   alldistricts: string[] = [];
   selectedCity = 'All Cities';
   selectedState= 'All States';
-  stateCoordinates: any[] = []; // Array to hold state coordinates
+  stateCoordinates: any[] = []; 
   selectedDistrict= 'All Districts';
   alldistrictss: string[] = [];
   selectedPoliceStation: { id: number; name: string } | 'All Police Stations' = 'All Police Stations';
@@ -982,27 +982,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     
   }
 
-  private initMap(): void {
-    this.initOperationalLayers();
-    this.initOverlays();
-    this.map = L.map('map', {
-      center: [20.5937, 78.9629], 
-      zoom: 6
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(this.map);
-
-    // Panel control for layers
-    var panelLayers = new (L as any).Control.PanelLayers(null, this.overlays, {
-      collapsibleGroups: true,
-      collapsed: false,
-      groupMaxHeight: 50,
-    });
-    this.map.addControl(panelLayers);
- }
+ 
 
 
 
@@ -1050,6 +1030,28 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   // }
 
 
+  private initMap(): void {
+    this.initOperationalLayers();
+    this.initOverlays();
+    this.map = L.map('map', {
+      center: [20.5937, 78.9629], 
+      zoom: 6
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    // Panel control for layers
+    var panelLayers = new (L as any).Control.PanelLayers(null, this.overlays, {
+      collapsibleGroups: true,
+      collapsed: false,
+      groupMaxHeight: 50,
+    });
+    this.map.addControl(panelLayers);
+ }
+ 
   toggleLayer(layer: string, event: any): void {
     switch (layer) {
       case 'Missing Person':
@@ -1096,52 +1098,52 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
 
   initOverlays() {
     // Helper function for adding icons
-    function iconByName(name: any) {
-      return '<i class="icon icon-' + name + '"></i>';
+    function iconByName(name: string) {
+      return `<i class="icon icon-${name}"></i>`;
     }
-
+  
     this.overlays = [
       {
-        group: "Operational Layers",  
+        group: "Operational Layers",
         icon: iconByName('map'),
         collapsed: false,
         layers: [
           {
-            name: "State Layer", 
+            name: "State Layer",
             active: true,
             layer: this.stateLayerName,
           },
           {
-            name: "District Layer", 
+            name: "District Layer",
             active: true,
             layer: this.distLayerName,
           }
         ]
       },
       {
-        group: "Person Data",  
+        group: "Person Data",
         icon: iconByName('person'),
         collapsed: true,
         layers: [
           {
-            name: "Missing Persons", 
+            name: "Missing Persons",
             active: true,
             layer: this.missingPersonLayer,
           },
           {
-            name: "Unidentified Persons", 
+            name: "Unidentified Persons",
             active: true,
             layer: this.unidentifiedPersonLayer,
           },
           {
-            name: "Unidentified Bodies", 
+            name: "Unidentified Bodies",
             active: true,
             layer: this.unidentifiedBodiesLayer,
           }
         ]
       }
     ];
-
+  
     // Push the operational layers into ddOverlays
     this.ddOverlays.push({ name: 'State Layer', layer: this.stateLayerName });
     this.ddOverlays.push({ name: 'District Layer', layer: this.distLayerName });

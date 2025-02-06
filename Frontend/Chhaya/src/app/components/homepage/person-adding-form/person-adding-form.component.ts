@@ -9,6 +9,7 @@ declare var bootstrap: any;
 import { Tab } from 'bootstrap';
 import { PersonAddAPIService } from './person-add-api.service';
 import { MissingPerson } from './exportData';
+import { dummyFormValues } from './dummy_test';
 @Component({
   selector: 'app-person-adding-form',
   templateUrl: './person-adding-form.component.html',
@@ -139,6 +140,85 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
     
   }
 
+
+
+  // ngOnInit() {
+  //   // Initialize the form and set dummy values for testing
+  //   this.missingPersonForm = this.fb.group({
+  //     full_name: [dummyFormValues.full_name, Validators.required],
+  //     gender: [dummyFormValues.gender, Validators.required],
+  //     blood_group: [dummyFormValues.blood_group, Validators.required],
+  //     date_of_birth: [dummyFormValues.date_of_birth, Validators.required],
+  //     age: [dummyFormValues.age, Validators.required],
+  //     time_of_birth: [dummyFormValues.time_of_birth, Validators.required],
+  //     place_of_birth: [dummyFormValues.place_of_birth, Validators.required],
+  //     height: [dummyFormValues.height, Validators.required],
+  //     weight: [dummyFormValues.weight, Validators.required],
+  //     complexion: [dummyFormValues.complexion, Validators.required],
+  //     hair_color: [dummyFormValues.hair_color, Validators.required],
+  //     hair_type: [dummyFormValues.hair_type, Validators.required],
+  //     eye_color: [dummyFormValues.eye_color, Validators.required],
+  //     birth_mark: [dummyFormValues.birth_mark],
+  //     distinctive_mark: [dummyFormValues.distinctive_mark],
+  //     caste: [dummyFormValues.caste],
+  //     sub_caste: [dummyFormValues.sub_caste],
+  //     marital_status: [dummyFormValues.marital_status, Validators.required],
+  //     religion: [dummyFormValues.religion],
+  //     mother_tongue: [dummyFormValues.mother_tongue],
+  //     known_languages: [dummyFormValues.known_languages],
+  //     educational_details: [dummyFormValues.educational_details],
+  //     occupation: [dummyFormValues.occupation],
+  //     identification_details: [dummyFormValues.identification_details],
+  //     identification_card_no: [dummyFormValues.identification_card_no],
+  //     missing_time: [dummyFormValues.missing_time, Validators.required],
+  //     missing_date: [dummyFormValues.missing_date, Validators.required],
+  //     location_details: [dummyFormValues.location_details],
+  //     last_seen_location: [dummyFormValues.last_seen_location],
+  //     case_status: [dummyFormValues.case_status],
+  //     condition: [dummyFormValues.condition],
+  //     fir_number: [dummyFormValues.fir_number, Validators.required],
+  //     police_station_name_and_address: [dummyFormValues.police_station_name_and_address],
+  //     investigating_officer_name: [dummyFormValues.investigating_officer_name],
+  //     investigating_officer_contact_number: [dummyFormValues.investigating_officer_contact_number],
+  //     reportingperson_name: [dummyFormValues.reportingperson_name, Validators.required],
+  //     relationship_with_victim: [dummyFormValues.relationship_with_victim, Validators.required],
+  //     contact_numbers: [dummyFormValues.contact_numbers],
+  //     email_address: [dummyFormValues.email_address, [Validators.required, Validators.email]],
+  //     consent: [dummyFormValues.consent, Validators.required],
+  //     willing_to_volunteer: [dummyFormValues.willing_to_volunteer],
+  
+  //     // Add any form controls for file fields
+  //     photo_upload: [dummyFormValues.photo_upload],
+  //     fir_photo: [dummyFormValues.fir_photo],
+  
+  //     // Add Nested Object fields as form controls
+  //     missing_location: this.fb.group({
+  //       latitude: [dummyFormValues.missing_location.latitude],
+  //       longitude: [dummyFormValues.missing_location.longitude],
+  //     }),
+  
+  //     contact: this.fb.group({
+  //       phone_number: [dummyFormValues.contact.phone_number],
+  //       email: [dummyFormValues.contact.email],
+  //       type: [dummyFormValues.contact.type],
+  //       is_primary: [dummyFormValues.contact.is_primary],
+  //     }),
+  
+  //     address: this.fb.group({
+  //       street: [dummyFormValues.address.street],
+  //       city: [dummyFormValues.address.city],
+  //       state: [dummyFormValues.address.state],
+  //       country: [dummyFormValues.address.country],
+  //       postal_code: [dummyFormValues.address.postal_code],
+  //       location: this.fb.group({
+  //         latitude: [dummyFormValues.address.location.latitude],
+  //         longitude: [dummyFormValues.address.location.longitude],
+  //       }),
+  //       is_active: [dummyFormValues.address.is_active],
+  //     }),
+  //   });
+  // }
+  
 
 
     initMap(mapType: string): void {
@@ -341,134 +421,254 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
   // }
   
   
-  onFileChange(event: any, controlName: string) {
+  
+  onFileChange(event: any, type: string): void {
     const file = event.target.files[0];
+  
     if (file) {
-      this.missingPersonForm.get(controlName)?.setValue(file);
+      if (type === 'photo') {
+        this.missingPersonForm.patchValue({ photo_upload: file });
+      } else if (type === 'file') {
+        this.missingPersonForm.patchValue({ fir_photo: file });
+      }
     }
   }
   
   
   
+  
+  
+  
+  
+  
 
-  // submitMPForm(): void {
-  //   console.log("✅ Form Validity:", this.missingPersonForm.valid);
-  //   console.log("❌ Form Errors:", this.missingPersonForm.errors);
-  //   console.log("📌 Data before FormData conversion:", this.missingPersonForm.value);
+  
 
-  //   if (this.missingPersonForm.valid) {
-  //       const formData = this.prepareFormData();
-
-  //       console.log('📦 FormData before sending:');
-  //       for (const pair of (formData as any).entries()) {
-  //           console.log(`${pair[0]}:`, pair[1]);
+  // submitMPForm() {
+  //   const formValues = this.missingPersonForm.value;
+  
+  //   // Construct the payload to match the format
+  //   const payload = {
+  //     full_name: formValues.full_name,
+  //     gender: formValues.gender,
+  //     blood_group: formValues.blood_group,
+  //     date_of_birth: formValues.date_of_birth,
+  //     age: formValues.age,
+  //     time_of_birth: formValues.time_of_birth,
+  //     place_of_birth: formValues.place_of_birth,
+  //     height: formValues.height,
+  //     weight: formValues.weight,
+  //     complexion: formValues.complexion,
+  //     hair_color: formValues.hair_color,
+  //     hair_type: formValues.hair_type,
+  //     eye_color: formValues.eye_color,
+  //     birth_mark: formValues.birth_mark,
+  //     distinctive_mark: formValues.distinctive_mark,
+  //     caste: formValues.caste,
+  //     sub_caste: formValues.sub_caste,
+  //     marital_status: formValues.marital_status,
+  //     religion: formValues.religion,
+  //     mother_tongue: formValues.mother_tongue,
+  //     known_languages: formValues.known_languages,
+  //     educational_details: formValues.educational_details,
+  //     occupation: formValues.occupation,
+  //     identification_details: formValues.identification_details,
+  //     identification_card_no: formValues.identification_card_no,
+  //     missing_time: formValues.missing_time,
+  //     fir_photo: formValues.fir_photo,
+  //     photo_upload: formValues.photo_upload,
+  //     missing_date: formValues.missing_date,
+  //     location_details: formValues.location_details,
+  //     last_seen_location: formValues.last_seen_location,
+  //     missing_location: {
+  //       latitude: formValues.missing_location.latitude,
+  //       longitude: formValues.missing_location.longitude
+  //     },
+  //     case_status: formValues.case_status,
+  //     condition: formValues.condition,
+  //     fir_number: formValues.fir_number,
+  //     police_station_name_and_address: formValues.police_station_name_and_address,
+  //     investigating_officer_name: formValues.investigating_officer_name,
+  //     investigating_officer_contact_number: formValues.investigating_officer_contact_number,
+  //     reportingperson_name: formValues.reportingperson_name,
+  //     relationship_with_victim: formValues.relationship_with_victim,
+  //     contact_numbers: formValues.contact_numbers,
+  //     email_address: formValues.email_address,
+  //     consent: formValues.consent,
+  //     contact: {
+  //       phone_number: formValues.contact.phone_number,
+  //       type: formValues.contact.type,
+  //       subtype: formValues.contact.subtype,
+  //       email: formValues.contact.email,
+  //       company_name: formValues.contact.company_name,
+  //       job_title: formValues.contact.job_title,
+  //       website: formValues.contact.website,
+  //       is_primary: formValues.contact.is_primary,
+  //       notes: formValues.contact.notes,
+  //       social_media_handles: formValues.contact.social_media_handles
+  //     },
+  //     address: {
+  //       street: formValues.address.street,
+  //       apartment_number: formValues.address.apartment_number,
+  //       village: formValues.address.village,
+  //       city: formValues.address.city,
+  //       district: formValues.address.district,
+  //       state: formValues.address.state,
+  //       postal_code: formValues.address.postal_code,
+  //       type: formValues.address.type,
+  //       subtype: formValues.address.subtype,
+  //       country_code: formValues.address.country_code,
+  //       landmark_details: formValues.address.landmark_details,
+  //       country: formValues.address.country,
+  //       is_active: formValues.address.is_active,
+  //       location: {
+  //         longitude: formValues.address.location.longitude,
+  //         latitude: formValues.address.location.latitude
   //       }
+  //     },
+  //     willing_to_volunteer: formValues.willing_to_volunteer,
+      
+  //   };
+  
+  //   // Call the service to post the data
+  //   this.MPservice.postMissingPerson(payload).subscribe({
+  //     next: (response) => {
+  //       console.log('Form submitted successfully:', response);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error submitting form:', error);
+  //     }
+  //   });
+  // }
+  
+  
+  
+  
 
-  //       this.MPservice.postMissingPerson(formData).subscribe({
-  //           next: (response) => {
-  //               console.log('✅ Form submitted successfully:', response);
-  //               alert('Form submitted successfully!');
-  //               this.missingPersonForm.reset();
-  //           },
-  //           error: (error) => {
-  //               console.error('❌ Error submitting form:', error);
-  //               alert('There was an error submitting the form. Please try again.');
-  //           }
-  //       });
-  //   } else {
-  //       console.warn('⚠️ Form is invalid, please correct the errors.');
-  //       alert('Please fill all required fields correctly.');
+  // submitMPForm() {
+  //   console.log("📝 Form Data Before Sending:", this.missingPersonForm.value);
+
+  //   if (!this.missingPersonForm.valid) {
+  //     console.error("🚨 Form is invalid!", this.missingPersonForm.value);
+  //     return;
   //   }
+
+  //   const formValues = this.missingPersonForm.value;
+  //   const formData = new FormData();
+
+  //   // Append all text fields
+  //   formData.append("full_name", formValues.full_name);
+  //   formData.append("gender", formValues.gender);
+  //   formData.append("blood_group", formValues.blood_group);
+  //   formData.append("date_of_birth", formValues.date_of_birth);
+  //   formData.append("age", formValues.age);
+  //   formData.append("time_of_birth", formValues.time_of_birth);
+  //   formData.append("place_of_birth", formValues.place_of_birth);
+  //   formData.append("height", formValues.height);
+  //   formData.append("weight", formValues.weight);
+  //   formData.append("complexion", formValues.complexion);
+  //   formData.append("hair_color", formValues.hair_color);
+  //   formData.append("hair_type", formValues.hair_type);
+  //   formData.append("eye_color", formValues.eye_color);
+  //   formData.append("birth_mark", formValues.birth_mark);
+  //   formData.append("distinctive_mark", formValues.distinctive_mark);
+  //   formData.append("caste", formValues.caste);
+  //   formData.append("sub_caste", formValues.sub_caste);
+  //   formData.append("marital_status", formValues.marital_status);
+  //   formData.append("religion", formValues.religion);
+  //   formData.append("mother_tongue", formValues.mother_tongue);
+  //   formData.append("known_languages", formValues.known_languages);
+  //   formData.append("educational_details", formValues.educational_details);
+  //   formData.append("occupation", formValues.occupation);
+  //   formData.append("identification_details", formValues.identification_details);
+  //   formData.append("identification_card_no", formValues.identification_card_no);
+  //   formData.append("missing_time", formValues.missing_time);
+  //   formData.append("missing_date", formValues.missing_date);
+  //   formData.append("location_details", formValues.location_details);
+  //   formData.append("last_seen_location", formValues.last_seen_location);
+  //   formData.append("case_status", formValues.case_status);
+  //   formData.append("condition", formValues.condition);
+  //   formData.append("fir_number", formValues.fir_number);
+  //   formData.append("police_station_name_and_address", formValues.police_station_name_and_address);
+  //   formData.append("investigating_officer_name", formValues.investigating_officer_name);
+  //   formData.append("investigating_officer_contact_number", formValues.investigating_officer_contact_number);
+  //   formData.append("reportingperson_name", formValues.reportingperson_name);
+  //   formData.append("relationship_with_victim", formValues.relationship_with_victim);
+  //   formData.append("contact_numbers", formValues.contact_numbers);
+  //   formData.append("email_address", formValues.email_address);
+  //   formData.append("consent", formValues.consent);
+  //   formData.append("willing_to_volunteer", formValues.willing_to_volunteer);
+
+  //   // Append File Fields
+  //   if (formValues.photo_upload && formValues.photo_upload instanceof File) {
+  //     formData.append("photo_upload", formValues.photo_upload);
+  //   }
+  //   if (formValues.fir_photo && formValues.fir_photo instanceof File) {
+  //     formData.append("fir_photo", formValues.fir_photo);
+  //   }
+
+  //   // Append Nested Objects as JSON Strings (Ensure they are not empty)
+  //   if (formValues.missing_location) {
+  //     formData.append("missing_location", JSON.stringify(formValues.missing_location));
+  //   }
+  //   if (formValues.contact) {
+  //     formData.append("contact", JSON.stringify(formValues.contact));
+  //   }
+  //   if (formValues.address) {
+  //     formData.append("address", JSON.stringify(formValues.address));
+  //   }
+
+  //   // Call the service to post the data
+  //   this.MPservice.postMissingPerson(formData).subscribe({
+  //     next: (response) => {
+  //       console.log('Form submitted successfully:', response);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error submitting form:', error);
+  //     }
+  //   });
   // }
 
   submitMPForm() {
+    console.log("📝 Form Data Before Sending:");
+  
+    if (!this.missingPersonForm.valid) {
+      console.error("🚨 Form is invalid!", this.missingPersonForm.value);
+      return;
+    }
+  
     const formValues = this.missingPersonForm.value;
+    const formData = new FormData();
   
-    // Construct the payload to match the format
-    const payload = {
-      full_name: formValues.full_name,
-      gender: formValues.gender,
-      blood_group: formValues.blood_group,
-      date_of_birth: formValues.date_of_birth,
-      age: formValues.age,
-      time_of_birth: formValues.time_of_birth,
-      place_of_birth: formValues.place_of_birth,
-      height: formValues.height,
-      weight: formValues.weight,
-      complexion: formValues.complexion,
-      hair_color: formValues.hair_color,
-      hair_type: formValues.hair_type,
-      eye_color: formValues.eye_color,
-      birth_mark: formValues.birth_mark,
-      distinctive_mark: formValues.distinctive_mark,
-      caste: formValues.caste,
-      sub_caste: formValues.sub_caste,
-      marital_status: formValues.marital_status,
-      religion: formValues.religion,
-      mother_tongue: formValues.mother_tongue,
-      known_languages: formValues.known_languages,
-      educational_details: formValues.educational_details,
-      occupation: formValues.occupation,
-      identification_details: formValues.identification_details,
-      identification_card_no: formValues.identification_card_no,
-      missing_time: formValues.missing_time,
-      fir_photo: formValues.fir_photo,
-      photo_upload: formValues.photo_upload,
-      missing_date: formValues.missing_date,
-      location_details: formValues.location_details,
-      last_seen_location: formValues.last_seen_location,
-      missing_location: {
-        latitude: formValues.missing_location.latitude,
-        longitude: formValues.missing_location.longitude
-      },
-      case_status: formValues.case_status,
-      condition: formValues.condition,
-      fir_number: formValues.fir_number,
-      police_station_name_and_address: formValues.police_station_name_and_address,
-      investigating_officer_name: formValues.investigating_officer_name,
-      investigating_officer_contact_number: formValues.investigating_officer_contact_number,
-      reportingperson_name: formValues.reportingperson_name,
-      relationship_with_victim: formValues.relationship_with_victim,
-      contact_numbers: formValues.contact_numbers,
-      email_address: formValues.email_address,
-      consent: formValues.consent,
-      contact: {
-        phone_number: formValues.contact.phone_number,
-        type: formValues.contact.type,
-        subtype: formValues.contact.subtype,
-        email: formValues.contact.email,
-        company_name: formValues.contact.company_name,
-        job_title: formValues.contact.job_title,
-        website: formValues.contact.website,
-        is_primary: formValues.contact.is_primary,
-        notes: formValues.contact.notes,
-        social_media_handles: formValues.contact.social_media_handles
-      },
-      address: {
-        street: formValues.address.street,
-        apartment_number: formValues.address.apartment_number,
-        village: formValues.address.village,
-        city: formValues.address.city,
-        district: formValues.address.district,
-        state: formValues.address.state,
-        postal_code: formValues.address.postal_code,
-        type: formValues.address.type,
-        subtype: formValues.address.subtype,
-        country_code: formValues.address.country_code,
-        landmark_details: formValues.address.landmark_details,
-        country: formValues.address.country,
-        is_active: formValues.address.is_active,
-        location: {
-          longitude: formValues.address.location.longitude,
-          latitude: formValues.address.location.latitude
-        }
-      },
-      willing_to_volunteer: formValues.willing_to_volunteer,
+    // Loop through formValues and append them to formData
+    Object.keys(formValues).forEach(key => {
+      const value = formValues[key];
       
-    };
+      if (value !== null && value !== undefined) {
+        if (typeof value === "object" && !(value instanceof File)) {
+          // Check for nested objects and stringify them
+          if (Array.isArray(value)) {
+            value.forEach(item => formData.append(key, JSON.stringify(item)));
+          } else {
+            formData.append(key, JSON.stringify(value));
+          }
+        } else if (value instanceof File) {
+          // Handle files separately, since they are binary data
+          formData.append(key, value, value.name);
+        } else {
+          // Append other fields as they are
+          formData.append(key, value);
+        }
+      }
+    });
   
-    // Call the service to post the data
-    this.MPservice.postMissingPerson(payload).subscribe({
+    // Log formData for debugging (since console.log(formData) won't show its contents)
+    for (let pair of (formData as any).entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+  
+    // Now, make the API call to submit the form data
+    this.MPservice.postMissingPerson(formData).subscribe({
       next: (response) => {
         console.log('Form submitted successfully:', response);
       },
@@ -478,11 +678,10 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
     });
   }
   
+
   
-  
-  
- //  calculate age as per dob
- 
+
+
  
  calculateAge() {
   const dob = this.missingPersonForm.get('date_of_birth')?.value;

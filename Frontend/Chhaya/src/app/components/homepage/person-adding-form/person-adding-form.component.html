@@ -11,7 +11,7 @@
     </p>
     
 
-    <form [formGroup]="missingPersonForm" enctype="multipart/form-data">
+    <form [formGroup]="missingPersonForm" (ngSubmit)="submitMPForm()" enctype="multipart/form-data">
       <!-- Full Name -->
       <div class="row mb-3">
         <div class="col-md-3">
@@ -904,12 +904,12 @@
             type="file"
             class="form-control border-dark"
             id="photo_upload"
-            formControlName="photo_upload"
-            accept="image/*"
-            (change)="onFileChange($event, 'photo_upload')" 
+            accept="image/*"  
+            (change)="onFileChange($event, 'photo')" 
           />
         </div>
       </div>
+      
       
 
       <!-- Missing Time and Date -->
@@ -1055,12 +1055,12 @@
             type="file"
             class="form-control border-dark"
             id="fir_photo"
-            formControlName="fir_photo"
-            accept="*/*"
-            (change)="onFileChange($event,'fir_photo')"
+            accept="image/*,application/pdf"
+            (change)="onFileChange($event, 'file')"
           />
         </div>
       </div>
+      
 
       <div class="row mb-3">
         <div class="col-md-4">
@@ -1254,7 +1254,7 @@
       
       <!-- Submit button with loader -->
       
-      <button type="submit" class="btn btn-dark" (click)="submitMPForm()" id="submitBtn">
+      <button type="submit" class="btn btn-dark" id="submitBtn">
         Submit
       </button>
 

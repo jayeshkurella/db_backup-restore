@@ -306,8 +306,8 @@ class Volunteer(models.Model):
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
     
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='volunteers', db_index=True)
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='volunteers', db_index=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='volunteers', db_index=True,null=True, blank=True,)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='volunteers', db_index=True,null=True, blank=True,)
     
     # Assignment Info
     volunteer_group = models.CharField(max_length=50, choices=SEARCH_GROUP_CHOICES, db_index=True)

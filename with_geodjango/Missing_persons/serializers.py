@@ -146,42 +146,39 @@ class MissingPersonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_location(self, obj):
-        return {"latitude": obj.missing_location.y, "longitude": obj.missing_location.x} if obj.missing_location else None
+        return {
+            "latitude": obj.missing_location.y, 
+            "longitude": obj.missing_location.x
+        } if obj.missing_location else None
 
+    
     def create(self, validated_data):
-        print("Validated Data:", validated_data)  # Add this line for debugging
+        """Creates a MissingPerson entry after saving Contact & Address"""
 
-        contact_data = validated_data.pop('contact')
-        address_data = validated_data.pop('address')
+        contact_data = validated_data.pop('contact', None)
+        address_data = validated_data.pop('address', None)
 
-        # Ensure mandatory fields are provided
-        if not contact_data:
-            raise serializers.ValidationError("Contact data is required.")
-        if not address_data:
-            raise serializers.ValidationError("Address data is required.")
+        # Save Contact
+        contact = Contact.objects.create(**contact_data) if contact_data else None
 
-        # Create related instances if data is provided
-        contact = Contact.objects.create(**contact_data)
+        # Save Address (Convert location field to Point)
+        if address_data:
+            if 'location' in address_data:
+                location = address_data.pop('location')
+                address_data['location'] = Point(location['longitude'], location['latitude'])
+            address = Address.objects.create(**address_data)
+        else:
+            address = None
 
-        if address_data and 'location' in address_data:
-            location = address_data.pop('location')
-            address_data['location'] = Point(location['longitude'], location['latitude'])  # Convert location to Point object
-        address = Address.objects.create(**address_data)
-
-        # Handle missing_location field (convert to Point)
+        # Convert missing_location to Point
         if 'missing_location' in validated_data:
             missing_location_data = validated_data.pop('missing_location')
-            
-            # Check if missing_location_data is a string or dictionary
-            if isinstance(missing_location_data, dict):
-                validated_data['missing_location'] = Point(
-                    missing_location_data['longitude'], 
-                    missing_location_data['latitude']
-                )
-            else:
-                raise serializers.ValidationError("Invalid format for missing_location. Expected a dictionary with latitude and longitude.")
-        
-        # Create MissingPerson instance
+            validated_data['missing_location'] = Point(
+                missing_location_data['longitude'], 
+                missing_location_data['latitude']
+            )
+
+        # Save MissingPerson with Foreign Key references
         missing_person = MissingPerson.objects.create(
             contact=contact,
             address=address,
@@ -189,18 +186,20 @@ class MissingPersonSerializer(serializers.ModelSerializer):
         )
         return missing_person
 
-    @transaction.atomic
+    
     def update(self, instance, validated_data):
+        """Updates MissingPerson, Contact, and Address"""
+
         contact_data = validated_data.pop('contact', None)
         address_data = validated_data.pop('address', None)
 
-        # Update contact
+        # Update Contact
         if contact_data:
             for attr, value in contact_data.items():
                 setattr(instance.contact, attr, value)
             instance.contact.save()
 
-        # Update address
+        # Update Address (Convert location to Point if provided)
         if address_data:
             if 'location' in address_data:
                 location = address_data.pop('location')
@@ -209,10 +208,13 @@ class MissingPersonSerializer(serializers.ModelSerializer):
                 setattr(instance.address, attr, value)
             instance.address.save()
 
-        # Update missing_location field if available
+        # Update missing_location if available
         if 'missing_location' in validated_data:
             missing_location_data = validated_data.pop('missing_location')
-            instance.missing_location = Point(missing_location_data['longitude'], missing_location_data['latitude'])
+            instance.missing_location = Point(
+                missing_location_data['longitude'], 
+                missing_location_data['latitude']
+            )
 
         # Update MissingPerson fields
         for attr, value in validated_data.items():
@@ -220,7 +222,7 @@ class MissingPersonSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-    
+
 class UndefinedMissingpersonSerializer(serializers.ModelSerializer):
     address = AddressSerializer()  
     contact = ContactSerializer() 
