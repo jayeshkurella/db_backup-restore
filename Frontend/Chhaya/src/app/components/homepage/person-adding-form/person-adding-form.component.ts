@@ -49,7 +49,6 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
     this.initMap('home'); // Initialize home location map
     this.initMap('missing');  
     this.missingPersonForm = this.fb.group({
-      
       full_name: ['', [Validators.required, Validators.minLength(3)]],
       gender: ['', Validators.required],
       blood_group: [''],
@@ -143,6 +142,8 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
 
 
   // ngOnInit() {
+  //         this.initMap('home'); // Initialize home location map
+  //          this.initMap('missing');
   //   // Initialize the form and set dummy values for testing
   //   this.missingPersonForm = this.fb.group({
   //     full_name: [dummyFormValues.full_name, Validators.required],
@@ -221,7 +222,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
   
 
 
-    initMap(mapType: string): void {
+  initMap(mapType: string): void {
       const mapId = mapType === 'home' ? 'mapHome' : 'mapMissing';
       const defaultLocation: L.LatLngTuple = [19.7515, 75.7139]; // Default location: India
 
@@ -444,102 +445,102 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
 
   
 
-  // submitMPForm() {
-  //   const formValues = this.missingPersonForm.value;
+  submitMPForm() {
+    const formValues = this.missingPersonForm.value;
   
-  //   // Construct the payload to match the format
-  //   const payload = {
-  //     full_name: formValues.full_name,
-  //     gender: formValues.gender,
-  //     blood_group: formValues.blood_group,
-  //     date_of_birth: formValues.date_of_birth,
-  //     age: formValues.age,
-  //     time_of_birth: formValues.time_of_birth,
-  //     place_of_birth: formValues.place_of_birth,
-  //     height: formValues.height,
-  //     weight: formValues.weight,
-  //     complexion: formValues.complexion,
-  //     hair_color: formValues.hair_color,
-  //     hair_type: formValues.hair_type,
-  //     eye_color: formValues.eye_color,
-  //     birth_mark: formValues.birth_mark,
-  //     distinctive_mark: formValues.distinctive_mark,
-  //     caste: formValues.caste,
-  //     sub_caste: formValues.sub_caste,
-  //     marital_status: formValues.marital_status,
-  //     religion: formValues.religion,
-  //     mother_tongue: formValues.mother_tongue,
-  //     known_languages: formValues.known_languages,
-  //     educational_details: formValues.educational_details,
-  //     occupation: formValues.occupation,
-  //     identification_details: formValues.identification_details,
-  //     identification_card_no: formValues.identification_card_no,
-  //     missing_time: formValues.missing_time,
-  //     fir_photo: formValues.fir_photo,
-  //     photo_upload: formValues.photo_upload,
-  //     missing_date: formValues.missing_date,
-  //     location_details: formValues.location_details,
-  //     last_seen_location: formValues.last_seen_location,
-  //     missing_location: {
-  //       latitude: formValues.missing_location.latitude,
-  //       longitude: formValues.missing_location.longitude
-  //     },
-  //     case_status: formValues.case_status,
-  //     condition: formValues.condition,
-  //     fir_number: formValues.fir_number,
-  //     police_station_name_and_address: formValues.police_station_name_and_address,
-  //     investigating_officer_name: formValues.investigating_officer_name,
-  //     investigating_officer_contact_number: formValues.investigating_officer_contact_number,
-  //     reportingperson_name: formValues.reportingperson_name,
-  //     relationship_with_victim: formValues.relationship_with_victim,
-  //     contact_numbers: formValues.contact_numbers,
-  //     email_address: formValues.email_address,
-  //     consent: formValues.consent,
-  //     contact: {
-  //       phone_number: formValues.contact.phone_number,
-  //       type: formValues.contact.type,
-  //       subtype: formValues.contact.subtype,
-  //       email: formValues.contact.email,
-  //       company_name: formValues.contact.company_name,
-  //       job_title: formValues.contact.job_title,
-  //       website: formValues.contact.website,
-  //       is_primary: formValues.contact.is_primary,
-  //       notes: formValues.contact.notes,
-  //       social_media_handles: formValues.contact.social_media_handles
-  //     },
-  //     address: {
-  //       street: formValues.address.street,
-  //       apartment_number: formValues.address.apartment_number,
-  //       village: formValues.address.village,
-  //       city: formValues.address.city,
-  //       district: formValues.address.district,
-  //       state: formValues.address.state,
-  //       postal_code: formValues.address.postal_code,
-  //       type: formValues.address.type,
-  //       subtype: formValues.address.subtype,
-  //       country_code: formValues.address.country_code,
-  //       landmark_details: formValues.address.landmark_details,
-  //       country: formValues.address.country,
-  //       is_active: formValues.address.is_active,
-  //       location: {
-  //         longitude: formValues.address.location.longitude,
-  //         latitude: formValues.address.location.latitude
-  //       }
-  //     },
-  //     willing_to_volunteer: formValues.willing_to_volunteer,
+    // Construct the payload to match the format
+    const payload = {
+      full_name: formValues.full_name,
+      gender: formValues.gender,
+      blood_group: formValues.blood_group,
+      date_of_birth: formValues.date_of_birth,
+      age: formValues.age,
+      time_of_birth: formValues.time_of_birth,
+      place_of_birth: formValues.place_of_birth,
+      height: formValues.height,
+      weight: formValues.weight,
+      complexion: formValues.complexion,
+      hair_color: formValues.hair_color,
+      hair_type: formValues.hair_type,
+      eye_color: formValues.eye_color,
+      birth_mark: formValues.birth_mark,
+      distinctive_mark: formValues.distinctive_mark,
+      caste: formValues.caste,
+      sub_caste: formValues.sub_caste,
+      marital_status: formValues.marital_status,
+      religion: formValues.religion,
+      mother_tongue: formValues.mother_tongue,
+      known_languages: formValues.known_languages,
+      educational_details: formValues.educational_details,
+      occupation: formValues.occupation,
+      identification_details: formValues.identification_details,
+      identification_card_no: formValues.identification_card_no,
+      missing_time: formValues.missing_time,
+      fir_photo: formValues.fir_photo,
+      photo_upload: formValues.photo_upload,
+      missing_date: formValues.missing_date,
+      location_details: formValues.location_details,
+      last_seen_location: formValues.last_seen_location,
+      missing_location: {
+        latitude: formValues.missing_location.latitude,
+        longitude: formValues.missing_location.longitude
+      },
+      case_status: formValues.case_status,
+      condition: formValues.condition,
+      fir_number: formValues.fir_number,
+      police_station_name_and_address: formValues.police_station_name_and_address,
+      investigating_officer_name: formValues.investigating_officer_name,
+      investigating_officer_contact_number: formValues.investigating_officer_contact_number,
+      reportingperson_name: formValues.reportingperson_name,
+      relationship_with_victim: formValues.relationship_with_victim,
+      contact_numbers: formValues.contact_numbers,
+      email_address: formValues.email_address,
+      consent: formValues.consent,
+      contact: {
+        phone_number: formValues.contact.phone_number,
+        type: formValues.contact.type,
+        subtype: formValues.contact.subtype,
+        email: formValues.contact.email,
+        company_name: formValues.contact.company_name,
+        job_title: formValues.contact.job_title,
+        website: formValues.contact.website,
+        is_primary: formValues.contact.is_primary,
+        notes: formValues.contact.notes,
+        social_media_handles: formValues.contact.social_media_handles
+      },
+      address: {
+        street: formValues.address.street,
+        apartment_number: formValues.address.apartment_number,
+        village: formValues.address.village,
+        city: formValues.address.city,
+        district: formValues.address.district,
+        state: formValues.address.state,
+        postal_code: formValues.address.postal_code,
+        type: formValues.address.type,
+        subtype: formValues.address.subtype,
+        country_code: formValues.address.country_code,
+        landmark_details: formValues.address.landmark_details,
+        country: formValues.address.country,
+        is_active: formValues.address.is_active,
+        location: {
+          longitude: formValues.address.location.longitude,
+          latitude: formValues.address.location.latitude
+        }
+      },
+      willing_to_volunteer: formValues.willing_to_volunteer,
       
-  //   };
+    };
   
-  //   // Call the service to post the data
-  //   this.MPservice.postMissingPerson(payload).subscribe({
-  //     next: (response) => {
-  //       console.log('Form submitted successfully:', response);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error submitting form:', error);
-  //     }
-  //   });
-  // }
+    // Call the service to post the data
+    this.MPservice.postMissingPerson(payload).subscribe({
+      next: (response) => {
+        console.log('Form submitted successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error submitting form:', error);
+      }
+    });
+  }
   
   
   
@@ -629,54 +630,54 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
   //   });
   // }
 
-  submitMPForm() {
-    console.log("📝 Form Data Before Sending:");
+  // submitMPForm() {
+  //   console.log("📝 Form Data Before Sending:");
   
-    if (!this.missingPersonForm.valid) {
-      console.error("🚨 Form is invalid!", this.missingPersonForm.value);
-      return;
-    }
+  //   if (!this.missingPersonForm.valid) {
+  //     console.error("🚨 Form is invalid!", this.missingPersonForm.value);
+  //     return;
+  //   }
   
-    const formValues = this.missingPersonForm.value;
-    const formData = new FormData();
+  //   const formValues = this.missingPersonForm.value;
+  //   const formData = new FormData();
   
-    // Loop through formValues and append them to formData
-    Object.keys(formValues).forEach(key => {
-      const value = formValues[key];
+  //   // Loop through formValues and append them to formData
+  //   Object.keys(formValues).forEach(key => {
+  //     const value = formValues[key];
       
-      if (value !== null && value !== undefined) {
-        if (typeof value === "object" && !(value instanceof File)) {
-          // Check for nested objects and stringify them
-          if (Array.isArray(value)) {
-            value.forEach(item => formData.append(key, JSON.stringify(item)));
-          } else {
-            formData.append(key, JSON.stringify(value));
-          }
-        } else if (value instanceof File) {
-          // Handle files separately, since they are binary data
-          formData.append(key, value, value.name);
-        } else {
-          // Append other fields as they are
-          formData.append(key, value);
-        }
-      }
-    });
+  //     if (value !== null && value !== undefined) {
+  //       if (typeof value === "object" && !(value instanceof File)) {
+  //         // Check for nested objects and stringify them
+  //         if (Array.isArray(value)) {
+  //           value.forEach(item => formData.append(key, JSON.stringify(item)));
+  //         } else {
+  //           formData.append(key, JSON.stringify(value));
+  //         }
+  //       } else if (value instanceof File) {
+  //         // Handle files separately, since they are binary data
+  //         formData.append(key, value, value.name);
+  //       } else {
+  //         // Append other fields as they are
+  //         formData.append(key, value);
+  //       }
+  //     }
+  //   });
   
-    // Log formData for debugging (since console.log(formData) won't show its contents)
-    for (let pair of (formData as any).entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
+  //   // Log formData for debugging (since console.log(formData) won't show its contents)
+  //   for (let pair of (formData as any).entries()) {
+  //     console.log(`${pair[0]}: ${pair[1]}`);
+  //   }
   
-    // Now, make the API call to submit the form data
-    this.MPservice.postMissingPerson(formData).subscribe({
-      next: (response) => {
-        console.log('Form submitted successfully:', response);
-      },
-      error: (error) => {
-        console.error('Error submitting form:', error);
-      }
-    });
-  }
+  //   // Now, make the API call to submit the form data
+  //   this.MPservice.postMissingPerson(formData).subscribe({
+  //     next: (response) => {
+  //       console.log('Form submitted successfully:', response);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error submitting form:', error);
+  //     }
+  //   });
+  // }
   
 
   
@@ -698,7 +699,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
     // ✅ Ensure age updates in the form
     this.missingPersonForm.get('age')?.setValue(age);
   }
-}
+ }
 
 
 

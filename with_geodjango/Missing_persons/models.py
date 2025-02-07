@@ -173,6 +173,9 @@ class Contact(models.Model):
     def __str__(self):
         return f"{self.phone_number} ({self.type})"
     
+
+
+
 class Address(models.Model):
     
     ADDRESS_TYPE_CHOICES = [

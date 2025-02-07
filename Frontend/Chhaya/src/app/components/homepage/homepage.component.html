@@ -32,149 +32,145 @@
 
 
 
-<div class="d-flex">
+<div class="d-flex flex-column flex-lg-row">
     <!-- Sidebar -->
-    <div class="sidebar" [ngClass]="{ collapsed: isCollapsed, closing: isClosing }">
-    
-        <!-- Sidebar Header for Chhaya Foundation -->
+    <div class="sidebar">
+        <!-- Sidebar Header -->
         <div class="sidebar-header">
-            <h4 class="sidebar-title" *ngIf="!isCollapsed">Chhaya Foundation</h4>
-            
-            <!-- Toggle Button -->
-            <!-- <button class="expand-btn btn btn-dark" (click)="toggleSidebar()">
-                <i class="bi" [ngClass]="isCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
-            </button> -->
-            
-            <img *ngIf="isCollapsed" src="assets/images/favicon-32x32.png" alt="Favicon">
+            <img src="assets/images/Chhaya.png" alt="Chhaya Foundation Logo" (click)="onNavigate()" class="sidebar-title">
         </div>
-        
+
         <!-- Sidebar Links -->
-        <ul class="sidebar-links">
-            <!-- Report Case Link -->
-            <li class="sidebar-item" [ngClass]="{'with-gap-1': isDropdownOpen.reportCase}">
-                <a 
-                    class="dropdown-toggle" 
-                    (click)="toggleDropdown('reportCase'); $event.preventDefault()" 
-                    [ngClass]="{ 'active': isDropdownOpen.reportCase }">
-                    <i class="bi bi-folder-plus"></i>
-                    <span class="link-text" *ngIf="!isCollapsed">Report Case</span>
+        <ul class="sidebar-links list-unstyled">
+            <!-- Report Case Dropdown -->
+            <li class="sidebar-item" [class.show]="openDropdown === '#reportCaseMenu'">
+                <a
+                    class="dropdown-toggle d-flex align-items-center"
+                    (click)="toggleDropdown($event, '#reportCaseMenu')"
+                >
+                    <i class="bi bi-folder-plus me-2"></i>
+                    <span>Report Case</span>
                 </a>
-                <ul *ngIf="!isCollapsed" [class.visible]="isDropdownOpen.reportCase" class="dropdown-menu">
+                <ul class="collapse list-unstyled ps-3" [class.show]="openDropdown === '#reportCaseMenu'" id="reportCaseMenu">
                     <li>
-                        <a routerLink="Add-missing-person">
-                            <i class="bi bi-person"></i> Missing Person
+                        <a class="d-flex align-items-center" [routerLink]="'Add-missing-person'">
+                            <i class="bi bi-person me-2"></i> Missing Person
                         </a>
                     </li>
                     <li>
-                        <a routerLink="add-unidentified-person">
-                            <i class="bi bi-question-circle"></i> Unidentified Person
+                        <a class="d-flex align-items-center" [routerLink]="'add-unidentified-person'">
+                            <i class="bi bi-question-circle me-2"></i> Unidentified Person
                         </a>
                     </li>
                     <li>
-                        <a routerLink="add-unidentified-body">
-                            <i class="bi bi-file-earmark-medical"></i> Unidentified Body
+                        <a class="d-flex align-items-center" [routerLink]="'add-unidentified-body'">
+                            <i class="bi bi-file-earmark-medical me-2"></i> Unidentified Body
                         </a>
                     </li>
                 </ul>
-                
-                
             </li>
             
-            <!-- Search Case Dropdown -->
-            <li class="sidebar-item " [ngClass]="{'with-gap-1': isDropdownOpen.searchCase}" >
-                <a class="dropdown-toggle" (click)="toggleDropdown('searchCase'); $event.preventDefault()" 
-                   [ngClass]="{ 'active': isDropdownOpen.searchCase }">
-                  <i class="bi bi-search"></i>
-                  <span class="link-text" *ngIf="!isCollapsed">Search Case</span>
-                </a>
-                <ul *ngIf="!isCollapsed" [class.visible]="isDropdownOpen.searchCase" class="dropdown-menu">
-                    <li>
-                        <a routerLink="missingperson">
-                            <i class="bi bi-person"></i> Missing Person
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="unidentified-person">
-                            <i class="bi bi-question-diamond"></i> Unidentified Person
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="unidentified-bodies">
-                            <i class="bi bi-person-x"></i> Unidentified Bodies
-                        </a>
-                    </li>
-                </ul>
-                
-              </li>
-    
-            <!-- Resources Dropdown -->
-            <li class="sidebar-item dropdown" [ngClass]="{'with-gap-2': isDropdownOpen.resources}">
-                <a class="dropdown-toggle" (click)="toggleDropdown('resources')" [ngClass]="{ 'active': isDropdownOpen.resources }">
-                    <i class="bi bi-briefcase"></i>
-                    <span class="link-text" *ngIf="!isCollapsed">Resources</span>
-                </a>
-                <ul *ngIf="!isCollapsed" [class.visible]="isDropdownOpen.resources" class="dropdown-menu">
-                    <li>
-                        <a routerLink="policestation">
-                            <i class="bi bi-shield-shaded"></i>
-                            <span>Police Stations</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="Hospitals">
-                            <i class="bi bi-hospital"></i>
-                            <span>Hospitals</span>
-                        </a>
-                    </li>
-                </ul>
-                
-            </li>
+            
 
-            <!-- volunteers -->
-            <li class="sidebar-item dropdown" data-tooltip="Volunteer">
-                <a  routerLink="volunteers">
-                    <i class="bi bi-hand-thumbs-up"></i> 
-                    <span class="link-text" *ngIf="!isCollapsed">Volunteer</span>
+            <!-- Search Case Dropdown -->
+            <li class="sidebar-item">
+                <a 
+                    class="dropdown-toggle d-flex align-items-center" 
+                    role="button" 
+                    (click)="toggleDropdown($event, 'searchCaseMenu')"
+                >
+                    <i class="bi bi-search me-2"></i>
+                    <span>Search Case</span>
+                </a>
+                <ul class="collapse list-unstyled ps-3" [class.show]="openDropdown === 'searchCaseMenu'" id="searchCaseMenu">
+                    <li>
+                        <a class="d-flex align-items-center" [routerLink]="'missingperson'">
+                            <i class="bi bi-person me-2"></i> Missing Person
+                        </a>
+                    </li>
+                    <li>
+                        <a class="d-flex align-items-center" [routerLink]="'unidentified-person'">
+                            <i class="bi bi-question-diamond me-2"></i> Unidentified Person
+                        </a>
+                    </li>
+                    <li>
+                        <a class="d-flex align-items-center" [routerLink]="'unidentified-bodies'">
+                            <i class="bi bi-person-x me-2"></i> Unidentified Bodies
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
+
+            <li class="sidebar-item">
+                <a 
+                    class="dropdown-toggle d-flex align-items-center" 
+                    role="button" 
+                    (click)="toggleDropdown($event, 'resourcesMenu')"
+                >
+                    <i class="bi bi-briefcase me-2"></i>
+                    <span>Resources</span>
+                </a>
+                <ul class="collapse list-unstyled ps-3" [class.show]="openDropdown === 'resourcesMenu'" id="resourcesMenu">
+                    <li>
+                        <a class="d-flex align-items-center" [routerLink]="'policestation'">
+                            <i class="bi bi-shield-shaded me-2"></i> Police Stations
+                        </a>
+                    </li>
+                    <li>
+                        <a class="d-flex align-items-center" [routerLink]="'Hospitals'">
+                            <i class="bi bi-hospital me-2"></i> Hospitals
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
+
+            <!-- Volunteer Link -->
+            <li class="sidebar-item">
+                <a class="d-flex align-items-center" [routerLink]=" 'volunteers' ">
+                    <i class="bi bi-hand-thumbs-up me-2"></i>
+                    <span>Volunteer</span>
                 </a>
             </li>
         </ul>
     </div>
-    
-
-   
 
     <!-- Main Content -->
     <div class="flex-grow-1 maincontent">
         <!-- Navbar Section (Sticky Navbar) -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-dark manicontentnav sticky-top">
+        <nav class="navbar navbar-expand-lg manicontentnav sticky-top">
             <div class="container-fluid">
-                <!-- <a class="navbar-brand  navmaiitem">Chhaya Foundation</a> -->
+                <!-- Navbar Toggler (for mobile) -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+        
+                <!-- Navbar Links -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link navmaiitem" href="javascript:void(0)" (click)="onNavigate()">
-                                <i class="bi bi-person-circle"></i> 
+                                <i class="bi bi-person-circle"></i>
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div *ngIf="isLoading" class="loader-overlay">
-                <div class="loader"></div>
-            </div>
         </nav>
-    
-        <!-- Content Section (Main Content Area) -->
+        
+
+        <!-- Content Section -->
         <div class="content-area">
             <router-outlet></router-outlet>
         </div>
     </div>
-    
-    
 </div>
+
+
+
+
+
 
 
 
