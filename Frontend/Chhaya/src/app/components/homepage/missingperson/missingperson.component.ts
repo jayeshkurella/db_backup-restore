@@ -31,16 +31,16 @@ export class MissingpersonComponent implements OnInit, AfterViewChecked {
 
   filters = {
     full_name :'',
-    city: 'all',
-    state: 'all',
+    city: '',
+    state: '',
     year: '',
     month: '',
-    caste: 'all', 
+    caste: '', 
     age: '',
-    marital_status: 'all',
-    blood_group: 'all',
+    marital_status: '',
+    blood_group: '',
     height: '',
-    district:'all'
+    district:''
 
   };
 
@@ -83,6 +83,12 @@ export class MissingpersonComponent implements OnInit, AfterViewChecked {
   report_data: any[] = []; 
   selectedReport: any;  // Variable to hold the selected report for details
   isModalOpen: boolean = false; 
+  isInitialLoad = true;
+  filtersApplied: boolean = false;  // Initially false
+  progress: number = 0;
+  progressColor: string = 'bg-primary'; // Corrected type of progressColor
+  progressMessage: string = '';
+  
 
   constructor(private missingpersonapi: MissingpersonapiService, private fb: FormBuilder,private cdr: ChangeDetectorRef, private policestationapi :PoliceStationaoiService) {
     this.confirmMatchForm = this.fb.group({
@@ -95,10 +101,12 @@ export class MissingpersonComponent implements OnInit, AfterViewChecked {
    }
 
   ngOnInit(): void {
-    this.loadMissingPersons(this.pagination.current_page);
+    // this.loadMissingPersons(this.pagination.current_page);
+    this.filteredPersons = [];
     this.getallstates()
-    this.getallcities()
     this.getalldistricts()
+    this.getallcities()
+    
     this.getallmarital()
    
   }
@@ -113,31 +121,61 @@ export class MissingpersonComponent implements OnInit, AfterViewChecked {
 
 
   loadMissingPersons(page: number): void {
-    this.loading = true;  
+    if (!this.filtersApplied) {
+      this.filteredPersons = [];  // Clear table initially
+      return; // Don't fetch data until filters are applied
+    }
+  
+    this.loading = true;
+    this.progress = 1; // Start at 1%
+    this.progressColor = 'bg-primary'; // Default progress bar color
+  
+    // Simulate progress incrementing
+    let interval = setInterval(() => {
+      if (this.progress < 90) {
+        this.progress += 10;
+      }
+    }, 200);
+  
     setTimeout(() => {
       this.missingpersonapi.getMissingPersonsWithFilters(page, this.filters).subscribe(
         (data) => {
-          if (data && data.data) {
+          clearInterval(interval);
+          this.progress = 100; // Complete progress
+  
+          if (data && data.data.length > 0) {
             this.filteredPersons = data.data;
             this.pagination = data.pagination;
+            this.progressColor = 'bg-success'; // Green if data found
+            this.progressMessage = "✅ Data loaded successfully!";
           } else {
-            console.error('No data returned from API');
+            this.filteredPersons = [];
+            this.progressColor = 'bg-danger'; // Red if no data found
+            this.progressMessage = "❌ No data found! Try with another filter.";
           }
-          this.loading = false; 
+  
+          setTimeout(() => {
+            this.loading = false; // Hide loader after 1s
+          }, 1000);
         },
         (error) => {
+          clearInterval(interval);
           console.error('Error fetching data:', error);
-          this.loading = false;  
+          this.progressColor = 'bg-danger';
+          this.progressMessage = "❌ Error fetching data!";
+          setTimeout(() => { this.loading = false; }, 1000);
         }
       );
-    }, 2000);  
+    }, 2000);
   }
   
-
-
+  
+  
   applyFilters(): void {
-    this.loadMissingPersons(this.pagination.current_page); // Re-fetch data with applied filters
+    this.filtersApplied = true; // Mark that filters are applied
+    this.loadMissingPersons(1); // Load data with filters
   }
+  
 
   viewDetails(person: any): void {
     if (person && person.full_name) {

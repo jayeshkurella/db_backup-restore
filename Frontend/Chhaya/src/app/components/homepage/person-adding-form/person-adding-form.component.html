@@ -7,7 +7,7 @@
     <div class="card p-4 mb-2 bg-light">
       <h5 class="header-bottom pb-2">Personal Information</h5>
         <div class="row g-3">
-            <div class="col-md-12"><input type="text" class="form-control" formControlName="'full_name" placeholder="Full Name"></div>
+            <div class="col-md-12"><input type="text" class="form-control" formControlName="full_name" placeholder="Full Name"></div>
             <div class="col-md-3">
               <select class="form-select border-dark" id="gender" name="gender" formControlName="gender">
                   <option value="" selected disabled>Gender</option>
@@ -247,18 +247,20 @@
           </div>
         
           <!-- Right Side: Map & Get Location Button -->
-          <div class="col-md-6">
-            <label for="mapLocationHome" class="form-label">Missing Person Home Location</label>
-            <div id="mapHome" style="height: 180px; border: 1px solid black;"></div>
-            
-            <div class="d-flex gap-2 mt-3">
-              <button type="button" class="btn btn-outline-dark border-dark" (click)="getCurrentLocation('home')">
-              Current
-              </button>
-              <input type="text" class="form-control" id="latitudelocation" formControlName="latitude" readonly placeholder="Latitude">
-              <input type="text" class="form-control" id="longitudelocation" formControlName="longitude" readonly placeholder="Longitude">
+            <div class="col-md-6">
+              <div formGroupName="location">
+              <label for="mapLocationHome" class="form-label">Missing Person Home Location</label>
+              <div id="mapHome" style="height: 180px; border: 1px solid black;"></div>
+              
+              <div class="d-flex gap-2 mt-3">
+                <button type="button" class="btn btn-outline-dark border-dark" (click)="getCurrentLocation('home')">
+                Current
+                </button>
+                <input type="text" class="form-control" id="latitudelocation" formControlName="latitude" readonly placeholder="Latitude">
+                <input type="text" class="form-control" id="longitudelocation" formControlName="longitude" readonly placeholder="Longitude">
+              </div>
             </div>
-          </div>
+            </div>
           
           
         </div>
@@ -426,6 +428,7 @@
         </div>
     
         <!-- Missing Person Map Location -->
+        <div formGroupName="missing_location">
         <div class="col-md-12">
           <label class="form-label">Missing Place Location</label>
           <div id="mapMissing" style="height: 200px; border: 1px solid black;"></div>
@@ -441,6 +444,7 @@
           <label class="form-label">Longitude</label>
           <input type="text" class="form-control border-dark" formControlName="longitude" readonly placeholder="Longitude">
         </div>
+      </div>
     
         <!-- Last Seen Location -->
         <div class="col-md-12">

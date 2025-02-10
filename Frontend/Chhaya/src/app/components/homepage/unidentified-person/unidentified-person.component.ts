@@ -10,28 +10,27 @@ import { PoliceStationaoiService } from 'src/app/services/police-stationaoi.serv
   templateUrl: './unidentified-person.component.html',
   styleUrls: ['./unidentified-person.component.css']
 })
-export class UnidentifiedPersonComponent implements OnInit,AfterViewChecked{
+export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
 
   environment = environment;
-  unidentifiedPersons :any= [];
+  unidentifiedPersons: any = [];
   filteredPersons: any[] = [];  
   selectedPerson: any = null;
 
   map: L.Map | undefined;
   marker: L.Marker | undefined;
   filters = {
-    gender : 'all',
-    city: 'all',
-    state: 'all',
+    gender: '',
+    city: '',
+    state: '',
     year: '',
     month: '',
-    caste: 'all', 
+    caste: '', 
     age: '',
-    marital_status: 'all',
-    blood_group: 'all',
+    marital_status: '',
+    blood_group: '',
     height: '',
-    district:'all'
-
+    district: ''
   };
   allstates: any;
   allcities: any;
@@ -44,8 +43,12 @@ export class UnidentifiedPersonComponent implements OnInit,AfterViewChecked{
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December',
   ];
+  filtersApplied: any;
+  progress: number = 0;
+  progressColor: string = '';
+  progressMessage: string = '';
 
-  constructor(private unidentifiedpersonapi :UnidentifiedPersonapiService,private policestationapi :PoliceStationaoiService) { }
+  constructor(private unidentifiedpersonapi: UnidentifiedPersonapiService, private policestationapi: PoliceStationaoiService) { }
 
   ngAfterViewChecked(): void {
     if (this.selectedPerson && this.selectedPerson.geometry && !this.map) {
@@ -63,47 +66,73 @@ export class UnidentifiedPersonComponent implements OnInit,AfterViewChecked{
   };
 
   ngOnInit(): void {
-    this.loadUnidentifiedPersons(this.pagination.current_page);
-    this.getallstates()
-    this.getallcities()
-    this.getalldistricts()
-    this.getallmarital()
+    this.getallstates();
+    this.getallcities();
+    this.getalldistricts();
+    this.getallmarital();
   }
-
 
   onPageChangeevent(page: number): void {
     this.loadUnidentifiedPersons(page);
-    
   }
 
-
   loadUnidentifiedPersons(page: number): void {
+    if (!this.filtersApplied) {
+      this.unidentifiedPersons = [];  // Clear table initially
+      return; // Don't fetch data until filters are applied
+    }
+
     this.loading = true;
+    this.progress = 1; // Start progress at 1%
+    this.progressColor = 'bg-primary'; // Default progress bar color
+    this.progressMessage = "Loading data...";
+
+    // Simulate progress incrementing up to 90%
+    let interval = setInterval(() => {
+      if (this.progress < 90) {
+        this.progress += 10;
+      }
+    }, 300);
+
     setTimeout(() => {
       this.unidentifiedpersonapi.getunidentifiedPersonsWithFilters(page, this.filters).subscribe(
         (data) => {
-          if (data && data.data) {
-            this.unidentifiedPersons = data.data;  // Use unidentifiedPersons here
+          clearInterval(interval);
+          this.progress = 100; // Complete progress
+
+          if (data && data.data.length > 0) {
+            this.unidentifiedPersons = data.data;
+            this.filteredPersons = data.data; // Update filteredPersons array
             this.pagination = data.pagination;
+            this.progressColor = 'bg-success'; // Green if data found
+            this.progressMessage = "✅ Data loaded successfully!";
           } else {
-            console.log("No data returned from API");
+            this.unidentifiedPersons = [];
+            this.filteredPersons = []; // Clear filteredPersons array
+            this.progressColor = 'bg-danger'; // Red if no data found
+            this.progressMessage = "❌ No data found! Try with another filter.";
           }
-          this.loading = false;
+
+          // Hide loader after a delay
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
         },
         (error) => {
-          console.log("Error fetching data", error);
-          this.loading = false;
+          clearInterval(interval);
+          console.error('Error fetching data:', error);
+          this.progressColor = 'bg-danger';
+          this.progressMessage = "❌ Error fetching data!";
+          setTimeout(() => { this.loading = false; }, 1000);
         }
       );
     }, 2000);
   }
-  
-  
-  
+
   applyFilters(): void {
-    this.loadUnidentifiedPersons(this.pagination.current_page); // Re-fetch data with applied filters
+    this.filtersApplied = true;
+    this.loadUnidentifiedPersons(1);
   }
-  
 
   viewDetails(person: any): void {
     if (person && person.full_name) {
@@ -118,8 +147,6 @@ export class UnidentifiedPersonComponent implements OnInit,AfterViewChecked{
       console.error('Selected person is not valid');
     }
   }
-
-
 
   initMap(): void {
     if (!this.selectedPerson?.geometry?.coordinates) {
@@ -177,27 +204,28 @@ export class UnidentifiedPersonComponent implements OnInit,AfterViewChecked{
       this.map.invalidateSize();
     }
   }
-  getallstates(){
+
+  getallstates(): void {
     this.policestationapi.getallstates().subscribe(data => {
-      this.allstates = data
+      this.allstates = data;
     });
   }
 
-  getallcities(){
+  getallcities(): void {
     this.policestationapi.getallcities().subscribe(data => {
-      this.allcities = data
+      this.allcities = data;
     });
   }
 
-  getalldistricts(){
+  getalldistricts(): void {
     this.policestationapi.getalldistricts().subscribe(data => {
-      this.alldistricts = data
+      this.alldistricts = data;
     });
   }
 
-  getallmarital(){
+  getallmarital(): void {
     this.policestationapi.getallmarital().subscribe(data => {
-      this.allmarital = data
+      this.allmarital = data;
     });
   }
 }

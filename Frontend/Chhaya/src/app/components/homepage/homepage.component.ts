@@ -29,11 +29,13 @@ export class HomepageComponent implements AfterViewInit{
 
   // Handle navigation with loading spinner
   onNavigate(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/Main-dashboard']);
-    }, 3000);
+    // this.isLoading = true;
+    // setTimeout(() => {
+    //   this.isLoading = false;
+    //   this.router.navigate(['/Main-dashboard']);
+    // }, 3000);
+    this.router.navigate(['/Main-dashboard']);
+    
   }
 
   toggleDropdown(event: Event, dropdownId: string) {

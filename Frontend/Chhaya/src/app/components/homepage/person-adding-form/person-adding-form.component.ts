@@ -15,7 +15,7 @@ import { dummyFormValues } from './dummy_test';
   templateUrl: './person-adding-form.component.html',
   styleUrls: ['./person-adding-form.component.css']
 })
-export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
+export class PersonAddingFormComponent implements OnInit {
   mapHome: any; // Map for home location
   mapMissing: any; // Map for missing person location
   markerHome: any; // Marker for home location
@@ -36,11 +36,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
 
   constructor(private MPservice :PersonAddAPIService,private fb: FormBuilder){}
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      // this.initMap();
-    }, 100); 
-  } 
+  
 
   ngOnInit() {
     // setTimeout(() => 
@@ -49,7 +45,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
     this.initMap('home'); // Initialize home location map
     this.initMap('missing');  
     this.missingPersonForm = this.fb.group({
-      full_name: ['', [Validators.required, Validators.minLength(3)]],
+      full_name: ['', [Validators.required]],
       gender: ['', Validators.required],
       blood_group: [''],
       date_of_birth: ['', Validators.required], 
@@ -300,23 +296,23 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit  {
       }, 2000);
   }
 
-// Update the form controls with the coordinates
+/// Update the form controls with the coordinates
   updateFormCoordinates(mapType: string, latitude: number, longitude: number): void {
-      if (mapType === "home") {
-          const control = this.missingPersonForm.get("address.location");
-          if (control) {
-              control.patchValue({ latitude, longitude }); // Update home location form control
-          } else {
-              console.error(`Form control 'address.location' not found`);
-          }
-      } else if (mapType === "missing") {
-          const control = this.missingPersonForm.get("missing_location");
-          if (control) {
-              control.patchValue({ latitude, longitude }); // Update missing location form control
-          } else {
-              console.error(`Form control 'missing_location' not found`);
-          }
-      }
+    if (mapType === "home") {
+        const locationGroup = this.missingPersonForm.get("address.location");
+        if (locationGroup) {
+            locationGroup.patchValue({ latitude, longitude }); // Update home location form control
+        } else {
+            console.error(`Form control 'address.location' not found`);
+        }
+    } else if (mapType === "missing") {
+        const missingLocationGroup = this.missingPersonForm.get("missing_location");
+        if (missingLocationGroup) {
+            missingLocationGroup.patchValue({ latitude, longitude }); // Update missing location form control
+        } else {
+            console.error(`Form control 'missing_location' not found`);
+        }
+    }
   }
 
 // Get current location based on the type (home or missing)

@@ -251,6 +251,15 @@
     line-height: 1.6;
 }
 
+.navmaiitem {
+    display: block; 
+    padding: 0.5rem 1rem; 
+    font-size: 25px; 
+    color: #f5a10f;
+    cursor: pointer;
+    margin-left: 1200px;
+}
+
 /* @media (max-width: 480px) {
     .content-box {
         padding: 15px;
@@ -345,7 +354,7 @@
     .navmaiitem {
         display: block; /* Ensure the item is not hidden */
         padding: 0.5rem 1rem; /* Adjust padding for better spacing */
-        font-size: 20px; /* Adjust font size for better visibility */
+        font-size: 30px; /* Adjust font size for better visibility */
     }
 }
 

@@ -1390,7 +1390,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
       this.router.navigate(['/homepage']).catch((error) => {
         console.error('Navigation error:', error);
       });
-    }, 3000);
+    }, 1000);
   }
   
 

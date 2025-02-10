@@ -1,56 +1,62 @@
+<div class="heading-container">
+  <h3 class="main-heading">Search Unidentified Person</h3>
+</div>
 <div class="container-fluid mt-2">
   <!-- Filter Section -->
   <div *ngIf="loading" class="fullscreen-loader">
-    <div class="loader"></div>
+    <div class="progress-container">
+      <div class="progress" style="height: 30px;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated {{ progressColor }}"
+             role="progressbar"
+             [style.width.%]="progress">
+          {{ progress }}%
+        </div>
+      </div>
+      <p class="text-center mt-2">{{ progressMessage }}</p>
+    </div>
   </div>
-  <div class="row g-2 align-items-center mt-2 mb-2 bg-dark">
-    <div class="col-md-2">
-      <select class="form-select" [(ngModel)]="filters.gender" (ngModelChange)="applyFilters()">
-        <option value="all">Select Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Transgender">Transgender</option>
-      </select>
-    </div>
-    
-    <div class="col-md-2">
-      <select class="form-select" [(ngModel)]="filters.city" placeholder="City" (ngModelChange)="applyFilters()">
-        <option value="all">Select city</option>
-        <option *ngFor="let city of allcities" [value]="city">{{ city }}</option>
-      </select>
-    </div>
-    
-    <div class="col-md-2">
-      <select class="form-select" [(ngModel)]="filters.state" placeholder="State" (ngModelChange)="applyFilters()">
-        <option value="all">Select state</option>
-        <option *ngFor="let state of allstates" [value]="state">{{ state }}</option>
-      </select>
-    </div>
-    
-    <div class="col-md-2">
-      <select class="form-select" [(ngModel)]="filters.district" placeholder="District" (ngModelChange)="applyFilters()">
-        <option value="all">Select district</option>
-        <option *ngFor="let district of alldistricts" [value]="district">{{ district }}</option>
-      </select>
-    </div>
-    
-    <div class="col-md-2">
-      <select class="form-select" [(ngModel)]="filters.year" (ngModelChange)="applyFilters()">
-        <option value="" selected>Select Year</option>
-        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <select class="form-select" [(ngModel)]="filters.month" (ngModelChange)="applyFilters()">
-        <option value="" selected>Select Month</option>
-        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
-      </select>
+  
+  <div class="container-fluid filter-section p-3 backcss bg-light rounded shadow-sm mb-2">
+    <!-- <h5 class="text-primary mb-3">Search Filters</h5> -->
+
+    <div class="row g-2 align-items-center ">
+      
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="filters.state" (ngModelChange)="applyFilters()">
+          <option value="" selected >State</option>
+          <option *ngFor="let state of allstates" [value]="state" >{{ state }}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="filters.district" (ngModelChange)="applyFilters()">
+          <option value="" selected >District</option>
+          <option *ngFor="let district of alldistricts" [value]="district">{{ district }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.city" (ngModelChange)="applyFilters()">
+          <option value="" selected>City</option>
+          <option *ngFor="let city of allcities" [value]="city">{{ city }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.year" (ngModelChange)="applyFilters()">
+          <option value="">Year</option>
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" [(ngModel)]="filters.month" (ngModelChange)="applyFilters()">
+          <option value="">Month</option>
+          <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+        </select>
+      </div>
     </div>
 
-    <div class="row g-2 align-items-center mt-2 mb-2">
-      <div class="col-md-2">
+    <div class="row g-2 align-items-center mt-1 ">
+      <div class="col-md-3">
         <select class="form-select" [(ngModel)]="filters.caste" (ngModelChange)="applyFilters()">
-          <option value="all">Select Caste</option>
+          <option value="">Caste</option>
           <option value="Open">Open</option>
           <option value="OBC">OBC</option>
           <option value="SC">SC</option>
@@ -58,19 +64,18 @@
           <option value="Others">Others</option>
         </select>
       </div>
-      
-      <div class="col-md-2">
-        <input type="text" class="form-control" placeholder="Enter Age and search" [(ngModel)]="filters.age"/>
+      <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Age" [(ngModel)]="filters.age" (ngModelChange)="applyFilters()"/>
       </div>
       <div class="col-md-2">
         <select class="form-select" [(ngModel)]="filters.marital_status" (ngModelChange)="applyFilters()">
-          <option value="all">Select Marital Status</option>
-          <option *ngFor="let Marital of allmarital" [value]="Marital">{{ Marital }}</option>
+          <option value="">Marital Status</option>
+          <option *ngFor="let marital of allmarital" [value]="marital">{{ marital }}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.blood_group" (ngModelChange)="applyFilters()">
-          <option value="all">Select Blood group</option> 
+        <select class="form-select" [(ngModel)]="filters.blood_group"(ngModelChange)="applyFilters()">
+          <option value="">Blood Group</option>
           <option value="A+">A+</option>
           <option value="A-">A-</option>
           <option value="B+">B+</option>
@@ -81,57 +86,62 @@
           <option value="AB-">AB-</option>
         </select>
       </div>
-      
       <div class="col-md-2">
-        <input type="text" class="form-control" placeholder="Enter Height and search" [(ngModel)]="filters.height"/>
-      </div>
-      <div class="col-md-1">
-        <button class="btn btn-outline-light w-100" (click)="applyFilters()">Search</button>
+        <input type="text" class="form-control" placeholder="Height" [(ngModel)]="filters.height" (ngModelChange)="applyFilters()"/>
       </div>
     </div>
   </div>
 
   <!-- Table Section -->
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th>Sr No.</th>
-          <th>Photo</th>
-          <th>Full Name</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Blood Group</th>
-          <th>Marital Status</th>
-          <th>Missing Date</th>
-          <th>Condition</th>
-          <th>Last Seen Location</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let person of unidentifiedPersons; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>
-            <div class="image-container">
-              <img [src]="person.photo_upload ? (environment.apiUrl + person.photo_upload) : 'assets/images/Nophoto.png'" alt="person Photo" class="img-fluid rounded" />
-            </div>
-          </td>
-          <td>{{ person.full_name || 'N/A' }}</td>
-          <td>{{ person.estimated_age }}</td>
-          <td>{{ person.gender }}</td>
-          <td>{{ person.blood_group || 'N/A' }}</td>
-          <td>{{ person.marital_status || 'N/A' }}</td>
-          <td>{{ person.last_seen_date }}</td>
-          <td>{{ person.condition_at_discovery }}</td>
-          <td>{{ person.last_location }}</td>
-          <td>
-            <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Show initial message before filters are applied -->
+  <div *ngIf="!filtersApplied">
+    <p class="text-center text-muted mt-3">Please apply the filters to find your person.</p>
   </div>
+
+<!-- Table to display results -->
+  <div>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Sr No.</th>
+            <th>Photo</th>
+            <th>Full Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Action</th>
+            <th style="width: 150px;">Match With</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="filtersApplied && filteredPersons.length > 0">
+          <tr *ngFor="let person of filteredPersons; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <img [src]="person.photo_upload ? (environment.apiUrl + person.photo_upload) : 'assets/images/pngwing.com.png'" 
+                  alt="person Photo" class="img-fluid rounded" 
+                  style="width: 60px; height: 60px; object-fit: cover;" />
+            </td>
+            <td>{{ person.full_name }}</td>
+            <td>{{ person.estimated_age }}</td>
+            <td>{{ person.gender }}</td>
+            <td>
+              <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+            </td>
+            <td>
+              <button class="btn btn-outline-success me-1" >UP</button>
+              <button class="btn btn-outline-dark" >UB</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  <!-- Show message when no persons are found -->
+  <div *ngIf="filtersApplied && filteredPersons.length === 0">
+    <p class="text-center text-danger">No persons found with the applied filters.</p>
+  </div>
+</div>
+
 
   <!-- Pagination Section -->
   <div *ngIf="unidentifiedPersons?.length > 0">

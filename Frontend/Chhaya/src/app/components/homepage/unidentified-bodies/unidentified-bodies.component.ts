@@ -20,17 +20,17 @@ export class UnidentifiedBodiesComponent implements OnInit, AfterViewChecked {
 
   filters = {
     full_name :'',
-    gender :'all',
-    city: 'all',
-    state: 'all',
+    gender :'',
+    city: '',
+    state: '',
     year: '',
     month: '',
-    caste: 'all', 
+    caste: '', 
     age: '',
-    marital_status: 'all',
-    blood_group: 'all',
+    marital_status: '',
+    blood_group: '',
     height: '',
-    district:'all'
+    district:''
 
   };
 
@@ -52,6 +52,11 @@ export class UnidentifiedBodiesComponent implements OnInit, AfterViewChecked {
     has_previous: false,
     has_next: false
   };
+  filtersApplied: boolean = false;  // Initially false
+  progress: number = 0;
+  progressColor: string = 'bg-primary'; // Corrected type of progressColor
+  progressMessage: string = '';
+  
 
   constructor(private unidentifiedbodiesapi: UnidentifiedbodiesapiService,private policestationapi :PoliceStationaoiService) {}
 
@@ -77,31 +82,59 @@ export class UnidentifiedBodiesComponent implements OnInit, AfterViewChecked {
 
   // to get the all data from unidentified bodies service
   loadUnidentifiedBodies(page: number): void {
-    this.loading = true;  
-  
-    
+    if (!this.filtersApplied) {
+      this.filteredPersons = [];  // Clear table initially
+      return; // Don't fetch data until filters are applied
+    }
+
+    this.loading = true;
+    this.progress = 1; // Start at 1%
+    this.progressColor = 'bg-primary'; // Default progress bar color
+
+    // Simulate progress incrementing
+    let interval = setInterval(() => {
+      if (this.progress < 90) {
+        this.progress += 10;
+      }
+    }, 200);
+
     setTimeout(() => {
       this.unidentifiedbodiesapi.getunidentifiedbodiesWithFilters(page, this.filters).subscribe(
         (data) => {
-          if (data && data.data) {
+          clearInterval(interval);
+          this.progress = 100; // Complete progress
+
+          if (data && data.data.length > 0) {
             this.filteredPersons = data.data;
             this.pagination = data.pagination;
+            this.progressColor = 'bg-success'; // Green if data found
+            this.progressMessage = "✅ Data loaded successfully!";
           } else {
-            console.error('No data returned from API');
+            this.filteredPersons = [];
+            this.progressColor = 'bg-danger'; // Red if no data found
+            this.progressMessage = "❌ No data found! Try with another filter.";
           }
-          this.loading = false; 
+
+          setTimeout(() => {
+            this.loading = false; // Hide loader after 1s
+          }, 1000);
         },
         (error) => {
+          clearInterval(interval);
           console.error('Error fetching data:', error);
-          this.loading = false;  
+          this.progressColor = 'bg-danger';
+          this.progressMessage = "❌ Error fetching data!";
+          setTimeout(() => { this.loading = false; }, 1000);
         }
       );
-    }, 2000);  
+    }, 2000);
+  }
+  
+  applyFilters(): void {
+    this.filtersApplied = true; // Mark that filters are applied
+    this.loadUnidentifiedBodies(1); // Load data with filters
   }
 
-  applyFilters(): void {
-    this.loadUnidentifiedBodies(this.pagination.current_page); // Re-fetch data with applied filters
-  }
   
 
   // to see data of individual person 

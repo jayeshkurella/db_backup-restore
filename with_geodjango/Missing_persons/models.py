@@ -566,6 +566,7 @@ class MissingPerson(models.Model):
         
 class UnidentifiedBody(models.Model):
     
+    
     GENDER_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female'),
@@ -679,11 +680,17 @@ class UnidentifiedBody(models.Model):
     fingerprints_collected = models.FileField(upload_to='ALLphotos/Unidentified_Bodies/fingerprints/', blank=True, null=True, help_text="Upload fingerprints collected", db_index=True)
     dna_sample_collected = models.FileField(upload_to='ALLphotos/Unidentified_Bodies/dna_samples/', blank=True, null=True, help_text="Upload DNA samples collected", db_index=True)
     post_mortem_report_upload = models.FileField(upload_to='ALLphotos/Unidentified_Bodies/post_mortem_reports/', blank=True, null=True, help_text="Upload the post-mortem report", db_index=True)
-    
+  
+    reporting_person_name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Name of Reporting Person")
+    reporting_person_contact_number = models.CharField(max_length=15, blank=True, null=True, verbose_name="Contact Number(s)")
+    reporting_person_email = models.EmailField(blank=True, null=True, verbose_name="Email Address")
+    relationship_with_victim = models.CharField(max_length=255, blank=True, null=True, verbose_name="Relationship with Victim")  
     # Metadata
     created_date = models.DateTimeField(auto_now_add=True, db_index=True)
     last_updated = models.DateTimeField(auto_now=True, db_index=True)
     is_deleted = models.BooleanField(default=False, db_index=True)
+    consent = models.BooleanField(default=False)
+
     
     def generate_case_id(self):
         year_month = datetime.now().strftime("%Y-%m")
@@ -883,6 +890,8 @@ class UnidentifiedMissingPerson(models.Model):
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    consent = models.BooleanField(default=False)
+
     
     def generate_case_id(self):
         year_month = datetime.now().strftime("%Y-%m")
