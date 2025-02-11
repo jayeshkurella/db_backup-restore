@@ -203,7 +203,7 @@
               <span style="color: #ff8642;font-size: 14px;">Search Here! </span>
               <div class="col-lg col-md-6">
                 <select
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedState"
                   (change)="filterDataByFilters()"
                   aria-label="State"
@@ -216,7 +216,7 @@
               </div>
               <div class="col-lg col-md-6">
                 <select
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedDistrict"
                   (change)="filterDataByFilters()"
                   aria-label="District"
@@ -232,7 +232,7 @@
               </div>
               <div class="col-lg col-md-6">
                 <select
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedCity"
                   (change)="filterDataByFilters()"
                   aria-label="City"
@@ -245,7 +245,7 @@
               </div>
               <div class="col-lg col-md-6">
                 <select
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedVillage"
                   (change)="filterDataByFilters()"
                   aria-label="Village"
@@ -261,7 +261,7 @@
               </div>
               <div class="col-lg col-md-6">
                 <select
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedPoliceStation"
                   (change)="filterDataByFilters()"
                   aria-label="Police"
@@ -284,7 +284,7 @@
               <div class="col-lg col-md-6">
                 <select
                   id="gender"
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedgender"
                   (change)="filterDataByFilters()"
                   aria-label="Gender"
@@ -301,7 +301,7 @@
                 <!-- <label for="heightRange" class="form-label">Height Range</label> -->
                 <select
                   id="heightRange"
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedHeightRange"
                   (change)="filterDataByFilters()"
                   aria-label="Height Range"
@@ -318,7 +318,7 @@
                 <!-- <label for="ageRange" class="form-label">Age Range</label> -->
                 <select
                   id="ageRange"
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedAgeRange"
                   (change)="filterDataByFilters()"
                   aria-label="Age Range"
@@ -337,7 +337,7 @@
                 <!-- <label for="maritalStatus" class="form-label">Marital Status</label> -->
                 <select
                   id="maritalStatus"
-                  class="form-select form-select-sg"
+                  class="form-select form-select-sg border-dark"
                   [(ngModel)]="selectedmarital"
                   (change)="filterDataByFilters()"
                   aria-label="Marital Status"
@@ -355,7 +355,7 @@
                 <input 
                   id="startDate"
                   type="date" 
-                  class="form-control form-select-sg" 
+                  class="form-control form-select-sg border-dark" 
                   [(ngModel)]="selectedStartDate"
                   (change)="filterDataByFilters()"
                   aria-label="Start Date"
@@ -523,7 +523,7 @@
           <!-- Tab navigation -->
           <ul class="nav nav-tabs mb-2" id="filteredTab" role="tablist">
             <li class="nav-item" role="presentation">
-              <a class="nav-link active" id="missing-tab" data-bs-toggle="tab" href="#missing" 
+              <a class="nav-link active " id="missing-tab" data-bs-toggle="tab" href="#missing" 
                  role="tab" aria-controls="missing" aria-selected="true">
                 <i class="bi bi-person-bounding-box me-2"></i>Missing Persons
               </a>

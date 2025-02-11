@@ -1,88 +1,122 @@
-<div class="container-fluid mt-2">
-  <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <div class="container-fluid d-flex justify-content-center">
-      <a class="navbar-brand text-light" href="#">Search Police Station </a>
-      <form class="d-flex flex-wrap justify-content-center gap-2 mx-auto mt-2 " (ngSubmit)="onSearch()">
-        <input 
-          class="form-control me-2" 
-          type="text" 
-          placeholder="Search by Name" 
-          aria-label="Search Name" 
-          [(ngModel)]="searchName" 
-          name="searchName"
-        >
-        <input 
-          class="form-control me-2" 
-          type="text" 
-          placeholder="Search by City" 
-          aria-label="Search City" 
-          [(ngModel)]="searchCity" 
-          name="searchCity"
-        >
-        <input 
-          class="form-control me-2" 
-          type="text" 
-          placeholder="Search by District" 
-          aria-label="Search District" 
-          [(ngModel)]="searchdistrict" 
-          name="searchdistrict"
-        >
-        <input 
-          class="form-control me-2" 
-          type="text" 
-          placeholder="Search by State" 
-          aria-label="Search State" 
-          [(ngModel)]="searchstate" 
-          name="searchstate"
-        >
-        <button class="btn btn-outline-light" type="submit">Search</button>
-      </form>
-    </div>
-  </nav>
+<div class="container-fluid d-flex justify-content-center align-items-center vh-90 p-4 containerx">
+  <div class="text-center text-white">
+    <h2 class="fw-bold">Find Your Local Police Station</h2>
+    <p class="fs-4">Quick access to emergency services and police stations across the country</p>
 
+    <!-- Search Form -->
+    <form class="mt-4" (ngSubmit)="onSearch()">
+      <div class="row g-3 justify-content-center">
+        <!-- Search by Name -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="searchName" name="searchName">
+        </div>
+        <!-- Search by City -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" placeholder="Search by City" [(ngModel)]="searchCity" name="searchCity">
+        </div>
+        <!-- Search by District -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" placeholder="Search by District" [(ngModel)]="searchdistrict" name="searchDistrict">
+        </div>
+        <!-- Search by State -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" placeholder="Search by State" [(ngModel)]="searchstate" name="searchState">
+        </div>
+      </div>
 
-  <section class="white">
-    <div class="container-fluid py-4">
-      <article class="postcard dark blue" *ngFor="let police of total_policestation">
-        <a class="postcard__img_link">
-          <img class="postcard__img" [src]="environment.apiUrl + police.photo_upload" alt="Image Title" />
-          
-        </a>
-        
-        <div class="postcard__text ">
-          
-          <h1 class="postcard__title blue">{{police.name}}</h1>
-          <div class="postcard__bar"></div>
-          <h1 style="font-weight: bold; font-size: 20px;">Phone : {{police.telephone_no}}</h1>
-          <h1 style="font-weight: bold; font-size: 20px;">Address : {{police.address}}</h1>
-          <h1 style="font-weight: bold; font-size: 20px;">City : {{police.city}}</h1>
-          
-          <ul class="postcard__tagbox">
-            <li class="tag__item " (click)="seeMores(police)"><i class="fas fa-info mr-2" ></i> More Info</li>
-            <li class="tag__item " (click)="seeChowikis(police)">
-                          <i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
-                          <span class="sr-only">Loading...</span> See chowikis under</li>
-          </ul>
-        </div>
-      </article>
-      <div *ngIf="total_policestation?.length > 0">
-        <app-pagination
-          [currentPage]="pagination.current_page"
-          [totalPages]="pagination.total_pages"
-          [hasPrevious]="pagination.has_previous"
-          [hasNext]="pagination.has_next"
-          (pageChange)="onPageChange($event)">
-        </app-pagination>
-        </div>
-        <div *ngIf="total_policestation?.length === 0">
-        <p>No Police Station Available.</p>
-        </div>
-    </div>
-  </section>
+      <!-- Search Button -->
+      <div class="mt-3">
+        <button class="btn btn-primary">
+          <i class="bi bi-search"></i> Search
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 
+<div class="container my-4">
+  <div class="card shadow-lg border-1 p-3 mb-1" *ngFor="let police of total_policestation">
+    <div class="row g-0">
+      <!-- Left Section: Image Placeholder -->
+      <div class="col-md-4 d-flex align-items-center justify-content-center bg-light ">
+        <div class="d-flex align-items-center justify-content-center" style="width: 100%; height: 100%;">
+          <img *ngIf="police.photo_upload; else placeholder" 
+               [src]="environment.apiUrl + police.photo_upload" 
+               alt="{{police.name}}" class="img-fluid">
+          <ng-template #placeholder>
+            <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+          </ng-template>
+        </div>
+      </div>
 
+      <!-- Right Section: Details -->
+      <div class="col-md-8 p-4 ">
+        <div class="d-flex justify-content-between  align-items-start">
+          <h3 class="fw-bold">{{ police.name }}</h3>
+          <span class="badge" [ngClass]="{'bg-success': police.station_status === 'Active', 'bg-danger': police.station_status !== 'Active'}">
+            {{ police.station_status }}
+          </span>
+        </div>
+        <p class="text-muted">
+          <i class="bi bi-geo-alt"></i> {{ police.address }}, {{ police.city }}
+        </p>
+
+        <!-- Horizontal Layout for Info -->
+        <div class="d-flex flex-wrap">
+          <!-- Contact -->
+          <div class="p-3 flex-fill">
+            <h5><i class="bi bi-telephone"></i> Contact</h5>
+            <p>Emergency: 112</p>
+            <p>Helpline: 1091</p>
+            <p>Office: {{ police.telephone_no }}</p>
+          </div>
+
+          <!-- Officer In Charge -->
+          <div class="p-3 flex-fill">
+            <h5><i class="bi bi-person-badge"></i> Officer In Charge</h5>
+            <p>{{ police.officer_name }}acp sharma</p>
+            <p>{{ police.officer_rank }}82</p>
+            <p>{{ police.officer_contact }}7412589632</p>
+          </div>
+
+          <!-- Hours & Info -->
+          <div class="p-3 flex-fill">
+            <h5><i class="bi bi-clock"></i> Hours & Info</h5>
+            <p>24/7</p>
+            <p>Est. {{ police.established_year }}</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-3">
+          <button class="btn btn-outline-primary me-2" (click)="seeMores(police)">
+             More Info
+          </button>
+          <!-- <button class="btn btn-secondary" (click)="seeChowikis(police)">
+            <i class="fa fa-cog fa-spin"></i> See Chowikis Under
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="total_policestation?.length > 0">
+    <app-pagination
+      [currentPage]="pagination.current_page"
+      [totalPages]="pagination.total_pages"
+      [hasPrevious]="pagination.has_previous"
+      [hasNext]="pagination.has_next"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+
+  <!-- No Data Message -->
+  <div *ngIf="total_policestation?.length === 0">
+    <p>No Police Station Available.</p>
+  </div>
+</div>
 
 
 <div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">

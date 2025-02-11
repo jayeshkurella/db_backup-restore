@@ -1,67 +1,76 @@
-<div class="container-fluid mt-2">
-  <div class="row g-2">
-    <!-- Loop through all hospitals -->
-    <div class="col-12" *ngFor="let hospital of allhospitals">
-      <div class="card custom-card shadow-lg">
-        <div class="row g-0 align-items-center">
-          <!-- Image Section -->
-          <div class="col-md-6 d-flex justify-content-center align-items-center">
-            <div class="hospital-photo-container-medium">
-              <img [src]="environment.apiUrl + hospital.photo_upload" alt="hospital Photo" class="img-fluid hospital-photo" />
-            </div>
+<div class="container my-4">
+  <h3 class="fw-bold text-center mb-4">Hospital Information & Details 🏥</h3>
+  <div class="card shadow-sm border-1 p-3 mb-1" *ngFor="let hospital of allhospitals">
+    <div class="row g-0">
+      <!-- Left Section: Image Placeholder -->
+      <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
+        <div class="d-flex align-items-center justify-content-center" style="width: 100%; height: 100%;">
+          <img *ngIf="hospital.photo_upload; else placeholder" 
+               [src]="environment.apiUrl + hospital.photo_upload" 
+               alt="{{ hospital.name }}" class="img-fluid">
+          <ng-template #placeholder>
+            <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Right Section: Details -->
+      <div class="col-md-8 p-4">
+        <div class="d-flex justify-content-between align-items-start">
+          <h3 class="fw-bold">{{ hospital.name || 'Loading...' }}</h3>
+        </div>
+        <p class="text-muted">
+          <i class="bi bi-geo-alt"></i> {{ hospital.hospital_address }}, {{ hospital.city }}, {{ hospital.state }}
+        </p>
+
+        <!-- Horizontal Layout for Info -->
+        <div class="d-flex flex-wrap">
+          <!-- Entity Info -->
+          <div class="p-3 flex-fill">
+            <h5><i class="bi bi-buildings"></i> Entity Type</h5>
+            <p>{{ hospital.entity_type || 'Loading...' }}</p>
           </div>
 
-          <!-- Data Section -->
-          <div class="col-md-6">
-            <div class="card-body">
-              <h4 class="text-center text-uppercase mb-4">{{ hospital.name || "Loading..." }}</h4>
-              <table class="table table-bordered">
-                <tbody>
-                  <tr>
-                    <th>Entity Type</th>
-                    <td>{{ hospital.entity_type || "Loading..." }}</td>
-                  </tr>
-                  <tr>
-                    <th>Zone</th>
-                    <td>{{ hospital.hospital_zone_name || "Loading..." }}</td>
-                  </tr>
-                  <tr>
-                    <th>Division</th>
-                    <td>{{ hospital.hospital_division_name || "Loading..." }}</td>
-                  </tr>
-                  <tr>
-                    <th>Address</th>
-                    <td>{{ hospital.hospital_address || "Loading..." }}</td>
-                  </tr>
-                  <tr>
-                    <th>City</th>
-                    <td>{{ hospital.city || "Not Available" }}</td>
-                  </tr>
-                  <tr>
-                    <th>District</th>
-                    <td>{{ hospital.district || "Not Available" }}</td>
-                  </tr>
-                  <tr>
-                    <th>State</th>
-                    <td>{{ hospital.state || "Not Available" }}</td>
-                  </tr>
-                  <tr>
-                    <th>Country</th>
-                    <td>{{ hospital.country || "Not Available" }}</td>
-                  </tr>
-                  <tr>
-                    <th>Website</th>
-                    <td>
-                      <a *ngIf="hospital.website" [href]="hospital.website" target="_blank" class="text-primary">{{ hospital.website }}</a>
-                      <span *ngIf="!hospital.website">Not Available</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <!-- Zone & Division -->
+          <div class="p-3 flex-fill">
+            <h5><i class="bi bi-map"></i> Zone & Division</h5>
+            <p>Zone: {{ hospital.hospital_zone_name || 'N/A' }}</p>
+            <p>Division: {{ hospital.hospital_division_name || 'N/A' }}</p>
+          </div>
+
+          <!-- Contact & Website -->
+          <div class="p-3 flex-fill">
+            <h5><i class="bi bi-globe"></i> Contact & Website</h5>
+            <p>District: {{ hospital.district || 'Not Available' }}</p>
+            <p>Country: {{ hospital.country || 'Not Available' }}</p>
+            <p>
+              <a *ngIf="hospital.website" [href]="hospital.website" target="_blank" class="text-primary">Visit Website</a>
+              <span *ngIf="!hospital.website">Not Available</span>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Pagination -->
+  <!-- <div *ngIf="allhospitals?.length > 0">
+    <app-pagination
+      [currentPage]="pagination.current_page"
+      [totalPages]="pagination.total_pages"
+      [hasPrevious]="pagination.has_previous"
+      [hasNext]="pagination.has_next"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div> -->
+
+  <!-- No Data Message -->
+  <div *ngIf="allhospitals?.length === 0">
+    <p>No Hospitals Available.</p>
+  </div>
 </div>
+
+
+
+
+

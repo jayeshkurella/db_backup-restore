@@ -32,6 +32,11 @@ class Division(models.Model):
         ]
 
 class PoliceStation(base_models.Model):
+    police_station_CHOICES = [
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+        ('Closed', 'Closed'),
+    ]
     division = models.ForeignKey(Division, on_delete=models.CASCADE, related_name="police_stations")
     name = models.CharField(max_length=100, unique=True)
     address = models.TextField()
@@ -42,6 +47,7 @@ class PoliceStation(base_models.Model):
     boundary = models.PolygonField(null=True, blank=True)  
 
     # Adding more geographical fields
+    station_status = models.CharField(choices=police_station_CHOICES,default='Active', blank=True, null=True)
     village = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     district = models.CharField(max_length=100, blank=True, null=True)

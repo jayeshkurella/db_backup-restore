@@ -104,10 +104,9 @@
     </div>
   </div>
 
-  <!-- Show initial message before filters are applied -->
-  <!-- Message when no filters are applied -->
- <div *ngIf="!filtersApplied">
-  <p class="text-center text-muted mt-3">Please apply the filters to find your person.</p>
+  
+ <div *ngIf="!filtersApplied" class="blink">
+  <p class="text-center text-muted mt-3">Please apply the filters to find person.</p>
   </div>
 
   <!-- Table to display results -->

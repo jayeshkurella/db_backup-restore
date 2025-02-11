@@ -82,12 +82,12 @@
   font-size: 1.8rem;
   cursor: pointer;
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-  color: #007bff; /* Primary color */
+  color: #f58220; /* Primary color */
 }
 
 .user-icon:hover {
   transform: scale(1.1); /* Slight zoom */
-  color: #0056b3; /* Darker shade on hover */
+  color: #f58220; /* Darker shade on hover */
 }
 
 /* Responsive adjustments */

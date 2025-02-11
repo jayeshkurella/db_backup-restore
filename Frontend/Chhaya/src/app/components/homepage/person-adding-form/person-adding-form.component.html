@@ -436,14 +436,17 @@
         </div>
     
         <!-- Latitude & Longitude -->
-        <div class="col-md-6">
-          <label class="form-label">Latitude</label>
-          <input type="text" class="form-control border-dark" formControlName="latitude" readonly placeholder="Latitude">
+        <div class="col-md-12 d-flex gap-3">
+          <div class="flex-fill">
+            <label class="form-label">Latitude</label>
+            <input type="text" class="form-control border-dark" formControlName="latitude" readonly placeholder="Latitude">
+          </div>
+          <div class="flex-fill">
+            <label class="form-label">Longitude</label>
+            <input type="text" class="form-control border-dark" formControlName="longitude" readonly placeholder="Longitude">
+          </div>
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Longitude</label>
-          <input type="text" class="form-control border-dark" formControlName="longitude" readonly placeholder="Longitude">
-        </div>
+        
       </div>
     
         <!-- Last Seen Location -->

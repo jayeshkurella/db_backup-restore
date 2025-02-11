@@ -15,11 +15,18 @@
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
 }
 
-.header-bottom
-{
-  border-bottom: 2px solid #000;
-  padding-bottom: 4px;
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
+
+.blink {
+  font-size: 18px;
+  animation: blink 1s infinite;
+}
+
+
 
 .backcss{
   /* border-top: 2px solid black; */
