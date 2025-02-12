@@ -39,6 +39,7 @@
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Glow effect */
 }
 
+
 /* Filters wrapper */
 .filters-wrapper {
   max-width: 100%;
@@ -50,39 +51,40 @@
   margin-top: 10px; /* Added margin for better spacing */
 }
 
-/* Filter chip styles */
 .filter-chip {
-  background: linear-gradient(45deg, #6a11cb, #2575fc); /* New gradient background */
-  color: white;
-  padding: 8px 16px; /* Slightly larger padding */
-  border-radius: 25px; /* Pill shape */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  font-size: 0.9rem;
+  color: rgb(0, 0, 0);
+  padding: 8px 16px;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
   font-weight: 500;
   display: flex;
   align-items: center;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  border: 1px solid black !important; /* Ensure border is applied */
+  background-color: transparent; /* Default background */
 }
+
 
 .filter-chip i {
   font-size: 1rem;
-  margin-right: 6px; /* Space between icon and text */
+  margin-right: 6px; 
 }
 
 /* Hover effect for filter chips */
-.filter-chip:hover {
-  transform: translateY(-2px); /* Lift effect */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow */
-  background: linear-gradient(45deg, #2575fc, #6a11cb); /* Reverse gradient */
-}
+  .filter-chip:hover {
+    border: 1px solid #f58220 !important;  
+    background-color: rgb(250, 186, 143); 
+    /* transform: translateY(-2px);  */
+  }
 
 /* User icon styles */
 .user-icon {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   cursor: pointer;
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-  color: #f58220; /* Primary color */
+  color: #f58220;
 }
 
 .user-icon:hover {
@@ -167,10 +169,7 @@
 
 
 
-.user-icon {
-  color: blueviolet;
-  font-size: 1.5rem;
-}
+
 
 canvas {
   width: 100% !important;
@@ -268,6 +267,35 @@ canvas {
   }
 }
 
+/* male card */
+
+
+.statistics-card-header{
+  font-size: 14px;
+  color: #f58220;
+}
+
+.male-card-summery{
+  font-size: 13px; 
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.custom-icon {
+  width: 20px;
+  height: 20px;
+  fill: #f58220;
+}
+
+
+/* Info icon styling */
+.info-icon {
+  cursor: pointer;
+  font-size: 12px;
+}
+
+
+
 
 
 .card-body {
@@ -300,7 +328,9 @@ canvas {
 
 
 
-
+.female-card-summery{
+  font-weight: 13px;
+}
 
 
 
@@ -442,7 +472,7 @@ canvas {
 
 .card-headerff {
   background-color: #f8f9fa;
-  font-size: 14px !important;
+  font-size: 13px !important;
   padding-bottom: 5px !important; /* Reduce bottom padding */
   margin-bottom: 0px !important;  /* Remove margin */
 }
@@ -460,7 +490,7 @@ canvas {
   text-align: center;
   vertical-align: middle;
   padding: 12px;
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 .tableff th {
@@ -473,7 +503,7 @@ canvas {
 }
 
 .tableff thead th {
-  font-size: 14px !important;
+  font-size: 13px !important;
   position: sticky;
   top: 0;
   z-index: 2; /* Ensures headers appear above table body content */
@@ -541,38 +571,38 @@ canvas {
 
 /* Data font size */
 .modal-body p, .modal-body div, .modal-body h5, .modal-body .row div {
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 .card-header  h6 {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 
 .card-header .card-title {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 
 .card-body h6 {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 
 .card-body .card-body p, 
 .card-body .card-body h5, 
 .card-body .d-flex, 
 .card-body .card-body span {
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 
 /* Adjust font size for the select input */
 .form-select.form-select-sg {
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 /* Adjust font size for each option inside the select */
 .form-select.form-select-sg option {
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 .form-control.form-select-sg {
-  font-size: 13px !important;
+  font-size: 12px !important;
 }

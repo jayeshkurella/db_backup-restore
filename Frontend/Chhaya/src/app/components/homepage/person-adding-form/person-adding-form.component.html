@@ -7,28 +7,10 @@
     <div class="card p-4 mb-2 bg-light">
       <h5 class="header-bottom pb-2">Personal Information</h5>
         <div class="row g-3">
-            <div class="col-md-12"><input type="text" class="form-control" formControlName="full_name" placeholder="Full Name"></div>
-            <div class="col-md-3">
-              <select class="form-select border-dark" id="gender" name="gender" formControlName="gender">
-                  <option value="" selected disabled>Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-              </select>
-            </div>
-
-              <div class="col-md-3">
-                <select class="form-select border-dark" id="bloodGroup" formControlName="blood_group">
-                    <option value="" selected hidden>Blood Group</option>
-                    <option value="A+">A+</option>
-                    <option value="O+">O+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-
-            <div class="col-md-3">
+            <div class="col-md-6"><input type="text" class="form-control border-dark" formControlName="full_name" placeholder="Full Name"></div>
+           
+            <!-- birth date -->
+            <div class="col-md-2">
               <input 
                   type="date" 
                   class="form-control border-dark" 
@@ -38,7 +20,8 @@
               />
             </div>
 
-            <div class="col-md-3">
+            <!-- age -->
+            <div class="col-md-2">
               <input
                   type="number"
                   class="form-control border-dark"
@@ -51,34 +34,60 @@
               />
             </div>
 
-            <div class="col-md-3">
+            <!-- birth time -->
+            <div class="col-md-2">
               <input 
-                  type="time" 
-                  class="form-control" 
+                  type="text" 
+                  class="form-control border-dark" 
                   id="tob" 
-                  placeholder="time of birth"
                   formControlName="time_of_birth"
-                  onfocus="this.removeAttribute('value');" 
-                  value="--:--">
+                  placeholder="Time of Birth"
+                  onfocus="this.type='time'; this.value='';" 
+                  onblur="if(!this.value) { this.type='text'; this.placeholder='Time of Birth'; }">
             </div>
+          
+          
+
+            <!-- gender -->
+            <div class="col-md-2">
+              <select class="form-select border-dark" id="gender" name="gender" formControlName="gender">
+                  <option value="" selected disabled>Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- blood group -->
+            <div class="col-md-2">
+              <select class="form-select border-dark" id="bloodGroup" formControlName="blood_group">
+                  <option value="" selected hidden>Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="O+">O+</option>
+                  <option value="B+">B+</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+              </select>
+          </div>
+
         <!-- Place of Birth -->
-          <div class="col-md-3">
-            <input type="text" class="form-control" id="place_of_birth" formControlName="place_of_birth" placeholder="Place of Birth">
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" id="place_of_birth" formControlName="place_of_birth" placeholder="Place of Birth">
           </div>
 
           <!-- Height -->
-          <div class="col-md-3">
-            <input type="text" class="form-control" id="height" formControlName="height" placeholder="Height (e.g., 151)">
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" id="height" formControlName="height" placeholder="Height (e.g., 151)">
           </div>
 
           <!-- Weight -->
-          <div class="col-md-3">
-            <input type="text" class="form-control" id="weight" formControlName="weight" placeholder="Weight (e.g., 50,55)">
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" id="weight" formControlName="weight" placeholder="Weight (e.g., 50,55)">
           </div>
 
           <!-- Complexion -->
-          <div class="col-md-3">
-            <select class="form-select" id="complexion" formControlName="complexion">
+          <div class="col-md-2">
+            <select class="form-select border-dark" id="complexion" formControlName="complexion">
                 <option value="" disabled selected>Complexion</option>
                 <option value="Fair">Fair</option>
                 <option value="Dusky">Dusky</option>
@@ -88,8 +97,8 @@
           </div>
 
           <!-- Hair Color -->
-          <div class="col-md-3">
-            <select class="form-select" id="hairColor" formControlName="hair_color">
+          <div class="col-md-2">
+            <select class="form-select border-dark" id="hairColor" formControlName="hair_color">
                 <option value="" disabled selected>Hair Color</option>
                 <option value="Black">Black</option>
                 <option value="Brown">Brown</option>
@@ -98,8 +107,8 @@
           </div>
 
           <!-- Hair Type -->
-          <div class="col-md-3">
-            <select class="form-select" id="hairType" formControlName="hair_type">
+          <div class="col-md-2">
+            <select class="form-select border-dark" id="hairType" formControlName="hair_type">
                 <option value="" disabled selected>Hair Type</option>
                 <option value="Straight">Straight</option>
                 <option value="Wavy">Wavy</option>
@@ -109,8 +118,8 @@
           </div>
 
           <!-- Eye Color -->
-          <div class="col-md-3">
-            <select class="form-select" id="eyeColor" formControlName="eye_color">
+          <div class="col-md-2">
+            <select class="form-select border-dark" id="eyeColor" formControlName="eye_color">
                 <option value="" disabled selected>Eye Color</option>
                 <option value="Dark Brown">Dark Brown</option>
                 <option value="Light Brown">Light Brown</option>
@@ -122,18 +131,18 @@
           </div>
 
           <!-- Birthmark -->
-          <div class="col-md-3">
-            <input type="text" class="form-control" id="birthmark" formControlName="birth_mark" placeholder="Birthmark">
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" id="birthmark" formControlName="birth_mark" placeholder="Birthmark">
           </div>
 
           <!-- Distinctive Marks -->
-          <div class="col-md-3">
-            <input type="text" class="form-control" id="distinctiveMarks" formControlName="distinctive_mark" placeholder="Distinctive Marks">
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" id="distinctiveMarks" formControlName="distinctive_mark" placeholder="Distinctive Marks">
           </div>
 
           <!-- Condition -->
-          <div class="col-md-3">
-            <select class="form-select" id="condition" formControlName="condition">
+          <div class="col-md-2">
+            <select class="form-select border-dark" id="condition" formControlName="condition">
                 <option value="" disabled selected>Condition</option>
                 <option value="Memory loss">Memory loss</option>
                 <option value="Shock">Shock</option>

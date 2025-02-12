@@ -27,7 +27,7 @@
       <div class="filters-wrapper d-flex flex-wrap justify-content-center mt-2">
         <div
           *ngIf="selectedState !== 'All States'"
-          class="filter-chip me-2 mb-2"
+          class="filter-chip me-2 mb-2 border-dark"
         >
           <i class="bi bi-geo-alt me-1"></i> State: {{ selectedState }}
         </div>
@@ -83,7 +83,7 @@
       <div class="card h-100  p-1">
         <!-- Card Header -->
         <div class=" bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #e0f7fa, #b2dfdb);">
-          <h6 class="text-center mb-0">Male Statistics</h6>
+          <h6 class="statistics-card-header mb-0">Male Statistics</h6>
         </div>
         
        
@@ -153,42 +153,96 @@
           </div>
     
           <!-- Male Stats Summary -->
-          <div class="row g-1">
-            <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f7fa, #4caf50);">
-                <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-check-circle-fill fs-5 text-success"></i>
-                  <div>
-                    <p class="text-black mb-0 small">Resolved Unidentified Bodies </p>
-                    <h6 class="text-black mb-0">{{ deceasedCountgendercount.Male || 0 }}</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
-                <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-person-check-fill fs-5 text-success"></i>
-                  <div>
-                    <p class="text-black mb-0 small">Missing Persons Mached</p>
+          <div class="row g-2">
+          <!-- resolved missing person -->
+          <div class="col-12">
+            <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <!-- Image and Text in Same Row -->
+                    <div class="d-flex align-items-start gap-2">
+                        <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon">
+                        <div class="d-flex flex-column">
+                            <p class="text-black mb-0">Resolved Missing Person</p>
+                            <div class="d-flex align-items-center">
+                                <p class="text-black mb-0">(RMP)</p>
+                                <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Missing Persons"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Count -->
                     <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
-                  </div>
                 </div>
-              </div>
             </div>
-            <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fff3e0, #ff9800);">
-                <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-clock-fill fs-5 text-warning"></i>
-                  <div>
-                    <p class="text-black mb-0 small">Pending Persons</p>
-                    <h6 class="text-black mb-0">{{ pendingGendercounts.Male || 0 }}</h6>
-                  </div>
+          </div>
+                
+         <!-- resloved UP -->
+          <div class="col-12">
+            <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <!-- Image and Text in Same Row -->
+                    <div class="d-flex align-items-start gap-2">
+                        <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon">
+                        <div class="d-flex flex-column">
+                            <p class="text-black mb-0 ">Resolved Unidentified Person</p>
+                            <div class="d-flex align-items-center">
+                                <p class="text-black mb-0">(RUP)</p>
+                                <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Unidentified Persons"></i>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Count -->
+                    <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
                 </div>
-              </div>
             </div>
           </div>
         
+          <!-- resolved UB -->
+          <div class="col-12">
+            <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f7fa, #4caf50);">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <!-- Image and Text in Same Row -->
+                    <div class="d-flex align-items-start gap-2">
+                        <img src="assets/images/user_icon.svg" alt="Resolved" class="custom-icon">
+                        <div class="d-flex flex-column">
+                            <p class="text-black mb-0 ">Resolved Unidentified Bodies</p>
+                            <div class="d-flex align-items-center">
+                                <p class="text-black mb-0">(RUB)</p>
+                                <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Unidentified Bodies"></i>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Count -->
+                    <h6 class="text-black mb-0">{{ deceasedCountgendercount.Male || 0 }}</h6>
+                </div>
+            </div>
+         </div>
+        
+          <!-- pending person -->
+          <div class="col-12">
+            <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fff3e0, #ff9800);">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <!-- Image and Text in Same Row -->
+                    <div class="d-flex align-items-start gap-2">
+                        <img src="assets/images/user_icon.svg" alt="Pending" class="custom-icon">
+                        <div class="d-flex flex-column">
+                            <p class="text-black mb-0">Pending Persons</p>
+                            <div class="d-flex align-items-center">
+                                <p class="text-black mb-0">(PP)</p>
+                                <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Pending Persons"></i>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Count -->
+                    <h6 class="text-black mb-0">{{ pendingGendercounts.Male || 0 }}</h6>
+                </div>
+            </div>
+        </div>
+        
+          </div>
       </div>
     </div>
 
@@ -385,7 +439,7 @@
               <div
                 id="map"
                 style="
-                  height: 416px;
+                  height: 450px;
                   border: 1px solid #000000;
                   border-radius: 5px;
                 "
@@ -400,7 +454,7 @@
       <div class="card h-100 p-1">
         <!-- Card Header -->
         <div class="bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #f8bbd0, #f48fb1);">
-          <h6 class="text-center mb-0">Female Statistics</h6>
+          <h6 class="statistics-card-header mb-0">Female Statistics</h6>
         </div>
         <div class="row g-1 mb-2">
           <!-- Female Stats from Missing Person -->
@@ -469,41 +523,88 @@
           </div>
     
           <!-- Female Stats Summary -->
-          <div class="row g-1">
+         
+          <div class="row g-2">
+            <!-- Resolved Missing Females (RMF) -->
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fce4ec, #f06292);">
-                <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-check-circle-fill fs-5 text-success"></i>
-                  <div>
-                    <p class="text-black mb-0 small">Resolved Unidentified Bodies</p>
-                    <h6 class="text-black mb-0">{{ deceasedCountgendercount.Female || 0 }}</h6>
-                  </div>
+                <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffebee, #ff7043);">
+                    <div class="card-body p-2 d-flex align-items-center justify-content-between border-dark">
+                        <div class="d-flex align-items-start gap-2">
+                            <img src="assets/images/user_icon.svg" alt="Resolved" class="custom-icon">
+                            <div class="d-flex flex-column">
+                                <p class="text-black mb-0 ">Resolved Missing Females</p>
+                                <div class="d-flex align-items-center">
+                                    <p class="text-black mb-0">(RMF)</p>
+                                    <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Resolved Missing Females"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
+                    </div>
                 </div>
-              </div>
             </div>
+        
+            <!-- Resolved Unidentified Bodies (RUB) -->
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #f8bbd0, #e91e63);">
-                <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-person-check-fill fs-5 text-success"></i>
-                  <div>
-                    <p class="text-black mb-0 small">Missing Female Matched</p>
-                    <h6 class="text-black mb-0">{{ found_alivegendercount.Female || 0 }}</h6>
-                  </div>
+                <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fce4ec, #f06292);">
+                    <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-start gap-2">
+                            <img src="assets/images/user_icon.svg" alt="Resolved" class="custom-icon">
+                            <div class="d-flex flex-column">
+                                <p class="text-black mb-0 ">Resolved Unidentified Females</p>
+                                <div class="d-flex align-items-center">
+                                    <p class="text-black mb-0">(RUF)</p>
+                                    <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Resolved Unidentified Females"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="text-black mb-0">{{ deceasedCountgendercount.Female || 0 }}</h6>
+                    </div>
                 </div>
-              </div>
             </div>
+        
+            <!-- Missing Female Matched (MFM) -->
             <div class="col-12">
-              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffebee, #ff7043);">
-                <div class="card-body p-2 d-flex align-items-center gap-2">
-                  <i class="bi bi-clock-fill fs-5 text-warning"></i>
-                  <div>
-                    <p class="text-black mb-0 small">Pending Female</p>
-                    <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
-                  </div>
+                <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #f8bbd0, #e91e63);">
+                    <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-start gap-2">
+                            <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon">
+                            <div class="d-flex flex-column">
+                                <p class="text-black mb-0 ">Resolved Unidentified Bodies</p>
+                                <div class="d-flex align-items-center">
+                                    <p class="text-black mb-0">(RUB)</p>
+                                    <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Unidentified Bodies"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="text-black mb-0">{{ found_alivegendercount.Female || 0 }}</h6>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+        
+            <!-- Pending Female (PF) -->
+            <div class="col-12">
+                <div class="card shadow-sm border-0 bg-gradient " style="background: linear-gradient(to bottom right, #ffebee, #ff7043);">
+                    <div class="card-body p-2 d-flex align-items-center justify-content-between border-dark">
+                        <div class="d-flex align-items-start gap-2">
+                            <img src="assets/images/user_icon.svg" alt="Pending" class="custom-icon">
+                            <div class="d-flex flex-column">
+                                <p class="text-black mb-0">Pending Female</p>
+                                <div class="d-flex align-items-center">
+                                    <p class="text-black mb-0">(PF)</p>
+                                    <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Pending Female"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+          
+          
+
        
       </div>
     </div>

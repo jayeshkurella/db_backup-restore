@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AllcountServiceService } from 'src/app/services/allcount-service.service';
 import { environment } from 'src/envirnments/envirnment';
@@ -121,6 +121,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   UBpendingGendercounts: { Male: number; Female: number ; Other: number } = { Male: 0, Female: 0, Other:0};
   UBsolvedGenderCounts: { Male: number; Female: number; Other: number } = { Male: 0, Female: 0, Other: 0};
   
+ 
   
   constructor(
     private router: Router, 
@@ -132,11 +133,18 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
     private policestationapi :PoliceStationaoiService,
     private fitereddataapi :MainDashserviceService,
     private cdr: ChangeDetectorRef,
-  ) {
-    
-   
-  }
+  ) {}
 
+ 
+  ngAfterViewInit(): void {
+    this.initMap();
+    this.getMissingPersonsData(1); 
+    this.getUnidentifiedPersonsData(1); 
+    this.getUnidentifiedBodiesData(1); 
+    // this.addCountsLegend();
+    
+  }
+  
 
   pagination: any = {
     current_page: 1,
@@ -971,16 +979,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   private unidentifiedBodiesLayer: L.LayerGroup = L.layerGroup();
   private map: L.Map | undefined;
 
-  ngAfterViewInit(): void {
-    this.initMap();
-    this.getMissingPersonsData(1); 
-    this.getUnidentifiedPersonsData(1); 
-    this.getUnidentifiedBodiesData(1); 
-    
-  
-    // this.addCountsLegend();
-    
-  }
+ 
 
  
 

@@ -21,6 +21,11 @@
     padding-bottom: 4px;
 }
 
+::placeholder {
+  color: black !important;
+  opacity: 1; /* Ensure full visibility in some browsers */
+}
+
 
 
 /* Style for the navbar */
