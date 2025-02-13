@@ -14,23 +14,23 @@
                     class="dropdown-toggle d-flex align-items-center"
                     (click)="toggleDropdown($event, '#reportCaseMenu')"
                 >
-                    <i class="bi bi-folder-plus me-2"></i>
+                    <i class="bi bi-folder-plus me-2 custom-icon"></i>
                     <span>Report Case</span>
                 </a>
                 <ul class="collapse list-unstyled ps-3" [class.show]="openDropdown === '#reportCaseMenu'" id="reportCaseMenu">
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'Add-missing-person'">
-                            <i class="bi bi-person me-2"></i> Missing Person
+                            <i class="bi bi-person me-2 custom-icon "></i> Missing Person
                         </a>
                     </li>
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'add-unidentified-person'">
-                            <i class="bi bi-question-circle me-2"></i> Unidentified Person
+                            <i class="bi bi-question-circle me-2 custom-icon"></i> Unidentified Person
                         </a>
                     </li>
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'add-unidentified-body'">
-                            <i class="bi bi-file-earmark-medical me-2"></i> Unidentified Body
+                            <i class="bi bi-file-earmark-medical me-2 custom-icon"></i> Unidentified Body
                         </a>
                     </li>
                 </ul>
@@ -45,23 +45,23 @@
                     role="button" 
                     (click)="toggleDropdown($event, 'searchCaseMenu')"
                 >
-                    <i class="bi bi-search me-2"></i>
+                    <i class="bi bi-search me-2 custom-icon"></i>
                     <span>Search Case</span>
                 </a>
                 <ul class="collapse list-unstyled ps-3" [class.show]="openDropdown === 'searchCaseMenu'" id="searchCaseMenu">
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'missingperson'">
-                            <i class="bi bi-person me-2"></i> Missing Person
+                            <i class="bi bi-person me-2 custom-icon"></i> Missing Person
                         </a>
                     </li>
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'unidentified-person'">
-                            <i class="bi bi-question-diamond me-2"></i> Unidentified Person
+                            <i class="bi bi-question-diamond me-2 custom-icon"></i> Unidentified Person
                         </a>
                     </li>
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'unidentified-bodies'">
-                            <i class="bi bi-person-x me-2"></i> Unidentified Bodies
+                            <i class="bi bi-person-x me-2 custom-icon"></i> Unidentified Bodies
                         </a>
                     </li>
                 </ul>
@@ -74,18 +74,18 @@
                     role="button" 
                     (click)="toggleDropdown($event, 'resourcesMenu')"
                 >
-                    <i class="bi bi-briefcase me-2"></i>
+                    <i class="bi bi-briefcase me-2 custom-icon" ></i>
                     <span>Resources</span>
                 </a>
                 <ul class="collapse list-unstyled ps-3" [class.show]="openDropdown === 'resourcesMenu'" id="resourcesMenu">
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'policestation'">
-                            <i class="bi bi-shield-shaded me-2"></i> Police Stations
+                            <i class="bi bi-shield-shaded me-2 custom-icon"></i> Police Stations
                         </a>
                     </li>
                     <li>
                         <a class="d-flex align-items-center" [routerLink]="'Hospitals'">
-                            <i class="bi bi-hospital me-2"></i> Hospitals
+                            <i class="bi bi-hospital me-2 custom-icon"></i> Hospitals
                         </a>
                     </li>
                 </ul>
@@ -95,7 +95,7 @@
             <!-- Volunteer Link -->
             <li class="sidebar-item">
                 <a class="d-flex align-items-center" [routerLink]=" 'volunteers' ">
-                    <i class="bi bi-hand-thumbs-up me-2"></i>
+                    <i class="bi bi-hand-thumbs-up me-2 custom-icon"></i>
                     <span>Volunteer</span>
                 </a>
             </li>
@@ -113,18 +113,19 @@
                 </button>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link navmaiitem" href="javascript:void(0)" (click)="onNavigate()">
-                            <i class="bi bi-person-circle"></i>
+                        <a class="nav-link navmaiitem">
+                            <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon" (click)="onNavigate()">
                         </a>
                     </li>
-                    
                 </ul>
+                
+                
                 <!-- Navbar Links -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto ">
                         <li class="nav-item">
-                            <a class="nav-link navmaiitem" href="javascript:void(0)" (click)="onNavigate()">
-                                <i class="bi bi-person-circle"></i>
+                            <a class="nav-link navmaiitem">
+                                <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon" (click)="onNavigate()">
                             </a>
                         </li>
                     </ul>

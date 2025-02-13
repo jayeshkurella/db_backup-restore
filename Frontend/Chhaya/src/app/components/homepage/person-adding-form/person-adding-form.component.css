@@ -7,7 +7,7 @@
 }
 
 .main-heading {
-  font-size: 25px; /* Larger font size */
+  font-size: 18px; /* Larger font size */
   font-weight: bold; /* Make it bold */
   color: #2c3e50; /* Dark color for contrast */
   text-transform: uppercase; /* Make the text uppercase for added impact */
@@ -17,15 +17,37 @@
 
 .header-bottom
   {
-    border-bottom: 2px solid #000;
-    padding-bottom: 4px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    color :#f58200;
+    font-size: 14px;
+    
+    /* padding: 8px; */
+}
+
+.selectors-font{
+  color: rgb(59, 58, 58) !important;
+  font-size: 12px;
+
 }
 
 ::placeholder {
-  color: black !important;
-  opacity: 1; /* Ensure full visibility in some browsers */
+  color: rgb(59, 58, 58) !important;
+  font-size: 12px;
+  opacity: 1; 
 }
 
+.custom-hover{
+  background-color: #f58200 !important;
+  color: white !important; /* Adjust text color for better visibility */
+  border-color: #ff5e00 !important;
+}
+
+.border-dark{
+  border: 1px solid #d3d3d3 !important;
+  border-radius: 4px !important;
+}
 
 
 /* Style for the navbar */
@@ -33,11 +55,11 @@
     background: linear-gradient(90deg, rgba(255, 153, 51, 1) 0%, rgba(255, 87, 34, 1) 100%);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
-    border-radius: 0 0 15px 15px; /* Rounded corners at the bottom */
+    border-radius: 0 0 15px 15px; 
   }
   
   .navbar-brand {
-    font-size: 2rem; /* Larger font size */
+    font-size: 2rem; 
     font-weight: bold;
     letter-spacing: 1.5px;
     text-transform: uppercase;

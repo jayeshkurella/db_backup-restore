@@ -63,7 +63,9 @@
     <!-- User Icon -->
     <div class="d-flex align-items-center">
       <a class="text-dark">
-        <i class="bi bi-person-circle user-icon" (click)="onNavigate()"></i>
+        <!-- <i class="bi bi-person-circle user-icon" ></i> -->
+        <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon-navbar" (click)="onNavigate()">
+
       </a>
     </div>
   </div>
@@ -624,21 +626,21 @@
           <!-- Tab navigation -->
           <ul class="nav nav-tabs mb-2" id="filteredTab" role="tablist">
             <li class="nav-item" role="presentation">
-              <a class="nav-link active " id="missing-tab" data-bs-toggle="tab" href="#missing" 
+              <a class="nav-link active filter-tab-items " id="missing-tab" data-bs-toggle="tab" href="#missing" 
                  role="tab" aria-controls="missing" aria-selected="true">
-                <i class="bi bi-person-bounding-box me-2"></i>Missing Persons
+                <i class="bi bi-person-bounding-box me-2 filtered-data-tab-icon "></i>Missing Persons
               </a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="unidentified-tab" data-bs-toggle="tab" href="#unidentified" 
+              <a class="nav-link filter-tab-items" id="unidentified-tab" data-bs-toggle="tab" href="#unidentified" 
                  role="tab" aria-controls="unidentified" aria-selected="false">
-                <i class="bi bi-person-lines-fill me-2"></i>Unidentified Persons
+                <i class="bi bi-person-lines-fill me-2 filtered-data-tab-icon "></i>Unidentified Persons
               </a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="bodies-tab" data-bs-toggle="tab" href="#bodies" 
+              <a class="nav-link filter-tab-items" id="bodies-tab" data-bs-toggle="tab" href="#bodies" 
                  role="tab" aria-controls="bodies" aria-selected="false">
-                <i class="bi bi-person-x-fill me-2"></i>Unidentified Bodies
+                <i class="bi bi-person-x-fill me-2 filtered-data-tab-icon  "></i>Unidentified Bodies
               </a>
             </li>
           </ul>
@@ -669,20 +671,21 @@
                       <td>{{ i + 1 }}</td>
                       <td>
                         <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
-                             alt="Person Photo" class="img-fluid rounded" style="height: 80px; width: 80px; object-fit: cover;" />
+                             alt="Person Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
                       </td>
                       <td>{{ person.full_name || 'Unknown' }}</td>
                       <td>{{ person.age || 'Not specified' }}</td>
                       <td>
-                        <i class="bi bi-gender-male text-primary" *ngIf="person.gender === 'Male'"></i>
-                        <i class="bi bi-gender-female text-danger" *ngIf="person.gender === 'Female'"></i>
-                        <i class="bi bi-gender-ambiguous text-secondary" *ngIf="person.gender !== 'Male' && person.gender !== 'Female'"></i>
+                        <img *ngIf="person.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40">
+                        <img *ngIf="person.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                        <img *ngIf="person.gender !== 'Male' && person.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
                       </td>
+                      
                       <td>{{ person.address.city || 'Not specified' }}</td>
                       <td>{{ person.address.district || 'Not specified' }}</td>
                       <td>{{ person.address.state || 'Not specified' }}</td>
                       <td>
-                        <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(person)">View</button>
+                        <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -712,20 +715,20 @@
                       <td>{{ i + 1 }}</td>
                       <td>
                         <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
-                             alt="Person Photo" class="img-fluid rounded" style="height: 80px; width: 80px; object-fit: cover;" />
+                             alt="Person Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
                       </td>
                       <td>{{ person.full_name || 'Unknown' }}</td>
                       <td>{{ person.estimated_age || 'Not specified' }}</td>
                       <td>
-                        <i class="bi bi-gender-male text-primary" *ngIf="person.gender === 'Male'"></i>
-                        <i class="bi bi-gender-female text-danger" *ngIf="person.gender === 'Female'"></i>
-                        <i class="bi bi-gender-ambiguous text-secondary" *ngIf="person.gender !== 'Male' && person.gender !== 'Female'"></i>
+                        <img *ngIf="person.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40">
+                        <img *ngIf="person.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                        <img *ngIf="person.gender !== 'Male' && person.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
                       </td>
                       <td>{{ person.address.city || 'Not specified' }}</td>
                       <td>{{ person.address.district || 'Not specified' }}</td>
                       <td>{{ person.address.state || 'Not specified' }}</td>
                       <td>
-                        <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(person)">View</button>
+                        <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -755,20 +758,20 @@
                       <td>{{ i + 1 }}</td>
                       <td>
                         <img [src]="body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : 'assets/images/Nophoto.png'"
-                             alt="Body Photo" class="img-fluid rounded" style="height: 80px; width: 80px; object-fit: cover;" />
+                             alt="Body Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
                       </td>
                       <td>{{ body.full_name || 'Unknown' }}</td>
                       <td>{{ body.estimated_age || 'Not specified' }}</td>
                       <td>
-                        <i class="bi bi-gender-male text-primary" *ngIf="body.gender === 'Male'"></i>
-                        <i class="bi bi-gender-female text-danger" *ngIf="body.gender === 'Female'"></i>
-                        <i class="bi bi-gender-ambiguous text-secondary" *ngIf="body.gender !== 'Male' && body.gender !== 'Female'"></i>
+                        <img *ngIf="body.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40" >
+                        <img *ngIf="body.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                        <img *ngIf="body.gender !== 'Male' && body.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
                       </td>
                       <td>{{ body.address.city|| 'Not specified' }}</td>
                       <td>{{ body.address.district || 'Not specified' }}</td>
                       <td>{{ body.address.state || 'Not specified' }}</td>
                       <td>
-                        <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(body)">View</button>
+                        <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(body)">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -820,11 +823,14 @@ aria-hidden="true"
               [src]="
                 selectedPerson.photo_upload
                   ? environment.apiUrl + selectedPerson.photo_upload
+                  : selectedPerson.body_photo_upload
+                  ? environment.apiUrl + selectedPerson.body_photo_upload
                   : 'assets/images/Nophoto.png'
               "
               alt="No Photo uploaded"
               class="img-fluid rounded"
             />
+
           </div>
           <div class="col-md-7">
             <h4>{{ selectedPerson.full_name }}</h4>
