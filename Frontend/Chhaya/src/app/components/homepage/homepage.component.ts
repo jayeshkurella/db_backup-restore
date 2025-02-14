@@ -9,7 +9,9 @@ import { Collapse } from 'bootstrap';
 })
 export class HomepageComponent implements AfterViewInit{
 
-  
+  isSidebarOpen = false;
+  OpenDropdown: string | null = null;
+
   isLoading = false;
   openDropdown: string | null = null;
 
@@ -41,6 +43,14 @@ export class HomepageComponent implements AfterViewInit{
   toggleDropdown(event: Event, dropdownId: string) {
     event.preventDefault(); // Prevents default anchor behavior
     this.openDropdown = this.openDropdown === dropdownId ? null : dropdownId;
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+}
+
+  closeSidebar() {
+      this.isSidebarOpen = false;
   }
 
 

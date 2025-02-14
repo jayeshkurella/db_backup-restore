@@ -1,17 +1,34 @@
 .containerx {
-    background: rgb(245,130,0);
-    background: linear-gradient(90deg, rgba(245,130,0,1) 0%, rgba(255,180,94,1) 48%, rgba(223,137,14,1) 100%);
-  }
+  background: linear-gradient(90deg, rgba(245,130,0,1) 0%, rgb(250, 168, 75) 48%, rgba(223,137,14,1) 100%);
+}
+
+.text-white p {
+  font-size: 14px; /* Reduced font size */
+}
+
+.form-control {
+  font-size: 13px; /* Reduced input font size */
+}
+
+
+
+.search-btn{
+  background-color:  #f58200 !important;
+  border: 1px solid #f58200 !important;
+  color: white !important;
+}
   
-  .search-box {
-    max-width: 600px;
-    margin: auto;
-  }
-  
 
+.object-fit-cover {
+  object-fit: cover; /* Ensures the image covers the entire container */
+  width: 100%;
+  height: 100%;
+}
 
-
-
+.border-right{
+  padding: 10px;
+  border: 05px solid #f58200;
+}
 
 
   /* Modal Animation */
@@ -24,15 +41,20 @@
   }
   
   /* Section Headings */
-  h5.text-primary {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #007bff;
+  .text-primary {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    color: #f58200  !important;
   }
   
   /* Spacing & Alignment */
   .modal-body .row {
     margin-bottom: 1rem;
+  }
+
+  .row{
+    font-size: 13px !important;
+    font-style: none !important;
   }
   
   /* Responsive Image */
