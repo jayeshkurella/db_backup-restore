@@ -328,6 +328,19 @@
                   </option>
                 </select>
               </div>
+              <!-- <div class="col-lg col-md-6">
+                <select
+                  id="ageRange"
+                  class="form-select form-select-sg border-dark"
+                  [(ngModel)]="selectedcase"
+                  (change)="filterDataByFilters()"
+                  aria-label="All Cases"
+                >
+                  <option value="All Cases" selected>Case Status</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </div> -->
               
             </div>
           </div>
@@ -410,20 +423,25 @@
                 <!-- <label for="startDate" class="form-label">Start Date</label> -->
                 <input 
                   id="startDate"
-                  type="date" 
+                  type="text" 
                   class="form-control form-select-sg border-dark" 
                   [(ngModel)]="selectedStartDate"
                   (change)="filterDataByFilters()"
                   aria-label="Start Date"
+                  placeholder="Search Date"
+                  onfocus="this.type='date'; this.value=''; this.placeholder=''"
+                  onblur="if(!this.value) { this.type='text'; this.placeholder='Search Date'; }"
                 />
               </div>
+              
+              
           
               <!-- End Date Filter -->
               <!-- <div class="col-lg col-md-6">
                 <input 
                   id="endDate"
                   type="date" 
-                  class="form-control form-select-sg" 
+                  class="form-control form-select-sg border-dark" 
                   [(ngModel)]="selectedEndDate"
                   (change)="filterDataByFilters()"
                   aria-label="End Date"

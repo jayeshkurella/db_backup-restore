@@ -27,35 +27,35 @@
 
     <div class="row g-2 align-items-center ">
       <div class="col-md-2">
-        <input type="text" class="form-control" placeholder="Full Name" [(ngModel)]="filters.full_name" (ngModelChange)="applyFilters()" />
+        <input type="text" class="form-control border-dark" placeholder="Full Name" [(ngModel)]="filters.full_name" (ngModelChange)="applyFilters()" />
       </div>
       
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.state" (ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.state" (ngModelChange)="applyFilters()">
           <option value="" selected >State</option>
           <option *ngFor="let state of allstates" [value]="state" >{{ state }}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.district" (ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.district" (ngModelChange)="applyFilters()">
           <option value="" selected >District</option>
           <option *ngFor="let district of alldistricts" [value]="district">{{ district }}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.city" (ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.city" (ngModelChange)="applyFilters()">
           <option value="" selected>City</option>
           <option *ngFor="let city of allcities" [value]="city">{{ city }}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.year" (ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.year" (ngModelChange)="applyFilters()">
           <option value="">Year</option>
           <option *ngFor="let year of years" [value]="year">{{ year }}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.month" (ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.month" (ngModelChange)="applyFilters()">
           <option value="">Month</option>
           <option *ngFor="let month of months" [value]="month">{{ month }}</option>
         </select>
@@ -64,7 +64,7 @@
 
     <div class="row g-2 align-items-center mt-1 ">
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.caste"(ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.caste"(ngModelChange)="applyFilters()">
           <option value="">Caste</option>
           <option value="Open">Open</option>
           <option value="OBC">OBC</option>
@@ -74,16 +74,16 @@
         </select>
       </div>
       <div class="col-md-2">
-        <input type="text" class="form-control" placeholder="Age" [(ngModel)]="filters.age" (ngModelChange)="applyFilters()"/>
+        <input type="text" class="form-control border-dark" placeholder="Age" [(ngModel)]="filters.age" (ngModelChange)="applyFilters()"/>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.marital_status"(ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.marital_status"(ngModelChange)="applyFilters()">
           <option value="">Marital Status</option>
           <option *ngFor="let marital of allmarital" [value]="marital">{{ marital }}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="filters.blood_group"(ngModelChange)="applyFilters()">
+        <select class="form-select border-dark" [(ngModel)]="filters.blood_group"(ngModelChange)="applyFilters()">
           <option value="">Blood Group</option>
           <option value="A+">A+</option>
           <option value="A-">A-</option>
@@ -96,7 +96,7 @@
         </select>
       </div>
       <div class="col-md-2">
-        <input type="text" class="form-control" placeholder="Height" [(ngModel)]="filters.height" (ngModelChange)="applyFilters()"/>
+        <input type="text" class="form-control border-dark" placeholder="Height" [(ngModel)]="filters.height" (ngModelChange)="applyFilters()"/>
       </div>
       <!-- <div class="col-md-2">
         <button class="btn btn-outline-success primary w-100" (click)="applyFilters()">Apply Filters</button>

@@ -111,17 +111,35 @@
                 <button class="navbar-toggler sidebar-toggle" type="button" (click)="toggleSidebar()">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
+                <ul class="navbar-nav ms-auto"> <!-- ms-auto aligns items to the right -->
+                    <li class="nav-item d-md-none">
+                        <!-- Visible on smaller screens -->
+                        <a class="nav-link">
+                            <img src="assets/images/user_icon.svg" alt="User Icon" class="custom-iconn" (click)="onNavigate()">
+                        </a>   
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <!-- Visible on larger screens like laptop or desktop -->
+                        <a class="nav-link">
+                            <img src="assets/images/user_icon.svg" alt="User Icon" class="custom-iconn" (click)="onNavigate()">
+                        </a>
+                    </li>
+                </ul>
                 <!-- Navbar Links -->
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link navmaiitem">
-                                <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon" (click)="onNavigate()">
-                            </a>                            
+                <!-- <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto"> 
+                        <li class="nav-item d-md-none">
+                            <a class="nav-link">
+                                <img src="assets/images/user_icon.svg" alt="User Icon" class="custom-iconn" (click)="onNavigate()">
+                            </a>   
+                        </li>
+                        <li class="nav-item d-none d-md-block">
+                            <a class="nav-link">
+                                <img src="assets/images/user_icon.svg" alt="User Icon" class="custom-iconn" (click)="onNavigate()">
+                            </a>
                         </li>
                     </ul>
-                </div>
+                </div>  -->
             </div>
         </nav>
 

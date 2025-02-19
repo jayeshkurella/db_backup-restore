@@ -44,6 +44,7 @@ export class DashboardDemoComponent implements OnInit ,AfterViewInit{
   alldistricts: string[] = [];
   selectedCity = 'All Cities';
   selectedState= 'All States';
+  selectedcase= 'All Cases';
   stateCoordinates: any[] = []; 
   selectedDistrict= 'All Districts';
   alldistrictss: string[] = [];

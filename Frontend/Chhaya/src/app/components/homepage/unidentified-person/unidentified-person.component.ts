@@ -10,17 +10,17 @@ import { PoliceStationaoiService } from 'src/app/services/police-stationaoi.serv
   templateUrl: './unidentified-person.component.html',
   styleUrls: ['./unidentified-person.component.css']
 })
-export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
+export class UnidentifiedPersonComponent implements OnInit,AfterViewChecked{
 
   environment = environment;
-  unidentifiedPersons: any = [];
+  unidentifiedPersons :any= [];
   filteredPersons: any[] = [];  
   selectedPerson: any = null;
 
   map: L.Map | undefined;
   marker: L.Marker | undefined;
   filters = {
-    gender: '',
+    gender : '',
     city: '',
     state: '',
     year: '',
@@ -30,7 +30,8 @@ export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
     marital_status: '',
     blood_group: '',
     height: '',
-    district: ''
+    district:''
+
   };
   allstates: any;
   allcities: any;
@@ -48,7 +49,7 @@ export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
   progressColor: string = '';
   progressMessage: string = '';
 
-  constructor(private unidentifiedpersonapi: UnidentifiedPersonapiService, private policestationapi: PoliceStationaoiService) { }
+  constructor(private unidentifiedpersonapi :UnidentifiedPersonapiService,private policestationapi :PoliceStationaoiService) { }
 
   ngAfterViewChecked(): void {
     if (this.selectedPerson && this.selectedPerson.geometry && !this.map) {
@@ -66,53 +67,58 @@ export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
   };
 
   ngOnInit(): void {
-    this.getallstates();
-    this.getallcities();
-    this.getalldistricts();
-    this.getallmarital();
+    // this.loadUnidentifiedPersons(this.pagination.current_page);
+    this.getallstates()
+    this.getallcities()
+    this.getalldistricts()
+    this.getallmarital()
   }
+
 
   onPageChangeevent(page: number): void {
     this.loadUnidentifiedPersons(page);
+    
   }
+
 
   loadUnidentifiedPersons(page: number): void {
     if (!this.filtersApplied) {
       this.unidentifiedPersons = [];  // Clear table initially
+      this.filteredPersons = [];      // Clear filtered data as well
       return; // Don't fetch data until filters are applied
     }
-
+  
     this.loading = true;
     this.progress = 1; // Start progress at 1%
     this.progressColor = 'bg-primary'; // Default progress bar color
     this.progressMessage = "Loading data...";
-
+  
     // Simulate progress incrementing up to 90%
     let interval = setInterval(() => {
       if (this.progress < 90) {
         this.progress += 10;
       }
     }, 300);
-
+  
     setTimeout(() => {
       this.unidentifiedpersonapi.getunidentifiedPersonsWithFilters(page, this.filters).subscribe(
         (data) => {
           clearInterval(interval);
           this.progress = 100; // Complete progress
-
+  
           if (data && data.data.length > 0) {
             this.unidentifiedPersons = data.data;
-            this.filteredPersons = data.data; // Update filteredPersons array
+            this.filteredPersons = data.data; // Update filteredPersons with fetched data
             this.pagination = data.pagination;
             this.progressColor = 'bg-success'; // Green if data found
-            this.progressMessage = "✅ Data loaded successfully!";
+            this.progressMessage = "✅ Matched  successfully!";
           } else {
             this.unidentifiedPersons = [];
-            this.filteredPersons = []; // Clear filteredPersons array
+            this.filteredPersons = []; // Clear filteredPersons if no data found
             this.progressColor = 'bg-danger'; // Red if no data found
             this.progressMessage = "❌ No data found! Try with another filter.";
           }
-
+  
           // Hide loader after a delay
           setTimeout(() => {
             this.loading = false;
@@ -129,10 +135,14 @@ export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
     }, 2000);
   }
 
+  
+  
+  
   applyFilters(): void {
-    this.filtersApplied = true;
-    this.loadUnidentifiedPersons(1);
+    this.filtersApplied =true;
+    this.loadUnidentifiedPersons(1)
   }
+  
 
   viewDetails(person: any): void {
     if (person && person.full_name) {
@@ -147,6 +157,8 @@ export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
       console.error('Selected person is not valid');
     }
   }
+
+
 
   initMap(): void {
     if (!this.selectedPerson?.geometry?.coordinates) {
@@ -204,28 +216,27 @@ export class UnidentifiedPersonComponent implements OnInit, AfterViewChecked {
       this.map.invalidateSize();
     }
   }
-
-  getallstates(): void {
+  getallstates(){
     this.policestationapi.getallstates().subscribe(data => {
-      this.allstates = data;
+      this.allstates = data
     });
   }
 
-  getallcities(): void {
+  getallcities(){
     this.policestationapi.getallcities().subscribe(data => {
-      this.allcities = data;
+      this.allcities = data
     });
   }
 
-  getalldistricts(): void {
+  getalldistricts(){
     this.policestationapi.getalldistricts().subscribe(data => {
-      this.alldistricts = data;
+      this.alldistricts = data
     });
   }
 
-  getallmarital(): void {
+  getallmarital(){
     this.policestationapi.getallmarital().subscribe(data => {
-      this.allmarital = data;
+      this.allmarital = data
     });
   }
 }

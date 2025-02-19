@@ -1,80 +1,68 @@
-<div class="containerx text-white py-5 text-center">
-  <div class="container">
-      <h5 class="fs-5">Find Your Local Hospital</h5>
-      <p class="fs-6 ">Quick access to emergency medical services and hospitals across the country</p>
-
-      <!-- Search Fields -->
-      <!-- <div class="row g-3 mt-4 justify-content-center">
-          <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="Search by Name">
-          </div>
-          <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="Search by City">
-          </div>
-          <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="Search by District">
-          </div>
-          <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="Search by State">
-          </div>
-      </div> -->
-
-      <!-- <div class="mt-3">
-          <button class="btn btn-light text-orange">
-              <i class="bi bi-search me-2"></i>Search
-          </button>
-      </div> -->
-  </div>
+<div class="container text-dark py-5 text-center border-bottom">
+  <h5 class="fs-5">Find Your Local Hospital</h5>
+  <h6 class="fs-6 ">Quick access to emergency medical services and hospitals across the country</h6>
 </div>
 
-<div class="container my-4">
-  <div class="card shadow-sm border p-3 mb-2" *ngFor="let hospital of allhospitals">
-    <div class="row g-0">
-      <!-- Left Section: Image Placeholder -->
-      <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
-        <div class="d-flex align-items-center justify-content-center w-100 h-100">
-          <img *ngIf="hospital.photo_upload; else placeholder" 
-               [src]="environment.apiUrl + hospital.photo_upload" 
-               alt="{{ hospital.name }}" class="img-fluid w-100 h-100 object-fit-cover">
-          <ng-template #placeholder>
-            <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
-          </ng-template>
-        </div>
-      </div>
-
-      <!-- Right Section: Details -->
-      <div class="col-md-8 p-4">
-        <div class="d-flex justify-content-between align-items-start">
-          <h3 class="fw-bold mb-2" style="font-size: 14px;">{{ hospital.name || 'Loading...' }}</h3>
-        </div>
-        <p class="text-muted mb-2" style="font-size: 13px;">
-          <i class="bi bi-geo-alt"></i> {{ hospital.hospital_address }}, {{ hospital.city }}, {{ hospital.state }}
-        </p>
-
-        <!-- Horizontal Layout for Info -->
-        <div class="d-flex flex-wrap">
-          <!-- Entity Info -->
-          <div class="p-3 flex-fill">
-            <h5 class="mb-1" style="font-size: 14px;"><i class="bi bi-buildings"></i> Entity Type</h5>
-            <p style="font-size: 13px;">{{ hospital.entity_type || 'Loading...' }}</p>
+<div class="container py-2">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let hospital of allhospitals">
+      <div class="card shadow-sm rounded border-1 p-3  h-100"> <!-- Added h-100 for equal height -->
+        <div class="row g-0 h-100"> <!-- Added h-100 for equal height -->
+          <!-- Image Placeholder -->
+          <div class="col-12 text-center bg-light" style="height: 250px;"> <!-- Fixed height for image container -->
+            <div class="w-100 h-100 overflow-hidden d-flex align-items-center justify-content-center">
+              <img *ngIf="hospital.photo_upload; else placeholder" 
+                  [src]="environment.apiUrl + hospital.photo_upload" 
+                  alt="{{ hospital.name }}" 
+                  class="img-fluid object-fit-cover w-100 h-100" 
+                  style="border-radius: 8px;">
+              <ng-template #placeholder>
+                <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+              </ng-template>
+            </div>
           </div>
-
-          <!-- Zone & Division -->
-          <div class="p-3 flex-fill">
-            <h5 class="mb-1" style="font-size: 14px;"><i class="bi bi-map"></i> Zone & Division</h5>
-            <p style="font-size: 13px;">Zone: {{ hospital.hospital_zone_name || 'N/A' }}</p>
-            <p style="font-size: 13px;">Division: {{ hospital.hospital_division_name || 'N/A' }}</p>
-          </div>
-
-          <!-- Contact & Website -->
-          <div class="p-3 flex-fill">
-            <h5 class="mb-1" style="font-size: 14px;"><i class="bi bi-globe"></i> Contact & Website</h5>
-            <p style="font-size: 13px;">District: {{ hospital.district || 'Not Available' }}</p>
-            <p style="font-size: 13px;">Country: {{ hospital.country || 'Not Available' }}</p>
-            <p style="font-size: 13px;">
-              <a *ngIf="hospital.website" [href]="hospital.website" target="_blank" class="text-primary">Visit Website</a>
-              <span *ngIf="!hospital.website">Not Available</span>
+          
+          <!-- Details -->
+          <div class="col-12 p-3 d-flex flex-column"> <!-- Added flex-column for equal height -->
+            <div class="d-flex justify-content-between align-items-start">
+              <h5 class="fw-bold mb-2" style="font-size: 14px;">{{ hospital.name || 'Loading...' }}</h5>
+              <span class="badge search-btn" [ngClass]="{'bg-dark': hospital.entity_type === 'Private', 'bg-success': hospital.entity_type !== 'Gove'}">
+                {{ hospital.entity_type }}
+              </span>
+            </div>
+            <p class="text-muted mb-2" style="font-size: 13px;">
+              <i class="bi bi-geo-alt"></i> {{ hospital.hospital_address }}, {{ hospital.city }}, {{ hospital.state }}
             </p>
+            
+            <!-- Horizontal Layout for Info -->
+            <div class="row flex-grow-1"> <!-- Added flex-grow-1 for equal height -->
+              <!-- Zone & Division -->
+              <div class="col-6 p-2">
+                <h6 class="fw-semibold mb-1" style="font-size: 14px;"><i class="bi bi-map"></i> Zone & Division</h6>
+                <h6 style="font-size: 13px;">Zone: {{ hospital.hospital_zone_name || 'N/A' }}</h6>
+                <h6 style="font-size: 13px;">Division: {{ hospital.hospital_division_name || 'N/A' }}</h6>
+              </div>
+              <!-- Contact & Website -->
+              <div class="col-6 p-2">
+                <h6 class="fw-semibold mb-1" style="font-size: 14px;"><i class="bi bi-globe"></i> Contact & Website</h6>
+                <h6 style="font-size: 13px;">District: {{ hospital.district || 'Not Available' }}</h6>
+                <h6 style="font-size: 13px;">Country: {{ hospital.country || 'Not Available' }}</h6>
+                <h6 style="font-size: 13px;">
+                  <a *ngIf="hospital.website" [href]="hospital.website" target="_blank" class="text-primary">Visit Website</a>
+                  <span *ngIf="!hospital.website">Not Available</span>
+                </h6>
+              </div>
+            </div>
+            
+            <!-- Footer Section -->
+            <!-- <div class="d-flex justify-content-between align-items-center mt-1">
+              <p class="text-muted small mb-0">
+                <i class="bi bi-clock"></i> 24/7
+              </p>
+              <button class="btn btn-outline-primary btn-sm" (click)="seeMoreHospital(hospital)">
+                More Info
+              </button>
+            </div> -->
           </div>
         </div>
       </div>

@@ -117,7 +117,7 @@
     font-size: 25px;
     color: #f5a10f !important;
     cursor: pointer;
-    margin-left: 1200px;
+    /* margin-left: 1200px; */
 }
 
 /* Main Content Styles */
@@ -135,12 +135,16 @@
 }
 
 .custom-iconn {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     color: #f58200 !important;
     display: inline-block; /* Ensures it doesn't collapse */
     visibility: visible;
+    cursor: pointer;
 }
+
+
+
 
 .content-box {
     background-color: #fff;
@@ -244,6 +248,8 @@
         padding: 15px;
     }
 }
+
+
 
 @media (min-width: 768px) and (max-width: 1200px) {
     .sidebar {
