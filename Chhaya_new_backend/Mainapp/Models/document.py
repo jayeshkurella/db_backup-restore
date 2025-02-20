@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 
+from .user import User
+
 class Document(models.Model):
     class DocumentTypeChoices(models.TextChoices):
         FIR = 'fir', 'FIR'
@@ -14,8 +16,8 @@ class Document(models.Model):
     document = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 
 
     def __str__(self):

@@ -3,7 +3,7 @@
   <p class="fs-6">Quick access to emergency services and police stations across the country</p>
 </div>
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center border-bottom">
   <div class="filter-section bg-light rounded mb-2 border px-2 py-2 border-dark" style="max-width: 1000px; width: 100%;">
     <div class="row g-2 align-items-center text-center">
       <form class="mt-4" (ngSubmit)="onSearch()">
@@ -96,8 +96,23 @@
           </div>
         </div>
       </div>
+      
+    
     </div>
+    
   </div>
+  <div *ngIf="total_policestation?.length > 0">
+    <app-pagination
+      [currentPage]="pagination.current_page"
+      [totalPages]="pagination.total_pages"
+      [hasPrevious]="pagination.has_previous"
+      [hasNext]="pagination.has_next"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+    </div>
+    <div *ngIf="total_policestation?.length === 0">
+    <p>No Police Station Available.</p>
+    </div>
 </div>
 
 

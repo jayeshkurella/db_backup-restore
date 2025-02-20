@@ -151,6 +151,9 @@
           </tr>
         </tbody>
       </table>
+      <div *ngIf="filteredPersons?.length === 0">
+        <p>No Persons  Available.</p>
+        </div>
     </div>
 
     <!-- Show message when no persons are found -->

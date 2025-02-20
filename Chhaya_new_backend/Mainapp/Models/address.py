@@ -1,6 +1,10 @@
 import uuid
 from django.db import models
 
+from .person import Person
+from .police_station import PoliceStation
+from .user import User
+
 class Address(models.Model):
     class AddressTypeChoices(models.TextChoices):
         PERMANENT = 'PERMANENT', 'Permanent'
@@ -24,14 +28,14 @@ class Address(models.Model):
     lat = models.CharField(max_length=50, blank=True, null=True)
     lang = models.CharField(max_length=50, blank=True, null=True)
 
-    user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
-    police_station = models.ForeignKey( 'PoliceStation', on_delete=models.CASCADE, related_name='addresses')
-    person = models.ForeignKey('Person', on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    police_station = models.ForeignKey( PoliceStation, on_delete=models.CASCADE, related_name='addresses')
+    person = models.ForeignKey(Person, on_delete=models.SET_NULL,related_name="addresses", null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 
 
     def __str__(self):

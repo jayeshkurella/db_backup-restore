@@ -1,6 +1,6 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+import uuid
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email_id, phone_no, password=None, **extra_fields):
@@ -8,7 +8,7 @@ class UserManager(BaseUserManager):
             raise ValueError("The Email field must be set")
         email_id = self.normalize_email(email_id)
         user = self.model(username=username, email_id=email_id, phone_no=phone_no, **extra_fields)
-        user.set_password(password)  # Hashes password automatically
+        user.set_password(password) 
         user.save(using=self._db)
         return user
 
@@ -46,14 +46,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_no = models.CharField(max_length=10, unique=True)
     country_code = models.CharField(max_length=5, blank=True, null=True)
 
-    password = models.CharField(max_length=255)  # Django handles password hashing
+    password = models.CharField(max_length=255)  
     salt = models.CharField(max_length=7, blank=True, null=True)
 
     is_consent = models.BooleanField(default=False)
     status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
 
-    person = models.ForeignKey('Person', on_delete=models.SET_NULL, null=True, blank=True)
-    contact = models.ForeignKey('Contact', on_delete=models.CASCADE, related_name='user_contact',null=True, blank=True)
+    person = models.ForeignKey('Person', on_delete=models.SET_NULL, null=True, blank=True)  # Use string reference
+    contact = models.ForeignKey('Contact', on_delete=models.SET_NULL, related_name='user_contact', null=True, blank=True)  # Use string reference
     consent_id = models.UUIDField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)

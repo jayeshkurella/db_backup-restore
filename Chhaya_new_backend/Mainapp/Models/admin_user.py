@@ -1,6 +1,10 @@
 import uuid
 from django.db import models
 
+from .address import Address
+from .contact import Contact
+from .user import User
+
 class AdminUser(models.Model):
     class AdminTypeChoices(models.TextChoices):
         ADMIN = "admin", "Admin"
@@ -16,13 +20,13 @@ class AdminUser(models.Model):
     last_name = models.CharField(max_length=50)
     dob = models.DateTimeField()
 
-    contact = models.ForeignKey('Contact', on_delete=models.SET_NULL, null=True, blank=True)
-    address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True)
+    contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 
 
     def __str__(self):

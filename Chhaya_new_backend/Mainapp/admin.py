@@ -1,21 +1,20 @@
+
 from django.contrib import admin
 
-# Register your models here.
-from django.contrib import admin
-from .Models.additonal_info import AdditionalInfo
-from .Models.address import Address
-from .Models.admin_user import AdminUser
-from .Models.consent import Consent
-from .Models.contact import Contact
-from .Models.document import Document
-from .Models.fir import FIR
-from .Models.hospital import Hospital
-from .Models.last_known_details import LastKnownDetails
-from .Models.match import Match
-from .Models.person_user import PersonUser
-from .Models.person import Person
-from .Models.police_station import PoliceStation
-from .Models.user import User
+from .models.additonal_info import AdditionalInfo
+from .models.address import Address
+from .models.admin_user import AdminUser
+from .models.consent import Consent
+from .models.contact import Contact
+from .models.document import Document
+from .models.fir import FIR
+from .models.hospital import Hospital
+from .models.last_known_details import LastKnownDetails
+from .models.match import Match
+from .models.person_user import PersonUser
+from .models.person import Person
+from .models.police_station import PoliceStation
+from .models.user import User
 
 # Register your models
 admin.site.register(AdditionalInfo)

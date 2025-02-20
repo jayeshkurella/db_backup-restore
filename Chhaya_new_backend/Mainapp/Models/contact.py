@@ -1,6 +1,10 @@
 import uuid
 from django.db import models
 
+from .person import Person
+from .police_station import PoliceStation
+from .user import User
+
 class Contact(models.Model):
     class ContactTypeChoices(models.TextChoices):
         PERSONAL = 'personal', 'Personal'
@@ -25,14 +29,14 @@ class Contact(models.Model):
     additional_details = models.TextField(blank=True, null=True)
     is_primary = models.BooleanField(default=False)
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='contacts')
-    police_station = models.ForeignKey('PoliceStation', on_delete=models.SET_NULL, null=True, blank=True)
-    person = models.ForeignKey('Person', on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contacts')
+    police_station = models.ForeignKey(PoliceStation, on_delete=models.SET_NULL, null=True, blank=True)
+    person = models.ForeignKey(Person, on_delete=models.SET_NULL, related_name="contacts",null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 
 
     def __str__(self):

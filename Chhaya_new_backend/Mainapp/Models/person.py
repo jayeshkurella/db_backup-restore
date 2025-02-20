@@ -1,11 +1,15 @@
 import uuid
+from django.conf import settings
 from django.db import models
+
+from .hospital import Hospital
+from .user import User
 
 class Person(models.Model):
     class TypeChoices(models.TextChoices):
         MISSING = 'm', 'Missing'
-        UP = 'up', 'UP'
-        UB = 'ub', 'UB'
+        UP = 'up', 'Unidentifed Person'
+        UB = 'ub', 'Unidentified Body'
     
     class GenderChoices(models.TextChoices):
         MALE = 'm', 'Male'
@@ -29,7 +33,7 @@ class Person(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50)
-    dob = models.DateField()
+    birth_date = models.DateField()
     age = models.IntegerField()
     birthtime = models.TimeField()
     gender = models.CharField(max_length=1, choices=GenderChoices.choices)
@@ -46,12 +50,12 @@ class Person(models.Model):
     distinctive_mark = models.CharField(max_length=50, blank=True, null=True)
     birth_mark_details = models.CharField(max_length=50, blank=True, null=True)
     photo = models.ImageField(blank=True, null=True)
-    hospital = models.ForeignKey('Hospital', on_delete=models.SET_NULL, null=True, blank=True)
+    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
     document_ids = models.TextField(blank=True, null=True, help_text="Comma-separated document IDs")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 
 
     def __str__(self):

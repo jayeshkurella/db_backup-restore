@@ -140,7 +140,7 @@ CORS_ALLOWED_ORIGINS = [
     # 'https://products.coderize.in/chhaya/',
     'http://localhost:4200',   
 ]
-AUTH_USER_MODEL = 'Mainapp.User'
+
 CORS_ALLOW_METHODS = (
     'GET',
     'POST',
@@ -154,3 +154,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://products.coderize.in/chhaya/',
     'http://localhost:4200', 
 ]
+
+AUTH_USER_MODEL = 'Mainapp.User'  

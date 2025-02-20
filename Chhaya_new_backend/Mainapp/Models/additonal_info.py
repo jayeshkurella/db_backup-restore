@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 
+from .user import User
+
 class AdditionalInfo(models.Model):
     class CasteChoices(models.TextChoices):
         SC = 'sc', 'Scheduled Caste (SC)'
@@ -32,12 +34,12 @@ class AdditionalInfo(models.Model):
     education_details = models.CharField(max_length=50, blank=True, null=True)
     occupation_details = models.CharField(max_length=50, blank=True, null=True)
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 
 
     def __str__(self):
