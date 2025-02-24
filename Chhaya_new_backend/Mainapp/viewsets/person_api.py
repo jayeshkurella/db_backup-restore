@@ -5,11 +5,9 @@ from rest_framework.pagination import PageNumberPagination
 from Mainapp.models.fir import FIR
 from ..pagination import CustomPagination
 from ..Serializers.serializers import PersonSerializer
-from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails 
+from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails ,Consent
 from django.db import transaction
 from drf_yasg import openapi
-
-
 
 
 
@@ -46,7 +44,6 @@ class PersonViewSet(viewsets.ViewSet):
     pagination_class = PageNumberPagination
 
 
-
     # 🔹 1. LIST all persons
     @swagger_auto_schema(
         operation_description="Retrieve a list of all persons",
@@ -55,7 +52,7 @@ class PersonViewSet(viewsets.ViewSet):
     def list(self, request):
         try:
             queryset = Person.objects.filter(_is_deleted=False).prefetch_related(
-                'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs'
+                'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs','consent'
             ).order_by('created_at')  # Ensure ordered queryset to avoid pagination warnings
 
             paginator = CustomPagination()
@@ -79,7 +76,7 @@ class PersonViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             person = Person.objects.filter(_is_deleted=False).prefetch_related(
-                'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs').get(pk=pk)
+                'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs','consent').get(pk=pk)
             serializer = PersonSerializer(person)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Person.DoesNotExist:
@@ -102,6 +99,7 @@ class PersonViewSet(viewsets.ViewSet):
                 additional_info_data = data.pop('additional_info', [])
                 last_known_details_data = data.pop('last_known_details', [])
                 firs_data = data.pop('firs', [])
+                consents_data = data.pop('consent', [])
 
                 # Create Person object
                 person = Person.objects.create(**data)
@@ -121,6 +119,9 @@ class PersonViewSet(viewsets.ViewSet):
                 ])
                 FIR.objects.bulk_create([
                     FIR(person=person, **fir) for fir in firs_data
+                ])
+                Consent.objects.bulk_create([
+                    Consent(person=person, **consent) for consent in consents_data
                 ])
 
                 return Response({'message': 'Person created successfully', 'person_id': str(person.id)}, status=status.HTTP_201_CREATED)
@@ -142,7 +143,7 @@ class PersonViewSet(viewsets.ViewSet):
 
                 # Update Person fields
                 for key, value in data.items():
-                    if key not in ['addresses', 'contacts', 'additional_info', 'last_known_details', 'firs']:
+                    if key not in ['addresses', 'contacts', 'additional_info', 'last_known_details', 'firs','consent']:
                         setattr(person, key, value)
                 person.save()
 

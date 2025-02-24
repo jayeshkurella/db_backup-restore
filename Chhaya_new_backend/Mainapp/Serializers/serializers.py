@@ -27,10 +27,6 @@ class LastKnownDetailsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class HospitalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hospital
-        fields = '__all__'
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,46 +63,21 @@ class FIRSerializer(serializers.ModelSerializer):
     class Meta:
         model = FIR
         fields = '__all__'
+        
+class HospitalSerializer(serializers.ModelSerializer):
+    address = serializers.PrimaryKeyRelatedField(queryset=Address.objects.all(),write_only=True)
+    address_details = AddressSerializer(source='address', read_only=True)
+    hospital_contact = ContactSerializer(many=True, read_only=True)
+    class Meta:
+        model = Hospital
+        fields = '__all__'
 
-# class PersonSerializer(serializers.ModelSerializer):
-#     addresses = AddressSerializer(many=True)
-#     contacts = ContactSerializer(many=True)
-#     additional_info  = AdditionalInfoSerializer(many=True)
-#     last_known_details  = LastKnownDetailsSerializer(many=True)
-#     firs  = FIRSerializer(many=True)
-#     class Meta:
-#         model = Person
-#         fields = '__all__'
-        
-#     def create(self, validated_data):
-#         addresses_data = validated_data.pop('addresses', [])
-#         contacts_data = validated_data.pop('contacts', [])
-#         additionalinfo_data = validated_data.pop('additional_info', [])
-#         lastknowndetails_data = validated_data.pop('last_known_details', [])
-#         firs_data = validated_data.pop('firs', [])
-        
-#         person = Person.objects.create(**validated_data)
-        
-#         for address_data in addresses_data:
-#             Address.objects.create(person=person, **address_data)
 
-#         for contact_data in contacts_data:
-#             Contact.objects.create(person=person, **contact_data)
-        
-#         for additionalinfo_data in additionalinfo_data:
-#             AdditionalInfo.objects.create(person=person, **additionalinfo_data)
-        
-#         for lastknowndetails_data in lastknowndetails_data:
-#             LastKnownDetails.objects.create(person=person, **lastknowndetails_data)
-        
-#         for fir_data in firs_data:
-#             FIR.objects.create(person=person, **fir_data)
-        
-#         return person
 
 class PoliceStationSerializer(serializers.ModelSerializer):
-    # address = AddressSerializer()
-    address = serializers.PrimaryKeyRelatedField(queryset=Address.objects.all())  # Accepts UUID instead of dict
+    address = serializers.PrimaryKeyRelatedField(queryset=Address.objects.all(),write_only=True)
+    address_details = AddressSerializer(source='address', read_only=True)
+    police_contact = ContactSerializer(many=True, read_only=True)
 
     class Meta:
         model = PoliceStation
@@ -118,6 +89,8 @@ class PersonSerializer(serializers.ModelSerializer):
     additional_info = AdditionalInfoSerializer(many=True, read_only=True)
     last_known_details = LastKnownDetailsSerializer(many=True, read_only=True)
     firs = FIRSerializer(many=True, read_only=True)
+    consent = ConsentSerializer(many=True, read_only=True)
+    hospital = HospitalSerializer(read_only=True)
     
     class Meta:
         model = Person

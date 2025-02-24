@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 import uuid
 
+from .address import Address
+
+
 class Hospital(models.Model):
     class HospitalTypeChoices(models.TextChoices):
         GOVERNMENT = 'gvt', 'Government'
@@ -9,8 +12,7 @@ class Hospital(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    address_id = models.UUIDField()
-    contact_id = models.UUIDField()
+    address = models.ForeignKey(Address, on_delete=models.CASCADE,null=True, blank=True,)
     type = models.CharField(max_length=10, choices=HospitalTypeChoices.choices)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

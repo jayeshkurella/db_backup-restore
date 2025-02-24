@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 
-from .person import Person
+
 from .police_station import PoliceStation
 from .user import User
 
@@ -30,7 +30,7 @@ class Address(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # police_station = models.ForeignKey( PoliceStation, on_delete=models.CASCADE, related_name='addresses')
-    person = models.ForeignKey(Person, on_delete=models.SET_NULL,related_name="addresses", null=True, blank=True)
+    person = models.ForeignKey('Person', on_delete=models.SET_NULL,related_name="addresses", null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -40,3 +40,5 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.type} - {self.city}, {self.state} ({self.pincode})"
+
+
