@@ -14,11 +14,16 @@ from .models.match import Match
 from .models.person_user import PersonUser
 from .models.person import Person
 from .models.police_station import PoliceStation
+from leaflet.admin import LeafletGeoAdmin  # Import Leaflet admin
+
 from .models.user import User
 
 # Register your models
 admin.site.register(AdditionalInfo)
-admin.site.register(Address)
+@admin.register(Address)
+class AddressAdmin(LeafletGeoAdmin):
+    pass
+    
 admin.site.register(AdminUser)
 admin.site.register(Consent)
 admin.site.register(Contact)
@@ -30,4 +35,8 @@ admin.site.register(Match)
 admin.site.register(PersonUser)
 admin.site.register(Person)
 admin.site.register(PoliceStation)
-admin.site.register(User)
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email_id', 'is_staff', 'is_superuser')
+    search_fields = ('username', 'email_id')
+    list_filter = ('is_staff', 'is_superuser')

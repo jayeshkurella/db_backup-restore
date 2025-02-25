@@ -1,0 +1,1142 @@
+<nav class="navbar navbar-expand-lg navbar-custom mb-2">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="assets/images/Chhaya.png" alt="Logo" class="navbar-logo" />
+      </a>
+  
+      <!-- Toggle button for mobile -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarFilters"
+        aria-controls="navbarFilters"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="bi bi-funnel"></i>
+      </button>
+  
+      <!-- Filters and user icon -->
+      <div
+        class="collapse navbar-collapse flex-column align-items-center"
+        id="navbarFilters"
+      >
+        <!-- Selected Filters -->
+        <div class="filters-wrapper d-flex flex-wrap justify-content-center mt-2">
+          <div
+            *ngIf="selectedState !== 'All States'"
+            class="filter-chip me-2 mb-2 border-dark"
+          >
+            <i class="bi bi-geo-alt me-1"></i> State: {{ selectedState }}
+          </div>
+          <div
+            *ngIf="selectedDistrict !== 'All Districts'"
+            class="filter-chip me-2 mb-2"
+          >
+            <i class="bi bi-geo me-1"></i> District: {{ selectedDistrict }}
+          </div>
+          <div
+            *ngIf="selectedCity !== 'All Cities'"
+            class="filter-chip me-2 mb-2"
+          >
+            <i class="bi bi-building me-1"></i> City: {{ selectedCity }}
+          </div>
+          <div
+            *ngIf="selectedVillage !== 'All Villages'"
+            class="filter-chip me-2 mb-2"
+          >
+            <i class="bi bi-tree me-1"></i> Village: {{ selectedVillage }}
+          </div>
+          <div
+            *ngIf="selectedPoliceStation !== 'All Police Stations' && selectedPoliceStation?.name"
+            class="filter-chip mb-2"
+          >
+            <i class="bi bi-shield me-1"></i> Police Station:
+            {{ selectedPoliceStation.name }}
+          </div>
+  
+        </div>
+      </div>
+  
+      <!-- User Icon -->
+      <div class="d-flex align-items-center">
+        <a class="text-dark">
+          <!-- <i class="bi bi-person-circle user-icon" ></i> -->
+          <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon-navbar" (click)="onNavigate()">
+  
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="loader"></div>
+  </div>
+  
+  
+  <div class="container-fluid" style="background-color: #f9fafc;">
+   
+    <div class="row g-1">
+      <!-- missing person statistics -->
+      <div class="col-lg-2">
+        <div class="card h-100  p-1">
+          <!-- Card Header -->
+          <div class=" bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #e0f7fa, #b2dfdb);">
+            <h6 class="statistics-card-header mb-0">Male Statistics</h6>
+          </div>
+          
+         
+            <div class="row g-1">
+              <!-- Male Stats from Missing Person -->
+              <div class="col-12">
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-2">
+                    <h6 class="text-black">Missing Person</h6>
+                    <div class="d-flex justify-content-between align-items-center ">
+                      <span class="medium text-black">Unidentified Bodies Found</span>
+                      <span class="text-black">{{ deceasedCountgendercount.Male || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Unidentified Person Matched</span>
+                      <span class="text-black">{{ found_alivegendercount.Male || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Pending Persons</span>
+                      <span class="text-black">{{ pendingGendercounts.Male || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Male Stats from Unidentified Person -->
+              <div class="col-12">
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-2">
+                    <h6 class="text-black">Unidentified Person</h6>
+                    <div class="d-flex justify-content-between align-items-center ">
+                      <span class="medium text-black">Unidentified Bodies Found</span>
+                      <span class="text-black">{{ UPdeceasedCountgendercount.Male || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Missing Persons Matched</span>
+                      <span class="text-black">{{ UPfound_alivegendercount.Male || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Pending Males</span>
+                      <span class="text-black">{{ UPpendingGendercounts.Male || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Male Stats from Unidentified Bodies -->
+              <div class="col-12">
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-2">
+                    <h6 class="text-black">Unidentified Bodies</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="medium text-black">Unidentified person Matched</span>
+                      <span class="text-black">{{ UBdeceasedCountgendercount.Male || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Missing Males Matched</span>
+                      <span class="text-black">{{ UBfound_alivegendercount.Male || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Pending Males</span>
+                      <span class="text-black">{{ UBpendingGendercounts.Male || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </div>
+      
+            <!-- Male Stats Summary -->
+            <div class="row g-2">
+            <!-- resolved missing person -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
+                  <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                      <!-- Image and Text in Same Row -->
+                      <div class="d-flex align-items-start gap-2">
+                          <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon">
+                          <div class="d-flex flex-column">
+                              <p class="text-black mb-0">Resolved Missing Person</p>
+                              <div class="d-flex align-items-center">
+                                  <p class="text-black mb-0">(RMP)</p>
+                                  <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Missing Persons"></i>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <!-- Count -->
+                      <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
+                  </div>
+              </div>
+            </div>
+                  
+           <!-- resloved UP -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #bbdefb, #2196f3);">
+                  <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                      <!-- Image and Text in Same Row -->
+                      <div class="d-flex align-items-start gap-2">
+                          <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon">
+                          <div class="d-flex flex-column">
+                              <p class="text-black mb-0 ">Resolved Unidentified Person</p>
+                              <div class="d-flex align-items-center">
+                                  <p class="text-black mb-0">(RUP)</p>
+                                  <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Unidentified Persons"></i>
+                              </div>
+                          </div>
+                      </div>
+          
+                      <!-- Count -->
+                      <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
+                  </div>
+              </div>
+            </div>
+          
+            <!-- resolved UB -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #e0f7fa, #4caf50);">
+                  <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                      <!-- Image and Text in Same Row -->
+                      <div class="d-flex align-items-start gap-2">
+                          <img src="assets/images/user_icon.svg" alt="Resolved" class="custom-icon">
+                          <div class="d-flex flex-column">
+                              <p class="text-black mb-0 ">Resolved Unidentified Bodies</p>
+                              <div class="d-flex align-items-center">
+                                  <p class="text-black mb-0">(RUB)</p>
+                                  <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Unidentified Bodies"></i>
+                              </div>
+                          </div>
+                      </div>
+          
+                      <!-- Count -->
+                      <h6 class="text-black mb-0">{{ deceasedCountgendercount.Male || 0 }}</h6>
+                  </div>
+              </div>
+           </div>
+          
+            <!-- pending person -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fff3e0, #ff9800);">
+                  <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                      <!-- Image and Text in Same Row -->
+                      <div class="d-flex align-items-start gap-2">
+                          <img src="assets/images/user_icon.svg" alt="Pending" class="custom-icon">
+                          <div class="d-flex flex-column">
+                              <p class="text-black mb-0">Pending Persons</p>
+                              <div class="d-flex align-items-center">
+                                  <p class="text-black mb-0">(PP)</p>
+                                  <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Pending Persons"></i>
+                              </div>
+                          </div>
+                      </div>
+          
+                      <!-- Count -->
+                      <h6 class="text-black mb-0">{{ pendingGendercounts.Male || 0 }}</h6>
+                  </div>
+              </div>
+          </div>
+          
+            </div>
+        </div>
+      </div>
+  
+      <!-- Map Section -->
+      <div class="col-lg-8">
+        <div class="containerx h-100">
+          <!-- Filters Section -->
+          <div class="row g-1">
+            <!-- State, District, City, Village, Police Station -->
+            <div class="col-12">
+              <div class="row">
+                <span style="color: #ff8642;font-size: 14px;">Search Here! </span>
+                <div class="col-lg col-md-6">
+                  <select
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedState"
+                    (change)="filterDataByFilters()"
+                    aria-label="State"
+                  >
+                    <option value="All States">State</option>
+                    <option *ngFor="let state of allstates" [value]="state">
+                      {{ state }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg col-md-6">
+                  <select
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedDistrict"
+                    (change)="filterDataByFilters()"
+                    aria-label="District"
+                  >
+                    <option value="All Districts">District</option>
+                    <option
+                      *ngFor="let district of alldistricts"
+                      [value]="district"
+                    >
+                      {{ district }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg col-md-6">
+                  <select
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedCity"
+                    (change)="filterDataByFilters()"
+                    aria-label="City"
+                  >
+                    <option value="All Cities">City</option>
+                    <option *ngFor="let city of allcities" [value]="city">
+                      {{ city }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg col-md-6">
+                  <select
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedVillage"
+                    (change)="filterDataByFilters()"
+                    aria-label="Village"
+                  >
+                    <option value="All Villages">Village</option>
+                    <option
+                      *ngFor="let village of allVillages"
+                      [value]="village"
+                    >
+                      {{ village }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg col-md-6">
+                  <select
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedPoliceStation"
+                    (change)="filterDataByFilters()"
+                    aria-label="Police"
+                  >
+                    <option value="All Police Stations">Police Station</option>
+                    <option *ngFor="let station of allpolicestations" [value]="station.id">
+                      {{ station.name }}
+                    </option>
+                  </select>
+                </div>
+                <!-- <div class="col-lg col-md-6">
+                  <select
+                    id="ageRange"
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedcase"
+                    (change)="filterDataByFilters()"
+                    aria-label="All Cases"
+                  >
+                    <option value="All Cases" selected>Case Status</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                </div> -->
+                
+              </div>
+            </div>
+            <!-- Gender, Height, Age, Marital Status -->
+            <div class="col-12">
+              <!-- <span>Personal Specilization </span> -->
+              <div class="row">
+                
+                <!-- Gender Filter -->
+                <div class="col-lg col-md-6">
+                  <select
+                    id="gender"
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedgender"
+                    (change)="filterDataByFilters()"
+                    aria-label="Gender"
+                  >
+                    <option value="All Genders">Gender</option>
+                    <option *ngFor="let gender of allgenders" [value]="gender">
+                      {{ gender }}
+                    </option>
+                  </select>
+                </div>
+            
+                <!-- Height Range Filter -->
+                <div class="col-lg col-md-6">
+                  <!-- <label for="heightRange" class="form-label">Height Range</label> -->
+                  <select
+                    id="heightRange"
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedHeightRange"
+                    (change)="filterDataByFilters()"
+                    aria-label="Height Range"
+                  >
+                    <option value="All Heights">Height</option>
+                    <option value="133-150">133-150 cm</option>
+                    <option value="151-180">151-180 cm</option>
+                    <option value="Above 180">Above 180 cm</option>
+                  </select>
+                </div>
+            
+                <!-- Age Range Filter -->
+                <div class="col-lg col-md-6">
+                  <!-- <label for="ageRange" class="form-label">Age Range</label> -->
+                  <select
+                    id="ageRange"
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedAgeRange"
+                    (change)="filterDataByFilters()"
+                    aria-label="Age Range"
+                  >
+                    <option value="All Ages">Age</option>
+                    <option value="0-18">0-18</option>
+                    <option value="18-30">18-30</option>
+                    <option value="30-50">30-50</option>
+                    <option value="50-70">50-70</option>
+                    <option value="Above 70">Above 70</option>
+                  </select>
+                </div>
+            
+                <!-- Marital Status Filter -->
+                <div class="col-lg col-md-6">
+                  <!-- <label for="maritalStatus" class="form-label">Marital Status</label> -->
+                  <select
+                    id="maritalStatus"
+                    class="form-select form-select-sg border-dark"
+                    [(ngModel)]="selectedmarital"
+                    (change)="filterDataByFilters()"
+                    aria-label="Marital Status"
+                  >
+                    <option value="Marital status">Marital Status</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Widowed">Widowed</option>
+                  </select>
+                </div>
+            
+                <!-- Start Date Filter -->
+                <div class="col-lg col-md-6">
+                  <!-- <label for="startDate" class="form-label">Start Date</label> -->
+                  <input 
+                    id="startDate"
+                    type="text" 
+                    class="form-control form-select-sg border-dark" 
+                    [(ngModel)]="selectedStartDate"
+                    (change)="filterDataByFilters()"
+                    aria-label="Start Date"
+                    placeholder="Search Date"
+                    onfocus="this.type='date'; this.value=''; this.placeholder=''"
+                    onblur="if(!this.value) { this.type='text'; this.placeholder='Search Date'; }"
+                  />
+                </div>
+                
+                
+            
+                <!-- End Date Filter -->
+                <!-- <div class="col-lg col-md-6">
+                  <input 
+                    id="endDate"
+                    type="date" 
+                    class="form-control form-select-sg border-dark" 
+                    [(ngModel)]="selectedEndDate"
+                    (change)="filterDataByFilters()"
+                    aria-label="End Date"
+                  />
+                </div> -->
+                
+              </div>
+            </div>
+            
+          </div>
+          <!-- Map Section -->
+          <div class="row">
+            <div class="col">
+              <div class="p-1 ">
+                <div
+                  id="map"
+                  style="
+                    height: 450px;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                  "
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-lg-2">
+        <div class="card h-100 p-1">
+          <!-- Card Header -->
+          <div class="bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #f8bbd0, #f48fb1);">
+            <h6 class="statistics-card-header mb-0">Female Statistics</h6>
+          </div>
+          <div class="row g-1 mb-2">
+            <!-- Female Stats from Missing Person -->
+            <div class="col-12">
+              <div class="card shadow-sm border-0">
+                <div class="card-body p-2">
+                  <h6 class="text-black">Missing Female</h6>
+          
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Unidentified Bodies Found</span>
+                      <span class="text-black">{{ deceasedCountgendercount.Female || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Unidentified Person Matched</span>
+                      <span class="text-black">{{ found_alivegendercount.Female || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Pending Persons</span>
+                      <span class="text-black">{{ pendingGendercounts.Female || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Female Stats from Unidentified Person -->
+              <div class="col-12">
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-2">
+                    <h6 class="text-black mb-1">Unidentified Female</h6>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Unidentified Bodies Found</span>
+                      <span class="text-black">{{ UPdeceasedCountgendercount.Female || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Missing Persons Matched</span>
+                      <span class="text-black">{{ UPfound_alivegendercount.Female || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Pending Females</span>
+                      <span class="text-black">{{ UPpendingGendercounts.Female || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Female Stats from Unidentified Bodies -->
+              <div class="col-12">
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-2">
+                    <h6 class="text-black mb-1">Unidentified Bodies</h6>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Unidentified Bodies Matched</span>
+                      <span class="text-black">{{ UBdeceasedCountgendercount.Female || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Missing Females Matched</span>
+                      <span class="text-black">{{ UBfound_alivegendercount.Female || 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="medium text-black">Pending Females</span>
+                      <span class="text-black">{{ UBpendingGendercounts.Female || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <!-- Female Stats Summary -->
+           
+            <div class="row g-2">
+              <!-- Resolved Missing Females (RMF) -->
+              <div class="col-12">
+                  <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #ffebee, #ff7043);">
+                      <div class="card-body p-2 d-flex align-items-center justify-content-between border-dark">
+                          <div class="d-flex align-items-start gap-2">
+                              <img src="assets/images/user_icon.svg" alt="Resolved" class="custom-icon">
+                              <div class="d-flex flex-column">
+                                  <p class="text-black mb-0 ">Resolved Missing Females</p>
+                                  <div class="d-flex align-items-center">
+                                      <p class="text-black mb-0">(RMF)</p>
+                                      <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Resolved Missing Females"></i>
+                                  </div>
+                              </div>
+                          </div>
+                          <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
+                      </div>
+                  </div>
+              </div>
+          
+              <!-- Resolved Unidentified Bodies (RUB) -->
+              <div class="col-12">
+                  <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #fce4ec, #f06292);">
+                      <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                          <div class="d-flex align-items-start gap-2">
+                              <img src="assets/images/user_icon.svg" alt="Resolved" class="custom-icon">
+                              <div class="d-flex flex-column">
+                                  <p class="text-black mb-0 ">Resolved Unidentified Females</p>
+                                  <div class="d-flex align-items-center">
+                                      <p class="text-black mb-0">(RUF)</p>
+                                      <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Resolved Unidentified Females"></i>
+                                  </div>
+                              </div>
+                          </div>
+                          <h6 class="text-black mb-0">{{ deceasedCountgendercount.Female || 0 }}</h6>
+                      </div>
+                  </div>
+              </div>
+          
+              <!-- Missing Female Matched (MFM) -->
+              <div class="col-12">
+                  <div class="card shadow-sm border-0 bg-gradient" style="background: linear-gradient(to bottom right, #f8bbd0, #e91e63);">
+                      <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                          <div class="d-flex align-items-start gap-2">
+                              <img src="assets/images/user_icon.svg" alt="Missing" class="custom-icon">
+                              <div class="d-flex flex-column">
+                                  <p class="text-black mb-0 ">Resolved Unidentified Bodies</p>
+                                  <div class="d-flex align-items-center">
+                                      <p class="text-black mb-0">(RUB)</p>
+                                      <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Unidentified Bodies"></i>
+                                  </div>
+                              </div>
+                          </div>
+                          <h6 class="text-black mb-0">{{ found_alivegendercount.Female || 0 }}</h6>
+                      </div>
+                  </div>
+              </div>
+          
+              <!-- Pending Female (PF) -->
+              <div class="col-12">
+                  <div class="card shadow-sm border-0 bg-gradient " style="background: linear-gradient(to bottom right, #ffebee, #ff7043);">
+                      <div class="card-body p-2 d-flex align-items-center justify-content-between border-dark">
+                          <div class="d-flex align-items-start gap-2">
+                              <img src="assets/images/user_icon.svg" alt="Pending" class="custom-icon">
+                              <div class="d-flex flex-column">
+                                  <p class="text-black mb-0">Pending Female</p>
+                                  <div class="d-flex align-items-center">
+                                      <p class="text-black mb-0">(PF)</p>
+                                      <i class="bi bi-info-circle text-muted info-icon ms-1" data-bs-toggle="tooltip" title="Pending Female"></i>
+                                  </div>
+                              </div>
+                          </div>
+                          <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+            
+            
+  
+         
+        </div>
+      </div>
+     
+  
+    </div>
+    
+  
+    <!-- filtered data -->
+    <div class="row mt-1">
+      <div class="col">
+        <div class="card cardff rounded-3 shadow-lg">
+          <div class="card-header card-headerff border-bottom-0">
+            <h6 class=" text-dark">Filtered Persons</h6>
+          </div>
+          <div class="card-body px-4 py-4">
+            <!-- Tab navigation -->
+            <ul class="nav nav-tabs mb-2" id="filteredTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active filter-tab-items " id="missing-tab" data-bs-toggle="tab" href="#missing" 
+                   role="tab" aria-controls="missing" aria-selected="true">
+                  <i class="bi bi-person-bounding-box me-2 filtered-data-tab-icon "></i>Missing Persons
+                </a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link filter-tab-items" id="unidentified-tab" data-bs-toggle="tab" href="#unidentified" 
+                   role="tab" aria-controls="unidentified" aria-selected="false">
+                  <i class="bi bi-person-lines-fill me-2 filtered-data-tab-icon "></i>Unidentified Persons
+                </a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link filter-tab-items" id="bodies-tab" data-bs-toggle="tab" href="#bodies" 
+                   role="tab" aria-controls="bodies" aria-selected="false">
+                  <i class="bi bi-person-x-fill me-2 filtered-data-tab-icon  "></i>Unidentified Bodies
+                </a>
+              </li>
+            </ul>
+            
+            
+    
+            <!-- Tab content -->
+            <div class="tab-content" id="filteredTabContent">
+              <!-- Missing Persons Tab -->
+              <div class="tab-pane fade show active" id="missing" role="tabpanel" aria-labelledby="missing-tab">
+                <div class="tableff-responsive">
+                  <table class="table tableff table-hover align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Sr No.</th>
+                        <th>Photo</th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>City</th>
+                        <th>District</th>
+                        <th>State</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let person of filteredMissingPersonssss; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
+                               alt="Person Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
+                        </td>
+                        <td>{{ person.full_name || 'Unknown' }}</td>
+                        <td>{{ person.age || 'Not specified' }}</td>
+                        <td>
+                          <img *ngIf="person.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40">
+                          <img *ngIf="person.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                          <img *ngIf="person.gender !== 'Male' && person.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                        </td>
+                        
+                        <td>{{ person.address.city || 'Not specified' }}</td>
+                        <td>{{ person.address.district || 'Not specified' }}</td>
+                        <td>{{ person.address.state || 'Not specified' }}</td>
+                        <td>
+                          <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            
+              <!-- Unidentified Persons Tab -->
+              <div class="tab-pane fade" id="unidentified" role="tabpanel" aria-labelledby="unidentified-tab">
+                <div class="tableff-responsive">
+                  <table class="table tableff table-hover align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Sr No.</th>
+                        <th>Photo</th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>City</th>
+                        <th>District</th>
+                        <th>State</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let person of filteredUnidentifiedPersonssss; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
+                               alt="Person Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
+                        </td>
+                        <td>{{ person.full_name || 'Unknown' }}</td>
+                        <td>{{ person.estimated_age || 'Not specified' }}</td>
+                        <td>
+                          <img *ngIf="person.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40">
+                          <img *ngIf="person.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                          <img *ngIf="person.gender !== 'Male' && person.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                        </td>
+                        <td>{{ person.address.city || 'Not specified' }}</td>
+                        <td>{{ person.address.district || 'Not specified' }}</td>
+                        <td>{{ person.address.state || 'Not specified' }}</td>
+                        <td>
+                          <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            
+              <!-- Unidentified Bodies Tab -->
+              <div class="tab-pane fade" id="bodies" role="tabpanel" aria-labelledby="bodies-tab">
+                <div class="tableff-responsive">
+                  <table class="table tableff table-hover align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Sr No.</th>
+                        <th>Photo</th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>City</th>
+                        <th>District</th>
+                        <th>State</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let body of filteredunidentifiedboidessss; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                          <img [src]="body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : 'assets/images/Nophoto.png'"
+                               alt="Body Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
+                        </td>
+                        <td>{{ body.full_name || 'Unknown' }}</td>
+                        <td>{{ body.estimated_age || 'Not specified' }}</td>
+                        <td>
+                          <img *ngIf="body.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40" >
+                          <img *ngIf="body.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                          <img *ngIf="body.gender !== 'Male' && body.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                        </td>
+                        <td>{{ body.address.city|| 'Not specified' }}</td>
+                        <td>{{ body.address.district || 'Not specified' }}</td>
+                        <td>{{ body.address.state || 'Not specified' }}</td>
+                        <td>
+                          <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(body)">View</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </div>
+  
+  
+  
+  
+  
+  
+  <!-- model  -->
+  <div
+  class="modal fade"
+  id="filteredDataModal"
+  tabindex="-1"
+  aria-labelledby="filteredDataModalLabel"
+  aria-hidden="true"
+  >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filteredDataModalLabel">
+          Person Details
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Person Details -->
+        <div *ngIf="selectedPerson" class="container">
+          <!-- Person Overview Section -->
+          <div class="row mb-4">
+            <div class="col-md-5 text-center">
+              <img
+                [src]="
+                  selectedPerson.photo_upload
+                    ? environment.apiUrl + selectedPerson.photo_upload
+                    : selectedPerson.body_photo_upload
+                    ? environment.apiUrl + selectedPerson.body_photo_upload
+                    : 'assets/images/Nophoto.png'
+                "
+                alt="No Photo uploaded"
+                class="img-fluid rounded"
+              />
+  
+            </div>
+            <div class="col-md-7">
+              <h4>{{ selectedPerson.full_name }}</h4>
+              <p>
+                <strong>Age:</strong>
+                {{ selectedPerson.age || selectedPerson.estimated_age }}
+              </p>
+              <p><strong>Gender:</strong> {{ selectedPerson.gender }}</p>
+              <p>
+                <strong>Blood Group:</strong> {{ selectedPerson.blood_group }}
+              </p>
+              <p>
+                <strong>Condition:</strong> {{ selectedPerson.condition }}
+              </p>
+              <p>
+                <strong>Last Seen Location:</strong>
+                {{
+                  selectedPerson.last_seen_location ||
+                    selectedPerson.body_seen_details ||
+                    selectedPerson.last_seen_details
+                }}
+              </p>
+            </div>
+          </div>
+  
+          <!-- personal info Section -->
+          <h5 class="mb-3 text-primary">Appearance Information</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Height:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.height || "N/A" }}</div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Weight:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.weight || "N/A" }}</div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>complexion:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.complexion || "N/A" }}
+            </div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Hair color:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.hair_color || "N/A" }}
+            </div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Hair type:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.hair_type || "N/A" }}
+            </div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Eye color:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.eye_color || "N/A" }}
+            </div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Birth Mark:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.birth_mark || "N/A" }}
+            </div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Distinctive mark:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.distinctive_mark || "N/A" }}
+            </div>
+          </div>
+  
+          <!-- Contact Information Section -->
+          <h5 class="mb-3 text-primary">Contact Information</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Phone Number:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.contact.phone_number }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Email:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.contact.email }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Social Media:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.contact.social_media_handles }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Contact Type:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.contact.type }}({{
+                selectedPerson.contact.subtype
+              }})
+            </div>
+          </div>
+  
+          <!-- Address Information Section -->
+          <h5 class="mb-3 text-primary">Address Information</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Street:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.street }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Apartment:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.address.apartment_number }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>City:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.city }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Village:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.village }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>landmark:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.landmark }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>location:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.location }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>location:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.address.address_type }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>State:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.state }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Country:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.country }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Postal Code:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.address.postal_code }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Address subtype:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.address.subtype }}</div>
+          </div>
+  
+          <!-- Educational and Occupation Information -->
+          <h5 class="mb-3 text-primary">Educational & Occupation Details</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>caste :</strong></div>
+            <div class="col-md-9">{{ selectedPerson.caste || "N/A" }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>sub caste:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.sub_caste || "N/A" }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>religion:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.religion || "N/A" }}</div>
+          </div>
+  
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>mother tongue:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.mother_tongue || "N/A" }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <strong>other known Languages:</strong>
+            </div>
+            <div class="col-md-9">
+              {{ selectedPerson.other_known_languages || "N/A" }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Educational Details:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.educational_details }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Occupation:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.occupation }}</div>
+          </div>
+  
+          <!-- Identification and Missing Details -->
+          <h5 class="mb-3 text-primary">
+            Identification & Missing Information
+          </h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Identification Type:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.identification_details }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <strong>Identification Card Number:</strong>
+            </div>
+            <div class="col-md-9">
+              {{ selectedPerson.identification_card_no }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Missing Date:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.missing_date }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Missing Time:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.missing_time }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>missing_location:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.missing_location }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Location Details:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.location_details }}</div>
+          </div>
+          <!-- Investigating Officer & Reporting Person Details -->
+          <h5 class="mb-3 text-primary">Investigation Details</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Police station :</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.police_station_name_and_address }}
+            </div>
+          </div>
+          <!-- <div class="row mb-3">
+            <div class="col-md-3">
+              <strong>Police station address:</strong>
+            </div>
+            <div class="col-md-9">
+              {{ selectedPerson.police_station_name_and_address.address }}
+            </div>
+          </div> -->
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <strong>Investigating Officer:</strong>
+            </div>
+            <div class="col-md-9">
+              {{ selectedPerson.investigating_officer_name }} ({{
+                selectedPerson.investigating_officer_contact_number
+              }})
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Reporting Person:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.reportingperson_name }} ({{
+                selectedPerson.relationship_with_victim
+              }})
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Willing to Volunteer:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.willing_to_volunteer ? "Yes" : "No" }}
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
+  

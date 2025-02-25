@@ -1,6 +1,6 @@
 import uuid
-from django.db import models
-
+# from django.db import models
+from django.contrib.gis.db import models 
 
 from .police_station import PoliceStation
 from .user import User
@@ -25,9 +25,7 @@ class Address(models.Model):
     pincode = models.CharField(max_length=50)
     country = models.CharField(max_length=50, help_text="Country code or ID")
     landmark_details = models.CharField(max_length=200, blank=True, null=True)
-    lat = models.CharField(max_length=50, blank=True, null=True)
-    lang = models.CharField(max_length=50, blank=True, null=True)
-
+    location = models.PointField(srid=4326,blank=True, null=True)  # SRID 4326 is standard for lat/lng
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # police_station = models.ForeignKey( PoliceStation, on_delete=models.CASCADE, related_name='addresses')
     person = models.ForeignKey('Person', on_delete=models.SET_NULL,related_name="addresses", null=True, blank=True)

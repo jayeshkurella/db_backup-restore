@@ -3,13 +3,14 @@ from rest_framework import serializers
 from ..models import Person , Address, Contact ,FIR,AdditionalInfo ,AdminUser ,User ,Consent ,Document ,Hospital ,LastKnownDetails ,Match ,PersonUser ,PoliceStation
 
 
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
 
-
-
+    
 class PersonUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonUser
