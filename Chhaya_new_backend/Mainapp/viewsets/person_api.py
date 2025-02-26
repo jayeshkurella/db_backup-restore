@@ -8,39 +8,27 @@ from ..Serializers.serializers import PersonSerializer
 from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails ,Consent
 from django.db import transaction
 from drf_yasg import openapi
-
-
+from django.contrib.gis.geos import Point
+import json
+from django.utils.timezone import now
 
 
 class PersonViewSet(viewsets.ViewSet):
-    
-    '''
-        Person API Endpoints
-        =====================
 
-        This API provides CRUD operations for managing persons and their related information. 
+    """
+    A ViewSet for managing Person entities and their related data.
 
-        🔹 Features:
-            - **Create** a new person with related details.
-            - **Retrieve** a list of persons (excluding soft deleted).
-            - **Retrieve** a person by ID.
-            - **Update** person details.
-            - **Soft Delete** a person (marks `_is_deleted=True` instead of removing it).
-            - **Soft Delete All** persons without actually removing them.
+    This ViewSet provides operations to list, retrieve, create, update (PUT and PATCH),
+    and partially update Person objects while handling their related data, such as
+    addresses, contacts, additional information, last known details, FIRs, and consents.
 
-        🔹 Delete Implementation:
-            - Instead of deleting records, we set `_is_deleted=True` in the database.
-            - The `list` endpoint only returns persons where `_is_deleted=False`.
-
-        🔹 Endpoints:
-            - `GET    /api/persons/`                 → List all active persons
-            - `POST   /api/persons/`                 → Create a new person
-            - `GET    /api/persons/{id}/`            → Retrieve a specific person
-            - `PUT    /api/persons/{id}/`            → Update a person
-            - `DELETE /api/persons/{id}/`            → Soft delete a person
-            - `DELETE /api/persons/soft_delete_all/` → Soft delete all persons
-
-    '''
+    Methods:
+        - list: Retrieves a paginated list of all persons that are not marked as deleted.
+        - retrieve: Retrieves a specific person by their ID, along with related data.
+        - create: Creates a new person and their related data as specified.
+        - update: Updates the details of an existing person and all related data.
+        - partial_update: Partially updates an existing person and their related data, allowing for selective data changes.
+    """
     pagination_class = PageNumberPagination
 
 
@@ -89,6 +77,7 @@ class PersonViewSet(viewsets.ViewSet):
         responses={201: openapi.Response("Person created successfully")}
     )
     def create(self, request):
+        print("Incoming Data:", json.dumps(request.data, indent=4))
         try:
             with transaction.atomic():
                 data = request.data
@@ -104,25 +93,54 @@ class PersonViewSet(viewsets.ViewSet):
                 # Create Person object
                 person = Person.objects.create(**data)
 
-                # Create related objects
-                Address.objects.bulk_create([
-                    Address(person=person, **address) for address in addresses_data
-                ])
-                Contact.objects.bulk_create([
-                    Contact(person=person, **contact) for contact in contacts_data
-                ])
-                AdditionalInfo.objects.bulk_create([
-                    AdditionalInfo(person=person, **info) for info in additional_info_data
-                ])
-                LastKnownDetails.objects.bulk_create([
-                    LastKnownDetails(person=person, **details) for details in last_known_details_data
-                ])
-                FIR.objects.bulk_create([
-                    FIR(person=person, **fir) for fir in firs_data
-                ])
-                Consent.objects.bulk_create([
-                    Consent(person=person, **consent) for consent in consents_data
-                ])
+                # ✅ Create related addresses with correct person reference
+                addresses = []
+                for address in addresses_data:
+                    lat = address.get('location', {}).get('latitude')
+                    lon = address.get('location', {}).get('longitude')
+
+                    if lat and lon:  # Ensure values exist and are not empty
+                        try:
+                            lat = float(lat)
+                            lon = float(lon)
+                            point = Point(lon, lat)  # Create a Point object
+                        except ValueError:
+                            return Response({'error': 'Latitude and Longitude must be valid numbers'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        point = None  # If lat/lon are missing, keep location empty
+
+                    # ✅ Ensure person is correctly assigned
+                    address_obj = Address(
+                        person=person,  # ✅ Assign the valid Person instance
+                        location=point,  # ✅ Store as Point or None
+                        **{k: v for k, v in address.items() if k not in ['location', 'person']}
+                        # Avoid duplicate person key
+                    )
+                    addresses.append(address_obj)
+
+                # ✅ Bulk create after validating all addresses
+                Address.objects.bulk_create(addresses)
+
+                contacts = [Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'}) for contact in
+                            contacts_data]
+                Contact.objects.bulk_create(contacts)
+
+                additional_info = [AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'}) for
+                                   info in additional_info_data]
+                AdditionalInfo.objects.bulk_create(additional_info)
+
+                last_known_details = [
+                    LastKnownDetails(person=person, **{k: v for k, v in details.items() if k != 'person'}) for details
+                    in last_known_details_data]
+                LastKnownDetails.objects.bulk_create(last_known_details)
+
+                firs = [FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'}) for fir in firs_data]
+                FIR.objects.bulk_create(firs)
+
+                consents = [Consent(person=person, **{k: v for k, v in consent.items() if k != 'person'}) for consent in
+                            consents_data]
+                Consent.objects.bulk_create(consents)
 
                 return Response({'message': 'Person created successfully', 'person_id': str(person.id)}, status=status.HTTP_201_CREATED)
 

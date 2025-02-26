@@ -12,8 +12,8 @@ class Document(models.Model):
         FINGERPRINT_REPORT = 'fingerprint_report', 'Fingerprint Report'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    type = models.CharField(max_length=20, choices=DocumentTypeChoices.choices)
-    document = models.TextField()
+    type = models.CharField(max_length=20, choices=DocumentTypeChoices.choices,blank=True, null=True)
+    document = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")

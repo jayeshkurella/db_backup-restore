@@ -10,13 +10,13 @@ from .user import User
 
 class FIR(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    fir_no = models.CharField(max_length=50, unique=True, help_text="Unique FIR number")
-    case_status = models.CharField(max_length=50, help_text="Current status of the case")
-    investigation_officer_name = models.CharField(max_length=50, help_text="Name of the investigation officer")
+    fir_no = models.CharField(max_length=50,  help_text="Unique FIR number",blank=True, null=True)
+    case_status = models.CharField(max_length=50, help_text="Current status of the case",blank=True, null=True)
+    investigation_officer_name = models.CharField(max_length=50, help_text="Name of the investigation officer",blank=True, null=True)
 
     investigation_officer_contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
-    police_station = models.ForeignKey(PoliceStation, on_delete=models.CASCADE)
-    document = models.ForeignKey(Document, on_delete=models.CASCADE)
+    police_station = models.ForeignKey(PoliceStation, on_delete=models.CASCADE,null=True, blank=True)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE,null=True, blank=True)
     person = models.ForeignKey(Person, on_delete=models.SET_NULL,null=True, blank=True,related_name="firs",)
 
 

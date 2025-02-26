@@ -24,7 +24,7 @@ export class HomepageComponent implements AfterViewInit{
   ngAfterViewInit(): void {
       if (this.reportCaseMenu) {
           new Collapse(this.reportCaseMenu.nativeElement, {
-              toggle: false // Prevent initial toggle
+              toggle: false 
           });
       }
   }
@@ -41,13 +41,13 @@ export class HomepageComponent implements AfterViewInit{
   }
 
   toggleDropdown(event: Event, dropdownId: string) {
-    event.preventDefault(); // Prevents default anchor behavior
+    event.preventDefault(); 
     this.openDropdown = this.openDropdown === dropdownId ? null : dropdownId;
   }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
-}
+  }
 
   closeSidebar() {
       this.isSidebarOpen = false;

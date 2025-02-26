@@ -25,23 +25,23 @@ class AdditionalInfo(models.Model):
         PASSPORT = 'passport', 'Passport'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    caste = models.CharField(max_length=10, choices=CasteChoices.choices)
+    caste = models.CharField(max_length=10, choices=CasteChoices.choices,blank=True, null=True)
     subcaste = models.CharField(max_length=50, blank=True, null=True)
     marital_status = models.CharField(max_length=10, choices=MaritalStatusChoices.choices)
     religion = models.CharField(max_length=50, blank=True, null=True)
     mother_tongue = models.CharField(max_length=50, blank=True, null=True)
     languages = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
-    id_type = models.CharField(max_length=10, choices=IdTypeChoices.choices)
-    id_no = models.CharField(max_length=50, unique=True, help_text="Unique identification number")
+    id_type = models.CharField(max_length=10, choices=IdTypeChoices.choices,blank=True, null=True)
+    id_no = models.CharField(max_length=50,  help_text="Unique identification number")
     education_details = models.CharField(max_length=50, blank=True, null=True)
     occupation_details = models.CharField(max_length=50, blank=True, null=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL,blank=True, null=True)
     person = models.ForeignKey(Person, on_delete=models.SET_NULL,null=True, blank=True,related_name="additional_info",)
 
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True,blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 

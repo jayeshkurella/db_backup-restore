@@ -85,13 +85,13 @@ class PoliceStationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PersonSerializer(serializers.ModelSerializer):
-    addresses = AddressSerializer(many=True, read_only=True)
-    contacts = ContactSerializer(many=True, read_only=True)
-    additional_info = AdditionalInfoSerializer(many=True, read_only=True)
-    last_known_details = LastKnownDetailsSerializer(many=True, read_only=True)
-    firs = FIRSerializer(many=True, read_only=True)
-    consent = ConsentSerializer(many=True, read_only=True)
-    hospital = HospitalSerializer(read_only=True)
+    addresses = AddressSerializer(many=True)
+    contacts = ContactSerializer(many=True)
+    additional_info = AdditionalInfoSerializer(many=True)
+    last_known_details = LastKnownDetailsSerializer(many=True)
+    firs = FIRSerializer(many=True)
+    consent = ConsentSerializer(many=True)
+    hospital = HospitalSerializer()
     
     class Meta:
         model = Person

@@ -1,0 +1,128 @@
+.heading-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 60px;       
+    text-align: center;      /* Center the text within the heading */
+  }
+  
+  .main-heading {
+    font-size: 18px; /* Larger font size */
+    font-weight: bold; /* Make it bold */
+    color: #2c3e50; /* Dark color for contrast */
+    text-transform: uppercase; /* Make the text uppercase for added impact */
+    letter-spacing: 1.5px; /* Slightly increase letter spacing */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  }
+  
+  .header-bottom
+    {
+      border-bottom: 1px solid #000;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      color :#f58200;
+      font-size: 14px;
+      
+      /* padding: 8px; */
+  }
+  
+  .selectors-font{
+    color: rgb(59, 58, 58) !important;
+    font-size: 12px;
+  
+  }
+  
+  ::placeholder {
+    color: rgb(59, 58, 58) !important;
+    font-size: 12px;
+    opacity: 1; 
+  }
+  
+  .custom-hover{
+    background-color: #f58200 !important;
+    color: white !important; /* Adjust text color for better visibility */
+    border-color: #ff5e00 !important;
+  }
+  
+  .border-dark{
+    border: 1px solid #d3d3d3 !important;
+    border-radius: 4px !important;
+  }
+  
+  
+  /* Style for the navbar */
+  .navbar {
+      background: linear-gradient(90deg, rgba(255, 153, 51, 1) 0%, rgba(255, 87, 34, 1) 100%);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+      border-radius: 0 0 15px 15px; 
+    }
+    
+    .navbar-brand {
+      font-size: 2rem; 
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: white;
+      text-align: center;
+      width: 100%;
+      padding: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: rgba(0, 0, 0, 0.3); /* Slight background to make the text stand out */
+      border-radius: 10px; /* Rounded corners for the title box */
+      transition: all 0.3s ease; /* Smooth hover transition */
+    }
+    
+    /* Hover effect for the navbar title */
+    .navbar-brand:hover {
+      color: #ff5722 !important;
+      background: rgba(255, 255, 255, 0.2); /* Lighten background on hover */
+    }
+    
+    @media (max-width: 767px) {
+      .navbar-brand {
+        font-size: 1.5rem; 
+        letter-spacing: 1px;
+      }
+    }
+  
+  
+    .custom-width {
+      width: 80%;
+    }
+    
+    .custom-bold {
+      font-weight: bold;
+    }
+  
+  /* Initial hidden state of the modal */
+  .modal {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050; /* Ensure it stays on top */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  /* Show the modal with a smooth slide-in effect */
+  .modal.show {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  #loader {
+    width: 100%;
+    height: 20px;
+    background-color: #007bff; /* Customize color */
+    transition: width 0.5s ease-in-out;
+  }
+  
+  #progressText {
+    font-size: 20px;
+  }
+  
+    

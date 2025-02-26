@@ -28,13 +28,13 @@ class Contact(models.Model):
     additional_details = models.TextField(blank=True, null=True)
     is_primary = models.BooleanField(default=False)
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='contacts')
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='contacts',null=True, blank=True,)
     hospital = models.ForeignKey('Hospital', on_delete=models.SET_NULL, null=True, blank=True,related_name='hospital_contact')
     police_station = models.ForeignKey('PoliceStation', on_delete=models.SET_NULL, null=True, blank=True, related_name="police_contact",)
     person = models.ForeignKey('Person', on_delete=models.SET_NULL, related_name="contacts",null=True, blank=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True, blank=True,)
+    updated_at = models.DateTimeField(auto_now=True,null=True, blank=True,)
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
     updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
 

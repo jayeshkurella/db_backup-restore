@@ -164,21 +164,62 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+
+
+
+
+import datetime
+from logging.handlers import TimedRotatingFileHandler
+
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)  
+
+# Generate dynamic log file names with date
+today_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {  
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {  
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
-        'file': {
+        'django_log_file': {  
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, f'django_{today_date}.log'),
+            'when': 'midnight', 
+            'interval': 1, 
+            'backupCount': 7,  
+            'formatter': 'verbose',
+        },
+        'user_log_file': {  
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, f'user_activity_{today_date}.log'),
+            'when': 'midnight',  
+            'interval': 1, 
+            'backupCount': 7,  
+            'formatter': 'verbose',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['file'],
+        'django': {  
+            'handlers': ['django_log_file'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
+        },
+        'user_activity': {  
+            'handlers': ['user_log_file'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     },
 }
