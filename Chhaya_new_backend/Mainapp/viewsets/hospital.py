@@ -11,7 +11,7 @@ from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer
 from ..models import PoliceStation ,Hospital
 from ..pagination import CustomPagination
 from django.core.cache import cache
-
+from rest_framework import generics
 
 
 class HospitalViewSet(viewsets.ModelViewSet):
@@ -157,5 +157,7 @@ class HospitalViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST )
 
         
-        
-        
+
+class HospitalListView(generics.ListAPIView):
+    queryset = Hospital.objects.all().order_by("id")
+    serializer_class = HospitalSerializer

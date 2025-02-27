@@ -27,6 +27,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   markerLayer: any; 
   fileToUpload:any
   age: number | any;
+  addedAddresses: { street: string, city: string }[] = [];
 
   missingPersonForm!: FormGroup;
   latcoordinate: any
@@ -73,9 +74,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   initializeForm() {
     this.personForm = this.fb.group({
       type: [''],
-      first_name: [''],
-      middle_name: [''],
-      last_name: [''],
+      full_name: [''],
       birth_date: [''],
       age: [''],
       birthtime: [null],
@@ -89,9 +88,10 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
       hair_type: [''],
       eye_color: [''],
       condition: [''],
+      Body_Condition: [''],  //new
       birth_mark: [''],
       distinctive_mark: [''],
-      photo: [''],
+      photo_upload: [''],
       hospital: [null],
       document_ids: [''],
       created_at: [null],
@@ -142,35 +142,137 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
     return this.personForm.get('consent') as FormArray;
   }
 
+  createAddressGroup(): FormGroup {
+    return this.fb.group({
+      type: [''],
+      street: [''],
+      apartment_number: [''],
+      village: [''],
+      city: [''],
+      district: [''],
+      state: [''],
+      country: [''],
+      pincode: [''],
+      landmark: [''],
+      latitude: [''],
+      longitude: ['']
+    });
+  }
+
+  addNewAddress() {
+    // Add a new empty address form
+    this.addresses.push(this.createAddressGroup());
+  }
+
+  saveAddress(index: number) {
+    // Store entered address in a variable (if needed for API)
+    const savedAddress = this.addresses.at(index).value;
+
+    // Push saved address to footer and reset the form field
+    this.addresses.at(index).reset();
+  }
+
   // Methods to add fields dynamically
+  // addAddress() {
+  //   this.addresses.push(
+  //     this.fb.group({
+  //       type: [''],
+  //       street: [''],
+  //       appartment_no: [''],
+  //       appartment_name: [''],
+  //       village: [''],
+  //       city: [''],
+  //       district: [''],
+  //       state: [''],
+  //       pincode: [''],
+  //       country: [''],
+  //       landmark_details: [''],
+  //       location: this.fb.group({
+  //         latitude: [''],
+  //         longitude: [''],
+  //       }),
+  //       user: [null],
+  //       person: [''],
+  //       created_at: [null],
+  //       updated_at: [null],
+  //       created_by: [null],
+  //       updated_by: [null],
+  //     })
+  //   );
+  // }
+  
   addAddress() {
+    // Get the current address values from the form
+    const addressData = {
+      type: this.personForm.get('type')?.value,
+      street: this.personForm.get('street')?.value,
+      appartment_no: this.personForm.get('appartment_no')?.value,
+      appartment_name: this.personForm.get('appartment_name')?.value,
+      village: this.personForm.get('village')?.value,
+      city: this.personForm.get('city')?.value,
+      district: this.personForm.get('district')?.value,
+      state: this.personForm.get('state')?.value,
+      pincode: this.personForm.get('pincode')?.value,
+      country: this.personForm.get('country')?.value,
+      landmark_details: this.personForm.get('landmark_details')?.value,
+      location: {
+        latitude: this.personForm.get('location.latitude')?.value,
+        longitude: this.personForm.get('location.longitude')?.value,
+      },
+      user: null,
+      person: '',
+      created_at: null,
+      updated_at: null,
+      created_by: null,
+      updated_by: null,
+    };
+  
+    // Add the address to the displayed list
+    this.addedAddresses.push(addressData);
+  
+    // Add the address to the FormArray for submission
     this.addresses.push(
       this.fb.group({
-        type: [''],
-        street: [''],
-        appartment_no: [''],
-        appartment_name: [''],
-        village: [''],
-        city: [''],
-        district: [''],
-        state: [''],
-        pincode: [''],
-        country: [''],
-        landmark_details: [''],
+        type: [addressData.type],
+        street: [addressData.street],
+        appartment_no: [addressData.appartment_no],
+        appartment_name: [addressData.appartment_name],
+        village: [addressData.village],
+        city: [addressData.city],
+        district: [addressData.district],
+        state: [addressData.state],
+        pincode: [addressData.pincode],
+        country: [addressData.country],
+        landmark_details: [addressData.landmark_details],
         location: this.fb.group({
-          latitude: [''],
-          longitude: [''],
+          latitude: [addressData.location.latitude],
+          longitude: [addressData.location.longitude],
         }),
-        user: [null],
-        person: [''],
-        created_at: [null],
-        updated_at: [null],
-        created_by: [null],
-        updated_by: [null],
+        user: [addressData.user],
+        person: [addressData.person],
+        created_at: [addressData.created_at],
+        updated_at: [addressData.updated_at],
+        created_by: [addressData.created_by],
+        updated_by: [addressData.updated_by],
       })
     );
-  }
   
+    // Clear the input fields
+    this.personForm.get('type')?.reset();
+    this.personForm.get('street')?.reset();
+    this.personForm.get('appartment_no')?.reset();
+    this.personForm.get('appartment_name')?.reset();
+    this.personForm.get('village')?.reset();
+    this.personForm.get('city')?.reset();
+    this.personForm.get('district')?.reset();
+    this.personForm.get('state')?.reset();
+    this.personForm.get('pincode')?.reset();
+    this.personForm.get('country')?.reset();
+    this.personForm.get('landmark_details')?.reset();
+    this.personForm.get('location.latitude')?.reset();
+    this.personForm.get('location.longitude')?.reset();
+  }
+
   addContact() {
     this.contacts.push(
       this.fb.group({
@@ -205,7 +307,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         marital_status: [''], // Dropdown - MaritalStatusChoices
         religion: [''],
         mother_tongue: [''],
-        languages: [''], // Comma-separated list
+        other_known_languages: [''], // Comma-separated list
         id_type: [''], // Dropdown - IdTypeChoices
         id_no: [''], // Alphanumeric check
         education_details: [''],
@@ -243,7 +345,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   addFIR() {
     this.firs.push(
       this.fb.group({
-        fir_no: [''], // Unique FIR number
+        fir_number: [''], // Unique FIR number
         case_status: [''], // Case status
         investigation_officer_name: [''], // Officer's name
         investigation_officer_contact: [null], // ForeignKey to Contact
@@ -316,63 +418,66 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
  }
 
 
-  updateLocation(lat: number, lng: number): void {
-    this.latitude = parseFloat(lat.toFixed(6));
-    this.longitude = parseFloat(lng.toFixed(6));
-  
-    // Define custom icon
-    const customIcon = L.icon({
-      iconUrl: 'assets/leaflet/images/marker-icon.png', // Ensure this path is correct
-      iconSize: [25, 41], // Default Leaflet icon size
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'assets/leaflet/images/marker-shadow.png',
-      shadowSize: [41, 41],
-    });
-  
-    // Remove existing marker
-    if (this.marker) {
-      this.map.removeLayer(this.marker);
-    }
-  
-    // Add new marker
-    this.marker = L.marker([this.latitude, this.longitude], {
-      draggable: true,
-      icon: customIcon,
-    }).addTo(this.map);
-  
-    // Update location on marker drag
-    this.marker.on('dragend', () => {
-      const newLatLng = this.marker!.getLatLng();
-      this.updateLocation(newLatLng.lat, newLatLng.lng);
-    });
-  
-    // Center the map on the new marker
-    this.map.setView([this.latitude, this.longitude], 10);
+ updateLocation(lat: number, lng: number, index?: number): void {
+  this.latitude = parseFloat(lat.toFixed(6));
+  this.longitude = parseFloat(lng.toFixed(6));
+
+  if (index !== undefined) {
+    // Ensure the selected address is updated
+    this.addresses.at(index).get('location.latitude')?.setValue(this.latitude);
+    this.addresses.at(index).get('location.longitude')?.setValue(this.longitude);
   }
+
+  // Define custom icon
+  const customIcon = L.icon({
+    iconUrl: 'assets/leaflet/images/marker-icon.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+    shadowSize: [41, 41],
+  });
+
+  // Remove existing marker
+  if (this.marker) {
+    this.map.removeLayer(this.marker);
+  }
+
+  // Add new marker
+  this.marker = L.marker([this.latitude, this.longitude], {
+    draggable: true,
+    icon: customIcon,
+  }).addTo(this.map);
+
+  // Update location on marker drag
+  this.marker.on('dragend', () => {
+    const newLatLng = this.marker!.getLatLng();
+    this.updateLocation(newLatLng.lat, newLatLng.lng, index);
+  });
+
+  // Center the map on the new marker
+  this.map.setView([this.latitude, this.longitude], 10);
+ }
+
   
 
-  getCurrentLocation(): void {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by this browser.');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Ensure the map is initialized before updating location
-        // if (!this.map) {
-        //   this.initMap();
-        // }
-
-        this.updateLocation(position.coords.latitude, position.coords.longitude);
-      },
-      (error) => {
-        console.error('Error fetching location:', error);
-        alert('Unable to fetch location. Ensure location services are enabled.');
-      }
-    );
+ getCurrentLocation(index: number): void {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by this browser.');
+    return;
   }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      this.updateLocation(position.coords.latitude, position.coords.longitude, index);
+    },
+    (error) => {
+      console.error('Error fetching location:', error);
+      alert('Unable to fetch location. Ensure location services are enabled.');
+    }
+  );
+}
+
 
 
 

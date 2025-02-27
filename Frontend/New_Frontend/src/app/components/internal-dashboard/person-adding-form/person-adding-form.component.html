@@ -8,12 +8,12 @@
       <div class="card p-4 mb-2 bg-light">
         <h5 class="header-bottom pb-2">Personal Information</h5>
           <div class="row g-3">
-              <div class="col-md-4"><input type="text" class="form-control border-dark selectors-font" formControlName="first_name" placeholder="first Name"></div>
-              <div class="col-md-4"><input type="text" class="form-control border-dark selectors-font" formControlName="middle_name" placeholder="middle Name"></div>
-              <div class="col-md-4"><input type="text" class="form-control border-dark selectors-font" formControlName="last_name" placeholder="last Name"></div>
-              <div class="mb-3  selectors-font">
-                <label for="typeSelect" class="form-label">Select person Type</label>
+              <div class="col-md-12"><input type="text" class="form-control border-dark selectors-font" formControlName="full_name" placeholder="Full Name"></div>
+             
+              <div class="col-md-2  selectors-font">
+                <!-- <label for="typeSelect" class="form-label">Select person Type</label> -->
                 <select class="form-select border-dark selectors-font" id="typeSelect" formControlName="type">
+                  <option value="" selected disabled>Person Type</option>
                   <option value="Missing Person">Missing Person</option>
                   <option value="Unidentified Person">Unidentified Person</option>
                   <option value="Unidentified Body">Unidentified Body</option>
@@ -70,25 +70,8 @@
                 </select>
               </div>
   
-             
-  
-          <!-- Place of Birth -->
-            <div class="col-md-3">
-              <input type="text" class="form-control border-dark selectors-font" id="place_of_birth" formControlName="birthplace" placeholder="Place of Birth">
-            </div>
-  
-            <!-- Height -->
-            <div class="col-md-2">
-              <input type="text" class="form-control border-dark selectors-font" id="height" formControlName="height" placeholder="Height (e.g., 151cm ,155cm)">
-            </div>
-  
-            <!-- Weight -->
-            <div class="col-md-2">
-              <input type="text" class="form-control border-dark selectors-font" id="weight" formControlName="weight" placeholder="Weight (e.g., 50kg,55kg)">
-            </div>
-  
-             <!-- blood group -->
-             <div class="col-md-3">
+              <!-- blood group -->
+             <div class="col-md-2">
               <select class="form-select border-dark selectors-font" id="bloodGroup" formControlName="blood_group">
                   <option value="" selected hidden>Blood Group</option>
                   <option value="A+">A+</option>
@@ -98,6 +81,24 @@
                   <option value="AB-">AB-</option>
               </select>
           </div>
+             
+  
+          <!-- Place of Birth -->
+            <div class="col-md-3">
+              <input type="text" class="form-control border-dark selectors-font" id="place_of_birth" formControlName="birthplace" placeholder="Place of Birth">
+            </div>
+  
+            <!-- Height -->
+            <div class="col-md-2">
+              <input type="text" class="form-control border-dark selectors-font" id="height" formControlName="height" placeholder="Height (e.g., 151 cm)">
+            </div>
+  
+            <!-- Weight -->
+            <div class="col-md-2">
+              <input type="text" class="form-control border-dark selectors-font" id="weight" formControlName="weight" placeholder="Weight (e.g., 50kg)">
+            </div>
+  
+             
   
             <!-- Complexion -->
             <div class="col-md-3">
@@ -132,7 +133,7 @@
             </div>
   
             <!-- Eye Color -->
-            <div class="col-md-3">
+            <div class="col-md-2">
               <select class="form-select border-dark selectors-font" id="eyeColor" formControlName="eye_color">
                   <option value="" disabled selected>Eye Color</option>
                   <option value="Dark Brown">Dark Brown</option>
@@ -144,7 +145,7 @@
               </select>
             </div>
             <!-- Condition -->
-            <div class="col-md-2">
+            <div class="col-md-3">
               <select class="form-select border-dark selectors-font" id="condition" formControlName="condition">
                   <option value="" disabled selected>Condition</option>
                   <option value="Memory loss">Memory loss</option>
@@ -163,6 +164,26 @@
                   <option value="Paralysis">Paralysis</option>
               </select>
             </div>
+
+            <div class="col-md-2">
+              <select class="form-select border-dark selectors-font" id="condition" formControlName="Body_Condition">
+                  <option value="" disabled selected>Body Condition</option>
+                  <option value="Decomposed">Decomposed</option>
+                  <option value="Intact">Intact</option>
+                  <option value="Skeletal">Skeletal</option>
+                  <option value="Burnt">Burnt</option>
+                  <option value="Fresh">Fresh</option>
+                  <option value="NORMAL">NORMAL</option>
+                  <option value="UNSTABLE">UNSTABLE</option>
+                  <option value="Stable">Stable</option>
+                  <option value="Excess">Excess</option>
+                  <option value="Underweight">Underweight</option>
+              </select>
+            </div>
+            <div class="col-md-3 selectors-font">
+              <!-- <label for="imageUpload" class="form-label selectors-font">Upload Image</label> -->
+              <input type="file" class="form-control selectors-font" id="imageUpload" (change)="onFileChange($event)" accept="image/*">
+            </div>
   
             <!-- Birthmark -->
             <div class="col-md-6">
@@ -173,10 +194,8 @@
             <div class="col-md-6">
               <textarea type="text" class="form-control border-dark selectors-font" id="distinctiveMarks" formControlName="distinctive_mark" placeholder="Enter Other Distinctive Marks"></textarea>
             </div>
-            <div class="mb-3 selectors-font">
-              <label for="imageUpload" class="form-label selectors-font">Upload Image</label>
-              <input type="file" class="form-control selectors-font" id="imageUpload" (change)="onFileChange($event)" accept="image/*">
-            </div>
+
+            
   
             
           </div>
@@ -238,8 +257,8 @@
                 <div id="mapHome" style="height: 180px; border: 1px solid black;"></div>
       
                 <div class="d-flex gap-2 mt-3">
-                  <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="getCurrentLocation()">
-                    <i class="bi bi-geo-alt"></i> Get Current Location
+                  <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="getCurrentLocation(i)">
+                    <i class="bi bi-geo-alt"></i> 
                   </button>
       
                   <input type="text" class="form-control border-dark selectors-font" formControlName="latitude" [value]="latitude ?? ''" readonly placeholder="Latitude">
@@ -249,7 +268,9 @@
             </div>
       
           </div>
+          <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="addAddress()">Add Another Address</button>
         </div>
+        
       </div>
       
       
@@ -452,7 +473,7 @@
           <!-- FIR Number -->
           <div class="col-md-4">
             <label class="form-label selectors-font">FIR Number</label>
-            <input type="text" class="form-control border-dark selectors-font" formControlName="fir_no" placeholder="Enter FIR Number">
+            <input type="text" class="form-control border-dark selectors-font" formControlName="fir_number" placeholder="Enter FIR Number">
           </div>
       
           <!-- Upload FIR Photo -->

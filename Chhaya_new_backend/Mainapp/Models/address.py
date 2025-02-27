@@ -13,28 +13,102 @@ class Address(models.Model):
         HOME = 'HOME', 'Home'
         OFFICE = 'OFFICE', 'Office'
 
+    class StateChoices(models.TextChoices):
+        ANDHRA_PRADESH = 'Andhra Pradesh', 'Andhra Pradesh'
+        ARUNACHAL_PRADESH = 'Arunachal Pradesh', 'Arunachal Pradesh'
+        ASSAM = 'Assam', 'Assam'
+        BIHAR = 'Bihar', 'Bihar'
+        CHHATTISGARH = 'Chhattisgarh', 'Chhattisgarh'
+        GOA = 'Goa', 'Goa'
+        GUJARAT = 'Gujarat', 'Gujarat'
+        HARYANA = 'Haryana', 'Haryana'
+        HIMACHAL_PRADESH = 'Himachal Pradesh', 'Himachal Pradesh'
+        JHARKHAND = 'Jharkhand', 'Jharkhand'
+        KARNATAKA = 'Karnataka', 'Karnataka'
+        KERALA = 'Kerala', 'Kerala'
+        MADHYA_PRADESH = 'Madhya Pradesh', 'Madhya Pradesh'
+        MAHARASHTRA = 'Maharashtra', 'Maharashtra'
+        MANIPUR = 'Manipur', 'Manipur'
+        MEGHALAYA = 'Meghalaya', 'Meghalaya'
+        MIZORAM = 'Mizoram', 'Mizoram'
+        NAGALAND = 'Nagaland', 'Nagaland'
+        ODISHA = 'Odisha', 'Odisha'
+        PUNJAB = 'Punjab', 'Punjab'
+        RAJASTHAN = 'Rajasthan', 'Rajasthan'
+        SIKKIM = 'Sikkim', 'Sikkim'
+        TAMIL_NADU = 'Tamil Nadu', 'Tamil Nadu'
+        TELANGANA = 'Telangana', 'Telangana'
+        TRIPURA = 'Tripura', 'Tripura'
+        UTTAR_PRADESH = 'Uttar Pradesh', 'Uttar Pradesh'
+        UTTARAKHAND = 'Uttarakhand', 'Uttarakhand'
+        WEST_BENGAL = 'West Bengal', 'West Bengal'
+
+    class CountryChoices(models.TextChoices):
+        INDIA = 'India', 'India'
+        USA = 'United States of America', 'United States of America'
+        CHINA = 'China', 'China'
+        JAPAN = 'Japan', 'Japan'
+        GERMANY = 'Germany', 'Germany'
+        UK = 'United Kingdom', 'United Kingdom'
+        FRANCE = 'France', 'France'
+        BRAZIL = 'Brazil', 'Brazil'
+        AUSTRALIA = 'Australia', 'Australia'
+        CANADA = 'Canada', 'Canada'
+        RUSSIA = 'Russia', 'Russia'
+        ITALY = 'Italy', 'Italy'
+        SOUTH_KOREA = 'South Korea', 'South Korea'
+        MEXICO = 'Mexico', 'Mexico'
+        SOUTH_AFRICA = 'South Africa', 'South Africa'
+        INDONESIA = 'Indonesia', 'Indonesia'
+        SAUDI_ARABIA = 'Saudi Arabia', 'Saudi Arabia'
+        TURKEY = 'Turkey', 'Turkey'
+        SPAIN = 'Spain', 'Spain'
+        NETHERLANDS = 'Netherlands', 'Netherlands'
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    type = models.CharField(max_length=10, choices=AddressTypeChoices.choices)
-    street = models.CharField(max_length=50)
+    type = models.CharField(max_length=10, choices=AddressTypeChoices.choices, db_index=True)
+
+    # Address Details
+    street = models.CharField(max_length=50, blank=True, null=True)
     appartment_no = models.CharField(max_length=50, blank=True, null=True)
     appartment_name = models.CharField(max_length=50, blank=True, null=True)
     village = models.CharField(max_length=50, blank=True, null=True)
-    city = models.CharField(max_length=50)
-    district = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    pincode = models.CharField(max_length=50)
-    country = models.CharField(max_length=50, help_text="Country code or ID")
+    city = models.CharField(max_length=50, blank=True, null=True, db_index=True)
+    district = models.CharField(max_length=50, blank=True, null=True, db_index=True)
+    state = models.CharField(max_length=50, choices=StateChoices.choices, db_index=True)
+    pincode = models.CharField(max_length=50, blank=True, null=True, db_index=True)
+    country = models.CharField(max_length=50, help_text="Country code or ID", choices=CountryChoices.choices,
+                               default="India", db_index=True)
     landmark_details = models.CharField(max_length=200, blank=True, null=True)
-    location = models.PointField(srid=4326,blank=True, null=True)  # SRID 4326 is standard for lat/lng
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    # police_station = models.ForeignKey( PoliceStation, on_delete=models.CASCADE, related_name='addresses')
-    person = models.ForeignKey('Person', on_delete=models.SET_NULL,related_name="addresses", null=True, blank=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set")
+    # Geolocation
+    location = models.PointField(srid=4326, blank=True, null=True, db_index=True)
 
+    # Status and Ownership
+    is_active = models.BooleanField(default=True, db_index=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
+    person = models.ForeignKey('Person', on_delete=models.SET_NULL, related_name="addresses", null=True, blank=True,
+                               db_index=True)
+    country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
+
+    # Created & Updated By
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name="created_%(class)s_set", db_index=True)
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name="updated_%(class)s_set", db_index=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["type", "city", "state", "pincode"]),
+            models.Index(fields=["country", "district"]),
+            models.Index(fields=["person", "user"]),
+            models.Index(fields=["created_at", "updated_at"]),
+            models.Index(fields=["location"]),
+        ]
 
     def __str__(self):
         return f"{self.type} - {self.city}, {self.state} ({self.pincode})"

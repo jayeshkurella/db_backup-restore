@@ -12,6 +12,19 @@ class AdditionalInfo(models.Model):
         OBC = 'obc', 'Other Backward Class (OBC)'
         OPEN = 'open', 'Open/General'
 
+    class SubCasteChoices(models.TextChoices):
+        MAHAR ='mahar', 'Mahar'
+        CHAMBHAR = 'chambhar', 'Chambhar'
+        Brahmin = 'brahmin', 'Brahmin'
+        GURDIAN = 'gurdian', 'Gurdian'
+        Maratha = 'maratha', 'Maratha'
+        Rajput = 'rajput', 'Rajput'
+        Jain = 'jain', 'Jain'
+        Teli = 'teli', 'Teli'
+        Kumbhar = 'kumbhar', 'Kumbhar'
+
+
+
     class MaritalStatusChoices(models.TextChoices):
         MARRIED = 'married', 'Married'
         SINGLE = 'single', 'Single'
@@ -30,7 +43,7 @@ class AdditionalInfo(models.Model):
     marital_status = models.CharField(max_length=10, choices=MaritalStatusChoices.choices)
     religion = models.CharField(max_length=50, blank=True, null=True)
     mother_tongue = models.CharField(max_length=50, blank=True, null=True)
-    languages = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
+    other_known_languages  = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
     id_type = models.CharField(max_length=10, choices=IdTypeChoices.choices,blank=True, null=True)
     id_no = models.CharField(max_length=50,  help_text="Unique identification number")
     education_details = models.CharField(max_length=50, blank=True, null=True)
@@ -47,4 +60,4 @@ class AdditionalInfo(models.Model):
 
 
     def __str__(self):
-        return f"Additional Info - {self.person.first_name}"
+        return f"Additional Info - {self.person.full_name}"

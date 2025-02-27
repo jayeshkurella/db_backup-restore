@@ -10,7 +10,11 @@ class LastKnownDetails(models.Model):
     person_photo = models.ImageField(blank=True, null=True, help_text="URL or Base64 encoded photo of the person")
     reference_photo = models.ImageField(blank=True, null=True, help_text="URL or Base64 encoded reference photo",)
     missing_time = models.TimeField(help_text="Exact time the person was last seen",blank=True, null=True)
-    missing_date = models.DateTimeField(help_text="Date the person went missing",blank=True, null=True)
+    missing_date = models.DateField(help_text="Date the person went missing",blank=True, null=True)
+    last_seen_location = models.TextField(null=True, blank=True, db_index=True)
+    missing_location_details = models.TextField(null=True, blank=True, db_index=True)
+    missing_location_place= models.TextField(null=True, blank=True, db_index=True)
+
 
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
     person = models.ForeignKey(Person, on_delete=models.SET_NULL,null=True, blank=True,related_name="last_known_details",)
@@ -22,4 +26,4 @@ class LastKnownDetails(models.Model):
 
 
     def __str__(self):
-        return f"Last Known Details - {self.person.first_name} {self.person.last_name}"
+        return f"Last Known Details - {self.person.full_name} "

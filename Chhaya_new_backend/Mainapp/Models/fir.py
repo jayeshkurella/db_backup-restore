@@ -9,11 +9,20 @@ from .police_station import PoliceStation
 from .user import User
 
 class FIR(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    fir_no = models.CharField(max_length=50,  help_text="Unique FIR number",blank=True, null=True)
-    case_status = models.CharField(max_length=50, help_text="Current status of the case",blank=True, null=True)
-    investigation_officer_name = models.CharField(max_length=50, help_text="Name of the investigation officer",blank=True, null=True)
 
+    class CaseStatus(models.TextChoices):
+        OPEN = "Open", "Open"
+        CLOSED = "Closed", "Closed"
+        IN_PROGRESS = "In Progress", "In Progress"
+        RESOLVED = "Resolved", "Resolved"
+        PENDING = "Pending", "Pending"
+
+
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    fir_number  = models.CharField(max_length=50,  help_text="Unique FIR number",blank=True, null=True)
+    case_status = models.CharField(max_length=50, blank=True, null=True,choices=CaseStatus.choices, default=CaseStatus.OPEN)
+    investigation_officer_name = models.CharField(max_length=50, help_text="Name of the investigation officer",blank=True, null=True)
     investigation_officer_contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
     police_station = models.ForeignKey(PoliceStation, on_delete=models.CASCADE,null=True, blank=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE,null=True, blank=True)
@@ -27,4 +36,4 @@ class FIR(models.Model):
 
 
     def __str__(self):
-        return f"FIR {self.fir_no} - {self.case_status}"
+        return f"FIR {self.fir_number} - {self.case_status}"

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from .authentication.user_authentication import AuthAPIView
-from .viewsets.hospital import HospitalViewSet
+from .viewsets.hospital import HospitalViewSet, HospitalListView
 from .viewsets.person_api import PersonViewSet
 from .viewsets.police_station import PoliceStationViewSet
 
@@ -16,6 +16,7 @@ router.register(r'hospitals', HospitalViewSet, basename='hospital')
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/users/', AuthAPIView.as_view(), name='user-auth'),
+    path("api/hospital-name-list/", HospitalListView.as_view(), name="hospital-list"),
 ]
 
 if settings.DEBUG:
