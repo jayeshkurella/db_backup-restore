@@ -25,6 +25,7 @@ class Contact(models.Model):
     job_title = models.CharField(max_length=50, blank=True, null=True)
     website_url = models.TextField(blank=True, null=True)
     social_media_availability = models.CharField(max_length=10, choices=SocialMediaChoices.choices, blank=True, null=True)
+    social_media_url = models.CharField(blank=True, null=True)
     additional_details = models.TextField(blank=True, null=True)
     is_primary = models.BooleanField(default=False, db_index=True)  # Indexed for faster filtering
 

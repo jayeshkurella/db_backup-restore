@@ -125,18 +125,47 @@
     font-size: 20px;
   }
   
-
+  .added-addresses-summary {
+    width: 100%;
+  }
   
-  .address-list {
+  .address-summary {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
   }
   
-  .address-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+  .address-title,
+  .address-text,
+  .address-location {
+    margin: 0;
+    padding: 0 8px;
+    font-size: 1rem;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+  
+  .remove-btn {
+    background-color: #dc3545;
+    border: none;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    transition: 0.3s;
+    white-space: nowrap;
+  }
+  
+  .remove-btn:hover {
+    background-color: #c82333;
+  }
+  
+  

@@ -66,7 +66,7 @@ class Address(models.Model):
         NETHERLANDS = 'Netherlands', 'Netherlands'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    type = models.CharField(max_length=10, choices=AddressTypeChoices.choices, db_index=True)
+    address_type = models.CharField(max_length=10, choices=AddressTypeChoices.choices, db_index=True)
 
     # Address Details
     street = models.CharField(max_length=50, blank=True, null=True)
@@ -103,7 +103,7 @@ class Address(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["type", "city", "state", "pincode"]),
+            models.Index(fields=["address_type", "city", "state", "pincode"]),
             models.Index(fields=["country", "district"]),
             models.Index(fields=["person", "user"]),
             models.Index(fields=["created_at", "updated_at"]),
@@ -111,6 +111,6 @@ class Address(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.type} - {self.city}, {self.state} ({self.pincode})"
+        return f"{self.address_type} - {self.city}, {self.state} ({self.pincode})"
 
 

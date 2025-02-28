@@ -37,12 +37,27 @@ class AdditionalInfo(models.Model):
         DL = 'dl', 'Driving License'
         PASSPORT = 'passport', 'Passport'
 
+    class ReligionChoices(models.TextChoices):
+        HINDU = 'hindu', 'Hindu'
+        MUSLIM = 'muslim','Muslim'
+        SIKH = 'sikh', 'Sikh'
+        CHRISTIAN = 'cristian','Cristian'
+
+    class MothertoungueChoices(models.TextChoices):
+        HINDI = 'hindi', 'Hindi'
+        ENGLISH = 'english', 'English'
+        BENGALI = 'bengali', 'Bengali'
+        MALAYALAM = 'malayalam', 'Malayalam'
+        TAMIL = 'tamil', 'Tamil'
+        TELEGRAM = 'telegram', 'Telegram'
+        OTHER = 'other', 'Other'
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     caste = models.CharField(max_length=10, choices=CasteChoices.choices,blank=True, null=True)
     subcaste = models.CharField(max_length=50, blank=True, null=True)
     marital_status = models.CharField(max_length=10, choices=MaritalStatusChoices.choices)
-    religion = models.CharField(max_length=50, blank=True, null=True)
-    mother_tongue = models.CharField(max_length=50, blank=True, null=True)
+    religion = models.CharField(max_length=50, blank=True, null=True,choices=ReligionChoices.choices)
+    mother_tongue = models.CharField(max_length=50, blank=True, null=True,choices=MothertoungueChoices.choices)
     other_known_languages  = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
     id_type = models.CharField(max_length=10, choices=IdTypeChoices.choices,blank=True, null=True)
     id_no = models.CharField(max_length=50,  help_text="Unique identification number")

@@ -105,7 +105,6 @@ class Person(models.Model):
     Body_Condition = models.CharField(max_length=50, blank=True, null=True,choices=BodyconditionChoices.choices,db_index=True)
     birth_mark = models.CharField(max_length=50, blank=True, null=True)
     distinctive_mark = models.CharField(max_length=50, blank=True, null=True)
-    photo_upload  = models.ImageField(upload_to='All_Photos/persons_photos/',blank=True, null=True)
     hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
     document_ids = models.TextField(blank=True, null=True, help_text="Comma-separated document IDs")
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
@@ -123,7 +122,7 @@ class Person(models.Model):
             models.Index(fields=["type","full_name","birth_date","age","gender"]),
             models.Index(fields=["height","weight","blood_group","complexion"]),
             models.Index(fields=["eye_color","hair_type","hair_color","condition"]),
-            models.Index(fields=["photo_upload","distinctive_mark","birth_mark","Body_Condition"]),
+            models.Index(fields=["distinctive_mark","birth_mark","Body_Condition"]),
             models.Index(fields=["hospital","document_ids"]),
             models.Index(fields=["created_by","updated_by"]),
             models.Index(fields=["_is_deleted","_is_confirmed"]),

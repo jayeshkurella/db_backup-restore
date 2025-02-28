@@ -13,7 +13,6 @@ class LastKnownDetails(models.Model):
     missing_date = models.DateField(help_text="Date the person went missing",blank=True, null=True)
     last_seen_location = models.TextField(null=True, blank=True, db_index=True)
     missing_location_details = models.TextField(null=True, blank=True, db_index=True)
-    missing_location_place= models.TextField(null=True, blank=True, db_index=True)
 
 
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)

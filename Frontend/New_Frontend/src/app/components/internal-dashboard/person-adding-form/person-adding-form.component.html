@@ -5,7 +5,7 @@
   <div class="container"> 
     <form [formGroup]="personForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
       <!-- personal info -->
-      <div class="card p-4 mb-2 bg-light">
+      <div class="card p-3 mb-2 bg-light">
         <h5 class="header-bottom pb-2">Personal Information</h5>
           <div class="row g-3">
               <div class="col-md-12"><input type="text" class="form-control border-dark selectors-font" formControlName="full_name" placeholder="Full Name"></div>
@@ -122,7 +122,7 @@
             </div>
   
             <!-- Hair Type -->
-            <div class="col-md-2">
+            <div class="col-md-3">
               <select class="form-select border-dark selectors-font" id="hairType" formControlName="hair_type">
                   <option value="" disabled selected>Hair Type</option>
                   <option value="Straight">Straight</option>
@@ -133,7 +133,7 @@
             </div>
   
             <!-- Eye Color -->
-            <div class="col-md-2">
+            <div class="col-md-3">
               <select class="form-select border-dark selectors-font" id="eyeColor" formControlName="eye_color">
                   <option value="" disabled selected>Eye Color</option>
                   <option value="Dark Brown">Dark Brown</option>
@@ -165,7 +165,7 @@
               </select>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3">
               <select class="form-select border-dark selectors-font" id="condition" formControlName="Body_Condition">
                   <option value="" disabled selected>Body Condition</option>
                   <option value="Decomposed">Decomposed</option>
@@ -180,10 +180,7 @@
                   <option value="Underweight">Underweight</option>
               </select>
             </div>
-            <div class="col-md-3 selectors-font">
-              <!-- <label for="imageUpload" class="form-label selectors-font">Upload Image</label> -->
-              <input type="file" class="form-control selectors-font" id="imageUpload" (change)="onFileChange($event)" accept="image/*">
-            </div>
+            
   
             <!-- Birthmark -->
             <div class="col-md-6">
@@ -203,78 +200,82 @@
   
       <!-- address table  -->
       <div class="card bg-light p-4 mb-3">
-        <div formArrayName="addresses">
-          <h5 class="header-bottom pb-2">Address Details</h5>
-          <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i" class="row g-3">
-            
+        <h5 class="header-bottom pb-2">Address Details</h5>
+        <div formGroupName="addresses">
+
+          <div class="row g-3">
             <!-- Address Fields -->
             <div class="col-md-6">
               <div class="row g-2">
                 <div class="col-md-6">
-                    <select class="form-control border-dark selectors-font" formControlName="type">
-                      <option value="" disabled selected>Select Address Type</option>
-                      <option value="PERMANENT">Permanent</option>
-                      <option value="CURRENT">Current</option>
-                      <option value="OLD">Old</option>
-                      <option value="HOME">Home</option>
-                      <option value="OFFICE">Office</option>
-                    </select>
-                  </div>
-                  
+                  <select class="form-control border-dark selectors-font" formControlName="type">
+                    <option value="" disabled selected>Select Address Type</option>
+                    <option value="PERMANENT">Permanent</option>
+                    <option value="CURRENT">Current</option>
+                    <option value="OLD">Old</option>
+                    <option value="HOME">Home</option>
+                    <option value="OFFICE">Office</option>
+                  </select>
+                </div>
                 <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="street" placeholder="Street"></div>
                 <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="appartment_no" placeholder="Apartment Number"></div>
                 <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="village" placeholder="Village"></div>
                 <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="city" placeholder="City"></div>
                 <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="district" placeholder="District"></div>
-      
-                <!-- State Dropdown -->
                 <div class="col-md-6">
                   <select class="form-control border-dark selectors-font" formControlName="state">
                     <option value="" selected disabled>State</option>
                     <option *ngFor="let state of states" [value]="state">{{ state }}</option>
                   </select>
                 </div>
-      
                 <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="pincode" placeholder="Pincode"></div>
-      
-                <!-- Country Dropdown -->
                 <div class="col-md-6">
                   <select class="form-control border-dark selectors-font" formControlName="country">
                     <option value="" disabled selected>Country</option>
                     <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
                   </select>
                 </div>
-      
-      
-                <div class="col-md-12"><textarea class="form-control border-dark selectors-font" formControlName="landmark_details" placeholder="Enter Landmark Details (e.g., Near Park)"></textarea></div>
+                <div class="col-md-6"><textarea class="form-control border-dark selectors-font" formControlName="landmark_details" placeholder="Enter Landmark Details (e.g., Near Park)"></textarea></div>
+                <button class="col-md-6" type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="addAddress()">Add Another Address</button>
+
               </div>
             </div>
-      
             <!-- Right Side: Map & Get Location Button -->
             <div class="col-md-6">
               <div formGroupName="location">
                 <label class="form-label selectors-font">Missing Person Home Location</label>
                 <div id="mapHome" style="height: 180px; border: 1px solid black;"></div>
-      
                 <div class="d-flex gap-2 mt-3">
-                  <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="getCurrentLocation(i)">
+                  <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="getCurrentLocation()">
                     <i class="bi bi-geo-alt"></i> 
                   </button>
-      
-                  <input type="text" class="form-control border-dark selectors-font" formControlName="latitude" [value]="latitude ?? ''" readonly placeholder="Latitude">
-                  <input type="text" class="form-control border-dark selectors-font" formControlName="longitude" [value]="longitude ?? ''" readonly placeholder="Longitude">
-                </div>
+                  <input type="text" class="form-control border-dark selectors-font" formControlName="latitude" readonly placeholder="Latitude">    
+                  <input type="text" class="form-control border-dark selectors-font" formControlName="longitude" readonly placeholder="Longitude">                </div>
               </div>
             </div>
-      
           </div>
-          <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="addAddress()">Add Another Address</button>
         </div>
         
+        <!-- Display Added Addresses in a Full-Width Row -->
+      <div class="added-addresses-summary mt-3">
+        <div *ngFor="let address of addedAddresses; let i = index" class="address-summary">
+          <span class="address-title">
+            <i class="bi bi-geo-alt-fill text-primary"></i>
+            <strong>{{ address.type }}:</strong>
+          </span>
+          <span class="address-text">
+            {{ address.street }}, {{ address.city }}, {{ address.state }} - {{ address.pincode }}
+          </span>
+          <span class="address-location">
+            📍 <strong>Lat:</strong> {{ address.location.latitude }}, <strong>Long:</strong> {{ address.location.longitude }}
+          </span>
+          <button type="button" class="btn btn-danger remove-btn" (click)="removeAddress(i)">
+            <i class="bi bi-trash"></i> Remove
+          </button>
+        </div>
       </div>
-      
-      
-      
+      </div>
+    
   
       <!-- contact -->
       <div class="card bg-light p-4 mb-3">
@@ -284,38 +285,47 @@
 
           <div class="row  g-3">
             <div class="col-md-3">
+              <select class="form-select border-dark selectors-font" formControlName="type">
+                <option value="" disabled selected>Type</option>
+                <option value="Personal">Personal</option>
+                <option value="Business">Business</option>
+                <option value="Office">Office</option>
+                <option value="Home">Home</option>
+              </select>
+            </div>
+            <div class="col-md-3">
               <input type="text" class="form-control border-dark selectors-font" formControlName="phone_no" placeholder="Phone Number">
             </div>
             <div class="col-md-3">
               <input type="email" class="form-control border-dark selectors-font" formControlName="email_id" placeholder="Email">
             </div>
-            <!-- <div class="col-md-3">
-              <input type="text" class="form-control border-dark selectors-font" formControlName="type" value="Missing Person" readonly>
-            </div> -->
-            <!-- <div class="col-md-3">
-              <select class="form-select border-dark selectors-font" formControlName="subtype">
-                <option value="" disabled selected>Subtype</option>
-                <option value="Personal">Personal</option>
-                <option value="Business">Business</option>
-                <option value="Emergency">Emergency</option>
-              </select>
-            </div> -->
+            
             <div class="col-md-3">
               <input type="text" class="form-control border-dark selectors-font" formControlName="company_name" placeholder="Company Name">
             </div>
             <div class="col-md-4">
               <input type="text" class="form-control border-dark selectors-font" formControlName="job_title" placeholder="Job Title">
             </div>
-            <!-- <div class="col-md-4">
-              <input type="url" class="form-control border-dark selectors-font" formControlName="website" placeholder="Website URL">
-            </div> -->
             <div class="col-md-4">
-              <input type="text" class="form-control border-dark selectors-font" formControlName="social_media_availability" placeholder="Social Media Handles">
+              <input type="url" class="form-control border-dark selectors-font" formControlName="website_url" placeholder="Website URL">
             </div>
-            <!-- <div class="col-md-5">
-              <textarea type="text" class="form-control border-dark selectors-font" formControlName="notes" placeholder="Additional Notes"></textarea>
-            </div> -->
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-4">
+              <select class="form-select border-dark selectors-font" formControlName="social_media_availability">
+                <option value="" disabled selected>Select Social Media Platform</option>
+                <option value="fb">Facebook</option>
+                <option value="insta">Instagram</option>
+                <option value="x">X (Twitter)</option>
+                <option value="thread">Threads</option>
+              </select>
+            </div>
+            
+            <div class="col-md-4">
+              <input type="text" class="form-control border-dark selectors-font" formControlName="social_media_url" placeholder="Social Media Url">
+            </div>
+            <div class="col-md-5">
+              <input type="text" class="form-control border-dark selectors-font" formControlName="additional_details" placeholder="Additional Notes" />
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
               <input type="checkbox" class="form-check-input border-dark me-2 selectors-font" formControlName="is_primary">
               <label class="form-label mb-0 selectors-font">Is Primary</label>
             </div>
@@ -341,9 +351,21 @@
                   <option value="OBC">OBC</option>
                 </select>
               </div>
-              <!-- <div class="col-md-3">
-                <input type="text" class="form-control border-dark selectors-font" formControlName="sub_caste" placeholder="Enter Sub Caste">
-              </div> -->
+              <div class="col-md-3">
+                <select class="form-select border-dark selectors-font" formControlName="subcaste">
+                  <option value="" disabled selected>Subcaste</option>
+                  <option value="mahar">Mahar</option>
+                  <option value="chambhar">Chambhar</option>
+                  <option value="brahmin">Brahmin</option>
+                  <option value="gurdian">Gurdian</option>
+                  <option value="maratha">Maratha</option>
+                  <option value="rajput">Rajput</option>
+                  <option value="jain">Jain</option>
+                  <option value="teli">Teli</option>
+                  <option value="kumbhar">Kumbhar</option>
+                </select>
+              </div>
+              
       
               <!-- Marital Status -->
               <div class="col-md-3">
@@ -377,13 +399,13 @@
               </div>
       
               <!-- Known Languages -->
-              <!-- <div class="col-md-3">
-                <input type="text" class="form-control border-dark selectors-font" formControlName="known_languages" placeholder="Enter Other Known Languages">
-              </div> -->
+              <div class="col-md-3">
+                <input type="text" class="form-control border-dark selectors-font" formControlName="other_known_languages" placeholder="Enter Other Known Languages">
+              </div>
       
               <!-- Identification Type -->
-              <!-- <div class="col-md-3">
-                <select class="form-select border-dark selectors-font" formControlName="identification_details">
+              <div class="col-md-3">
+                <select class="form-select border-dark selectors-font" formControlName="id_type">
                   <option value="" disabled selected>Identification Type</option>
                   <option value="Aadhar Card">Aadhar Card</option>
                   <option value="Pan Card">Pan Card</option>
@@ -391,22 +413,22 @@
                   <option value="Passport">Passport</option>
                   <option value="VoterID">VoterID</option>
                 </select>
-              </div> -->
+              </div>
       
               <!-- Identification Card Number -->
-              <!-- <div class="col-md-3">
-                <input type="text" class="form-control border-dark selectors-font" formControlName="identification_card_no" placeholder="Enter Identification Card Number">
-              </div> -->
+              <div class="col-md-3">
+                <input type="text" class="form-control border-dark selectors-font" formControlName="id_no" placeholder="Enter Identification Card Number">
+              </div>
       
               <!-- Educational Details -->
-              <!-- <div class="col-md-3">
-                <input type="text" class="form-control border-dark selectors-font" formControlName="educational_details" placeholder="Enter Educational Details">
-              </div> -->
+              <div class="col-md-6">
+                <input type="text" class="form-control border-dark selectors-font" formControlName="education_details" placeholder="Enter Educational Details">
+              </div>
       
               <!-- Occupation -->
-              <!-- <div class="col-md-3">
-                <input type="text" class="form-control border-dark selectors-font" formControlName="occupation" placeholder="Enter Occupation">
-              </div> -->
+              <div class="col-md-6">
+                <input type="text" class="form-control border-dark selectors-font" formControlName="occupation_details" placeholder="Enter Occupation">
+              </div>
       
             </div>
           </div>
@@ -425,11 +447,15 @@
         <div class="row">
           <!-- Left Side: All Fields -->
           <div class="col-md-12">
-            <div class="row g-3">
+            <div class="row g-3">   
               <!-- Upload Person Photo -->
               <div class="col-md-6">
                 <label class="form-label selectors-font">Upload Person Photo</label>
-                <input type="file" class="form-control border-dark selectors-font" accept="image/*" (change)="onFileChange($event)">
+                <input type="file" class="form-control border-dark selectors-font" accept="image/*" (change)="onFileSelect($event, 'last_known_details', i, 'person_photo')">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label selectors-font">Upload Reference Photo</label>
+                <input type="file" class="form-control border-dark selectors-font" accept="image/*" (change)="onFileSelect($event, 'last_known_details', i, 'reference_photo')">
               </div>
       
               <!-- Missing Time -->
@@ -445,15 +471,15 @@
               </div>
       
               <!-- Location Details -->
-              <!-- <div class="col-md-6">
+              <div class="col-md-6">
                 <label class="form-label selectors-font">Location Details</label>
-                <input type="text" class="form-control border-dark selectors-font" formControlName="location_details" placeholder="Enter Location Details">
-              </div> -->
+                <textarea type="text" class="form-control border-dark selectors-font" formControlName="missing_location_details" placeholder="Enter Location Details"></textarea>
+              </div>
       
               <!-- Last Seen Location -->
-              <div class="col-md-12">
-                <!-- <label class="form-label selectors-font">Last seen details</label> -->
-                <!-- <textarea class="form-control border-dark selectors-font" formControlName="last_seen_location" placeholder="Enter the Last Seen Location Details"></textarea> -->
+              <div class="col-md-6">
+                <label class="form-label selectors-font">Last seen details</label>
+                <textarea class="form-control border-dark selectors-font" formControlName="last_seen_location" placeholder="Enter the Last Seen Location Details"></textarea>
               </div>
             </div>
           </div>
@@ -479,7 +505,7 @@
           <!-- Upload FIR Photo -->
           <div class="col-md-4">
             <label class="form-label selectors-font">Upload FIR Photo</label>
-            <input type="file" class="form-control border-dark selectors-font" accept="image/*,application/pdf" (change)="onFileChange($event)">
+            <input type="file" class="form-control border-dark selectors-font" accept="image/*,application/pdf" (change)="onFileSelect($event, 'firs', i, 'fir_photo')">
           </div>
       
           <!-- Case Status -->
@@ -499,45 +525,77 @@
           </div>
       
           <!-- Police Station Name & Address -->
-          <!-- <div class="col-md-4">
+          <div class="col-md-4">
             <label class="form-label selectors-font">Police Station Name & Address</label>
-            <input type="text" class="form-control border-dark selectors-font" formControlName="police_station_name_and_address" placeholder="Enter Police Station Details">
-          </div> -->
+            <input type="text" class="form-control border-dark selectors-font" formControlName="police_station" placeholder="Enter Police Station Details">
+          </div>
       
           <!-- Investigating Officer Name -->
-          <!-- <div class="col-md-4">
+          <div class="col-md-4">
             <label class="form-label selectors-font">Investigating Officer's Name</label>
-            <input type="text" class="form-control border-dark selectors-font" formControlName="investigating_officer_name" placeholder="Enter Officer's Name">
-          </div> -->
+            <input type="text" class="form-control border-dark selectors-font" formControlName="investigation_officer_name" placeholder="Enter Officer's Name">
+          </div>
       
           <!-- Investigating Officer Contact -->
-          <!-- <div class="col-md-4">
+          <div class="col-md-4">
             <label class="form-label selectors-font">Investigating Officer's Contact Number</label>
-            <input type="text" class="form-control border-dark selectors-font" formControlName="investigating_officer_contact_number" placeholder="Enter Contact Number">
-          </div> -->
+            <input type="text" class="form-control border-dark selectors-font" formControlName="investigation_officer_contact" placeholder="Enter Contact Number">
+          </div>
         </div>
             </div>
       </div>
       </div>
   
       
-  
+      <!-- consent -->
       <div class="card bg-light p-4 mb-3">
         <h5 class="header-bottom pb-2">Consent & Submission</h5>  
+      
         <div formArrayName="consent">
-            <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3">
-
-        <!-- Consent Checkbox -->
-        <div class="form-check mb-3">
-          <input type="checkbox" class="form-check-input border-dark selectors-font" id="consentCheckbox" formControlName="is_consent" required>
-          <label class="form-check-label selectors-font" for="consentCheckbox">
-            I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
-            I consent to the use of this information for the purpose of locating the missing person.
-          </label>
+          <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3">
+            
+            <!-- Consent Data -->
+            <div class="col-md-6">
+              <label class="form-label selectors-font">Data</label>
+              <textarea class="form-control border-dark selectors-font" formControlName="data" placeholder="Enter Summary"></textarea>
+            </div>
+      
+            <!-- Document Upload -->
+            <div class="col-md-6">
+              <label class="form-label selectors-font">Upload Document</label>
+              <input type="file" class="form-control border-dark selectors-font" (change)="onFileSelect($event, 'consent', i, 'document')">
+              <small class="text-muted">Allowed formats: PDF, JPG, PNG</small>
+            </div>
+      
+            <!-- Consent Checkbox -->
+            <div class="col-md-12 d-flex align-items-center">
+              <input type="checkbox" class="form-check-input me-2" [id]="'consentCheckbox' + i" formControlName="is_consent">
+              <label class="form-check-label selectors-font" [for]="'consentCheckbox' + i">
+                I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
+                I consent to the use of this information for the purpose of locating the missing person.
+              </label>
+            </div>
+      
+            <!-- Remove Consent Button -->
+            <!-- <div class="col-md-12">
+              <button type="button" class="btn btn-danger" (click)="removeConsent(i)">
+                <i class="bi bi-trash"></i> Remove
+              </button>
+            </div> -->
+      
+          </div>  
         </div>
-         </div>  
+      
+        <!-- Add Consent Button -->
+        <!-- <div class="mt-3">
+          <button type="button" class="btn btn-primary" (click)="addConsent()">
+            <i class="bi bi-plus-circle"></i> Add Consent
+          </button>
+        </div> -->
+      
       </div>
-      </div>
+      
+      
       <button class="btn btn-success w-20 custom-hover selectors-font">SUBMIT REPORT</button>
     </form>
   </div>

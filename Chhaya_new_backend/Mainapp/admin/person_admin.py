@@ -32,7 +32,7 @@ class PersonAdmin(admin.ModelAdmin):
             "fields": ("condition", "Body_Condition", "birth_mark", "distinctive_mark")
         }),
         ("Additional Details", {
-            "fields": ("hospital", "document_ids", "photo_upload")
+            "fields": ("hospital", "document_ids")
         }),
         ("System Information", {
             "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted")
