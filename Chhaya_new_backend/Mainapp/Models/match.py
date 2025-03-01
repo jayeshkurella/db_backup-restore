@@ -25,4 +25,4 @@ class Match(models.Model):
         unique_together = ('person', 'match_person')  # Prevents duplicate match entries
 
     def __str__(self):
-        return f"Match: {self.person.first_name} ↔ {self.match_person.first_name} ({self.status})"
+        return f"Match: {self.person.full_name}  ({self.status})"

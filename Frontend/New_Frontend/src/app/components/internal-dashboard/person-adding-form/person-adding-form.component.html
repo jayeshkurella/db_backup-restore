@@ -201,14 +201,13 @@
       <!-- address table  -->
       <div class="card bg-light p-4 mb-3">
         <h5 class="header-bottom pb-2">Address Details</h5>
-        <div formGroupName="addresses">
-
+        <!-- Single Form to Enter Address -->
+        <div formGroupName="addressForm">
           <div class="row g-3">
-            <!-- Address Fields -->
             <div class="col-md-6">
               <div class="row g-2">
                 <div class="col-md-6">
-                  <select class="form-control border-dark selectors-font" formControlName="type">
+                  <select class="form-control border-dark selectors-font" formControlName="address_type">
                     <option value="" disabled selected>Select Address Type</option>
                     <option value="PERMANENT">Permanent</option>
                     <option value="CURRENT">Current</option>
@@ -235,54 +234,57 @@
                     <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
                   </select>
                 </div>
-                <div class="col-md-6"><textarea class="form-control border-dark selectors-font" formControlName="landmark_details" placeholder="Enter Landmark Details (e.g., Near Park)"></textarea></div>
-                <button class="col-md-6" type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="addAddress()">Add Another Address</button>
-
+                <textarea class="form-control border-dark selectors-font" formControlName="landmark_details" placeholder="Enter Landmark Details (e.g., Near Park)"></textarea>
               </div>
             </div>
-            <!-- Right Side: Map & Get Location Button -->
+      
+            <!-- Map & Location -->
             <div class="col-md-6">
               <div formGroupName="location">
                 <label class="form-label selectors-font">Missing Person Home Location</label>
                 <div id="mapHome" style="height: 180px; border: 1px solid black;"></div>
                 <div class="d-flex gap-2 mt-3">
                   <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="getCurrentLocation()">
-                    <i class="bi bi-geo-alt"></i> 
+                    <i class="bi bi-geo-alt"></i>
                   </button>
                   <input type="text" class="form-control border-dark selectors-font" formControlName="latitude" readonly placeholder="Latitude">    
-                  <input type="text" class="form-control border-dark selectors-font" formControlName="longitude" readonly placeholder="Longitude">                </div>
+                  <input type="text" class="form-control border-dark selectors-font" formControlName="longitude" readonly placeholder="Longitude">
+                </div>
               </div>
             </div>
           </div>
         </div>
-        
-        <!-- Display Added Addresses in a Full-Width Row -->
-      <div class="added-addresses-summary mt-3">
-        <div *ngFor="let address of addedAddresses; let i = index" class="address-summary">
-          <span class="address-title">
-            <i class="bi bi-geo-alt-fill text-primary"></i>
-            <strong>{{ address.type }}:</strong>
-          </span>
-          <span class="address-text">
-            {{ address.street }}, {{ address.city }}, {{ address.state }} - {{ address.pincode }}
-          </span>
-          <span class="address-location">
-            📍 <strong>Lat:</strong> {{ address.location.latitude }}, <strong>Long:</strong> {{ address.location.longitude }}
-          </span>
-          <button type="button" class="btn btn-danger remove-btn" (click)="removeAddress(i)">
-            <i class="bi bi-trash"></i> Remove
-          </button>
+      
+        <!-- Add Address Button -->
+        <button  type="button" class="col-md-2 btn btn-outline-primary custom-hover mt-1" (click)="addAddress()">Add Another Address</button>
+      
+        <!-- Display Added Addresses -->
+        <div class="added-addresses-summary mt-1">
+          <!-- <h5>Added Addresses</h5> -->
+          <div *ngFor="let address of addresses.controls; let i = index" class="address-summary">
+            <span class="address-title">
+              <i class="bi bi-geo-alt-fill text-primary"></i>
+              <strong>{{ address.get('address_type')?.value }}:</strong>
+            </span>
+            <span class="address-text">
+              {{ address.get('street')?.value }}, {{ address.get('city')?.value }}, {{ address.get('state')?.value }} - {{ address.get('pincode')?.value }}
+            </span>
+            <span class="address-location">
+              📍 <strong>Lat:</strong> {{ address.get('location.latitude')?.value }}, <strong>Long:</strong> {{ address.get('location.longitude')?.value }}
+            </span>
+            <button type="button" class="btn btn-danger remove-btn" (click)="removeAddress(i)">
+              <i class="bi bi-trash"></i> Remove
+            </button>
+          </div>
         </div>
       </div>
-      </div>
+      
     
   
       <!-- contact -->
       <div class="card bg-light p-4 mb-3">
-        <div formArrayName="contacts">
+        <div formGroupName="contactForm">
           <h5 class="header-bottom pb-2">Contact Information</h5>
-          <div *ngFor="let address of contacts.controls; let i = index" [formGroupName]="i" class="row g-3">
-
           <div class="row  g-3">
             <div class="col-md-3">
               <select class="form-select border-dark selectors-font" formControlName="type">
@@ -330,8 +332,36 @@
               <label class="form-label mb-0 selectors-font">Is Primary</label>
             </div>
         </div>
+        <button  type="button" class="col-md-2 btn btn-outline-primary custom-hover mt-1" (click)="addcontact()">Add Another Contact</button>
+
           </div>
-        </div>
+          <!-- Display Added Contacts -->
+    <div class="added-contacts-summary mt-1">
+      <div *ngFor="let contact of contacts.controls; let i = index" class="contact-summary">
+        <span class="contact-title">
+          <i class="bi bi-person-fill text-primary"></i>
+          <strong>{{ contact.get('type')?.value }} Contact:</strong>
+        </span>
+        <span class="contact-text">
+          {{ contact.get('phone_no')?.value }} | {{ contact.get('email_id')?.value }} 
+        </span>
+        <span class="contact-company">
+          <strong>Company:</strong> {{ contact.get('company_name')?.value }} | 
+          <strong>Job Title:</strong> {{ contact.get('job_title')?.value }}
+        </span>
+        <!-- <span class="contact-social">
+          <strong>Social Media:</strong> {{ contact.get('social_media_availability')?.value }} | 
+          <a href="{{ contact.get('social_media_url')?.value }}" target="_blank">Profile Link</a>
+        </span> -->
+        <span class="contact-primary">
+          <strong>Is Primary:</strong> {{ contact.get('is_primary')?.value ? 'Yes' : 'No' }}
+        </span>
+        <button type="button" class="btn btn-danger remove-btn" (click)="removecontact(i)">
+          <i class="bi bi-trash"></i> Remove
+        </button>
+      </div>
+    </div>
+
       </div>
   
       <!-- addtional -->

@@ -66,7 +66,7 @@ class Address(models.Model):
         NETHERLANDS = 'Netherlands', 'Netherlands'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    address_type = models.CharField(max_length=10, choices=AddressTypeChoices.choices, db_index=True)
+    address_type = models.CharField(max_length=10, choices=AddressTypeChoices.choices, db_index=True,blank=True, null=True)
 
     # Address Details
     street = models.CharField(max_length=50, blank=True, null=True)
@@ -75,10 +75,10 @@ class Address(models.Model):
     village = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True, db_index=True)
     district = models.CharField(max_length=50, blank=True, null=True, db_index=True)
-    state = models.CharField(max_length=50, choices=StateChoices.choices, db_index=True)
+    state = models.CharField(max_length=50, choices=StateChoices.choices, db_index=True,blank=True, null=True)
     pincode = models.CharField(max_length=50, blank=True, null=True, db_index=True)
     country = models.CharField(max_length=50, help_text="Country code or ID", choices=CountryChoices.choices,
-                               default="India", db_index=True)
+                               default="India", db_index=True,blank=True, null=True)
     landmark_details = models.CharField(max_length=200, blank=True, null=True)
 
     # Geolocation

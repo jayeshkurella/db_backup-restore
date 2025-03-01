@@ -101,35 +101,21 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
       updated_by: [null],
       _is_deleted: [false],
   
-      // Single address form (resets after adding)
-      addresses: this.fb.group({
-        type: [''],
-        street: [''],
-        appartment_no: [''],
-        appartment_name: [''],
-        village: [''],
-        city: [''],
-        district: [''],
-        state: [''],
-        pincode: [''],
-        country: [''],
-        landmark_details: [''],
-        location: this.fb.group({
-          latitude: [''],
-          longitude: [''],
-        }),
-        created_by: [null],
-        updated_by: [null],
-      }),
-  
+     // Addresses array
+      addresses: this.fb.array([]),
       contacts: this.fb.array([]),
+
+      addressForm: this.createAddressFormGroup(),
+      contactForm: this.createAddresFormGroup(),
+
+     
       additional_info: this.fb.array([]),
       last_known_details: this.fb.array([]),
       firs: this.fb.array([]),
       consent: this.fb.array([]),
     });
   
-    this.addContact();
+    // this.addContact();
     this.addAdditionalInfo();
     this.addLastKnownDetails();
     this.addFIR();
@@ -163,31 +149,94 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
     return this.personForm.get('consent') as FormArray;
   }
 
+ 
+
   addAddress() {
-    if (this.personForm.get('addresses')?.valid) {
-      // Save current address
-      this.addedAddresses.push(this.personForm.get('addresses')?.value);
+    if (this.personForm.get('addressForm')?.valid) {
+      // Push addressForm into addresses FormArray
+      this.addresses.push(this.fb.group(this.personForm.get('addressForm')?.value));
   
-      // Reset only the address form (not the entire person form)
-      this.personForm.get('addresses')?.reset();
+      // Log the addresses FormArray
+      console.log("Addresses:", this.addresses.value);
+  
+      // Mark the form as dirty to trigger change detection
+      this.personForm.markAsDirty();
+  
+      // Reset only addressForm (not entire form)
+      this.personForm.get('addressForm')?.reset();
+  
+      // Explicitly reset select fields to their default options
+      this.personForm.get('addressForm.address_type')?.setValue('');
+      this.personForm.get('addressForm.state')?.setValue('');
+      this.personForm.get('addressForm.country')?.setValue('');
     } else {
       alert("Please fill in all required fields before adding another address.");
     }
   }
-  
 
+  addcontact() {
+    if (this.personForm.get('contactForm')?.valid) {
+      // Push addressForm into addresses FormArray
+      this.contacts.push(this.fb.group(this.personForm.get('contactForm')?.value));
   
-
-  removeAddress(index: number) {
-    // Remove the address from the addedAddresses array
-    this.addedAddresses.splice(index, 1);
+      // Log the addresses FormArray
+      console.log("contacts:", this.contacts.value);
+  
+      // Mark the form as dirty to trigger change detection
+      this.personForm.markAsDirty();
+  
+      // Reset only addressForm (not entire form)
+      this.personForm.get('contactForm')?.reset();
+  
+      // Explicitly reset select fields to their default options
+      this.personForm.get('contactForm.type')?.setValue('');
+      this.personForm.get('contactForm.social_media_availability')?.setValue('');
+      this.personForm.get('contactForm.is_primary')?.setValue('');
+    
+    } else {
+      alert("Please fill in all required fields before adding another contact.");
+    }
   }
-
+  
+  
+  
   
 
-  addContact() {
-    this.contacts.push(
-      this.fb.group({
+  // Remove an address
+  removeAddress(index: number) {
+    this.addresses.removeAt(index);
+  }
+  removecontact(index: number) {
+    this.contacts.removeAt(index);
+  }
+  
+
+  
+  createAddressFormGroup(): FormGroup {
+    return this.fb.group({
+      address_type: [''],
+      street: [''],
+      appartment_no: [''],
+      appartment_name: [''],
+      village: [''],
+      city: [''],
+      district: [''],
+      state: [''],
+      pincode: [''],
+      country: [''],
+      landmark_details: [''],
+      location: this.fb.group({
+        latitude: [''],
+        longitude: [''],
+      }),
+      created_by: [null],
+      updated_by: [null],
+    });
+  }
+  
+
+  createAddresFormGroup():FormGroup {
+     return this.fb.group({
         phone_no: [''],
         country_cd: [''],
         email_id: [''],
@@ -209,7 +258,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         created_by: [null],
         updated_by: [null],
       })
-    );
+    
   }
   
   addAdditionalInfo() {
@@ -293,10 +342,6 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   
 
   // Remove dynamically added fields
-  
-  removeContact(index: number) {
-    this.contacts.removeAt(index);
-  }
   removeAdditionalInfo(index: number) {
     this.additionalInfo.removeAt(index);
   }
@@ -337,8 +382,10 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
     this.longitude = parseFloat(lng.toFixed(6));
 
     // Update the form controls
-    this.personForm.get('location.latitude')?.setValue(this.latitude);
-    this.personForm.get('location.longitude')?.setValue(this.longitude);
+    this.personForm.get('addressForm.location')?.patchValue({
+      latitude: this.latitude,
+      longitude: this.longitude,
+    });
 
     // Define custom icon
     const customIcon = L.icon({
@@ -352,14 +399,14 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
 
     // Remove existing marker
     if (this.marker) {
-      this.map.removeLayer(this.marker);
+      this.map!.removeLayer(this.marker);
     }
 
     // Add new marker
     this.marker = L.marker([this.latitude, this.longitude], {
       draggable: true,
       icon: customIcon,
-    }).addTo(this.map);
+    }).addTo(this.map!);
 
     // Update location on marker drag
     this.marker.on('dragend', () => {
@@ -368,7 +415,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
     });
 
     // Center the map on the new marker
-    this.map.setView([this.latitude, this.longitude], 10);
+    this.map!.setView([this.latitude, this.longitude], 10);
   }
 
   
@@ -411,20 +458,176 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   
   
   
+  // onSubmit() {
+  //   // Check if addressForm has valid data and add it to the addresses array
+  //   const addressFormValue = this.personForm.get('addressForm')?.value;
+  //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
+  //     this.addresses.push(this.fb.group(addressFormValue)); // Add address to FormArray
+  //   }
+  
+  //   // Check if contactForm has valid data and add it to the contacts array
+  //   const contactFormValue = this.personForm.get('contactForm')?.value;
+  //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
+  //     this.contacts.push(this.fb.group(contactFormValue)); // Add contact to FormArray
+  //   }
+  
+  //   // Prepare the payload for the backend
+  //   const payload = {
+  //     ...this.personForm.value, // Include all form values
+  //     addresses: this.addresses.value, // Use the FormArray value for addresses
+  //     contacts: this.contacts.value,   // Use the FormArray value for contacts
+  //   };
+  
+  //   // Remove temporary forms from the payload
+  //   delete payload.addressForm;
+  //   delete payload.contactForm;
+  
+  //   // Log the payload for debugging
+  //   console.log("Payload Sent to Backend:", payload);
+  
+  //   // Create a FormData object to handle file uploads
+  //   const formData = new FormData();
+  
+  //   // Append the JSON payload as a string
+  //   formData.append('payload', JSON.stringify(payload));
+  
+  //   // Append files from last_known_details
+  //   this.lastKnownDetails.controls.forEach((group, index) => {
+  //     const personPhoto = group.get('person_photo')?.value;
+  //     const referencePhoto = group.get('reference_photo')?.value;
+  
+  //     if (personPhoto instanceof File) {
+  //       formData.append(`last_known_details[${index}][person_photo]`, personPhoto);
+  //     }
+  //     if (referencePhoto instanceof File) {
+  //       formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto);
+  //     }
+  //   });
+  
+  //   // Append files from firs
+  //   this.firs.controls.forEach((group, index) => {
+  //     const firPhoto = group.get('fir_photo')?.value;
+  
+  //     if (firPhoto instanceof File) {
+  //       formData.append(`firs[${index}][fir_photo]`, firPhoto);
+  //     }
+  //   });
+  
+  //   // Append files from consent
+  //   this.consent.controls.forEach((group, index) => {
+  //     const document = group.get('document')?.value;
+  
+  //     if (document instanceof File) {
+  //       formData.append(`consent[${index}][document]`, document);
+  //     }
+  //   });
+  
+  //   // Send FormData to the backend
+  //   this.MPservice.postMissingPerson(formData).subscribe({
+  //     next: (response) => {
+  //       console.log('Person added successfully!', response);
+  //       alert("Person added successfully");
+  //       this.personForm.reset();
+  //       this.addresses.clear(); // Clear the addresses FormArray
+  //       this.contacts.clear(); 
+  //       this.additionalInfo.clear();
+  //       this.lastKnownDetails.clear();
+  //       this.firs.clear();
+  //       this.consent.clear();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error adding person:', error);
+  //       alert('An error occurred while adding the person. Please try again.');
+  //     },
+  //   });
+  // }
   
 
+  onSubmit() {
+    // Check if addressForm has valid data and add it to the addresses array
+    const addressFormValue = this.personForm.get('addressForm')?.value;
+    if (addressFormValue && Object.keys(addressFormValue).length > 0) {
+      this.addresses.push(this.fb.group(addressFormValue)); // Add address to FormArray
+    }
+  
+    // Check if contactForm has valid data and add it to the contacts array
+    const contactFormValue = this.personForm.get('contactForm')?.value;
+    if (contactFormValue && Object.keys(contactFormValue).length > 0) {
+      this.contacts.push(this.fb.group(contactFormValue)); // Add contact to FormArray
+    }
+  
+    // Prepare the payload for the backend
+    const payload = {
+      ...this.personForm.value, // Include all form values
+      addresses: this.addresses.value, // Use the FormArray value for addresses
+      contacts: this.contacts.value,   // Use the FormArray value for contacts
+    };
+  
+    // Remove temporary forms from the payload
+    delete payload.addressForm;
+    delete payload.contactForm;
+  
+    // Log the payload for debugging
+    console.log("Payload Sent to Backend:", payload);
+  
+    // Create a FormData object to handle file uploads
+    const formData = new FormData();
+  
+    // Append the JSON payload as a string
+    formData.append('payload', JSON.stringify(payload));
+  
+    // Append files from last_known_details
+    this.lastKnownDetails.controls.forEach((group, index) => {
+      const personPhoto = group.get('person_photo')?.value;
+      const referencePhoto = group.get('reference_photo')?.value;
+  
+      if (personPhoto instanceof File) {
+        formData.append(`last_known_details[${index}][person_photo]`, personPhoto);
+      }
+      if (referencePhoto instanceof File) {
+        formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto);
+      }
+    });
+  
+    // Append files from firs
+    this.firs.controls.forEach((group, index) => {
+      const firPhoto = group.get('fir_photo')?.value;
+  
+      if (firPhoto instanceof File) {
+        formData.append(`firs[${index}][fir_photo]`, firPhoto);
+      }
+    });
+  
+    // Append files from consent
+    this.consent.controls.forEach((group, index) => {
+      const document = group.get('document')?.value;
+  
+      if (document instanceof File) {
+        formData.append(`consent[${index}][document]`, document);
+      }
+    });
+  
+    // Send FormData to the backend
+    this.MPservice.postMissingPerson(formData).subscribe({
+      next: (response) => {
+        console.log('Person added successfully!', response);
+        alert("Person added successfully");
+        this.personForm.reset();
+        this.addresses.clear(); // Clear the addresses FormArray
+        this.contacts.clear();  // Clear the contacts FormArray
+      },
+      error: (error) => {
+        console.error('Error adding person:', error);
+        alert('An error occurred while adding the person. Please try again.');
+      },
+    });
+  }
   
 
  
   
   
-  onSubmit() {
-    this.MPservice.postMissingPerson(this.personForm.value).subscribe({
-      next: (response) => console.log('Person added successfully!', response),
-      error: (error) => console.error('Error adding person:', error),
-    });
-  }
-  
+ 
   
 
 

@@ -125,11 +125,15 @@
     font-size: 20px;
   }
   
-  .added-addresses-summary {
+  .added-addresses-summary,
+  .added-contacts-summary {
     width: 100%;
   }
+
   
-  .address-summary {
+  
+  .address-summary ,
+  .contacts-summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -145,8 +149,11 @@
   }
   
   .address-title,
+  .contacts-title,
   .address-text,
-  .address-location {
+  .contacts-text,
+  .address-location ,
+  .contacts-location {
     margin: 0;
     padding: 0 8px;
     font-size: 1rem;

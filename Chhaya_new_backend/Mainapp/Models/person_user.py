@@ -19,4 +19,4 @@ class PersonUser(models.Model):
         unique_together = ('person', 'user')  # Ensures a unique mapping per person-user
 
     def __str__(self):
-        return f"{self.user.username} - {self.person.first_name} {self.person.last_name}"
+        return f"{self.user.first_name} "

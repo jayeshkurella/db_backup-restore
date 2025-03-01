@@ -8,7 +8,7 @@ class LastKnownDetailsAdmin(admin.ModelAdmin):
     list_display = ('id', 'person', 'missing_date', 'missing_time', 'last_seen_location', 'missing_location_details',
                      'created_at', 'updated_at')
     list_filter = ('missing_date', 'created_at')
-    search_fields = ('person__full_name', 'last_seen_location', 'missing_location_details', )
+    search_fields = ('last_seen_location', 'missing_location_details', )
     ordering = ('-missing_date', '-created_at')
     readonly_fields = ('created_at', 'updated_at')
 

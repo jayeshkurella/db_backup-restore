@@ -59,8 +59,8 @@ class AdditionalInfo(models.Model):
     religion = models.CharField(max_length=50, blank=True, null=True,choices=ReligionChoices.choices)
     mother_tongue = models.CharField(max_length=50, blank=True, null=True,choices=MothertoungueChoices.choices)
     other_known_languages  = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
-    id_type = models.CharField(max_length=10, choices=IdTypeChoices.choices,blank=True, null=True)
-    id_no = models.CharField(max_length=50,  help_text="Unique identification number")
+    id_type = models.CharField(max_length=100, choices=IdTypeChoices.choices,blank=True, null=True)
+    id_no = models.CharField(max_length=100,  help_text="Unique identification number")
     education_details = models.CharField(max_length=50, blank=True, null=True)
     occupation_details = models.CharField(max_length=50, blank=True, null=True)
 

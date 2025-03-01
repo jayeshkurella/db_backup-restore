@@ -25,4 +25,4 @@ class LastKnownDetails(models.Model):
 
 
     def __str__(self):
-        return f"Last Known Details - {self.person.full_name} "
+        return f"Last Known Details - {self.missing_date}"
