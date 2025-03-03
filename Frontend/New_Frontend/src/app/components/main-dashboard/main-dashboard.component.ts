@@ -200,20 +200,20 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     this.http.get<any[]>('assets/state.json').subscribe(data => {
       this.stateCoordinates = data;
       this.allstates = data.map(state => state.name); 
-      console.log('State Coordinates:', this.stateCoordinates);
+      // console.log('State Coordinates:', this.stateCoordinates);
     });
   }
 
   moveMapToState(stateCode: string): void {
-    const indiaCoordinates: [number, number] = [20.5937, 78.9629];  // Center of India (LatLngTuple)
-    const indiaZoomLevel = 6;  // Zoom level for the whole country
+    const indiaCoordinates: [number, number] = [20.5937, 78.9629];  
+    const indiaZoomLevel = 6; 
     
     if (stateCode === 'All States') {
       // If 'All States' is selected, move the map to the center of India
       if (this.map) {
         this.map.flyTo(indiaCoordinates, indiaZoomLevel, {
-          duration: 3, // Duration of the animation (in seconds)
-          easeLinearity: 0.25 // Controls the easing of the transition
+          duration: 3,
+          easeLinearity: 0.25 
         });
       }
     } else {
@@ -221,8 +221,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
       if (this.map && state) {
         // Fly to the center of the selected state with smooth transition
         this.map.flyTo(state.coordinates, 7, {
-          duration: 2, // Duration of the animation (in seconds)
-          easeLinearity: 0.25 // Controls the easing of the transition
+          duration: 2,
+          easeLinearity: 0.25 
         });
       }
     }
@@ -264,67 +264,79 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   private initMap(): void {
     this.initOperationalLayers();
     this.initOverlays();
+
     this.map = L.map('map', {
-      center: [20.5937, 78.9629], 
-      zoom: 6
+        center: [20.5937, 78.9629],
+        zoom: 6
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
     }).addTo(this.map);
+
+    // Add only the cluster group to the map initially
+    this.geoServerClusterGroup!.addTo(this.map);
 
     // Panel control for layers
     var panelLayers = new (L as any).Control.PanelLayers(null, this.overlays, {
-      collapsibleGroups: true,
-      collapsed: false,
-      groupMaxHeight: 50,
+        collapsibleGroups: true,
+        collapsed: false,
+        groupMaxHeight: 50,
     });
     this.map.addControl(panelLayers);
- }
+}
+
  
  toggleLayer(layer: string, event: any): void {
   switch (layer) {
-    case 'State Layer':
-      if (event.target.checked) {
-        this.stateLayerName.addTo(this.map!); 
-      } else {
-        this.stateLayerName.remove(); 
-      }
-      break;
-    case 'District Layer':
-      if (event.target.checked) {
-        this.distLayerName.addTo(this.map!); 
-      } else {
-        this.distLayerName.remove(); 
-      }
-      break;
-    case 'Missing Person':
-      if (event.target.checked) {
-        this.missingPersonLayer.addTo(this.map!); 
-      } else {
-        this.missingPersonLayer.remove(); 
-      }
-      break;
-    case 'Unidentified Person':
-      if (event.target.checked) {
-        this.unidentifiedPersonLayer.addTo(this.map!); 
-      } else {
-        this.unidentifiedPersonLayer.remove(); 
-      }
-      break;
-    case 'Unidentified Bodies':
-      if (event.target.checked) {
-        this.unidentifiedBodiesLayer.addTo(this.map!); 
-      } else {
-        this.unidentifiedBodiesLayer.remove();
-      }
-      break;
-    default:
-      console.warn(`Layer '${layer}' not found.`);
-      break;
+      case 'State Layer':
+          if (event.target.checked) {
+              this.stateLayerName.addTo(this.map!); 
+          } else {
+              this.stateLayerName.remove(); 
+          }
+          break;
+      case 'District Layer':
+          if (event.target.checked) {
+              this.distLayerName.addTo(this.map!); 
+          } else {
+              this.distLayerName.remove(); 
+          }
+          break;
+      case 'Missing Person':
+          if (event.target.checked) {
+              this.missingPersonLayer.addTo(this.map!); 
+          } else {
+              this.missingPersonLayer.remove(); 
+          }
+          break;
+      case 'Unidentified Person':
+          if (event.target.checked) {
+              this.unidentifiedPersonLayer.addTo(this.map!); 
+          } else {
+              this.unidentifiedPersonLayer.remove(); 
+          }
+          break;
+      case 'Unidentified Bodies':
+          if (event.target.checked) {
+              this.unidentifiedBodiesLayer.addTo(this.map!); 
+          } else {
+              this.unidentifiedBodiesLayer.remove();
+          }
+          break;
+      case 'GeoServer Markers':
+          if (event.target.checked) {
+              this.geoServerClusterGroup?.addTo(this.map!); 
+          } else {
+              this.geoServerClusterGroup?.remove();
+          }
+          break;
+      default:
+          console.warn(`Layer '${layer}' not found.`);
+          break;
   }
-}
+  }
 
   initOperationalLayers() {
     this.geoServerClusterGroup = L.markerClusterGroup();
@@ -339,6 +351,11 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         shadowSize: [41, 41]
     });
 
+    // Create separate layers for each person type
+    this.missingPersonLayer = L.layerGroup();
+    this.unidentifiedPersonLayer = L.layerGroup();
+    this.unidentifiedBodiesLayer = L.layerGroup();
+
     // Fetch GeoJSON from GeoServer
     fetch("http://localhost:8080/geoserver/chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_address&outputFormat=application/json")
         .then(response => response.json())
@@ -350,6 +367,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                 try {
                     const personId = feature.properties.person_id;
                     const geometry = feature.geometry;
+                    const personType = feature.properties.person_type;
 
                     // Check if geometry data is valid
                     if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
@@ -371,28 +389,43 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                     // Create marker with popup showing person details
                     const marker = L.marker(latlng, { icon: customIcon });
 
-                    const popupContent = `
-                        <b>Person Details</b><br>
-                        <b>Name:</b> ${personDetails.name || 'N/A'}<br>
-                        <b>Age:</b> ${personDetails.age || 'N/A'}<br>
-                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-                        <b>Addresses:</b><br>
-                        ${personDetails.addresses?.map((address: any) => `
-                            <b>Street:</b> ${address.street || 'N/A'}<br>
-                            <b>City:</b> ${address.city || 'N/A'}<br>
-                            <b>State:</b> ${address.state || 'N/A'}<br>
-                            <b>Pincode:</b> ${address.pincode || 'N/A'}<br>
-                            <b>Coordinates:</b> ${address.latitude || 'N/A'}, ${address.longitude || 'N/A'}<br>
-                        `).join('<br>') || 'No addresses available'}
-                        <b>Contacts:</b><br>
-                        ${personDetails.contacts?.map((contact: any) => `
-                            <b>Phone:</b> ${contact.phone || 'N/A'}<br>
-                            <b>Email:</b> ${contact.email || 'N/A'}<br>
-                        `).join('<br>') || 'No contacts available'}
-                    `;
+                const personPhotoUrl = personDetails.last_known_details?.[0]?.person_photo 
+                    ? `${environment.apiUrl}${personDetails.last_known_details[0].person_photo}` 
+                    :  '/assets/images/Chhaya.png';
+
+                  const popupContent = `
+                      <b>Person Details</b><br>
+                      <img src="${personPhotoUrl}" alt="Person Image" style="max-width: 100px; max-height: 100px; margin: 5px 0;"><br>
+                      <b>Name:</b> ${personDetails.type || 'N/A'}<br>
+                      <b>Name:</b> ${personDetails.name || 'N/A'}<br>
+                      <b>Age:</b> ${personDetails.age || 'N/A'}<br>
+                      <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+                      
+                  `;
 
                     marker.bindPopup(popupContent);
+
+                    // Add marker to the appropriate layer based on person_type
+                    switch (personType) {
+                        case 'Missing person':
+                            this.missingPersonLayer.addLayer(marker);
+                            break;
+                        case 'Unidentified person':
+                            this.unidentifiedPersonLayer.addLayer(marker);
+                            break;
+                        case 'Unidentified Bodies':
+                            this.unidentifiedBodiesLayer.addLayer(marker);
+                            break;
+                        default:
+                            console.warn(`Unknown person type: ${personType}`);
+                            break;
+                    }
+
+                    // Add the marker to the MarkerClusterGroup
+                    this.geoServerClusterGroup?.addLayer(marker);
+
                     return marker;
+
                 } catch (error) {
                     console.error("Error processing feature:", feature, error);
                     return null;
@@ -402,8 +435,11 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
             // Wait for all markers to be created
             Promise.all(markerPromises).then(markers => {
                 markers.forEach(marker => {
-                    if (marker) this.geoServerClusterGroup!.addLayer(marker);
+                    if (marker) this.geoServerClusterGroup?.addLayer(marker);
                 });
+
+                // Add the MarkerClusterGroup to the map initially
+                this.geoServerClusterGroup?.addTo(this.map!);
             });
 
         })
@@ -430,68 +466,64 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
 
   initOverlays() {
     function iconByName(name: string) {
-      return `<i class="icon icon-${name}"></i>`;
+        return `<i class="icon icon-${name}"></i>`;
     }
 
     this.overlays = [
-      {
-        group: "Operational Layers",
-        icon: iconByName('map'),
-        collapsed: false,
-        layers: [
-          {
-            name: "State Layer",
-            active: true,
-            layer: this.stateLayerName,
-          },
-          {
-            name: "District Layer",
-            active: true,
-            layer: this.distLayerName,
-          }
-        ]
-      },
-      {
-        group: "Person Data",
-        icon: iconByName('location'),
-        collapsed: false,
-        layers: [
-          {
-            name: "Missing Person",
-            active: true,
-            layer: this.missingPersonLayer,
-          },
-          {
-            name: "Unidentified Person",
-            active: true,
-            layer: this.unidentifiedPersonLayer,
-          },
-          {
-            name: "Unidentified Bodies",
-            active: true,
-            layer: this.unidentifiedBodiesLayer,
-          }
-        ]
-      }
+        {
+            group: "Operational Layers",
+            icon: iconByName('map'),
+            collapsed: false,
+            layers: [
+                {
+                    name: "State Layer",
+                    active: true, // Initially inactive
+                    layer: this.stateLayerName,
+                },
+                {
+                    name: "District Layer",
+                    active: true, // Initially inactive
+                    layer: this.distLayerName,
+                }
+            ]
+        },
+        {
+            group: "Person Data",
+            icon: iconByName('location'),
+            collapsed: false,
+            layers: [
+                {
+                    name: "Missing Person",
+                    active: false, // Initially inactive
+                    layer: this.missingPersonLayer,
+                },
+                {
+                    name: "Unidentified Person",
+                    active: false, // Initially inactive
+                    layer: this.unidentifiedPersonLayer,
+                },
+                {
+                    name: "Unidentified Bodies",
+                    active: false, // Initially inactive
+                    layer: this.unidentifiedBodiesLayer,
+                }
+            ]
+        },
+        // {
+        //     group: "GeoServer Markers",
+        //     icon: iconByName('marker'),
+        //     collapsed: false,
+        //     layers: [
+        //         {
+        //             name: "GeoServer Markers",
+        //             active: true, // Initially active
+        //             layer: this.geoServerClusterGroup,
+        //         }
+        //     ]
+        // }
     ];
-
-    // Add the GeoServer Markers layer only if it's defined
-    if (this.geoServerClusterGroup) {
-      this.overlays.push({
-        group: "Operational Layers",
-        icon: iconByName('marker'),
-        collapsed: false,
-        layers: [
-          {
-            name: "GeoServer Markers",
-            active: true,
-            layer: this.geoServerClusterGroup,
-          }
-        ]
-      });
-    }
-  }
-  
+}
+    
   
 
   isLoading = false;
