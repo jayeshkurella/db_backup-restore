@@ -8,7 +8,7 @@ from drf_yasg import openapi
 from django.db import transaction
 from rest_framework.pagination import PageNumberPagination
 from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer ,HospitalSerializer
-from ..models import PoliceStation ,Hospital
+from ..models import PoliceStation, Hospital, Contact
 from ..pagination import CustomPagination
 from django.core.cache import cache
 from rest_framework import generics
@@ -115,7 +115,7 @@ class HospitalViewSet(viewsets.ModelViewSet):
     request_body=HospitalSerializer,
     responses={200: openapi.Response("Hospital updated successfully")}
     )
-    def update(self, request, pk=None):
+    def update(self, request, pk=None, *args, **kwargs):  # Added *args and **kwargs
         try:
             with transaction.atomic():
                 hospitals = get_object_or_404(Hospital, pk=pk)
@@ -123,22 +123,36 @@ class HospitalViewSet(viewsets.ModelViewSet):
                 # Extract and update address if provided
                 address_data = request.data.pop("address", None)
                 if address_data:
-                    address_serializer = AddressSerializer(hospitals.address, data=address_data, partial=True)
+                    address_serializer = AddressSerializer(
+                        hospitals.address,
+                        data=address_data,
+                        partial=True
+                    )
                     if address_serializer.is_valid():
                         address_serializer.save()
                     else:
-                        return Response(address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                        return Response(
+                            address_serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
 
-                # Update hospitals information
-                serializer = self.get_serializer(hospitals, data=request.data, partial=True)
+                # Extract 'partial' from kwargs to handle PATCH requests properly
+                partial = kwargs.get('partial', False)
+
+                # Update hospital information
+                serializer = self.get_serializer(
+                    hospitals,
+                    data=request.data,
+                    partial=partial  # Corrected to use the partial flag
+                )
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_200_OK)
+
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
     # 🔹 5. DELETE Police Station
     @swagger_auto_schema(
         operation_description="Delete Hospital by ID",

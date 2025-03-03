@@ -19,4 +19,4 @@ class Consent(models.Model):
 
 
     def __str__(self):
-        return f"{self.is_consent}-{self.person.type}  -{self.person.id}"
+        return f"{self.is_consent}"

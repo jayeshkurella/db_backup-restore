@@ -116,6 +116,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   UBsolvedGenderCounts: { Male: number; Female: number; Other: number } = { Male: 0, Female: 0, Other: 0};
   mainAppLayer: L.Layer | undefined;
   geoServerClusterGroup: L.MarkerClusterGroup | undefined;
+  permanentAddressLayer: any;
+  temporaryAddressLayer: any;
   
  
   
@@ -183,7 +185,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     // this.getgenderst()
     // this.getallvillges()
     this.filterDataByFilters()
-    
+  
     
     
   }
@@ -197,7 +199,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   private loadStateData(): void {
     this.http.get<any[]>('assets/state.json').subscribe(data => {
       this.stateCoordinates = data;
-      this.allstates = data.map(state => state.name); // Populate the state dropdown
+      this.allstates = data.map(state => state.name); 
+      console.log('State Coordinates:', this.stateCoordinates);
     });
   }
 
@@ -224,8 +227,18 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
       }
     }
   }
+  
+
 
   filterDataByFilters(): void {
+    if (this.selectedState !== 'All States') {
+      this.moveMapToState(this.selectedState);
+      // this.getDistrictsByState(this.selectedState);
+      // this.loadDistrictsForState(this.selectedState);
+    } else {
+      this.alldistricts = [];
+    }
+
   }
   
   
@@ -270,100 +283,156 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     this.map.addControl(panelLayers);
  }
  
-  toggleLayer(layer: string, event: any): void {
-    switch (layer) {
-      case 'Missing Person':
-        if (event.target.checked) {
-          this.missingPersonLayer.addTo(this.map!); 
-        } else {
-          this.missingPersonLayer.remove(); 
-        }
-        break;
-      case 'Unidentified Person':
-        if (event.target.checked) {
-          this.unidentifiedPersonLayer.addTo(this.map!); 
-        } else {
-          this.unidentifiedPersonLayer.remove(); 
-        }
-        break;
-      case 'Unidentified Bodies':
-        if (event.target.checked) {
-          this.unidentifiedBodiesLayer.addTo(this.map!); 
-        } else {
-          this.unidentifiedBodiesLayer.remove();
-        }
-        break;
-    }
+ toggleLayer(layer: string, event: any): void {
+  switch (layer) {
+    case 'State Layer':
+      if (event.target.checked) {
+        this.stateLayerName.addTo(this.map!); 
+      } else {
+        this.stateLayerName.remove(); 
+      }
+      break;
+    case 'District Layer':
+      if (event.target.checked) {
+        this.distLayerName.addTo(this.map!); 
+      } else {
+        this.distLayerName.remove(); 
+      }
+      break;
+    case 'Missing Person':
+      if (event.target.checked) {
+        this.missingPersonLayer.addTo(this.map!); 
+      } else {
+        this.missingPersonLayer.remove(); 
+      }
+      break;
+    case 'Unidentified Person':
+      if (event.target.checked) {
+        this.unidentifiedPersonLayer.addTo(this.map!); 
+      } else {
+        this.unidentifiedPersonLayer.remove(); 
+      }
+      break;
+    case 'Unidentified Bodies':
+      if (event.target.checked) {
+        this.unidentifiedBodiesLayer.addTo(this.map!); 
+      } else {
+        this.unidentifiedBodiesLayer.remove();
+      }
+      break;
+    default:
+      console.warn(`Layer '${layer}' not found.`);
+      break;
   }
+}
 
   initOperationalLayers() {
     this.geoServerClusterGroup = L.markerClusterGroup();
-  
-    // Define custom icon
+
+    // Define custom icon for markers
     const customIcon = L.icon({
-      iconUrl: 'assets/leaflet/images/marker-icon-2x.png', 
-      iconSize: [25, 41], 
-      iconAnchor: [12, 41], 
-      popupAnchor: [1, -34], 
-      shadowUrl: 'assets/leaflet/images/marker-shadow.png', 
-      shadowSize: [41, 41] 
+        iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+        shadowSize: [41, 41]
     });
-  
+
     // Fetch GeoJSON from GeoServer
     fetch("http://localhost:8080/geoserver/chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_address&outputFormat=application/json")
-      .then(response => response.json())
-      .then(data => {
-        let geoJsonLayer = L.geoJSON(data, {
-          pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: customIcon });
-          },
-          onEachFeature: function (feature, layer) {
-            let props = feature.properties;
-            let popupContent = `
-              <b>Address Details</b><br>
-              <b>State:</b> ${props.state || "N/A"}<br>
-              <b>City:</b> ${props.city || "N/A"}<br>
-              <b>District:</b> ${props.district || "N/A"}<br>
-              <b>Street:</b> ${props.street || "N/A"}<br>
-              <b>Pincode:</b> ${props.pincode || "N/A"}<br>
-            `;
-          
-            layer.bindPopup(popupContent);
-          }
-        });
-  
-        // ✅ Add GeoJSON layer to marker cluster group
-        this.geoServerClusterGroup!.addLayer(geoJsonLayer);
-      })
-      .catch(error => console.error("Error fetching GeoJSON:", error));
-  
+        .then(response => response.json())
+        .then(data => {
+            console.log("GeoServer Response:", data);
+
+            // Array to hold all marker promises
+            const markerPromises = data.features.map(async (feature: any) => {
+                try {
+                    const personId = feature.properties.person_id;
+                    const geometry = feature.geometry;
+
+                    // Check if geometry data is valid
+                    if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
+                        console.warn("Invalid or missing 'geometry' data for feature:", feature);
+                        return null;
+                    }
+
+                    const [lng, lat] = geometry.coordinates;
+                    const latlng: L.LatLngTuple = [lat, lng];
+
+                    // Auto-fetch related person data from the backend
+                    const personResponse = await fetch(`http://127.0.0.1:8000/api/persons/${personId}/`);
+                    if (!personResponse.ok) {
+                        throw new Error(`Failed to fetch person details: ${personResponse.status}`);
+                    }
+                    const personDetails = await personResponse.json();
+                    console.log("Fetched Person Details:", personDetails);
+
+                    // Create marker with popup showing person details
+                    const marker = L.marker(latlng, { icon: customIcon });
+
+                    const popupContent = `
+                        <b>Person Details</b><br>
+                        <b>Name:</b> ${personDetails.name || 'N/A'}<br>
+                        <b>Age:</b> ${personDetails.age || 'N/A'}<br>
+                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+                        <b>Addresses:</b><br>
+                        ${personDetails.addresses?.map((address: any) => `
+                            <b>Street:</b> ${address.street || 'N/A'}<br>
+                            <b>City:</b> ${address.city || 'N/A'}<br>
+                            <b>State:</b> ${address.state || 'N/A'}<br>
+                            <b>Pincode:</b> ${address.pincode || 'N/A'}<br>
+                            <b>Coordinates:</b> ${address.latitude || 'N/A'}, ${address.longitude || 'N/A'}<br>
+                        `).join('<br>') || 'No addresses available'}
+                        <b>Contacts:</b><br>
+                        ${personDetails.contacts?.map((contact: any) => `
+                            <b>Phone:</b> ${contact.phone || 'N/A'}<br>
+                            <b>Email:</b> ${contact.email || 'N/A'}<br>
+                        `).join('<br>') || 'No contacts available'}
+                    `;
+
+                    marker.bindPopup(popupContent);
+                    return marker;
+                } catch (error) {
+                    console.error("Error processing feature:", feature, error);
+                    return null;
+                }
+            });
+
+            // Wait for all markers to be created
+            Promise.all(markerPromises).then(markers => {
+                markers.forEach(marker => {
+                    if (marker) this.geoServerClusterGroup!.addLayer(marker);
+                });
+            });
+
+        })
+        .catch(error => console.error("Error fetching GeoJSON:", error));
+
+    // Add other layers (state, district, etc.)
     let state: L.Layer = L.tileLayer.wms(this.geo_url, {
-      layers: this.stateLayer, 
-      format: "image/png",
-      transparent: true,
-      opacity: 0.75
+        layers: this.stateLayer,
+        format: "image/png",
+        transparent: true,
+        opacity: 0.75
     });
     this.stateLayerName = state;
-    
+
     let dist: L.Layer = L.tileLayer.wms(this.geo_url, {
-      layers: this.distLayer, 
-      format: "image/png",
-      transparent: true,
-      opacity: 0.75
+        layers: this.distLayer,
+        format: "image/png",
+        transparent: true,
+        opacity: 0.75
     });
     this.distLayerName = dist;
   }
-  
-  
-  
-  
+ 
 
-  
   initOverlays() {
     function iconByName(name: string) {
       return `<i class="icon icon-${name}"></i>`;
     }
-  
+
     this.overlays = [
       {
         group: "Operational Layers",
@@ -383,40 +452,47 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         ]
       },
       {
-        group: "Person data",
+        group: "Person Data",
         icon: iconByName('location'),
         collapsed: false,
         layers: [
           {
             name: "Missing Person",
             active: true,
-            layer: this.geoServerClusterGroup!,
+            layer: this.missingPersonLayer,
+          },
+          {
+            name: "Unidentified Person",
+            active: true,
+            layer: this.unidentifiedPersonLayer,
+          },
+          {
+            name: "Unidentified Bodies",
+            active: true,
+            layer: this.unidentifiedBodiesLayer,
           }
         ]
       }
     ];
-  
-    // ✅ Add the layer only if it's defined
+
+    // Add the GeoServer Markers layer only if it's defined
     if (this.geoServerClusterGroup) {
-      this.ddOverlays.push({ name: "GeoServer Markers", layer: this.geoServerClusterGroup });
+      this.overlays.push({
+        group: "Operational Layers",
+        icon: iconByName('marker'),
+        collapsed: false,
+        layers: [
+          {
+            name: "GeoServer Markers",
+            active: true,
+            layer: this.geoServerClusterGroup,
+          }
+        ]
+      });
     }
   }
   
   
-  
-
-  
-
-
-  
-
-
-
-  
- 
-
-
-
 
   isLoading = false;
 

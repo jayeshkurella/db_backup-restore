@@ -13,7 +13,7 @@ class Document(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(max_length=20, choices=DocumentTypeChoices.choices,blank=True, null=True)
-    document = models.TextField(blank=True, null=True)
+    document = models.FileField(blank=True, null=True,upload_to='documents/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")

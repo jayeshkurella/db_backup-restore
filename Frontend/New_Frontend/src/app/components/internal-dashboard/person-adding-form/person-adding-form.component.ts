@@ -47,6 +47,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   ];
   selectedImage: string | ArrayBuffer | null | undefined;
   uploadedFiles: any;
+  selectedFiles: { [key: string]: any[] } = {};
 
   constructor(private MPservice :PersonAddApiService,private fb: FormBuilder){
     // this.initializeForm();
@@ -442,7 +443,19 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
-      this.getFormArray(section).at(index).get(field)?.setValue(file);
+        // Ensure the section exists in selectedFiles
+        if (!this.selectedFiles[section]) {
+            this.selectedFiles[section] = [];
+        }
+        // Ensure the index exists in the section
+        if (!this.selectedFiles[section][index]) {
+            this.selectedFiles[section][index] = {};
+        }
+        // Store the file in the selectedFiles object
+        this.selectedFiles[section][index][field] = file;
+
+        // Optionally, set the file name in the form control for display purposes
+        this.getFormArray(section).at(index).get(field)?.setValue(file.name);
     }
   }
   
@@ -458,205 +471,92 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   
   
   
-  // onSubmit() {
-  //   // Check if addressForm has valid data and add it to the addresses array
-  //   const addressFormValue = this.personForm.get('addressForm')?.value;
-  //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
-  //     this.addresses.push(this.fb.group(addressFormValue)); // Add address to FormArray
-  //   }
   
-  //   // Check if contactForm has valid data and add it to the contacts array
-  //   const contactFormValue = this.personForm.get('contactForm')?.value;
-  //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
-  //     this.contacts.push(this.fb.group(contactFormValue)); // Add contact to FormArray
-  //   }
-  
-  //   // Prepare the payload for the backend
-  //   const payload = {
-  //     ...this.personForm.value, // Include all form values
-  //     addresses: this.addresses.value, // Use the FormArray value for addresses
-  //     contacts: this.contacts.value,   // Use the FormArray value for contacts
-  //   };
-  
-  //   // Remove temporary forms from the payload
-  //   delete payload.addressForm;
-  //   delete payload.contactForm;
-  
-  //   // Log the payload for debugging
-  //   console.log("Payload Sent to Backend:", payload);
-  
-  //   // Create a FormData object to handle file uploads
-  //   const formData = new FormData();
-  
-  //   // Append the JSON payload as a string
-  //   formData.append('payload', JSON.stringify(payload));
-  
-  //   // Append files from last_known_details
-  //   this.lastKnownDetails.controls.forEach((group, index) => {
-  //     const personPhoto = group.get('person_photo')?.value;
-  //     const referencePhoto = group.get('reference_photo')?.value;
-  
-  //     if (personPhoto instanceof File) {
-  //       formData.append(`last_known_details[${index}][person_photo]`, personPhoto);
-  //     }
-  //     if (referencePhoto instanceof File) {
-  //       formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto);
-  //     }
-  //   });
-  
-  //   // Append files from firs
-  //   this.firs.controls.forEach((group, index) => {
-  //     const firPhoto = group.get('fir_photo')?.value;
-  
-  //     if (firPhoto instanceof File) {
-  //       formData.append(`firs[${index}][fir_photo]`, firPhoto);
-  //     }
-  //   });
-  
-  //   // Append files from consent
-  //   this.consent.controls.forEach((group, index) => {
-  //     const document = group.get('document')?.value;
-  
-  //     if (document instanceof File) {
-  //       formData.append(`consent[${index}][document]`, document);
-  //     }
-  //   });
-  
-  //   // Send FormData to the backend
-  //   this.MPservice.postMissingPerson(formData).subscribe({
-  //     next: (response) => {
-  //       console.log('Person added successfully!', response);
-  //       alert("Person added successfully");
-  //       this.personForm.reset();
-  //       this.addresses.clear(); // Clear the addresses FormArray
-  //       this.contacts.clear(); 
-  //       this.additionalInfo.clear();
-  //       this.lastKnownDetails.clear();
-  //       this.firs.clear();
-  //       this.consent.clear();
-  //     },
-  //     error: (error) => {
-  //       console.error('Error adding person:', error);
-  //       alert('An error occurred while adding the person. Please try again.');
-  //     },
-  //   });
-  // }
   
 
   onSubmit() {
     // Check if addressForm has valid data and add it to the addresses array
     const addressFormValue = this.personForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
-      this.addresses.push(this.fb.group(addressFormValue)); // Add address to FormArray
+      this.addresses.push(this.fb.group(addressFormValue)); 
     }
   
-    // Check if contactForm has valid data and add it to the contacts array
     const contactFormValue = this.personForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
-      this.contacts.push(this.fb.group(contactFormValue)); // Add contact to FormArray
+      this.contacts.push(this.fb.group(contactFormValue)); 
     }
   
-    // Prepare the payload for the backend
-    const payload = {
-      ...this.personForm.value, // Include all form values
-      addresses: this.addresses.value, // Use the FormArray value for addresses
-      contacts: this.contacts.value,   // Use the FormArray value for contacts
-    };
-  
-    // Remove temporary forms from the payload
-    delete payload.addressForm;
-    delete payload.contactForm;
-  
-    // Log the payload for debugging
-    console.log("Payload Sent to Backend:", payload);
-  
-    // Create a FormData object to handle file uploads
-    const formData = new FormData();
-  
-    // Append the JSON payload as a string
-    formData.append('payload', JSON.stringify(payload));
-  
-    // Append files from last_known_details
-    this.lastKnownDetails.controls.forEach((group, index) => {
-      const personPhoto = group.get('person_photo')?.value;
-      const referencePhoto = group.get('reference_photo')?.value;
-  
-      if (personPhoto instanceof File) {
-        formData.append(`last_known_details[${index}][person_photo]`, personPhoto);
-      }
-      if (referencePhoto instanceof File) {
-        formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto);
-      }
-    });
-  
-    // Append files from firs
-    this.firs.controls.forEach((group, index) => {
-      const firPhoto = group.get('fir_photo')?.value;
-  
-      if (firPhoto instanceof File) {
-        formData.append(`firs[${index}][fir_photo]`, firPhoto);
-      }
-    });
-  
-    // Append files from consent
-    this.consent.controls.forEach((group, index) => {
-      const document = group.get('document')?.value;
-  
-      if (document instanceof File) {
-        formData.append(`consent[${index}][document]`, document);
-      }
-    });
-  
-    // Send FormData to the backend
-    this.MPservice.postMissingPerson(formData).subscribe({
+    
+   const payload = {
+    ...this.personForm.value,
+    addresses: this.addresses.value, 
+      contacts: this.contacts.value,  
+  };
+
+  // Remove temporary forms from the payload
+  delete payload.addressForm;
+  delete payload.contactForm;
+
+  // Log the payload for debugging
+  console.log("Payload Sent to Backend:", payload);
+
+  // Create a FormData object to handle file uploads
+  const formData = new FormData();
+
+  // Append the JSON payload as a string
+  formData.append('payload', JSON.stringify(payload));
+
+  // Append files from last_known_details
+  if (this.selectedFiles['last_known_details']) {
+      this.selectedFiles['last_known_details'].forEach((group, index) => {
+          const personPhoto = group['person_photo'];
+          const referencePhoto = group['reference_photo'];
+
+          if (personPhoto) {
+              formData.append(`last_known_details[${index}][person_photo]`, personPhoto, personPhoto.name);
+          }
+          if (referencePhoto) {
+              formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto, referencePhoto.name);
+          }
+      });
+  }
+
+  // Append files from firs
+  if (this.selectedFiles['firs']) {
+      this.selectedFiles['firs'].forEach((group, index) => {
+          const firPhoto = group['fir_photo'];
+
+          if (firPhoto) {
+              formData.append(`firs[${index}][fir_photo]`, firPhoto, firPhoto.name);
+          }
+      });
+  }
+
+  // Append files from consent
+  if (this.selectedFiles['consent']) {
+      this.selectedFiles['consent'].forEach((group, index) => {
+          const document = group['document'];
+
+          if (document) {
+              formData.append(`consent[${index}][document]`, document, document.name);
+          }
+      });
+  }
+
+  // Send FormData to the backend
+  this.MPservice.postMissingPerson(formData).subscribe({
       next: (response) => {
-        console.log('Person added successfully!', response);
-        alert("Person added successfully");
-        this.personForm.reset();
-        this.addresses.clear(); // Clear the addresses FormArray
-        this.contacts.clear();  // Clear the contacts FormArray
+          console.log('Person added successfully!', response);
+          alert("Person added successfully");
+          this.personForm.reset();
+          this.addresses.clear(); // Clear the addresses FormArray
+          this.contacts.clear();  // Clear the contacts FormArray
+          this.selectedFiles = {}; // Reset selectedFiles
       },
       error: (error) => {
-        console.error('Error adding person:', error);
-        alert('An error occurred while adding the person. Please try again.');
+          console.error('Error adding person:', error);
+          alert('An error occurred while adding the person. Please try again.');
       },
-    });
+  });
   }
-  
-
- 
-  
-  
- 
-  
-
-
-  
-
-  
-
-
- 
- calculateAge() {
-  const dob = this.missingPersonForm.get('date_of_birth')?.value;
-  if (dob) {
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    
-    // ✅ Ensure age updates in the form
-    this.missingPersonForm.get('age')?.setValue(age);
-  }
- }
-
-
-
-
-  
-
 }

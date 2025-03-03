@@ -8,7 +8,7 @@ from drf_yasg import openapi
 from django.db import transaction
 from rest_framework.pagination import PageNumberPagination
 from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer
-from ..models import PoliceStation
+from ..models import PoliceStation, Contact
 from ..pagination import CustomPagination
 from django.core.cache import cache
 
@@ -115,7 +115,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
     request_body=PoliceStationSerializer,
     responses={200: openapi.Response("Police station updated successfully")}
     )
-    def update(self, request, pk=None):
+    def update(self, request, pk=None, *args, **kwargs):  # Added *args, **kwargs to handle 'partial'
         try:
             with transaction.atomic():
                 police_station = get_object_or_404(PoliceStation, pk=pk)
@@ -123,14 +123,28 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
                 # Extract and update address if provided
                 address_data = request.data.pop("address", None)
                 if address_data:
-                    address_serializer = AddressSerializer(police_station.address, data=address_data, partial=True)
+                    address_serializer = AddressSerializer(
+                        police_station.address,
+                        data=address_data,
+                        partial=True
+                    )
                     if address_serializer.is_valid():
                         address_serializer.save()
                     else:
-                        return Response(address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                        return Response(
+                            address_serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+                # Extracting the 'partial' argument from kwargs
+                partial = kwargs.get('partial', False)  # NEW: Get partial flag from kwargs
 
                 # Update police station
-                serializer = self.get_serializer(police_station, data=request.data, partial=True)
+                serializer = self.get_serializer(
+                    police_station,
+                    data=request.data,
+                    partial=partial  # Updated: Use partial flag
+                )
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -139,7 +153,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 🔹 5. DELETE Police Station
+            # 🔹 5. DELETE Police Station
     @swagger_auto_schema(
         operation_description="Delete a police station",
         responses={204: openapi.Response("Police station deleted successfully")}
