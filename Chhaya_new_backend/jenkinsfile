@@ -2,23 +2,22 @@ pipeline {
     agent any
 
     environment {
-        // Set the workspace directory
         WORKSPACE_DIR = "${WORKSPACE}/Chhaya_new_backend"
         VIRTUALENV_DIR = "${WORKSPACE}/.venv"
         PYTHON = 'python3'
-        DB_HOST = 'localhost'  // Update with your database host (or use Docker container name)
-        DB_PORT = '5432'       // Adjust for PostgreSQL or MySQL
-        DB_NAME = 'chhaya_demo'  // Your database name
-        DB_USER = 'postgres'   // Your DB username
-        DB_PASSWORD = 'postgres' // Your DB password (use Jenkins credentials for safety)
+        DB_HOST = 'localhost'
+        DB_PORT = '5432'
+        DB_NAME = 'chhaya_demo'
+        DB_USER = 'postgres'
+        DB_PASSWORD = 'postgres'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                dir("${WORKSPACE_DIR}") {
-                    // Checkout the code from GitLab repository
-                    git branch: 'sanketlodhe', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
+                script {
+                    // Checkout the code from GitLab repository using stored credentials
+                    git credentialsId: 'gitlab-jenkins', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git', branch: 'sanketlodhe'
                 }
             }
         }
