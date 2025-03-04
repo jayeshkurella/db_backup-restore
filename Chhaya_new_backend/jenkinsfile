@@ -31,9 +31,7 @@ pipeline {
                 script {
                     // Installing dependencies inside virtual environment
                     sh """
-                        source ${VENV_DIR}/bin/activate
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
+                        bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r requirements.txt'
                     """
                 }
             }
