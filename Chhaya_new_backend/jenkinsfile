@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Set the home directory for the administrator user
-        HOME_DIR = '/home/administrator'
-        VIRTUALENV_DIR = "${HOME_DIR}/.venv"
+        // Set the workspace directory
+        WORKSPACE_DIR = "${WORKSPACE}/Chhaya_new_backend"
+        VIRTUALENV_DIR = "${WORKSPACE}/.venv"
         PYTHON = 'python3'
         DB_HOST = 'localhost'  // Update with your database host (or use Docker container name)
         DB_PORT = '5432'       // Adjust for PostgreSQL or MySQL
@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                dir("${HOME_DIR}") {
+                dir("${WORKSPACE_DIR}") {
                     // Checkout the code from GitLab repository
                     git branch: 'sanketlodhe', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
                 }
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Install dependencies using pip from requirements.txt
-                    sh './${VIRTUALENV_DIR}/bin/pip install -r requirements.txt'
+                    sh './${VIRTUALENV_DIR}/bin/pip install -r ${WORKSPACE_DIR}/requirement.txt'
                 }
             }
         }
@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     // Run Django migrations (or similar for your framework)
-                    sh './${VIRTUALENV_DIR}/bin/python manage.py migrate --noinput'
+                    sh './${VIRTUALENV_DIR}/bin/python ${WORKSPACE_DIR}/manage.py migrate --noinput'
                 }
             }
         }
@@ -70,7 +70,7 @@ pipeline {
                     // Deploy the application in the background
                     echo 'Deploying the application...'
                     // Run the application (e.g., Django or Flask) in the background
-                    sh 'nohup ./${VIRTUALENV_DIR}/bin/python manage.py runserver 0.0.0.0:9000 &'
+                    sh 'nohup ./${VIRTUALENV_DIR}/bin/python ${WORKSPACE_DIR}/manage.py runserver 0.0.0.0:9000 &'
                 }
             }
         }
