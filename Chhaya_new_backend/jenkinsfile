@@ -4,7 +4,7 @@ pipeline {
     environment {
         PYTHON_VERSION = 'python3.10'
         VENV_DIR = '.venv'
-        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt' // Set path for requirements.txt
+        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirements.txt'  // Path to requirements.txt
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
         stage('Set up Python Environment') {
             steps {
                 script {
-                    // Create Python virtual environment
+                    // Create a Python virtual environment
                     sh """
                         python3 -m venv ${VENV_DIR}
                     """
@@ -28,16 +28,21 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Check if requirements.txt exists and install dependencies
-                    if (fileExists(REQUIREMENTS_FILE)) {
-                        sh """
-                            bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
-                        """
-                    } else {
-                        error "requirements.txt not found at ${REQUIREMENTS_FILE}"
-                    }
-
-                    // Install GDAL via pip directly
+                    // Add the ubuntugis PPA repository to get newer GDAL version
+                    // This solves the issue of version mismatch for libgdal
+                    sh """
+                        sudo add-apt-repository ppa:ubuntugis/ppa -y
+                        sudo apt update
+                        sudo apt-get install -y libgdal-dev
+                    """
+                    
+                    // Install Python dependencies from requirements.txt
+                    sh """
+                        bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
+                    """
+                    
+                    // Install GDAL from pip if needed
+                    // Install the specific version that matches your required bindings (version 3.8.4)
                     sh """
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install gdal==3.8.4'
                     """
@@ -48,7 +53,7 @@ pipeline {
         stage('Set up Database') {
             steps {
                 script {
-                    // Add steps for setting up the database if required
+                    // Add steps to set up your database here
                     echo 'Setting up Database...'
                 }
             }
@@ -57,7 +62,7 @@ pipeline {
         stage('Run Migrations') {
             steps {
                 script {
-                    // Add steps for running migrations if required
+                    // Add steps to run migrations here
                     echo 'Running Migrations...'
                 }
             }
@@ -66,7 +71,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Add steps for deployment if required
+                    // Add deployment steps here
                     echo 'Deploying...'
                 }
             }
@@ -76,6 +81,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
+            // Remove the virtual environment to clean up after the build
             sh """
                 rm -rf ${VENV_DIR}
             """
