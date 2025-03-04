@@ -10,6 +10,7 @@ import 'leaflet.markercluster';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/envirnments/envirnment';
 import { Router } from '@angular/router';
+import { MainDashboardServiceService } from './main-dashboard-service.service';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -35,11 +36,10 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   allstates: string[] = [];
   allcities: string[] = [];
   alldistricts: string[] = [];
-  selectedCity = 'All Cities';
-  selectedState= 'All States';
+  
   selectedcase= 'All Cases';
   stateCoordinates: any[] = []; 
-  selectedDistrict= 'All Districts';
+
   alldistrictss: string[] = [];
   selectedPoliceStation: { id: number; name: string } | 'All Police Stations' = 'All Police Stations';
   selectedgender='All Genders';
@@ -54,7 +54,6 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   unidentifiedPersonTotalCounts: number = 0; 
   unidentifiedBodyTotalCount: number = 0; 
   selectedBloodGroup = 'All Blood Groups'; 
-  selectedVillage = 'All Villages';
   state: string | null = null;
   district: string | null = null;
   city: string | null = null;
@@ -118,12 +117,20 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   geoServerClusterGroup: L.MarkerClusterGroup | undefined;
   permanentAddressLayer: any;
   temporaryAddressLayer: any;
+
+
+  states:any;
+  selectedState= 'state';
+  selectedDistrict = 'district';
+  selectedCity= 'city';
+  selectedVillage = 'village';
   
  
   
   constructor(
     private router: Router, 
     private http: HttpClient,
+    private filterService :MainDashboardServiceService,
     // private allcountapi: AllcountServiceService, 
     // private missingperonapi: MissingpersonapiService,
     // private unidentifiedpersonapi: UnidentifiedPersonapiService,
@@ -157,8 +164,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   }
  
   ngOnInit(): void {
-    // Set default state to Maharashtra
     this.loadStateData();
+    // this.loadStateData();
     this.selectedState = 'Maharashtra';  
     this.selectedDistrict = 'All Districts'; 
     this.selectedCity = 'All Cities';  
@@ -200,9 +207,9 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     this.http.get<any[]>('assets/state.json').subscribe(data => {
       this.stateCoordinates = data;
       this.allstates = data.map(state => state.name); 
-      // console.log('State Coordinates:', this.stateCoordinates);
     });
   }
+
 
   moveMapToState(stateCode: string): void {
     const indiaCoordinates: [number, number] = [20.5937, 78.9629];  
@@ -230,16 +237,53 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   
 
 
+//   filterDataByFilters(): void {
+//     this.moveMapToState(this.selectedState);
+//     if (this.selectedState && this.selectedState !== 'All States') {
+        
+//         this.onStateChange(this.selectedState);
+//     }
+
+//     if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
+//         this.onDistrictChange({ target: { value: this.selectedDistrict } } as unknown as Event);
+//     }
+
+//     if (this.selectedCity && this.selectedCity !== 'All Cities') {
+//         this.onCityChange(this.selectedCity);
+//     }
+
+//     if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
+//         this.onVillageChange(this.selectedVillage);
+//     }
+//  }
+
   filterDataByFilters(): void {
-    if (this.selectedState !== 'All States') {
-      this.moveMapToState(this.selectedState);
-      // this.getDistrictsByState(this.selectedState);
-      // this.loadDistrictsForState(this.selectedState);
-    } else {
-      this.alldistricts = [];
+    this.moveMapToState(this.selectedState);
+    this.initOperationalLayers()
+
+    if (this.selectedState && this.selectedState !== 'All States') {
+        this.onStateChange(this.selectedState);
     }
 
+    if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
+        this.onDistrictChange({ target: { value: this.selectedDistrict } } as unknown as Event);
+    }
+
+    if (this.selectedCity && this.selectedCity !== 'All Cities') {
+        this.onCityChange(this.selectedCity);
+    }
+
+    if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
+        this.onVillageChange(this.selectedVillage);
+    }
+
+    
+    
   }
+
+  
+
+  
   
   
   viewDetails(person: any): void {
@@ -262,7 +306,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
 
 
   private initMap(): void {
-    this.initOperationalLayers();
+    // this.initOperationalLayers();
     this.initOverlays();
 
     this.map = L.map('map', {
@@ -285,7 +329,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         groupMaxHeight: 50,
     });
     this.map.addControl(panelLayers);
-}
+ }
 
  
  toggleLayer(layer: string, event: any): void {
@@ -338,10 +382,25 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   }
   }
 
+  
   initOperationalLayers() {
+    // Clear existing markers and layers
+    if (this.geoServerClusterGroup) {
+        this.geoServerClusterGroup.clearLayers();
+    }
+    if (this.missingPersonLayer) {
+        this.missingPersonLayer.clearLayers();
+    }
+    if (this.unidentifiedPersonLayer) {
+        this.unidentifiedPersonLayer.clearLayers();
+    }
+    if (this.unidentifiedBodiesLayer) {
+        this.unidentifiedBodiesLayer.clearLayers();
+    }
+
+    // Reinitialize the marker cluster group
     this.geoServerClusterGroup = L.markerClusterGroup();
 
-    // Define custom icon for markers
     const customIcon = L.icon({
         iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
         iconSize: [25, 41],
@@ -351,25 +410,73 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         shadowSize: [41, 41]
     });
 
-    // Create separate layers for each person type
     this.missingPersonLayer = L.layerGroup();
     this.unidentifiedPersonLayer = L.layerGroup();
     this.unidentifiedBodiesLayer = L.layerGroup();
 
-    // Fetch GeoJSON from GeoServer
-    fetch("http://localhost:8080/geoserver/chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_address&outputFormat=application/json")
+    // Build dynamic CQL filter
+    const filters = [];
+
+    if (this.selectedState && this.selectedState !== 'All States') {
+        filters.push(`state='${this.selectedState}'`);
+    }
+    if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
+        filters.push(`district='${this.selectedDistrict}'`);
+    }
+    if (this.selectedCity && this.selectedCity !== 'All Cities') {
+        filters.push(`city='${this.selectedCity}'`);
+    }
+    if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
+        filters.push(`village='${this.selectedVillage}'`);
+    }
+    if (this.selectedPoliceStation && this.selectedPoliceStation !== 'All Police Stations') {
+        filters.push(`police_station_id=${this.selectedPoliceStation}`);
+    }
+    if (this.selectedcase && this.selectedcase !== 'All Cases') {
+        filters.push(`case_status='${this.selectedcase}'`);
+    }
+    if (this.selectedgender && this.selectedgender !== 'All Genders') {
+        filters.push(`gender='${this.selectedgender}'`);
+    }
+    if (this.selectedHeightRange && this.selectedHeightRange !== 'All Heights') {
+        if (this.selectedHeightRange === 'Above 180') {
+            filters.push(`height > 180`);
+        } else {
+            const [minHeight, maxHeight] = this.selectedHeightRange.split('-').map(Number);
+            filters.push(`height >= ${minHeight} AND height <= ${maxHeight}`);
+        }
+    }
+    if (this.selectedAgeRange && this.selectedAgeRange !== 'All Ages') {
+        if (this.selectedAgeRange === 'Above 70') {
+            filters.push(`age > 70`);
+        } else {
+            const [minAge, maxAge] = this.selectedAgeRange.split('-').map(Number);
+            filters.push(`age >= ${minAge} AND age <= ${maxAge}`);
+        }
+    }
+    if (this.selectedmarital && this.selectedmarital !== 'Marital status') {
+        filters.push(`marital_status='${this.selectedmarital}'`);
+    }
+    if (this.selectedStartDate) {
+        filters.push(`date >= '${this.selectedStartDate}'`);
+    }
+    if (this.selectedEndDate) {
+        filters.push(`date <= '${this.selectedEndDate}'`);
+    }
+
+    const cqlFilter = filters.length > 0 ? `&CQL_FILTER=${encodeURIComponent(filters.join(' AND '))}` : '';
+    console.log("CQL Filter: ", cqlFilter);
+
+    fetch(`http://localhost:8080/geoserver/chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_address&outputFormat=application/json${cqlFilter}`)
         .then(response => response.json())
         .then(data => {
-            console.log("GeoServer Response:", data);
-
-            // Array to hold all marker promises
             const markerPromises = data.features.map(async (feature: any) => {
                 try {
                     const personId = feature.properties.person_id;
                     const geometry = feature.geometry;
                     const personType = feature.properties.person_type;
+                    console.log(feature.properties.person_type)
 
-                    // Check if geometry data is valid
                     if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
                         console.warn("Invalid or missing 'geometry' data for feature:", feature);
                         return null;
@@ -378,34 +485,25 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                     const [lng, lat] = geometry.coordinates;
                     const latlng: L.LatLngTuple = [lat, lng];
 
-                    // Auto-fetch related person data from the backend
                     const personResponse = await fetch(`http://127.0.0.1:8000/api/persons/${personId}/`);
                     if (!personResponse.ok) {
                         throw new Error(`Failed to fetch person details: ${personResponse.status}`);
                     }
                     const personDetails = await personResponse.json();
-                    console.log("Fetched Person Details:", personDetails);
 
-                    // Create marker with popup showing person details
                     const marker = L.marker(latlng, { icon: customIcon });
+                    marker.feature = feature;
 
-                const personPhotoUrl = personDetails.last_known_details?.[0]?.person_photo 
-                    ? `${environment.apiUrl}${personDetails.last_known_details[0].person_photo}` 
-                    :  '/assets/images/Chhaya.png';
-
-                  const popupContent = `
-                      <b>Person Details</b><br>
-                      <img src="${personPhotoUrl}" alt="Person Image" style="max-width: 100px; max-height: 100px; margin: 5px 0;"><br>
-                      <b>Name:</b> ${personDetails.type || 'N/A'}<br>
-                      <b>Name:</b> ${personDetails.name || 'N/A'}<br>
-                      <b>Age:</b> ${personDetails.age || 'N/A'}<br>
-                      <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-                      
-                  `;
+                    const popupContent = `
+                        <img src="${environment.defaultPersonImage}" alt="Person Image" style="max-width: 100px; max-height: 100px; margin: 5px 0;"><br>
+                        <b>Name:</b> ${personDetails.type || 'N/A'}<br>
+                        <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
+                        <b>Age:</b> ${personDetails.age || 'N/A'}<br>
+                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+                    `;
 
                     marker.bindPopup(popupContent);
 
-                    // Add marker to the appropriate layer based on person_type
                     switch (personType) {
                         case 'Missing person':
                             this.missingPersonLayer.addLayer(marker);
@@ -421,9 +519,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                             break;
                     }
 
-                    // Add the marker to the MarkerClusterGroup
                     this.geoServerClusterGroup?.addLayer(marker);
-
                     return marker;
 
                 } catch (error) {
@@ -432,20 +528,17 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                 }
             });
 
-            // Wait for all markers to be created
             Promise.all(markerPromises).then(markers => {
                 markers.forEach(marker => {
                     if (marker) this.geoServerClusterGroup?.addLayer(marker);
                 });
 
-                // Add the MarkerClusterGroup to the map initially
                 this.geoServerClusterGroup?.addTo(this.map!);
             });
 
         })
         .catch(error => console.error("Error fetching GeoJSON:", error));
 
-    // Add other layers (state, district, etc.)
     let state: L.Layer = L.tileLayer.wms(this.geo_url, {
         layers: this.stateLayer,
         format: "image/png",
@@ -461,7 +554,9 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         opacity: 0.75
     });
     this.distLayerName = dist;
-  }
+}
+
+
  
 
   initOverlays() {
@@ -522,8 +617,11 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         //     ]
         // }
     ];
-}
+  }
     
+
+ 
+
   
 
   isLoading = false;
@@ -539,11 +637,63 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     }, 1000);
   }
   
-
-
-
- 
   
+  onStateChange(state: string): void {
+    this.selectedState = state;
+    this.selectedDistrict = 'All Districts';
+    this.selectedCity = 'All Cities';
+    this.selectedVillage = 'All Villages';
+    this.alldistricts = [];
+    this.allcities = [];
+    this.allVillages = [];
+
+    if (state && state !== 'All States') {
+        this.filterService.getDistricts(state).subscribe((data) => {
+            this.alldistricts = data;
+            console.log("on state change", this.alldistricts);
+            this.moveMapToState(state);
+        });
+    }
+  }
+
+  onDistrictChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const district = target.value;
+
+    this.selectedDistrict = district;
+    this.selectedCity = 'All Cities';
+    this.selectedVillage = 'All Villages';
+    this.allcities = [];
+    this.allVillages = [];
+
+    if (district !== 'All Districts') {
+        this.filterService.getCities(district).subscribe((data) => {
+            console.log('Cities fetched:', data);
+            this.allcities = data;
+        }, error => {
+            console.error('Error fetching cities:', error);
+        });
+    } else {
+        console.warn('No district selected or "All Districts" selected');
+    }
+  }
+
+  onCityChange(city: string): void {
+    this.selectedCity = city;
+    this.selectedVillage = 'All Villages';
+    this.allVillages = [];
+
+    if (city && city !== 'All Cities') {
+        this.filterService.getVillages(city).subscribe((data) => {
+            this.allVillages = data;
+        });
+    }
+  }
+
+  onVillageChange(village: string): void {
+    this.selectedVillage = village;
+  }
+
   
 
 }

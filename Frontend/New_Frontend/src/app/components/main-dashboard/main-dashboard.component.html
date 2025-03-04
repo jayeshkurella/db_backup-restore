@@ -258,77 +258,77 @@
               <div class="row">
                 <span style="color: #ff8642;font-size: 14px;">Search Here! </span>
                 <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg border-dark"
-                    [(ngModel)]="selectedState"
-                    (change)="filterDataByFilters()"
-                    aria-label="State"
-                  >
-                    <option value="All States">State</option>
-                    <option *ngFor="let state of allstates" [value]="state">
-                      {{ state }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg border-dark"
-                    [(ngModel)]="selectedDistrict"
-                    (change)="filterDataByFilters()"
-                    aria-label="District"
-                  >
-                    <option value="All Districts">District</option>
-                    <option
-                      *ngFor="let district of alldistricts"
-                      [value]="district"
+                    <select
+                        class="form-select form-select-sg border-dark"
+                        [(ngModel)]="selectedState"
+                        (change)="onStateChange(selectedState)"
+                        aria-label="State"
                     >
-                      {{ district }}
-                    </option>
-                  </select>
+                        <option value="All States">State</option>
+                        <option *ngFor="let state of allstates" [value]="state">
+                            {{ state }}
+                        </option>
+                    </select>
                 </div>
                 <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg border-dark"
-                    [(ngModel)]="selectedCity"
-                    (change)="filterDataByFilters()"
-                    aria-label="City"
-                  >
-                    <option value="All Cities">City</option>
-                    <option *ngFor="let city of allcities" [value]="city">
-                      {{ city }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg border-dark"
-                    [(ngModel)]="selectedVillage"
-                    (change)="filterDataByFilters()"
-                    aria-label="Village"
-                  >
-                    <option value="All Villages">Village</option>
-                    <option
-                      *ngFor="let village of allVillages"
-                      [value]="village"
+                    <select
+                        class="form-select form-select-sg border-dark"
+                        [(ngModel)]="selectedDistrict"
+                        (change)="onDistrictChange($event)"
+                        aria-label="District"
                     >
-                      {{ village }}
-                    </option>
-                  </select>
+                        <option value="All Districts">District</option>
+                        <option
+                            *ngFor="let district of alldistricts"
+                            [value]="district"
+                        >
+                            {{ district }}
+                        </option>
+                    </select>
                 </div>
                 <div class="col-lg col-md-6">
-                  <select
-                    class="form-select form-select-sg border-dark"
-                    [(ngModel)]="selectedPoliceStation"
-                    (change)="filterDataByFilters()"
-                    aria-label="Police"
-                  >
-                    <option value="All Police Stations">Police Station</option>
-                    <option *ngFor="let station of allpolicestations" [value]="station.id">
-                      {{ station.name }}
-                    </option>
-                  </select>
+                    <select
+                        class="form-select form-select-sg border-dark"
+                        [(ngModel)]="selectedCity"
+                        (change)="onCityChange(selectedCity)"
+                        aria-label="City"
+                    >
+                        <option value="All Cities">City</option>
+                        <option *ngFor="let city of allcities" [value]="city">
+                            {{ city }}
+                        </option>
+                    </select>
                 </div>
-                <!-- <div class="col-lg col-md-6">
+                <div class="col-lg col-md-6">
+                    <select
+                        class="form-select form-select-sg border-dark"
+                        [(ngModel)]="selectedVillage"
+                        (change)="onVillageChange(selectedVillage)"
+                        aria-label="Village"
+                    >
+                        <option value="All Villages">Village</option>
+                        <option
+                            *ngFor="let village of allVillages"
+                            [value]="village"
+                        >
+                            {{ village }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-lg col-md-6">
+                    <select
+                        class="form-select form-select-sg border-dark"
+                        [(ngModel)]="selectedPoliceStation"
+                        (change)="filterDataByFilters()"
+                        aria-label="Police"
+                    >
+                        <option value="All Police Stations">Police Station</option>
+                        <option *ngFor="let station of allpolicestations" [value]="station.id">
+                            {{ station.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-lg col-md-6">
                   <select
                     id="ageRange"
                     class="form-select form-select-sg border-dark"
@@ -340,13 +340,11 @@
                     <option value="Resolved">Resolved</option>
                     <option value="Pending">Pending</option>
                   </select>
-                </div> -->
-                
-              </div>
+                </div>
+  
             </div>
-            <!-- Gender, Height, Age, Marital Status -->
+            </div>
             <div class="col-12">
-              <!-- <span>Personal Specilization </span> -->
               <div class="row">
                 
                 <!-- Gender Filter -->
@@ -359,9 +357,8 @@
                     aria-label="Gender"
                   >
                     <option value="All Genders">Gender</option>
-                    <option *ngFor="let gender of allgenders" [value]="gender">
-                      {{ gender }}
-                    </option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                   </select>
                 </div>
             
@@ -428,25 +425,25 @@
                     [(ngModel)]="selectedStartDate"
                     (change)="filterDataByFilters()"
                     aria-label="Start Date"
-                    placeholder="Search Date"
+                    placeholder="Start Date"
                     onfocus="this.type='date'; this.value=''; this.placeholder=''"
-                    onblur="if(!this.value) { this.type='text'; this.placeholder='Search Date'; }"
+                    onblur="if(!this.value) { this.type='text'; this.placeholder='Start Date'; }"
                   />
                 </div>
-                
-                
-            
                 <!-- End Date Filter -->
-                <!-- <div class="col-lg col-md-6">
+                <div class="col-lg col-md-6">
                   <input 
                     id="endDate"
-                    type="date" 
+                    type="text" 
                     class="form-control form-select-sg border-dark" 
                     [(ngModel)]="selectedEndDate"
                     (change)="filterDataByFilters()"
                     aria-label="End Date"
+                    placeholder="End Date"
+                    onfocus="this.type='date'; this.value=''; this.placeholder=''"
+                    onblur="if(!this.value) { this.type='text'; this.placeholder='End Date'; }"
                   />
-                </div> -->
+                </div>
                 
               </div>
             </div>

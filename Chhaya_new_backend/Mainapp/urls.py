@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from .authentication.user_authentication import AuthAPIView
+from .viewsets.filters import filter_Address_ViewSet
 from .viewsets.hospital import HospitalViewSet, HospitalListView
 from .viewsets.person_api import PersonViewSet
 from .viewsets.police_station import PoliceStationViewSet
@@ -12,6 +13,7 @@ router = DefaultRouter()
 router.register(r'persons', PersonViewSet, basename='person')
 router.register(r'police-stations', PoliceStationViewSet, basename='police-station')
 router.register(r'hospitals', HospitalViewSet, basename='hospital')
+router.register(r'filters_address', filter_Address_ViewSet, basename='filters')
 
 urlpatterns = [
     path('api/', include(router.urls)),
