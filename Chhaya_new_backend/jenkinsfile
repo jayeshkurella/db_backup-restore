@@ -4,7 +4,7 @@ pipeline {
     environment {
         PYTHON_VERSION = 'python3.10'
         VENV_DIR = '.venv'
-        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirements.txt'  // Correct path to requirements.txt
+        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirements.txt' // Set path for requirements.txt
     }
 
     stages {
@@ -30,9 +30,13 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Check if the requirements.txt file exists
+                    // Debugging: List files in the workspace to verify requirements.txt location
+                    echo "Listing files in workspace:"
+                    sh 'ls -R'
+
+                    // Check if requirements.txt exists
                     if (fileExists(REQUIREMENTS_FILE)) {
-                        // Installing dependencies inside the virtual environment
+                        // Installing dependencies inside virtual environment
                         sh """
                             bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
                         """
@@ -46,6 +50,7 @@ pipeline {
         stage('Set up Database') {
             steps {
                 script {
+                    // Add steps for setting up the database if required
                     echo 'Setting up Database...'
                 }
             }
@@ -54,6 +59,7 @@ pipeline {
         stage('Run Migrations') {
             steps {
                 script {
+                    // Add steps for running migrations if required
                     echo 'Running Migrations...'
                 }
             }
@@ -62,6 +68,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // Add steps for deployment if required
                     echo 'Deploying...'
                 }
             }
