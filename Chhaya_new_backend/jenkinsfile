@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+
+    environment {
+        // Set the home directory for the administrator user
+        HOME_DIR = '/home/administrator'
+        VIRTUALENV_DIR = "${HOME_DIR}/.venv"
+        PYTHON = 'python3'
+        DB_HOST = 'localhost'  // Update with your database host (or use Docker container name)
+        DB_PORT = '5432'       // Adjust for PostgreSQL or MySQL
+        DB_NAME = 'chhaya_demo'  // Your database name
+        DB_USER = 'postgres'   // Your DB username
+        DB_PASSWORD = 'postgres' // Your DB password (use Jenkins credentials for safety)
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                dir("${HOME_DIR}") {
+                    // Checkout the code from GitLab repository
+                    git branch: 'sanketlodhe', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
+                }
+            }
+        }
+
+        stage('Set up Python Environment') {
+            steps {
+                script {
+                    // Create a virtual environment if it doesn't exist
+                    sh 'python3 -m venv ${VIRTUALENV_DIR}'
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install dependencies using pip from requirements.txt
+                    sh './${VIRTUALENV_DIR}/bin/pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Set up Database') {
+            steps {
+                script {
+                    // Install PostgreSQL client (or MySQL client if using MySQL)
+                    sh 'sudo apt-get install -y postgresql-client'
+                    
+                    // Optionally, create the database if it doesn't exist
+                    sh """
+                        PGPASSWORD=${DB_PASSWORD} psql -h ${DB_HOST} -U ${DB_USER} -d postgres -c "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+                    """
+                }
+            }
+        }
+
+        stage('Run Migrations') {
+            steps {
+                script {
+                    // Run Django migrations (or similar for your framework)
+                    sh './${VIRTUALENV_DIR}/bin/python manage.py migrate --noinput'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Deploy the application in the background
+                    echo 'Deploying the application...'
+                    // Run the application (e.g., Django or Flask) in the background
+                    sh 'nohup ./${VIRTUALENV_DIR}/bin/python manage.py runserver 0.0.0.0:9000 &'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup the virtual environment after deployment
+            echo 'Cleaning up...'
+            sh 'rm -rf ${VIRTUALENV_DIR}'
+        }
+
+        success {
+            echo 'Build and Deployment Successful!'
+        }
+
+        failure {
+            echo 'Build or Deployment Failed!'
+        }
+    }
+}
