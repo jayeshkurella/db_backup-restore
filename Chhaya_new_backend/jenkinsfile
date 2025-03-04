@@ -4,7 +4,7 @@ pipeline {
     environment {
         PYTHON_VERSION = 'python3.10'
         VENV_DIR = '.venv'
-        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirements.txt' // Set path for requirements.txt
+        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt' // Set path for requirements.txt
     }
 
     stages {
