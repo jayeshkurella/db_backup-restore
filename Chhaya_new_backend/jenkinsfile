@@ -32,4 +32,59 @@ pipeline {
                 script {
                     // Check if requirements.txt exists before installing dependencies
                     if (fileExists(REQUIREMENTS_FILE)) {
-                        // Installing dependencies 
+                        // Installing dependencies inside virtual environment
+                        sh """
+                            bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
+                        """
+                    } else {
+                        error "requirements.txt not found!"
+                    }
+                }
+            }
+        }
+
+        stage('Set up Database') {
+            steps {
+                script {
+                    // Add steps for setting up the database if required
+                    echo 'Setting up Database...'
+                }
+            }
+        }
+
+        stage('Run Migrations') {
+            steps {
+                script {
+                    // Add steps for running migrations if required
+                    echo 'Running Migrations...'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Add steps for deployment if required
+                    echo 'Deploying...'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            sh """
+                rm -rf ${VENV_DIR}
+            """
+        }
+
+        success {
+            echo 'Build or Deployment succeeded!'
+        }
+
+        failure {
+            echo 'Build or Deployment Failed!'
+        }
+    }
+}
