@@ -17,10 +17,15 @@ pipeline {
         stage('Set up Python Environment') {
             steps {
                 script {
-                    // Install GDAL and set environment variables before setting up virtualenv
+                    // Install GDAL and update libgdal version
                     sh """
                         sudo apt-get update
                         sudo apt-get install -y gdal-bin libgdal-dev
+                        # Install GDAL from a newer PPA repository if necessary
+                        # For Ubuntu, install PPA for newer GDAL version:
+                        sudo add-apt-repository ppa:ubuntugis/ppa
+                        sudo apt-get update
+                        sudo apt-get install -y libgdal-dev
                         export CPLUS_INCLUDE_PATH=/usr/include/gdal
                         export C_INCLUDE_PATH=/usr/include/gdal
                         python3 -m venv ${VENV_DIR}
