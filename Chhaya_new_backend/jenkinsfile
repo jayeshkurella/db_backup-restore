@@ -4,7 +4,8 @@ pipeline {
     environment {
         PYTHON_VERSION = 'python3.10'
         VENV_DIR = '.venv'
-        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt'  // Path to requirements.txt
+        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirements.txt'  // Path to requirements.txt
+        SUDO_PASSWORD = 'your_sudo_password'  // Set the sudo password here
     }
 
     stages {
@@ -28,12 +29,12 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Add the ubuntugis PPA repository to get newer GDAL version
-                    // This solves the issue of version mismatch for libgdal
+                    // Add the ubuntugis PPA repository to get the newer GDAL version
+                    // Using sudo -S to provide the password from the environment
                     sh """
-                        sudo add-apt-repository ppa:ubuntugis/ppa -y
-                        sudo apt update
-                        sudo apt-get install -y libgdal-dev
+                        echo ${SUDO_PASSWORD} | sudo -S add-apt-repository ppa:ubuntugis/ppa -y
+                        echo ${SUDO_PASSWORD} | sudo -S apt update
+                        echo ${SUDO_PASSWORD} | sudo -S apt-get install -y libgdal-dev
                     """
                     
                     // Install Python dependencies from requirements.txt
@@ -41,8 +42,7 @@ pipeline {
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
                     """
                     
-                    // Install GDAL from pip if needed
-                    // Install the specific version that matches your required bindings (version 3.8.4)
+                    // Install GDAL via pip (specific version 3.8.4)
                     sh """
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install gdal==3.8.4'
                     """
