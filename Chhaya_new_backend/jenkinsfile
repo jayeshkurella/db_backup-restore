@@ -17,10 +17,12 @@ pipeline {
         stage('Set up Python Environment') {
             steps {
                 script {
-                    // Creating Python virtual environment
+                    // Install GDAL and set environment variables before setting up virtualenv
                     sh """
                         sudo apt-get update
-                        sudo apt-get install -y python3.10-venv python3-pip
+                        sudo apt-get install -y gdal-bin libgdal-dev
+                        export CPLUS_INCLUDE_PATH=/usr/include/gdal
+                        export C_INCLUDE_PATH=/usr/include/gdal
                         python3 -m venv ${VENV_DIR}
                     """
                 }
@@ -30,13 +32,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Debugging: List files in the workspace to verify requirements.txt location
-                    echo "Listing files in workspace:"
-                    sh 'ls -R'
-
-                    // Check if requirements.txt exists
+                    // Check if requirements.txt exists and install dependencies
                     if (fileExists(REQUIREMENTS_FILE)) {
-                        // Installing dependencies inside virtual environment
                         sh """
                             bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
                         """
