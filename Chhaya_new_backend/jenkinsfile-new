@@ -1,28 +1,34 @@
 pipeline {
     agent any
-    environment {
-        GIT_CREDENTIALS_ID = 'gitlab-jenkins' // Use the correct credential ID
-    }
+
     stages {
         stage('Checkout Code') {
             steps {
                 script {
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/sanketlodhe']],  // Use the correct branch
-                        userRemoteConfigs: [[
-                            url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git',
-                            credentialsId: env.GIT_CREDENTIALS_ID
-                        ]]
-                    ])
+                    checkout scm
                 }
             }
         }
+
         stage('Setup and Deploy') {
             steps {
-                sh 'chmod +x deploy.sh'
-                sh './deploy.sh'
+                script {
+                    sh '''
+                    cd Chhaya_new_backend
+                    chmod +x deploy.sh
+                    ./deploy.sh
+                    '''
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
         }
     }
 }
