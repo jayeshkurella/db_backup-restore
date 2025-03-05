@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent any  // This specifies that the pipeline can run on any available agent
 
     environment {
         PYTHON_VERSION = 'python3.10'
@@ -46,17 +46,6 @@ pipeline {
                     // Install GDAL via pip (specific version 3.8.4)
                     sh """
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install gdal==3.8.4'
-                    """
-                }
-            }
-        }
-
-        stage('Set up Database') {
-            steps {
-                script {
-                    // Example: Set up database using Docker or a database setup script
-                    sh """
-                        docker-compose up -d db
                     """
                 }
             }
@@ -128,7 +117,7 @@ pipeline {
         always {
             echo 'Cleaning up...'
             // Wrap cleanup steps inside a node block
-            node {
+            node('any') {  // Ensuring the node block has a label here
                 script {
                     // Ensure that VENV_DIR is accessible in the post block
                     def VENV_DIR = '.venv'
