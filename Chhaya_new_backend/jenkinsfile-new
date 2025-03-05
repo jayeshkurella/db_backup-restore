@@ -4,8 +4,8 @@ pipeline {
     environment {
         PYTHON_VERSION = 'python3.10'
         VENV_DIR = '.venv'
-        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt'  // Path to requirements.txt
-        SUDO_PASSWORD = credentials('your_sudo_password_id')  // Use Jenkins credentials plugin for security
+        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt'  
+        SUDO_PASSWORD = credentials('your_sudo_password_id')  
     }
 
     stages {
@@ -18,7 +18,7 @@ pipeline {
         stage('Set up Python Environment') {
             steps {
                 script {
-                    // Create a Python virtual environment
+                    
                     sh """
                         ${PYTHON_VERSION} -m venv ${VENV_DIR}
                     """
@@ -29,14 +29,14 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Use sudo and install GDAL with the required dependencies
+                    
                     sh """
                         echo ${SUDO_PASSWORD} | sudo -S add-apt-repository ppa:ubuntugis/ppa -y
                         echo ${SUDO_PASSWORD} | sudo -S apt-get update
                         echo ${SUDO_PASSWORD} | sudo -S apt-get install -y libgdal-dev
                     """
                     
-                    // Install Python dependencies from requirements.txt
+                    
                     sh """
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
                     """
