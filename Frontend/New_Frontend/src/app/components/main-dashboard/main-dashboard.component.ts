@@ -257,16 +257,16 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
 //     }
 //  }
 
-  filterDataByFilters(): void {
+filterDataByFilters(): void {
     this.moveMapToState(this.selectedState);
-    this.initOperationalLayers()
+    // this.initOperationalLayers();
 
     if (this.selectedState && this.selectedState !== 'All States') {
         this.onStateChange(this.selectedState);
     }
 
     if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
-        this.onDistrictChange({ target: { value: this.selectedDistrict } } as unknown as Event);
+        this.onDistrictChange(this.selectedDistrict);
     }
 
     if (this.selectedCity && this.selectedCity !== 'All Cities') {
@@ -276,10 +276,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
         this.onVillageChange(this.selectedVillage);
     }
+}
 
-    
-    
-  }
 
   
 
@@ -385,6 +383,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   
   initOperationalLayers() {
     // Clear existing markers and layers
+    console.log("Clearing existing layers...");
     if (this.geoServerClusterGroup) {
         this.geoServerClusterGroup.clearLayers();
     }
@@ -414,68 +413,53 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     this.unidentifiedPersonLayer = L.layerGroup();
     this.unidentifiedBodiesLayer = L.layerGroup();
 
-    // Build dynamic CQL filter
-    const filters = [];
-
+    // Build the CQL filter based on selected state and district
+    let cqlFilter = '';
     if (this.selectedState && this.selectedState !== 'All States') {
-        filters.push(`state='${this.selectedState}'`);
+        cqlFilter += `state='${this.selectedState}'`;
     }
     if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
-        filters.push(`district='${this.selectedDistrict}'`);
-    }
-    if (this.selectedCity && this.selectedCity !== 'All Cities') {
-        filters.push(`city='${this.selectedCity}'`);
-    }
-    if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
-        filters.push(`village='${this.selectedVillage}'`);
-    }
-    if (this.selectedPoliceStation && this.selectedPoliceStation !== 'All Police Stations') {
-        filters.push(`police_station_id=${this.selectedPoliceStation}`);
-    }
-    if (this.selectedcase && this.selectedcase !== 'All Cases') {
-        filters.push(`case_status='${this.selectedcase}'`);
-    }
-    if (this.selectedgender && this.selectedgender !== 'All Genders') {
-        filters.push(`gender='${this.selectedgender}'`);
-    }
-    if (this.selectedHeightRange && this.selectedHeightRange !== 'All Heights') {
-        if (this.selectedHeightRange === 'Above 180') {
-            filters.push(`height > 180`);
-        } else {
-            const [minHeight, maxHeight] = this.selectedHeightRange.split('-').map(Number);
-            filters.push(`height >= ${minHeight} AND height <= ${maxHeight}`);
+        if (cqlFilter !== '') {
+            cqlFilter += ' AND ';
         }
-    }
-    if (this.selectedAgeRange && this.selectedAgeRange !== 'All Ages') {
-        if (this.selectedAgeRange === 'Above 70') {
-            filters.push(`age > 70`);
-        } else {
-            const [minAge, maxAge] = this.selectedAgeRange.split('-').map(Number);
-            filters.push(`age >= ${minAge} AND age <= ${maxAge}`);
-        }
-    }
-    if (this.selectedmarital && this.selectedmarital !== 'Marital status') {
-        filters.push(`marital_status='${this.selectedmarital}'`);
-    }
-    if (this.selectedStartDate) {
-        filters.push(`date >= '${this.selectedStartDate}'`);
-    }
-    if (this.selectedEndDate) {
-        filters.push(`date <= '${this.selectedEndDate}'`);
+        cqlFilter += `district='${this.selectedDistrict}'`;
     }
 
-    const cqlFilter = filters.length > 0 ? `&CQL_FILTER=${encodeURIComponent(filters.join(' AND '))}` : '';
-    console.log("CQL Filter: ", cqlFilter);
+    // Log the constructed CQL filter
+    console.log("Selected State:", this.selectedState);
+    console.log("Selected District:", this.selectedDistrict);
+    console.log("Constructed CQL Filter:", cqlFilter);
 
-    fetch(`http://localhost:8080/geoserver/chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_address&outputFormat=application/json${cqlFilter}`)
-        .then(response => response.json())
+    // WFS request with CQL filters
+    // const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=Chhaya:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
+    // const wfsUrl = `http://localhost:8080/geoserver/Chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=Chhaya:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
+    // console.log("WFS Request URL:", wfsUrl);
+
+    const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
+console.log("WFS Request URL:", wfsUrl);
+
+    fetch(wfsUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch GeoJSON: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Fetched Data:", data);
+
+            if (!data.features || data.features.length === 0) {
+                console.warn("No features returned by GeoServer for the applied filter.");
+                alert("No data available for the selected state and district.");
+                return;
+            }
+
             const markerPromises = data.features.map(async (feature: any) => {
                 try {
-                    const personId = feature.properties.person_id;
+                    const fullPersonId = feature.id; // e.g., "Mainapp_person.977b76d5-f4c7-4955-b239-b232ace34b39"
+                    const personId = fullPersonId.split('.')[1]; // Extract only the ID part
                     const geometry = feature.geometry;
                     const personType = feature.properties.person_type;
-                    console.log(feature.properties.person_type)
 
                     if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
                         console.warn("Invalid or missing 'geometry' data for feature:", feature);
@@ -485,22 +469,21 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                     const [lng, lat] = geometry.coordinates;
                     const latlng: L.LatLngTuple = [lat, lng];
 
-                    const personResponse = await fetch(`http://127.0.0.1:8000/api/persons/${personId}/`);
+                    const personResponse = await fetch(`${environment.apiUrl}persons/${personId}/`);
                     if (!personResponse.ok) {
                         throw new Error(`Failed to fetch person details: ${personResponse.status}`);
                     }
-                    const personDetails = await personResponse.json();
 
+                    const personDetails = await personResponse.json();
                     const marker = L.marker(latlng, { icon: customIcon });
                     marker.feature = feature;
 
-                    const popupContent = `
-                        <img src="${environment.defaultPersonImage}" alt="Person Image" style="max-width: 100px; max-height: 100px; margin: 5px 0;"><br>
-                        <b>Name:</b> ${personDetails.type || 'N/A'}<br>
+                    const popupContent = 
+                        `<img src="${environment.defaultPersonImage}" alt="Person Image" style="max-width: 100px; max-height: 100px; margin: 5px 0;"><br>
+                        <b>Type:</b> ${personDetails.type || 'N/A'}<br>
                         <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
                         <b>Age:</b> ${personDetails.age || 'N/A'}<br>
-                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-                    `;
+                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>`;
 
                     marker.bindPopup(popupContent);
 
@@ -515,11 +498,10 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
                             this.unidentifiedBodiesLayer.addLayer(marker);
                             break;
                         default:
-                            console.warn(`Unknown person type: ${personType}`);
+                            console.warn("Unknown person type:", personType);
                             break;
                     }
 
-                    this.geoServerClusterGroup?.addLayer(marker);
                     return marker;
 
                 } catch (error) {
@@ -555,6 +537,164 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     });
     this.distLayerName = dist;
 }
+
+// initOperationalLayers() {
+//     console.log("Clearing existing layers...");
+
+//     // Clear existing markers and layers
+//     if (this.geoServerClusterGroup) {
+//         this.geoServerClusterGroup.clearLayers();
+//     }
+//     if (this.missingPersonLayer) {
+//         this.missingPersonLayer.clearLayers();
+//     }
+//     if (this.unidentifiedPersonLayer) {
+//         this.unidentifiedPersonLayer.clearLayers();
+//     }
+//     if (this.unidentifiedBodiesLayer) {
+//         this.unidentifiedBodiesLayer.clearLayers();
+//     }
+
+//     // Reinitialize the marker cluster group
+//     this.geoServerClusterGroup = L.markerClusterGroup();
+
+//     const customIcon = L.icon({
+//         iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
+//         iconSize: [25, 41],
+//         iconAnchor: [12, 41],
+//         popupAnchor: [1, -34],
+//         shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+//         shadowSize: [41, 41]
+//     });
+
+//     this.missingPersonLayer = L.layerGroup();
+//     this.unidentifiedPersonLayer = L.layerGroup();
+//     this.unidentifiedBodiesLayer = L.layerGroup();
+
+//     // Build the CQL filter based on selected state and district
+//     let cqlFilter = '';
+
+//     if (this.selectedState && this.selectedState !== 'All States') {
+//         cqlFilter = `INTERSECTS(location, querySingle('GeoFlow_WCD:tblstates', 'geom', 'state_name=''${this.selectedState}'''))`;
+//     }
+
+//     if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
+//         if (cqlFilter) {
+//             cqlFilter += ' AND ';
+//         }
+//         cqlFilter += `INTERSECTS(location, querySingle('GeoFlow_WCD:tbldistricts', 'geom', 'district_name=''${this.selectedDistrict}'''))`;
+//     }
+
+//     console.log("Selected State:", this.selectedState);
+//     console.log("Selected District:", this.selectedDistrict);
+//     console.log("Constructed CQL Filter:", cqlFilter);
+
+//     // WFS request with CQL filters
+//     const wfsUrl = `http://localhost:8080/geoserver/Chhaya/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=Chhaya:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
+//     console.log("WFS Request URL:", wfsUrl);
+
+//     fetch(wfsUrl)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error(`Failed to fetch GeoJSON: ${response.status}`);
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             console.log("Fetched Data:", data);
+
+//             if (!data.features || data.features.length === 0) {
+//                 console.warn("No features returned by GeoServer for the applied filter.");
+//                 alert("No data available for the selected state and district.");
+//                 return;
+//             }
+
+//             const markerPromises = data.features.map(async (feature: any) => {
+//                 try {
+//                     const fullPersonId = feature.id;
+//                     const personId = fullPersonId.split('.')[1];
+//                     const geometry = feature.geometry;
+//                     const personType = feature.properties.person_type;
+
+//                     if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
+//                         console.warn("Invalid or missing 'geometry' data for feature:", feature);
+//                         return null;
+//                     }
+
+//                     const [lng, lat] = geometry.coordinates;
+//                     const latlng: L.LatLngTuple = [lat, lng];
+
+//                     const personResponse = await fetch(`http://127.0.0.1:8000/api/persons/${personId}/`);
+//                     if (!personResponse.ok) {
+//                         throw new Error(`Failed to fetch person details: ${personResponse.status}`);
+//                     }
+
+//                     const personDetails = await personResponse.json();
+//                     const marker = L.marker(latlng, { icon: customIcon });
+//                     marker.feature = feature;
+
+//                     const popupContent = 
+//                         `<img src="${environment.defaultPersonImage}" alt="Person Image" style="max-width: 100px; max-height: 100px; margin: 5px 0;"><br>
+//                         <b>Type:</b> ${personDetails.type || 'N/A'}<br>
+//                         <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
+//                         <b>Age:</b> ${personDetails.age || 'N/A'}<br>
+//                         <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>`;
+
+//                     marker.bindPopup(popupContent);
+
+//                     switch (personType) {
+//                         case 'Missing person':
+//                             this.missingPersonLayer.addLayer(marker);
+//                             break;
+//                         case 'Unidentified person':
+//                             this.unidentifiedPersonLayer.addLayer(marker);
+//                             break;
+//                         case 'Unidentified Bodies':
+//                             this.unidentifiedBodiesLayer.addLayer(marker);
+//                             break;
+//                         default:
+//                             console.warn("Unknown person type:", personType);
+//                             break;
+//                     }
+
+//                     return marker;
+
+//                 } catch (error) {
+//                     console.error("Error processing feature:", feature, error);
+//                     return null;
+//                 }
+//             });
+
+//             Promise.all(markerPromises).then(markers => {
+//                 markers.forEach(marker => {
+//                     if (marker) this.geoServerClusterGroup?.addLayer(marker);
+//                 });
+
+//                 this.geoServerClusterGroup?.addTo(this.map!);
+//             });
+
+//         })
+//         .catch(error => console.error("Error fetching GeoJSON:", error));
+
+//     // Add state and district boundary layers to the map
+//     this.stateLayerName = L.tileLayer.wms(this.geo_url, {
+//         layers: this.stateLayer,
+//         format: "image/png",
+//         transparent: true,
+//         opacity: 0.75
+//     });
+//     this.map?.addLayer(this.stateLayerName);
+
+//     this.distLayerName = L.tileLayer.wms(this.geo_url, {
+//         layers: this.distLayer,
+//         format: "image/png",
+//         transparent: true,
+//         opacity: 0.75
+//     });
+//     this.map?.addLayer(this.distLayerName);
+// }
+
+
 
 
  
@@ -640,6 +780,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   
   onStateChange(state: string): void {
     this.selectedState = state;
+    this.initOperationalLayers();
     this.selectedDistrict = 'All Districts';
     this.selectedCity = 'All Cities';
     this.selectedVillage = 'All Villages';
@@ -656,17 +797,15 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     }
   }
 
-  onDistrictChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const district = target.value;
-
+  onDistrictChange(district: string): void {
     this.selectedDistrict = district;
+    this.initOperationalLayers();
     this.selectedCity = 'All Cities';
     this.selectedVillage = 'All Villages';
     this.allcities = [];
     this.allVillages = [];
-
-    if (district !== 'All Districts') {
+    
+    if (district && district !== 'All Districts') {
         this.filterService.getCities(district).subscribe((data) => {
             console.log('Cities fetched:', data);
             this.allcities = data;
@@ -676,7 +815,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     } else {
         console.warn('No district selected or "All Districts" selected');
     }
-  }
+}
+
 
   onCityChange(city: string): void {
     this.selectedCity = city;

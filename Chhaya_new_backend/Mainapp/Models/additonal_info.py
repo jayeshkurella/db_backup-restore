@@ -75,4 +75,4 @@ class AdditionalInfo(models.Model):
 
 
     def __str__(self):
-        return f"Additional Info - {self.person.full_name}"
+        return f"Additional Info - {self.person}"

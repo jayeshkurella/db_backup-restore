@@ -153,7 +153,8 @@ CORS_ALLOW_METHODS = (
 
 CSRF_TRUSTED_ORIGINS = [
     'https://products.coderize.in/chhaya/',
-    'http://localhost:4200', 
+    'http://localhost:4200',
+    'http://localhost:8080'
 ]
 
 AUTH_USER_MODEL = 'Mainapp.User'  

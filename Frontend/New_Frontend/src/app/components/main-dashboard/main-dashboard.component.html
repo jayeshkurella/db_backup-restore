@@ -274,7 +274,7 @@
                     <select
                         class="form-select form-select-sg border-dark"
                         [(ngModel)]="selectedDistrict"
-                        (change)="onDistrictChange($event)"
+                        (change)="onDistrictChange(selectedDistrict)"
                         aria-label="District"
                     >
                         <option value="All Districts">District</option>

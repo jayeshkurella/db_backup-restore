@@ -65,14 +65,9 @@ class Address(models.Model):
         SPAIN = 'Spain', 'Spain'
         NETHERLANDS = 'Netherlands', 'Netherlands'
 
-    class PersonTypeChoices(models.TextChoices):
-        MP ='Missing person', 'Missing person'
-        UP ='Unidentified person', 'Unidentified person'
-        UB ='Unidentified body', 'Unidentified body'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     address_type = models.CharField(max_length=50, choices=AddressTypeChoices.choices, db_index=True,blank=True, null=True)
-    person_type = models.CharField(max_length=50, choices=PersonTypeChoices.choices, db_index=True,blank=True, null=True)
 
     # Address Details
     street = models.CharField(max_length=50, blank=True, null=True)

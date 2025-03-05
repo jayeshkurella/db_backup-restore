@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
@@ -15,7 +15,7 @@ from django.utils.timezone import now
 
 
 class PersonViewSet(viewsets.ViewSet):
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (MultiPartParser, FormParser,JSONParser)
 
     """
     A ViewSet for managing Person entities and their related data.
@@ -83,133 +83,187 @@ class PersonViewSet(viewsets.ViewSet):
         responses={201: openapi.Response("Person created successfully")}
     )
     # def create(self, request):
-    #     print("Incoming Data:", json.dumps(request.data, indent=4))
+    #     print("Incoming Data Format:", request.content_type)  # Debugging: Print request content type
     #     try:
     #         with transaction.atomic():
-    #             data = request.data
-    #             print("Extracted Data:", json.dumps(data, indent=4))
+    #             # Handle JSON data
+    #             if request.content_type == 'application/json':
+    #                 data = request.data  # JSON data is already parsed into request.data
+    #                 print("Extracted JSON Data:", json.dumps(data, indent=4))  # Debugging: Print JSON data
+    #
+    #             # Handle form-data
+    #             elif request.content_type.startswith('multipart/form-data'):
+    #                 # Extract JSON payload from form-data
+    #                 payload_str = request.POST.get('payload', '{}')  # Use 'payload' as the key for JSON data
+    #                 data = json.loads(payload_str)
+    #                 print("Extracted Form-Data JSON Payload:",
+    #                       json.dumps(data, indent=4))  # Debugging: Print form-data JSON payload
+    #
+    #             else:
+    #                 return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
     #
     #             # Extract related data
-    #             addresses_data = data.pop('addresses', [])
-    #             contacts_data = data.pop('contacts', [])
-    #             additional_info_data = data.pop('additional_info', [])
-    #             last_known_details_data = data.pop('last_known_details', [])
-    #             firs_data = data.pop('firs', [])
-    #             consents_data = data.pop('consent', [])
+    #             addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]
+    #             contacts_data = [contact for contact in data.get('contacts', []) if any(contact.values())]
+    #             additional_info_data = [info for info in data.get('additional_info', []) if any(info.values())]
+    #             last_known_details_data = [details for details in data.get('last_known_details', []) if
+    #                                        any(details.values())]
+    #             firs_data = [fir for fir in data.get('firs', []) if any(fir.values())]
+    #             consents_data = [consent for consent in data.get('consent', []) if any(consent.values())]
     #
-    #             print("Addresses Data:", json.dumps(addresses_data, indent=4))
-    #             print("Contacts Data:", json.dumps(contacts_data, indent=4))
-    #             print("Additional Info Data:", json.dumps(additional_info_data, indent=4))
-    #             print("Last Known Details Data:", json.dumps(last_known_details_data, indent=4))
-    #             print("FIRs Data:", json.dumps(firs_data, indent=4))
-    #             print("Consents Data:", json.dumps(consents_data, indent=4))
+    #             print("Filtered Addresses Data:",
+    #                   json.dumps(addresses_data, indent=4))  # Debugging: Print addresses data
+    #             print("Filtered Contacts Data:", json.dumps(contacts_data, indent=4))  # Debugging: Print contacts data
+    #             print("Filtered Additional Info Data:",
+    #                   json.dumps(additional_info_data, indent=4))  # Debugging: Print additional info data
+    #             print("Filtered Last Known Details Data:",
+    #                   json.dumps(last_known_details_data, indent=4))  # Debugging: Print last known details data
+    #             print("Filtered FIRs Data:", json.dumps(firs_data, indent=4))  # Debugging: Print FIRs data
+    #             print("Filtered Consents Data:", json.dumps(consents_data, indent=4))  # Debugging: Print consents data
     #
-    #             # Create Person object
-    #             person = Person.objects.create(**data)
-    #             print("Person Created:", person.id)
+    #             # Create Person object with only non-empty data
+    #             person_data = {k: v for k, v in data.items() if v not in [None, "", []] and k not in [
+    #                 'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
+    #             ]}
+    #             person = Person.objects.create(**person_data)
+    #             print("Person Created:", person.id)  # Debugging: Print person ID
     #
-    #             # ✅ Create related addresses with correct person reference
+    #             # Create related addresses
     #             addresses = []
     #             for address in addresses_data:
-    #                 print("Processing Address:", json.dumps(address, indent=4))
     #                 lat = address.get('location', {}).get('latitude')
     #                 lon = address.get('location', {}).get('longitude')
+    #                 print(f"Latitude: {lat}, Longitude: {lon}")
     #
-    #                 if lat and lon:  # Ensure values exist and are not empty
+    #                 point = None
+    #                 if lat and lon:
     #                     try:
     #                         lat = float(lat)
     #                         lon = float(lon)
-    #                         point = Point(lon, lat)  # Create a Point object
-    #                         print("Created Point:", point)
+    #                         point = Point(lon, lat)
     #                     except ValueError as e:
     #                         print("Error converting lat/lon to float:", e)
     #                         return Response({'error': 'Latitude and Longitude must be valid numbers'},
     #                                         status=status.HTTP_400_BAD_REQUEST)
-    #                 else:
-    #                     point = None  # If lat/lon are missing, keep location empty
-    #                     print("No valid lat/lon provided, setting location to None")
     #
-    #                 # ✅ Ensure person is correctly assigned
     #                 address_obj = Address(
-    #                     person=person,  # ✅ Assign the valid Person instance
-    #                     location=point,  # ✅ Store as Point or None
+    #                     person=person,
+    #                     location=point,
     #                     **{k: v for k, v in address.items() if k not in ['location', 'person']}
-    #                     # Avoid duplicate person key
     #                 )
-    #                 print("Address Object Created:", address_obj)
     #                 addresses.append(address_obj)
-    #
-    #             # ✅ Bulk create after validating all addresses
     #             Address.objects.bulk_create(addresses)
-    #             print("Addresses Bulk Created")
+    #             print("Addresses Bulk Created")  # Debugging: Print confirmation
     #
-    #             contacts = [Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'}) for contact in
-    #                         contacts_data]
-    #             print("Contacts List Created:", contacts)
+    #             # Create related contacts
+    #             contacts = [Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'})
+    #                         for contact in contacts_data]
     #             Contact.objects.bulk_create(contacts)
-    #             print("Contacts Bulk Created")
+    #             print("Contacts Bulk Created")  # Debugging: Print confirmation
     #
-    #             additional_info = [AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'}) for
-    #                                info in additional_info_data]
-    #             print("Additional Info List Created:", additional_info)
+    #             # Create additional info
+    #             additional_info = [AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'})
+    #                                for info in additional_info_data]
     #             AdditionalInfo.objects.bulk_create(additional_info)
-    #             print("Additional Info Bulk Created")
+    #             print("Additional Info Bulk Created")  # Debugging: Print confirmation
     #
-    #             # ✅ Fix LastKnownDetails creation
+    #             # Create last known details
     #             last_known_details = []
     #             for details in last_known_details_data:
-    #                 print("Processing Last Known Details:", json.dumps(details, indent=4))
-    #                 # Handle person_photo and reference_photo
-    #                 person_photo = details.pop('person_photo', None)
-    #                 reference_photo = details.pop('reference_photo', None)
-    #
-    #                 # If person_photo is an empty dict, set it to None
-    #                 if isinstance(person_photo, dict) and not person_photo:
-    #                     person_photo = None
-    #
-    #                 # If reference_photo is an empty dict, set it to None
-    #                 if isinstance(reference_photo, dict) and not reference_photo:
-    #                     reference_photo = None
+    #                 person_photo = details.pop('person_photo', None) or None
+    #                 reference_photo = details.pop('reference_photo', None) or None
     #
     #                 last_known_details.append(
     #                     LastKnownDetails(
-    #                         person=person,  # ✅ Assign the valid Person instance
-    #                         person_photo=person_photo,  # ✅ Handle person_photo
-    #                         reference_photo=reference_photo,  # ✅ Handle reference_photo
+    #                         person=person,
+    #                         person_photo=person_photo,
+    #                         reference_photo=reference_photo,
     #                         **{k: v for k, v in details.items() if k != 'person'}
     #                     )
     #                 )
-    #             print("Last Known Details List Created:", last_known_details)
     #             LastKnownDetails.objects.bulk_create(last_known_details)
-    #             print("Last Known Details Bulk Created")
+    #             print("Last Known Details Bulk Created")  # Debugging: Print confirmation
     #
-    #             firs = [FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'}) for fir in firs_data]
-    #             print("FIRs List Created:", firs)
+    #             # Function to handle document creation
+    #             def create_document(file_data, document_type):
+    #                 if file_data:  # Check if file data is provided
+    #                     return Document.objects.create(document=file_data, type=document_type)
+    #                 return None  # Return None if no file data is provided
+    #
+    #             # Create FIRs
+    #             firs = []
+    #             for fir_data in firs_data:
+    #                 # Handle the document field
+    #                 document_data = fir_data.pop('document', None)  # Extract document data
+    #                 document = create_document(document_data,
+    #                                            Document.DocumentTypeChoices.FIR)  # Create a Document instance or None
+    #
+    #                 # Create the FIR instance
+    #                 fir = FIR(
+    #                     person=person,  # Assign the Person instance
+    #                     document=document,  # Assign the Document instance or None
+    #                     **{k: v for k, v in fir_data.items() if k != 'person'}
+    #                 )
+    #                 firs.append(fir)
+    #
+    #             # Bulk create FIRs
     #             FIR.objects.bulk_create(firs)
-    #             print("FIRs Bulk Created")
+    #             print("FIRs Bulk Created")  # Debugging: Print confirmation
     #
-    #             consents = [Consent(person=person, **{k: v for k, v in consent.items() if k != 'person'}) for consent in
-    #                         consents_data]
-    #             print("Consents List Created:", consents)
+    #             # Function to handle document creation
+    #             def create_document(file_data):
+    #                 if file_data:  # Check if file data is provided
+    #                     return Document.objects.create(document=file_data)  # Use the correct field name
+    #                 return None  # Return None if no file data is provided
+    #
+    #             # Create consents
+    #             consents = []
+    #             for consent_data in consents_data:
+    #                 # Handle the document field
+    #                 document_data = consent_data.pop('document', None)  # Extract document data
+    #                 document = create_document(document_data)  # Create a Document instance or None
+    #
+    #                 # Create the Consent instance
+    #                 consent = Consent(
+    #                     person=person,  # Assign the Person instance
+    #                     document=document,  # Assign the Document instance or None
+    #                     **{k: v for k, v in consent_data.items() if k != 'person'}
+    #                 )
+    #                 consents.append(consent)
+    #
+    #             # Bulk create consents
     #             Consent.objects.bulk_create(consents)
-    #             print("Consents Bulk Created")
+    #             print("Consents Bulk Created")  # Debugging: Print confirmation
     #
-    #             return Response({'message': 'Person created successfully', 'person_id': str(person.id)},
-    #                             status=status.HTTP_201_CREATED)
+    #             serializer = PersonSerializer(person)
+    #             person_data = serializer.data
+    #
+    #             return Response(
+    #                 {'message': 'Person created successfully', 'person_id': str(person.id), 'person_data': person_data},
+    #                 status=status.HTTP_201_CREATED)
     #
     #     except Exception as e:
-    #         print("Exception Occurred:", str(e))
+    #         print("Exception Occurred:", str(e))  # Debugging: Print exception
     #         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    # 🔹 4. UPDATE an existing person (PUT)
+    #
     def create(self, request):
-        print("Incoming Data:", json.dumps(request.POST, indent=4))
+        print("Incoming Data Format:", request.content_type)  # Debugging: Print request content type
         try:
             with transaction.atomic():
-                # Extract the JSON payload from request.POST
-                payload_str = request.POST.get('payload', '{}')
-                data = json.loads(payload_str)
-                print("Extracted Data:", json.dumps(data, indent=4))
+                # Handle JSON data
+                if request.content_type == 'application/json':
+                    data = request.data  # JSON data is already parsed into request.data
+                    print("Extracted JSON Data:", json.dumps(data, indent=4))  # Debugging: Print JSON data
+
+                # Handle form-data
+                elif request.content_type.startswith('multipart/form-data'):
+                    # Extract JSON payload from form-data
+                    payload_str = request.POST.get('payload', '{}')  # Use 'payload' as the key for JSON data
+                    data = json.loads(payload_str)
+                    print("Extracted Form-Data JSON Payload:", json.dumps(data, indent=4))
+
+                else:
+                    return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
                 # Extract related data
                 addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]
@@ -221,24 +275,42 @@ class PersonViewSet(viewsets.ViewSet):
                 consents_data = [consent for consent in data.get('consent', []) if any(consent.values())]
 
                 print("Filtered Addresses Data:", json.dumps(addresses_data, indent=4))
-                print("Filtered Contacts Data:", json.dumps(contacts_data, indent=4))
-                print("Filtered Additional Info Data:", json.dumps(additional_info_data, indent=4))
-                print("Filtered Last Known Details Data:", json.dumps(last_known_details_data, indent=4))
-                print("Filtered FIRs Data:", json.dumps(firs_data, indent=4))
-                print("Filtered Consents Data:", json.dumps(consents_data, indent=4))
 
-                # Create Person object with only non-empty data
+                # Create Person object with the first address data
                 person_data = {k: v for k, v in data.items() if v not in [None, "", []] and k not in [
-                    'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent']}
+                    'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
+                ]}
+
+                # Extract the first address
+                first_address = addresses_data.pop(0) if addresses_data else {}
+                person_data.update({
+                    'street': first_address.get('street', ''),
+                    'appartment_no': first_address.get('appartment_no', ''),
+                    'appartment_name': first_address.get('appartment_name', ''),
+                    'village': first_address.get('village', ''),
+                    'city': first_address.get('city', ''),
+                    'district': first_address.get('district', ''),
+                    'state': first_address.get('state', ''),
+                    'pincode': first_address.get('pincode', ''),
+                    'country': first_address.get('country', 'India'),
+                    'landmark_details': first_address.get('landmark_details', ''),
+                    'location': Point(
+                        float(first_address['location']['longitude']),
+                        float(first_address['location']['latitude'])
+                    ) if first_address.get('location') else None,
+                    'is_active': first_address.get('is_active', True),
+                    'country_code': first_address.get('country_code', ''),
+                })
 
                 person = Person.objects.create(**person_data)
                 print("Person Created:", person.id)
 
-                # Create related addresses
+                # Create remaining addresses
                 addresses = []
                 for address in addresses_data:
                     lat = address.get('location', {}).get('latitude')
                     lon = address.get('location', {}).get('longitude')
+                    print(f"Latitude: {lat}, Longitude: {lon}")
 
                     point = None
                     if lat and lon:
@@ -261,91 +333,37 @@ class PersonViewSet(viewsets.ViewSet):
                 print("Addresses Bulk Created")
 
                 # Create related contacts
-                contacts = [Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'})
-                            for contact in contacts_data]
+                contacts = [Contact(person=person, **contact) for contact in contacts_data]
                 Contact.objects.bulk_create(contacts)
-                print("Contacts Bulk Created")
 
                 # Create additional info
-                additional_info = [AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'})
-                                   for info in additional_info_data]
+                additional_info = [AdditionalInfo(person=person, **info) for info in additional_info_data]
                 AdditionalInfo.objects.bulk_create(additional_info)
-                print("Additional Info Bulk Created")
 
                 # Create last known details
-                last_known_details = []
-                for details in last_known_details_data:
-                    person_photo = details.pop('person_photo', None) or None
-                    reference_photo = details.pop('reference_photo', None) or None
-
-                    last_known_details.append(
-                        LastKnownDetails(
-                            person=person,
-                            person_photo=person_photo,
-                            reference_photo=reference_photo,
-                            **{k: v for k, v in details.items() if k != 'person'}
-                        )
-                    )
+                last_known_details = [LastKnownDetails(person=person, **details) for details in last_known_details_data]
                 LastKnownDetails.objects.bulk_create(last_known_details)
-                print("Last Known Details Bulk Created")
-
-                # Function to handle document creation
-                def create_document(file_data, document_type):
-                    if file_data:  # Check if file data is provided
-                        return Document.objects.create(document=file_data, type=document_type)
-                    return None  # Return None if no file data is provided
 
                 # Create FIRs
-                firs = []
-                for fir_data in firs_data:
-                    # Handle the document field
-                    document_data = fir_data.pop('document', None)  # Extract document data
-                    document = create_document(document_data,
-                                               Document.DocumentTypeChoices.FIR)  # Create a Document instance or None
-
-                    # Create the FIR instance
-                    fir = FIR(
-                        person=person,  # Assign the Person instance
-                        document=document,  # Assign the Document instance or None
-                        **{k: v for k, v in fir_data.items() if k != 'person'}
-                    )
-                    firs.append(fir)
-
-                # Bulk create FIRs
+                firs = [FIR(person=person, **fir) for fir in firs_data]
                 FIR.objects.bulk_create(firs)
-                print("FIRs Bulk Created")
-
-                # Function to handle document creation
-                def create_document(file_data):
-                    if file_data:  # Check if file data is provided
-                        return Document.objects.create(document=file_data)  # Use the correct field name
-                    return None  # Return None if no file data is provided
 
                 # Create consents
-                consents = []
-                for consent_data in consents_data:
-                    # Handle the document field
-                    document_data = consent_data.pop('document', None)  # Extract document data
-                    document = create_document(document_data)  # Create a Document instance or None
-
-                    # Create the Consent instance
-                    consent = Consent(
-                        person=person,  # Assign the Person instance
-                        document=document,  # Assign the Document instance or None
-                        **{k: v for k, v in consent_data.items() if k != 'person'}
-                    )
-                    consents.append(consent)
-
-                # Bulk create consents
+                consents = [Consent(person=person, **consent) for consent in consents_data]
                 Consent.objects.bulk_create(consents)
-                print("Consents Bulk Created")
 
-                return Response({'message': 'Person created successfully', 'person_id': str(person.id)},
-                                status=status.HTTP_201_CREATED)
+                # Prepare the final response data
+                serializer = PersonSerializer(person)
+                person_data = serializer.data
+                return Response(
+                    {'message': 'Person created successfully', 'person_id': str(person.id), 'data': person_data},
+                    status=status.HTTP_201_CREATED
+                )
 
         except Exception as e:
             print("Exception Occurred:", str(e))
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
     @swagger_auto_schema(
         operation_description="Update an existing person's details",
         request_body=PersonSerializer,

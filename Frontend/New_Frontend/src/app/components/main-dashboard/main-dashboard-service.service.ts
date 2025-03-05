@@ -18,6 +18,7 @@ export class MainDashboardServiceService {
 
   // Fetch districts for a selected state
   getDistricts(state: string): Observable<string[]> {
+    console.log(state)
     return this.http.get<string[]>(`${this.environment}filters_address/districts/?state=${state}`);
   }
 
