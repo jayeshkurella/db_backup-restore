@@ -127,10 +127,14 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            // Remove the virtual environment to clean up after the build
-            sh """
-                rm -rf ${VENV_DIR}
-            """
+            script {
+                // Ensure that VENV_DIR is accessible in the post block
+                def VENV_DIR = '.venv'
+                // Remove the virtual environment to clean up after the build
+                sh """
+                    rm -rf ${VENV_DIR}
+                """
+            }
         }
 
         success {
