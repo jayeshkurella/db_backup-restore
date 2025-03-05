@@ -1,97 +1,16 @@
 pipeline {
     agent any
-
-    environment {
-        PYTHON_VERSION = 'python3.10'
-        VENV_DIR = '.venv'
-        REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt'  
-        SUDO_PASSWORD = credentials('your_sudo_password_id')  
-    }
-
     stages {
-        stage('Declarative: Checkout SCM') {
+        stage('Checkout Code') {
             steps {
-                checkout scm  // Checkout the source code from the repository
+                git 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
             }
         }
-
-        stage('Set up Python Environment') {
+        stage('Setup and Deploy') {
             steps {
-                script {
-                    
-                    sh """
-                        ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                    """
-                }
+                sh 'chmod +x deploy.sh'
+                sh './deploy.sh'
             }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    
-                    sh """
-                        echo ${SUDO_PASSWORD} | sudo -S add-apt-repository ppa:ubuntugis/ppa -y
-                        echo ${SUDO_PASSWORD} | sudo -S apt-get update
-                        echo ${SUDO_PASSWORD} | sudo -S apt-get install -y libgdal-dev
-                    """
-                    
-                    
-                    sh """
-                        bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
-                    """
-                    
-                    // Install a specific version of GDAL via pip
-                    sh """
-                        bash -c 'source ${VENV_DIR}/bin/activate && pip install gdal==3.8.4'
-                    """
-                }
-            }
-        }
-
-        stage('Set up Database') {
-            steps {
-                script {
-                    // Replace this with your actual database setup steps
-                    echo 'Setting up Database...'
-                }
-            }
-        }
-
-        stage('Run Migrations') {
-            steps {
-                script {
-                    // Replace with actual migration commands
-                    echo 'Running Migrations...'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                script {
-                    // Replace with your actual deployment steps
-                    echo 'Deploying...'
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Cleaning up...'
-            // Remove the virtual environment to clean up after the build
-            sh """
-                rm -rf ${VENV_DIR}
-            """
-        }
-
-        success {
-            echo 'Build or Deployment succeeded!'
-        }
-
-        failure {
-            echo 'Build or Deployment Failed!'
         }
     }
 }
