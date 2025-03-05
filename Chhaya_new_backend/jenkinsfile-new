@@ -1,18 +1,17 @@
 pipeline {
-    agent any  // This specifies that the pipeline can run on any available agent
+    agent any
 
     environment {
         PYTHON_VERSION = 'python3.10'
         VENV_DIR = '.venv'
         REQUIREMENTS_FILE = 'Chhaya_new_backend/requirement.txt'  // Path to requirements.txt
-        SUDO_PASSWORD = credentials('your-sudo-password-id')  // Jenkins credentials for sudo password
-        NGINX_CONFIG_PATH = '/etc/nginx/nginx.conf'  // Path to the main NGINX config file
+        SUDO_PASSWORD = credentials('your_sudo_password_id')  // Use Jenkins credentials plugin for security
     }
 
     stages {
         stage('Declarative: Checkout SCM') {
             steps {
-                checkout scm
+                checkout scm  // Checkout the source code from the repository
             }
         }
 
@@ -21,7 +20,7 @@ pipeline {
                 script {
                     // Create a Python virtual environment
                     sh """
-                        python3.10 -m venv ${VENV_DIR}
+                        ${PYTHON_VERSION} -m venv ${VENV_DIR}
                     """
                 }
             }
@@ -30,12 +29,11 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Add the ubuntugis PPA repository to get the newer GDAL version
-                    // Using sudo -S to provide the password from the environment
+                    // Use sudo and install GDAL with the required dependencies
                     sh """
                         echo ${SUDO_PASSWORD} | sudo -S add-apt-repository ppa:ubuntugis/ppa -y
-                        echo ${SUDO_PASSWORD} | sudo -S apt update
-                        echo ${SUDO_PASSWORD} | sudo -S apt-get install -y libgdal-dev nginx
+                        echo ${SUDO_PASSWORD} | sudo -S apt-get update
+                        echo ${SUDO_PASSWORD} | sudo -S apt-get install -y libgdal-dev
                     """
                     
                     // Install Python dependencies from requirements.txt
@@ -43,7 +41,7 @@ pipeline {
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}'
                     """
                     
-                    // Install GDAL via pip (specific version 3.8.4)
+                    // Install a specific version of GDAL via pip
                     sh """
                         bash -c 'source ${VENV_DIR}/bin/activate && pip install gdal==3.8.4'
                     """
@@ -51,52 +49,20 @@ pipeline {
             }
         }
 
-        stage('Run Migrations') {
+        stage('Set up Database') {
             steps {
                 script {
-                    // Example: Running database migrations
-                    sh """
-                        bash -c 'source ${VENV_DIR}/bin/activate && python manage.py migrate'
-                    """
+                    // Replace this with your actual database setup steps
+                    echo 'Setting up Database...'
                 }
             }
         }
 
-        stage('Configure NGINX') {
+        stage('Run Migrations') {
             steps {
                 script {
-                    // Step 1: Back up the existing NGINX config file before making changes
-                    sh """
-                        sudo cp ${NGINX_CONFIG_PATH} ${NGINX_CONFIG_PATH}.bak
-                    """
-
-                    // Step 2: Modify the NGINX config file directly (e.g., adding a reverse proxy for your app)
-                    // You can either use sed or echo commands to modify the file, or replace it entirely with your custom configuration
-
-                    // Example: Adding a reverse proxy block for your application to the nginx.conf
-                    sh """
-                        echo 'server {' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '    listen 80;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '    server_name your-domain.com;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '    location / {' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '        proxy_pass http://127.0.0.1:8000;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '        proxy_set_header Host $host;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '        proxy_set_header X-Real-IP $remote_addr;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '        proxy_set_header X-Forwarded-Proto $scheme;' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '    }' | sudo tee -a ${NGINX_CONFIG_PATH}
-                        echo '}' | sudo tee -a ${NGINX_CONFIG_PATH}
-                    """
-
-                    // Step 3: Test the NGINX configuration to ensure it’s correct
-                    sh """
-                        sudo nginx -t
-                    """
-
-                    // Step 4: Reload NGINX to apply the new configuration
-                    sh """
-                        sudo systemctl reload nginx
-                    """
+                    // Replace with actual migration commands
+                    echo 'Running Migrations...'
                 }
             }
         }
@@ -104,10 +70,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the application (e.g., copy files to the server, restart the application)
-                    sh """
-                        bash deploy.sh  # Assuming you have a deploy script
-                    """
+                    // Replace with your actual deployment steps
+                    echo 'Deploying...'
                 }
             }
         }
@@ -116,17 +80,10 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            // Wrap cleanup steps inside a node block
-            node('any') {  // Ensuring the node block has a label here
-                script {
-                    // Ensure that VENV_DIR is accessible in the post block
-                    def VENV_DIR = '.venv'
-                    // Remove the virtual environment to clean up after the build
-                    sh """
-                        rm -rf ${VENV_DIR}
-                    """
-                }
-            }
+            // Remove the virtual environment to clean up after the build
+            sh """
+                rm -rf ${VENV_DIR}
+            """
         }
 
         success {
