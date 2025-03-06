@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('Checkout') {
             steps {
-                git url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git', credentialsId: 'gitlab-jenkins'
+                git url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git', credentialsId: 'gitlab-jenkins', git branch: 'sanketlodhe'
             }
         }
         stage ('Setup Virtual Environment, Install Dependencies') {
