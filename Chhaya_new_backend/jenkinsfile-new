@@ -9,32 +9,32 @@ pipeline {
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
-                chmod +x scripts/setup_python_env.sh
-                ./scripts/setup_python_env.sh
+                chmod +x Chhaya_new_backend/scripts/setup_python_env.sh
+                ./Chhaya_new_backend/scripts/setup_python_env.sh
                 ''' 
             }
         }
         stage ('db_config') {
             steps {
                 sh '''
-                chmod +x scripts/db_config.sh
-                ./scripts/db_config.sh
+                chmod +x Chhaya_new_backend/scripts/db_config.sh
+                ./Chhaya_new_backend/scripts/db_config.sh
                 '''
             }
         }
         stage ('migration') {
             steps {
                 sh '''
-                chmod +x scripts/migration.sh
-                ./scripts/migration.sh
+                chmod +x Chhaya_new_backend/scripts/migration.sh
+                ./Chhaya_new_backend/scripts/migration.sh
                 ''' 
             }
         }
         stage ('runserver') {
             steps {
                 sh '''
-                chmod +x scripts/runserver.sh
-                ./scripts/runserver.sh
+                chmod +x Chhaya_new_backend/scripts/runserver.sh
+                ./Chhaya_new_backend/scripts/runserver.sh
                 '''
             }
         }
