@@ -333,7 +333,10 @@ class PersonViewSet(viewsets.ViewSet):
                 print("Addresses Bulk Created")
 
                 # Create related contacts
-                contacts = [Contact(person=person, **contact) for contact in contacts_data]
+                contacts = [
+                    Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'})
+                    for contact in contacts_data
+                ]
                 Contact.objects.bulk_create(contacts)
 
                 # Create additional info
@@ -348,8 +351,11 @@ class PersonViewSet(viewsets.ViewSet):
                 firs = [FIR(person=person, **fir) for fir in firs_data]
                 FIR.objects.bulk_create(firs)
 
-                # Create consents
-                consents = [Consent(person=person, **consent) for consent in consents_data]
+                # Create consents safely
+                consents = [
+                    Consent(person=person, **{k: v for k, v in consent.items() if k != 'person'})
+                    for consent in consents_data
+                ]
                 Consent.objects.bulk_create(consents)
 
                 # Prepare the final response data

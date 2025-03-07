@@ -2,22 +2,21 @@ from django.contrib import admin
 from Mainapp.models.person import Person
 from leaflet.admin import LeafletGeoAdmin
 
-
 @admin.register(Person)
 class PersonAdmin(LeafletGeoAdmin):
     list_display = (
-        "sr_no", "full_name", "type", "gender", "age", "birth_date",
-        "height", "weight", "blood_group", "complexion",
+        "sr_no", "full_name", "type", "gender", "age", "birth_date","birthtime",
+        "height", "weight", "blood_group", "complexion","photo_photo",
         "eye_color", "hair_type", "hair_color",
         'street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country',
-        "hospital", "_is_confirmed", "_is_deleted", "created_at"
+        "hospital", "_is_confirmed", "_is_deleted", "case_status", "created_at"
     )
 
     list_filter = (
         "type", "gender", "blood_group", "complexion",
         "eye_color", "hair_type", "hair_color", "Body_Condition",
         "_is_confirmed", "_is_deleted", "hospital",
-        "condition", "state", "country", "address_type"
+        "condition", "state", "country", "address_type", "case_status"
     )
 
     search_fields = (
@@ -26,17 +25,14 @@ class PersonAdmin(LeafletGeoAdmin):
     )
 
     ordering = ("-created_at",)
-
     readonly_fields = ("created_at", "updated_at")
-
-    list_per_page = 20
 
     fieldsets = (
         ("Basic Information", {
-            "fields": ("full_name", "type", "gender", "birth_date", "age", "birthplace")
+            "fields": ("full_name", "type", "gender", "birth_date", "age", "birthplace","birthtime")
         }),
         ("Physical Characteristics", {
-            "fields": ("height", "weight", "complexion", "eye_color", "hair_color", "hair_type", "blood_group")
+            "fields": ("height", "weight", "complexion", "eye_color", "hair_color", "hair_type", "blood_group","photo_photo")
         }),
         ("Medical & Identification", {
             "fields": ("condition", "Body_Condition", "birth_mark", "distinctive_mark")
@@ -48,6 +44,9 @@ class PersonAdmin(LeafletGeoAdmin):
                 "country", "landmark_details", "location"
             )
         }),
+        ("Case Management", {
+            "fields": ("case_status",)
+        }),
         ("Additional Details", {
             "fields": ("hospital", "document_ids")
         }),
@@ -57,26 +56,21 @@ class PersonAdmin(LeafletGeoAdmin):
     )
 
     def sr_no(self, obj):
-        """ Generate serial number dynamically """
+        """Generate serial number dynamically"""
         return list(self.get_queryset(None)).index(obj) + 1
 
     sr_no.short_description = "Sr. No."
 
-    # Enable delete permission in admin
     def has_delete_permission(self, request, obj=None):
         return True
 
-    # Enable adding new records if needed
     def has_add_permission(self, request):
         return True
 
-    # Soft delete functionality
     def delete_model(self, request, obj):
-        """ Perform soft delete by setting _is_deleted instead of actual deletion """
         obj._is_deleted = True
         obj.save()
 
-    # Bulk soft delete action
     @admin.action(description='Soft delete selected persons')
     def soft_delete_selected(self, request, queryset):
         queryset.update(_is_deleted=True)

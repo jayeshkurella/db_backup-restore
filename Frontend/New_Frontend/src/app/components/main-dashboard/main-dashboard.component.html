@@ -667,89 +667,94 @@
               <!-- Missing Persons Tab -->
               <div class="tab-pane fade show active" id="missing" role="tabpanel" aria-labelledby="missing-tab">
                 <div class="tableff-responsive">
-                  <table class="table tableff table-hover align-middle">
-                    <thead class="table-light">
-                      <tr>
-                        <th>Sr No.</th>
-                        <th>Photo</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>City</th>
-                        <th>District</th>
-                        <th>State</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let person of filteredMissingPersonssss; let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td>
-                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
-                               alt="Person Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
-                        </td>
-                        <td>{{ person.full_name || 'Unknown' }}</td>
-                        <td>{{ person.age || 'Not specified' }}</td>
-                        <td>
-                          <img *ngIf="person.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40">
-                          <img *ngIf="person.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
-                          <img *ngIf="person.gender !== 'Male' && person.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
-                        </td>
-                        
-                        <td>{{ person.address.city || 'Not specified' }}</td>
-                        <td>{{ person.address.district || 'Not specified' }}</td>
-                        <td>{{ person.address.state || 'Not specified' }}</td>
-                        <td>
-                          <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                    <table class="table tableff table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Photo</th>
+                                <th>Full Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>City</th>
+                                <th>District</th>
+                                <th>State</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let person of filteredMissingPersonssss; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>
+                                  <img [src]="getImageUrl(person.properties.photo_photo)"
+                                       alt="Person Photo" 
+                                       class="img-fluid rounded" 
+                                       style="height: 50px; width: 50px; object-fit: cover;" />
+                              </td>
+                              
+                                <td>{{ person.properties.full_name || 'Unknown' }}</td>
+                                <td>{{ person.properties.age || 'Not specified' }}</td>
+                                <td>
+                                  
+                                    <img *ngIf="person.properties.gender === 'male'" src="assets/images/male.png" alt="Male" width="40" height="40">
+                                    <img *ngIf="person.properties.gender === 'female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                                    <img *ngIf="person.properties.gender !== 'male' && person.properties.gender !== 'female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                                </td>
+                                <td>{{ person.properties.city || 'Not specified' }}</td>
+                                <td>{{ person.properties.district || 'Not specified' }}</td>
+                                <td>{{ person.properties.state || 'Not specified' }}</td>
+                                <td>
+                                    <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-              </div>
+            </div>
             
               <!-- Unidentified Persons Tab -->
               <div class="tab-pane fade" id="unidentified" role="tabpanel" aria-labelledby="unidentified-tab">
                 <div class="tableff-responsive">
-                  <table class="table tableff table-hover align-middle">
-                    <thead class="table-light">
-                      <tr>
-                        <th>Sr No.</th>
-                        <th>Photo</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>City</th>
-                        <th>District</th>
-                        <th>State</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let person of filteredUnidentifiedPersonssss; let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td>
-                          <img [src]="person.photo_upload ? environment.apiUrl + person.photo_upload : 'assets/images/Nophoto.png'"
-                               alt="Person Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
-                        </td>
-                        <td>{{ person.full_name || 'Unknown' }}</td>
-                        <td>{{ person.estimated_age || 'Not specified' }}</td>
-                        <td>
-                          <img *ngIf="person.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40">
-                          <img *ngIf="person.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
-                          <img *ngIf="person.gender !== 'Male' && person.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
-                        </td>
-                        <td>{{ person.address.city || 'Not specified' }}</td>
-                        <td>{{ person.address.district || 'Not specified' }}</td>
-                        <td>{{ person.address.state || 'Not specified' }}</td>
-                        <td>
-                          <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                    <table class="table tableff table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Photo</th>
+                                <th>Full Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>City</th>
+                                <th>District</th>
+                                <th>State</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let person of filteredUnidentifiedPersonssss; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>
+                                  <img [src]="getImageUrl(person.properties.photo_photo)"
+                                       alt="Person Photo" 
+                                       class="img-fluid rounded" 
+                                       style="height: 50px; width: 50px; object-fit: cover;" />
+                              </td>
+                                <td>{{ person.properties.full_name || 'Unknown' }}</td>
+                                <td>{{ person.properties.age || 'Not specified' }}</td>
+                                <td>
+                                    <img *ngIf="person.properties.gender === 'male'" src="assets/images/male.png" alt="Male" width="40" height="40">
+                                    <img *ngIf="person.properties.gender === 'female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                                    <img *ngIf="person.properties.gender !== 'male' && person.properties.gender !== 'female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                                </td>
+                                <td>{{ person.properties.city || 'Not specified' }}</td>
+                                <td>{{ person.properties.district || 'Not specified' }}</td>
+                                <td>{{ person.properties.state || 'Not specified' }}</td>
+                                <td>
+                                    <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(person)">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-              </div>
+            </div>
             
               <!-- Unidentified Bodies Tab -->
               <div class="tab-pane fade" id="bodies" role="tabpanel" aria-labelledby="bodies-tab">
@@ -772,19 +777,21 @@
                       <tr *ngFor="let body of filteredunidentifiedboidessss; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>
-                          <img [src]="body.body_photo_upload ? environment.apiUrl + body.body_photo_upload : 'assets/images/Nophoto.png'"
-                               alt="Body Photo" class="img-fluid rounded" style="height: 50px; width: 50px; object-fit: cover;" />
-                        </td>
-                        <td>{{ body.full_name || 'Unknown' }}</td>
-                        <td>{{ body.estimated_age || 'Not specified' }}</td>
+                          <img [src]="getImageUrl(body.properties.photo_photo)"
+                               alt="Person Photo" 
+                               class="img-fluid rounded" 
+                               style="height: 50px; width: 50px; object-fit: cover;" />
+                      </td>
+                        <td>{{ body.properties.full_name || 'Unknown' }}</td>
+                        <td>{{ body.properties.age || 'Not specified' }}</td>
                         <td>
-                          <img *ngIf="body.gender === 'Male'" src="assets/images/male.png" alt="Male" width="40" height="40" >
-                          <img *ngIf="body.gender === 'Female'" src="assets/images/female.png" alt="Female" width="40" height="40">
-                          <img *ngIf="body.gender !== 'Male' && body.gender !== 'Female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                          <img *ngIf="body.properties.gender === 'male'" src="assets/images/male.png" alt="Male" width="40" height="40" >
+                          <img *ngIf="body.properties.gender === 'female'" src="assets/images/female.png" alt="Female" width="40" height="40">
+                          <img *ngIf="body.properties.gender !== 'male' && body.gender !== 'female'" src="assets/images/other.png" alt="Other" width="24" height="24">
                         </td>
-                        <td>{{ body.address.city|| 'Not specified' }}</td>
-                        <td>{{ body.address.district || 'Not specified' }}</td>
-                        <td>{{ body.address.state || 'Not specified' }}</td>
+                        <td>{{ body.properties.city|| 'Not specified' }}</td>
+                        <td>{{ body.properties.district || 'Not specified' }}</td>
+                        <td>{{ body.properties.state || 'Not specified' }}</td>
                         <td>
                           <button class="btn btn-primary data-view-btn btn-sm" (click)="viewDetails(body)">View</button>
                         </td>
@@ -830,44 +837,35 @@
       </div>
       <div class="modal-body">
         <!-- Person Details -->
-        <div *ngIf="selectedPerson" class="container">
+        <div *ngIf="selectedPersonDetails" class="container">
           <!-- Person Overview Section -->
           <div class="row mb-4">
             <div class="col-md-5 text-center">
-              <img
-                [src]="
-                  selectedPerson.photo_upload
-                    ? environment.apiUrl + selectedPerson.photo_upload
-                    : selectedPerson.body_photo_upload
-                    ? environment.apiUrl + selectedPerson.body_photo_upload
-                    : 'assets/images/Nophoto.png'
-                "
-                alt="No Photo uploaded"
+              <td>
+                <img
+                [src]="getImageUrl(selectedPersonDetails.photo_photo)"
+                alt="Person Photo"
                 class="img-fluid rounded"
+                style="height: 200px; width: 500px; object-fit: cover;"
               />
+            </td>
+
   
             </div>
             <div class="col-md-7">
-              <h4>{{ selectedPerson.full_name }}</h4>
+              <h4>{{  selectedPersonDetails.full_name }}</h4>
               <p>
                 <strong>Age:</strong>
-                {{ selectedPerson.age || selectedPerson.estimated_age }}
+                {{ selectedPersonDetails.age  }}
               </p>
-              <p><strong>Gender:</strong> {{ selectedPerson.gender }}</p>
+              <p><strong>Gender:</strong> {{selectedPersonDetails.gender }}</p>
               <p>
-                <strong>Blood Group:</strong> {{ selectedPerson.blood_group }}
-              </p>
-              <p>
-                <strong>Condition:</strong> {{ selectedPerson.condition }}
+                <strong>Blood Group:</strong> {{ selectedPersonDetails.blood_group }}
               </p>
               <p>
-                <strong>Last Seen Location:</strong>
-                {{
-                  selectedPerson.last_seen_location ||
-                    selectedPerson.body_seen_details ||
-                    selectedPerson.last_seen_details
-                }}
+                <strong>Condition:</strong> {{ selectedPersonDetails.condition }}
               </p>
+              
             </div>
           </div>
   
@@ -875,53 +873,53 @@
           <h5 class="mb-3 text-primary">Appearance Information</h5>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Height:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.height || "N/A" }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.height || "N/A" }}</div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>Weight:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.weight || "N/A" }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.weight || "N/A" }}</div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>complexion:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.complexion || "N/A" }}
+              {{ selectedPersonDetails.complexion || "N/A" }}
             </div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>Hair color:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.hair_color || "N/A" }}
+              {{ selectedPersonDetails.hair_color || "N/A" }}
             </div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>Hair type:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.hair_type || "N/A" }}
+              {{ selectedPersonDetails.hair_type || "N/A" }}
             </div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>Eye color:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.eye_color || "N/A" }}
+              {{ selectedPersonDetails.eye_color || "N/A" }}
             </div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>Birth Mark:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.birth_mark || "N/A" }}
+              {{ selectedPersonDetails.birth_mark || "N/A" }}
             </div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>Distinctive mark:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.distinctive_mark || "N/A" }}
+              {{ selectedPersonDetails.distinctive_mark || "N/A" }}
             </div>
           </div>
   
@@ -930,102 +928,108 @@
           <div class="row mb-3">
             <div class="col-md-3"><strong>Phone Number:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.contact.phone_number }}
+              {{ selectedPersonDetails.contacts[0].phone_no }}
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Email:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.contact.email }}</div>
+            <div class="col-md-9">{{  selectedPersonDetails.contacts[0].email_id }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>company:</strong></div>
+            <div class="col-md-9">{{  selectedPersonDetails.contacts[0].company_name }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Social Media:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.contact.social_media_handles }}
+              {{  selectedPersonDetails.contacts[0].social_media_url }}
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Contact Type:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.contact.type }}({{
-                selectedPerson.contact.subtype
-              }})
+              {{  selectedPersonDetails.contacts[0].type }}
             </div>
           </div>
   
           <!-- Address Information Section -->
           <h5 class="mb-3 text-primary">Address Information</h5>
           <div class="row mb-3">
+            <div class="col-md-3"><strong>Address Type:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.properties.address_type }}
+            </div>
+          </div>
+          <div class="row mb-3">
             <div class="col-md-3"><strong>Street:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.street }}</div>
+            <div class="col-md-9">{{ selectedPerson.properties.street }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Apartment:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.address.apartment_number }}
+              {{ selectedPerson.properties.appartment_no }} 
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Apartment Name:</strong></div>
+            <div class="col-md-9">
+              {{ selectedPerson.properties.appartment_name }} 
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>City:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.city }}</div>
+            <div class="col-md-9">{{ selectedPerson.properties.city }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Village:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.village }}</div>
+            <div class="col-md-9">{{ selectedPerson.properties.village }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>landmark:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.landmark }}</div>
+            <div class="col-md-9">{{ selectedPerson.properties.landmark_details }}</div>
           </div>
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <div class="col-md-3"><strong>location:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.location }}</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-3"><strong>location:</strong></div>
-            <div class="col-md-9">
-              {{ selectedPerson.address.address_type }}
-            </div>
-          </div>
+            <div class="col-md-9">{{ selectedPerson.properties.location }}</div>
+          </div> -->
+          
           <div class="row mb-3">
             <div class="col-md-3"><strong>State:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.state }}</div>
+            <div class="col-md-9">{{ selectedPerson.properties.state }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Country:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.country }}</div>
+            <div class="col-md-9">{{ selectedPerson.properties.country }}</div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-3"><strong>Postal Code:</strong></div>
+            <div class="col-md-3"><strong>Country Code:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.address.postal_code }}
+              {{ selectedPerson.properties.country_code }}
             </div>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-3"><strong>Address subtype:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.address.subtype }}</div>
-          </div>
+          
   
           <!-- Educational and Occupation Information -->
           <h5 class="mb-3 text-primary">Educational & Occupation Details</h5>
           <div class="row mb-3">
             <div class="col-md-3"><strong>caste :</strong></div>
-            <div class="col-md-9">{{ selectedPerson.caste || "N/A" }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.additional_info[0].caste || "N/A" }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>sub caste:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.sub_caste || "N/A" }}
+              {{ selectedPersonDetails.additional_info[0].subcaste || "N/A" }}
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>religion:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.religion || "N/A" }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.additional_info[0].religion || "N/A" }}</div>
           </div>
   
           <div class="row mb-3">
             <div class="col-md-3"><strong>mother tongue:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.mother_tongue || "N/A" }}
+              {{ selectedPersonDetails.additional_info[0].mother_tongue || "N/A" }}
             </div>
           </div>
           <div class="row mb-3">
@@ -1033,18 +1037,18 @@
               <strong>other known Languages:</strong>
             </div>
             <div class="col-md-9">
-              {{ selectedPerson.other_known_languages || "N/A" }}
+              {{ selectedPersonDetails.additional_info[0].other_known_languages || "N/A" }}
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Educational Details:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.educational_details }}
+              {{ selectedPersonDetails.additional_info[0].education_details }}
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Occupation:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.occupation }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.additional_info[0].occupation_details }}</div>
           </div>
   
           <!-- Identification and Missing Details -->
@@ -1054,7 +1058,7 @@
           <div class="row mb-3">
             <div class="col-md-3"><strong>Identification Type:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.identification_details }}
+              {{ selectedPersonDetails.additional_info[0].id_type }}
             </div>
           </div>
           <div class="row mb-3">
@@ -1062,7 +1066,7 @@
               <strong>Identification Card Number:</strong>
             </div>
             <div class="col-md-9">
-              {{ selectedPerson.identification_card_no }}
+              {{ selectedPersonDetails.additional_info[0].id_no }}
             </div>
           </div>
           <div class="row mb-3">
@@ -1071,24 +1075,28 @@
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Missing Time:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.missing_time }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.last_known_details[0].missing_time }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>missing_location:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.missing_location }}</div>
+            <div class="col-md-9">{{ selectedPersonDetails.last_known_details[0].missing_date }}</div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-3"><strong>Location Details:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.location_details }}</div>
+            <div class="col-md-3"><strong>Last Seen Location:</strong></div>
+            <div class="col-md-9">{{ selectedPersonDetails.last_known_details[0].last_seen_location }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>Last Seen Location Details:</strong></div>
+            <div class="col-md-9">{{ selectedPersonDetails.last_known_details[0].missing_location_details }}</div>
           </div>
           <!-- Investigating Officer & Reporting Person Details -->
-          <h5 class="mb-3 text-primary">Investigation Details</h5>
+          <!-- <h5 class="mb-3 text-primary">Investigation Details</h5>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Police station :</strong></div>
             <div class="col-md-9">
               {{ selectedPerson.police_station_name_and_address }}
             </div>
-          </div>
+          </div> -->
           <!-- <div class="row mb-3">
             <div class="col-md-3">
               <strong>Police station address:</strong>
@@ -1097,7 +1105,7 @@
               {{ selectedPerson.police_station_name_and_address.address }}
             </div>
           </div> -->
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <div class="col-md-3">
               <strong>Investigating Officer:</strong>
             </div>
@@ -1106,21 +1114,13 @@
                 selectedPerson.investigating_officer_contact_number
               }})
             </div>
-          </div>
-          <div class="row mb-3">
+          </div> -->
+          <!-- <div class="row mb-3">
             <div class="col-md-3"><strong>Reporting Person:</strong></div>
             <div class="col-md-9">
-              {{ selectedPerson.reportingperson_name }} ({{
-                selectedPerson.relationship_with_victim
-              }})
+              {{ selectedPersonDetails.created_by.username }}
             </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-3"><strong>Willing to Volunteer:</strong></div>
-            <div class="col-md-9">
-              {{ selectedPerson.willing_to_volunteer ? "Yes" : "No" }}
-            </div>
-          </div>
+          </div> -->
           
         </div>
       </div>

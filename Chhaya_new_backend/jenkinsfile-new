@@ -1,43 +1,34 @@
 pipeline {
     agent any
+
     stages {
-        stage ('Checkout') {
+        stage('Checkout Code') {
             steps {
-               git credentialsId: 'gitlab-jenkins', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git', branch: 'sanketlodhe'
+                script {
+                    checkout scm
+                }
             }
         }
-        stage ('Setup Virtual Environment, Install Dependencies') {
+
+        stage('Setup and Deploy') {
             steps {
-                sh '''
-                chmod +x Chhaya_new_backend/scripts/setup_python_env.sh
-                ./Chhaya_new_backend/scripts/setup_python_env.sh
-                ''' 
-            }
-        }
-        stage ('db_config') {
-            steps {
-                sh '''
-                chmod +x Chhaya_new_backend/scripts/db_config.sh
-                ./Chhaya_new_backend/scripts/db_config.sh
-                '''
-            }
-        }
-        stage ('migration') {
-            steps {
-                sh '''
-                chmod +x Chhaya_new_backend/scripts/migration.sh
-                ./Chhaya_new_backend/scripts/migration.sh
-                ''' 
-            }
-        }
-        stage ('runserver') {
-            steps {
-                sh '''
-                chmod +x Chhaya_new_backend/scripts/runserver.sh
-                ./Chhaya_new_backend/scripts/runserver.sh
-                '''
+                script {
+                    sh '''
+                    cd Chhaya_new_backend
+                    chmod +x deploy.sh
+                    ./deploy.sh
+                    '''
+                }
             }
         }
     }
-}
 
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}

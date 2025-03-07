@@ -1,14 +1,14 @@
 import uuid
 from django.conf import settings
 from django.contrib.gis.db import models
-
+from datetime import date
 from .hospital import Hospital
 from .user import User
 
 class Person(models.Model):
     class TypeChoices(models.TextChoices):
         MISSING = 'Missing Person', 'Missing Person'
-        Unidentified_Person = 'Unidentifed Person', 'Unidentifed Person'
+        Unidentified_Person = 'Unidentified Person', 'Unidentified Person'
         Unidnetified_Body = 'Unidentified Body', 'Unidentified Body'
     
     class GenderChoices(models.TextChoices):
@@ -121,6 +121,7 @@ class Person(models.Model):
         UTTAR_PRADESH = 'Uttar Pradesh', 'Uttar Pradesh'
         UTTARAKHAND = 'Uttarakhand', 'Uttarakhand'
         WEST_BENGAL = 'West Bengal', 'West Bengal'
+        DELHI = 'Delhi', 'Delhi'
 
     class CountryChoices(models.TextChoices):
         INDIA = 'India', 'India'
@@ -156,7 +157,7 @@ class Person(models.Model):
     birthplace = models.CharField(max_length=255, null=True, blank=True,db_index=True)
     height = models.IntegerField(help_text="Height in CM",blank=True, null=True,db_index=True)
     weight = models.IntegerField(help_text="Weight in GMS",blank=True, null=True,db_index=True)
-    blood_group = models.CharField(max_length=2, choices=BloodGroupChoices.choices,blank=True, null=True,db_index=True)
+    blood_group = models.CharField(max_length=5, choices=BloodGroupChoices.choices,blank=True, null=True,db_index=True)
     complexion = models.CharField(max_length=50, choices=ComplexionChoices.choices,blank=True, null=True,db_index=True)
     hair_color = models.CharField(max_length=50, choices=Hair_colorChoices.choices, blank=True, null=True,db_index=True)
     hair_type = models.CharField(max_length=10, choices=Hair_typeChoices.choices, blank=True, null=True,db_index=True)
@@ -173,6 +174,15 @@ class Person(models.Model):
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set",db_index=True)
     _is_deleted = models.BooleanField(default=False,db_index=True)
     _is_confirmed = models.BooleanField(default=False,db_index=True)
+    photo_photo = models.ImageField(blank=True, null=True, help_text="URL or Base64 encoded photo of the person",upload_to='All_Photos')
+
+    date_reported = models.DateField(default=date.today)
+    case_status = models.CharField(
+        max_length=10,
+        choices=[('Resolved', 'resolved'), ('Pending', 'pending')],
+        default='pending',
+        db_index=True
+    )
 
     address_type = models.CharField(max_length=50, choices=AddressTypeChoices.choices, db_index=True, blank=True,
                                     null=True)
@@ -193,6 +203,23 @@ class Person(models.Model):
     is_active = models.BooleanField(default=True, db_index=True)
     country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
 
+    match_entity_id = models.UUIDField(
+        blank=True,
+        null=True,
+        help_text="ID of the matched entity (Missing/Unidentified Person/Body)"
+    )
+    match_type = models.CharField(
+        max_length=20,
+        choices=[
+            ('Missing Person', 'Missing Person'),
+            ('Unidentified Person', 'Unidentified Person'),
+            ('Unidentified Body', 'Unidentified Body'),
+        ],
+        blank=True,
+        null=True,
+        help_text="The type of the matched entity"
+    )
+
     def __str__(self):
         return f"{self.full_name} ({self.type})"
 
@@ -205,6 +232,7 @@ class Person(models.Model):
             models.Index(fields=["hospital","document_ids"]),
             models.Index(fields=["created_by","updated_by"]),
             models.Index(fields=["_is_deleted","_is_confirmed"]),
+            models.Index(fields=["match_entity_id", "match_type"]),
         ]
 
 
