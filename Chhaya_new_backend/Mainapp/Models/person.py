@@ -179,8 +179,8 @@ class Person(models.Model):
     date_reported = models.DateField(default=date.today)
     case_status = models.CharField(
         max_length=10,
-        choices=[('Resolved', 'resolved'), ('Pending', 'pending')],
-        default='pending',
+        choices=[('Resolved', 'resolved'), ('Pending', 'pending'), ('Matched', 'matched')],
+        default='pending',  # Ensure 'pending' is in lowercase to match the choice value
         db_index=True
     )
 
@@ -208,7 +208,8 @@ class Person(models.Model):
         null=True,
         help_text="ID of the matched entity (Missing/Unidentified Person/Body)"
     )
-    match_type = models.CharField(
+
+    match_with= models.CharField(
         max_length=20,
         choices=[
             ('Missing Person', 'Missing Person'),
@@ -232,7 +233,7 @@ class Person(models.Model):
             models.Index(fields=["hospital","document_ids"]),
             models.Index(fields=["created_by","updated_by"]),
             models.Index(fields=["_is_deleted","_is_confirmed"]),
-            models.Index(fields=["match_entity_id", "match_type"]),
+            models.Index(fields=["match_entity_id"]),
         ]
 
 
