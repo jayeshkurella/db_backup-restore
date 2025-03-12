@@ -6,7 +6,12 @@ from .user import User
 
 class Match(models.Model):
     class StatusChoices(models.TextChoices):
-        MATCHED = "matched", "Matched"
+        MATCHED = "Matched", "matched"
+
+    class MatchWithChoices(models.TextChoices):
+        MISSING_PERSON = "Missing Person", "Missing Person"
+        UNIDENTIFIED_PERSON = "Unidentified Person", "Unidentified Person"
+        UNIDENTIFIED_BODY = "Unidentified Body", "Unidentified Body"
 
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -15,11 +20,7 @@ class Match(models.Model):
     status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.MATCHED)
     match_with = models.CharField(
         max_length=20,
-        choices=[
-            ('Missing Person', 'Missing Person'),
-            ('Unidentified Person', 'Unidentified Person'),
-            ('Unidentified Body', 'Unidentified Body'),
-        ],
+        choices=MatchWithChoices.choices,
         blank=True,
         null=True,
         help_text="The type of the matched entity"

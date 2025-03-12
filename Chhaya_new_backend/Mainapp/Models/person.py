@@ -212,9 +212,9 @@ class Person(models.Model):
     match_with= models.CharField(
         max_length=20,
         choices=[
-            ('Missing Person', 'Missing Person'),
-            ('Unidentified Person', 'Unidentified Person'),
-            ('Unidentified Body', 'Unidentified Body'),
+            ('Missing Person', 'missing person'),
+            ('Unidentified Person', 'unidentified person'),
+            ('Unidentified Body', 'unidentified body'),
         ],
         blank=True,
         null=True,

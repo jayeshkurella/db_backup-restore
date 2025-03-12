@@ -133,6 +133,7 @@
 					return this._layers[i];
 				}
 			}
+
 		},
 	
 		_addLayer: function (layerDef, overlay, group, isCollapsed) {
@@ -400,14 +401,27 @@
 			container.appendChild(this._form);
 		},
 	
+		// _updateHeight: function (h) {
+		// 	h = h || this._map.getSize().y;
+	
+		// 	if (this.options.compact)
+		// 		this._form.style.maxHeight = (h - this.options.compactOffset) + 'px';
+		// 	else
+		// 		this._form.style.height = h + 'px';
+		// },
+
 		_updateHeight: function (h) {
 			h = h || this._map.getSize().y;
-	
-			if (this.options.compact)
+		
+			if (this.options.compact) {
 				this._form.style.maxHeight = (h - this.options.compactOffset) + 'px';
-			else
-				this._form.style.height = h + 'px';
+			} else {
+				this._form.style.height = 'auto'; // Change this to auto instead of full height
+				this._form.style.maxHeight = '250px'; // Set a reasonable max height
+				this._form.style.overflowY = 'auto'; // Allow scrolling if needed
+			}
 		},
+		
 	
 		_expand: function () {
 			L.DomUtil.addClass(this._container, 'expanded');

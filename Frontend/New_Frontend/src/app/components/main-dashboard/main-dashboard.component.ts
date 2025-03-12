@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 declare var bootstrap: any;
 import * as L from 'leaflet';
-// import 'leaflet-panel-layers';
+
 import '../../../../src/leaflet-panel-layers'
 
 import 'leaflet-basemaps/L.Control.Basemaps'; 
