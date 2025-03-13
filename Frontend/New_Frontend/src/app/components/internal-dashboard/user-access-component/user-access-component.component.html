@@ -1,0 +1,60 @@
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background: linear-gradient(45deg, #FA6400, #E63946);">
+            <h6 class="mb-0 fw-bold">Pending User Approvals</h6>
+        </div>
+        
+        <div class="card-body">
+            <!-- Search Bar -->
+            <div class="mb-3 d-flex align-items-center">
+                <input type="text" class="form-control me-2" [(ngModel)]="searchQuery" 
+                       placeholder="Search users..." (input)="searchUsers()" 
+                       style="width: 40%; min-width: 250px;">
+                <!-- <button class="btn btn-primary" (click)="searchUsers()">
+                    <i class="bi bi-search"></i> Search
+                </button> -->
+            </div>
+            
+
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>User Type</th>
+                            <th>Subtype</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of filteredUsers">
+                            <td class="fw-semibold">{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email_id }}</td>
+                            <td>{{ user.phone_no }}</td>
+                            <td class="text-uppercase"><span class="badge bg-primary">{{ user.user_type }}</span></td>
+                            <td class="text-uppercase"><span class="badge bg-secondary">{{ user.sub_user_type }}</span></td>
+                            <td>
+                                <button class="btn btn-success btn-sm me-2" (click)="approveUser(user.id)" *ngIf="user.status === 'hold'">
+                                    <i class="bi bi-check-circle"></i> Approve
+                                </button>
+                                <button class="btn btn-danger btn-sm me-2" (click)="rejectUser(user.id)" *ngIf="user.status === 'hold'">
+                                    <i class="bi bi-x-circle"></i> Reject
+                                </button>
+                                <button class="btn btn-warning btn-sm" (click)="deactivateUser(user.id)" *ngIf="user.status === 'active'">
+                                    <i class="bi bi-person-x"></i> Deactivate
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State Message -->
+            <div *ngIf="filteredUsers.length === 0" class="alert alert-info text-center">
+                <i class="bi bi-info-circle"></i> No pending users for approval.
+            </div>
+        </div>
+    </div>
+</div>

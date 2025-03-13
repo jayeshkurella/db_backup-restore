@@ -1,9 +1,12 @@
 from rest_framework import viewsets, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.permissions import IsAuthenticated ,AllowAny
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
 from Mainapp.models.fir import FIR
+from ..access_permision import IsAdminUser , IsVolunteerUser
 from ..pagination import CustomPagination
 from ..Serializers.serializers import PersonSerializer
 from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, Document
@@ -14,8 +17,13 @@ import json
 from django.utils.timezone import now
 
 
+
 class PersonViewSet(viewsets.ViewSet):
+    authentication_classes = [TokenAuthentication]  # Require token authentication
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
     parser_classes = (MultiPartParser, FormParser,JSONParser)
+
 
     """
     A ViewSet for managing Person entities and their related data.
@@ -33,8 +41,18 @@ class PersonViewSet(viewsets.ViewSet):
     """
     pagination_class = PageNumberPagination
 
+    def get_permissions(self):
+        """
+        Override this method to allow unrestricted access to `retrieve`
+        while enforcing restrictions on other actions.
+        """
+        if self.action == "retrieve":
+            return [AllowAny()]  # No restriction for retrieving a single person
 
-    # 🔹 1. LIST all persons
+        return [permission() for permission in self.permission_classes]
+
+
+        # 🔹 1. LIST all persons
     @swagger_auto_schema(
         operation_description="Retrieve a list of all persons",
         responses={200: PersonSerializer(many=True)}

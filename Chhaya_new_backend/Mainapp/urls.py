@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
-
+from .authentication.admin_user_management import AdminUserApprovalView
 from .authentication.user_authentication import AuthAPIView
 from .viewsets.filters import filter_Address_ViewSet
 from .viewsets.hospital import HospitalViewSet, HospitalListView
@@ -24,6 +24,8 @@ urlpatterns = [
     path("api/hospital-name-list/", HospitalListView.as_view(), name="hospital-list"),
     path('api/match/mp-to-ups/<uuid:mp_id>/', MatchMPWithUPAPIView.as_view(), name='match-mp-to-ups'),
     path('api/match/mp-to-ubs/<uuid:mp_id>/', MatchMPWithUBAPIView.as_view(), name='match-mp-to-ubs'),
+    path("api/pending-users/", AdminUserApprovalView.as_view(), name="pending-users"),
+    path("api/users/approve/<uuid:user_id>/", AdminUserApprovalView.as_view(), name="admin-approve-user"),
 ]
 
 if settings.DEBUG:

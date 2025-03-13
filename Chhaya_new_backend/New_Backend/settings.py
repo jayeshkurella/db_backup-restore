@@ -29,10 +29,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'Mainapp',
-    "corsheaders",
+    'corsheaders',
     'leaflet',
     'drf_yasg',
     'rest_framework',
+    'rest_framework.authtoken'
     
 ]
 
@@ -137,24 +138,29 @@ GDAL_LIBRARY_PATH = r'C:\Users\sanke\Desktop\Chhaya_FullStack\Chhaya_new_backend
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    'https://products.coderize.in',
-    # 'https://products.coderize.in/chhaya/',
-    'http://localhost:4200',   
+    # 'https://products.coderize.in',
+    'http://localhost:4200',
+    'http://63.250.52.91'
 ]
 
-CORS_ALLOW_METHODS = (
-    'GET',
-    'POST',
-    'PUT',
-    'PATCH', 
-    'DELETE',
-    'OPTIONS',
-)
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS"
+]
+
+
+
 
 CSRF_TRUSTED_ORIGINS = [
     'https://products.coderize.in/chhaya/',
     'http://localhost:4200',
-    'http://localhost:8080'
+    'http://localhost:8080',
+    'http://63.250.52.91'
+
 ]
 
 AUTH_USER_MODEL = 'Mainapp.User'  
@@ -166,8 +172,14 @@ AUTHENTICATION_BACKENDS = [
 
 
 
-
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # Enable Token Authentication
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Require authentication by default
+    ],
+}
 
 import datetime
 from logging.handlers import TimedRotatingFileHandler

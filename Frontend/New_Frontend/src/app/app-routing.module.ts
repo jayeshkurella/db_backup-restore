@@ -10,11 +10,17 @@ import { UnidentifiedBodiesApiService } from './components/internal-dashboard/un
 import { UnidentifiedPersonComponent } from './components/internal-dashboard/unidentified-person/unidentified-person.component';
 import { MissingPersonComponent } from './components/internal-dashboard/missing-person/missing-person.component';
 import { UnidentifiedBodiesComponent } from './components/internal-dashboard/unidentified-bodies/unidentified-bodies.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './auth.guard';
+import { UserAccessComponentComponent } from './components/internal-dashboard/user-access-component/user-access-component.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Main-dashboard', pathMatch: 'full' },
   {path :"Main-dashboard", component:MainDashboardComponent},
-  {path: 'internal-dashboard', component: InternalDashboardComponent,
+  {path :"register", component:RegisterComponent},
+  {path :"login", component:LoginComponent},
+  {path: 'internal-dashboard', component: InternalDashboardComponent,canActivate: [AuthGuard],
     children: [
       { path: '', component: PersonAddingFormComponent },
       { path: 'Add-missing-person', component: PersonAddingFormComponent },
@@ -24,6 +30,8 @@ const routes: Routes = [
       { path: 'volunteers', component: VolunteersComponent},
       { path: 'policestation', component: PoliceStationsComponent},
       { path: 'Hospitals', component: HospitalsComponent},
+      { path: 'user-access', component: UserAccessComponentComponent },
+
   ]}
 ];
 

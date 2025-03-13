@@ -4,6 +4,7 @@
         <!-- Sidebar Header -->
         <div class="sidebar-header">
             <img src="assets/images/Chhaya.png" alt="Chhaya Foundation Logo" (click)="onNavigate()" class="sidebar-title">
+            
         </div>
 
         <!-- Sidebar Links -->
@@ -96,6 +97,12 @@
                     <span>Volunteer</span>
                 </a>
             </li>
+            <li class="sidebar-item" *ngIf="userType === 'admin'">
+                <a class="d-flex align-items-center" [routerLink]="'user-access'" (click)="closeSidebar()">
+                    <i class="bi bi-person-check me-2 custom-icon"></i>
+                    <span>User Access</span>
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -122,6 +129,7 @@
                         <!-- Visible on larger screens like laptop or desktop -->
                         <a class="nav-link">
                             <img src="assets/images/user_icon.svg" alt="User Icon" class="custom-iconn" (click)="onNavigate()">
+                            <!-- <div class="custom-iconn" (click)="onNavigate()">Logout</div> -->
                         </a>
                     </li>
                 </ul>

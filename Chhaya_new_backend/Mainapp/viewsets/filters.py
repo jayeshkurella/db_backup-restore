@@ -4,8 +4,11 @@ from rest_framework.decorators import action
 
 from Mainapp.models import Person
 
+from rest_framework.permissions import AllowAny
 
 class filter_Address_ViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
     # List all states
     @action(detail=False, methods=['GET'])
     def states(self, request):

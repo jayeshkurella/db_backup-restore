@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MainDashboardComponent } from './components/main-dashboard/main-dashboard.component';
 import { InternalDashboardComponent } from './components/internal-dashboard/internal-dashboard.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
@@ -17,6 +17,10 @@ import { UnidentifiedBodiesComponent } from './components/internal-dashboard/uni
 import { VolunteersComponent } from './components/internal-dashboard/volunteers/volunteers.component';
 import { PoliceStationsComponent } from './components/internal-dashboard/police-stations/police-stations.component';
 import { HospitalsComponent } from './components/internal-dashboard/hospitals/hospitals.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthInterceptor } from './interceptors/auth.service';
+import { UserAccessComponentComponent } from './components/internal-dashboard/user-access-component/user-access-component.component';
 
 
 @NgModule({
@@ -31,7 +35,10 @@ import { HospitalsComponent } from './components/internal-dashboard/hospitals/ho
     UnidentifiedBodiesComponent,
     VolunteersComponent,
     PoliceStationsComponent,
-    HospitalsComponent
+    HospitalsComponent,
+    RegisterComponent,
+    LoginComponent,
+    UserAccessComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +50,11 @@ import { HospitalsComponent } from './components/internal-dashboard/hospitals/ho
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

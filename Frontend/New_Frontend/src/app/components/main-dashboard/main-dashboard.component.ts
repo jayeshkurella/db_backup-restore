@@ -483,16 +483,27 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     }
 
     if (this.selectedStartDate && this.selectedEndDate) {
-        if (cqlFilter !== '') {
-            cqlFilter += ' AND ';
+        const startDate = new Date(this.selectedStartDate);
+        const endDate = new Date(this.selectedEndDate);
+    
+        if (startDate > endDate) {
+            console.error("Invalid date range: Start date cannot be after End date.");
+            alert("Start date cannot be after End date. Please select a valid range.");
+        } else {
+            if (cqlFilter !== '') {
+                cqlFilter += ' AND ';
+            }
+            cqlFilter += `reported_date BETWEEN '${this.selectedStartDate}' AND '${this.selectedEndDate}'`;
         }
-        cqlFilter += `date_reported BETWEEN '${this.selectedStartDate}' AND '${this.selectedEndDate}'`;
     }
+    
+    console.log("Filtering Data Between:", this.selectedStartDate, "and", this.selectedEndDate);
+
 
     console.log("CQL Filter:", cqlFilter);
 
     // WFS request with CQL filters
-    const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
+    const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya_demo:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
 
     fetch(wfsUrl)
         .then(response => {
@@ -562,84 +573,84 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         opacity: 0.75
     });
     this.distLayerName = dist;
-}
+   }
 
-addMarkersToMap(features: any[], customIcon: L.Icon) {
-    const markerPromises = features.map(async (feature: any) => {
-        try {
-            const fullPersonId = feature.id; // e.g., "Mainapp_person.977b76d5-f4c7-4955-b239-b232ace34b39"
-            const personId = fullPersonId.split('.')[1]; // Extract only the ID part
-            const geometry = feature.geometry;
-            const personType = feature.properties.person_type;
+    addMarkersToMap(features: any[], customIcon: L.Icon) {
+        const markerPromises = features.map(async (feature: any) => {
+            try {
+                const fullPersonId = feature.id; // e.g., "Mainapp_person.977b76d5-f4c7-4955-b239-b232ace34b39"
+                const personId = fullPersonId.split('.')[1]; // Extract only the ID part
+                const geometry = feature.geometry;
+                const personType = feature.properties.person_type;
 
-            if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
-                console.warn("Invalid or missing 'geometry' data for feature:", feature);
+                if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
+                    console.warn("Invalid or missing 'geometry' data for feature:", feature);
+                    return null;
+                }
+
+                const [lng, lat] = geometry.coordinates;
+                const latlng: L.LatLngTuple = [lat, lng];
+
+                const personResponse = await fetch(`${environment.apiUrl}api/persons/${personId}/`);
+                if (!personResponse.ok) {
+                    throw new Error(`Failed to fetch person details: ${personResponse.status}`);
+                }
+
+                const personDetails = await personResponse.json();
+                console.log("Person Details:", personDetails);
+
+                const marker = L.marker(latlng, { icon: customIcon });
+                marker.feature = feature;
+
+                const imageUrl = personDetails.photo_photo 
+                    ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
+                    : 'assets/images/Chhaya.png';
+
+                const popupContent = `
+                    <div style="max-width: 400px; padding: 05px;">
+                        <img src="${imageUrl}" 
+                            alt="Person Image" 
+                            style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;">
+                        <b>Type:</b> ${personDetails.type || 'N/A'}<br>
+                        <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
+                        <b>Age:</b> ${personDetails.age || 'N/A'}<br>
+                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+                        <b>City:</b> ${personDetails.city || 'N/A'}<br>
+                        <b>State:</b> ${personDetails.state || 'N/A'}<br>
+                        <b>Country:</b> ${personDetails.country || 'N/A'}<br>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+
+                switch (personType) {
+                    case 'Missing person':
+                        this.missingPersonLayer.addLayer(marker);
+                        break;
+                    case 'Unidentified person':
+                        this.unidentifiedPersonLayer.addLayer(marker);
+                        break;
+                    case 'Unidentified Bodies':
+                        this.unidentifiedBodiesLayer.addLayer(marker);
+                        break;
+                }
+
+                return marker;
+
+            } catch (error) {
+                console.error("Error processing feature:", feature, error);
                 return null;
             }
-
-            const [lng, lat] = geometry.coordinates;
-            const latlng: L.LatLngTuple = [lat, lng];
-
-            const personResponse = await fetch(`${environment.apiUrl}api/persons/${personId}/`);
-            if (!personResponse.ok) {
-                throw new Error(`Failed to fetch person details: ${personResponse.status}`);
-            }
-
-            const personDetails = await personResponse.json();
-            console.log("Person Details:", personDetails);
-
-            const marker = L.marker(latlng, { icon: customIcon });
-            marker.feature = feature;
-
-            const imageUrl = personDetails.photo_photo 
-                ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
-                : 'assets/images/Chhaya.png';
-
-            const popupContent = `
-                <div style="max-width: 400px; padding: 05px;">
-                    <img src="${imageUrl}" 
-                        alt="Person Image" 
-                        style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;">
-                    <b>Type:</b> ${personDetails.type || 'N/A'}<br>
-                    <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
-                    <b>Age:</b> ${personDetails.age || 'N/A'}<br>
-                    <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-                    <b>City:</b> ${personDetails.city || 'N/A'}<br>
-                    <b>State:</b> ${personDetails.state || 'N/A'}<br>
-                    <b>Country:</b> ${personDetails.country || 'N/A'}<br>
-                </div>
-            `;
-
-            marker.bindPopup(popupContent);
-
-            switch (personType) {
-                case 'Missing person':
-                    this.missingPersonLayer.addLayer(marker);
-                    break;
-                case 'Unidentified person':
-                    this.unidentifiedPersonLayer.addLayer(marker);
-                    break;
-                case 'Unidentified Bodies':
-                    this.unidentifiedBodiesLayer.addLayer(marker);
-                    break;
-            }
-
-            return marker;
-
-        } catch (error) {
-            console.error("Error processing feature:", feature, error);
-            return null;
-        }
-    });
-
-    Promise.all(markerPromises).then(markers => {
-        markers.forEach(marker => {
-            if (marker) this.geoServerClusterGroup?.addLayer(marker);
         });
 
-        this.geoServerClusterGroup?.addTo(this.map!);
-    });
-}
+        Promise.all(markerPromises).then(markers => {
+            markers.forEach(marker => {
+                if (marker) this.geoServerClusterGroup?.addLayer(marker);
+            });
+
+            this.geoServerClusterGroup?.addTo(this.map!);
+        });
+    }
 
 
 
@@ -727,7 +738,7 @@ addMarkersToMap(features: any[], customIcon: L.Icon) {
     this.cdr.detectChanges(); 
     setTimeout(() => {
       this.isLoading = false;
-      this.router.navigate(['/internal-dashboard']).catch((error) => {
+      this.router.navigate(['/login']).catch((error) => {
         console.error('Navigation error:', error);
       });
     }, 1000);

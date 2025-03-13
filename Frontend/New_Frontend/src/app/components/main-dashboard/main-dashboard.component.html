@@ -83,8 +83,10 @@
       <!-- missing person statistics -->
       <div class="col-lg-2">
         <div class="card h-100  p-1">
+          <h6 class="statistics-card-headser mb-0">Comming Soon</h6>
           <!-- Card Header -->
           <div class=" bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #e0f7fa, #b2dfdb);">
+            
             <h6 class="statistics-card-header mb-0">Male Statistics</h6>
           </div>
           
@@ -315,7 +317,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-lg col-md-6">
+                <!-- <div class="col-lg col-md-6">
                     <select
                         class="form-select form-select-sg border-dark"
                         [(ngModel)]="selectedPoliceStation"
@@ -327,7 +329,7 @@
                             {{ station.name }}
                         </option>
                     </select>
-                </div>
+                </div> -->
                 <div class="col-lg col-md-6">
                   <select
                     id="ageRange"
@@ -399,8 +401,7 @@
                 </div>
             
                 <!-- Marital Status Filter -->
-                <div class="col-lg col-md-6">
-                  <!-- <label for="maritalStatus" class="form-label">Marital Status</label> -->
+                <!-- <div class="col-lg col-md-6">
                   <select
                     id="maritalStatus"
                     class="form-select form-select-sg border-dark"
@@ -413,7 +414,7 @@
                     <option value="Married">Married</option>
                     <option value="Widowed">Widowed</option>
                   </select>
-                </div>
+                </div> -->
             
                 <!-- Start Date Filter -->
                 <div class="col-lg col-md-6">
@@ -469,6 +470,8 @@
   
       <div class="col-lg-2">
         <div class="card h-100 p-1">
+          <h6 class="statistics-card-headser mb-0">Comming Soon</h6>
+
           <!-- Card Header -->
           <div class="bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #f8bbd0, #f48fb1);">
             <h6 class="statistics-card-header mb-0">Female Statistics</h6>
@@ -785,10 +788,11 @@
                         <td>{{ body.properties.full_name || 'Unknown' }}</td>
                         <td>{{ body.properties.age || 'Not specified' }}</td>
                         <td>
-                          <img *ngIf="body.properties.gender === 'male'" src="assets/images/male.png" alt="Male" width="40" height="40" >
+                          <img *ngIf="body.properties.gender === 'male'" src="assets/images/male.png" alt="Male" width="40" height="40">
                           <img *ngIf="body.properties.gender === 'female'" src="assets/images/female.png" alt="Female" width="40" height="40">
-                          <img *ngIf="body.properties.gender !== 'male' && body.gender !== 'female'" src="assets/images/other.png" alt="Other" width="24" height="24">
-                        </td>
+                          <img *ngIf="body.properties.gender !== 'male' && body.properties.gender !== 'female'" src="assets/images/other.png" alt="Other" width="24" height="24">
+                      </td>
+                      
                         <td>{{ body.properties.city|| 'Not specified' }}</td>
                         <td>{{ body.properties.district || 'Not specified' }}</td>
                         <td>{{ body.properties.state || 'Not specified' }}</td>

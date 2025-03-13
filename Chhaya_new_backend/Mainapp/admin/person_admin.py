@@ -9,7 +9,7 @@ class PersonAdmin(LeafletGeoAdmin):
         "height", "weight", "blood_group", "complexion","photo_photo",
         "eye_color", "hair_type", "hair_color",
         'street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country',
-        "hospital", "_is_confirmed", "_is_deleted", "case_status", "created_at","match_with"
+        "hospital", "_is_confirmed", "_is_deleted", "case_status", "created_at","match_with","reported_date"
     )
 
     list_filter = (
@@ -51,7 +51,7 @@ class PersonAdmin(LeafletGeoAdmin):
             "fields": ("hospital", "document_ids")
         }),
         ("System Information", {
-            "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted","match_with")
+            "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted","match_with",'reported_date')
         }),
     )
 
