@@ -34,8 +34,8 @@ class Contact(models.Model):
     police_station = models.ForeignKey('PoliceStation', on_delete=models.SET_NULL, null=True, blank=True, related_name="police_contact", db_index=True)
     person = models.ForeignKey('Person', on_delete=models.SET_NULL, related_name="contacts", null=True, blank=True, db_index=True)
 
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)  # Indexed for sorting
-    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True, db_index=True)  # Indexed for sorting
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)  # Indexed for sorting
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)  # Indexed for sorting
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set", db_index=True)
     updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set", db_index=True)
 
@@ -47,6 +47,5 @@ class Contact(models.Model):
             models.Index(fields=['phone_no']),  # Composite index
             models.Index(fields=['email_id']),
             models.Index(fields=['country_cd']),
-            models.Index(fields=['created_at']),
-            models.Index(fields=['updated_at']),
+
         ]

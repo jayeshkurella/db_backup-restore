@@ -57,7 +57,7 @@
           <div class="input-group w-50">
             <span class="input-group-text bg-light border-0"><i class="bi bi-people"></i></span>
             <select class="form-select border-0 border-bottom" formControlName="user_type" (change)="onUserTypeChange()">
-              <option value="" disabled>Select User Type</option>
+              <option value="" disabled>User Type</option>
               <option *ngFor="let type of userTypes" [value]="type.value">{{ type.label }}</option>
             </select>
           </div>
@@ -66,7 +66,7 @@
           <div class="input-group w-50" *ngIf="subUserTypes[registerForm.value.user_type]">
             <span class="input-group-text bg-light border-0"><i class="bi bi-person-badge"></i></span>
             <select class="form-select border-0 border-bottom" formControlName="sub_user_type">
-              <option value="" disabled>Select Sub Type</option>
+              <option value="" disabled>Sub Type</option>
               <option *ngFor="let subtype of subUserTypes[registerForm.value.user_type]" [value]="subtype.value">
                 {{ subtype.label }}
               </option>
@@ -74,31 +74,27 @@
           </div>
         
         </div>
-        
-              
+                      <!-- Password Field -->
+        <div class="mb-3 input-group">
+          <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
+          <input type="password" class="form-control border-0 border-bottom" formControlName="password" 
+                placeholder="Enter password" id="passwordInput">
+          <span class="input-group-text bg-light border-0" style="cursor: pointer;" 
+                (click)="togglePasswordVisibility('password')">
+            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+          </span>
+        </div>
 
-              <!-- Password Field -->
-      <!-- Password Field -->
-<div class="mb-3 input-group">
-  <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
-  <input type="password" class="form-control border-0 border-bottom" formControlName="password" 
-        placeholder="Enter password" id="passwordInput">
-  <span class="input-group-text bg-light border-0" style="cursor: pointer;" 
-        (click)="togglePasswordVisibility('password')">
-    <i class="bi bi-eye" id="togglePasswordIcon"></i>
-  </span>
-</div>
-
-<!-- Confirm Password Field -->
-<div class="mb-3 input-group">
-  <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
-  <input type="password" class="form-control border-0 border-bottom" formControlName="password2" 
-        placeholder="Confirm password" id="password2Input">
-  <span class="input-group-text bg-light border-0" style="cursor: pointer;" 
-        (click)="togglePasswordVisibility('password2')">
-    <i class="bi bi-eye" id="togglePasswordIcon2"></i>
-  </span>
-</div>
+        <!-- Confirm Password Field -->
+        <div class="mb-3 input-group">
+          <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
+          <input type="password" class="form-control border-0 border-bottom" formControlName="password2" 
+                placeholder="Confirm password" id="password2Input">
+          <span class="input-group-text bg-light border-0" style="cursor: pointer;" 
+                (click)="togglePasswordVisibility('password2')">
+            <i class="bi bi-eye" id="togglePasswordIcon2"></i>
+          </span>
+        </div>
 
 
     

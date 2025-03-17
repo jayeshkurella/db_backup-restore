@@ -12,7 +12,7 @@ export class PersonAddApiService {
   constructor(private http: HttpClient) { }
 
   postMissingPerson(payload: any): Observable<any> {  
-    return this.http.post<any>(this.apiUrl + "persons/", payload).pipe(
+    return this.http.post<any>(this.apiUrl + "api/persons/", payload).pipe(
       tap(
         (response: any) => console.log("✅ Response received:", response),
         (error: any) => console.error("❌ Error occurred:", error)
@@ -21,6 +21,6 @@ export class PersonAddApiService {
   }
 
   getallPerson(): Observable<any> {  
-    return this.http.get(this.apiUrl + "persons/");
+    return this.http.get(this.apiUrl + "api/persons/");
   }
 }

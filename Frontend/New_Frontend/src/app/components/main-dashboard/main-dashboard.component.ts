@@ -32,7 +32,6 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   allunidentiedbodies: any[] = [];
   missingpersonscount: any[] = [];
   unidentifiedpersonscount: any[] = [];
-  unidentifiedbodiescount: any[] = [];
   missingPersonGenderCounts: any[] = [];
   allpolicestations: any[] = [];
   allstates: string[] = [];
@@ -87,6 +86,8 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   ongoingcount: number = 0;
   solvedcount:number = 0;
   pendingcount: number = 0;
+  femaleCount:number = 0;
+  maleCount:number = 0;
   
   Found_alivecount: number = 0;
   Deceasedcount: number = 0;
@@ -127,6 +128,23 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
   selectedCity= 'city';
   selectedVillage = 'village';
   filteredData: any[] = [];
+    missingPersonPendingMale: number =0
+    unidentifiedPersonPendingFemale: number=0
+    unidentifiedPersonPendingMale: number=0
+    unidentifiedBodyPendingMale: number=0
+    unidentifiedBodyPendingFemale: number=0
+    missingPersonPendingFemale: number=0
+    missingPersonResolvedMale: number=0;
+    missingPersonResolvedFemale: number=0;
+    missingPersonMatchedWithUnidentifiedMale: number =0;
+    missingPersonMatchedWithUnidentifiedFemale: number=0;
+    missingPersonMatchedWithUnidentifiedBodyMale: number =0;
+    missingPersonMatchedWithUnidentifiedBodyFemale: number=0;
+    unidentifiedPersonMatchedWithMissingMale: number=0;
+    unidentifiedPersonMatchedWithMissingFemale: number=0;
+    unidentifiedBodyMatchedWithMissingMale: number =0;
+    unidentifiedBodyMatchedWithMissingFemale: number=0;
+   
  
   
   constructor(
@@ -343,37 +361,28 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
               this.distLayerName.remove(); 
           }
           break;
-    //   case 'Missing Person':
-    //       if (event.target.checked) {
-    //           this.missingPersonLayer.addTo(this.map!); 
-    //       } else {
-    //           this.missingPersonLayer.remove(); 
-    //       }
-    //       break;
-    //   case 'Unidentified Person':
-    //       if (event.target.checked) {
-    //           this.unidentifiedPersonLayer.addTo(this.map!); 
-    //       } else {
-    //           this.unidentifiedPersonLayer.remove(); 
-    //       }
-    //       break;
-    //   case 'Unidentified Bodies':
-    //       if (event.target.checked) {
-    //           this.unidentifiedBodiesLayer.addTo(this.map!); 
-    //       } else {
-    //           this.unidentifiedBodiesLayer.remove();
-    //       }
-    //       break;
-    //   case 'GeoServer Markers':
-    //       if (event.target.checked) {
-    //           this.geoServerClusterGroup?.addTo(this.map!); 
-    //       } else {
-    //           this.geoServerClusterGroup?.remove();
-    //       }
-    //       break;
-    //   default:
-    //       console.warn(`Layer '${layer}' not found.`);
-    //       break;
+      case 'Missing Person':
+          if (event.target.checked) {
+              this.missingPersonLayer.addTo(this.map!); 
+          } else {
+              this.missingPersonLayer.remove(); 
+          }
+          break;
+      case 'Unidentified Person':
+          if (event.target.checked) {
+              this.unidentifiedPersonLayer.addTo(this.map!); 
+          } else {
+              this.unidentifiedPersonLayer.remove(); 
+          }
+          break;
+      case 'Unidentified Bodies':
+          if (event.target.checked) {
+              this.unidentifiedBodiesLayer.addTo(this.map!); 
+          } else {
+              this.unidentifiedBodiesLayer.remove();
+          }
+          break;
+      
   }
   }
 
@@ -512,10 +521,15 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
             }
             return response.json();
         })
-        .then(data => {
+        .then(async (data) => { // ✅ Make this async to handle markers better
             if (!data.features || data.features.length === 0) {
                 console.warn("No features returned by GeoServer for the applied filter.");
-                alert("No data found for the selected filters. Please adjust your filters and try again.");
+                this.missingPersonsCount = 0;
+                this.unidentifiedPersonTotalCounts = 0;
+                this.unidentifiedBodyTotalCount = 0;
+                this.maleCount = 0;
+                this.femaleCount = 0;
+                this.pendingcount = 0;
                 return;
             }
 
@@ -531,12 +545,87 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
             this.filteredunidentifiedboidessss = this.filteredData.filter(
                 (person: any) => person.properties.type === 'Unidentified Body'
             );
+            console.log(this.filteredunidentifiedboidessss)
 
-            // Log the categorized data for debugging
-            console.log("Missing Persons:", this.filteredMissingPersonssss);
-            console.log("Unidentified Persons:", this.filteredUnidentifiedPersonssss);
-            console.log("Unidentified Bodies:", this.filteredunidentifiedboidessss);
 
+            // Get Pending Male & Female for each category
+            this.missingPersonPendingMale = this.filteredMissingPersonssss.filter(
+                (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'male'
+            ).length;
+
+            this.missingPersonPendingFemale = this.filteredMissingPersonssss.filter(
+                (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'female'
+            ).length;
+
+
+
+            this.unidentifiedPersonPendingMale = this.filteredUnidentifiedPersonssss.filter(
+                (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'male'
+            ).length;
+
+            this.unidentifiedPersonPendingFemale = this.filteredUnidentifiedPersonssss.filter(
+                (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'female'
+            ).length;
+
+            this.unidentifiedBodyPendingMale = this.filteredunidentifiedboidessss.filter(
+                (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'male'
+            ).length;
+
+            this.unidentifiedBodyPendingFemale = this.filteredunidentifiedboidessss.filter(
+                (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'female'
+            ).length;
+
+            // ✅ Matching Cases Based on `match_with` Feature
+            this.missingPersonMatchedWithUnidentifiedMale = this.filteredMissingPersonssss.filter(
+                (person: any) => person.properties.match_with === 'Unidentified Person' && person.properties.gender === 'male'
+            ).length;
+
+
+            this.missingPersonMatchedWithUnidentifiedFemale = this.filteredMissingPersonssss.filter(
+                (person: any) => person.properties.match_with === 'Unidentified Person' && person.properties.gender === 'female'
+            ).length;
+
+            this.missingPersonMatchedWithUnidentifiedBodyMale = this.filteredMissingPersonssss.filter(
+                (person: any) => person.properties.match_with === 'Unidentified Body' && person.properties.gender === 'male'
+            ).length;
+            
+            this.missingPersonMatchedWithUnidentifiedBodyFemale = this.filteredMissingPersonssss.filter(
+                (person: any) => person.properties.match_with === 'Unidentified Body' && person.properties.gender === 'female'
+            ).length;
+
+
+            // Unidentified Person Male Matched with Missing Person
+            this.unidentifiedPersonMatchedWithMissingMale = this.filteredUnidentifiedPersonssss.filter(
+                (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'male'
+            ).length;
+
+            // Unidentified Person Female Matched with Missing Person
+            this.unidentifiedPersonMatchedWithMissingFemale = this.filteredUnidentifiedPersonssss.filter(
+                (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'female'
+            ).length;
+
+            // Unidentified Body Male Matched with Missing Person
+            this.unidentifiedBodyMatchedWithMissingMale = this.filteredunidentifiedboidessss.filter(
+                (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'male'
+            ).length;
+
+            // Unidentified Body Female Matched with Missing Person
+            this.unidentifiedBodyMatchedWithMissingFemale = this.filteredunidentifiedboidessss.filter(
+                (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'female'
+            ).length;
+            
+            console.log(this.unidentifiedBodyMatchedWithMissingFemale,"person")
+            
+            
+    // Get counts
+            this.missingPersonsCount = this.filteredMissingPersonssss.length;
+            this.unidentifiedPersonTotalCounts = this.filteredUnidentifiedPersonssss.length;
+            this.unidentifiedBodyTotalCount = this.filteredunidentifiedboidessss.length;
+            this.maleCount = data.features.filter((person: any) => person.properties.gender === 'male').length;
+            this.femaleCount = data.features.filter((person: any) => person.properties.gender === 'female').length;
+            this.pendingcount = data.features.filter((person: any) => person.properties.case_status === 'Pending').length;
+    
+            
             // Call the method to display details (if needed)
             this.displayFilteredDataDetails();
 
@@ -573,84 +662,72 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         opacity: 0.75
     });
     this.distLayerName = dist;
-   }
+  }
 
-    addMarkersToMap(features: any[], customIcon: L.Icon) {
-        const markerPromises = features.map(async (feature: any) => {
-            try {
-                const fullPersonId = feature.id; // e.g., "Mainapp_person.977b76d5-f4c7-4955-b239-b232ace34b39"
-                const personId = fullPersonId.split('.')[1]; // Extract only the ID part
-                const geometry = feature.geometry;
-                const personType = feature.properties.person_type;
+  
 
-                if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
-                    console.warn("Invalid or missing 'geometry' data for feature:", feature);
-                    return null;
-                }
 
-                const [lng, lat] = geometry.coordinates;
-                const latlng: L.LatLngTuple = [lat, lng];
+  async addMarkersToMap(features: any[], customIcon: L.Icon) {
+    if (!this.map) {
+        console.error("Map is not initialized yet.");
+        return;
+    }
 
-                const personResponse = await fetch(`${environment.apiUrl}api/persons/${personId}/`);
-                if (!personResponse.ok) {
-                    throw new Error(`Failed to fetch person details: ${personResponse.status}`);
-                }
+    const markerPromises = features.map(async (feature: any) => {
+        try {
+            const fullPersonId = feature.id;
+            const personId = fullPersonId.split('.')[1]; 
+            const geometry = feature.geometry;
 
-                const personDetails = await personResponse.json();
-                console.log("Person Details:", personDetails);
-
-                const marker = L.marker(latlng, { icon: customIcon });
-                marker.feature = feature;
-
-                const imageUrl = personDetails.photo_photo 
-                    ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
-                    : 'assets/images/Chhaya.png';
-
-                const popupContent = `
-                    <div style="max-width: 400px; padding: 05px;">
-                        <img src="${imageUrl}" 
-                            alt="Person Image" 
-                            style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;">
-                        <b>Type:</b> ${personDetails.type || 'N/A'}<br>
-                        <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
-                        <b>Age:</b> ${personDetails.age || 'N/A'}<br>
-                        <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-                        <b>City:</b> ${personDetails.city || 'N/A'}<br>
-                        <b>State:</b> ${personDetails.state || 'N/A'}<br>
-                        <b>Country:</b> ${personDetails.country || 'N/A'}<br>
-                    </div>
-                `;
-
-                marker.bindPopup(popupContent);
-
-                switch (personType) {
-                    case 'Missing person':
-                        this.missingPersonLayer.addLayer(marker);
-                        break;
-                    case 'Unidentified person':
-                        this.unidentifiedPersonLayer.addLayer(marker);
-                        break;
-                    case 'Unidentified Bodies':
-                        this.unidentifiedBodiesLayer.addLayer(marker);
-                        break;
-                }
-
-                return marker;
-
-            } catch (error) {
-                console.error("Error processing feature:", feature, error);
+            if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
+                console.warn("Invalid or missing 'geometry' data for feature:", feature);
                 return null;
             }
-        });
 
-        Promise.all(markerPromises).then(markers => {
-            markers.forEach(marker => {
-                if (marker) this.geoServerClusterGroup?.addLayer(marker);
-            });
+            const [lng, lat] = geometry.coordinates;
+            const latlng: L.LatLngTuple = [lat, lng];
 
-            this.geoServerClusterGroup?.addTo(this.map!);
-        });
-    }
+            const personResponse = await fetch(`${environment.apiUrl}api/persons/${personId}/`);
+            if (!personResponse.ok) {
+                throw new Error(`Failed to fetch person details: ${personResponse.status}`);
+            }
+
+            const personDetails = await personResponse.json();
+            const marker = L.marker(latlng, { icon: customIcon });
+
+            const imageUrl = personDetails.photo_photo 
+                ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
+                : 'assets/images/Chhaya.png';
+
+            const popupContent = `
+                <div style="max-width: 400px; padding: 05px;">
+                    <img src="${imageUrl}" 
+                        alt="Person Image" 
+                        style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;">
+                    <b>Type:</b> ${personDetails.type || 'N/A'}<br>
+                    <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
+                    <b>Age:</b> ${personDetails.age || 'N/A'}<br>
+                    <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+                    <b>City:</b> ${personDetails.city || 'N/A'}<br>
+                    <b>State:</b> ${personDetails.state || 'N/A'}<br>
+                    <b>Country:</b> ${personDetails.country || 'N/A'}<br>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            this.geoServerClusterGroup?.addLayer(marker); // ✅ Add each marker directly
+            return marker;
+
+        } catch (error) {
+            console.error("Error processing feature:", feature, error);
+            return null;
+        }
+    });
+
+    await Promise.all(markerPromises); // ✅ Ensure all markers are processed
+    this.geoServerClusterGroup?.addTo(this.map!);
+}
+
 
 
 
@@ -701,18 +778,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         //         }
         //     ]
         // },
-        // {
-        //     group: "GeoServer Markers",
-        //     icon: iconByName('marker'),
-        //     collapsed: false,
-        //     layers: [
-        //         {
-        //             name: "GeoServer Markers",
-        //             active: true, // Initially active
-        //             layer: this.geoServerClusterGroup,
-        //         }
-        //     ]
-        // }
+        
     ];
   }
     
@@ -756,7 +822,7 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
         return finalUrl;
     }
     return 'assets/images/Chhaya.png';
-}
+    }
 
   
   onStateChange(state: string): void {
@@ -784,54 +850,54 @@ export class MainDashboardComponent implements OnInit ,AfterViewInit {
     if (this.geoServerClusterGroup) {
         this.geoServerClusterGroup.clearLayers();
     }
-}
-
-onDistrictChange(district: string): void {
-    this.selectedDistrict = district;
-    this.initOperationalLayers();
-    this.selectedCity = 'All Cities';
-    this.selectedVillage = 'All Villages';
-    this.allcities = [];
-    this.allVillages = [];
-
-    if (district && district !== 'All Districts') {
-        this.filterService.getCities(district).subscribe((data) => {
-            console.log('Cities fetched:', data);
-            this.allcities = data;
-
-            // Move the map to the district
-            this.moveMapToDistrict(district);
-        }, error => {
-            console.error('Error fetching cities:', error);
-        });
-    } else {
-        console.warn('No district selected or "All Districts" selected');
-    }
-}
-
-moveMapToDistrict(districtName: string): void {
-    if (!districtName || districtName === 'All Districts') {
-        return;
     }
 
-    const state = this.stateCoordinates.find(s => 
-        s.districts && s.districts.some((d: { name: string; }) => d.name === districtName)
-    );
+    onDistrictChange(district: string): void {
+        this.selectedDistrict = district;
+        this.initOperationalLayers();
+        this.selectedCity = 'All Cities';
+        this.selectedVillage = 'All Villages';
+        this.allcities = [];
+        this.allVillages = [];
 
-    if (state) {
-        const district = state.districts.find((d: { name: string; }) => d.name === districtName);
-        if (this.map && district && district.coordinates) {
-            this.map.flyTo(district.coordinates, 8, { 
-                duration: 3,
-                easeLinearity: 0.25
+        if (district && district !== 'All Districts') {
+            this.filterService.getCities(district).subscribe((data) => {
+                console.log('Cities fetched:', data);
+                this.allcities = data;
+
+                // Move the map to the district
+                this.moveMapToDistrict(district);
+            }, error => {
+                console.error('Error fetching cities:', error);
             });
         } else {
-            console.warn('District not found in state data:', districtName);
+            console.warn('No district selected or "All Districts" selected');
         }
-    } else {
-        console.warn('No matching state found for district:', districtName);
     }
-}
+
+    moveMapToDistrict(districtName: string): void {
+        if (!districtName || districtName === 'All Districts') {
+            return;
+        }
+
+        const state = this.stateCoordinates.find(s => 
+            s.districts && s.districts.some((d: { name: string; }) => d.name === districtName)
+        );
+
+        if (state) {
+            const district = state.districts.find((d: { name: string; }) => d.name === districtName);
+            if (this.map && district && district.coordinates) {
+                this.map.flyTo(district.coordinates, 8, { 
+                    duration: 3,
+                    easeLinearity: 0.25
+                });
+            } else {
+                console.warn('District not found in state data:', districtName);
+            }
+        } else {
+            console.warn('No matching state found for district:', districtName);
+        }
+    }
 
 
 

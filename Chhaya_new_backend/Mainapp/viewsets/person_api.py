@@ -15,6 +15,7 @@ from drf_yasg import openapi
 from django.contrib.gis.geos import Point
 import json
 from django.utils.timezone import now
+import traceback  # Add this import at the top of your file
 
 
 
@@ -264,6 +265,8 @@ class PersonViewSet(viewsets.ViewSet):
     #         print("Exception Occurred:", str(e))  # Debugging: Print exception
     #         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     #
+
+
     def create(self, request):
         print("Incoming Data Format:", request.content_type)  # Debugging: Print request content type
         try:
@@ -358,18 +361,28 @@ class PersonViewSet(viewsets.ViewSet):
                 Contact.objects.bulk_create(contacts)
 
                 # Create additional info
-                additional_info = [AdditionalInfo(person=person, **info) for info in additional_info_data]
+                additional_info = [
+                    AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'})
+                    for info in additional_info_data if isinstance(info, dict)
+                ]
                 AdditionalInfo.objects.bulk_create(additional_info)
 
                 # Create last known details
-                last_known_details = [LastKnownDetails(person=person, **details) for details in last_known_details_data]
+                last_known_details = [
+                    LastKnownDetails(person=person, **{k: v for k, v in details.items() if
+                                                       isinstance(details, dict) and k != 'person'})
+                    for details in last_known_details_data if isinstance(details, dict)
+                ]
                 LastKnownDetails.objects.bulk_create(last_known_details)
 
                 # Create FIRs
-                firs = [FIR(person=person, **fir) for fir in firs_data]
+                firs = [
+                    FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'})
+                    for fir in firs_data if isinstance(fir, dict)
+                ]
                 FIR.objects.bulk_create(firs)
 
-                # Create consents safely
+                # Create consents
                 consents = [
                     Consent(person=person, **{k: v for k, v in consent.items() if k != 'person'})
                     for consent in consents_data
@@ -386,8 +399,9 @@ class PersonViewSet(viewsets.ViewSet):
 
         except Exception as e:
             print("Exception Occurred:", str(e))
+            print("Traceback:")
+            traceback.print_exc()  # Print the full traceback including the line number
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
     @swagger_auto_schema(
         operation_description="Update an existing person's details",
         request_body=PersonSerializer,

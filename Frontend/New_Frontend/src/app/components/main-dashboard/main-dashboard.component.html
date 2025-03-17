@@ -83,7 +83,6 @@
       <!-- missing person statistics -->
       <div class="col-lg-2">
         <div class="card h-100  p-1">
-          <h6 class="statistics-card-headser mb-0">Comming Soon</h6>
           <!-- Card Header -->
           <div class=" bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #e0f7fa, #b2dfdb);">
             
@@ -99,15 +98,15 @@
                     <h6 class="text-black">Missing Person</h6>
                     <div class="d-flex justify-content-between align-items-center ">
                       <span class="medium text-black">Unidentified Bodies Found</span>
-                      <span class="text-black">{{ deceasedCountgendercount.Male || 0 }}</span>
+                      <span class="text-black">{{missingPersonMatchedWithUnidentifiedBodyMale || 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Unidentified Person Matched</span>
-                      <span class="text-black">{{ found_alivegendercount.Male || 0 }}</span>
+                      <span class="text-black">{{ missingPersonMatchedWithUnidentifiedMale || 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Pending Persons</span>
-                      <span class="text-black">{{ pendingGendercounts.Male || 0 }}</span>
+                      <span class="text-black">{{ missingPersonPendingMale || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -118,17 +117,17 @@
                 <div class="card shadow-sm border-0">
                   <div class="card-body p-2">
                     <h6 class="text-black">Unidentified Person</h6>
-                    <div class="d-flex justify-content-between align-items-center ">
+                    <!-- <div class="d-flex justify-content-between align-items-center ">
                       <span class="medium text-black">Unidentified Bodies Found</span>
                       <span class="text-black">{{ UPdeceasedCountgendercount.Male || 0 }}</span>
-                    </div>
+                    </div> -->
                     <div class="d-flex justify-content-between align-items-center">
-                      <span class="medium text-black">Missing Persons Matched</span>
-                      <span class="text-black">{{ UPfound_alivegendercount.Male || 0 }}</span>
+                      <span class="medium text-black">Missing Males Matched</span>
+                      <span class="text-black">{{ unidentifiedPersonMatchedWithMissingMale || 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Pending Males</span>
-                      <span class="text-black">{{ UPpendingGendercounts.Male || 0 }}</span>
+                      <span class="text-black">{{ unidentifiedPersonPendingMale || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -139,17 +138,17 @@
                 <div class="card shadow-sm border-0">
                   <div class="card-body p-2">
                     <h6 class="text-black">Unidentified Bodies</h6>
-                    <div class="d-flex justify-content-between align-items-center mb-1">
+                    <!-- <div class="d-flex justify-content-between align-items-center mb-1">
                       <span class="medium text-black">Unidentified person Matched</span>
                       <span class="text-black">{{ UBdeceasedCountgendercount.Male || 0 }}</span>
-                    </div>
+                    </div> -->
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Missing Males Matched</span>
-                      <span class="text-black">{{ UBfound_alivegendercount.Male || 0 }}</span>
+                      <span class="text-black">{{ unidentifiedBodyMatchedWithMissingMale|| 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Pending Males</span>
-                      <span class="text-black">{{ UBpendingGendercounts.Male || 0 }}</span>
+                      <span class="text-black">{{ unidentifiedBodyPendingMale || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -175,7 +174,7 @@
                       </div>
                       
                       <!-- Count -->
-                      <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
+                      <h6 class="text-black mb-0">{{ missingPersonMatchedWithUnidentifiedBodyMale + missingPersonMatchedWithUnidentifiedMale || 0 }}</h6>
                   </div>
               </div>
             </div>
@@ -197,7 +196,7 @@
                       </div>
           
                       <!-- Count -->
-                      <h6 class="text-black mb-0">{{ found_alivegendercount.Male + deceasedCountgendercount.Male || 0 }}</h6>
+                      <h6 class="text-black mb-0">{{ unidentifiedPersonMatchedWithMissingMale || 0 }}</h6>
                   </div>
               </div>
             </div>
@@ -219,7 +218,7 @@
                       </div>
           
                       <!-- Count -->
-                      <h6 class="text-black mb-0">{{ deceasedCountgendercount.Male || 0 }}</h6>
+                      <h6 class="text-black mb-0">{{ unidentifiedBodyMatchedWithMissingMale || 0 }}</h6>
                   </div>
               </div>
            </div>
@@ -241,7 +240,7 @@
                       </div>
           
                       <!-- Count -->
-                      <h6 class="text-black mb-0">{{ pendingGendercounts.Male || 0 }}</h6>
+                      <h6 class="text-black mb-0">{{missingPersonPendingMale + unidentifiedPersonPendingMale + unidentifiedBodyPendingMale || 0 }}</h6>
                   </div>
               </div>
           </div>
@@ -457,7 +456,7 @@
                 <div
                   id="map"
                   style="
-                    height: 450px;
+                    height: 400px;
                     border: 1px solid #000000;
                     border-radius: 5px;
                   "
@@ -470,7 +469,6 @@
   
       <div class="col-lg-2">
         <div class="card h-100 p-1">
-          <h6 class="statistics-card-headser mb-0">Comming Soon</h6>
 
           <!-- Card Header -->
           <div class="bg-gradient border-bottom-0 p-2" style="background: linear-gradient(to bottom right, #f8bbd0, #f48fb1);">
@@ -485,15 +483,15 @@
           
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Unidentified Bodies Found</span>
-                      <span class="text-black">{{ deceasedCountgendercount.Female || 0 }}</span>
+                      <span class="text-black">{{ missingPersonMatchedWithUnidentifiedBodyFemale || 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                      <span class="medium text-black">Unidentified Person Matched</span>
-                      <span class="text-black">{{ found_alivegendercount.Female || 0 }}</span>
+                      <span class="medium text-black">Unidentified Females Matched</span>
+                      <span class="text-black">{{ missingPersonMatchedWithUnidentifiedFemale || 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                      <span class="medium text-black">Pending Persons</span>
-                      <span class="text-black">{{ pendingGendercounts.Female || 0 }}</span>
+                      <span class="medium text-black">Pending Females</span>
+                      <span class="text-black">{{ missingPersonPendingFemale || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -504,17 +502,17 @@
                 <div class="card shadow-sm border-0">
                   <div class="card-body p-2">
                     <h6 class="text-black mb-1">Unidentified Female</h6>
-                    <div class="d-flex justify-content-between align-items-center">
+                    <!-- <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Unidentified Bodies Found</span>
                       <span class="text-black">{{ UPdeceasedCountgendercount.Female || 0 }}</span>
-                    </div>
+                    </div> -->
                     <div class="d-flex justify-content-between align-items-center">
-                      <span class="medium text-black">Missing Persons Matched</span>
-                      <span class="text-black">{{ UPfound_alivegendercount.Female || 0 }}</span>
+                      <span class="medium text-black">Missing Females Matched</span>
+                      <span class="text-black">{{ unidentifiedPersonMatchedWithMissingFemale|| 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Pending Females</span>
-                      <span class="text-black">{{ UPpendingGendercounts.Female || 0 }}</span>
+                      <span class="text-black">{{ unidentifiedPersonPendingFemale || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -525,17 +523,17 @@
                 <div class="card shadow-sm border-0">
                   <div class="card-body p-2">
                     <h6 class="text-black mb-1">Unidentified Bodies</h6>
-                    <div class="d-flex justify-content-between align-items-center">
+                    <!-- <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Unidentified Bodies Matched</span>
                       <span class="text-black">{{ UBdeceasedCountgendercount.Female || 0 }}</span>
-                    </div>
+                    </div> -->
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Missing Females Matched</span>
-                      <span class="text-black">{{ UBfound_alivegendercount.Female || 0 }}</span>
+                      <span class="text-black">{{ unidentifiedBodyMatchedWithMissingFemale || 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="medium text-black">Pending Females</span>
-                      <span class="text-black">{{ UBpendingGendercounts.Female || 0 }}</span>
+                      <span class="text-black">{{ unidentifiedBodyPendingFemale || 0 }}</span>
                     </div>
                   </div>
                 </div>
@@ -559,7 +557,7 @@
                                   </div>
                               </div>
                           </div>
-                          <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
+                          <h6 class="text-black mb-0">{{ missingPersonMatchedWithUnidentifiedBodyFemale + missingPersonMatchedWithUnidentifiedFemale || 0 }}</h6>
                       </div>
                   </div>
               </div>
@@ -578,7 +576,7 @@
                                   </div>
                               </div>
                           </div>
-                          <h6 class="text-black mb-0">{{ deceasedCountgendercount.Female || 0 }}</h6>
+                          <h6 class="text-black mb-0">{{ unidentifiedPersonMatchedWithMissingFemale || 0 }}</h6>
                       </div>
                   </div>
               </div>
@@ -597,7 +595,7 @@
                                   </div>
                               </div>
                           </div>
-                          <h6 class="text-black mb-0">{{ found_alivegendercount.Female || 0 }}</h6>
+                          <h6 class="text-black mb-0">{{ unidentifiedBodyMatchedWithMissingFemale || 0 }}</h6>
                       </div>
                   </div>
               </div>
@@ -616,7 +614,7 @@
                                   </div>
                               </div>
                           </div>
-                          <h6 class="text-black mb-0">{{ pendingGendercounts.Female || 0 }}</h6>
+                          <h6 class="text-black mb-0">{{ missingPersonPendingFemale + unidentifiedPersonPendingFemale + unidentifiedBodyPendingFemale|| 0 }}</h6>
                       </div>
                   </div>
               </div>

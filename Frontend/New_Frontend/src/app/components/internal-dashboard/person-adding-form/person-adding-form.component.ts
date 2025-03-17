@@ -14,7 +14,7 @@ import { PersonAddApiService } from './person-add-api.service';
 })
 export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
-  
+  storedPersonId: string | null = null;
   map!: L.Map;
   marker!: L.Marker | null;
   latitude: number | null = null;
@@ -53,13 +53,17 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
     // this.initializeForm();
   }
 
-  
 
   ngOnInit(): void {
+    // this.gettoken()
     this.getperson()
     this.initializeForm();
-    // this.initMap(this.selectedMapId);
-    
+   
+  }
+  // ✅ Define gettoken() separately
+  gettoken() {
+    this.storedPersonId = localStorage.getItem('user_id');
+    console.log(this.storedPersonId, "id");
   }
 
   ngAfterViewInit(): void {
@@ -98,10 +102,10 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
       document_ids: [''],
       created_at: [null],
       updated_at: [null],
-      created_by: [null],
-      updated_by: [null],
+      created_by: [null],  
+      updated_by: [null],  
       _is_deleted: [false],
-  
+
      // Addresses array
       addresses: this.fb.array([]),
       contacts: this.fb.array([]),
@@ -223,6 +227,7 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
       city: [''],
       district: [''],
       state: [''],
+      user: [this.storedPersonId],
       pincode: [''],
       country: [''],
       landmark_details: [''],
@@ -230,13 +235,14 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         latitude: [''],
         longitude: [''],
       }),
-      created_by: [null],
-      updated_by: [null],
+      created_by: [this.storedPersonId],
+      updated_by:[this.storedPersonId],
     });
   }
   
 
   createAddresFormGroup():FormGroup {
+    
      return this.fb.group({
         phone_no: [''],
         country_cd: [''],
@@ -250,14 +256,14 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         additional_details: [''],
         is_primary: [false],
   
-        user: [null],
+        user: [this.storedPersonId],
         hospital: [null],
         police_station: [null],
         person: [''],
         created_at: [null],
         updated_at: [null],
-        created_by: [null],
-        updated_by: [null],
+        created_by:  [this.storedPersonId],
+        updated_by:  [this.storedPersonId],
       })
     
   }
@@ -276,12 +282,12 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         education_details: [''],
         occupation_details: [''],
         
-        user: [null],
+        user:  [this.storedPersonId],
         person: [''],
         created_at: [null],
         updated_at: [null],
-        created_by: [null],
-        updated_by: [null],
+        created_by:  [this.storedPersonId],
+        updated_by:  [this.storedPersonId],
       })
     );
   }
@@ -295,15 +301,13 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         missing_date: [''], // Date Picker
         last_seen_location: [''],
         missing_location_details: [''],
-        
-  
         address: [null], // Should be linked with Address entity
         person: [''], // Should be linked with Person entity
   
         created_at: [null],
         updated_at: [null],
-        created_by: [null],
-        updated_by: [null],
+        created_by:  [this.storedPersonId],
+        updated_by:  [this.storedPersonId],
       })
     );
   }
@@ -320,8 +324,8 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         person: [''], // ForeignKey to Person
         created_at: [null],
         updated_at: [null],
-        created_by: [null],
-        updated_by: [null],
+        created_by:  [this.storedPersonId],
+        updated_by:  [this.storedPersonId],
       })
     );
   }
@@ -335,8 +339,8 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         is_consent: [false,Validators.required],
         created_at: [null],
         updated_at: [null],
-        created_by: [null],
-        updated_by: [null],
+        created_by:  [this.storedPersonId],
+        updated_by:  [this.storedPersonId],
       })
     );
   }
