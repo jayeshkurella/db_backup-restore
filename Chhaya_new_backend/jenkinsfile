@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    stages {
+        stage ('Checkout') {
+            steps {
+                git 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
+            }
+        }
+        stage ('Setup Virtual Environment, Install Dependencies') {
+            steps {
+                sh '''
+                chmod +x scripts/setup_python_env.sh
+                ./scripts/setup_python_env.sh
+                ''' 
+            }
+        }
+        stage ('db_config') {
+            steps {
+                sh '''
+                chmod +x scripts/db_config.sh
+                ./scripts/db_config.sh
+                '''
+            }
+        }
+        stage ('migration') {
+            steps {
+                sh '''
+                chmod +x scripts/migration.sh
+                ./scripts/migration.sh
+                ''' 
+            }
+        }
+        stage ('runserver') {
+            steps {
+                sh '''
+                chmod +x scripts/runserver.sh
+                ./scripts/runserver.sh
+                '''
+            }
+        }
+    }
+}
+
