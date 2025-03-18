@@ -6,6 +6,14 @@ pipeline {
                 git branch: 'chhaya_jenkins', credentialsId: 'new-token1', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
             }
         }
+        stage ('Debug: List Workspace Contents') {
+            steps {
+                sh '''
+                echo "Current directory: $(pwd)"
+                ls -R /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend
+                '''
+            }
+        }
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
