@@ -4,6 +4,7 @@ pipeline {
         stage ('Checkout') {
             steps {
                 git branch: 'chhaya_jenkins', credentialsId: 'new-token1', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
+                sh 'ls -R'
             }
         }
         stage ('Setup Virtual Environment, Install Dependencies') {
