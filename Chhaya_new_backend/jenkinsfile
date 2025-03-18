@@ -10,8 +10,8 @@ pipeline {
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
-                chmod +x /Chhaya_new_backend/scripts/setup_python_env.sh
-                ./Chhaya_new_backend/scripts/setup_python_env.sh
+                chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/setup_python_env.sh
+                ./var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/setup_python_env.sh
                 ''' 
             }
         }
