@@ -2,7 +2,7 @@
 
 # Activate virtual environment
 echo "Activating virtual environment..."
-source /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/venv/bin/activate
+source /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/venv/bin/activate
 
 # Check if the virtual environment was activated successfully
 if [ $? -eq 0 ]; then
@@ -13,7 +13,7 @@ else
 fi
 
 # Change to the project directory (optional, but it's a good practice)
-cd /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend
+cd /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend
 
 # Run Django development server 
 echo "Starting the Django development server..."
