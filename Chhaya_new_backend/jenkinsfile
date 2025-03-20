@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        WORKSPACE_DIR = "${WORKSPACE}/Chhaya_new_backend/scripts"
+    }
     stages {
         stage ('Checkout') {
             steps {
@@ -7,35 +10,47 @@ pipeline {
             }
         }
 
+        stage ('Fix Line Endings') {
+            steps {
+                sh '''
+                sudo apt-get install -y dos2unix
+                dos2unix ${WORKSPACE_DIR}/*.sh
+                '''
+            }
+        }
+
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
-                sudo chmod +x /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/scripts/setup_python_env.sh
-                bash /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/scripts/setup_python_env.sh
+                chmod +x ${WORKSPACE_DIR}/setup_python_env.sh
+                bash ${WORKSPACE_DIR}/setup_python_env.sh
                 '''
             }
         }
+
         stage ('db_config') {
             steps {
                 sh '''
-                sudo chmod +x /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/scripts/db_config.sh
-                bash /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/db_config.sh
+                chmod +x ${WORKSPACE_DIR}/db_config.sh
+                bash ${WORKSPACE_DIR}/db_config.sh
                 '''
             }
         }
+
         stage ('migration') {
             steps {
                 sh '''
-                sudo chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/migration.sh
-                bash /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/migration.sh
+                chmod +x ${WORKSPACE_DIR}/migration.sh
+                bash ${WORKSPACE_DIR}/migration.sh
                 '''
             }
         }
+
         stage ('runserver') {
             steps {
                 sh '''
-                sudo chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/runserver.sh
-                bash /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/runserver.sh
+                chmod +x ${WORKSPACE_DIR}/runserver.sh
+                bash ${WORKSPACE_DIR}/runserver.sh
                 '''
             }
         }
