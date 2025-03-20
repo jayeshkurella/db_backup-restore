@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project_directory="/var/lib/jenkins/workspace/chhaya_jenkins"
+project_directory="/var/lib/jenkins/workspace/chhaya_new"
 
 echo "Changing directory to Python project directory"
 cd $project_directory
@@ -22,7 +22,7 @@ fi
 
 # Check if manage.py exists
 if [ ! -f "$project_directory/Chhaya_new_backend/manage.py" ]; then
-  echo "manage.py not found in $project_directory/flames"
+  echo "manage.py not found in $project_directory/Chhaya_new_backend"
   exit 1
 fi
 
