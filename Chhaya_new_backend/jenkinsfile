@@ -16,32 +16,32 @@ pipeline {
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
-                chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/setup_python_env.sh
-                ./var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/setup_python_env.sh
+                sudo chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/setup_python_env.sh
+                /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/setup_python_env.sh
                 '''
             }
         }
         stage ('db_config') {
             steps {
                 sh '''
-                 chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/db_config.sh
-                ./var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/db_config.sh
+                sudo chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/db_config.sh
+                /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/db_config.sh
                 '''
             }
         }
         stage ('migration') {
             steps {
                 sh '''
-                chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/migration.sh
-                ./var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/migration.sh
+                sudo chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/migration.sh
+                /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/migration.sh
                 '''
             }
         }
         stage ('runserver') {
             steps {
                 sh '''
-                chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/runserver.sh
-                ./var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/runserver.sh
+                sudo chmod +x /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/runserver.sh
+                /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/runserver.sh
                 '''
             }
         }
