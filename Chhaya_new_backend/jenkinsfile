@@ -7,6 +7,12 @@ pipeline {
             }
         }
         
+        stage ('Check file access') {
+            steps {
+                sh 'ls -l /var/lib/jenkins/workspace/chhaya_jenkins/Chhaya_new_backend/scripts/'
+            }
+        }
+
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
