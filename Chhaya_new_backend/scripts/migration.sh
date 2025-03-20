@@ -10,6 +10,10 @@ else
     exit 1
 fi
 
+echo "Installing dependencies..."
+pip install --upgrade pip
+pip install -r /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/requirements.txt
+
 echo "Processing for makemigrations..."
 python /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/manage.py makemigrations
 
