@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh '''
                 sudo chmod +x /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/scripts/setup_python_env.sh
-                ./var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/scripts/setup_python_env.sh
+                bash /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/scripts/setup_python_env.sh
                 '''
             }
         }
