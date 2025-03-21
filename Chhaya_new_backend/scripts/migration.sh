@@ -11,7 +11,7 @@ else
 fi
 
 echo "Installing dependencies..."
-pip install -r /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/requirements.txt
+pip install -r /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/requirement.txt
 
 echo "Processing for makemigrations..."
 python /var/lib/jenkins/workspace/chhaya_new/Chhaya_new_backend/manage.py makemigrations
