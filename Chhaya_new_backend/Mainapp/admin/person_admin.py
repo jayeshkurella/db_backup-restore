@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Mainapp.models.person import Person
+from ..models.person import Person
 from leaflet.admin import LeafletGeoAdmin
 
 @admin.register(Person)

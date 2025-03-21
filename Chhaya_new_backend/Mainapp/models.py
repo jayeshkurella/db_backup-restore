@@ -1,15 +1,15 @@
 
-# from .Models.additonal_info import *
-# from .Models.address import *
-# from .Models.admin_user import *
-# from .Models.consent import *
-# from .Models.contact import *
-# from .Models.document import *
-# from .Models.fir import *
-# from .Models.hospital import *
-# from .Models.last_known_details import *
-# from .Models.match import *
-# from .Models.person_user import *
-# from .Models.person import *
-# from .Models.police_station import *
-# from .Models.user import *
+from .models.additonal_info import *
+from .models.address import *
+from .models.admin_user import *
+from .models.consent import *
+from .models.contact import *
+from .models.document import *
+from .models.fir import *
+from .models.hospital import *
+from .models.last_known_details import *
+from .models.match import *
+from .models.person_user import *
+from .models.person import *
+from .models.police_station import *
+from .models.user import *

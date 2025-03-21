@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import FIR
+from ..models import FIR
 
 
 @admin.register(FIR)

@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from Mainapp.models import PersonUser
+from ..models import PersonUser
 
 admin.site.register(PersonUser)

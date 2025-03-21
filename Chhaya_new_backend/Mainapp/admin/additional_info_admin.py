@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import AdditionalInfo
+from ..models import AdditionalInfo
 
 
 @admin.register(AdditionalInfo)

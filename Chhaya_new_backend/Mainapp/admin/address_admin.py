@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import Address
+from ..models import Address
 from leaflet.admin import LeafletGeoAdmin
 
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import Consent
+from ..models import Consent
 
 
 @admin.register(Consent)

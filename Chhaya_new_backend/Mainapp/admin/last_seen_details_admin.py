@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import LastKnownDetails
+from ..models import LastKnownDetails
 
 
 @admin.register(LastKnownDetails)

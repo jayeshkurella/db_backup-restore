@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
-from Mainapp.models import PoliceStation, Address, User
+from ..models import PoliceStation, Address, User
 
 class PoliceStationAPITestCase(TestCase):
     """ Test case for Police Station API """

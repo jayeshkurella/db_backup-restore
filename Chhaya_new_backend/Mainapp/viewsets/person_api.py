@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated ,AllowAny
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
-from Mainapp.models.fir import FIR
+from ..models.fir import FIR
 from ..access_permision import IsAdminUser , IsVolunteerUser ,AllUserAccess
 from ..pagination import CustomPagination
 from ..Serializers.serializers import PersonSerializer

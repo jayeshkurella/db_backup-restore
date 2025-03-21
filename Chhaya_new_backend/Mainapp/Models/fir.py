@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 
-from Mainapp.models.person import Person
+from .person import Person
 
 from .contact import Contact
 from .document import Document

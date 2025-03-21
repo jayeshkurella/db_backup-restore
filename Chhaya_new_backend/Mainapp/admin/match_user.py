@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import Match
+from ..models import Match
 
 from django.contrib import admin
 

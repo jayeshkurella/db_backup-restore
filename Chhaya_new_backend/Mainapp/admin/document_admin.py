@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Mainapp.models import Document
+from ..models import Document
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
