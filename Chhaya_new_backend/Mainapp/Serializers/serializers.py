@@ -1,3 +1,4 @@
+import datetime  # Ensure this is imported
 
 from rest_framework import serializers
 from ..models import Person , Address, Contact ,FIR,AdditionalInfo ,AdminUser ,User ,Consent ,Document ,Hospital ,LastKnownDetails ,Match ,PersonUser ,PoliceStation
@@ -26,8 +27,6 @@ class LastKnownDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = LastKnownDetails
         fields = '__all__'
-
-
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:

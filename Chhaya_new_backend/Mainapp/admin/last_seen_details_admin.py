@@ -5,7 +5,7 @@ from Mainapp.models import LastKnownDetails
 
 @admin.register(LastKnownDetails)
 class LastKnownDetailsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'person', 'missing_date', 'missing_time', 'last_seen_location', 'missing_location_details',
+    list_display = ('id', 'person', 'missing_date', 'last_seen_location', 'missing_location_details',
                      'created_at', 'updated_at')
     list_filter = ('missing_date', 'created_at')
     search_fields = ('last_seen_location', 'missing_location_details', )
@@ -18,7 +18,7 @@ class LastKnownDetailsAdmin(admin.ModelAdmin):
         }),
         ('Missing Details', {
             'fields': (
-            'missing_date', 'missing_time', 'last_seen_location', 'missing_location_details',
+            'missing_date', 'last_seen_location', 'missing_location_details',
             'address')
         }),
         ('Photos', {

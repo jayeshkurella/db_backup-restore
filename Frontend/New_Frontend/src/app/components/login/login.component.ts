@@ -70,6 +70,24 @@ export class LoginComponent {
     );
  }
 
+ isPasswordVisible: boolean = false;
+
+togglePasswordVisibility(field: string) {
+  if (field === 'password') {
+    this.isPasswordVisible = !this.isPasswordVisible;
+    const passwordInput = document.getElementById('passwordInput') as HTMLInputElement;
+    const toggleIcon = document.getElementById('togglePasswordIcon') as HTMLElement;
+
+    if (this.isPasswordVisible) {
+      passwordInput.type = 'text';
+      toggleIcon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+  } 
+}
+
 
   
 

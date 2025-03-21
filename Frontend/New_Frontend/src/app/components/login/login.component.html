@@ -25,7 +25,12 @@
         <!-- Password -->
         <div class="mb-3 input-group">
           <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
-          <input type="password" class="form-control border-0 border-bottom" formControlName="password" placeholder="Enter your password">
+          <input type="password" class="form-control border-0 border-bottom" formControlName="password" 
+                placeholder="Enter password" id="passwordInput">
+          <span class="input-group-text bg-light border-0" style="cursor: pointer;" 
+                (click)="togglePasswordVisibility('password')">
+            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+          </span>
         </div>
     
         <!-- Submit Button -->

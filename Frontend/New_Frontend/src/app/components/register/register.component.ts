@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { RegisterApiService } from './register-api.service';
 import { Router } from '@angular/router';
 declare var bootstrap: any; // Bootstrap modal instance
@@ -120,11 +120,15 @@ export class RegisterComponent {
   }
   
   // ✅ Custom Validator to Check if Passwords Match
-  passwordMatchValidator(formGroup: FormGroup) {
+  passwordMatchValidator(formGroup: AbstractControl): ValidationErrors | null {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('password2')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
+  
+    return password && confirmPassword && password !== confirmPassword
+      ? { passwordMismatch: true }  // ✅ Ensure it's a key-value pair
+      : null;
   }
+  
   
 
   get f() {

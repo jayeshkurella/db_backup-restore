@@ -42,3 +42,25 @@ class IsMedicalStaffUser(BasePermission):
     """Allows access only to Medical Staff users."""
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.user_type == 'medical_staff'
+
+
+class AllUserAccess(BasePermission):
+    """
+    Allows access to specific user types.
+    By default, allows all users if no specific user type is provided.
+
+    Usage:
+    - `permission_classes = [AllUserAccess("admin", "officer")]`  # Restrict access
+    - `permission_classes = [AllUserAccess()]`  # Allow all authenticated users
+    """
+
+    def __init__(self, *allowed_user_types):
+        self.allowed_user_types = allowed_user_types or [
+            "admin", "family", "officer", "reporting", "volunteer", "police_station", "medical_staff"
+        ]
+
+    def has_permission(self, request, view):
+        print("Authenticated:", request.user.is_authenticated)
+        print("User Type:", getattr(request.user, "user_type", None))
+
+        return request.user.is_authenticated and getattr(request.user, "user_type", "") in self.allowed_user_types

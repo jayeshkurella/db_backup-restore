@@ -1,12 +1,15 @@
+import logging
+
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated ,AllowAny
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
 from Mainapp.models.fir import FIR
-from ..access_permision import IsAdminUser , IsVolunteerUser
+from ..access_permision import IsAdminUser , IsVolunteerUser ,AllUserAccess
 from ..pagination import CustomPagination
 from ..Serializers.serializers import PersonSerializer
 from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, Document
@@ -17,29 +20,14 @@ import json
 from django.utils.timezone import now
 import traceback  # Add this import at the top of your file
 
+logger = logging.getLogger(__name__)
 
 
 class PersonViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication]  # Require token authentication
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated,AllUserAccess]
 
     parser_classes = (MultiPartParser, FormParser,JSONParser)
-
-
-    """
-    A ViewSet for managing Person entities and their related data.
-
-    This ViewSet provides operations to list, retrieve, create, update (PUT and PATCH),
-    and partially update Person objects while handling their related data, such as
-    addresses, contacts, additional information, last known details, FIRs, and consents.
-
-    Methods:
-        - list: Retrieves a paginated list of all persons that are not marked as deleted.
-        - retrieve: Retrieves a specific person by their ID, along with related data.
-        - create: Creates a new person and their related data as specified.
-        - update: Updates the details of an existing person and all related data.
-        - partial_update: Partially updates an existing person and their related data, allowing for selective data changes.
-    """
     pagination_class = PageNumberPagination
 
     def get_permissions(self):
@@ -101,190 +89,23 @@ class PersonViewSet(viewsets.ViewSet):
         request_body=PersonSerializer,
         responses={201: openapi.Response("Person created successfully")}
     )
-    # def create(self, request):
-    #     print("Incoming Data Format:", request.content_type)  # Debugging: Print request content type
-    #     try:
-    #         with transaction.atomic():
-    #             # Handle JSON data
-    #             if request.content_type == 'application/json':
-    #                 data = request.data  # JSON data is already parsed into request.data
-    #                 print("Extracted JSON Data:", json.dumps(data, indent=4))  # Debugging: Print JSON data
-    #
-    #             # Handle form-data
-    #             elif request.content_type.startswith('multipart/form-data'):
-    #                 # Extract JSON payload from form-data
-    #                 payload_str = request.POST.get('payload', '{}')  # Use 'payload' as the key for JSON data
-    #                 data = json.loads(payload_str)
-    #                 print("Extracted Form-Data JSON Payload:",
-    #                       json.dumps(data, indent=4))  # Debugging: Print form-data JSON payload
-    #
-    #             else:
-    #                 return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-    #
-    #             # Extract related data
-    #             addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]
-    #             contacts_data = [contact for contact in data.get('contacts', []) if any(contact.values())]
-    #             additional_info_data = [info for info in data.get('additional_info', []) if any(info.values())]
-    #             last_known_details_data = [details for details in data.get('last_known_details', []) if
-    #                                        any(details.values())]
-    #             firs_data = [fir for fir in data.get('firs', []) if any(fir.values())]
-    #             consents_data = [consent for consent in data.get('consent', []) if any(consent.values())]
-    #
-    #             print("Filtered Addresses Data:",
-    #                   json.dumps(addresses_data, indent=4))  # Debugging: Print addresses data
-    #             print("Filtered Contacts Data:", json.dumps(contacts_data, indent=4))  # Debugging: Print contacts data
-    #             print("Filtered Additional Info Data:",
-    #                   json.dumps(additional_info_data, indent=4))  # Debugging: Print additional info data
-    #             print("Filtered Last Known Details Data:",
-    #                   json.dumps(last_known_details_data, indent=4))  # Debugging: Print last known details data
-    #             print("Filtered FIRs Data:", json.dumps(firs_data, indent=4))  # Debugging: Print FIRs data
-    #             print("Filtered Consents Data:", json.dumps(consents_data, indent=4))  # Debugging: Print consents data
-    #
-    #             # Create Person object with only non-empty data
-    #             person_data = {k: v for k, v in data.items() if v not in [None, "", []] and k not in [
-    #                 'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
-    #             ]}
-    #             person = Person.objects.create(**person_data)
-    #             print("Person Created:", person.id)  # Debugging: Print person ID
-    #
-    #             # Create related addresses
-    #             addresses = []
-    #             for address in addresses_data:
-    #                 lat = address.get('location', {}).get('latitude')
-    #                 lon = address.get('location', {}).get('longitude')
-    #                 print(f"Latitude: {lat}, Longitude: {lon}")
-    #
-    #                 point = None
-    #                 if lat and lon:
-    #                     try:
-    #                         lat = float(lat)
-    #                         lon = float(lon)
-    #                         point = Point(lon, lat)
-    #                     except ValueError as e:
-    #                         print("Error converting lat/lon to float:", e)
-    #                         return Response({'error': 'Latitude and Longitude must be valid numbers'},
-    #                                         status=status.HTTP_400_BAD_REQUEST)
-    #
-    #                 address_obj = Address(
-    #                     person=person,
-    #                     location=point,
-    #                     **{k: v for k, v in address.items() if k not in ['location', 'person']}
-    #                 )
-    #                 addresses.append(address_obj)
-    #             Address.objects.bulk_create(addresses)
-    #             print("Addresses Bulk Created")  # Debugging: Print confirmation
-    #
-    #             # Create related contacts
-    #             contacts = [Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'})
-    #                         for contact in contacts_data]
-    #             Contact.objects.bulk_create(contacts)
-    #             print("Contacts Bulk Created")  # Debugging: Print confirmation
-    #
-    #             # Create additional info
-    #             additional_info = [AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'})
-    #                                for info in additional_info_data]
-    #             AdditionalInfo.objects.bulk_create(additional_info)
-    #             print("Additional Info Bulk Created")  # Debugging: Print confirmation
-    #
-    #             # Create last known details
-    #             last_known_details = []
-    #             for details in last_known_details_data:
-    #                 person_photo = details.pop('person_photo', None) or None
-    #                 reference_photo = details.pop('reference_photo', None) or None
-    #
-    #                 last_known_details.append(
-    #                     LastKnownDetails(
-    #                         person=person,
-    #                         person_photo=person_photo,
-    #                         reference_photo=reference_photo,
-    #                         **{k: v for k, v in details.items() if k != 'person'}
-    #                     )
-    #                 )
-    #             LastKnownDetails.objects.bulk_create(last_known_details)
-    #             print("Last Known Details Bulk Created")  # Debugging: Print confirmation
-    #
-    #             # Function to handle document creation
-    #             def create_document(file_data, document_type):
-    #                 if file_data:  # Check if file data is provided
-    #                     return Document.objects.create(document=file_data, type=document_type)
-    #                 return None  # Return None if no file data is provided
-    #
-    #             # Create FIRs
-    #             firs = []
-    #             for fir_data in firs_data:
-    #                 # Handle the document field
-    #                 document_data = fir_data.pop('document', None)  # Extract document data
-    #                 document = create_document(document_data,
-    #                                            Document.DocumentTypeChoices.FIR)  # Create a Document instance or None
-    #
-    #                 # Create the FIR instance
-    #                 fir = FIR(
-    #                     person=person,  # Assign the Person instance
-    #                     document=document,  # Assign the Document instance or None
-    #                     **{k: v for k, v in fir_data.items() if k != 'person'}
-    #                 )
-    #                 firs.append(fir)
-    #
-    #             # Bulk create FIRs
-    #             FIR.objects.bulk_create(firs)
-    #             print("FIRs Bulk Created")  # Debugging: Print confirmation
-    #
-    #             # Function to handle document creation
-    #             def create_document(file_data):
-    #                 if file_data:  # Check if file data is provided
-    #                     return Document.objects.create(document=file_data)  # Use the correct field name
-    #                 return None  # Return None if no file data is provided
-    #
-    #             # Create consents
-    #             consents = []
-    #             for consent_data in consents_data:
-    #                 # Handle the document field
-    #                 document_data = consent_data.pop('document', None)  # Extract document data
-    #                 document = create_document(document_data)  # Create a Document instance or None
-    #
-    #                 # Create the Consent instance
-    #                 consent = Consent(
-    #                     person=person,  # Assign the Person instance
-    #                     document=document,  # Assign the Document instance or None
-    #                     **{k: v for k, v in consent_data.items() if k != 'person'}
-    #                 )
-    #                 consents.append(consent)
-    #
-    #             # Bulk create consents
-    #             Consent.objects.bulk_create(consents)
-    #             print("Consents Bulk Created")  # Debugging: Print confirmation
-    #
-    #             serializer = PersonSerializer(person)
-    #             person_data = serializer.data
-    #
-    #             return Response(
-    #                 {'message': 'Person created successfully', 'person_id': str(person.id), 'person_data': person_data},
-    #                 status=status.HTTP_201_CREATED)
-    #
-    #     except Exception as e:
-    #         print("Exception Occurred:", str(e))  # Debugging: Print exception
-    #         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    #
-
-
     def create(self, request):
-        print("Incoming Data Format:", request.content_type)  # Debugging: Print request content type
+        logger.debug("Incoming Data Format: %s", request.content_type)
         try:
             with transaction.atomic():
-                # Handle JSON data
+                # Extract data based on content type
                 if request.content_type == 'application/json':
-                    data = request.data  # JSON data is already parsed into request.data
-                    print("Extracted JSON Data:", json.dumps(data, indent=4))  # Debugging: Print JSON data
-
-                # Handle form-data
+                    data = request.data
                 elif request.content_type.startswith('multipart/form-data'):
-                    # Extract JSON payload from form-data
-                    payload_str = request.POST.get('payload', '{}')  # Use 'payload' as the key for JSON data
+                    payload_str = request.POST.get('payload', '{}')
                     data = json.loads(payload_str)
-                    print("Extracted Form-Data JSON Payload:", json.dumps(data, indent=4))
-
                 else:
                     return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+                logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
+
+                # Validate person data
+                self._validate_person_data(data)
 
                 # Extract related data
                 addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]
@@ -295,113 +116,103 @@ class PersonViewSet(viewsets.ViewSet):
                 firs_data = [fir for fir in data.get('firs', []) if any(fir.values())]
                 consents_data = [consent for consent in data.get('consent', []) if any(consent.values())]
 
-                print("Filtered Addresses Data:", json.dumps(addresses_data, indent=4))
+                logger.debug("Filtered Addresses Data: %s", json.dumps(addresses_data, indent=4))
 
-                # Create Person object with the first address data
+                # Create Person object
                 person_data = {k: v for k, v in data.items() if v not in [None, "", []] and k not in [
                     'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
                 ]}
-
-                # Extract the first address
-                first_address = addresses_data.pop(0) if addresses_data else {}
-                person_data.update({
-                    'street': first_address.get('street', ''),
-                    'appartment_no': first_address.get('appartment_no', ''),
-                    'appartment_name': first_address.get('appartment_name', ''),
-                    'village': first_address.get('village', ''),
-                    'city': first_address.get('city', ''),
-                    'district': first_address.get('district', ''),
-                    'state': first_address.get('state', ''),
-                    'pincode': first_address.get('pincode', ''),
-                    'country': first_address.get('country', 'India'),
-                    'landmark_details': first_address.get('landmark_details', ''),
-                    'location': Point(
-                        float(first_address['location']['longitude']),
-                        float(first_address['location']['latitude'])
-                    ) if first_address.get('location') else None,
-                    'is_active': first_address.get('is_active', True),
-                    'country_code': first_address.get('country_code', ''),
-                })
-
                 person = Person.objects.create(**person_data)
-                print("Person Created:", person.id)
+                logger.debug("Person Created: %s", person.id)
 
-                # Create remaining addresses
-                addresses = []
-                for address in addresses_data:
-                    lat = address.get('location', {}).get('latitude')
-                    lon = address.get('location', {}).get('longitude')
-                    print(f"Latitude: {lat}, Longitude: {lon}")
+                # Create related objects
+                self._create_addresses(person, addresses_data)
+                self._create_contacts(person, contacts_data)
+                self._create_additional_info(person, additional_info_data)
+                self._create_last_known_details(person, last_known_details_data)
+                self._create_firs(person, firs_data)
+                self._create_consents(person, consents_data)
 
-                    point = None
-                    if lat and lon:
-                        try:
-                            lat = float(lat)
-                            lon = float(lon)
-                            point = Point(lon, lat)
-                        except ValueError as e:
-                            print("Error converting lat/lon to float:", e)
-                            return Response({'error': 'Latitude and Longitude must be valid numbers'},
-                                            status=status.HTTP_400_BAD_REQUEST)
-
-                    address_obj = Address(
-                        person=person,
-                        location=point,
-                        **{k: v for k, v in address.items() if k not in ['location', 'person']}
-                    )
-                    addresses.append(address_obj)
-                Address.objects.bulk_create(addresses)
-                print("Addresses Bulk Created")
-
-                # Create related contacts
-                contacts = [
-                    Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'})
-                    for contact in contacts_data
-                ]
-                Contact.objects.bulk_create(contacts)
-
-                # Create additional info
-                additional_info = [
-                    AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'})
-                    for info in additional_info_data if isinstance(info, dict)
-                ]
-                AdditionalInfo.objects.bulk_create(additional_info)
-
-                # Create last known details
-                last_known_details = [
-                    LastKnownDetails(person=person, **{k: v for k, v in details.items() if
-                                                       isinstance(details, dict) and k != 'person'})
-                    for details in last_known_details_data if isinstance(details, dict)
-                ]
-                LastKnownDetails.objects.bulk_create(last_known_details)
-
-                # Create FIRs
-                firs = [
-                    FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'})
-                    for fir in firs_data if isinstance(fir, dict)
-                ]
-                FIR.objects.bulk_create(firs)
-
-                # Create consents
-                consents = [
-                    Consent(person=person, **{k: v for k, v in consent.items() if k != 'person'})
-                    for consent in consents_data
-                ]
-                Consent.objects.bulk_create(consents)
-
-                # Prepare the final response data
+                # Prepare the final response
                 serializer = PersonSerializer(person)
-                person_data = serializer.data
                 return Response(
-                    {'message': 'Person created successfully', 'person_id': str(person.id), 'data': person_data},
+                    {'message': 'Person created successfully', 'person_id': str(person.id), 'data': serializer.data},
                     status=status.HTTP_201_CREATED
                 )
 
+        except ValueError as e:
+            logger.error("Validation error: %s", str(e))
+            return Response({'error': f'Validation error: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print("Exception Occurred:", str(e))
-            print("Traceback:")
-            traceback.print_exc()  # Print the full traceback including the line number
+            logger.error("Exception Occurred: %s", str(e))
+            logger.error("Traceback: %s", traceback.format_exc())
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def _validate_person_data(self, data):
+        required_fields = ['full_name', 'age', 'gender']
+        for field in required_fields:
+            if field not in data or not data[field]:
+                raise ValueError(f"Missing required field: {field}")
+
+    def _create_addresses(self, person, addresses_data):
+        addresses = []
+        for address in addresses_data:
+            lat = address.get('location', {}).get('latitude')
+            lon = address.get('location', {}).get('longitude')
+            point = None
+            if lat and lon:
+                try:
+                    lat = float(lat)
+                    lon = float(lon)
+                    if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+                        raise ValueError("Latitude must be between -90 and 90, and longitude between -180 and 180.")
+                    point = Point(lon, lat)
+                except ValueError as e:
+                    raise ValueError(f"Invalid location data: {e}")
+
+            address_obj = Address(
+                person=person,
+                location=point,
+                **{k: v for k, v in address.items() if k not in ['location', 'person']}
+            )
+            addresses.append(address_obj)
+        Address.objects.bulk_create(addresses)
+
+    def _create_contacts(self, person, contacts_data):
+        contacts = [
+            Contact(person=person, **{k: v for k, v in contact.items() if k != 'person'})
+            for contact in contacts_data
+        ]
+        Contact.objects.bulk_create(contacts)
+
+    def _create_additional_info(self, person, additional_info_data):
+        additional_info = [
+            AdditionalInfo(person=person, **{k: v for k, v in info.items() if k != 'person'})
+            for info in additional_info_data if isinstance(info, dict)
+        ]
+        AdditionalInfo.objects.bulk_create(additional_info)
+
+    def _create_last_known_details(self, person, last_known_details_data):
+        last_known_details = [
+            LastKnownDetails(person=person, **{k: v for k, v in details.items() if k != 'person'})
+            for details in last_known_details_data if isinstance(details, dict)
+        ]
+        LastKnownDetails.objects.bulk_create(last_known_details)
+
+    def _create_firs(self, person, firs_data):
+        firs = [
+            FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'})
+            for fir in firs_data if isinstance(fir, dict)
+        ]
+        FIR.objects.bulk_create(firs)
+
+    def _create_consents(self, person, consents_data):
+        consents = [
+            Consent(person=person, **{k: v for k, v in consent.items() if k != 'person'})
+            for consent in consents_data
+        ]
+        Consent.objects.bulk_create(consents)
+
     @swagger_auto_schema(
         operation_description="Update an existing person's details",
         request_body=PersonSerializer,
@@ -615,5 +426,32 @@ class PersonViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['get'], url_path='missing-persons')
+    def missing_persons(self, request):
+        return self.get_persons_by_type(request, 'Missing Person')
 
+    @action(detail=False, methods=['get'], url_path='unidentified-persons')
+    def unidentified_persons(self, request):
+        return self.get_persons_by_type(request, 'Unidentified Person')
 
+    @action(detail=False, methods=['get'], url_path='unidentified-bodies')
+    def unidentified_bodies(self, request):
+        return self.get_persons_by_type(request, 'Unidentified Body')
+
+    def get_persons_by_type(self, request, person_type):
+        """Return filtered persons based on request parameters"""
+        try:
+            filters = {key: value for key, value in request.query_params.items() if value}
+
+            persons = Person.objects.filter(type=person_type, _is_deleted=False, **filters).prefetch_related(
+                'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
+            ).order_by('-created_at')
+
+            if not persons.exists():
+                return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
+
+            serializer = PersonSerializer(persons, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)

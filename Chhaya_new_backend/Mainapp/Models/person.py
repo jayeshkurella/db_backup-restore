@@ -57,11 +57,15 @@ class Person(models.Model):
         VIOLET = 'VIOLET', 'Violet'
 
     class BloodGroupChoices(models.TextChoices):
-        O = 'O', 'O'
-        A = 'A', 'A'
-        B = 'B', 'B'
-        AB = 'AB', 'AB'
-    
+        O_POS = 'O+', 'O+'
+        O_NEG = 'O-', 'O-'
+        A_POS = 'A+', 'A+'
+        A_NEG = 'A-', 'A-'
+        B_POS = 'B+', 'B+'
+        B_NEG = 'B-', 'B-'
+        AB_POS = 'AB+', 'AB+'
+        AB_NEG = 'AB-', 'AB-'
+
     class ConditionChoices(models.TextChoices):
         MEMORY_LOSS = 'MEMORY_LOSS', 'Memory Loss'
         ANXIETY = 'ANXIETY', 'Anxiety'
