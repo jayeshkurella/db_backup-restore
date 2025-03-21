@@ -75,9 +75,9 @@ export class MissingPersonComponent implements OnInit {
   pendingPersons: any[] = [];
   resolvedPersons: any[] = [];
 // Pagination variables
-pendingPage: number = 1;
-resolvedPage: number = 1;
-itemsPerPage: number = 5; // Adjust as needed
+  pendingPage: number = 1;
+  resolvedPage: number = 1;
+  itemsPerPage: number = 5; // Adjust as needed
   ngOnInit() {
     this.getStates();
   }
@@ -114,58 +114,7 @@ itemsPerPage: number = 5; // Adjust as needed
 
   
 
-//   applyFilters(): void {
-//     this.loading = true;
-//     this.filtersApplied = true;
-//     this.progress = 1; // Start at 1%
-//     this.progressColor = 'bg-primary'; // Default progress bar color
-//     this.progressMessage = "🔄 Applying filters...";
 
-//     // Simulate progress incrementing
-//     let interval = setInterval(() => {
-//         if (this.progress < 90) {
-//             this.progress += 10;
-//         }
-//     }, 200);
-
-//     setTimeout(() => {
-//         this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-//             (response) => {
-//                 clearInterval(interval);
-//                 this.progress = 100; // Complete progress
-
-//                 console.log('Filtered Data:', response);
-
-//                 if (response && Array.isArray(response)) {
-//                     // Separate persons based on case_status
-//                     this.pendingPersons = response.filter(person => person.case_status === 'Pending');
-//                     this.resolvedPersons = response.filter(person => person.case_status === 'Resolved');
-
-//                     this.progressColor = 'bg-success'; // Green if data found
-//                     this.progressMessage = "✅ Filters applied successfully!";
-//                 } else {
-//                     console.error('Unexpected API response:', response);
-//                     this.pendingPersons = [];
-//                     this.resolvedPersons = [];
-
-//                     this.progressColor = 'bg-danger'; // Red if no data found
-//                     this.progressMessage = "❌ No data found! Try with another filter.";
-//                 }
-
-//                 setTimeout(() => {
-//                     this.loading = false; // Hide loader after 1s
-//                 }, 1000);
-//             },
-//             (error) => {
-//                 clearInterval(interval);
-//                 console.error('Error fetching data:', error);
-//                 this.progressColor = 'bg-danger';
-//                 this.progressMessage = "❌ Error applying filters!";
-//                 setTimeout(() => { this.loading = false; }, 1000);
-//             }
-//         );
-//     }, 2000);
-//  }
 applyFilters(): void {
   this.loading = true;
   this.filtersApplied = true;
@@ -214,7 +163,7 @@ applyFilters(): void {
         setTimeout(() => { this.loading = false; }, 1000);
       }
     );
-  }, 2000);
+  }, 1000);
 }
 
 

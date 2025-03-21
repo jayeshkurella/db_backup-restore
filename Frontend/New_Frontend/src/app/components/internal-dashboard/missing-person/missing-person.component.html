@@ -127,9 +127,11 @@
       <div class="tab-pane fade show active" id="pending">
         <div class="table-responsive">
           <!-- Show message when no persons are found -->
-          <div *ngIf="pendingPersons && pendingPersons.length === 0" class="text-center text-danger mt-3">
-            No pending persons found with the applied filters.
-          </div>
+          <!-- Show message only if data has been fetched and no results are found -->
+        <div *ngIf="pendingPersons !== undefined && pendingPersons.length === 0 && filtersApplied" class="text-center text-danger mt-3">
+          No pending persons found with the applied filters.
+        </div>
+
 
           <!-- Show table only if persons exist -->
           <table *ngIf="paginatedPendingPersons.length > 0" class="table table-bordered mt-1">
@@ -179,9 +181,11 @@
       <div class="tab-pane fade" id="resolved">
         <div class="table-responsive">
           <!-- Show message when no resolved persons are found -->
-          <div *ngIf="resolvedPersons && resolvedPersons.length === 0" class="text-center text-muted mt-3">
-            No resolved cases found.
-          </div>
+          <!-- Show message only if data is fetched and filters are applied -->
+        <div *ngIf="resolvedPersons !== undefined && resolvedPersons.length === 0 && filtersApplied" class="text-center text-muted mt-3">
+          No resolved cases found.
+        </div>
+
 
           <!-- Show table only if resolved persons exist -->
           <table *ngIf="paginatedResolvedPersons.length > 0" class="table table-bordered mt-1">
@@ -440,34 +444,41 @@
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>missing_location:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.last_known_details[0].missing_location }}</div>
+            <div class="col-md-9">{{ selectedPerson.last_known_details[0].last_seen_location }}</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Location Details:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.last_known_details[0].location_details }}</div>
+            <div class="col-md-9">{{ selectedPerson.last_known_details[0].missing_location_details }}</div>
           </div>
           <!-- Investigating Officer & Reporting Person Details -->
           <h5 class="mb-3 text-primary">Investigation Details</h5>
           <div class="row mb-3">
-              <div class="col-md-3"><strong>Police station :</strong></div>
-              <div class="col-md-9">{{ selectedPerson.police_station_name_and_address}} </div>
+              <div class="col-md-3"><strong>Fir Number :</strong></div>
+              <div class="col-md-9">{{ selectedPerson.firs[0].fir_number}} </div>
             </div>
-            <!-- <div class="row mb-3">
-              <div class="col-md-3"><strong>Police station address:</strong></div>
-              <div class="col-md-9">{{ selectedPerson.police_station_name_and_address.address }} </div>
-            </div> -->
+            <div class="row mb-3">
+              <div class="col-md-3"><strong>Case Status :</strong></div>
+              <div class="col-md-9">{{ selectedPerson.firs[0].case_status}} </div>
+            </div>
           <div class="row mb-3">
             <div class="col-md-3"><strong>Investigating Officer:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.investigating_officer_name }} ({{ selectedPerson.investigating_officer_contact_number }})</div>
+            <div class="col-md-9">{{ selectedPerson.firs[0].investigation_officer_name }} ({{ selectedPerson.investigating_officer_contact_number }})</div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-3"><strong>Reporting Person:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.reportingperson_name }} ({{ selectedPerson.relationship_with_victim }})</div>
+            <div class="col-md-3"><strong>Police station:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.firs[0].police_station }} </div>
+          </div>
+
+          <h5 class="mb-3 text-primary">consent</h5>
+          <div class="row mb-3">
+            <div class="col-md-3"><strong>consent:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.consent[0].is_consent }} </div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-3"><strong>Willing to Volunteer:</strong></div>
-            <div class="col-md-9">{{ selectedPerson.willing_to_volunteer ? 'Yes' : 'No' }}</div>
+            <div class="col-md-3"><strong>Data:</strong></div>
+            <div class="col-md-9">{{ selectedPerson.consent[0].data }} </div>
           </div>
+
           <!-- Map Section -->
         <h5 class="mb-3 text-primary">Location of missing Person</h5>
         <div class="row mb-3">
@@ -475,7 +486,7 @@
             <div id="map"></div>
           </div>
         </div>
-
+        
         </div>
       </div>
       <div class="modal-footer">
