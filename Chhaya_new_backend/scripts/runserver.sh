@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Activating virtual environment..."
-source /var/lib/jenkins/workspace/chhaya_tets/venv/bin/activate
+source /var/lib/jenkins/workspace/chhaya_test/venv/bin/activate
 
 if [[ "$VIRTUAL_ENV" != "" ]]; then
     echo "Virtual environment activated."
