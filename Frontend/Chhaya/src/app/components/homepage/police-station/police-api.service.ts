@@ -12,14 +12,6 @@ export class PoliceAPIService {
 
   constructor(private http:HttpClient) { }
 
-  // getallpoliceStation(page :number): Observable<any> {
-  //   return this.http.get<any>(`${this.mainUrl +'police-stations/'}?page=${page}`);
-  // }
-
-  // getallpoliceStationbyID(id:string):Observable<any>{
-  //   return this.http.get<any>(`${this.mainUrl+'police-stations/'}${id}/`);
-  // }
-
   // Search police stations based on query
   searchPoliceStations(queryParams: any): Observable<any> {
     const params = new HttpParams()
@@ -27,7 +19,6 @@ export class PoliceAPIService {
       .set('city', queryParams.city || '')
       .set('district', queryParams.district || '')
       .set('state', queryParams.state || '');
-  
     return this.http.get<any>(`${this.mainUrl}police-stations/`, { params });
   }
 

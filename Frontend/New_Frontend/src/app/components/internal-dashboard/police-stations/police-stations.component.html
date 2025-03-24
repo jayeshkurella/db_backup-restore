@@ -1,1 +1,548 @@
-<p>police-stations works!</p>
+<div class="container text-center text-dark mt-3">
+    <h4 class="fw-bold fs-5">Find Your Local Police Station</h4>
+    <p class="fs-6">Quick access to emergency services and police stations across the country</p>
+    <!-- Button to Open Modal -->
+<button type="button" class="btn btn-primary search-btn mb-2" data-bs-toggle="modal" data-bs-target="#policeStationModal" (click)="openModal()">
+    Add Police Station
+  </button>
+  </div>
+  
+
+
+  <div class="d-flex justify-content-center border-bottom">
+    <div class="filter-section bg-light rounded mb-2 border px-2 py-2 border-dark" style="max-width: 1000px; width: 100%;">
+      <div class="row g-2 align-items-center text-center">
+        <form class="mt-4" (ngSubmit)="onSearch()">
+          <div class="row g-3 justify-content-center">
+            <!-- Search by Name -->
+            <div class="col-md-3">
+              <input type="text" class="form-control border-dark" placeholder="Search by Name" [(ngModel)]="searchName" name="searchName">
+            </div>
+            <!-- Search by City -->
+            <div class="col-md-3">
+              <input type="text" class="form-control border-dark" placeholder="Search by City" [(ngModel)]="searchCity" name="searchCity">
+            </div>
+            <!-- Search by District -->
+            <div class="col-md-2">
+              <input type="text" class="form-control border-dark" placeholder="Search by District" [(ngModel)]="searchdistrict" name="searchDistrict">
+            </div>
+            <!-- Search by State -->
+            <div class="col-md-2">
+              <input type="text" class="form-control border-dark" placeholder="Search by State" [(ngModel)]="searchstate" name="searchState">
+            </div>
+            <!-- Search Button -->
+            <div class="col-md-2">
+              <button class="btn btn-primary search-btn btn-sm w-100">
+                <i class="bi bi-search"></i> Search
+              </button>        
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="container my-1">
+    <div class="row">
+      <div class="col-md-4 mb-1" *ngFor="let police of total_policestation">
+        <div class="card shadow-sm rounded border-1  h-100"> <!-- Added h-100 for equal height -->
+          <div class="row g-0 h-100"> <!-- Added h-100 for equal height -->
+            <!-- Image Placeholder -->
+            <div class="col-12 text-center bg-light" style="height: 250px;"> <!-- Fixed height for image container -->
+              <div class="w-100 h-100 overflow-hidden d-flex align-items-center justify-content-center">
+                <img *ngIf="police.station_photo; else placeholder" 
+                    [src]="environment.apiUrl + police.station_photo" 
+                    alt="{{police.name}}" 
+                    class="img-fluid object-fit-cover w-100 h-100" 
+                    style="border-radius: 8px;">
+                <ng-template #placeholder>
+                  <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+                </ng-template>
+              </div>
+            </div>
+            
+            <!-- Details -->
+            <div class="col-12 p-3 d-flex flex-column"> <!-- Added flex-column for equal height -->
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="f">{{ police.name }}</h5>
+                <span class="badge search-btn" [ngClass]="{'bg-dark': police.station_status === 'Active', 'bg-danger': police.activ_Status !== 'Active'}">
+                  {{ police.activ_Status }}
+                </span>
+              </div>
+              <p class="text-muted small">
+                <i class="bi bi-geo-alt"></i> {{ police.address_details.city }}, {{ police.phone_no }}
+              </p>
+              
+              <!-- Contact & Officer Info -->
+              <!-- <div class="row flex-grow-1"> 
+                <div class="col-6">
+                  <h6 class="fw-semibold"><i class="bi bi-telephone"></i> Contact</h6>
+                  <p class="mb-1 small">Emergency: 112</p>
+                  <p class="mb-1 small">Helpline: 1091</p>
+                  <p class="mb-1 small">Office: {{ police.telephone_no }}</p>
+                </div>
+                <div class="col-6">
+                  <h6 class="fw-semibold"><i class="bi bi-person-fill"></i> Officer In Charge</h6>
+                  <p class="mb-1 small">{{ police.officer_name }}</p>
+                  <p class="mb-1 small">{{ police.officer_rank }}</p>
+                  <p class="mb-1 small">{{ police.officer_contact }}</p>
+                </div>
+              </div> -->
+              
+              <!-- Footer Section -->
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <p class="text-muted small mb-0">
+                  <i class="bi bi-clock"></i> 24/7 &bull; Est. {{ police.established_year }}
+                </p>
+                <button class="btn btn-outline-primary search-btn btn-sm" (click)="seeMores(police)">
+                  More Info
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      
+      </div>
+      
+    </div>
+    <div *ngIf="total_policestation?.length > 0">
+     
+      </div>
+      <div *ngIf="total_policestation?.length === 0">
+      <p>No Police Station Available.</p>
+      </div>
+  </div>
+
+  
+  <!-- Bootstrap Modal -->
+  <!-- Bootstrap Modal -->
+<div class="modal fade" id="policeStationModal" tabindex="-1" aria-labelledby="policeStationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="policeStationModalLabel">Add Police Station</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="policeStationForm" (ngSubmit)="submitForm()">
+            
+            <!-- Police Station Details -->
+            <h5>Police Station Information</h5>
+            <div class="row">
+                <!-- First Row -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" formControlName="name">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" formControlName="phone_no">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <!-- Second Row -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Photo</label>
+                        <input type="file" class="form-control" (change)="onFileChange($event)">
+                      </div>                      
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" formControlName="activ_Status">
+                      <option value="" selected>Status</option>
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              
+  
+            <!-- Address Fields -->
+            <h5>Address Details</h5>
+            <div formGroupName="address">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Address Type</label>
+                        <select class="form-select" formControlName="address_type">
+                          <option value="" selected>Address Type</option>
+                          <option value="PERMANENT">Permanent</option>
+                          <option value="CURRENT">Current</option>
+                          <option value="OLD">Old</option>
+                          <option value="HOME">Home</option>
+                          <option value="OFFICE">Office</option>
+                        </select>
+                      </div>
+                      
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">Street</label>
+                      <input type="text" class="form-control" formControlName="street">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">Apartment No.</label>
+                      <input type="text" class="form-control" formControlName="appartment_no">
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">Apartment Name</label>
+                      <input type="text" class="form-control" formControlName="appartment_name">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">Village</label>
+                      <input type="text" class="form-control" formControlName="village">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">City</label>
+                      <input type="text" class="form-control" formControlName="city">
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">District</label>
+                      <input type="text" class="form-control" formControlName="district">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">State</label>
+                      <select class="form-select" formControlName="state">
+                        <option value="" selected>Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Andaman Nicobar">Andaman and Nicobar Islands</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Dadra_Nagar Haveli">Dadra and Nagar Haveli</option>
+                        <option value="Daman Diu">Daman and Diu</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="Puducherry">Puducherry</option>
+                      </select>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">Country</label>
+                      <select class="form-select" formControlName="country">
+                        <option value="" selected>Select Country</option>
+                        <option value="India">India</option>
+                        <option value="United States">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Australia">Australia</option>
+                        <option value="France">France</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Spain">Spain</option>
+                        <option value="China">China</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="Russia">Russia</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="United Arab Emirates">United Arab Emirates</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="New Zealand">New Zealand</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label">Pincode</label>
+                      <input type="text" class="form-control" formControlName="pincode">
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="mb-3">
+                      <label class="form-label">Landmark Details</label>
+                      <input type="text" class="form-control" formControlName="landmark_details">
+                    </div>
+                  </div>
+                </div>
+              
+                <!-- Location Fields with Map -->
+                <h5>Location Details</h5>
+                <div formGroupName="location">
+                    <div class="row">
+                      <!-- Left Side: Latitude, Longitude & Button -->
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label class="form-label">Latitude</label>
+                          <input type="text" class="form-control" formControlName="latitude" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Longitude</label>
+                          <input type="text" class="form-control" formControlName="longitude" readonly>
+                        </div>
+                        <div class="mt-3">
+                          <button type="button" class="btn btn-outline-primary border-dark custom-hover w-100" (click)="getCurrentLocation()">
+                            <i class="bi bi-geo-alt"></i> Get Current Location
+                          </button>
+                        </div>
+                      </div>
+                  
+                      <!-- Right Side: Map -->
+                      <div class="col-md-6">
+                        <div id="mapHome" style="height: 200px; border: 1px solid black;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+              </div>
+              
+  
+            <!-- Contacts Section -->
+            <h5>Contact Details</h5>
+            <div formArrayName="police_contact">
+                <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="border p-3 mb-3 rounded">
+                  
+                  <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">contact Type</label>
+                        <select class="form-select" formControlName="type">
+                          <option value="" selected>Contact Type</option>
+                          <option value="personal">Personal</option>
+                          <option value="office">Office</option>
+                          <option value="home">Home</option>
+                        </select>
+                      </div>
+                      
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" formControlName="phone_no">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Country Code</label>
+                        <input type="text" class="form-control" formControlName="country_cd">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" formControlName="email_id">
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control" formControlName="company_name">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Job Title</label>
+                        <input type="text" class="form-control" formControlName="job_title">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Website URL</label>
+                        <input type="text" class="form-control" formControlName="website_url">
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Social Media URL</label>
+                        <input type="text" class="form-control" formControlName="social_media_url">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Additional Details</label>
+                        <input type="text" class="form-control" formControlName="additional_details">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Primary Contact</label>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" formControlName="is_primary">
+                          <label class="form-check-label">Yes</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="text-end">
+                    <button type="button" class="btn btn-danger" (click)="removeContact(i)" *ngIf="contacts.length > 1">
+                      Remove
+                    </button>
+                  </div>
+              
+                </div>
+              </div>
+              
+  
+            <!-- Add Contact Button -->
+            <button type="button" class="btn btn-secondary" (click)="addContact()">Add Contact</button>
+  
+            <!-- Submit Button -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+  
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- model to view data -->
+  <div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="personModalLabel">Police Station Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="selectedPoliceStation" class="container">
+            <!-- Person Overview Section -->
+            <div class="row mb-12">
+              <div class="col-md-5 text-center">
+                <img [src]="selectedPoliceStation.station_photo ? (environment.apiUrl + selectedPoliceStation.station_photo) : 'assets/images/pngwng.com.png'" alt="station Photo" class="img-fluid rounded">
+              </div>
+              <div class="col-md-7">
+                <h5>{{ selectedPoliceStation.name }}</h5>
+                <p>Website:
+                  <a *ngIf="selectedPoliceStation.police_contact[0]?.website_url" [href]="selectedPoliceStation.police_contact[0]?.website_url" target="_blank" class="text-primary">{{ selectedPoliceStation.police_contact[0]?.website_url }}</a>
+                  <span *ngIf="!selectedPoliceStation.police_contact[0]?.website_url">Not Available</span>
+                </p>
+              </div>
+            </div>
+            <!-- Contact Information Section -->
+            <div class="row mb-3">
+                <!-- Left Side: Address Details -->
+                <div class="col-md-6">
+                    <h5 class="mb-3 text-primary">Address Details</h5>
+                    <div class="row mb-2">
+                        <div class="row mb-2" *ngIf="selectedPoliceStation.address_details">
+                            <p>Street: {{ selectedPoliceStation.address_details?.street }}</p>
+                            <p>Village: {{ selectedPoliceStation.address_details?.village }}</p>
+                            <p>City: {{ selectedPoliceStation.address_details?.city }}</p>
+                            <p>District: {{ selectedPoliceStation.address_details?.district }}</p>
+                            <p>State: {{ selectedPoliceStation.address_details?.state }}</p>
+                            <p>Country: {{ selectedPoliceStation.address_details?.country }}</p>
+                            <p>Pincode: {{ selectedPoliceStation.address_details?.pincode }}</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            
+                <!-- Right Side: Contact Information -->
+                <div class="col-md-6">
+                    <h5 class="mb-3 text-primary">Contact Information</h5>
+                    <div class="row mb-2" *ngIf="selectedPoliceStation.police_contact?.length">
+                        <div class="col-md-8">
+                            <p>Contact Type: {{ selectedPoliceStation.police_contact[0]?.type }}</p>
+                            <p>Phone no:{{ selectedPoliceStation.police_contact[0]?.country_cd }} {{ selectedPoliceStation.police_contact[0]?.phone_no }}</p>
+                            <p>Email: {{ selectedPoliceStation.police_contact[0]?.email_id }}</p>
+                            <p>Company: {{ selectedPoliceStation.police_contact[0]?.company_name }}</p>
+                            <p>Job Title: {{ selectedPoliceStation.police_contact[0]?.job_title }}</p>
+                            <p>Website: <a href="{{ selectedPoliceStation.police_contact[0]?.website_url }}" target="_blank">{{ selectedPoliceStation.police_contact[0]?.website_url }}</a></p>
+                            <p>Social: <a href="{{ selectedPoliceStation.police_contact[0]?.social_media_url }}" target="_blank">{{ selectedPoliceStation.police_contact[0]?.social_media_availability }}</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Section -->
+            <h5 class="mb-3 text-primary">Location of police station</h5>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <div id="map" ></div>
+              </div>
+            </div>         
+           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary search-btn" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

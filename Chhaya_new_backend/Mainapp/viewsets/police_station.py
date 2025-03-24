@@ -1,6 +1,9 @@
 # views.py
+from django.contrib.gis.geos import Point
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
+from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
@@ -11,8 +14,9 @@ from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer
 from ..models import PoliceStation, Contact
 from ..pagination import CustomPagination
 from django.core.cache import cache
+from django.db.models import Q
 
-
+import json
 
 
 class PoliceStationViewSet(viewsets.ModelViewSet):
@@ -22,18 +26,41 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
     serializer_class = PoliceStationSerializer
     pagination_class = PageNumberPagination
     queryset = PoliceStation.objects.all()
+    parser_classes = (MultiPartParser, FormParser)  # ✅ Allow file uploads
+
 
     # 🔹 1. LIST Police Stations with Pagination
     def list(self, request):
         try:
-            queryset = PoliceStation.objects.select_related('address').prefetch_related('police_contact')
+            # Extract query parameters
+            name = request.query_params.get('name', '').strip()
+            city = request.query_params.get('city', '').strip()
+            district = request.query_params.get('district', '').strip()
+            state = request.query_params.get('state', '').strip()
+
+            # Build the filter conditions dynamically
+            filters = Q()
+            if name:
+                filters &= Q(name__icontains=name)
+            if city:
+                filters &= Q(address__city__icontains=city)
+            if district:
+                filters &= Q(address__district__icontains=district)
+            if state:
+                filters &= Q(address__state__icontains=state)
+
+            # Apply filters to the queryset
+            queryset = PoliceStation.objects.select_related('address').prefetch_related('police_contact').filter(
+                filters)
+
+            # Paginate the filtered queryset
             paginator = CustomPagination()
             paginated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = PoliceStationSerializer(paginated_queryset, many=True)
             return paginator.get_paginated_response(serializer.data)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
     # 🔹 2. RETRIEVE Police Station by ID
     def retrieve(self, request, pk=None):
         try:
@@ -49,45 +76,98 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Police station not found'}, status=status.HTTP_404_NOT_FOUND)
 
     # 🔹 3. CREATE a new Police Station
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         try:
+            print("\n🔹 Received API Request Data:", request.data)  # Log incoming data
+
             with transaction.atomic():
-                # Extract address data
+                # 🔹 Validate `name` field
+                if not request.data.get("name"):
+                    return Response({"error": "Name is required and cannot be blank."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                # 🔹 Handle `station_photo` (File Handling)
+                station_photo = request.FILES.get("station_photo")  # ✅ Use `request.FILES`
+                if not station_photo:
+                    return Response(
+                        {"error": "Invalid station photo. Ensure you're sending a valid file."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                # 🔹 Process Address Data
                 address_data = request.data.get("address")
                 if not address_data:
                     return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Validate and create address
+                # ✅ Convert JSON string to Python dictionary (Fixes `[object Object]` issue)
+                if isinstance(address_data, str):
+                    address_data = json.loads(address_data)
+
+                location_data = address_data.get("location")
+                if isinstance(location_data, dict):
+                    latitude = location_data.get("latitude")
+                    longitude = location_data.get("longitude")
+                    if latitude and longitude:
+                        try:
+                            address_data["location"] = Point(float(longitude), float(latitude))
+                        except (ValueError, TypeError):
+                            return Response(
+                                {"error": "Invalid location format. Latitude and Longitude must be valid numbers."},
+                                status=status.HTTP_400_BAD_REQUEST
+                            )
+                    else:
+                        return Response(
+                            {"error": "Latitude and Longitude cannot be empty."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+                # 🔹 Validate and create address
                 address_serializer = AddressSerializer(data=address_data)
                 if not address_serializer.is_valid():
                     return Response({"address": address_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
                 address = address_serializer.save()
 
-                # Prepare police station data
+                # 🔹 Prepare police station data
                 police_station_data = request.data.copy()
                 police_station_data["address"] = address.id
-                contacts_data = police_station_data.pop("police_contact", [])
+                police_station_data["station_photo"] = station_photo  # ✅ Assign file correctly
 
-                # Create police station
+                # ✅ Convert JSON string for `police_contact`
+                contacts_data = request.data.get("police_contact", "[]")
+                if isinstance(contacts_data, str):
+                    contacts_data = json.loads(contacts_data)
+
+                # 🔹 Create police station
                 police_station_serializer = self.get_serializer(data=police_station_data)
                 if not police_station_serializer.is_valid():
                     return Response(police_station_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 police_station = police_station_serializer.save()
 
-                # Create contacts
-                contacts = [Contact(police_station=police_station, **contact) for contact in contacts_data]
-                Contact.objects.bulk_create(contacts)
+                # 🔹 Corrected Contact Creation Logic
+                contact_objects = []
+                for contact in contacts_data:
+                    contact["police_station"] = police_station  # ✅ Assign correctly
 
-                # Return response with contacts
+                    # 🔹 Ensure `person` is always `None`
+                    contact["person"] = None  # ✅ Set `person` as NULL
+
+                    contact_objects.append(Contact(**contact))
+
+                # ✅ Bulk create contacts properly
+                Contact.objects.bulk_create(contact_objects)
+
+                # 🔹 Return response with contacts
                 response_data = self.get_serializer(police_station).data
                 response_data['police_contact'] = ContactSerializer(police_station.police_contact.all(), many=True).data
 
+                print("\n🚀 Final Response Data:", response_data)
                 return Response(response_data, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+        except Exception as e:
+            print("\n❌ API Error:", str(e))
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     # 🔹 4. FULL UPDATE (PUT)
     def update(self, request, pk=None):
         return self._update_police_station(request, pk, partial=False)

@@ -242,7 +242,6 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
   
 
   createAddresFormGroup():FormGroup {
-    
      return this.fb.group({
         phone_no: [''],
         country_cd: [''],
@@ -255,7 +254,6 @@ export class PersonAddingFormComponent implements OnInit , AfterViewInit {
         social_media_availability: [''], // Should be a dropdown with SocialMediaChoices
         additional_details: [''],
         is_primary: [false],
-  
         user: [this.storedPersonId],
         hospital: [null],
         police_station: [null],

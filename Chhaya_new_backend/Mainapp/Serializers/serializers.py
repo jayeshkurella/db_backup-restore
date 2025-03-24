@@ -75,6 +75,7 @@ class HospitalSerializer(serializers.ModelSerializer):
 
 
 class PoliceStationSerializer(serializers.ModelSerializer):
+    station_photo = serializers.ImageField(required=False)  # ✅ Ensure it's an image field
     address = serializers.PrimaryKeyRelatedField(queryset=Address.objects.all(),write_only=True)
     address_details = AddressSerializer(source='address', read_only=True)
     police_contact = ContactSerializer(many=True, read_only=True)
