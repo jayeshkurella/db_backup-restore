@@ -12,7 +12,8 @@ from ..models import PoliceStation, Hospital, Contact
 from ..pagination import CustomPagination
 from django.core.cache import cache
 from rest_framework import generics
-
+import json
+from django.contrib.gis.geos import Point
 
 class HospitalViewSet(viewsets.ModelViewSet):
     """
@@ -47,43 +48,95 @@ class HospitalViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Hospital not found'}, status=status.HTTP_404_NOT_FOUND)
 
     # 🔹 3. CREATE a new Hospital
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         try:
+            print("\n🔹 Received API Request Data:", request.data)  # Log incoming data
+
             with transaction.atomic():
-                # Extract address data
+                # 🔹 Validate `name` field
+                if not request.data.get("name"):
+                    return Response({"error": "Hospital name is required and cannot be blank."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                # 🔹 Handle `hospital_photo` (File Handling)
+                hospital_photo = request.FILES.get("hospital_photo")  # ✅ Use `request.FILES`
+                if not hospital_photo:
+                    return Response(
+                        {"error": "Invalid hospital photo. Ensure you're sending a valid file."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                # 🔹 Process Address Data
                 address_data = request.data.get("address")
                 if not address_data:
                     return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Validate and create address
+                # ✅ Convert JSON string to Python dictionary (Fixes `[object Object]` issue)
+                if isinstance(address_data, str):
+                    address_data = json.loads(address_data)
+
+                location_data = address_data.get("location")
+                if isinstance(location_data, dict):
+                    latitude = location_data.get("latitude")
+                    longitude = location_data.get("longitude")
+                    if latitude and longitude:
+                        try:
+                            address_data["location"] = Point(float(longitude), float(latitude))
+                        except (ValueError, TypeError):
+                            return Response(
+                                {"error": "Invalid location format. Latitude and Longitude must be valid numbers."},
+                                status=status.HTTP_400_BAD_REQUEST
+                            )
+                    else:
+                        return Response(
+                            {"error": "Latitude and Longitude cannot be empty."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+                # 🔹 Validate and create address
                 address_serializer = AddressSerializer(data=address_data)
                 if not address_serializer.is_valid():
                     return Response({"address": address_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
                 address = address_serializer.save()
 
-                # Prepare hospital data
+                # 🔹 Prepare hospital data
                 hospital_data = request.data.copy()
                 hospital_data["address"] = address.id
-                contacts_data = hospital_data.pop("hospital_contact", [])
+                hospital_data["hospital_photo"] = hospital_photo  # ✅ Assign file correctly
 
-                # Create hospital
+                # ✅ Convert JSON string for `hospital_contact`
+                contacts_data = request.data.get("hospital_contact", "[]")
+                if isinstance(contacts_data, str):
+                    contacts_data = json.loads(contacts_data)
+
+                # 🔹 Create hospital
                 hospital_serializer = self.get_serializer(data=hospital_data)
                 if not hospital_serializer.is_valid():
                     return Response(hospital_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 hospital = hospital_serializer.save()
 
-                # Create contacts
-                contacts = [Contact(hospital=hospital, **contact) for contact in contacts_data]
-                Contact.objects.bulk_create(contacts)
+                # 🔹 Corrected Contact Creation Logic
+                contact_objects = []
+                for contact in contacts_data:
+                    contact["hospital"] = hospital  # ✅ Assign correctly
+                    # ✅ Ensure `person` is always NULL
+                    contact["person"] = None  #
+                    contact_objects.append(Contact(**contact))
 
-                # Return response with contacts
+                # ✅ Bulk create contacts properly
+                Contact.objects.bulk_create(contact_objects)
+
+                # 🔹 Return response with contacts
                 response_data = self.get_serializer(hospital).data
                 response_data['hospital_contact'] = ContactSerializer(hospital.hospital_contact.all(), many=True).data
 
+                print("\n🚀 Final Response Data:", response_data)
                 return Response(response_data, status=status.HTTP_201_CREATED)
+
         except Exception as e:
+            print("\n❌ API Error:", str(e))
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     # 🔹 4. FULL UPDATE (PUT)

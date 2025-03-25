@@ -11,6 +11,7 @@ class Hospital(models.Model):
         NON_GOVERNMENT = 'nongvt', 'Non-Government'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    hospital_photo =models.ImageField(upload_to='Hospitals_photos/', blank=True, null=True)
     name = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.CASCADE,null=True, blank=True,)
     type = models.CharField(max_length=10, choices=HospitalTypeChoices.choices)

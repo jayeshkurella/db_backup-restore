@@ -22,7 +22,7 @@ throw new Error('Method not implemented.');
     this.hospitalService.getallhospitals().subscribe(
       (data) => {
         if (data) {
-          this.allhospitals = data.data; 
+          this.allhospitals = data.res; 
           console.log("data",this.allhospitals)
         } 
       },
