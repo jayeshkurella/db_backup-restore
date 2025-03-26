@@ -1,9 +1,8 @@
 import datetime  # Ensure this is imported
 
 from rest_framework import serializers
-from ..models import Person , Address, Contact ,FIR,AdditionalInfo ,AdminUser ,User ,Consent ,Document ,Hospital ,LastKnownDetails ,Match ,PersonUser ,PoliceStation
-
-
+from ..models import Person, Address, Contact, FIR, AdditionalInfo, AdminUser, User, Consent, Document, Hospital, \
+    LastKnownDetails, Match, PersonUser, PoliceStation, Volunteer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -98,3 +97,9 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
     
+class VolunteerSerializer(serializers.ModelSerializer):
+    volunteer_Address = AddressSerializer(many=True)
+    volunteer_contact = ContactSerializer(many=True)
+    class Meta:
+        model = Volunteer
+        fields = '__all__'

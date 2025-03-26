@@ -13,3 +13,4 @@ from .models.person_user import *
 from .models.person import *
 from .models.police_station import *
 from .models.user import *
+from .models.volunteer import *

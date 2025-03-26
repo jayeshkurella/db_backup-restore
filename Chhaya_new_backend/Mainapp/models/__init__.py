@@ -12,3 +12,4 @@ from .person_user import PersonUser
 from .person import Person
 from .police_station import PoliceStation
 from .user import User
+from .volunteer import Volunteer

@@ -33,6 +33,7 @@ class Contact(models.Model):
     hospital = models.ForeignKey('Hospital', on_delete=models.SET_NULL, null=True, blank=True, related_name='hospital_contact', db_index=True)
     police_station = models.ForeignKey('PoliceStation', on_delete=models.SET_NULL, null=True, blank=True, related_name="police_contact", db_index=True)
     person = models.ForeignKey('Person', on_delete=models.SET_NULL, related_name="contacts", null=True, blank=True, db_index=True)
+    volunteer = models.ForeignKey('Volunteer', on_delete=models.SET_NULL, related_name="volunteer_contact", null=True, blank=True,db_index=True)
 
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)  # Indexed for sorting
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)  # Indexed for sorting

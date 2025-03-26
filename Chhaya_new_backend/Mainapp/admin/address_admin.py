@@ -14,7 +14,7 @@ class AddressAdmin(LeafletGeoAdmin):
     fieldsets = (
         ('Basic Information', {'fields': ('address_type', 'is_active')}),
         ('Location Details', {'fields': ('street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country', 'landmark_details', 'location')}),
-        ('Related Entities', {'fields': ('user', 'person', 'created_by', 'updated_by')}),
+        ('Related Entities', {'fields': ('user', 'person','volunteer', 'created_by', 'updated_by')}),
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
 

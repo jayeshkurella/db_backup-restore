@@ -1,7 +1,8 @@
 import uuid
 # from django.db import models
-from django.contrib.gis.db import models 
+from django.contrib.gis.db import models
 
+from .volunteer import Volunteer
 from .police_station import PoliceStation
 from .user import User
 
@@ -88,8 +89,8 @@ class Address(models.Model):
     # Status and Ownership
     is_active = models.BooleanField(default=True, db_index=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
-    person = models.ForeignKey('Person', on_delete=models.SET_NULL, related_name="addresses", null=True, blank=True,
-                               db_index=True)
+    person = models.ForeignKey('Person', on_delete=models.SET_NULL, related_name="addresses", null=True, blank=True,db_index=True)
+    volunteer = models.ForeignKey('Volunteer', on_delete=models.SET_NULL, related_name="volunteer_Address", null=True, blank=True,db_index=True)
     country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
 
     # Timestamps

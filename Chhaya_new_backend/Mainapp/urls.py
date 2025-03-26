@@ -11,11 +11,14 @@ from .viewsets.police_station import PoliceStationViewSet
 
 from .match.missing_person_with_UP import MatchMPWithUPAPIView
 from .match.missing_person_with_UB import MatchMPWithUBAPIView
+from .viewsets.volunteer import VolunteerViewSet
+
 router = DefaultRouter()
 router.register(r'persons', PersonViewSet, basename='person')
 router.register(r'police-stations', PoliceStationViewSet, basename='police-station')
 router.register(r'hospitals', HospitalViewSet, basename='hospital')
 router.register(r'filters_address', filter_Address_ViewSet, basename='filters')
+router.register(r'volunteers',VolunteerViewSet,basename='volunteer')
 
 
 urlpatterns = [

@@ -52,7 +52,7 @@ class PersonViewSet(viewsets.ViewSet):
             queryset = Person.objects.filter(_is_deleted=False).prefetch_related(
                 'addresses', 'contacts', 'additional_info',
                 'last_known_details', 'firs', 'consent'
-            ).order_by('-created_at')  # Changed to descending order
+            ).order_by('-created_at')
 
             # Pagination
             paginator = CustomPagination()
