@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import uuid
+from django.utils import timezone
+from datetime import timedelta
+
+from django.utils.timezone import now
 
 
 class UserManager(BaseUserManager):
@@ -107,6 +111,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "email_id"
     REQUIRED_FIELDS = ["phone_no", "first_name", "last_name"]
+    reset_token = models.CharField(max_length=255, blank=True, null=True)
+    reset_token_created_at = models.DateTimeField(blank=True, null=True)
+
+    def is_reset_token_valid(self):
+        """Check if the reset token is valid (e.g., expires after 1 hour)."""
+        if self.reset_token_created_at:
+            return (now() - self.reset_token_created_at).total_seconds() < 3600  # 1 hour
+        return False
 
     def save(self, *args, **kwargs):
         # Ensure only admin users can be staff or superusers

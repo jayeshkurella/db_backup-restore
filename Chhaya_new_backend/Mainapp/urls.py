@@ -24,6 +24,8 @@ router.register(r'volunteers',VolunteerViewSet,basename='volunteer')
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/users/', AuthAPIView.as_view(), name='user-auth'),
+    path('reset-password/<str:reset_token>/', AuthAPIView.as_view(), name='reset-password-get'),  # ✅ Only for GET
+    path('reset-password/', AuthAPIView.as_view(), name='reset-password-post'),  # ✅ Only for POST
     path("api/hospital-name-list/", HospitalListView.as_view(), name="hospital-list"),
     path('api/match/mp-to-ups/<uuid:mp_id>/', MatchMPWithUPAPIView.as_view(), name='match-mp-to-ups'),
     path('api/match/mp-to-ubs/<uuid:mp_id>/', MatchMPWithUBAPIView.as_view(), name='match-mp-to-ubs'),
