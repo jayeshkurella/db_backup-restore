@@ -1,0 +1,42 @@
+<odoo>
+  <data>
+
+    <!-- Action to open the popup -->
+    <record id="action_pnb_records_wizard" model="ir.actions.act_window">
+        <field name="name">Previous Record</field>
+        <field name="res_model">pnb.records</field>
+        <field name="view_mode">tree</field>
+        <field name="target">new</field>
+        <field name="context">{'default_opd_id': active_id}</field>
+
+    </record>
+
+    <!-- <record id="view_hms_opd_pnb_record_tree" model="ir.ui.view">
+      <field name="name">pnb.records.tree</field>
+      <field name="model">pnb.records</field>
+      <field name="arch" type="xml">
+          <tree string="Previous Records" editable="top">
+              <field name="previous_date"/>
+              <field name="description"/>  
+              <button name="unlink" type="object" string="Delete" class="btn btn-danger"/>
+            
+          </tree>
+      </field>
+    </record> -->
+    <record id="view_hms_opd_pnb_record_tree" model="ir.ui.view">
+      <field name="name">pnb.records.tree</field>
+      <field name="model">pnb.records</field>
+      <field name="arch" type="xml">
+          <tree string="Previous Records" editable="top">
+              <header>
+                  <button name="unlink" type="object" string="Delete" class="btn btn-danger"/>
+              </header>              
+              <!-- Table Fields -->
+              <field name="previous_date"/>
+              <field name="description"/>  
+          </tree>
+      </field>
+  </record>
+
+  </data>
+</odoo>

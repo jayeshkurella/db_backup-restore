@@ -1,0 +1,54 @@
+<odoo>
+    <data>
+
+        <!-- Define a new module category -->
+        <record model="ir.module.category" id="module_patient_view_access">
+            <field name="name">Patient User View Access</field>
+            <field name="sequence">15</field>
+        </record>
+     
+        <!-- Admin Group -->
+        <record id="group_patient_user_view_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+        <!-- DEO Group -->
+        <record id="group_patient_hms_deo" model="res.groups">
+            <field name="name">DEO's</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+        <!-- Doctors (Physician) Group -->
+        <record id="group_patient_hms_doctor" model="res.groups">
+            <field name="name">Doctors</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+        <!-- Doctors (Physician) Group -->
+        <record id="group_patient_hms_doctor_opd" model="res.groups">
+            <field name="name">Doctors - OPD Access</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+        <!-- Dietician Group -->
+        <record id="group_patient_hms_dietician" model="res.groups">
+            <field name="name">Dietician</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+        <!-- Psychologist Group -->
+        <record id="group_patient_hms_psychologist" model="res.groups">
+            <field name="name">Psychologist</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+        <!-- Counsellor Group -->
+        <record id="group_patient_hms_counsellor" model="res.groups">
+            <field name="name">Counsellor</field>
+            <field name="category_id" ref="customized_annual_form.module_patient_view_access"/>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<odoo>
+
+    <!-- CCO view -->
+    <record id="hms_annual_cco_line_tree" model="ir.ui.view">
+        <field name="name">cco.line.tree</field>
+        <field name="model">patient.cco</field>
+        <field name="arch" type="xml">                
+            <tree string="CCO " default_order="date_of_record desc">
+                <field name="date_of_record"/>
+            
+                <!-- Complications Section -->  
+                <field name="complications"/>
+                <field name="complications_medicine_name" string="Medicine Name"/>
+                <field name="complications_short_comment" string="Details"/>
+
+                <!-- Comorbidities Section -->      
+                <field name="comorbidities"/>
+                <field name="comorbidities_medicine_name" string="Medicine Name"/>
+                <field name="comorbidities_short_comment" string="Details"/>
+
+
+                <!-- Others Section -->      
+                <field name="others"/>
+                <field name="others_medicine_name" string="Medicine Name"/>
+                <field name="others_short_comment" string="Details"/>
+
+            </tree>
+        </field>
+    </record>
+
+</odoo>

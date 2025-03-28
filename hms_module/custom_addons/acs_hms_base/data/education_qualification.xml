@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="hms_illiterate" model="education.qualification">
+            <field name="name">Illiterate</field>
+        </record>
+        <record id="hms_std_1" model="education.qualification">
+            <field name="name">STD. 1</field>
+        </record>
+        <record id="hms_std_2" model="education.qualification">
+            <field name="name">STD. 2</field>
+        </record>
+        <record id="hms_std_3" model="education.qualification">
+            <field name="name">STD. 3</field>
+        </record>
+        <record id="hms_std_4" model="education.qualification">
+            <field name="name">STD. 4</field>
+        </record>
+        <record id="hms_std_5" model="education.qualification">
+            <field name="name">STD. 5</field>
+        </record>
+        <record id="hms_std_6" model="education.qualification">
+            <field name="name">STD. 6</field>
+        </record>
+        <record id="hms_std_7" model="education.qualification">
+            <field name="name">STD. 7</field>
+        </record>
+        <record id="hms_std_8" model="education.qualification">
+            <field name="name">STD. 8</field>
+        </record>
+        <record id="hms_std_9" model="education.qualification">
+            <field name="name">STD. 9</field>
+        </record>
+        <record id="hms_std_10" model="education.qualification">
+            <field name="name">STD. 10</field>
+        </record>
+        <record id="hms_std_11" model="education.qualification">
+            <field name="name">STD. 11</field>
+        </record>
+        <record id="hms_std_12" model="education.qualification">
+            <field name="name">STD. 12</field>
+        </record>
+        <record id="hms_ded" model="education.qualification">
+            <field name="name">DED</field>
+        </record>
+        <record id="hms_dpharm" model="education.qualification">
+            <field name="name">DPHARM</field>
+        </record>
+        <record id="hms_diploma" model="education.qualification">
+            <field name="name">DIPLOMA</field>
+        </record>
+        <record id="hms_iti_1" model="education.qualification">
+            <field name="name">ITI 1</field>
+        </record>
+        <record id="hms_iti_2" model="education.qualification">
+            <field name="name">ITI 2</field>
+        </record>
+        <record id="hms_dmlt" model="education.qualification">
+            <field name="name">DMLT</field>
+        </record>
+        <record id="hms_fybcom" model="education.qualification">
+            <field name="name">FYBCOM</field>
+        </record>
+        <record id="hms_sybcom" model="education.qualification">
+            <field name="name">SYBCOM</field>
+        </record>
+        <record id="hms_fybsc" model="education.qualification">
+            <field name="name">FYBSC</field>
+        </record>
+        <record id="hms_sybsc" model="education.qualification">
+            <field name="name">SYBSC</field>
+        </record>
+        <record id="hms_fyba" model="education.qualification">
+            <field name="name">FYBA</field>
+        </record>
+
+        <record id="hms_syba" model="education.qualification">
+            <field name="name">SYBA</field>
+        </record>
+        <record id="hms_fybca" model="education.qualification">
+            <field name="name">FYBCA</field>
+        </record>
+        <record id="hms_sybca" model="education.qualification">
+            <field name="name">SYBCA</field>
+        </record>
+        <record id="hms_bsc" model="education.qualification">
+            <field name="name">BSC</field>
+        </record>
+        <record id="hms_bsc_nursing" model="education.qualification">
+            <field name="name">BSC Nursing</field>
+        </record>
+        <record id="hms_bcom" model="education.qualification">
+            <field name="name">BCOM</field>
+        </record>
+        <record id="hms_ba" model="education.qualification">
+            <field name="name">BA</field>
+        </record>
+        <record id="hms_bca" model="education.qualification">
+            <field name="name">BCA</field>
+        </record>
+        <record id="hms_ca" model="education.qualification">
+            <field name="name">CA</field>
+        </record>
+        <record id="hms_be" model="education.qualification">
+            <field name="name">BE</field>
+        </record>
+        <record id="hms_bpharm" model="education.qualification">
+            <field name="name">BPHARM</field>
+        </record>
+        <record id="hms_bed" model="education.qualification">
+            <field name="name">BED</field>
+        </record>
+        <record id="hms_llb" model="education.qualification">
+            <field name="name">LLB</field>
+        </record>
+        <record id="hms_gnm" model="education.qualification">
+            <field name="name">GNM</field>
+        </record>
+        <record id="hms_msc_1" model="education.qualification">
+            <field name="name">MSC 1</field>
+        </record>
+        <record id="hms_mcom_1" model="education.qualification">
+            <field name="name">MCOM 1</field>
+        </record>
+        <record id="hms_bhs" model="education.qualification">
+            <field name="name">BHS</field>
+        </record>
+        <record id="hms_bba" model="education.qualification">
+            <field name="name">BBA</field>
+        </record>
+        <record id="hms_btech" model="education.qualification">
+            <field name="name">BTECH</field>
+        </record>
+        <record id="hms_ma_1" model="education.qualification">
+            <field name="name">MA 1</field>
+        </record>
+        <record id="hms_msc_2" model="education.qualification">
+            <field name="name">MSC 2</field>
+        </record>
+        <record id="hms_mcom_2" model="education.qualification">
+            <field name="name">MCOM 2</field>
+        </record>
+        <record id="hms_ma_2" model="education.qualification">
+            <field name="name">MA 2</field>
+        </record>
+        <record id="hms_me" model="education.qualification">
+            <field name="name">ME</field>
+        </record>
+        <record id="hms_mtech" model="education.qualification">
+            <field name="name">MTECH</field>
+        </record>
+        <record id="hms_mba" model="education.qualification">
+            <field name="name">MBA</field>
+        </record>
+
+        <record id="hms_msc_agri" model="education.qualification">
+            <field name="name">MSC Agri</field>
+        </record>
+        <record id="hms_mca" model="education.qualification">
+            <field name="name">MCA</field>
+        </record>
+        <record id="hms_msc_nursing" model="education.qualification">
+            <field name="name">MSC Nursing</field>
+        </record>
+        <record id="hms_med" model="education.qualification">
+            <field name="name">MED</field>
+        </record>
+        <record id="hms_llm" model="education.qualification">
+            <field name="name">LLM</field>
+        </record>
+
+    </data>
+
+</odoo>

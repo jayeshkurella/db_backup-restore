@@ -1,0 +1,118 @@
+<odoo>
+    <data>
+
+        <!-- Define a new module category -->
+        <record model="ir.module.category" id="module_annual_hospital_management">
+            <field name="name">Annual User View Access</field>
+            <field name="sequence">13</field>
+        </record>
+
+        <!-- Admin Group -->
+        <record id="annual_group_admin_access" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- DEO Group -->
+        <record id="annual_group_hms_deo" model="res.groups">
+            <field name="name">DEO's</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+
+        <!-- Doctors (Physician) Group -->
+        <record id="annual_group_hms_doctor" model="res.groups">
+            <field name="name">Doctors</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- Doctors (Physician) Group -->
+        <record id="annual_group_hms_doctor_opd" model="res.groups">
+            <field name="name">Doctors - OPD Access</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- Dietician Group -->
+        <record id="annual_group_hms_dietician" model="res.groups">
+            <field name="name">Dietician</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- Psychologiest Group -->
+        <record id="annual_group_hms_psychologist" model="res.groups">
+            <field name="name">Psychologiest</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- Counselor Group -->
+        <record id="annual_group_hms_counselor_I" model="res.groups">
+            <field name="name">Counsellor - Sandhya</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- Counselor Group -->
+        <record id="annual_group_hms_counselor_II" model="res.groups">
+            <field name="name">Counsellor - Vanadana</field>
+            <field name="category_id" ref="customized_annual_form.module_annual_hospital_management"/>
+        </record>
+
+        <!-- Physician Access Rights  -->
+
+        <!-- Define a new module category for Physician -->
+        <record model="ir.module.category" id="module_physician">
+            <field name="name">Physician</field>
+        </record>
+
+        <record id="physician_all_acceess" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="customized_annual_form.module_physician"/>
+        </record>
+
+        <record id="physician_own_acceess" model="res.groups">
+            <field name="name">Physician</field>
+            <field name="category_id" ref="customized_annual_form.module_physician"/>
+        </record>
+
+        <record id="physician_deo_all_acceess" model="res.groups">
+            <field name="name">DEO - Physician All Access</field>
+            <field name="category_id" ref="customized_annual_form.module_physician"/>
+        </record>
+
+        <!-- Admin Record Rule -->
+        <record id="rule_hms_admin_full_access" model="ir.rule">
+            <field name="name">Admin Full Access</field>
+            <field name="model_id" ref="customized_annual_form.model_hms_physician"/>
+            <field name="groups" eval="[(4, ref('customized_annual_form.physician_all_acceess'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Physician Record Rule -->
+        <record id="rule_hms_physician_own_record" model="ir.rule">
+            <field name="name">Physician Own Record Access</field>
+            <field name="model_id" ref="customized_annual_form.model_hms_physician"/>
+            <field name="groups" eval="[(4, ref('customized_annual_form.physician_own_acceess'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- DEO Record Rule -->
+        <record id="rule_hms_deo_full_access" model="ir.rule">
+            <field name="name">DEO - Physician Full Access</field>
+            <field name="model_id" ref="customized_annual_form.model_hms_physician"/>
+            <field name="groups" eval="[(4, ref('customized_annual_form.physician_deo_all_acceess'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>
