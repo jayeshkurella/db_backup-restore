@@ -2,32 +2,32 @@
 
 project_directory="/var/lib/jenkins/workspace/chhaya-foundations"
 
-
 echo "Changing directory to project workspace directory"
-cd $project_directory
+cd $project_directory || { echo "Failed to change directory to $project_directory"; exit 1; }
 
 echo "Validate the present working directory"
 pwd
 
-if [ -d "venv" ] 
-then
-    echo "Python virtual environment exists." 
+if [ -d "venv" ]; then
+    echo "Python virtual environment exists."
 else
-    python3 -m venv venv
+    echo "Python virtual environment does not exist. Creating a new one..."
+    python3 -m venv venv || { echo "Failed to create virtual environment"; exit 1; }
 fi
 
 echo "Activating the virtual environment!"
-source venv/bin/activate
+source venv/bin/activate || { echo "Failed to activate the virtual environment"; exit 1; }
 
 echo "Checking if virtual environment is active after activation"
 if [ -z "$VIRTUAL_ENV" ]; then
   echo "No virtual environment is active."
+  exit 1
 else
   echo "Virtual environment is active: $VIRTUAL_ENV"
 fi
 
 echo "Installing Python dependencies!"
-pip install -r Chhaya_new_backend/requirement.txt
+pip install -r Chhaya_new_backend/requirement.txt || { echo "Failed to install dependencies"; exit 1; }
 
 echo "Deactivating the virtual environment"
 deactivate
