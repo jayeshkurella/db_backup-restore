@@ -1,11 +1,11 @@
 [Unit]
-Description=Gunicorn
+Description=Gunicorn for Chhaya
 
 [Service]
-User=administrator
+User=jenkins
 Type=simple
-WorkingDirectory=/home/administrator/var/lib/jenkins/workspace/chhaya-foundations
-ExecStart=/bin/bash -c 'source /home/administrator/var/lib/jenkins/workspace/chhaya-foundations/venv/bin/activate && cd /home/administrator/var/lib/jenkins/workspace/chhaya-foundations/Chhaya_new_backend && /home/administrator/var/lib/jenkins/workspace/chhaya-foundations/venv/bin/gunicorn New_Backend.wsgi -b 0.0.0.0:8090 --error-logfile /var/log/chhaya/error.log --access-logfile /var/log/chhaya/access.log'
+WorkingDirectory=/var/lib/jenkins/workspace/chhaya-foundations
+ExecStart=/bin/bash -c 'source /var/lib/jenkins/workspace/chhaya-foundations/venv/bin/activate && cd /var/lib/jenkins/workspace/chhaya-foundations/Chhaya_new_backend && /var/lib/jenkins/workspace/chhaya-foundations/venv/bin/gunicorn New_Backend.wsgi -b 0.0.0.0:8090 --error-logfile /var/log/chhaya/error.log --access-logfile /var/log/chhaya/access.log'
 Restart=always
 RestartSec=3
 
