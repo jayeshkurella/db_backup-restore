@@ -4,7 +4,7 @@ Description=Gunicorn for Chhaya
 [Service]
 User=jenkins
 Type=simple
-WorkingDirectory=/var/lib/jenkins/workspace/chhaya-foundations
+WorkingDirectory=/var/lib/jenkins/workspace/chhaya-foundations/Chhaya_new_backend
 ExecStart=/bin/bash -c 'source /var/lib/jenkins/workspace/chhaya-foundations/Chhaya_new_backend/venv/bin/activate && cd /var/lib/jenkins/workspace/chhaya-foundations/Chhaya_new_backend && /var/lib/jenkins/workspace/chhaya-foundations/Chhaya_new_backend/venv/bin/gunicorn New_Backend.wsgi -b 0.0.0.0:8090 --error-logfile /var/log/chhaya/error.log --access-logfile /var/log/chhaya/access.log'
 Restart=always
 RestartSec=3
