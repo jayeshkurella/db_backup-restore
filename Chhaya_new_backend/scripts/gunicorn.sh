@@ -1,7 +1,8 @@
 #!/bin/bash
 
+# Define project directory and log directory paths
 project_directory="/var/lib/jenkins/workspace/chhaya-foundations"
-# project_log_directory="/home/administrator/var/lib/jenkins/workspace/chhaya-foundations/logs"
+log_directory="/var/log/chhaya"
 
 echo "Changing directory to project workspace directory"
 cd $project_directory || { echo "Failed to change directory to $project_directory"; exit 1; }
@@ -25,11 +26,19 @@ else
 fi
 
 # Restart and check the status of the gunicorn service
-sudo systemctl restart chhaya.service
-sudo systemctl status chhaya.service || { echo "Failed to restart or check the status of chhaya.service"; exit 1; }
+# Check the service status and handle errors correctly
+sudo systemctl restart chhaya.service || { echo "Failed to restart chhaya.service"; exit 1; }
+
+# Checking the status of the service after attempting to restart
+service_status=$(sudo systemctl is-active chhaya.service)
+if [ "$service_status" == "active" ]; then
+    echo "chhaya.service is running successfully."
+else
+    echo "chhaya.service failed to start. Status: $service_status"
+    exit 1
+fi
 
 # Create /var/log/chhaya directory, set permissions, and create log files
-log_directory="/var/log/chhaya"
 if [ -d "$log_directory" ]; then
     echo "Log directory $log_directory is present."
 else
