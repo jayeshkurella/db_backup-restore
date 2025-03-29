@@ -14,7 +14,7 @@ if [ -f /etc/systemd/system/chhaya.service ]; then
     echo "gunicorn.service already exists in /etc/systemd/system. Restarting the service..."
 else
     echo "gunicorn.service not found. Copying the service file..."
-    sudo cp -rf scripts/chhaya.service /etc/systemd/system/
+    sudo cp -rf Chhaya_new_backend/scripts/chhaya.service /etc/systemd/system/
     sudo systemctl daemon-reload
     sudo systemctl start chhaya.service
     sudo systemctl enable chhaya.service
