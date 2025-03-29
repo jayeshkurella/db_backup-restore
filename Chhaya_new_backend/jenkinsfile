@@ -6,33 +6,16 @@ pipeline {
     stages {
         stage ('Checkout') {
             steps {
-                git branch: 'chhaya_jenkins', credentialsId: 'new-token1', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
-            }
-        }
-
-        stage ('Fix Line Endings') {
-            steps {
-                sh '''
-                sudo apt-get install -y dos2unix
-                dos2unix ${WORKSPACE_DIR}/*.sh
-                '''
+                git branch: 'sanketlodhe', credentialsId: 'new-token1', url: 'https://gitlab.com/coderizers/app_view/chhaya_foundation.git'
+                sh 'ls -l Chhaya_new_backend/scripts/'
             }
         }
 
         stage ('Setup Virtual Environment, Install Dependencies') {
             steps {
                 sh '''
-                chmod +x ${WORKSPACE_DIR}/setup_python_env.sh
-                bash ${WORKSPACE_DIR}/setup_python_env.sh
-                '''
-            }
-        }
-
-        stage ('db_config') {
-            steps {
-                sh '''
-                chmod +x ${WORKSPACE_DIR}/db_config.sh
-                bash ${WORKSPACE_DIR}/db_config.sh
+                chmod +x Chhaya_new_backend/scripts/setup_virtualenv.sh
+                ./Chhaya_new_backend/scripts/setup_virtualenv.sh
                 '''
             }
         }
@@ -40,19 +23,21 @@ pipeline {
         stage ('migration') {
             steps {
                 sh '''
-                chmod +x ${WORKSPACE_DIR}/migration.sh
-                bash ${WORKSPACE_DIR}/migration.sh
+                chmod +x Chhaya_new_backend/scripts/run_migration.sh
+                ./Chhaya_new_backend/scripts/run_migration.sh
                 '''
             }
         }
 
-        stage ('runserver') {
+        stage ('Setup Gunicorn') {
             steps {
                 sh '''
-                chmod +x ${WORKSPACE_DIR}/runserver.sh
-                bash ${WORKSPACE_DIR}/runserver.sh
+                chmod +x Chhaya_new_backend/scripts/gunicorn.sh
+                ./Chhaya_new_backend/scripts/gunicorn.sh
                 '''
             }
         }
     }
 }
+
+
