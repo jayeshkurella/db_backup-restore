@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project_directory="/var/lib/jenkins/workspace/chhaya-foundations"
+project_directory="/home/ubuntu/workspace/chhaya-foundations1"
 
 echo "Changing directory to project workspace directory"
 cd $project_directory || { echo "Failed to change directory to $project_directory"; exit 1; }
