@@ -18,7 +18,7 @@ from drf_yasg import openapi
 from django.contrib.gis.geos import Point
 import json
 from django.utils.timezone import now
-import traceback  # Add this import at the top of your file
+import traceback
 
 logger = logging.getLogger(__name__)
 

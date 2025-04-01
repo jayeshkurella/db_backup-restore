@@ -1,0 +1,200 @@
+<div class="blank-layout-container justify-content-center">
+  <div class="position-relative row w-100 h-100">
+    <div class="col-lg-7 col-xl-8 bg-gredient p-0">
+      <div class="p-24 h-100">
+        <app-branding></app-branding>
+
+        <div
+          class="align-items-center justify-content-center img-height d-none d-lg-flex"
+        >
+          <img
+            src="assets/images/backgrounds/login-bg.svg"
+            alt="login"
+            style="max-width: 500px"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5 col-xl-4 p-0">
+      <div
+        class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100"
+      >
+        <div class="row justify-content-center w-100">
+          <div class="col-lg-9 max-width-form">
+            <h4 class="f-w-700 f-s-24 m-0">Welcome to Chhaya Foundation</h4>
+            <div class="row m-t-24 justify-content-center">
+              <div class="col-12 col-sm-8 col-md-6">
+                <button mat-stroked-button class="w-100">
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="/assets/images/svgs/google-icon.svg"
+                      alt="google"
+                      width="16"
+                      class="m-r-10"
+                    />
+                    Sign in with Google
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="or-border m-t-30 mb-2">or sign up with</div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    
+              <!-- First Name & Last Name -->
+              <div class="row mb-3">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control border-0 border-bottom" formControlName="first_name" placeholder="First Name">
+                  </div>
+                  <small class="text-danger" *ngIf="registerForm.controls['first_name'].invalid && registerForm.controls['first_name'].touched">
+                    First letter must be capital & only letters allowed.
+                  </small>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control border-0 border-bottom" formControlName="last_name" placeholder="Last Name">
+                  </div>
+                  <small class="text-danger" *ngIf="registerForm.controls['last_name'].invalid && registerForm.controls['last_name'].touched">
+                    First letter must be capital & only letters allowed.
+                  </small>
+                </div>
+              </div>
+          
+              <!-- Email -->
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
+                  <input type="email" class="form-control border-0 border-bottom" formControlName="email_id" placeholder="Enter your email">
+                </div>
+                <small class="text-danger" *ngIf="registerForm.controls['email_id'].invalid && registerForm.controls['email_id'].touched">
+                  Enter a valid email.
+                </small>
+              </div>
+          
+              <!-- Phone Number -->
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-telephone"></i></span>
+                  <select class="form-select border-0 border-bottom small-select" formControlName="country_code">
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+91" selected>🇮🇳 +91</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+61">🇦🇺 +61</option>
+                    <option value="+81">🇯🇵 +81</option>
+                  </select>
+                  <input type="text" class="form-control border-0 border-bottom" formControlName="phone_no" placeholder="Phone Number">
+                </div>
+                <small class="text-danger" *ngIf="registerForm.controls['phone_no'].invalid && registerForm.controls['phone_no'].touched">
+                  Enter a valid 10-digit phone number.
+                </small>
+              </div>
+              
+              <!-- User Type & Sub Type -->
+              <div class="mb-3 d-flex align-items-center gap-2">
+                <div class="input-group w-50">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-people"></i></span>
+                  <select class="form-select border-0 border-bottom" formControlName="user_type" (change)="onUserTypeChange()">
+                    <option value="" disabled>Select User Type</option>
+                    <option *ngFor="let type of userTypes" [value]="type.value">{{ type.label }}</option>
+                  </select>
+                </div>
+              
+                <div class="input-group w-50" *ngIf="subUserTypes[registerForm.value.user_type]">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-person-badge"></i></span>
+                  <select class="form-select border-0 border-bottom" formControlName="sub_user_type">
+                    <option value="" disabled>Sub Type</option>
+                    <option *ngFor="let subtype of subUserTypes[registerForm.value.user_type]" [value]="subtype.value">
+                      {{ subtype.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              
+             <!-- Password Field -->
+<div class="mb-3">
+  <div class="input-group">
+    <span class="input-group-text bg-light border-0">
+      <i class="bi bi-lock"></i>
+    </span>
+    <input 
+      [type]="hidePassword ? 'password' : 'text'" 
+      class="form-control border-0 border-bottom" 
+      formControlName="password" 
+      placeholder="Enter password"
+    />
+    <button 
+      type="button" 
+      class="bg-transparent border-0 text-dark" 
+      (click)="hidePassword = !hidePassword">
+      <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+    </button>
+  </div>
+  <small class="text-danger" *ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].touched">
+    Password must be 6+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special character.
+  </small>
+</div>
+
+<!-- Confirm Password Field -->
+<div class="mb-3">
+  <div class="input-group">
+    <span class="input-group-text bg-light border-0">
+      <i class="bi bi-lock"></i>
+    </span>
+    <input 
+      [type]="hideConfirmPassword ? 'password' : 'text'" 
+      class="form-control border-0 border-bottom" 
+      formControlName="password2" 
+      placeholder="Confirm password"
+    />
+    <button 
+      type="button" 
+      class="bg-transparent border-0 text-dark" 
+      (click)="hideConfirmPassword = !hideConfirmPassword">
+      <i class="bi" [ngClass]="hideConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+    </button>
+  </div>
+  <small class="text-danger" *ngIf="registerForm.errors?.['passwordMismatch']">
+    Passwords do not match.
+  </small>
+</div>
+
+              <!-- Consent Checkbox -->
+              <div class="mb-3 d-flex align-items-center">
+                <input type="checkbox" class="form-check-input me-2" formControlName="is_consent" />
+                <label class="form-check-label">
+                  I agree to the 
+                  <a href="#" class="text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#teermsModal">
+                    Terms and Conditions
+                  </a>
+                </label>
+              </div>
+          
+              <!-- Submit Button -->
+              <div class="d-grid">
+                <button type="submit" class="btn text-white fw-bold py-2" 
+                        style="background: linear-gradient(45deg, #FA6400, #E63946);" 
+                        [disabled]="registerForm.invalid">
+                  Register
+                </button>
+              </div>
+            </form>
+            <span class="d-block f-w-500 d-block m-t-24"
+              >Already have an Account?
+
+              <a
+                [routerLink]="['/authentication/login']"
+                class="text-decoration-none text-primary f-w-500 f-s-14"
+              >
+                Sign In</a
+              >
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

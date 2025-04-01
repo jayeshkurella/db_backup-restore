@@ -18,8 +18,7 @@ import { MainDashboardServiceService } from './main-dashboard-service.service';
   styleUrls: ['./main-dashboard.component.css']
 })
 export class MainDashboardComponent implements OnInit ,AfterViewInit {
-    selectedPersonDetails: any = null;
-
+   selectedPersonDetails: any = null;
   environment = environment;
   geo_url =environment.geo_url
   stateLayer = "GeoFlow_WCD:tblstates";

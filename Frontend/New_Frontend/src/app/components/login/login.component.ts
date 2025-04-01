@@ -39,8 +39,8 @@ export class LoginComponent {
         (response) => {
             console.log('Login Successful:', response);
             localStorage.setItem('authToken', response.token);
-            localStorage.setItem('user_type', response.user_type);
-            localStorage.setItem('user_id', response.user_id); 
+            localStorage.setItem('user_type', response.user.user_type);
+            localStorage.setItem('user_id', response.user.user_id); 
             
             alert('Login successful! Welcome back.');
 
@@ -72,21 +72,21 @@ export class LoginComponent {
 
  isPasswordVisible: boolean = false;
 
-togglePasswordVisibility(field: string) {
-  if (field === 'password') {
-    this.isPasswordVisible = !this.isPasswordVisible;
-    const passwordInput = document.getElementById('passwordInput') as HTMLInputElement;
-    const toggleIcon = document.getElementById('togglePasswordIcon') as HTMLElement;
+  togglePasswordVisibility(field: string) {
+    if (field === 'password') {
+      this.isPasswordVisible = !this.isPasswordVisible;
+      const passwordInput = document.getElementById('passwordInput') as HTMLInputElement;
+      const toggleIcon = document.getElementById('togglePasswordIcon') as HTMLElement;
 
-    if (this.isPasswordVisible) {
-      passwordInput.type = 'text';
-      toggleIcon.classList.replace('bi-eye', 'bi-eye-slash');
-    } else {
-      passwordInput.type = 'password';
-      toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
-    }
-  } 
-}
+      if (this.isPasswordVisible) {
+        passwordInput.type = 'text';
+        toggleIcon.classList.replace('bi-eye', 'bi-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
+      }
+    } 
+  }
 
 
   
