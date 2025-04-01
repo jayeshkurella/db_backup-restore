@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project_directory="/var/lib/jenkins/workspace/chhaya-foundations"
+project_directory="/home/ubuntu/workspace/chhaya-foundations1"
 
 echo "Change directory to python project directory"
 
