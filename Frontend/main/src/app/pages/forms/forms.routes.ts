@@ -13,10 +13,12 @@ import { AppFormLayoutsComponent } from './form-layouts/form-layouts.component';
 import { AppFormVerticalComponent } from './form-vertical/form-vertical.component';
 import { AppFormWizardComponent } from './form-wizard/form-wizard.component';
 import { AppFormToastrComponent } from './form-toastr/form-toastr.component';
+import { authGuard } from '../authentication/side-login/auth.guard';
 
 export const FormsRoutes: Routes = [
   {
     path: 'forms-elements',
+    canActivate: [authGuard],  
     children: [
       {
         path: 'autocomplete',
@@ -82,13 +84,13 @@ export const FormsRoutes: Routes = [
       {
         path: 'form-layouts',
         component: AppFormLayoutsComponent,
-        data: {
-          title: 'Form Layouts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Form Layouts' },
-          ],
-        },
+        // data: {
+        //   // title: 'Form Layouts',
+        //   urls: [
+        //     { title: 'Dashboard', url: '/dashboards/dashboard1' },
+        //     { title: 'Form Layouts' },
+        //   ],
+        // },
       },
       {
         path: 'form-horizontal',

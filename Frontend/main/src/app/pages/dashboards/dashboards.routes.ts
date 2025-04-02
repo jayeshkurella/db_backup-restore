@@ -23,7 +23,7 @@ export const DashboardsRoutes: Routes = [
       {
         path: 'dashboard2',
         component: AppDashboard2Component,
-        canActivate: [authGuard],  // Place canActivate outside of data
+        canActivate: [authGuard],  
         data: {
           title: 'eCommerce',
           urls: [

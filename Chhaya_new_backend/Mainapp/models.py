@@ -14,3 +14,4 @@ from .models.person import *
 from .models.police_station import *
 from .models.user import *
 from .models.volunteer import *
+from .models.dummy_table import dummy_Table
