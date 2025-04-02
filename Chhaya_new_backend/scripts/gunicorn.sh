@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define project directory and log directory paths
-project_directory="/hime/ubuntu/jenkins/workspace/chhaya-foundations1"
+project_directory="/home/administrator/backend_project/workspace/chhaya-backend"
 log_directory="/var/log/chhaya"
 
 echo "Changing directory to project workspace directory"
