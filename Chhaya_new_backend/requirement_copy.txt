@@ -22,7 +22,7 @@ djangorestframework-simplejwt==5.3.1
 drf-yasg==1.21.7
 filelock==3.16.0
 fiona==1.9.5
-GDAL==3.6.4
+GDAL==3.8.4
 gunicorn
 geopandas==0.14.4
 git-filter-repo==2.45.0
