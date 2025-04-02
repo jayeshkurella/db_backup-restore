@@ -387,63 +387,63 @@ export const navItems: NavItem[] = [
     route: 'forms',
     ddType: '',
     children: [
-      {
-        displayName: 'Form elements',
-        iconName: 'point',
-        route: 'forms/forms-elements',
-        children: [
-          {
-            displayName: 'Autocomplete',
-            iconName: 'point',
-            route: 'forms/forms-elements/autocomplete',
-          },
-          {
-            displayName: 'Button',
-            iconName: 'point',
-            route: 'forms/forms-elements/button',
-          },
-          {
-            displayName: 'Checkbox',
-            iconName: 'point',
-            route: 'forms/forms-elements/checkbox',
-          },
-          {
-            displayName: 'Radio',
-            iconName: 'point',
-            route: 'forms/forms-elements/radio',
-          },
-          {
-            displayName: 'Datepicker',
-            iconName: 'point',
-            route: 'forms/forms-elements/datepicker',
-          },
-        ],
-      },
+      // {
+      //   displayName: 'Form elements',
+      //   iconName: 'point',
+      //   route: 'forms/forms-elements',
+      //   children: [
+      //     {
+      //       displayName: 'Autocomplete',
+      //       iconName: 'point',
+      //       route: 'forms/forms-elements/autocomplete',
+      //     },
+      //     {
+      //       displayName: 'Button',
+      //       iconName: 'point',
+      //       route: 'forms/forms-elements/button',
+      //     },
+      //     {
+      //       displayName: 'Checkbox',
+      //       iconName: 'point',
+      //       route: 'forms/forms-elements/checkbox',
+      //     },
+      //     {
+      //       displayName: 'Radio',
+      //       iconName: 'point',
+      //       route: 'forms/forms-elements/radio',
+      //     },
+      //     {
+      //       displayName: 'Datepicker',
+      //       iconName: 'point',
+      //       route: 'forms/forms-elements/datepicker',
+      //     },
+      //   ],
+      // },
       {
         displayName: 'Form Layouts',
         iconName: 'point',
         route: '/forms/form-layouts',
       },
-      {
-        displayName: 'Form Horizontal',
-        iconName: 'point',
-        route: '/forms/form-horizontal',
-      },
-      {
-        displayName: 'Form Vertical',
-        iconName: 'point',
-        route: '/forms/form-vertical',
-      },
-      {
-        displayName: 'Form Wizard',
-        iconName: 'point',
-        route: '/forms/form-wizard',
-      },
-      {
-        displayName: 'Toastr',
-        iconName: 'point',
-        route: '/forms/form-toastr',
-      },
+      // {
+      //   displayName: 'Form Horizontal',
+      //   iconName: 'point',
+      //   route: '/forms/form-horizontal',
+      // },
+      // {
+      //   displayName: 'Form Vertical',
+      //   iconName: 'point',
+      //   route: '/forms/form-vertical',
+      // },
+      // {
+      //   displayName: 'Form Wizard',
+      //   iconName: 'point',
+      //   route: '/forms/form-wizard',
+      // },
+      // {
+      //   displayName: 'Toastr',
+      //   iconName: 'point',
+      //   route: '/forms/form-toastr',
+      // },
     ],
   },
   {

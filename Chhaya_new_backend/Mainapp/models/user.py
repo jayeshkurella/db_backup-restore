@@ -17,12 +17,13 @@ class UserManager(BaseUserManager):
         # Extract and remove user_type from extra_fields to avoid passing it twice
         user_type = extra_fields.pop("user_type", User.UserTypeChoices.REPORTING)
 
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
 
         if user_type == User.UserTypeChoices.ADMIN:
             extra_fields["is_staff"] = True
             extra_fields["is_superuser"] = True
+
 
         first_name = extra_fields.pop("first_name", "")
         last_name = extra_fields.pop("last_name", "")

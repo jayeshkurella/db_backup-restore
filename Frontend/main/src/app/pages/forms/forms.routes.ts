@@ -84,6 +84,7 @@ export const FormsRoutes: Routes = [
       {
         path: 'form-layouts',
         component: AppFormLayoutsComponent,
+        canActivate: [authGuard],
         // data: {
         //   // title: 'Form Layouts',
         //   urls: [

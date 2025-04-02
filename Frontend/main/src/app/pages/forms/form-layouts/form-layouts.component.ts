@@ -23,6 +23,7 @@ import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 
 import { merge } from 'rxjs';
 import { FormApiService } from './form-api.service';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -42,8 +43,10 @@ import { FormApiService } from './form-api.service';
     HighlightLineNumbers,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './form-layouts.component.html',
+  styleUrls: ['./form-layouts.component.scss'], // ✅ Corrected filename
   providers: [provideNativeDateAdapter()],
 })
 export class AppFormLayoutsComponent implements OnInit , AfterViewInit{

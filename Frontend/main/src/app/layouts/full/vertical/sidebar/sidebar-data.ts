@@ -178,58 +178,58 @@ export const navItems: NavItem[] = [
   {
     navCap: 'Person Form',
   },
+  // {
+  //   displayName: 'Form elements',
+  //   iconName: 'apps',
+  //   route: 'forms/forms-elements',
+  //   // children: [
+  //   //   {
+  //   //     displayName: 'Autocomplete',
+  //   //     iconName: 'point',
+  //   //     route: 'forms/forms-elements/autocomplete',
+  //   //   },
+  //   //   {
+  //   //     displayName: 'Button',
+  //   //     iconName: 'point',
+  //   //     route: 'forms/forms-elements/button',
+  //   //   },
+  //   //   {
+  //   //     displayName: 'Checkbox',
+  //   //     iconName: 'point',
+  //   //     route: 'forms/forms-elements/checkbox',
+  //   //   },
+  //   //   {
+  //   //     displayName: 'Radio',
+  //   //     iconName: 'point',
+  //   //     route: 'forms/forms-elements/radio',
+  //   //   },
+  //   //   {
+  //   //     displayName: 'Datepicker',
+  //   //     iconName: 'point',
+  //   //     route: 'forms/forms-elements/datepicker',
+  //   //   },
+  //   // ],
+  // },
   {
-    displayName: 'Form elements',
-    iconName: 'apps',
-    route: 'forms/forms-elements',
-    children: [
-      {
-        displayName: 'Autocomplete',
-        iconName: 'point',
-        route: 'forms/forms-elements/autocomplete',
-      },
-      {
-        displayName: 'Button',
-        iconName: 'point',
-        route: 'forms/forms-elements/button',
-      },
-      {
-        displayName: 'Checkbox',
-        iconName: 'point',
-        route: 'forms/forms-elements/checkbox',
-      },
-      {
-        displayName: 'Radio',
-        iconName: 'point',
-        route: 'forms/forms-elements/radio',
-      },
-      {
-        displayName: 'Datepicker',
-        iconName: 'point',
-        route: 'forms/forms-elements/datepicker',
-      },
-    ],
-  },
-  {
-    displayName: 'Form Layouts',
+    displayName: 'Add Person',
     iconName: 'file-description',
     route: '/forms/form-layouts',
   },
-  {
-    displayName: 'Form Horizontal',
-    iconName: 'box-align-bottom',
-    route: '/forms/form-horizontal',
-  },
-  {
-    displayName: 'Form Vertical',
-    iconName: 'box-align-left',
-    route: '/forms/form-vertical',
-  },
-  {
-    displayName: 'Form Wizard',
-    iconName: 'files',
-    route: '/forms/form-wizard',
-  },
+  // {
+  //   displayName: 'Form Horizontal',
+  //   iconName: 'box-align-bottom',
+  //   route: '/forms/form-horizontal',
+  // },
+  // {
+  //   displayName: 'Form Vertical',
+  //   iconName: 'box-align-left',
+  //   route: '/forms/form-vertical',
+  // },
+  // {
+  //   displayName: 'Form Wizard',
+  //   iconName: 'files',
+  //   route: '/forms/form-wizard',
+  // },
   // {
   //   displayName: 'Toastr',
   //   iconName: 'notification',
