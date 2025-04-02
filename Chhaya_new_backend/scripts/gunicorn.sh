@@ -11,30 +11,30 @@ echo "Validate the present working directory"
 pwd
 
 # Check if gunicorn.service file exists in the correct location
-service_file="$project_directory/Chhaya_new_backend/scripts/chhaya.service"
+service_file="$project_directory/Chhaya_new_backend/scripts/chhaya_new.service"
 
 if [ -f "$service_file" ]; then
     echo "gunicorn.service found. Copying the service file..."
     sudo cp "$service_file" /etc/systemd/system/
     sudo systemctl daemon-reload
-    sudo systemctl start chhaya.service
-    sudo systemctl enable chhaya.service
+    sudo systemctl start chhaya_new.service
+    sudo systemctl enable chhaya_new.service
     echo "Gunicorn has been started and enabled."
 else
-    echo "Error: chhaya.service not found in $service_file. Please ensure the file exists."
+    echo "Error: chhaya_new.service not found in $service_file. Please ensure the file exists."
     exit 1
 fi
 
 # Restart and check the status of the gunicorn service
 # Check the service status and handle errors correctly
-sudo systemctl restart chhaya.service || { echo "Failed to restart chhaya.service"; exit 1; }
+sudo systemctl restart chhaya_new.service || { echo "Failed to restart chhaya.service"; exit 1; }
 
 # Checking the status of the service after attempting to restart
-service_status=$(sudo systemctl is-active chhaya.service)
+service_status=$(sudo systemctl is-active chhaya_new.service)
 if [ "$service_status" == "active" ]; then
-    echo "chhaya.service is running successfully."
+    echo "chhaya_new.service is running successfully."
 else
-    echo "chhaya.service failed to start. Status: $service_status"
+    echo "chhaya_new.service failed to start. Status: $service_status"
     exit 1
 fi
 
