@@ -46,7 +46,7 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   templateUrl: './form-layouts.component.html',
-  styleUrls: ['./form-layouts.component.scss'], // ✅ Corrected filename
+  styleUrls: ['./form-layouts.component.scss'],
   providers: [provideNativeDateAdapter()],
 })
 export class AppFormLayoutsComponent implements OnInit , AfterViewInit{

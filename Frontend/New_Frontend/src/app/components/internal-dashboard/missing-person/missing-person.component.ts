@@ -115,56 +115,56 @@ export class MissingPersonComponent implements OnInit {
   
 
 
-applyFilters(): void {
-  this.loading = true;
-  this.filtersApplied = true;
-  this.progress = 1; // Start progress
-  this.progressColor = 'bg-primary';
-  this.progressMessage = "🔄 Applying filters...";
+  applyFilters(): void {
+    this.loading = true;
+    this.filtersApplied = true;
+    this.progress = 1; // Start progress
+    this.progressColor = 'bg-primary';
+    this.progressMessage = "🔄 Applying filters...";
 
-  let interval = setInterval(() => {
-    if (this.progress < 90) this.progress += 10;
-  }, 200);
+    let interval = setInterval(() => {
+      if (this.progress < 90) this.progress += 10;
+    }, 200);
 
-  setTimeout(() => {
-    this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-      (response) => {
-        clearInterval(interval);
-        this.progress = 100; 
+    setTimeout(() => {
+      this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
+        (response) => {
+          clearInterval(interval);
+          this.progress = 100; 
 
-        if (response && Array.isArray(response)) {
-          this.pendingPersons = response.filter(person => person.case_status === 'Pending');
-          this.resolvedPersons = response.filter(person => person.case_status === 'Resolved');
+          if (response && Array.isArray(response)) {
+            this.pendingPersons = response.filter(person => person.case_status === 'Pending');
+            this.resolvedPersons = response.filter(person => person.case_status === 'Resolved');
 
-          // Reset pagination on new filter
-          this.pendingPage = 1;
-          this.resolvedPage = 1;
+            // Reset pagination on new filter
+            this.pendingPage = 1;
+            this.resolvedPage = 1;
 
-          this.progressColor = 'bg-success';
-          this.progressMessage = "✅ Filters applied successfully!";
-        } else {
-          console.error('Unexpected API response:', response);
-          this.pendingPersons = [];
-          this.resolvedPersons = [];
+            this.progressColor = 'bg-success';
+            this.progressMessage = "✅ Filters applied successfully!";
+          } else {
+            console.error('Unexpected API response:', response);
+            this.pendingPersons = [];
+            this.resolvedPersons = [];
 
+            this.progressColor = 'bg-danger';
+            this.progressMessage = "❌ No data found!";
+          }
+
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
+        },
+        (error) => {
+          clearInterval(interval);
+          console.error('Error fetching data:', error);
           this.progressColor = 'bg-danger';
-          this.progressMessage = "❌ No data found!";
+          this.progressMessage = "❌ Error applying filters!";
+          setTimeout(() => { this.loading = false; }, 1000);
         }
-
-        setTimeout(() => {
-          this.loading = false;
-        }, 1000);
-      },
-      (error) => {
-        clearInterval(interval);
-        console.error('Error fetching data:', error);
-        this.progressColor = 'bg-danger';
-        this.progressMessage = "❌ Error applying filters!";
-        setTimeout(() => { this.loading = false; }, 1000);
-      }
-    );
-  }, 1000);
-}
+      );
+    }, 1000);
+  }
 
 
 

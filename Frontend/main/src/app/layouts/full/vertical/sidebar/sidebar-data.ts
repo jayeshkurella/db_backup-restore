@@ -176,45 +176,44 @@ export const navItems: NavItem[] = [
   //   ],
   // },
   {
-    navCap: 'Person Form',
+    navCap: 'Person',
   },
-  // {
-  //   displayName: 'Form elements',
-  //   iconName: 'apps',
-  //   route: 'forms/forms-elements',
-  //   // children: [
-  //   //   {
-  //   //     displayName: 'Autocomplete',
-  //   //     iconName: 'point',
-  //   //     route: 'forms/forms-elements/autocomplete',
-  //   //   },
-  //   //   {
-  //   //     displayName: 'Button',
-  //   //     iconName: 'point',
-  //   //     route: 'forms/forms-elements/button',
-  //   //   },
-  //   //   {
-  //   //     displayName: 'Checkbox',
-  //   //     iconName: 'point',
-  //   //     route: 'forms/forms-elements/checkbox',
-  //   //   },
-  //   //   {
-  //   //     displayName: 'Radio',
-  //   //     iconName: 'point',
-  //   //     route: 'forms/forms-elements/radio',
-  //   //   },
-  //   //   {
-  //   //     displayName: 'Datepicker',
-  //   //     iconName: 'point',
-  //   //     route: 'forms/forms-elements/datepicker',
-  //   //   },
-  //   // ],
-  // },
   {
     displayName: 'Add Person',
     iconName: 'file-description',
     route: '/forms/form-layouts',
   },
+  // {
+  //   navCap: 'Search Case',
+  // },
+  {
+    displayName: 'Search Case',
+    iconName: 'search',
+    route: '/datatable/kichen-sink',
+    children: [
+      {
+        displayName: 'Missing Person',
+        iconName: 'user',
+        route: '/datatable/kichen-sink',
+      },
+      {
+        displayName: 'Unidentified Person',
+        iconName: 'user',
+        route: 'forms/forms-elements/button',
+      },
+      {
+        displayName: 'Unidentified Bodies',
+        iconName: 'user',
+        route: 'forms/forms-elements/checkbox',
+      },
+    ],
+  },
+  // {
+  //      displayName: 'Data table',
+  //      iconName: 'border-outer',
+  //      route: '/datatable/kichen-sink',
+  //   }
+  
   // {
   //   displayName: 'Form Horizontal',
   //   iconName: 'box-align-bottom',

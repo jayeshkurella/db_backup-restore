@@ -39,7 +39,7 @@
         <!-- Date of Birth -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Date of Birth</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="birth_date" placeholder="Date of Birth">
+          <input matInput [matDatepicker]="picker" formControlName="birth_date">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -50,13 +50,12 @@
             matInput 
             type="time" 
             formControlName="birthtime" 
-            placeholder="HH:MM (24-hour)"
           >
         </mat-form-field>
         <!-- Age -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Age</mat-label>
-          <input matInput type="number" formControlName="age" placeholder="Age">
+          <input matInput type="number" formControlName="age">
         </mat-form-field>
 
       </div>
@@ -89,19 +88,19 @@
         <!-- Place of Birth -->
         <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-3">
           <mat-label>Place of Birth</mat-label>
-          <input matInput formControlName="birthplace" placeholder="Enter Place of Birth">
+          <input matInput formControlName="birthplace">
         </mat-form-field>
 
         <!-- Height -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Height (cm)</mat-label>
-          <input matInput type="text" formControlName="height" placeholder="e.g., 151 cm">
+          <input matInput type="text" formControlName="height">
         </mat-form-field>
 
         <!-- Weight -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Weight (kg)</mat-label>
-          <input matInput type="text" formControlName="weight" placeholder="e.g., 50kg">
+          <input matInput type="text" formControlName="weight">
         </mat-form-field>
 
       </div>
@@ -151,14 +150,14 @@
         <!-- Birthmark -->
         <mat-form-field appearance="outline" class="col-12 col-md-6">
           <mat-label>Birthmark Details</mat-label>
-          <textarea matInput formControlName="birth_mark" rows="3" placeholder="Enter Birthmark Details"></textarea>
+          <textarea matInput formControlName="birth_mark" rows="3" ></textarea>
         </mat-form-field>
 
         <!-- Distinctive Marks -->
         <mat-form-field appearance="outline" class="col-12 col-md-6">
           <mat-label>Distinctive Marks</mat-label>
           <textarea matInput formControlName="distinctive_mark" rows="3"
-            placeholder="Enter Other Distinctive Marks"></textarea>
+            ></textarea>
         </mat-form-field>
 
       </div>
@@ -636,7 +635,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Location Details</mat-label>
               <textarea matInput formControlName="missing_location_details"
-                placeholder="Enter Location Details"></textarea>
+               ></textarea>
             </mat-form-field>
           </div>
 
@@ -645,7 +644,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Last Seen Details</mat-label>
               <textarea matInput formControlName="last_seen_location"
-                placeholder="Enter the Last Seen Location Details"></textarea>
+               ></textarea>
             </mat-form-field>
           </div>
 
@@ -667,7 +666,7 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>FIR Number</mat-label>
-              <input matInput type="text" formControlName="fir_number" placeholder="Enter FIR Number">
+              <input matInput type="text" formControlName="fir_number">
             </mat-form-field>
           </div>
 
@@ -700,7 +699,7 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Police Station Name & Address</mat-label>
-              <input matInput type="text" formControlName="police_station" placeholder="Enter Police Station Details">
+              <input matInput type="text" formControlName="police_station" >
             </mat-form-field>
           </div>
 
@@ -709,7 +708,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Name</mat-label>
               <input matInput type="text" formControlName="investigation_officer_name"
-                placeholder="Enter Officer's Name">
+                >
             </mat-form-field>
           </div>
 
@@ -718,7 +717,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Contact Number</mat-label>
               <input matInput type="text" formControlName="investigation_officer_contact"
-                placeholder="Enter Contact Number">
+                >
             </mat-form-field>
           </div>
 
@@ -742,7 +741,7 @@
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Data</mat-label>
-              <textarea matInput formControlName="data" placeholder="Enter Summary"></textarea>
+              <textarea matInput formControlName="data" ></textarea>
             </mat-form-field>
           </div>
 

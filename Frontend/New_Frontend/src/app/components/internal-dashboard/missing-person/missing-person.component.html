@@ -54,6 +54,7 @@
             <option *ngFor="let city of allcities" [value]="city">{{ city }}</option>
           </select>
         </div>
+        
         <div class="col-md-2">
           <select class="form-select" [(ngModel)]="filters.year" (ngModelChange)="applyFilters()">
             <option value="">Year</option>
@@ -127,7 +128,6 @@
       <div class="tab-pane fade show active" id="pending">
         <div class="table-responsive">
           <!-- Show message when no persons are found -->
-          <!-- Show message only if data has been fetched and no results are found -->
         <div *ngIf="pendingPersons !== undefined && pendingPersons.length === 0 && filtersApplied" class="text-center text-danger mt-3">
           No pending persons found with the applied filters.
         </div>
