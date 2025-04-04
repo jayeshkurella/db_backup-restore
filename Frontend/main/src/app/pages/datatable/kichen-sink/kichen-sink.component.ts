@@ -159,7 +159,6 @@ const employees = [
 @Component({
     templateUrl: './kichen-sink.component.html',
     styleUrls: ['./kichen-sink.component.scss'],
-
     imports: [
         MaterialModule,
         TablerIconsModule,
@@ -175,9 +174,6 @@ const employees = [
 export class AppKichenSinkComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
-  states = ['Maharashtra', 'Gujarat', 'Delhi', 'Karnataka']; 
-  districts = ['Pune', 'Ahmedabad', 'Mumbai', 'Bangalore'];
-  cities = ['Pune', 'Ahmedabad', 'Mumbai', 'Bangalore'];
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i); 
   castes = ['General', 'OBC', 'SC', 'ST'];

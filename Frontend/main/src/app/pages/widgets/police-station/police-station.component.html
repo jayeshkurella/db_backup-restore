@@ -1,0 +1,110 @@
+<div class="mat-typography text-center mt-4">
+    <h4 class="mat-headline-6 font-weight-bold">Find Your Local Police Station</h4>
+    <p class="mat-body-2">Quick access to emergency services and police stations across the country</p>
+  
+    <!-- Material Button to Open Modal -->
+    <button mat-raised-button color="primary" (click)="openModal()" class="mt-2">
+      Add Police Station
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-center border-bottom">
+    <div class="filter-section bg-light rounded mb-2 border px-2 py-2 border-dark" style="max-width: 1000px; width: 100%;">
+      <form class="mt-4" (ngSubmit)="onSearch()" novalidate>
+        <div class="row g-3 justify-content-center">
+          <!-- Search by Name -->
+          <div class="col-md-3">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Search by Name</mat-label>
+              <input matInput placeholder="Enter name" [(ngModel)]="searchName" name="searchName">
+            </mat-form-field>
+          </div>
+          <!-- Search by City -->
+          <div class="col-md-3">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Search by City</mat-label>
+              <input matInput placeholder="Enter city" [(ngModel)]="searchCity" name="searchCity">
+            </mat-form-field>
+          </div>
+          <!-- Search by District -->
+          <div class="col-md-2">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Search by District</mat-label>
+              <input matInput placeholder="Enter district" [(ngModel)]="searchdistrict" name="searchDistrict">
+            </mat-form-field>
+          </div>
+          <!-- Search by State -->
+          <div class="col-md-2">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Search by State</mat-label>
+              <input matInput placeholder="Enter state" [(ngModel)]="searchstate" name="searchState">
+            </mat-form-field>
+          </div>
+          <!-- Search Button -->
+          <div class="col-md-2 d-flex align-items-end">
+            <button mat-raised-button color="primary" class="w-100">
+              <mat-icon>search</mat-icon>&nbsp;Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  
+  <div class="row p-2 mt-1">
+    <div class="col-sm-6 col-lg-4" *ngFor="let police of total_policestation">
+      <mat-card class="cardWithShadow overflow-hidden p-3">
+        <!-- Image Section -->
+        <div class="position-relative">
+          <img
+            *ngIf="police.station_photo; else placeholder"
+            [src]="environment.apiUrl + police.station_photo"
+            class="w-100 object-fit-cover p-2"
+            style="height: 200px; border-radius: 8px;"
+            alt="{{ police.name }}"
+          />
+          <ng-template #placeholder>
+            <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+              <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+            </div>
+          </ng-template>
+        </div>
+  
+        <mat-card-content class="p-3">
+          <!-- Title -->
+          <mat-card-title class="f-s-18 fw-bold m-b-0 d-flex justify-content-between align-items-center">
+            <span>{{ police.name }}</span>
+            <span class="badge px-2 py-1" 
+                  [ngClass]="{'bg-success text-white': police.activ_Status === 'Active', 
+                              'bg-danger text-white': police.activ_Status !== 'Active'}">
+              {{ police.activ_Status }}
+            </span>
+          </mat-card-title>
+          
+  
+          <!-- Address -->
+          <mat-card-subtitle class="f-s-14 text-muted">
+            <i class="bi bi-geo-alt"></i> {{ police.address_details.city }}, {{ police.address_details.state }}
+          </mat-card-subtitle>
+  
+          <!-- Footer -->
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <button mat-flat-button color="primary" class="text-white px-3" (click)="seeMores(police)">
+              More Info
+            </button>
+            
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  
+  
+  
+  <!-- No Police Station Available -->
+  <div *ngIf="total_policestation?.length === 0">
+    <p>No Police Station Available.</p>
+  </div>
+  
+  

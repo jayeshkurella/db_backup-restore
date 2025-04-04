@@ -153,28 +153,7 @@ export const navItems: NavItem[] = [
   //   iconName: 'app-window',
   //   route: 'landingpage',
   // },
-  // {
-  //   displayName: 'Widgets',
-  //   iconName: 'layout',
-  //   route: 'widgets',
-  //   children: [
-  //     {
-  //       displayName: 'Cards',
-  //       iconName: 'point',
-  //       route: 'widgets/cards',
-  //     },
-  //     {
-  //       displayName: 'Banners',
-  //       iconName: 'point',
-  //       route: 'widgets/banners',
-  //     },
-  //     {
-  //       displayName: 'Charts',
-  //       iconName: 'point',
-  //       route: 'widgets/charts',
-  //     },
-  //   ],
-  // },
+ 
   {
     navCap: 'Person',
   },
@@ -199,15 +178,49 @@ export const navItems: NavItem[] = [
       {
         displayName: 'Unidentified Person',
         iconName: 'user',
-        route: 'forms/forms-elements/button',
+        route: '/datatable/unidentified-person',
       },
       {
         displayName: 'Unidentified Bodies',
         iconName: 'user',
-        route: 'forms/forms-elements/checkbox',
+        route: '/datatable/unidentified-bodies',
       },
     ],
   },
+  //  {
+  //   displayName: 'Widgets',
+  //   iconName: 'layout',
+  //   route: 'widgets',
+  //   children: [
+  //     {
+  //       displayName: 'Cards',
+  //       iconName: 'point',
+  //       route: 'widgets/cards',
+  //     },
+  //     {
+  //       displayName: 'Banners',
+  //       iconName: 'point',
+  //       route: 'widgets/banners',
+  //     },
+  //     {
+  //       displayName: 'Charts',
+  //       iconName: 'point',
+  //       route: 'widgets/charts',
+  //     },
+  //     {
+  //       displayName: 'Police-Station',
+  //       iconName: 'Home',
+  //       route: 'widgets/police-station',
+  //     },
+  //     {
+  //       displayName: 'Hospitals',
+  //       iconName: 'point',
+  //       route: 'widgets/hospitals',
+  //     },
+  //   ],
+  // },
+
+  
   // {
   //      displayName: 'Data table',
   //      iconName: 'border-outer',

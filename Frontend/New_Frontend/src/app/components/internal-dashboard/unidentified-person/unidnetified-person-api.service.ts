@@ -16,6 +16,7 @@ export class UnidnetifiedPersonApiService {
     const params = new HttpParams({ fromObject: filters }); 
     return this.http.get(`${this.apiUrl}api/persons/unidentified-persons/`, { params });
   }
+  
   getStates(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}api/filters_address/states/`);
   }
