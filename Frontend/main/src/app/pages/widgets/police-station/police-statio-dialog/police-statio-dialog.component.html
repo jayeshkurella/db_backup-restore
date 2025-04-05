@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Police Station Details</h2>
+<mat-dialog-content class="dialog-body">
+  <!-- <img [src]="getFullPhotoPath(data.station_photo)" alt="Station Photo" style="width: 100%; max-height: 200px; object-fit: contain;" /> -->
+
+  <p><strong>Name:</strong> {{ data.name }}</p>
+  <p><strong>Phone No:</strong> {{ data.phone_no }}</p>
+  <p><strong>Status:</strong> {{ data.activ_Status }}</p>
+
+  <p><strong>Address:</strong> 
+    {{ data.address_details?.street }},
+    {{ data.address_details?.village }},
+    {{ data.address_details?.city }},
+    {{ data.address_details?.district }},
+    {{ data.address_details?.state }},
+    {{ data.address_details?.country }} - {{ data.address_details?.pincode }}
+  </p>
+
+  <div style="height: 250px; border: 1px solid #ccc; margin-top: 15px;" id="stationMap"></div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close color="warn">Close</button>
+</mat-dialog-actions>

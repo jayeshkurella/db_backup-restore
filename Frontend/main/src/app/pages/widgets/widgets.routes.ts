@@ -6,44 +6,16 @@ import { AppCardsComponent } from './cards/cards.component';
 import { AppChartsComponent } from './charts/charts.component';
 import { PoliceStationComponent } from './police-station/police-station.component';
 import { HospitalsComponent } from './hospitals/hospitals.component';
+import { authGuard } from '../authentication/side-login/auth.guard';
+import { AddPoliceStationComponent } from './police-station/add-police-station/add-police-station.component';
+import { AddHospitalsComponent } from './hospitals/add-hospitals/add-hospitals.component';
 
 export const WidgetsRoutes: Routes = [
   {
     path: '',
+    canActivate : [authGuard],
     children: [
-      {
-        path: 'banners',
-        component: AppBannersComponent,
-        data: {
-          title: 'Banners',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Banners' },
-          ],
-        },
-      },
-      {
-        path: 'cards',
-        component: AppCardsComponent,
-        data: {
-          title: 'Cards',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Cards' },
-          ],
-        },
-      },
-      {
-        path: 'charts',
-        component: AppChartsComponent,
-        data: {
-          title: 'Charts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Charts' },
-          ],
-        },
-      },
+      
       {
         path: 'police-station',
         component: PoliceStationComponent,
@@ -56,6 +28,10 @@ export const WidgetsRoutes: Routes = [
         },
       },
       {
+        path: 'add-police-station',
+        component: AddPoliceStationComponent,
+      },
+      {
         path: 'hospitals',
         component: HospitalsComponent,
         data: {
@@ -66,6 +42,10 @@ export const WidgetsRoutes: Routes = [
           ],
         },
       },
+      {
+        path: 'add-hospitals',
+        component:AddHospitalsComponent,
+      }
     ],
   },
 ];

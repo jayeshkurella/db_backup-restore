@@ -6,6 +6,7 @@ import { MaterialModule } from '../../../material.module';
 import { BrandingComponent } from '../../../layouts/full/vertical/sidebar/branding.component';
 import { LoginApiService } from './login-api.service';
 import { CommonModule } from '@angular/common';  // Import CommonModule
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-side-login',
@@ -21,7 +22,7 @@ export class AppSideLoginComponent {
   isPasswordVisible: boolean = false;
   hidePassword: boolean = true; // Initially hide the password
 
-  constructor(private settings: CoreService,private authService: LoginApiService, private router: Router,private fb: FormBuilder,) {
+  constructor(private settings: CoreService,private authService: LoginApiService, private router: Router,private fb: FormBuilder,private toastr: ToastrService) {
     this.loginForm = this.fb.group({
       email_id: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -47,9 +48,13 @@ export class AppSideLoginComponent {
     this.authService.login(this.loginForm.value).subscribe(
         (response) => {
             console.log('Login Successful:', response);
-            alert('Login successful! Welcome back.');
+            this.toastr.success('Login successful! Welcome back.', 'Success');
             this.loginForm.reset();
-    this.router.navigate(['/dashboards/dashboard2']);
+     // Redirect to intended route (if any), else default
+     const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/dashboards/dashboard2';
+     localStorage.removeItem('redirectAfterLogin');
+
+     this.router.navigate([redirectUrl]);
   },
   (error) => {
       console.error('Login Failed:', error);
@@ -67,10 +72,14 @@ export class AppSideLoginComponent {
               alert(errorMessage);
           }
       } else {
-          alert('Login failed. Please try again.');
+        this.showError();
       }
   }
 );
+}
+
+showError() {
+  this.toastr.error('This is not good!', 'Oops!');
 }
 
   togglePasswordVisibility(field: string) {

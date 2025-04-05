@@ -1,0 +1,39 @@
+<h2 mat-dialog-title class="text-center">{{ data.name }}</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mt-3">
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Type:</strong> {{ data.address_details
+                .address_type }}</p>
+            <p><strong>City:</strong> {{ data.address_details
+                ?.city }}</p>
+            <p><strong>District:</strong> {{ data.address_details
+                ?.district }}</p>
+            <p><strong>State:</strong> {{ data.address_details
+                ?.state }}</p>
+            <p><strong>Country:</strong> {{ data.address_details
+                ?.country }}</p>
+            <p><strong>Pincode:</strong> {{ data.address_details
+                ?.pincode }}</p>
+        </div>
+        <div class="col-md-6">
+            <div id="hospitalMap" style="height: 200px; border: 1px solid #ccc;"></div>
+        </div>
+    </div>
+
+    <mat-divider class="my-3"></mat-divider>
+
+    <h5>Contact Details</h5>
+    <div *ngFor="let contact of data.hospital_contact">
+        <p><strong>Type:</strong> {{ contact.type }}</p>
+        <p><strong>Phone:</strong> {{ contact.phone_no }}</p>
+        <p><strong>Email:</strong> {{ contact.email_id }}</p>
+        <p><strong>Primary:</strong> {{ contact.is_primary ? 'Yes' : 'No' }}</p>
+        <mat-divider></mat-divider>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button color="warn" (click)="dialogRef.close()">Close</button>
+</mat-dialog-actions>

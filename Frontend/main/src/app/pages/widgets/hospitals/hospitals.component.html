@@ -1,1 +1,70 @@
-<p>hospitals works!</p>
+<mat-card class="text-center mat-elevation-z2 py-4">
+    <h2 class="mat-headline">Find Your Local Hospital</h2>
+    <p class="mat-subheading-1">Quick access to emergency medical services and hospitals across the country</p>
+    <div class="d-flex justify-content-center mt-3">
+    <button mat-stroked-button color="primary" (click)="addhospital()">
+      Add Hospital
+    </button>
+  </div>
+  </mat-card>
+  
+  <div class="row p-2 mt-2">
+    <div class="col-sm-6 col-lg-4" *ngFor="let hospital of allhospitals">
+      <mat-card class="cardWithShadow overflow-hidden">
+  
+        <!-- Image Section -->
+        <div class="position-relative">
+          <img
+            *ngIf="hospital.hospital_photo; else placeholder"
+            [src]="environment.apiUrl + hospital.hospital_photo"
+            class="w-100 object-fit-cover"
+            style="height: 200px; border-radius: 8px;"
+            alt="{{ hospital.name }}"
+          />
+          <ng-template #placeholder>
+            <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+              <mat-icon fontIcon="image" style="font-size: 3rem; color: #ccc;"></mat-icon>
+            </div>
+          </ng-template>
+        </div>
+  
+        <!-- Card Content -->
+        <mat-card-content class="p-3">
+  
+          <!-- Name and Type -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="fw-bold mb-0">{{ hospital.name }}</h5>
+            <span class="badge px-2 py-1"
+                  [ngClass]="{
+                    'bg-success text-white': hospital.type === 'Government',
+                    'bg-dark text-white': hospital.type !== 'Government'
+                  }">
+              {{ hospital.type }}
+            </span>
+          </div>
+  
+          <!-- Address and Contact -->
+          <div class="d-flex justify-content-between text-muted f-s-14 mb-2">
+            <div class="d-flex align-items-center">
+              <mat-icon fontIcon="location_on" class="me-1" style="font-size: 18px;"></mat-icon>
+              {{ hospital.address_details.city }}, {{ hospital.address_details.state }}
+            </div>
+            <div class="d-flex align-items-center">
+              <mat-icon fontIcon="call" class="me-1" style="font-size: 18px;"></mat-icon>
+              {{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}
+            </div>
+          </div>
+  
+          <!-- Button -->
+          <div class="d-flex justify-content-center mt-3">
+            <button mat-stroked-button color="primary" class="px-4" (click)="seeMoreHospital(hospital)">
+              More Info
+            </button>
+          </div>
+  
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  
+  

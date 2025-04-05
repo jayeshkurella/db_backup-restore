@@ -2,9 +2,6 @@ import { authGuard } from 'src/app/pages/authentication/side-login/auth.guard';
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
-  // {
-  //   navCap: 'Home',
-  // },
   {
     displayName: 'Home',
     iconName: 'aperture',
@@ -15,145 +12,6 @@ export const navItems: NavItem[] = [
     iconName: 'home',
     route: '/dashboards/dashboard2',
   },
-  // {
-  //   navCap: 'Apps',
-  // },
-  // {
-  //   displayName: 'Chat',
-  //   iconName: 'message-2',
-  //   route: 'apps/chat',
-  // },
-  // {
-  //   displayName: 'Calendar',
-  //   iconName: 'calendar-event',
-  //   route: 'apps/calendar',
-  // },
-  // {
-  //   displayName: 'Email',
-  //   iconName: 'mail',
-  //   route: 'apps/email/inbox',
-  // },
-  // {
-  //   displayName: 'Kanban',
-  //   iconName: 'checklist',
-  //   route: 'apps/kanban',
-  // },
-  // {
-  //   displayName: 'Contacts',
-  //   iconName: 'phone',
-  //   route: 'apps/contacts',
-  // },
-  // {
-  //   displayName: 'Contact List',
-  //   iconName: 'phone',
-  //   route: 'apps/contact-list',
-  //   chip: true,
-  //   chipClass: 'bg-error text-white',
-  //   chipContent: 'New',
-  // },
-  // {
-  //   displayName: 'Courses',
-  //   iconName: 'certificate',
-  //   route: 'apps/courses',
-  // },
-  // {
-  //   displayName: 'Employee',
-  //   iconName: 'brand-ctemplar',
-  //   route: 'apps/employee',
-  // },
-  // {
-  //   displayName: 'Notes',
-  //   iconName: 'note',
-  //   route: 'apps/notes',
-  // },
-  // {
-  //   displayName: 'Tickets',
-  //   iconName: 'ticket',
-  //   route: 'apps/tickets',
-  // },
-  // {
-  //   displayName: 'Invoice',
-  //   iconName: 'file-invoice',
-  //   route: '',
-  //   children: [
-  //     {
-  //       displayName: 'List',
-  //       iconName: 'point',
-  //       route: '/apps/invoice',
-  //     },
-  //     {
-  //       displayName: 'Detail',
-  //       iconName: 'point',
-  //       route: '/apps/viewInvoice/101',
-  //     },
-  //     {
-  //       displayName: 'Create',
-  //       iconName: 'point',
-  //       route: '/apps/addInvoice',
-  //     },
-  //     {
-  //       displayName: 'Edit',
-  //       iconName: 'point',
-  //       route: '/apps/editinvoice/101',
-  //     },
-  //   ],
-  // },
-  // {
-  //   displayName: 'ToDo',
-  //   iconName: 'edit',
-  //   route: 'apps/todo',
-  // },
-  // {
-  //   displayName: 'Blog',
-  //   iconName: 'chart-donut-3',
-  //   route: 'apps/blog',
-  //   children: [
-  //     {
-  //       displayName: 'Post',
-  //       iconName: 'point',
-  //       route: 'apps/blog/post',
-  //     },
-  //     {
-  //       displayName: 'Detail',
-  //       iconName: 'point',
-  //       route: 'apps/blog/detail/Early Black Friday Amazon deals: cheap TVs, headphones, laptops',
-  //     },
-  //   ],
-  // },
-  // {
-  //   navCap: 'Pages',
-  // },
-  // {
-  //   displayName: 'Roll Base Access',
-  //   iconName: 'lock-access',
-  //   route: 'apps/permission',
-  // },
-  // {
-  //   displayName: 'Treeview',
-  //   iconName: 'git-merge',
-  //   route: 'theme-pages/treeview',
-  // },
-  // {
-  //   displayName: 'Pricing',
-  //   iconName: 'currency-dollar',
-  //   route: 'theme-pages/pricing',
-  // },
-  // {
-  //   displayName: 'Account Setting',
-  //   iconName: 'user-circle',
-  //   route: 'theme-pages/account-setting',
-  // },
-  // {
-  //   displayName: 'FAQ',
-  //   iconName: 'help',
-  //   route: 'theme-pages/faq',
-  // },
-  // {
-  //   displayName: 'Landingpage',
-  //   iconName: 'app-window',
-  //   route: 'landingpage',
-  // },
- 
   {
     navCap: 'Person',
   },
@@ -162,9 +20,6 @@ export const navItems: NavItem[] = [
     iconName: 'file-description',
     route: '/forms/form-layouts',
   },
-  // {
-  //   navCap: 'Search Case',
-  // },
   {
     displayName: 'Search Case',
     iconName: 'search',
@@ -187,38 +42,23 @@ export const navItems: NavItem[] = [
       },
     ],
   },
-  //  {
-  //   displayName: 'Widgets',
-  //   iconName: 'layout',
-  //   route: 'widgets',
-  //   children: [
-  //     {
-  //       displayName: 'Cards',
-  //       iconName: 'point',
-  //       route: 'widgets/cards',
-  //     },
-  //     {
-  //       displayName: 'Banners',
-  //       iconName: 'point',
-  //       route: 'widgets/banners',
-  //     },
-  //     {
-  //       displayName: 'Charts',
-  //       iconName: 'point',
-  //       route: 'widgets/charts',
-  //     },
-  //     {
-  //       displayName: 'Police-Station',
-  //       iconName: 'Home',
-  //       route: 'widgets/police-station',
-  //     },
-  //     {
-  //       displayName: 'Hospitals',
-  //       iconName: 'point',
-  //       route: 'widgets/hospitals',
-  //     },
-  //   ],
-  // },
+   {
+    displayName: 'Resources',
+    iconName: 'layout',
+    route: 'widgets',
+    children: [
+      {
+        displayName: 'Police-Station',
+        iconName: 'shield',
+        route: 'widgets/police-station',
+      },
+      {
+        displayName: 'Hospitals',
+        iconName: 'hospital',
+        route: 'widgets/hospitals',
+      },
+    ],
+  },
 
   
   // {
