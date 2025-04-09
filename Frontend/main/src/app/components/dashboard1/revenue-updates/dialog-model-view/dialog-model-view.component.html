@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>Person Details</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="person" class="container">
+
+    <!-- Person Overview -->
+    <div class="row mb-4">
+      <div class="col-md-5 text-center">
+        <img
+          [src]="getImageUrl(person.photo_photo)"
+          alt="Person Photo"
+          class="img-fluid rounded"
+          style="height: 200px; width: 100%; object-fit: cover;"
+        />
+      </div>
+      <div class="col-md-7">
+        <h4>{{ person.full_name }}</h4>
+        <p><strong>Age:</strong> {{ person.age }}</p>
+        <p><strong>Gender:</strong> {{ person.gender }}</p>
+        <p><strong>Blood Group:</strong> {{ person.blood_group }}</p>
+        <p><strong>Condition:</strong> {{ person.condition }}</p>
+      </div>
+    </div>
+
+    <!-- Appearance Info -->
+    <h5 class="text-primary">Appearance Information</h5>
+    <p><strong>Height:</strong> {{ person.height || 'N/A' }}</p>
+    <p><strong>Weight:</strong> {{ person.weight || 'N/A' }}</p>
+    <p><strong>Complexion:</strong> {{ person.complexion || 'N/A' }}</p>
+    <p><strong>Hair Color:</strong> {{ person.hair_color || 'N/A' }}</p>
+    <p><strong>Hair Type:</strong> {{ person.hair_type || 'N/A' }}</p>
+    <p><strong>Eye Color:</strong> {{ person.eye_color || 'N/A' }}</p>
+    <p><strong>Birth Mark:</strong> {{ person.birth_mark || 'N/A' }}</p>
+    <p><strong>Distinctive Mark:</strong> {{ person.distinctive_mark || 'N/A' }}</p>
+
+    <!-- Contact Info -->
+    <h5 class="text-primary mt-3">Contact Information</h5>
+    <p><strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}</p>
+    <p><strong>Email:</strong> {{ person.contacts[0]?.email_id }}</p>
+    <p><strong>Company:</strong> {{ person.contacts[0]?.company_name }}</p>
+    <p><strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}</p>
+    <p><strong>Contact Type:</strong> {{ person.contacts[0]?.type }}</p>
+
+    <!-- Address Info -->
+    <h5 class="text-primary mt-3">Address Information</h5>
+    <p><strong>Address Type:</strong> {{ person.properties?.address_type }}</p>
+    <p><strong>Street:</strong> {{ person.properties?.street }}</p>
+    <p><strong>Apartment:</strong> {{ person.properties?.appartment_no }}</p>
+    <p><strong>Apartment Name:</strong> {{ person.properties?.appartment_name }}</p>
+    <p><strong>City:</strong> {{ person.properties?.city }}</p>
+    <p><strong>Village:</strong> {{ person.properties?.village }}</p>
+    <p><strong>Landmark:</strong> {{ person.properties?.landmark_details }}</p>
+    <p><strong>State:</strong> {{ person.properties?.state }}</p>
+    <p><strong>Country:</strong> {{ person.properties?.country }}</p>
+    <p><strong>Country Code:</strong> {{ person.properties?.country_code }}</p>
+
+    <!-- Education & Occupation -->
+    <h5 class="text-primary mt-3">Educational & Occupation Details</h5>
+    <p><strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' }}</p>
+    <p><strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' }}</p>
+    <p><strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' }}</p>
+    <p><strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' }}</p>
+    <p><strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' }}</p>
+    <p><strong>Education:</strong> {{ person.additional_info[0]?.education_details }}</p>
+    <p><strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}</p>
+
+    <!-- Identification -->
+    <h5 class="text-primary mt-3">Identification & Missing Info</h5>
+    <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type }}</p>
+    <p><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</p>
+    <p><strong>Missing Date:</strong> {{ person.missing_date }}</p>
+    <p><strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}</p>
+    <p><strong>Missing Location Date:</strong> {{ person.last_known_details[0]?.missing_date }}</p>
+    <p><strong>Last Seen Location:</strong> {{ person.last_known_details[0]?.last_seen_location }}</p>
+    <p><strong>Last Seen Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close()">Close</button>
+</mat-dialog-actions>

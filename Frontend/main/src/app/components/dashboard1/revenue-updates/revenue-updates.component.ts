@@ -4,26 +4,28 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
+// declare let L: any; 
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 declare var bootstrap: any;
 import * as L from 'leaflet';
 // import 'leaflet-panel-layers';
+import 'leaflet.markercluster';
 
 // import '../../../../../src/leaflet-panel-layers'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 
 import 'leaflet-basemaps/L.Control.Basemaps'; 
-import 'leaflet.markercluster/dist/leaflet.markercluster';
-import 'leaflet.markercluster';
+
 
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/envirnment/envirnment';
 import { MapApiService } from './map-api.service';
 import { CdkTableDataSourceInput } from '@angular/cdk/table';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogModelViewComponent } from './dialog-model-view/dialog-model-view.component';
 
 @Component({
   selector: 'app-revenue-updates',
@@ -169,14 +171,11 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     private http: HttpClient,
     private filterService :MapApiService,
     private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
   }
   ngAfterViewInit(): void {
     this.initMap();
-    // this.getMissingPersonsData(1); 
-    // this.getUnidentifiedPersonsData(1); 
-    // this.getUnidentifiedBodiesData(1); 
-    // this.addCountsLegend();
     
   }
   pagination: any = {
@@ -275,83 +274,75 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   
   
   
-    viewDetails(person: any): void {
-        console.log('Selected Person:', person);
-        this.selectedPerson = person;
-    
-        const personId = person.id.split('.')[1]; // Extract person ID from feature ID
-        fetch(`${environment.apiUrl}api/persons/${personId}/`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch person details: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Fetched Person Details:', data);
-                this.selectedPersonDetails = data;
-                console.log('Selected Person',this.selectedPersonDetails)
-    
-                // Open the modal only after data is fetched
-                const modal = new bootstrap.Modal(document.getElementById('filteredDataModal'));
-                modal.show();
-            })
-            .catch(error => console.error('Error fetching person details:', error));
-    }
+ viewDetails(person: any): void {
+    const personId = person.id.split('.')[1];
+  
+    fetch(`${environment.apiUrl}api/persons/${personId}/`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch person details: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.dialog.open(DialogModelViewComponent, {
+          width: '55vw',
+          maxWidth: 'none',
+          data: data, 
+        });
+      })
+      .catch(error => console.error('Error fetching person details:', error));
+  }
     
 
   private missingPersonLayer: L.LayerGroup = L.layerGroup();
   private unidentifiedPersonLayer: L.LayerGroup = L.layerGroup();
   private unidentifiedBodiesLayer: L.LayerGroup = L.layerGroup();
   private map: L.Map | undefined;
-  private markerClusterGroup!: L.MarkerClusterGroup;
+  private markerClusterGroup: L.MarkerClusterGroup = L.markerClusterGroup();
 
-
-  private initMap(): void {
+  private initMap(): void { 
     this.initOverlays();
-
-    // Define the base map (OpenStreetMap)
+  
     const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
     });
-
-    // Define the satellite map (ESRI World Imagery)
+  
     const satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 19,
+      maxZoom: 19,
     });
-
-    // Initialize the map with the base map
-    this.map = L.map('map', {
-        center: [20.5937, 78.9629],
-        zoom: 6,
-        layers: [baseMap] 
-    });
-
-    // Add the satellite map as an optional layer
+  
     const baseMaps = {
-        "Base Map": baseMap,
-        "Satellite Map": satelliteMap
+      "Base Map": baseMap,
+      "Satellite Map": satelliteMap
     };
-
-   
-    const layerControl = L.control.layers(baseMaps, {}, { 
-        position: 'bottomright' 
-    }).addTo(this.map);
-
-    // Add only the cluster group to the map initially
-    this.geoServerClusterGroup!.addTo(this.map);
-
-    console.log(L.Control);  // Check if PanelLayers is available
-    console.log((L as any).control.PanelLayers); 
-    // Panel control for layers
-    var panelLayers = new (L as any).Control.PanelLayers(null, this.overlays, {
-        collapsibleGroups: true,
-        collapsed: false,
-        groupMaxHeight: 50,
+  
+    this.map = L.map('map', {
+      center: [20.5937, 78.9629],
+      zoom: 6,
+      layers: [baseMap]
     });
-    this.map.addControl(panelLayers);
- }
+  
+    L.control.layers(baseMaps, {}, {
+      position: 'bottomright'
+    }).addTo(this.map);
+  
+    // Add GeoServer cluster group safely
+    this.markerClusterGroup = L.markerClusterGroup();
+    this.map.addLayer(this.markerClusterGroup);
+    if (typeof L.control.panelLayers === 'function') {
+        const panelLayers = L.control.panelLayers(baseMaps, this.overlays, {
+            collapsed: true,
+            collapsibleGroups: true,
+            position: 'topright', 
+          }).addTo(this.map);
+          
+        this.map.addControl(panelLayers);
+      }   
+  }
+  
+  
 
  
  toggleLayer(layer: string, event: any): void {
@@ -393,7 +384,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
           break;
       
   }
-  }
+ }
 
   
   initOperationalLayers() {
@@ -671,7 +662,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
         opacity: 0.75
     });
     this.distLayerName = dist;
-  }
+ }
 
   
 
@@ -735,7 +726,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
     await Promise.all(markerPromises); // ✅ Ensure all markers are processed
     this.geoServerClusterGroup?.addTo(this.map!);
- }
+  }
 
 
 
@@ -803,7 +794,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     this.filteredData.forEach((feature, index) => {
         console.log(`Feature ${index + 1}:`, feature.properties);
     });
-    }
+ }
   
 
   isLoading = false;
@@ -831,7 +822,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
         return finalUrl;
     }
     return 'assets/old/images/Chhaya.png';
-    }
+  }
 
   
   onStateChange(state: string): void {

@@ -13,7 +13,8 @@ import { MaterialModule } from 'src/app/material.module';
 @Component({
     selector: 'app-sidebar',
     imports: [BrandingComponent, TablerIconsModule, MaterialModule],
-    templateUrl: './sidebar.component.html'
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
   constructor() { }
