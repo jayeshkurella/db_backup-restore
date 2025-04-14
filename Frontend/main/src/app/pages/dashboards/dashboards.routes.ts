@@ -27,7 +27,7 @@ export const DashboardsRoutes: Routes = [
         data: {
           title: 'eCommerce',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Dashboard', url: '/dashboards/dashboard2' },
             { title: 'eCommerce' },
           ],
         },

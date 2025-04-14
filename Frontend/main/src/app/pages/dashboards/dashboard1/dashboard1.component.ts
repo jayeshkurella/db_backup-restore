@@ -13,23 +13,25 @@ import { AppSellingProductComponent } from '../../../components/dashboard1/selli
 import { AppWeeklyStatsComponent } from '../../../components/dashboard1/weekly-stats/weekly-stats.component';
 import { AppTopProjectsComponent } from '../../../components/dashboard1/top-projects/top-projects.component';
 import { AppProjectsComponent } from '../../../components/dashboard1/projects/projects.component';
+import { PanalLayerComponent } from "../../../components/dashboard1/panal-layer/panal-layer.component";
 
 @Component({
     selector: 'app-dashboard1',
     imports: [
-        TablerIconsModule,
-        AppTopCardsComponent,
-        AppRevenueUpdatesComponent,
-        AppYearlyBreakupComponent,
-        AppMonthlyEarningsComponent,
-        AppEmployeeSalaryComponent,
-        AppCustomersComponent,
-        AppSocialCardComponent,
-        AppSellingProductComponent,
-        AppWeeklyStatsComponent,
-        AppTopProjectsComponent,
-        AppProjectsComponent
-    ],
+    TablerIconsModule,
+    AppTopCardsComponent,
+    AppRevenueUpdatesComponent,
+    AppYearlyBreakupComponent,
+    AppMonthlyEarningsComponent,
+    AppEmployeeSalaryComponent,
+    AppCustomersComponent,
+    AppSocialCardComponent,
+    AppSellingProductComponent,
+    AppWeeklyStatsComponent,
+    AppTopProjectsComponent,
+    AppProjectsComponent,
+    PanalLayerComponent
+],
     templateUrl: './dashboard1.component.html'
 })
 export class AppDashboard1Component {

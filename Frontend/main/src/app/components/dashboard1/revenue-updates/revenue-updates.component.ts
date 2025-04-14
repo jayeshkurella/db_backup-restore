@@ -4,13 +4,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-// declare let L: any; 
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
-declare var bootstrap: any;
+
 import * as L from 'leaflet';
-// import 'leaflet-panel-layers';
-import 'leaflet.markercluster';
+
+import 'leaflet.markercluster'; 
 
 // import '../../../../../src/leaflet-panel-layers'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -301,8 +300,8 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   private map: L.Map | undefined;
   private markerClusterGroup: L.MarkerClusterGroup = L.markerClusterGroup();
 
+
   private initMap(): void { 
-    this.initOverlays();
   
     const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -324,67 +323,58 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
       layers: [baseMap]
     });
   
-    L.control.layers(baseMaps, {}, {
-      position: 'bottomright'
-    }).addTo(this.map);
+    // ✅ Create WMS Layers for state & district here
+    this.stateLayerName = L.tileLayer.wms(environment.geo_url, {
+      layers: this.stateLayer,
+      format: 'image/png',
+      transparent: true
+    });
   
-    // Add GeoServer cluster group safely
-    this.markerClusterGroup = L.markerClusterGroup();
+    this.distLayerName = L.tileLayer.wms(environment.geo_url, {
+      layers: this.distLayer,
+      format: 'image/png',
+      transparent: true
+    });
+    this.initOverlays();
+
+    // Add initial WMS layers if needed
+    this.stateLayerName.addTo(this.map);
+    this.distLayerName.addTo(this.map);
+  
+    this.markerClusterGroup = (L as any).markerClusterGroup();
     this.map.addLayer(this.markerClusterGroup);
+  
     if (typeof L.control.panelLayers === 'function') {
-        const panelLayers = L.control.panelLayers(baseMaps, this.overlays, {
-            collapsed: true,
-            collapsibleGroups: true,
-            position: 'topright', 
-          }).addTo(this.map);
-          
-        this.map.addControl(panelLayers);
-      }   
+        const panelLayers = L.control.panelLayers({}, this.overlays, {
+          collapsed: false,
+          collapsibleGroups: true,
+          position: 'topright'
+        }).addTo(this.map!);
+      }
+      
+    
   }
+  
   
   
 
  
- toggleLayer(layer: string, event: any): void {
-  switch (layer) {
-      case 'State Layer':
+  toggleLayer(event: any) {
+    this.overlays.forEach((group: { layers: any[]; }) => {
+      group.layers.forEach(layer => {
+        if (event.target.value === layer.name) {
           if (event.target.checked) {
-              this.stateLayerName.addTo(this.map!); 
+            console.log(`Adding ${layer.name}`);
+            layer.layer.addTo(this.map!);
           } else {
-              this.stateLayerName.remove(); 
+            console.log(`Removing ${layer.name}`);
+            layer.layer.remove();
           }
-          break;
-      case 'District Layer':
-          if (event.target.checked) {
-              this.distLayerName.addTo(this.map!); 
-          } else {
-              this.distLayerName.remove(); 
-          }
-          break;
-      case 'Missing Person':
-          if (event.target.checked) {
-              this.missingPersonLayer.addTo(this.map!); 
-          } else {
-              this.missingPersonLayer.remove(); 
-          }
-          break;
-      case 'Unidentified Person':
-          if (event.target.checked) {
-              this.unidentifiedPersonLayer.addTo(this.map!); 
-          } else {
-              this.unidentifiedPersonLayer.remove(); 
-          }
-          break;
-      case 'Unidentified Bodies':
-          if (event.target.checked) {
-              this.unidentifiedBodiesLayer.addTo(this.map!); 
-          } else {
-              this.unidentifiedBodiesLayer.remove();
-          }
-          break;
-      
+        }
+      });
+    });
   }
- }
+  
 
   
   initOperationalLayers() {
@@ -662,10 +652,11 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
         opacity: 0.75
     });
     this.distLayerName = dist;
+
+    console.log("State Layer: ", this.stateLayerName);
+console.log("District Layer: ", this.distLayerName);
+
  }
-
-  
-
 
   async addMarkersToMap(features: any[], customIcon: L.Icon) {
     if (!this.map) {
@@ -729,58 +720,34 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   }
 
 
-
-
- 
-
   initOverlays() {
+    
     function iconByName(name: string) {
-        return `<i class="icon icon-${name}"></i>`;
+      console.log("Icon Name:", name);
+      return `<i class="icon icon-${name}"></i>`;
     }
-
+  
     this.overlays = [
-        {
-            group: "Operational Layers",
-            icon: iconByName('map'),
-            collapsed: false,
-            layers: [
-                {
-                    name: "State Layer",
-                    active: true, // Initially inactive
-                    layer: this.stateLayerName,
-                },
-                {
-                    name: "District Layer",
-                    active: true, // Initially inactive
-                    layer: this.distLayerName,
-                }
-            ]
-        },
-        // {
-        //     group: "Person Data",
-        //     icon: iconByName('location'),
-        //     collapsed: false,
-        //     layers: [
-        //         {
-        //             name: "Missing Person",
-        //             active: false, // Initially inactive
-        //             layer: this.missingPersonLayer,
-        //         },
-        //         {
-        //             name: "Unidentified Person",
-        //             active: false, // Initially inactive
-        //             layer: this.unidentifiedPersonLayer,
-        //         },
-        //         {
-        //             name: "Unidentified Bodies",
-        //             active: false, // Initially inactive
-        //             layer: this.unidentifiedBodiesLayer,
-        //         }
-        //     ]
-        // },
-        
+      {
+        group: "Operational Layers",
+        icon: iconByName('map'),
+        collapsed: false,
+        layers: [
+          {
+            name: "State Layer",
+            active: true,
+            layer: this.stateLayerName
+          },
+          {
+            name: "District Layer",
+            active: true,
+            layer: this.distLayerName
+          }
+        ]
+      }
     ];
   }
+  
     
 
  

@@ -34,7 +34,6 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              
               "src/styles.scss",
               "src/assets/scss/style.scss",
               "node_modules/ngx-toastr/toastr.css",
@@ -43,6 +42,7 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-panel-layers/dist/leaflet-panel-layers.src.css",
+              "node_modules/leaflet-panel-layers/src/leaflet-panel-layers.css",
               "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
               "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
             ],
@@ -50,29 +50,35 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet-panel-layers/src/leaflet-panel-layers.js",
               "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.js",
               "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
               "node_modules/leaflet-panel-layers/dist/leaflet-panel-layers.src.js"
-
             ],
             "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "12mb",
-                  "maximumError": "12mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "12mb",
-                  "maximumError": "12mb"
+                "budgets": [
+                  {
+                    "type": "initial",
+                    "maximumWarning": "12mb",
+                    "maximumError": "12mb"
+                  },
+                  {
+                    "type": "anyComponentStyle",
+                    "maximumWarning": "12mb",
+                    "maximumError": "12mb"
+                  }
+                ],
+                "outputHashing": "all",
+                "optimization": {
+                  "fonts": {
+                    "inline": false
+                  }
+                  
                 }
-              ],
-              "outputHashing": "all"
-            },
+              },
             "development": {
               "optimization": false,
               "extractLicenses": false,
