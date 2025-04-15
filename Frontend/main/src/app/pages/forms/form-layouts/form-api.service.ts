@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient ,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { environment } from 'src/envirnment/envirnment';
@@ -8,12 +8,30 @@ import { environment } from 'src/envirnment/envirnment';
 })
 export class FormApiService {
 
-  private apiUrl = environment.apiUrl
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  postMissingPerson(payload: any): Observable<any> {  
-    return this.http.post<any>(this.apiUrl + "api/persons/", payload).pipe(
+  // Utility function to get authToken from localStorage
+  private getAuthToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
+  // Helper function to create headers
+  private createHeaders() {
+    const authToken = this.getAuthToken();
+    let headers = new HttpHeaders();
+    if (authToken) {
+      headers = headers.set('Authorization', `Token ${authToken}`);
+    }
+    return headers;
+  }
+
+  // Post Missing Person with Authorization Token
+  postMissingPerson(payload: any): Observable<any> {
+    const headers = this.createHeaders();  // Get headers with token
+    console.log("Payload for Missing Person:", payload);
+    return this.http.post<any>(this.apiUrl + "api/persons/", payload, { headers }).pipe(
       tap(
         (response: any) => console.log("✅ Response received:", response),
         (error: any) => console.error("❌ Error occurred:", error)
@@ -21,8 +39,10 @@ export class FormApiService {
     );
   }
 
-  getallPerson(): Observable<any> {  
-    return this.http.get(this.apiUrl + "api/persons/", { observe: 'response' }).pipe(
+  // Get All Persons with Authorization Token
+  getallPerson(): Observable<any> {
+    const headers = this.createHeaders();  // Get headers with token
+    return this.http.get(this.apiUrl + "api/persons/", { headers, observe: 'response' }).pipe(
       tap(response => {
         console.log('Response Headers:', response.headers);
       }),

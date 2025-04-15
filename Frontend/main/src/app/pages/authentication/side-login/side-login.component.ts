@@ -51,7 +51,7 @@ export class AppSideLoginComponent {
             this.toastr.success('Login successful! Welcome back.', 'Success');
             this.loginForm.reset();
      // Redirect to intended route (if any), else default
-     const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/dashboards/dashboard2';
+     const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/forms/form-layouts';
      localStorage.removeItem('redirectAfterLogin');
 
      this.router.navigate([redirectUrl]);

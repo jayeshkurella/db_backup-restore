@@ -89,7 +89,16 @@ class PersonViewSet(viewsets.ViewSet):
         request_body=PersonSerializer,
         responses={201: openapi.Response("Person created successfully")}
     )
+
+
+    def _validate_person_data(self, data):
+        required_fields = ['full_name', 'age', 'gender']
+        for field in required_fields:
+            if field not in data or not data[field]:
+                raise ValueError(f"Missing required field: {field}")
+
     def create(self, request):
+        logger.info(f"Incoming data: {request.data}")
         logger.debug("Incoming Data Format: %s", request.content_type)
         try:
             with transaction.atomic():
@@ -125,8 +134,26 @@ class PersonViewSet(viewsets.ViewSet):
                 person = Person.objects.create(**person_data)
                 logger.debug("Person Created: %s", person.id)
 
-                # Create related objects
-                self._create_addresses(person, addresses_data)
+                # Extract zero index address and store it directly in the person model
+                if addresses_data:
+                    first_address = addresses_data[0]
+                    # Store address fields directly in the Person model
+                    person.appartment_name = first_address.get('appartment_name', '')
+                    person.appartment_no = first_address.get('appartment_no', '')
+                    person.street = first_address.get('street', '')
+                    person.village = first_address.get('village', '')
+                    person.landmark_details = first_address.get('landmark_details', '')
+                    person.pincode = first_address.get('pincode', '')
+                    person.city = first_address.get('city', '')
+                    person.district = first_address.get('district', '')
+                    person.state = first_address.get('state', '')
+                    person.country = first_address.get('country', '')
+                    person.location = Point(first_address.get('location', {}).get('longitude'),
+                                            first_address.get('location', {}).get('latitude'))
+                    person.save()
+
+                # Create related objects (for remaining addresses, contacts, etc.)
+                self._create_addresses(person, addresses_data[1:])  # Skip the first address as it is already saved
                 self._create_contacts(person, contacts_data)
                 self._create_additional_info(person, additional_info_data)
                 self._create_last_known_details(person, last_known_details_data)
@@ -147,12 +174,6 @@ class PersonViewSet(viewsets.ViewSet):
             logger.error("Exception Occurred: %s", str(e))
             logger.error("Traceback: %s", traceback.format_exc())
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    def _validate_person_data(self, data):
-        required_fields = ['full_name', 'age', 'gender']
-        for field in required_fields:
-            if field not in data or not data[field]:
-                raise ValueError(f"Missing required field: {field}")
 
     def _create_addresses(self, person, addresses_data):
         addresses = []
@@ -200,6 +221,10 @@ class PersonViewSet(viewsets.ViewSet):
         LastKnownDetails.objects.bulk_create(last_known_details)
 
     def _create_firs(self, person, firs_data):
+        for fir in firs_data:
+            logger.debug("FIR Record: %s", fir)
+            if 'fir_date' in fir:
+                logger.debug("Type of fir_date: %s", type(fir['fir_date']))
         firs = [
             FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'})
             for fir in firs_data if isinstance(fir, dict)

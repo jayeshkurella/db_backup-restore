@@ -175,4 +175,30 @@
     background-color: #c82333;
   }
   
+  .contact-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px; /* For scrollbar space */
+  }
   
+  .contact-type {
+    min-width: 120px;
+  }
+  
+  .contact-info {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  /* Optional: Add horizontal scroll for small screens */
+  @media (max-width: 768px) {
+    .contact-line {
+      flex-direction: column;
+      align-items: flex-start;
+      white-space: normal;
+    }
+  }

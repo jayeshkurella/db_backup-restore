@@ -7,11 +7,11 @@ export const navItems: NavItem[] = [
     iconName: 'aperture',
     route: '/dashboards/dashboard1',
   },
-  {
-    displayName: 'Internal',
-    iconName: 'home',
-    route: '/dashboards/dashboard2',
-  },
+  // {
+  //   displayName: 'Internal',
+  //   iconName: 'home',
+  //   route: '/dashboards/dashboard2',
+  // },
   {
     navCap: 'Person',
   },

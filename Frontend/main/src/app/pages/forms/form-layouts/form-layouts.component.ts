@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { Component, OnInit ,AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup ,FormArray } from '@angular/forms';
+
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 import {
@@ -17,13 +18,13 @@ import {
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { AppCodeViewComponent } from '../../../components/code-view/code-view.component';
-import { Highlight, HighlightAuto } from 'ngx-highlightjs';
-import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+
 
 import { merge } from 'rxjs';
 import { FormApiService } from './form-api.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -37,17 +38,15 @@ import { CommonModule } from '@angular/common';
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    AppCodeViewComponent,
-    Highlight,
-    HighlightAuto,
-    HighlightLineNumbers,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    NgxMatTimepickerModule,
+    MatIconModule
   ],
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
-  providers: [provideNativeDateAdapter()],
+  providers: [provideNativeDateAdapter(),DatePipe],
 })
 export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
@@ -89,7 +88,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
 
 
-  constructor(private fb: FormBuilder,private formapi:FormApiService) {
+  constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe) {
     
   }
   ngOnInit(): void {
@@ -514,91 +513,179 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   
   
 
+  // onSubmit() {
+  //   // Check if addressForm has valid data and add it to the addresses array
+  //   const addressFormValue = this.personForm.get('addressForm')?.value;
+  //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
+  //     this.addresses.push(this.fb.group(addressFormValue)); 
+  //   }
+  
+  //   const contactFormValue = this.personForm.get('contactForm')?.value;
+  //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
+  //     this.contacts.push(this.fb.group(contactFormValue)); 
+  //   }
+  
+    
+  //  const payload = {
+  //   ...this.personForm.value,
+  //   addresses: this.addresses.value, 
+  //     contacts: this.contacts.value,  
+  // };
+
+  // // Remove temporary forms from the payload
+  // delete payload.addressForm;
+  // delete payload.contactForm;
+
+  // // Log the payload for debugging
+  // console.log("Payload Sent to Backend:", payload);
+
+  // // Create a FormData object to handle file uploads
+  // const formData = new FormData();
+
+  // // Append the JSON payload as a string
+  // formData.append('payload', JSON.stringify(payload));
+
+  // // Append files from last_known_details
+  // if (this.selectedFiles['last_known_details']) {
+  //     this.selectedFiles['last_known_details'].forEach((group, index) => {
+  //         const personPhoto = group['person_photo'];
+  //         const referencePhoto = group['reference_photo'];
+
+  //         if (personPhoto) {
+  //             formData.append(`last_known_details[${index}][person_photo]`, personPhoto, personPhoto.name);
+  //         }
+  //         if (referencePhoto) {
+  //             formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto, referencePhoto.name);
+  //         }
+  //     });
+  // }
+
+  // // Append files from firs
+  // if (this.selectedFiles['firs']) {
+  //     this.selectedFiles['firs'].forEach((group, index) => {
+  //         const firPhoto = group['fir_photo'];
+
+  //         if (firPhoto) {
+  //             formData.append(`firs[${index}][fir_photo]`, firPhoto, firPhoto.name);
+  //         }
+  //     });
+  // }
+
+  // // Append files from consent
+  // if (this.selectedFiles['consent']) {
+  //     this.selectedFiles['consent'].forEach((group, index) => {
+  //         const document = group['document'];
+
+  //         if (document) {
+  //             formData.append(`consent[${index}][document]`, document, document.name);
+  //         }
+  //     });
+  // }
+
+  // // Send FormData to the backend
+  // this.formapi.postMissingPerson(formData).subscribe({
+  //     next: (response) => {
+  //         console.log('Person added successfully!', response);
+  //         alert("Person added successfully");
+  //         this.personForm.reset();
+  //         this.addresses.clear(); // Clear the addresses FormArray
+  //         this.contacts.clear();  // Clear the contacts FormArray
+  //         this.selectedFiles = {}; // Reset selectedFiles
+  //     },
+  //     error: (error) => {
+  //         console.error('Error adding person:', error);
+  //         alert('An error occurred while adding the person. Please try again.');
+  //     },
+  // });
+  // }
+
   onSubmit() {
-    // Check if addressForm has valid data and add it to the addresses array
+    // Get the address form value and ensure it's valid
     const addressFormValue = this.personForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
       this.addresses.push(this.fb.group(addressFormValue)); 
     }
   
+    // Get the contact form value and ensure it's valid
     const contactFormValue = this.personForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
       this.contacts.push(this.fb.group(contactFormValue)); 
     }
   
-    
-   const payload = {
-    ...this.personForm.value,
-    addresses: this.addresses.value, 
+    // Format birth_date using DatePipe (Ensure it is only a date, no time)
+    const birthDate = this.personForm.get('birth_date')?.value;
+    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); // Adjust format as needed
+  
+    // If the birth_date is in a Date object, ensure it’s formatted correctly
+    let finalBirthDate = formattedBirthDate;
+    if (birthDate instanceof Date) {
+      finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  // Format it to 'yyyy-MM-dd'
+    }
+  
+    // Format birthtime (if any)
+    const birthTime = this.personForm.get('birthtime')?.value;
+    const formattedBirthTime = this.formatTime(birthTime); // Format birthtime (HH:MM)
+  
+    // Format missing_date for last_known_details (if any)
+    const lastKnownDetails = this.personForm.get('last_known_details')?.value;
+    if (lastKnownDetails && lastKnownDetails.length > 0) {
+      lastKnownDetails.forEach((detail: { missing_date: string | number | Date | null; missing_time: string | null; }) => {
+        if (detail.missing_date) {
+          detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
+        }
+  
+        // Format missing_time (if any)
+        if (detail.missing_time) {
+          detail.missing_time = this.formatTime(detail.missing_time); // Ensure it's formatted properly
+        }
+      });
+    }
+  
+    // Prepare the payload with the values from the form
+    const payload = {
+      ...this.personForm.value,
+      birth_date: finalBirthDate,  // Use formatted birth_date (ensure it's only the date part)
+      birthtime: formattedBirthTime,  // Use formatted birthtime
+      addresses: this.addresses.value, 
       contacts: this.contacts.value,  
-  };
-
-  // Remove temporary forms from the payload
-  delete payload.addressForm;
-  delete payload.contactForm;
-
-  // Log the payload for debugging
-  console.log("Payload Sent to Backend:", payload);
-
-  // Create a FormData object to handle file uploads
-  const formData = new FormData();
-
-  // Append the JSON payload as a string
-  formData.append('payload', JSON.stringify(payload));
-
-  // Append files from last_known_details
-  if (this.selectedFiles['last_known_details']) {
-      this.selectedFiles['last_known_details'].forEach((group, index) => {
-          const personPhoto = group['person_photo'];
-          const referencePhoto = group['reference_photo'];
-
-          if (personPhoto) {
-              formData.append(`last_known_details[${index}][person_photo]`, personPhoto, personPhoto.name);
-          }
-          if (referencePhoto) {
-              formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto, referencePhoto.name);
-          }
-      });
-  }
-
-  // Append files from firs
-  if (this.selectedFiles['firs']) {
-      this.selectedFiles['firs'].forEach((group, index) => {
-          const firPhoto = group['fir_photo'];
-
-          if (firPhoto) {
-              formData.append(`firs[${index}][fir_photo]`, firPhoto, firPhoto.name);
-          }
-      });
-  }
-
-  // Append files from consent
-  if (this.selectedFiles['consent']) {
-      this.selectedFiles['consent'].forEach((group, index) => {
-          const document = group['document'];
-
-          if (document) {
-              formData.append(`consent[${index}][document]`, document, document.name);
-          }
-      });
-  }
-
-  // Send FormData to the backend
-  this.formapi.postMissingPerson(formData).subscribe({
+    };
+  
+    // Remove temporary forms from the payload (addressForm and contactForm)
+    delete payload.addressForm;
+    delete payload.contactForm;
+  
+    // Log the payload for debugging purposes
+    console.log("Payload Sent to Backend:", payload);
+  
+    // Send the JSON data to the backend
+    this.formapi.postMissingPerson(payload).subscribe({
       next: (response) => {
-          console.log('Person added successfully!', response);
-          alert("Person added successfully");
-          this.personForm.reset();
-          this.addresses.clear(); // Clear the addresses FormArray
-          this.contacts.clear();  // Clear the contacts FormArray
-          this.selectedFiles = {}; // Reset selectedFiles
+        console.log('Person added successfully!', response);
+        alert("Person added successfully");
+  
+        // Reset the form after successful submission
+        this.personForm.reset();
+        this.addresses.clear(); // Clear the addresses FormArray
+        this.contacts.clear();  // Clear the contacts FormArray
+        this.selectedFiles = {}; // Reset selected files
       },
       error: (error) => {
-          console.error('Error adding person:', error);
-          alert('An error occurred while adding the person. Please try again.');
+        console.error('Error adding person:', error);
+        alert('An error occurred while adding the person. Please try again.');
       },
-  });
+    });
   }
+  
+  // Utility method to format time (HH:MM or HH:MM:SS)
+  formatTime(time: string): string {
+    // Ensure time follows the HH:MM or HH:MM:SS format
+    const formattedTime = time ? time.replace(/[“”]/g, '"') : ''; // Replace curly quotes if present
+    return formattedTime;
+  }
+  
+  
+
+ 
 
 
  

@@ -22,7 +22,7 @@
         <!-- Person Type -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Person Type</mat-label>
-          <mat-select formControlName="type" id="typeSelect">
+          <mat-select formControlName="type" id="typeSelect" required>
             <mat-option value="" disabled>Select Person Type</mat-option>
             <mat-option value="Missing Person">Missing Person</mat-option>
             <mat-option value="Unidentified Person">Unidentified Person</mat-option>
@@ -33,7 +33,7 @@
         <!-- Full Name -->
         <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-4">
           <mat-label>Full Name</mat-label>
-          <input matInput type="text" formControlName="full_name" />
+          <input matInput type="text" formControlName="full_name" required />
         </mat-form-field>
 
         <!-- Date of Birth -->
@@ -43,15 +43,14 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+        
+
 
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Time of Birth</mat-label>
-          <input 
-            matInput 
-            type="time" 
-            formControlName="birthtime" 
-          >
+          <input matInput type="time" formControlName="birthtime" required>
         </mat-form-field>
+        
         <!-- Age -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Age</mat-label>
@@ -252,10 +251,10 @@
             </mat-form-field>
           </div>
 
-          <div class="col-12">
+          <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Landmark Details</mat-label>
-              <textarea matInput formControlName="landmark_details" rows="2"></textarea>
+              <textarea matInput formControlName="landmark_details" rows="1"></textarea>
             </mat-form-field>
           </div>
         </div>
@@ -264,8 +263,7 @@
       <!-- Right Section: Map & Location -->
       <div class="col-md-6">
         <div formGroupName="location">
-          <label class="form-label selectors-font mb-2">Missing Person Home Location</label>
-          <div id="mapHome" style="height: 200px; border: 1px solid black; border-radius: 5px;"></div>
+          <div id="mapHome" style="height: 250px; border: 1px solid black; border-radius: 5px; z-index: 1;"></div>
 
           <div class="d-flex gap-2 mt-3">
             <button type="button" mat-icon-button (click)="getCurrentLocation()">
@@ -288,33 +286,42 @@
 
     <!-- Add Address Button -->
     <div class="d-flex justify-content-end mt-1">
-      <button mat-raised-button color="primary" (click)="addAddress()">Add Another Address</button>
+      <button mat-flat-button color="primary" type="button" (click)="addAddress()">Add Another Address</button>
     </div>
+    
 
     <!-- Display Added Addresses -->
-    <div class="added-addresses-summary mt-1">
-      <div *ngFor="let address of addresses.controls; let i = index"
+        <div *ngFor="let address of addresses.controls; let i = index" 
         class="d-flex align-items-center justify-content-between border-bottom py-2">
-        <div>
-          <span class="address-title d-flex align-items-center">
-            <mat-icon color="primary" class="me-2">place</mat-icon>
-            <strong>{{ address.get('address_type')?.value }}:</strong>
+        <div class="flex-grow-1">
+        <span class="address-title d-flex align-items-center">
+        <mat-icon color="primary" class="me-2">place</mat-icon>
+        <strong>{{ address.get('address_type')?.value || 'No type' }}:</strong>
+        </span>
+        <span class="address-text text-muted">
+        {{ 
+          (address.get('street')?.value ? address.get('street')?.value + ', ' : '') +
+          (address.get('appartment_no')?.value ? 'Apt ' + address.get('appartment_no')?.value + ', ' : '') +
+          (address.get('village')?.value ? address.get('village')?.value + ', ' : '') +
+          (address.get('city')?.value ? address.get('city')?.value + ', ' : '') +
+          (address.get('district')?.value ? address.get('district')?.value + ', ' : '') +
+          (address.get('state')?.value ? address.get('state')?.value + ' - ' : '') +
+          (address.get('pincode')?.value ? address.get('pincode')?.value : '') +
+          (address.get('country')?.value ? ', ' + address.get('country')?.value : '')
+        }}
+        </span>
+        <!-- <div *ngIf="address.get('location')?.value">
+          <span class="text-muted">
+             Lat: {{ address.get('location.latitude')?.value }}, 
+            Long: {{ address.get('location.longitude')?.value }}
           </span>
-          <span class="address-text text-muted">
-            {{ address.get('street')?.value }}, {{ address.get('city')?.value }}, {{ address.get('state')?.value }} - {{
-            address.get('pincode')?.value }}
-          </span>
-          <span class="address-location d-block text-muted">
-            📍 <strong>Lat:</strong> {{ address.get('location.latitude')?.value }}, <strong>Long:</strong> {{
-            address.get('location.longitude')?.value }}
-          </span>
+        </div> -->
+        
         </div>
-
-        <button mat-icon-button color="warn" (click)="removeAddress(i)">
-          <mat-icon>delete</mat-icon>
+        <button mat-icon-button color="warn" type="button" (click)="removeAddress(i)">
+        <mat-icon>delete</mat-icon>
         </button>
-      </div>
-    </div>
+        </div>
 
     <!-- contact Section -->
     <div class="p-3 bg-light-primary  mt-2 mb-4">
@@ -322,7 +329,10 @@
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
       </h5>
     </div>
+
     <!-- Contact Information Card -->
+    <mat-card class="p-4 mb-3">
+      
     <form formGroupName="contactForm">
       <div class="row g-3">
         <!-- Contact Type -->
@@ -415,57 +425,52 @@
 
       <!-- Add Contact Button -->
       <div class="d-flex justify-content-end mt-2">
-        <button mat-raised-button color="primary" (click)="addcontact()">Add Another Contact</button>
+        <button mat-flat-button color="primary" type="button" (click)="addcontact()">Add Another Contact</button>
       </div>
+      
     </form>
-
-    <!-- Display Added Contacts -->
+  
     <mat-list class="mt-3">
       <mat-list-item *ngFor="let contact of contacts.controls; let i = index">
         <div class="w-100 d-flex align-items-center justify-content-between">
-
-          <div>
-            <h6>
+          <div class="contact-line">
+            <span class="contact-type">
               <mat-icon class="text-primary">person</mat-icon>
-              <strong>{{ contact.get('type')?.value }} Contact:</strong>
-            </h6>
-
-            <p class="text-muted">
-              📞 {{ contact.get('phone_no')?.value }} | ✉️ {{ contact.get('email_id')?.value }}
-            </p>
-
-            <p class="text-muted">
-              🏢 <strong>Company:</strong> {{ contact.get('company_name')?.value }} |
-              <strong>Job Title:</strong> {{ contact.get('job_title')?.value }}
-            </p>
-
-            <p class="text-muted" *ngIf="contact.get('social_media_availability')?.value">
-              🌍 <strong>Social Media:</strong> {{ contact.get('social_media_availability')?.value }} |
-              <a href="{{ contact.get('social_media_url')?.value }}" target="_blank" class="text-primary">Profile
-                Link</a>
-            </p>
-
-            <p class="text-muted">
-              ⭐ <strong>Is Primary:</strong> {{ contact.get('is_primary')?.value ? 'Yes' : 'No' }}
-            </p>
+              <strong>{{ contact.get('type')?.value }}:</strong>
+            </span>
+            
+            <span class="contact-info">
+              📞 {{ contact.get('phone_no')?.value || '' }} | 
+              ✉️ {{ contact.get('email_id')?.value || '' }} | 
+              🏢 {{ contact.get('company_name')?.value || '' }} | 
+              {{ contact.get('job_title')?.value || '' }} | 
+              <span *ngIf="contact.get('social_media_availability')?.value">
+                🌍 {{ contact.get('social_media_availability')?.value }} | 
+                <a href="{{ contact.get('social_media_url')?.value }}" target="_blank" class="text-primary">Profile</a> |
+              </span>
+              ⭐ {{ contact.get('is_primary')?.value ? 'Primary' : '' }}
+            </span>
           </div>
-
+    
           <!-- Remove Button -->
-          <button mat-icon-button color="warn" (click)="removecontact(i)">
+          <button mat-icon-button color="warn" type="button" (click)="removecontact(i)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </mat-list-item>
     </mat-list>
 
+
+  </mat-card>
     <!-- contact Section -->
     <div class="p-3 bg-light-primary  mt-2 mb-4">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Additional information
       </h5>
     </div>
+    
     <!-- Additional Information Card -->
-    <mat-card class="p-4 mb-3">
+    <mat-card class="p-4 mb-3 mt-2">
       <div formArrayName="additional_info">
         <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3">
           <div class="row g-3">
@@ -770,7 +775,7 @@
 
 
     <!-- Submit & Cancel Buttons -->
-    <div class="d-flex justify-content-end mt-4">
+    <div class="d-flex justify-content-start mt-4">
       <button mat-flat-button class="bg-error text-white me-3">Cancel</button>
       <button mat-flat-button color="primary">SUBMIT REPORT</button>
     </div>
