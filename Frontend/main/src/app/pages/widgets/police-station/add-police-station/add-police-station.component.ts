@@ -9,13 +9,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
+import { MaterialModule } from 'src/app/material.module';
 
 @Component({
   selector: 'app-add-police-station',
   imports: [MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,        
-    CommonModule,MatSelectModule,MatIconModule ,MatCheckboxModule    ],
+    CommonModule,MatSelectModule,MatIconModule ,MatCheckboxModule ,MaterialModule   ],
   templateUrl: './add-police-station.component.html',
   styleUrl: './add-police-station.component.scss'
 })
@@ -23,6 +24,7 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
   policeStationForm!: FormGroup;
   latitude: number | null = null;
   longitude: number | null = null;
+  savedContacts: any[] = [];
   map!: L.Map;
   marker!: L.Marker;
   states: string[] = [
@@ -106,14 +108,35 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
     });
   }
 
+  // addContact(): void {
+  //   this.contacts.push(this.createContactForm());
+  // }
+
+
   addContact(): void {
-    this.contacts.push(this.createContactForm());
+    const firstContact = this.contacts.at(0);
+
+    if (firstContact.valid) {
+      // Push a copy of the form value to the saved contacts array
+      this.savedContacts.push({ ...firstContact.value });
+
+      // Reset only the first form
+      firstContact.reset({
+        is_primary: false
+      });
+    } else {
+      firstContact.markAllAsTouched();
+    }
   }
+
 
   removeContact(index: number): void {
     this.contacts.removeAt(index);
   }
-
+  removeSavedContact(index: number): void {
+    this.savedContacts.splice(index, 1);
+  }
+  
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {

@@ -9,7 +9,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 
 import * as L from 'leaflet';
 
-import 'leaflet.markercluster'; 
+// import 'leaflet.markercluster'; 
 
 // import '../../../../../src/leaflet-panel-layers'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -134,7 +134,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   UBpendingGendercounts: { Male: number; Female: number ; Other: number } = { Male: 0, Female: 0, Other:0};
   UBsolvedGenderCounts: { Male: number; Female: number; Other: number } = { Male: 0, Female: 0, Other: 0};
   mainAppLayer: L.Layer | undefined;
-  geoServerClusterGroup: L.MarkerClusterGroup | undefined;
+  // geoServerClusterGroup: L.MarkerClusterGroup | undefined;
   permanentAddressLayer: any;
   temporaryAddressLayer: any;
 
@@ -298,7 +298,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   private unidentifiedPersonLayer: L.LayerGroup = L.layerGroup();
   private unidentifiedBodiesLayer: L.LayerGroup = L.layerGroup();
   private map: L.Map | undefined;
-  private markerClusterGroup: L.MarkerClusterGroup = L.markerClusterGroup();
+  // private markerClusterGroup: L.MarkerClusterGroup = L.markerClusterGroup();
 
 
   // private initMap(): void { 
@@ -1207,9 +1207,9 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   }
 
   private updateStateLayer(): void {
-    if (this.geoServerClusterGroup) {
-        this.geoServerClusterGroup.clearLayers();
-    }
+    // if (this.geoServerClusterGroup) {
+    //     this.geoServerClusterGroup.clearLayers();
+    // }
   }
 
     onDistrictChange(district: string): void {

@@ -1,20 +1,29 @@
+
 <mat-card class="text-center mat-elevation-z2 py-4">
-    <h4 class="mat-headline-6 font-weight-bold">Find Your Local Police Station</h4>
-    <p class="mat-body-2">Quick access to emergency services and police stations across the country</p>
-    <div class="d-flex justify-content-center mt-3">
-    <!-- Material Button to Open Modal -->
-    <button mat-stroked-button color="primary" class="mt-2 mb-1" (click)="navigateToAddStation()">
+  <div class="position-relative text-center">
+    <!-- Centered Text -->
+    <div>
+      <h4 class="mat-headline-6 font-weight-bold">Find Your Local Police Station</h4>
+      <p class="mat-body-2 sub-heading">Quick access to emergency services and police stations across the country</p>
+    </div>
+  
+    <!-- Right-aligned Button -->
+    <button
+      mat-stroked-button
+      color="primary"
+      class="position-absolute top-0 end-0 mt-1 me-2"
+      (click)="navigateToAddStation()"
+    >
       Add Police Station
     </button>
   </div>
-  </mat-card>
+  
+  
 
-  <div class="d-flex justify-content-center border-bottom">
-    <div class="filter-section rounded mb-3 border p-4 " style="max-width: 100%;">
-      <p class="mb-3">Search police station</p>
+  <mat-card class="d-flex justify-content-center m-1">
+    <div class="filter-section rounded m-3 " style="max-width: 100%;">
       <form (ngSubmit)="onSearch()" novalidate>
         <div class="filter-grid">
-          
           <!-- Name -->
           <mat-form-field appearance="outline">
             <mat-label>Search by Name</mat-label>
@@ -41,7 +50,7 @@
   
           <!-- Search Button -->
            
-          <div class="search-button">
+          <div class="search-button ">
             <button mat-stroked-button color="primary">
               <mat-icon>search</mat-icon>&nbsp;Search
             </button>
@@ -50,14 +59,19 @@
         </div>
       </form>
     </div>
-  </div>
+  </mat-card>
+
+
+
+
   
   
   
   
   
   
-  <div class="row p-2 mt-2">
+
+  <div class="row p-2 mt-1">
     <div class="col-sm-6 col-lg-4" *ngFor="let police of total_policestation">
       <mat-card class="cardWithShadow overflow-hidden">
         
@@ -123,5 +137,5 @@
   <div *ngIf="total_policestation?.length === 0">
     <p>No Police Station Available.</p>
   </div>
-  
-  
+
+</mat-card>

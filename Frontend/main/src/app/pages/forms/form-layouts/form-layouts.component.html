@@ -15,15 +15,15 @@
         Personal Info
       </h5>
     </div>
-
-    <div class="row g-3 mt-3">
+    <mat-card class="p-4 m-1 mb-2">
+    <div class="row g-2 mt-3">
       <div class="d-flex flex-wrap align-items-center w-100">
 
         <!-- Person Type -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Person Type</mat-label>
+          <!-- <mat-label>Person Type</mat-label> -->
           <mat-select formControlName="type" id="typeSelect" required>
-            <mat-option value="" disabled>Select Person Type</mat-option>
+            <mat-option value="" disabled>Person Type</mat-option>
             <mat-option value="Missing Person">Missing Person</mat-option>
             <mat-option value="Unidentified Person">Unidentified Person</mat-option>
             <mat-option value="Unidentified Body">Unidentified Body</mat-option>
@@ -162,22 +162,23 @@
       </div>
 
     </div>
+    </mat-card>
 
 
     <!-- Address Section -->
-    <div class="p-3 bg-light-primary rounded mt-2 mb-4">
+    <div class="p-3 bg-light-primary rounded mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Address
       </h5>
     </div>
-
-    <div formGroupName="addressForm" class="row g-3">
+    <mat-card class="p-4 mb-3">
+    <div formGroupName="addressForm" class="row g-3 m-2">
       <!-- Left Section: Address Fields -->
       <div class="col-md-6">
         <div class="row g-2">
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Address Type</mat-label>
+              <!-- <mat-label>Address Type</mat-label> -->
               <mat-select formControlName="address_type">
                 <mat-option value="" disabled>Select Address Type</mat-option>
                 <mat-option value="PERMANENT">Permanent</mat-option>
@@ -322,19 +323,19 @@
         <mat-icon>delete</mat-icon>
         </button>
         </div>
-
+      </mat-card>
     <!-- contact Section -->
-    <div class="p-3 bg-light-primary  mt-2 mb-4">
+    <div class="p-3 bg-light-primary  mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
       </h5>
     </div>
 
     <!-- Contact Information Card -->
-    <mat-card class="p-4 mb-3">
+    <mat-card class="p-4">
       
     <form formGroupName="contactForm">
-      <div class="row g-3">
+      <div class="row g-3 m-1">
         <!-- Contact Type -->
         <div class="col-md-3">
           <mat-form-field appearance="outline" class="w-100">
@@ -424,13 +425,13 @@
       </div>
 
       <!-- Add Contact Button -->
-      <div class="d-flex justify-content-end mt-2">
+      <div class="d-flex justify-content-end mt-1">
         <button mat-flat-button color="primary" type="button" (click)="addcontact()">Add Another Contact</button>
       </div>
       
     </form>
   
-    <mat-list class="mt-3">
+    <mat-list class="mt-1">
       <mat-list-item *ngFor="let contact of contacts.controls; let i = index">
         <div class="w-100 d-flex align-items-center justify-content-between">
           <div class="contact-line">
@@ -462,8 +463,8 @@
 
 
   </mat-card>
-    <!-- contact Section -->
-    <div class="p-3 bg-light-primary  mt-2 mb-4">
+  
+    <div class="p-3 bg-light-primary  mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Additional information
       </h5>
@@ -594,7 +595,7 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-4">
+    <div class="p-3 bg-light-primary mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Missing Data
       </h5>
@@ -657,15 +658,15 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-4">
+    <div class="p-3 bg-light-primary mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>Legal Info
       </h5>
     </div>
 
-    <mat-card class="card  p-4 mb-3">
+    <mat-card class="card  p-4 mb-1">
       <div formArrayName="firs">
-        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-3">
+        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
 
           <!-- FIR Number -->
           <div class="col-md-4">
@@ -685,7 +686,7 @@
           <!-- Case Status -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Case Status</mat-label>
+              <!-- <mat-label>Case Status</mat-label> -->
               <mat-select formControlName="case_status">
                 <mat-option value="">Select Case Status</mat-option>
                 <mat-option value="Open">Open</mat-option>
@@ -730,23 +731,23 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-4">
+    <div class="p-3 bg-light-primary mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>consent
       </h5>
     </div>
 
     <!-- Consent & Submission -->
-    <mat-card class="card p-4 mb-3">
+    <mat-card class="card p-4  mb-1">
 
       <div formArrayName="consent">
-        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3">
+        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
 
           <!-- Consent Data -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Data</mat-label>
-              <textarea matInput formControlName="data" ></textarea>
+              <input matInput formControlName="data" />
             </mat-form-field>
           </div>
 
@@ -755,7 +756,6 @@
             <label class="form-label selectors-font">Upload Document</label>
             <input type="file" class="form-control" accept=".pdf, .jpg, .png"
               (change)="onFileSelect($event, 'consent', i, 'document')">
-            <mat-hint>Allowed formats: PDF, JPG, PNG</mat-hint>
           </div>
 
           <!-- Consent Checkbox -->

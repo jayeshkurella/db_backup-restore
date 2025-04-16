@@ -21,7 +21,11 @@
   .search-button {
     display: flex;
     height: 100%;
-    // justify-content: flex-end;
+    justify-content: flex-end;
+    margin-right: 45px;
   }
   
-  
+.sub-heading{
+  line-height: 50px;
+  font-weight: 500;
+}

@@ -1,23 +1,60 @@
 <h2 mat-dialog-title>Police Station Details</h2>
+
 <mat-dialog-content class="dialog-body">
-  <!-- <img [src]="getFullPhotoPath(data.station_photo)" alt="Station Photo" style="width: 100%; max-height: 200px; object-fit: contain;" /> -->
+  <!-- Station Photo -->
+  <div class="text-center mb-3">
+    <img 
+      [src]="data?.station_photo ? (environment.apiUrl + data?.station_photo) : 'assets/images/pngwing.com.png'" 
+      alt="Station Photo" 
+      style="width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px;" />
+  </div>
 
-  <p><strong>Name:</strong> {{ data.name }}</p>
-  <p><strong>Phone No:</strong> {{ data.phone_no }}</p>
-  <p><strong>Status:</strong> {{ data.activ_Status }}</p>
+  <!-- Basic Info -->
+  <div class="mb-3">
+    <p><strong>Name:</strong> {{ data.name }}</p>
+    <p><strong>Phone No:</strong> {{ data.phone_no }}</p>
+    <p><strong>Status:</strong> {{ data.activ_Status }}</p>
+  </div>
 
-  <p><strong>Address:</strong> 
-    {{ data.address_details?.street }},
-    {{ data.address_details?.village }},
-    {{ data.address_details?.city }},
-    {{ data.address_details?.district }},
-    {{ data.address_details?.state }},
-    {{ data.address_details?.country }} - {{ data.address_details?.pincode }}
-  </p>
+  <!-- Two-Column Section -->
+  <div class="d-flex flex-wrap gap-3 justify-content-between mb-3">
+    
+    <!-- Address Info -->
+    <div class="flex-fill" style="min-width: 300px;">
+      <p><strong>Address Details:</strong></p>
+      <ul class="list-unstyled mb-0">
+        <li><strong>Street:</strong> {{ data.address_details?.street }}</li>
+        <li><strong>Village:</strong> {{ data.address_details?.village }}</li>
+        <li><strong>City:</strong> {{ data.address_details?.city }}</li>
+        <li><strong>District:</strong> {{ data.address_details?.district }}</li>
+        <li><strong>State:</strong> {{ data.address_details?.state }}</li>
+        <li><strong>Country:</strong> {{ data.address_details?.country }}</li>
+        <li><strong>Pincode:</strong> {{ data.address_details?.pincode }}</li>
+        <li><strong>Landmark:</strong> {{ data.address_details?.landmark_details }}</li>
+      </ul>
+    </div>
 
-  <div style="height: 250px; border: 1px solid #ccc; margin-top: 15px;" id="stationMap"></div>
+    <!-- Contact Info -->
+    <div class="flex-fill" style="min-width: 300px;">
+      <p><strong>Contact Info:</strong></p>
+      <div *ngFor="let contact of data.police_contact" class="ps-2">
+        <p class="mb-1">
+          <strong>Phone:</strong> {{ contact.country_cd }} {{ contact.phone_no }}<br />
+          <strong>Email:</strong> {{ contact.email_id }}<br />
+          <strong>Type:</strong> {{ contact.type }}<br />
+          <strong>Primary:</strong> {{ contact.is_primary ? 'Yes' : 'No' }}
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Map -->
+  <div style="height: 250px; border: 1px solid #ccc;" id="stationMap" class="rounded"></div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close color="warn">Close</button>
+<!-- Close Button -->
+<mat-dialog-actions align="end" class="mt-3">
+  <button mat-stroked-button mat-dialog-close class="btn btn-outline-warning" color="primary">Close</button>
 </mat-dialog-actions>
+

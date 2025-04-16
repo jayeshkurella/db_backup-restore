@@ -23,6 +23,7 @@ import { environment } from 'src/envirnment/envirnment';
   styleUrl: './police-statio-dialog.component.scss'
 })
 export class PoliceStatioDialogComponent implements AfterViewInit {
+
   environment = environment
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,30 +31,34 @@ export class PoliceStatioDialogComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    const location = this.data.address_details?.location;
-    const coords = this.extractLatLngFromWKT(location);
+    setTimeout(() => {
+      const location = this.data.address_details?.location;
+      const coords = this.extractLatLngFromWKT(location);
   
-    if (coords) {
-      const map = L.map('stationMap').setView([coords.lat, coords.lng], 13);
+      if (coords) {
+        const map = L.map('stationMap', {
+          zoomControl: true,
+          attributionControl: false
+        }).setView([coords.lat, coords.lng], 13);
   
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
   
-      // ✅ Define custom icon
-      const customIcon = L.icon({
-        iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-      });
+        const customIcon = L.icon({
+          iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32]
+        });
   
-      // ✅ Use custom marker
-      L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(map)
-        .bindPopup(`${this.data.name}`)
-        .openPopup();
-    }
+        L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(map)
+          .bindPopup(`${this.data.name}`)
+          .openPopup();
+      }
+    }, 200); // 100–200ms is typically enough
   }
+  
   
 
   extractLatLngFromWKT(wkt: string): { lat: number, lng: number } | null {
