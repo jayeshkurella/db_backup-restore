@@ -1,5 +1,6 @@
 import logging
-
+from datetime import datetime
+from dateutil import parser
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
@@ -466,10 +467,39 @@ class PersonViewSet(viewsets.ViewSet):
     def get_persons_by_type(self, request, person_type):
         """Return filtered persons based on request parameters"""
         try:
-            filters = {key: value for key, value in request.query_params.items() if value}
+            # Initialize filters with query params (excluding empty values)
+            filters = {
+                key: value
+                for key, value in request.query_params.items()
+                if value and key not in ['startDate', 'endDate']  # Exclude date params
+            }
 
-            persons = Person.objects.filter(type=person_type, _is_deleted=False, **filters).prefetch_related(
-                'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
+            # Handle date filtering separately
+            start_date = request.query_params.get('startDate')
+            end_date = request.query_params.get('endDate')
+
+            if start_date:
+                try:
+                    start_date = parser.parse(start_date).date()
+                    filters['date_reported__gte'] = start_date  # ✅ Correct field name
+                except (ValueError, TypeError):
+                    pass  # Skip if invalid
+
+            if end_date:
+                try:
+                    end_date = parser.parse(end_date).date()
+                    filters['date_reported__lte'] = end_date  # ✅ Correct field name
+                except (ValueError, TypeError):
+                    pass  # Skip if invalid
+
+            # Apply filters to the Person model
+            persons = Person.objects.filter(
+                type=person_type,
+                _is_deleted=False,
+                **filters
+            ).prefetch_related(
+                'addresses', 'contacts', 'additional_info',
+                'last_known_details', 'firs', 'consent'
             ).order_by('-created_at')
 
             if not persons.exists():

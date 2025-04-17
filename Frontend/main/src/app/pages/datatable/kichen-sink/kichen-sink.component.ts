@@ -224,22 +224,22 @@ export class AppKichenSinkComponent implements AfterViewInit {
   @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
   @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
   constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService) {}
-
   filters = {
-    full_name :'',
+    full_name: '',
     city: '',
     state: '',
-    year: '',
-    month: '',
-    caste: '', 
+    startDate: null as string | null,  // Change type to string | null
+    endDate: null as string | null,    // Change type to string | null
+    caste: '',
     age: '',
     marital_status: '',
     blood_group: '',
     height: '',
-    district:'',
-    gender:''
+    district: '',
+    gender: ''
+};
 
-  };
+
 
   pendingPersons: any[] = [];
   resolvedPersons: any[] = [];
@@ -287,6 +287,14 @@ export class AppKichenSinkComponent implements AfterViewInit {
     this.loading = true;   // Show full-screen spinner
     this.progressMessage = "🔄 Applying filters...";
 
+    // Format startDate and endDate before sending the request (as string)
+    // if (this.filters.startDate instanceof Date) {
+    //     this.filters.startDate = this.formatDate(this.filters.startDate);
+    // }
+    // if (this.filters.endDate instanceof Date) {
+    //     this.filters.endDate = this.formatDate(this.filters.endDate);
+    // }
+
     this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
         (response) => {
             this.loading = false;  // Hide spinner
@@ -320,6 +328,16 @@ export class AppKichenSinkComponent implements AfterViewInit {
         }
     );
 }
+
+// Helper function to format date in YYYY-MM-DD format
+formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+    const day = date.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+    return `${year}-${month}-${day}`;
+}
+
+
 
 
 

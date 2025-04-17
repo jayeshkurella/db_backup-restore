@@ -15,5 +15,6 @@ export interface NavItem {
     children?: NavItem[];
     ddType?: string;
     canActivate?: CanActivateFn[]; // Make it optional
+    condition?: string; // ✅ Add this line
 
 }

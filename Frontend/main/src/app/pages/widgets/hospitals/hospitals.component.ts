@@ -74,8 +74,10 @@ export class HospitalsComponent implements OnInit{
 
   seeMoreHospital(hospital: any) {
     this.dialog.open(HospitalDialogComponent, {
-      width: '600px',
+      width: '80%',
+      maxWidth: '800px',  
       data: hospital
     });
   }
+  
 }

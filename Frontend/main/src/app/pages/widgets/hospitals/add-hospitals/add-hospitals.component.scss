@@ -15,3 +15,32 @@
   .text-muted {
     color: var(--mat-text-color) !important;
   }
+
+
+
+  .contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .contact-item {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    min-width: 200px;  /* Ensures each item takes up minimum width */
+  }
+  
+  .contact-item strong {
+    margin-right: 5px;
+  }
+  
+  .d-flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .me-3 {
+    margin-right: 15px;
+  }
+  

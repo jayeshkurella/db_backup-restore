@@ -34,6 +34,8 @@ export class AddHospitalsComponent implements OnInit ,AfterViewInit {
   latitude: number | null = null;
   longitude: number | null = null;
   environment = environment;
+  savedContacts: any[] = []; // Array to store saved contacts
+
   states: string[] = [
     'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
     'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
@@ -61,6 +63,7 @@ selectedFileName: any;
   ngAfterViewInit(): void {
     this.initMap();
   }
+
   initializeForm(): void {
     this.hospitalForm = this.fb.group({
       name: ['', Validators.required],
@@ -105,9 +108,28 @@ selectedFileName: any;
     });
   }
   
+  removeContact(index: number): void {
+    this.contacts.removeAt(index);
+  }
 
-  addContact(): void {
-    this.contacts.push(this.createContactForm());
+  removeSavedContact(index: number): void {
+    this.savedContacts.splice(index, 1);
+  }
+ addContact(): void {
+    const firstContact = this.contacts.at(0);
+
+    if (firstContact.valid) {
+      // Push a copy of the form value to the saved contacts array
+      this.savedContacts.push({ ...firstContact.value });
+
+      // Reset only the first form
+      firstContact.reset({
+        country_cd: '+91',
+        is_primary: false,
+      });
+    } else {
+      firstContact.markAllAsTouched();
+    }
   }
 
   onFileChange(event: any): void {
@@ -192,7 +214,5 @@ selectedFileName: any;
         }
     );
 }
-  removeContact(index: number) {
-    this.contacts.removeAt(index);
-  }
+ 
 }

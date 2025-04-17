@@ -64,30 +64,27 @@
       
   
               <!-- Year Dropdown -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Year</mat-label>
-            <mat-select [(ngModel)]="filters.year" (selectionChange)="applyFilters()">
-              <mat-option value="">All Years</mat-option>
-              <mat-option *ngFor="let year of years" [value]="year">
-                {{ year }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+                <!-- Start Date Picker -->
+          <div class="col-lg-2 col-md-3">
+            <mat-form-field appearance="outline" class="w-100 hide-hint">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startPicker" [(ngModel)]="filters.startDate" (dateChange)="applyFilters()" placeholder="Choose start date">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-        <!-- Month Dropdown -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Month</mat-label>
-            <mat-select [(ngModel)]="filters.month" (selectionChange)="applyFilters()">
-              <mat-option value="">All Months</mat-option>
-              <mat-option *ngFor="let month of months" [value]="month">
-                {{ month }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          <!-- End Date Picker -->
+          <div class="col-lg-2 col-md-3">
+            <mat-form-field appearance="outline" class="w-100 hide-hint">
+                <mat-label>End Date</mat-label>
+                <input matInput [matDatepicker]="endPicker" [(ngModel)]="filters.endDate" (dateChange)="applyFilters()" placeholder="Choose end date">
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+
 
     </div>
   

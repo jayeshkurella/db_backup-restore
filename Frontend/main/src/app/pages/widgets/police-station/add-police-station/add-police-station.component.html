@@ -164,7 +164,7 @@
     <div class="p-3 bg-light-primary text-center rounded mt-2">
       <h5>contacts Details</h5>
     </div>
-    <mat-card class="mt-2 p-2">
+    <mat-card  class="mt-2 p-2">
       <div formArrayName="police_contact">
         <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class=" p-3 mb-3 rounded">
           <div class="row">
@@ -240,22 +240,26 @@
         </div>
         <div *ngIf="savedContacts.length > 0">
           <h6>Added Contacts:</h6>
-          <div *ngFor="let contact of savedContacts; let i = index" class="d-flex border p-2 mb-2 rounded bg-light align-items-center">
-            
-            <!-- Delete Icon Button -->
-            <button mat-icon-button type="button" color="warn" (click)="removeSavedContact(i)" class="me-3">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <div *ngFor="let contact of savedContacts; let i = index" class="border p-3 mb-3 rounded bg-light">
+            <div class="d-flex flex-wrap align-items-center gap-3">
+              <!-- Delete Icon Button -->
+              <button mat-icon-button type="button" color="warn" (click)="removeSavedContact(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
         
-            <!-- Contact Info -->
-            <div class="me-4"><strong>Type:</strong> {{ contact.type }}</div>
-            <div class="me-4"><strong>Phone:</strong> {{ contact.phone_no }}</div>
-            <div class="me-4"><strong>Country:</strong> {{ contact.country_cd }}</div>
-            <div class="me-4"><strong>Email:</strong> {{ contact.email_id }}</div>
-            <!-- Add more fields as required -->
-        
+              <!-- Contact Info (flex wrapped for better spacing) -->
+              <div class="contact-item"><strong>Type:</strong> {{ contact.type }}</div>
+              <div class="contact-item"><strong>Phone:</strong> {{ contact.phone_no }}</div>
+              <div class="contact-item"><strong>Country:</strong> {{ contact.country_cd }}</div>
+              <div class="contact-item"><strong>Email:</strong> {{ contact.email_id }}</div>
+              <div class="contact-item" *ngIf="contact.company_name"><strong>Company:</strong> {{ contact.company_name }}</div>
+              <div class="contact-item" *ngIf="contact.job_title"><strong>Job Title:</strong> {{ contact.job_title }}</div>
+              <div class="contact-item" *ngIf="contact.website_url"><strong>Website:</strong> {{ contact.website_url }}</div>
+              <div class="contact-item" *ngIf="contact.social_media_url"><strong>Social:</strong> {{ contact.social_media_url }}</div>
+            </div>
           </div>
         </div>
+        
         
       </div>
     

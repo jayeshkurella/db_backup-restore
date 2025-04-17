@@ -32,28 +32,36 @@ export class HospitalDialogComponent implements AfterViewInit{
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
   public  dialogRef :MatDialogRef<HospitalDialogComponent>) {}
   ngAfterViewInit(): void {
-    const location = this.data.address_details?.location;
-    const coords = this.extractLatLngFromWKT(location);
+    setTimeout(() => {
+      const location = this.data.address_details?.location;
+      const coords = this.extractLatLngFromWKT(location);
   
-    if (coords) {
-      const map = L.map('hospitalMap').setView([coords.lat, coords.lng], 13);
+      if (coords) {
+        const map = L.map('hospitalMap', {
+          zoomControl: true,
+          attributionControl: false
+        }).setView([coords.lat, coords.lng], 13);
   
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
   
-      const customIcon = L.icon({
-        iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-      });
+        const customIcon = L.icon({
+          iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32]
+        });
   
-      L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(map)
-        .bindPopup(`${this.data.name}`)
-        .openPopup();
-    }
+        L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(map)
+          .bindPopup(`${this.data.name}`)
+          .openPopup();
+      }
+  
+      
+    }, 200); // Delay ensures DOM and map container are rendered
   }
+  
   
 
   extractLatLngFromWKT(wkt: string): { lat: number; lng: number } | null {
