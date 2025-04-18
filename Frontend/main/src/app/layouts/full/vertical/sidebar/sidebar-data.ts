@@ -23,12 +23,12 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Search Case',
     iconName: 'search',
-    route: '/datatable/kichen-sink',
+    route: '/datatable',
     children: [
       {
         displayName: 'Missing Person',
         iconName: 'user',
-        route: '/datatable/kichen-sink',
+        route: '/datatable/missing-person',
       },
       {
         displayName: 'Unidentified Person',

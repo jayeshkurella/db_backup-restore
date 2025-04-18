@@ -12,7 +12,7 @@ export const DatatablesRoutes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: 'kichen-sink',
+        path: 'missing-person',
         component: AppKichenSinkComponent,
         data: {
           title: 'Datatable',

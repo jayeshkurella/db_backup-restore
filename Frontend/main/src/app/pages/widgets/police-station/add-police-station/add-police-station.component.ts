@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as L from 'leaflet';
 import { PoliceStationApiService } from '../police-station-api.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -52,26 +52,26 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
 
   initializeForm(): void {
     this.policeStationForm = this.fb.group({
-      name: [''],
-      phone_no: [''],
-      station_photo: [''],
-      activ_Status: [''],
+      name: ['', Validators.required],
+      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
+      station_photo: ['',Validators.required],
+      activ_Status: ['', Validators.required],
       address: this.fb.group({
-        address_type: [''],
-        street: [''],
-        appartment_no: [''],
-        appartment_name: [''],
-        village: [''],
-        city: [''],
-        district: [''],
-        state: [''],
+        address_type: ['', Validators.required],
+        street: ['', Validators.required],
+        appartment_no: ['',Validators.required],
+        appartment_name: ['',Validators.required],
+        village: ['',Validators.required],
+        city: ['', Validators.required],
+        district: ['', Validators.required],
+        state: ['', Validators.required],
         user: [null],
-        pincode: [''],
-        country: [''],
-        landmark_details: [''],
+        pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{5,10}$/)]],
+        country: ['', Validators.required],
+        landmark_details: ['',Validators.required],
         location: this.fb.group({
-          latitude: [''],
-          longitude: [''],
+          latitude: ['', Validators.required],
+          longitude: ['', Validators.required],
         }),
         created_by: [null],
         updated_by: [null],
@@ -79,6 +79,7 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
       police_contact: this.fb.array([this.createContactForm()])
     });
   }
+  
 
   get contacts(): FormArray {
     return this.policeStationForm.get('police_contact') as FormArray;
@@ -86,10 +87,10 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
 
   createContactForm(): FormGroup {
     return this.fb.group({
-      phone_no: [''],
-      country_cd: [''],
-      email_id: [''],
-      type: [''],
+      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
+      country_cd: ['', Validators.required],
+      email_id: ['', [Validators.required, Validators.email]],
+      type: ['', Validators.required],
       company_name: [''],
       job_title: [''],
       website_url: [''],
@@ -107,6 +108,7 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
       updated_by: [null],
     });
   }
+  
 
   // addContact(): void {
   //   this.contacts.push(this.createContactForm());
@@ -149,28 +151,39 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
       alert('Please fill in all required fields correctly.');
       return;
     }
-
+  
     const formData = new FormData();
     const formValues = this.policeStationForm.value;
-
+  
+    // ✅ Combine saved and filled police contacts
+    const validFormContacts = formValues.police_contact.filter((contact: any) =>
+      Object.values(contact).some(v => v !== '' && v !== null && v !== false)
+    );
+  
+    const allContacts = [...this.savedContacts, ...validFormContacts];
+    formValues.police_contact = allContacts;
+  
+    // ✅ Handle station photo
     if (formValues.station_photo) {
       formData.append('station_photo', formValues.station_photo);
     }
-
+  
+    // ✅ Append all form values to FormData
     Object.keys(formValues).forEach(key => {
       if (key !== 'station_photo') {
-        formData.append(key, JSON.stringify(formValues[key]));
+        const value = formValues[key];
+        formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
       }
     });
-
+  
+    // ✅ API call
     this.policeapi.addPoliceStation(formData).subscribe({
       next: () => {
         alert('Police station added successfully!');
+        this.savedContacts = []; // Reset saved contacts
         this.policeStationForm.reset();
         this.initializeForm();
         this.router.navigate(['/widgets/police-station']);
-
-        
       },
       error: (err) => {
         console.error(err);
@@ -178,6 +191,8 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
       }
     });
   }
+  
+  
 
   initMap(): void {
     this.map = L.map('mapAddStation').setView([22.9734, 78.6569], 5);
@@ -215,13 +230,10 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
 
     // Custom marker icon
     const customIcon = L.icon({
-        iconUrl: 'assets/leaflet/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowUrl: 'assets/leaflet/images/marker-shadow.png',
-        shadowSize: [41, 41],
-    });
+          iconUrl: '/assets/leaflet/images/marker-icon-2x.png',
+          iconSize: [30, 40],
+          iconAnchor: [15, 40],
+        });
 
     // Remove existing marker before adding a new one
     if (this.marker) {

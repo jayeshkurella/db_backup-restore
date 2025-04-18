@@ -50,28 +50,24 @@ class HospitalViewSet(viewsets.ModelViewSet):
     # 🔹 3. CREATE a new Hospital
     def create(self, request, *args, **kwargs):
         try:
-            print("\n🔹 Received API Request Data:", request.data)  # Log incoming data
+            print("\n🔹 Received API Request Data:", request.data)
 
             with transaction.atomic():
-                # 🔹 Validate `name` field
                 if not request.data.get("name"):
                     return Response({"error": "Hospital name is required and cannot be blank."},
                                     status=status.HTTP_400_BAD_REQUEST)
 
-                # 🔹 Handle `hospital_photo` (File Handling)
-                hospital_photo = request.FILES.get("hospital_photo")  # ✅ Use `request.FILES`
+                hospital_photo = request.FILES.get("hospital_photo")
                 if not hospital_photo:
                     return Response(
                         {"error": "Invalid hospital photo. Ensure you're sending a valid file."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
-                # 🔹 Process Address Data
                 address_data = request.data.get("address")
                 if not address_data:
                     return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-                # ✅ Convert JSON string to Python dictionary (Fixes `[object Object]` issue)
                 if isinstance(address_data, str):
                     address_data = json.loads(address_data)
 
@@ -93,42 +89,36 @@ class HospitalViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST
                         )
 
-                # 🔹 Validate and create address
                 address_serializer = AddressSerializer(data=address_data)
                 if not address_serializer.is_valid():
                     return Response({"address": address_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
                 address = address_serializer.save()
 
-                # 🔹 Prepare hospital data
                 hospital_data = request.data.copy()
                 hospital_data["address"] = address.id
-                hospital_data["hospital_photo"] = hospital_photo  # ✅ Assign file correctly
+                hospital_data["hospital_photo"] = hospital_photo
+                hospital_data["created_by"] = request.user.id  # ✅ NEW
+                # hospital_data["updated_by"] = request.user.id  # ✅ NEW
 
-                # ✅ Convert JSON string for `hospital_contact`
                 contacts_data = request.data.get("hospital_contact", "[]")
                 if isinstance(contacts_data, str):
                     contacts_data = json.loads(contacts_data)
 
-                # 🔹 Create hospital
                 hospital_serializer = self.get_serializer(data=hospital_data)
                 if not hospital_serializer.is_valid():
                     return Response(hospital_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 hospital = hospital_serializer.save()
 
-                # 🔹 Corrected Contact Creation Logic
                 contact_objects = []
                 for contact in contacts_data:
-                    contact["hospital"] = hospital  # ✅ Assign correctly
-                    # ✅ Ensure `person` is always NULL
-                    contact["person"] = None  #
+                    contact["hospital"] = hospital
+                    contact["person"] = None
                     contact_objects.append(Contact(**contact))
 
-                # ✅ Bulk create contacts properly
                 Contact.objects.bulk_create(contact_objects)
 
-                # 🔹 Return response with contacts
                 response_data = self.get_serializer(hospital).data
                 response_data['hospital_contact'] = ContactSerializer(hospital.hospital_contact.all(), many=True).data
 

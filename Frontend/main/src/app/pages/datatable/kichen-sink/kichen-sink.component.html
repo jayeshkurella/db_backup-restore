@@ -18,7 +18,7 @@
     <div class="row">
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>Full Name</mat-label>
+          <!-- <mat-label>Full Name</mat-label> -->
           <input matInput placeholder="Full Name" [(ngModel)]="filters.full_name" (ngModelChange)="applyFilters()" />
         </mat-form-field>
       </div>
@@ -26,7 +26,7 @@
   
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>State</mat-label>
+          <!-- <mat-label>State</mat-label> -->
           <mat-select [(ngModel)]="filters.state" (selectionChange)="onStateChange(); applyFilters()">
             <mat-option value="">All States</mat-option>
             <mat-option *ngFor="let state of allstates" [value]="state">
@@ -39,7 +39,7 @@
   
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>District</mat-label>
+          <!-- <mat-label>District</mat-label> -->
           <mat-select [(ngModel)]="filters.district" (selectionChange)="onDistrictChange(); applyFilters()">
             <mat-option value="">All Districts</mat-option>
             <mat-option *ngFor="let district of alldistricts" [value]="district">
@@ -52,7 +52,7 @@
   
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-label>City</mat-label>
+          <!-- <mat-label>City</mat-label> -->
           <mat-select [(ngModel)]="filters.city" (selectionChange)="applyFilters()">
             <mat-option value="">All Cities</mat-option>
             <mat-option *ngFor="let city of allcities" [value]="city">
@@ -93,7 +93,7 @@
       <!-- Caste Dropdown -->
         <div class="col-lg-2 col-md-2">
           <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Caste</mat-label>
+            <!-- <mat-label>Caste</mat-label> -->
             <mat-select [(ngModel)]="filters.caste" (selectionChange)="applyFilters()">
               <mat-option value="">Caste</mat-option>
               <mat-option value="Open">Open</mat-option>
@@ -108,7 +108,7 @@
         <!-- Gender Dropdown -->
         <div class="col-lg-2 col-md-2">
           <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Gender</mat-label>
+            <!-- <mat-label>Gender</mat-label> -->
             <mat-select [(ngModel)]="filters.gender" (selectionChange)="applyFilters()">
               <mat-option value="">Gender</mat-option>
               <mat-option value="male">Male</mat-option>
@@ -121,14 +121,14 @@
         <div class="col-lg-2 col-md-2">
           <mat-form-field appearance="outline" class="w-100 hide-hint">
             <mat-label>Age</mat-label>
-            <input matInput type="number" [(ngModel)]="filters.age" (ngModelChange)="applyFilters()">
+            <input matInput type="number"  [(ngModel)]="filters.age" (ngModelChange)="applyFilters()">
           </mat-form-field>
         </div>
 
         <!-- Marital Status Dropdown -->
         <div class="col-lg-2 col-md-2">
           <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Marital Status</mat-label>
+            <!-- <mat-label>Marital Status</mat-label> -->
             <mat-select [(ngModel)]="filters.marital_status" (selectionChange)="applyFilters()">
               <mat-option value="">Marital Status</mat-option>
               <mat-option value="married">Married</mat-option>
@@ -140,7 +140,7 @@
         <!-- Blood Group Dropdown -->
         <div class="col-lg-2 col-md-2">
           <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Blood Group</mat-label>
+            <!-- <mat-label>Blood Group</mat-label> -->
             <mat-select [(ngModel)]="filters.blood_group" (selectionChange)="applyFilters()">
               <mat-option value="">Blood Group</mat-option>
               <mat-option value="A+">A+</mat-option>
@@ -185,7 +185,7 @@
 
             <table *ngIf="dataSourcePending.data.length > 0" mat-table [dataSource]="pendingPersons" class="w-100">
               <ng-container matColumnDef="sr">
-                <th mat-header-cell *matHeaderCellDef>#</th>
+                <th mat-header-cell *matHeaderCellDef>S.No</th>
                 <td mat-cell *matCellDef="let person; let i = index">
                   {{ i + 1 + (paginatorPending.pageIndex * paginatorPending.pageSize) }}
                 </td>
@@ -194,8 +194,8 @@
               <ng-container matColumnDef="photo">
                 <th mat-header-cell *matHeaderCellDef>Photo</th>
                 <td mat-cell *matCellDef="let person">
-                  <img [src]="person.photo_photo ? (environment.apiUrl + person.photo_photo) : 'assets/images/pngwing.com.png'"
-                       alt="Person Photo" class="rounded-circle" width="40" />
+                  <img [src]="person.photo_photo ? (environment.apiUrl + person.photo_photo) : '/assets/old/images/Chhaya.png'"
+                       alt="Person Photo" class="rounded-circle" width="60" />
                 </td>
               </ng-container>
 
@@ -211,8 +211,24 @@
 
               <ng-container matColumnDef="gender">
                 <th mat-header-cell *matHeaderCellDef>Gender</th>
-                <td mat-cell *matCellDef="let person">{{ person.gender }}</td>
+                <td mat-cell *matCellDef="let person">
+                  <img 
+                    *ngIf="person.gender === 'male'; else femaleIcon" 
+                    src="/assets/old/images/male.png" 
+                    alt="Male" 
+                    width="30" 
+                    height="30">
+                  <ng-template #femaleIcon>
+                    <img 
+                      src="/assets/old/images/female.png" 
+                      alt="Female" 
+                      width="30" 
+                      height="30">
+                  </ng-template>
+                </td>
               </ng-container>
+              
+              
 
               <ng-container matColumnDef="date_of_missing">
                 <th mat-header-cell *matHeaderCellDef>Date of Missing</th>

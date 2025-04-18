@@ -10,7 +10,7 @@
     
       <nav aria-label="breadcrumb" class="breadcrumb-container">
         <ol class="breadcrumb mb-2">
-          <li class="breadcrumb-item active" aria-current="page">Search Unidentified Person</li>
+          <li class="breadcrumb-item active" aria-current="page">Search Unidentified bodies</li>
         </ol>
       </nav>
       
@@ -172,7 +172,7 @@
   </mat-card>
   <!-- Show message when filters are not applied -->
   <div *ngIf="!filtersApplied" class="text-center text-muted mt-3">
-    Please apply the filters to find a person.
+    Please apply the filters to find a body.
   </div>
   
   <mat-tab-group class="custom-tabs mb-1">
@@ -188,7 +188,7 @@
   
               <table *ngIf="dataSourcePending.data.length > 0" mat-table [dataSource]="pendingPersons" class="w-100">
                 <ng-container matColumnDef="sr">
-                  <th mat-header-cell *matHeaderCellDef>#</th>
+                  <th mat-header-cell *matHeaderCellDef>S .No</th>
                   <td mat-cell *matCellDef="let person; let i = index">
                     {{ i + 1 + (paginatorPending.pageIndex * paginatorPending.pageSize) }}
                   </td>
@@ -197,7 +197,7 @@
                 <ng-container matColumnDef="photo">
                   <th mat-header-cell *matHeaderCellDef>Photo</th>
                   <td mat-cell *matCellDef="let person">
-                    <img [src]="person.photo_photo ? (environment.apiUrl + person.photo_photo) : 'assets/images/pngwing.com.png'"
+                    <img [src]="person.photo_photo ? (environment.apiUrl + person.photo_photo) : '/assets/old/images/Chhaya.png'"
                          alt="Person Photo" class="rounded-circle" width="40" />
                   </td>
                 </ng-container>
@@ -214,9 +214,23 @@
   
                 <ng-container matColumnDef="gender">
                   <th mat-header-cell *matHeaderCellDef>Gender</th>
-                  <td mat-cell *matCellDef="let person">{{ person.gender }}</td>
+                  <td mat-cell *matCellDef="let person">
+                    <img 
+                      *ngIf="person.gender === 'male'; else femaleIcon" 
+                      src="/assets/old/images/male.png" 
+                      alt="Male" 
+                      width="30" 
+                      height="30">
+                    <ng-template #femaleIcon>
+                      <img 
+                        src="/assets/old/images/female.png" 
+                        alt="Female" 
+                        width="30" 
+                        height="30">
+                    </ng-template>
+                  </td>
                 </ng-container>
-  
+                
                 <ng-container matColumnDef="date_of_missing">
                   <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
                   <td mat-cell *matCellDef="let person">{{ person.date_reported }}</td>

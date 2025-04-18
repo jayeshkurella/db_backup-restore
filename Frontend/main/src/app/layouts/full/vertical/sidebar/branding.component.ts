@@ -7,7 +7,7 @@ import { CoreService } from 'src/app/services/core.service';
   template: `
 
 
-    <a href="/" class="logodark">
+    <a href="/dashboards/dashboard1" class="logodark">
   <img
     src="https://i.postimg.cc/c4cNmDdV/favicon-32x32.png"
     class="align-middle m-2"
@@ -15,7 +15,7 @@ import { CoreService } from 'src/app/services/core.service';
   />
 </a>
 
-<a href="/" class="logolight">
+<a href="/dashboards/dashboard1" class="logolight">
   <img
     src="https://i.postimg.cc/c4cNmDdV/favicon-32x32.png"
     class="align-middle m-2"

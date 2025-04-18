@@ -1,0 +1,20 @@
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Dark transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Ensure it appears above everything */
+}
+
+.spinner-container {
+    text-align: center;
+    color: white;
+}
+.text-muted {
+  color: var(--mat-text-color) !important;
+}

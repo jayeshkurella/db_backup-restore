@@ -70,23 +70,23 @@ selectedFileName: any;
       type: ['', Validators.required],
       hospital_photo: [''],
       address: this.fb.group({
-        address_type: [''],
-        street: [''],
-        appartment_no: [''], // ✅ MUST exist
+        address_type: ['', Validators.required],
+        street: ['', Validators.required],
+        appartment_no: ['', Validators.required],
         appartment_name: [''],
-        village: [''],
-        city: [''],
-        district: [''],
-        state: [''],
-        country: [''],
-        pincode: [''],
-        landmark_details: [''],
+        village: ['', Validators.required],
+        city: ['', Validators.required],
+        district: ['', Validators.required],
+        state: ['', Validators.required],
+        country: ['', Validators.required],
+        pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+        landmark_details: ['',Validators.required],
         location: this.fb.group({
-          latitude: [''],
-          longitude: ['']
+          latitude: ['', Validators.required],
+          longitude: ['', Validators.required]
         })
       }),
-      hospital_contact: this.fb.array([this.createContactForm()]),
+      hospital_contact: this.fb.array([this.createContactForm()], Validators.required),
     });
   }
 
@@ -96,15 +96,15 @@ selectedFileName: any;
 
   createContactForm(): FormGroup {
     return this.fb.group({
-      phone_no: [''],
-      country_cd: ['+91'],
-      email_id: [''],
-      type: [''],
-      is_primary: [false],
-      company_name: [''],        // ✅ Add this
-      job_title: [''],           // ✅ Add this
-      website_url: [''],         // ✅ Add this
-      social_media_url: [''],    // ✅ Add this
+      type: ['', Validators.required],
+      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      country_cd: ['', Validators.required],
+      email_id: ['', Validators.email],
+      company_name: ['' ],
+      job_title: [''],
+      website_url: ['', Validators.pattern(/https?:\/\/[\S]+/)],
+      social_media_url: ['', Validators.pattern(/https?:\/\/[\S]+/)],
+      is_primary: [false]
     });
   }
   
@@ -144,20 +144,31 @@ selectedFileName: any;
       alert('Please fill all required fields.');
       return;
     }
-
+  
     const formData = new FormData();
     const formValues = this.hospitalForm.value;
-
+  
+    // Combine saved contacts and form-filled contacts
+    const allContacts = [...this.savedContacts, ...formValues.hospital_contact];
+  
+    // Overwrite hospital_contact with both saved and filled contacts
+    formValues.hospital_contact = allContacts;
+  
     if (formValues.hospital_photo) {
       formData.append('hospital_photo', formValues.hospital_photo);
     }
-
+  
     Object.keys(formValues).forEach((key) => {
       if (key !== 'hospital_photo') {
-        formData.append(key, JSON.stringify(formValues[key]));
+        const value = formValues[key];
+        if (typeof value === 'object' && value !== null) {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value);
+        }
       }
     });
-
+  
     this.hospitalService.addHospital(formData).subscribe({
       next: () => {
         alert('Hospital added successfully.');
@@ -168,6 +179,8 @@ selectedFileName: any;
       },
     });
   }
+  
+  
 
   initMap(): void {
     this.map = L.map('mapAddHospital').setView([22.9734, 78.6569], 5);
@@ -184,17 +197,24 @@ selectedFileName: any;
   updateLocation(lat: number, lng: number): void {
     this.latitude = lat;
     this.longitude = lng;
-
+  
     this.hospitalForm.get('address.location')?.patchValue({
       latitude: lat,
       longitude: lng,
     });
-
+  
+    // Custom hospital icon
+    const customIcon = L.icon({
+      iconUrl: '/assets/leaflet/images/marker-icon-2x.png',
+      iconSize: [30, 40],
+      iconAnchor: [15, 40],
+    });
+  
     if (this.marker) {
       this.map.removeLayer(this.marker);
     }
-
-    this.marker = L.marker([lat, lng]).addTo(this.map);
+  
+    this.marker = L.marker([lat, lng], { icon: customIcon }).addTo(this.map);
     this.map.setView([lat, lng], 12);
   }
 
