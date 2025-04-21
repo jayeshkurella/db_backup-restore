@@ -1,0 +1,227 @@
+
+.hospital-detail-container {
+  padding: 24px;
+  border-radius: 8px;
+  margin: 16px auto;
+  max-width: 1200px;
+  background: var(--card-bg);
+  color: var(--text-color);
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    .title-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .hospital-name {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 500;
+        color: var(--primary-text);
+      }
+
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.875rem;
+        font-weight: 500;
+
+        &.active {
+          background: var(--success-bg);
+          color: var(--success-text);
+        }
+
+        &.inactive {
+          background: var(--warn-bg);
+          color: var(--warn-text);
+        }
+      }
+    }
+
+    .hospital-type {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--secondary-text);
+    }
+  }
+
+  .image-container {
+    margin-bottom: 24px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .hospital-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .info-card {
+    background: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 8px !important;
+    overflow: hidden;
+
+    mat-card-header {
+      border-bottom: 1px solid var(--divider-color);
+      padding-bottom: 16px;
+
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary-text);
+      }
+    }
+
+    mat-card-content {
+      padding-top: 16px;
+    }
+
+    &.address-card {
+      .address-details {
+        display: grid;
+        gap: 12px;
+
+        .address-line {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: var(--text-color);
+
+          mat-icon {
+            color: var(--icon-color);
+          }
+        }
+      }
+    }
+
+    &.contacts-card {
+      .contacts-container {
+        display: grid;
+        gap: 16px;
+
+        .contact-item {
+          padding: 16px;
+          border-radius: 8px;
+          background: var(--item-bg);
+          border: 1px solid var(--divider-color);
+
+          &.primary-contact {
+            border-left: 4px solid var(--primary-color);
+          }
+
+          .contact-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+
+            .contact-type {
+              font-weight: 500;
+            }
+
+            .primary-badge {
+              background: var(--primary-color);
+              color: white;
+              padding: 2px 8px;
+              border-radius: 12px;
+              font-size: 0.75rem;
+            }
+          }
+
+          .contact-details {
+            display: grid;
+            gap: 8px;
+
+            a {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              color: var(--link-color);
+              text-decoration: none;
+
+              &:hover {
+                text-decoration: underline;
+              }
+
+              mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.map-card {
+      .map-container {
+        height: 300px;
+        width: 100%;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+
+    .secondary-actions {
+      display: flex;
+      gap: 16px;
+    }
+  }
+}
+
+:root {
+  --card-bg: #ffffff;
+  --item-bg: #f8f9fa;
+  --text-color: #212529;
+  --primary-text: #0d6efd;
+  --secondary-text: #6c757d;
+  --icon-color: #495057;
+  --link-color: #0d6efd;
+  --divider-color: #dee2e6;
+  --success-bg: #d1e7dd;
+  --success-text: #0f5132;
+  --warn-bg: #fff3cd;
+  --warn-text: #664d03;
+  --primary-color: #0d6efd;
+}
+
+.dark-mode {
+  --card-bg: #2d3748;
+  --item-bg: #4a5568;
+  --text-color: #e2e8f0;
+  --primary-text: #90cdf4;
+  --secondary-text: #a0aec0;
+  --icon-color: #cbd5e0;
+  --link-color: #63b3ed;
+  --divider-color: #4a5568;
+  --success-bg: #22543d;
+  --success-text: #9ae6b4;
+  --warn-bg: #744210;
+  --warn-text: #faf089;
+  --primary-color: #4299e1;
+}

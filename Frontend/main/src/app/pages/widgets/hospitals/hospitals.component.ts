@@ -79,5 +79,12 @@ export class HospitalsComponent implements OnInit{
       data: hospital
     });
   }
+
+  seeMoreHospitaldata(hospital: any) {
+    this.router.navigate(['/widgets/hospital', hospital.id], {
+      state: { hospital } 
+    });
+  }
+  
   
 }

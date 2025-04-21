@@ -1,0 +1,166 @@
+<div class="container py-4 hospital-detail-container">
+
+    <!-- Header with hospital name and status badge -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary mb-0">{{ hospital.name }}</h1>
+      <span class="badge" 
+            [ngClass]="{
+              'bg-success': hospital.status === 'Active',
+              'bg-warning': hospital.status === 'Inactive',
+              'bg-secondary': !hospital.status
+            }">
+        {{ hospital.status || 'Active' }}
+      </span>
+    </div>
+  
+    <!-- Hospital Photo with shadow and hover effect -->
+    <div class="text-center mb-4">
+      <img 
+        [src]="hospital?.hospital_photo ? (environment.apiUrl + hospital?.hospital_photo) : 'assets/images/pngwing.com.png'" 
+        alt="Hospital Photo" 
+        class="img-fluid rounded-3 shadow hospital-photo"
+        style="max-height: 400px; width: 100%; object-fit: cover;" />
+    </div>
+  
+    <!-- Key Information Cards -->
+    <div class="row mb-4 g-3">
+      <div class="col-md-4">
+        <div class="card h-100 border-primary">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-info-circle me-2"></i>Basic Info
+            </h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Type:</span>
+                <span class="fw-bold">{{ hospital.type }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Primary Phone:</span>
+                <span class="fw-bold">{{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Address Card -->
+      <div class="col-md-8">
+        <div class="card h-100 border-primary">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-map-marker-alt me-2"></i>Address Details
+            </h5>
+            <div class="row">
+              <div class="col-md-6">
+                <p class="mb-2">
+                  <i class="fas fa-road me-2 text-muted"></i>
+                  <strong>Street:</strong> {{ hospital.address_details?.street || 'N/A' }}
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-building me-2 text-muted"></i>
+                  <strong>Apartment:</strong> 
+                  {{ hospital.address_details?.appartment_no || '' }} 
+                  {{ hospital.address_details?.appartment_no && hospital.address_details?.appartment_name ? ',' : '' }} 
+                  {{ hospital.address_details?.appartment_name || '' }}
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-map-pin me-2 text-muted"></i>
+                  <strong>Landmark:</strong> {{ hospital.address_details?.landmark_details || 'N/A' }}
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p class="mb-2">
+                  <i class="fas fa-city me-2 text-muted"></i>
+                  <strong>City:</strong> {{ hospital.address_details?.city || 'N/A' }}
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-globe-asia me-2 text-muted"></i>
+                  <strong>State/Country:</strong> 
+                  {{ hospital.address_details?.state || '' }} 
+                  {{ hospital.address_details?.state && hospital.address_details?.country ? ',' : '' }} 
+                  {{ hospital.address_details?.country || '' }}
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-mail-bulk me-2 text-muted"></i>
+                  <strong>Pincode:</strong> {{ hospital.address_details?.pincode || 'N/A' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Contact Information with tabs -->
+    <div class="card mb-4 border-primary">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-address-book me-2"></i>Contact Information
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4" *ngFor="let contact of hospital.hospital_contact; let i = index">
+            <div class="contact-card p-3 rounded" [ngClass]="{'bg-light': contact.is_primary}">
+              <h6 class="border-bottom pb-2">
+                Contact {{i+1}} <span *ngIf="contact.is_primary" class="badge bg-success ms-2">Primary</span>
+              </h6>
+              <p class="mb-1">
+                <i class="fas fa-point me-2 text-primary"></i>
+                <strong>{{ contact.type }} </strong>
+              </p>
+              <p class="mb-1">
+                <i class="fas fa-phone me-2 text-primary"></i>
+                <strong>{{ contact.country_cd }} {{ contact.phone_no }}</strong>
+              </p>
+              <p class="mb-1" *ngIf="contact.email_id">
+                <i class="fas fa-envelope me-2 text-primary"></i>
+                {{ contact.email_id }}
+              </p>
+              <p class="mb-0" *ngIf="contact.website_url">
+                <i class="fas fa-globe me-2 text-primary"></i>
+                <a [href]="contact.website_url" target="_blank">Visit Website</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Interactive Map Section -->
+    <div class="card mb-4 border-primary">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-map-marked-alt me-2"></i>Location
+        </h5>
+      </div>
+      <div class="card-body p-0">
+        <div style="height: 350px; width: 100%; z-index: 1;" id="hospitalMap"></div>
+      </div>
+      <div class="card-footer text-muted small">
+        <i class="fas fa-info-circle me-1"></i> Click and drag to explore the area around the hospital
+      </div>
+    </div>
+  
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-between">
+      <button mat-stroked-button color="primary" (click)="goBack()">
+        <i class="fas fa-arrow-left me-2"></i>Back
+      </button>
+      <!-- <div>
+        <button mat-raised-button color="primary" class="me-2">
+          <i class="fas fa-directions me-2"></i>Get Directions
+        </button>
+        <button mat-raised-button color="accent">
+          <i class="fas fa-phone me-2"></i>Call Now
+        </button>
+      </div> -->
+    </div>
+  
+  </div>
+
+
+
+
+

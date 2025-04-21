@@ -100,6 +100,7 @@ class PersonViewSet(viewsets.ViewSet):
 
     def create(self, request):
         logger.info(f"Incoming data: {request.data}")
+        print("data comes",request.data)
         logger.debug("Incoming Data Format: %s", request.content_type)
         try:
             with transaction.atomic():
