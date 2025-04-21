@@ -125,8 +125,8 @@
             <!-- Start Date -->
             <div style="min-width: 200px;">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Start Date</mat-label>
-                <input matInput [(ngModel)]="selectedStartDate" (change)="filterDataByFilters()" [matDatepicker]="startPicker" placeholder="Start Date" />
+                <!-- <mat-label>Start Date</mat-label> -->
+                <input matInput [(ngModel)]="selectedStartDate" (change)="filterDataByFilters()"  (ngModelChange)="onDateChange()" [matDatepicker]="startPicker" placeholder="Start Date" />
                 <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
               </mat-form-field>
@@ -135,8 +135,8 @@
             <!-- End Date -->
             <div style="min-width: 200px;">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>End Date</mat-label>
-                <input matInput [(ngModel)]="selectedEndDate" (change)="filterDataByFilters()" [matDatepicker]="endPicker" placeholder="End Date" />
+                <!-- <mat-label>End Date</mat-label> -->
+                <input matInput [(ngModel)]="selectedEndDate" (change)="filterDataByFilters()"  (ngModelChange)="onDateChange()" [matDatepicker]="endPicker" placeholder="End Date" />
                 <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
                 <mat-datepicker #endPicker></mat-datepicker>
               </mat-form-field>

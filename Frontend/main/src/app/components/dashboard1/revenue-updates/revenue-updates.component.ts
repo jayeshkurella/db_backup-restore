@@ -36,6 +36,7 @@ import { DialogModelViewComponent } from './dialog-model-view/dialog-model-view.
   templateUrl: './revenue-updates.component.html',
 })
 export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
+
   environment = environment;
   geo_url =environment.geo_url
   selectedPersonDetails: any = null;
@@ -191,6 +192,9 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
  
   ngOnInit(): void {
     this.loadStateData();
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
     
     // this.loadStateData();
     this.selectedState = 'Maharashtra';  
@@ -204,6 +208,8 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     this.selectedWeightRange = 'All Weights'; 
     this.selectedAgeRange = 'All Ages'; 
     this.selectedmarital = 'Marital status';  
+    this.selectedStartDate = yesterday;
+    this.selectedEndDate = today;
     this.filterDataByFilters()    
   }
 
@@ -248,7 +254,6 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
   filterDataByFilters(): void {
         this.moveMapToState(this.selectedState);
-        // this.initOperationalLayers();
 
         if (this.selectedState && this.selectedState !== 'All States') {
             this.onStateChange(this.selectedState);
@@ -298,61 +303,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   private unidentifiedPersonLayer: L.LayerGroup = L.layerGroup();
   private unidentifiedBodiesLayer: L.LayerGroup = L.layerGroup();
   private map: L.Map | undefined;
-  // private markerClusterGroup: L.MarkerClusterGroup = L.markerClusterGroup();
-
-
-  // private initMap(): void { 
   
-  //   const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //     maxZoom: 19,
-  //     attribution: '&copy; OpenStreetMap contributors'
-  //   });
-  
-  //   const satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  //     maxZoom: 19,
-  //   });
-  
-  //   const baseMaps = {
-  //     "Base Map": baseMap,
-  //     "Satellite Map": satelliteMap
-  //   };
-  
-  //   this.map = L.map('map', {
-  //     center: [20.5937, 78.9629],
-  //     zoom: 6,
-  //     layers: [baseMap]
-  //   });
-  
-
-  //   this.stateLayerName = L.tileLayer.wms(environment.geo_url, {
-  //     layers: this.stateLayer,
-  //     format: 'image/png',
-  //     transparent: true
-  //   });
-  
-  //   this.distLayerName = L.tileLayer.wms(environment.geo_url, {
-  //     layers: this.distLayer,
-  //     format: 'image/png',
-  //     transparent: true
-  //   });
-  //   this.initOverlays();
-
-    
-  //   this.stateLayerName.addTo(this.map);
-  //   this.distLayerName.addTo(this.map);
-  
-  //   this.markerClusterGroup = (L as any).markerClusterGroup();
-  //   this.map.addLayer(this.markerClusterGroup);
-  
-  //   if (typeof L.control.panelLayers === 'function') {
-  //       const panelLayers = L.control.panelLayers({}, this.overlays, {
-  //         collapsed: false,
-  //         collapsibleGroups: true,
-  //         position: 'topright'
-  //       }).addTo(this.map!);
-  //     }
-  // }
-
   private initMap(): void { 
     const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -423,288 +374,25 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     });
   }
   
-
+  onDateChange() {
+    if (this.selectedStartDate && this.selectedEndDate) {
+      const startDate = new Date(this.selectedStartDate);
+      const endDate = new Date(this.selectedEndDate);
   
-//   initOperationalLayers() {
-//     // Clear existing markers and layers
-//     console.log("Clearing existing layers...");
-//     if (this.geoServerClusterGroup) {
-//         this.geoServerClusterGroup.clearLayers();
-//     }
-//     if (this.missingPersonLayer) {
-//         this.missingPersonLayer.clearLayers();
-//     }
-//     if (this.unidentifiedPersonLayer) {
-//         this.unidentifiedPersonLayer.clearLayers();
-//     }
-//     if (this.unidentifiedBodiesLayer) {
-//         this.unidentifiedBodiesLayer.clearLayers();
-//     }
+      if (startDate > endDate) {
+        alert("Start date cannot be after end date.");
+        return;
+      }
+  
+      this.initOperationalLayers(); // 🔁 re-fetch data with updated date
+    }
+  }
+  
 
-//     // Reinitialize the marker cluster group
-//     this.geoServerClusterGroup = L.markerClusterGroup();
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0]; // returns '2025-04-20'
+  }
 
-//     const customIcon = L.icon({
-//         iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
-//         iconSize: [25, 41],
-//         iconAnchor: [12, 41],
-//         popupAnchor: [1, -34],
-//         shadowUrl: 'assets/leaflet/images/marker-shadow.png',
-//         shadowSize: [41, 41]
-//     });
-
-//     this.missingPersonLayer = L.layerGroup();
-//     this.unidentifiedPersonLayer = L.layerGroup();
-//     this.unidentifiedBodiesLayer = L.layerGroup();
-
-//     // Build the CQL filter based on selected filters
-//     let cqlFilter = '';
-
-//     if (this.selectedState && this.selectedState !== 'All States') {
-//         cqlFilter += `state='${this.selectedState}'`;
-//     }
-
-//     if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `district='${this.selectedDistrict}'`;
-//     }
-
-//     if (this.selectedCity && this.selectedCity !== 'All Cities') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `city='${this.selectedCity}'`;
-//     }
-
-//     if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `village='${this.selectedVillage}'`;
-//     }
-
-//     if (this.selectedPoliceStation && this.selectedPoliceStation !== 'All Police Stations') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `police_station_id='${this.selectedPoliceStation}'`;
-//     }
-
-//     if (this.selectedcase && this.selectedcase !== 'All Cases') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `case_status='${this.selectedcase}'`;
-//     }
-
-//     if (this.selectedgender && this.selectedgender !== 'All Genders') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `gender='${this.selectedgender}'`;
-//     }
-
-//     if (this.selectedHeightRange && this.selectedHeightRange !== 'All Heights') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         const [minHeight, maxHeight] = this.selectedHeightRange.split('-');
-//         cqlFilter += `height BETWEEN ${minHeight} AND ${maxHeight}`;
-//     }
-
-//     if (this.selectedAgeRange && this.selectedAgeRange !== 'All Ages') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         const [minAge, maxAge] = this.selectedAgeRange.split('-');
-//         cqlFilter += `age BETWEEN ${minAge} AND ${maxAge}`;
-//     }
-
-//     if (this.selectedmarital && this.selectedmarital !== 'Marital status') {
-//         if (cqlFilter !== '') {
-//             cqlFilter += ' AND ';
-//         }
-//         cqlFilter += `marital_status='${this.selectedmarital}'`;
-//     }
-
-//     if (this.selectedStartDate && this.selectedEndDate) {
-//         const startDate = new Date(this.selectedStartDate);
-//         const endDate = new Date(this.selectedEndDate);
-    
-//         if (startDate > endDate) {
-//             console.error("Invalid date range: Start date cannot be after End date.");
-//             alert("Start date cannot be after End date. Please select a valid range.");
-//         } else {
-//             if (cqlFilter !== '') {
-//                 cqlFilter += ' AND ';
-//             }
-//             cqlFilter += `reported_date BETWEEN '${this.selectedStartDate}' AND '${this.selectedEndDate}'`;
-//         }
-//     }
-    
-//     console.log("Filtering Data Between:", this.selectedStartDate, "and", this.selectedEndDate);
-
-
-//     console.log("CQL Filter:", cqlFilter);
-
-//     // WFS request with CQL filters
-//     const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya_demo:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
-
-//     fetch(wfsUrl)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`Failed to fetch GeoJSON: ${response.status}`);
-//             }
-//             return response.json();
-//         })
-//         .then(async (data) => { // ✅ Make this async to handle markers better
-//             if (!data.features || data.features.length === 0) {
-//                 console.warn("No features returned by GeoServer for the applied filter.");
-//                 this.missingPersonsCount = 0;
-//                 this.unidentifiedPersonTotalCounts = 0;
-//                 this.unidentifiedBodyTotalCount = 0;
-//                 this.maleCount = 0;
-//                 this.femaleCount = 0;
-//                 this.pendingcount = 0;
-//                 return;
-//             }
-
-//             this.filteredData = data.features;
-
-//             // Categorize the data based on the 'type' field
-//             this.filteredMissingPersonssss = this.filteredData.filter(
-//                 (person: any) => person.properties.type === 'Missing Person'
-//             );
-//             this.filteredUnidentifiedPersonssss = this.filteredData.filter(
-//                 (person: any) => person.properties.type === 'Unidentified Person'
-//             );
-//             this.filteredunidentifiedboidessss = this.filteredData.filter(
-//                 (person: any) => person.properties.type === 'Unidentified Body'
-//             );
-//             console.log(this.filteredunidentifiedboidessss)
-
-
-//             // Get Pending Male & Female for each category
-//             this.missingPersonPendingMale = this.filteredMissingPersonssss.filter(
-//                 (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'male'
-//             ).length;
-
-//             this.missingPersonPendingFemale = this.filteredMissingPersonssss.filter(
-//                 (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'female'
-//             ).length;
-
-
-
-//             this.unidentifiedPersonPendingMale = this.filteredUnidentifiedPersonssss.filter(
-//                 (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'male'
-//             ).length;
-
-//             this.unidentifiedPersonPendingFemale = this.filteredUnidentifiedPersonssss.filter(
-//                 (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'female'
-//             ).length;
-
-//             this.unidentifiedBodyPendingMale = this.filteredunidentifiedboidessss.filter(
-//                 (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'male'
-//             ).length;
-
-//             this.unidentifiedBodyPendingFemale = this.filteredunidentifiedboidessss.filter(
-//                 (person: any) => person.properties.case_status === 'Pending' && person.properties.gender === 'female'
-//             ).length;
-
-//             // ✅ Matching Cases Based on `match_with` Feature
-//             this.missingPersonMatchedWithUnidentifiedMale = this.filteredMissingPersonssss.filter(
-//                 (person: any) => person.properties.match_with === 'Unidentified Person' && person.properties.gender === 'male'
-//             ).length;
-
-
-//             this.missingPersonMatchedWithUnidentifiedFemale = this.filteredMissingPersonssss.filter(
-//                 (person: any) => person.properties.match_with === 'Unidentified Person' && person.properties.gender === 'female'
-//             ).length;
-
-//             this.missingPersonMatchedWithUnidentifiedBodyMale = this.filteredMissingPersonssss.filter(
-//                 (person: any) => person.properties.match_with === 'Unidentified Body' && person.properties.gender === 'male'
-//             ).length;
-            
-//             this.missingPersonMatchedWithUnidentifiedBodyFemale = this.filteredMissingPersonssss.filter(
-//                 (person: any) => person.properties.match_with === 'Unidentified Body' && person.properties.gender === 'female'
-//             ).length;
-
-
-//             // Unidentified Person Male Matched with Missing Person
-//             this.unidentifiedPersonMatchedWithMissingMale = this.filteredUnidentifiedPersonssss.filter(
-//                 (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'male'
-//             ).length;
-
-//             // Unidentified Person Female Matched with Missing Person
-//             this.unidentifiedPersonMatchedWithMissingFemale = this.filteredUnidentifiedPersonssss.filter(
-//                 (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'female'
-//             ).length;
-
-//             // Unidentified Body Male Matched with Missing Person
-//             this.unidentifiedBodyMatchedWithMissingMale = this.filteredunidentifiedboidessss.filter(
-//                 (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'male'
-//             ).length;
-
-//             // Unidentified Body Female Matched with Missing Person
-//             this.unidentifiedBodyMatchedWithMissingFemale = this.filteredunidentifiedboidessss.filter(
-//                 (person: any) => person.properties.match_with === 'Missing Person' && person.properties.gender === 'female'
-//             ).length;
-            
-//             console.log(this.unidentifiedBodyMatchedWithMissingFemale,"person")
-            
-            
-//        // Get counts
-//             this.missingPersonsCount = this.filteredMissingPersonssss.length;
-//             this.unidentifiedPersonTotalCounts = this.filteredUnidentifiedPersonssss.length;
-//             this.unidentifiedBodyTotalCount = this.filteredunidentifiedboidessss.length;
-//             this.maleCount = data.features.filter((person: any) => person.properties.gender === 'male').length;
-//             this.femaleCount = data.features.filter((person: any) => person.properties.gender === 'female').length;
-//             this.pendingcount = data.features.filter((person: any) => person.properties.case_status === 'Pending').length;
-    
-            
-//             // Call the method to display details (if needed)
-//             this.displayFilteredDataDetails();
-
-//             // Load initial subset of points (e.g., first 100 points)
-//             const initialPoints = data.features.slice(0, 100);
-//             this.addMarkersToMap(initialPoints, customIcon);
-
-//             // Load remaining points asynchronously
-//             const remainingPoints = data.features.slice(100);
-//             if (remainingPoints.length > 0) {
-//                 setTimeout(() => {
-//                     this.addMarkersToMap(remainingPoints, customIcon);
-//                 }, 1000); // Delay to ensure initial points are rendered first
-//             }
-
-//         })
-//         .catch(error => {
-//             console.error("Error fetching GeoJSON:", error);
-//             alert("An error occurred while fetching data. Please try again.");
-//         });
-
-//     let state: L.Layer = L.tileLayer.wms(this.geo_url, {
-//         layers: this.stateLayer,
-//         format: "image/png",
-//         transparent: true,
-//         opacity: 0.75
-//     });
-//     this.stateLayerName = state;
-
-//     let dist: L.Layer = L.tileLayer.wms(this.geo_url, {
-//         layers: this.distLayer,
-//         format: "image/png",
-//         transparent: true,
-//         opacity: 0.75
-//     });
-//     this.distLayerName = dist;
-
-//     console.log("State Layer: ", this.stateLayerName);
-//     console.log("District Layer: ", this.distLayerName);
-
-//  }
  initOperationalLayers() {
   console.log("Clearing existing layers...");
     if (this.missingPersonLayer) this.missingPersonLayer.clearLayers();
@@ -800,25 +488,30 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
       cqlFilter += `marital_status='${this.selectedmarital}'`;
   }
 
+ 
+
   if (this.selectedStartDate && this.selectedEndDate) {
-      const startDate = new Date(this.selectedStartDate);
-      const endDate = new Date(this.selectedEndDate);
+    const startDate = new Date(this.selectedStartDate);
+    const endDate = new Date(this.selectedEndDate);
   
-      if (startDate > endDate) {
-          console.error("Invalid date range: Start date cannot be after End date.");
-          alert("Start date cannot be after End date. Please select a valid range.");
-      } else {
-          if (cqlFilter !== '') {
-              cqlFilter += ' AND ';
-          }
-          cqlFilter += `reported_date BETWEEN '${this.selectedStartDate}' AND '${this.selectedEndDate}'`;
+    if (startDate > endDate) {
+      console.error("Invalid date range: Start date cannot be after End date.");
+      alert("Start date cannot be after End date. Please select a valid range.");
+    } else {
+      const formattedStart = this.formatDate(startDate);
+      const formattedEnd = this.formatDate(endDate);
+  
+      if (cqlFilter !== '') {
+        cqlFilter += ' AND ';
       }
+  
+      cqlFilter += `reported_date BETWEEN '${formattedStart}' AND '${formattedEnd}'`;
+    }
   }
   
   console.log("Filtering Data Between:", this.selectedStartDate, "and", this.selectedEndDate);
 
 
-  console.log("CQL Filter:", cqlFilter);
 
   // WFS request with CQL filters
   const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya_demo:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
@@ -976,71 +669,9 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   });
   this.distLayerName = dist;
 
-  console.log("State Layer: ", this.stateLayerName);
-  console.log("District Layer: ", this.distLayerName);
+ }
 
-}
-
-  // async addMarkersToMap(features: any[], customIcon: L.Icon) {
-  //   if (!this.map) {
-  //       console.error("Map is not initialized yet.");
-  //       return;
-  //   }
-
-  //   const markerPromises = features.map(async (feature: any) => {
-  //       try {
-  //           const fullPersonId = feature.id;
-  //           const personId = fullPersonId.split('.')[1]; 
-  //           const geometry = feature.geometry;
-
-  //           if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
-  //               console.warn("Invalid or missing 'geometry' data for feature:", feature);
-  //               return null;
-  //           }
-
-  //           const [lng, lat] = geometry.coordinates;
-  //           const latlng: L.LatLngTuple = [lat, lng];
-
-  //           const personResponse = await fetch(`${environment.apiUrl}api/persons/${personId}/`);
-  //           if (!personResponse.ok) {
-  //               throw new Error(`Failed to fetch person details: ${personResponse.status}`);
-  //           }
-
-  //           const personDetails = await personResponse.json();
-  //           const marker = L.marker(latlng, { icon: customIcon });
-
-  //           const imageUrl = personDetails.photo_photo 
-  //               ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
-  //               : 'assets/old/images/Chhaya.png';
-
-  //           const popupContent = `
-  //               <div style="max-width: 400px; padding: 05px;">
-  //                   <img src="${imageUrl}" 
-  //                       alt="Person Image" 
-  //                       style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;">
-  //                   <b>Type:</b> ${personDetails.type || 'N/A'}<br>
-  //                   <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
-  //                   <b>Age:</b> ${personDetails.age || 'N/A'}<br>
-  //                   <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-  //                   <b>City:</b> ${personDetails.city || 'N/A'}<br>
-  //                   <b>State:</b> ${personDetails.state || 'N/A'}<br>
-  //                   <b>Country:</b> ${personDetails.country || 'N/A'}<br>
-  //               </div>
-  //           `;
-
-  //           marker.bindPopup(popupContent);
-  //           this.geoServerClusterGroup?.addLayer(marker); // ✅ Add each marker directly
-  //           return marker;
-
-  //       } catch (error) {
-  //           console.error("Error processing feature:", feature, error);
-  //           return null;
-  //       }
-  //   });
-
-  //   await Promise.all(markerPromises); // ✅ Ensure all markers are processed
-  //   this.geoServerClusterGroup?.addTo(this.map!);
-  // }
+ 
 
   async addMarkersToMap(features: any[], customIcon: L.Icon) {
     if (!this.map) {

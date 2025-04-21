@@ -16,10 +16,32 @@ export const navItems: NavItem[] = [
     navCap: 'Person',
   },
   {
-    displayName: 'Add Person',
-    iconName: 'file-description',
-    route: '/forms/form-layouts',
-  },
+      displayName: 'Add Person',
+      iconName: 'file-description',
+      route: '/forms',
+      children: [
+        {
+          displayName: 'Missing Person',
+          iconName: 'user',
+          route: '/forms/Missing-person-form',
+        },
+        {
+          displayName: 'Unidentified Person',
+          iconName: 'user',
+          route: '/forms/Unidentified-person-form',
+        },
+        {
+          displayName: 'Unidentified Body',
+          iconName: 'user',
+          route: '/forms/Unidentified-bodies-form',
+        },
+      ],
+    },
+  // {
+  //   displayName: 'Add Person',
+  //   iconName: 'file-description',
+  //   route: '/forms/form-layouts',
+  // },
   {
     displayName: 'Search Case',
     iconName: 'search',

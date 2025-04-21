@@ -14,128 +14,26 @@ import { AppFormVerticalComponent } from './form-vertical/form-vertical.componen
 import { AppFormWizardComponent } from './form-wizard/form-wizard.component';
 import { AppFormToastrComponent } from './form-toastr/form-toastr.component';
 import { authGuard } from '../authentication/side-login/auth.guard';
+import { UnidentifiedPersonFormComponent } from './unidentified-person-form/unidentified-person-form.component';
+import { UnidentifiedBodyFormComponent } from './unidentified-body-form/unidentified-body-form.component';
 
 export const FormsRoutes: Routes = [
   {
-    path: 'forms-elements',
-    canActivate: [authGuard],  
-    children: [
-      {
-        path: 'autocomplete',
-        component: AppAutocompleteComponent,
-        data: {
-          title: 'Autocomplete',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Autocomplete' },
-          ],
-        },
-      },
-      {
-        path: 'button',
-        component: AppButtonComponent,
-        data: {
-          title: 'Button',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Button' },
-          ],
-        },
-      },
-      {
-        path: 'checkbox',
-        component: AppCheckboxComponent,
-        data: {
-          title: 'Checkbox',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Checkbox' },
-          ],
-        },
-      },
-
-      {
-        path: 'radio',
-        component: AppRadioComponent,
-        data: {
-          title: 'Radio Button',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Radio Button' },
-          ],
-        },
-      },
-      {
-        path: 'datepicker',
-        component: AppDatepickerComponent,
-        data: {
-          title: 'Datepicker',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Datepicker' },
-          ],
-        },
-      },
-    ],
-  },
-  {
     path: '',
+    canActivate: [authGuard],
     children: [
       {
-        path: 'form-layouts',
+        path: 'Missing-person-form',
         component: AppFormLayoutsComponent,
-        canActivate: [authGuard],
-        // data: {
-        //   // title: 'Form Layouts',
-        //   urls: [
-        //     { title: 'Dashboard', url: '/dashboards/dashboard1' },
-        //     { title: 'Form Layouts' },
-        //   ],
-        // },
       },
       {
-        path: 'form-horizontal',
-        component: AppFormHorizontalComponent,
-        data: {
-          title: 'Form Horizontal',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Form Horizontal' },
-          ],
-        },
+        path: 'Unidentified-person-form',
+        component: UnidentifiedPersonFormComponent,
+        
       },
       {
-        path: 'form-vertical',
-        component: AppFormVerticalComponent,
-        data: {
-          title: 'Form Vertical',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Form Vertical' },
-          ],
-        },
-      },
-      {
-        path: 'form-wizard',
-        component: AppFormWizardComponent,
-        data: {
-          title: 'Form Wizard',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Form Wizard' },
-          ],
-        },
-      },
-      {
-        path: 'form-toastr',
-        component: AppFormToastrComponent,
-        data: {
-          title: 'Form Toastr',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Form Toastr' },
-          ],
-        },
+        path: 'Unidentified-bodies-form',
+        component: UnidentifiedBodyFormComponent,
       },
     ],
   },
