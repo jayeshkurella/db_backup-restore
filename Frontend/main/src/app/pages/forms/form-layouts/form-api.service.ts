@@ -12,7 +12,6 @@ export class FormApiService {
 
   constructor(private http: HttpClient) { }
 
-  // Utility function to get authToken from localStorage
   private getAuthToken(): string | null {
     return localStorage.getItem('authToken');
   }
