@@ -20,20 +20,20 @@
       <div class="d-flex flex-wrap align-items-center w-100">
 
         <!-- Person Type -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <!-- <mat-label>Person Type</mat-label> -->
+        <!-- <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+          <mat-label>Person Type</mat-label>
           <mat-select formControlName="type" id="typeSelect" required>
             <mat-option value="" disabled>Person Type</mat-option>
             <mat-option value="Missing Person">Missing Person</mat-option>
             <mat-option value="Unidentified Person">Unidentified Person</mat-option>
             <mat-option value="Unidentified Body">Unidentified Body</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
 
         <!-- Full Name -->
         <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-4">
           <mat-label>Full Name</mat-label>
-          <input matInput type="text" formControlName="full_name" required />
+          <input matInput type="text" formControlName="full_name"  />
         </mat-form-field>
 
         <!-- Date of Birth -->
@@ -46,22 +46,23 @@
         
 
 
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+        <!-- <mat-form-field appearance="outline">
           <mat-label>Time of Birth</mat-label>
-          <input matInput type="time" formControlName="birthtime" required>
-        </mat-form-field>
+          <input
+            matInput
+            [ngxTimepicker]="picker"
+            formControlName="birthtime"
+            readonly>
+           <ngx-material-timepicker #picker></ngx-material-timepicker>
+        </mat-form-field> -->
+        
+        
         
         <!-- Age -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Age</mat-label>
           <input matInput type="number" formControlName="age">
         </mat-form-field>
-
-      </div>
-
-      <!-- Second Row -->
-      <div class="d-flex flex-wrap align-items-center w-100">
-
         <!-- Gender -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Gender</mat-label>
@@ -72,15 +73,22 @@
           </mat-select>
         </mat-form-field>
 
+      </div>
+
+      <!-- Second Row -->
+      <div class="d-flex flex-wrap align-items-center w-100">
         <!-- Blood Group -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Blood Group</mat-label>
           <mat-select formControlName="blood_group">
             <mat-option value="A+">A+</mat-option>
-            <mat-option value="O+">O+</mat-option>
+            <mat-option value="A-">A-</mat-option>
             <mat-option value="B+">B+</mat-option>
+            <mat-option value="B-">B-</mat-option>
             <mat-option value="AB+">AB+</mat-option>
             <mat-option value="AB-">AB-</mat-option>
+            <mat-option value="O+">O+</mat-option>
+            <mat-option value="O-">O-</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -93,11 +101,18 @@
         <!-- Height -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Height (cm)</mat-label>
-          <input matInput type="text" formControlName="height">
+          <mat-select formControlName="height">
+            <mat-option value="<150">Less than 150 cm</mat-option>
+            <mat-option value="150-160">150 - 160 cm</mat-option>
+            <mat-option value="161-170">161 - 170 cm</mat-option>
+            <mat-option value="171-180">171 - 180 cm</mat-option>
+            <mat-option value="181-190">181 - 190 cm</mat-option>
+            <mat-option value=">190">More than 190 cm</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <!-- Weight -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Weight (kg)</mat-label>
           <input matInput type="text" formControlName="weight">
         </mat-form-field>
@@ -742,32 +757,25 @@
 
       <div formArrayName="consent">
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
-
-          <!-- Consent Data -->
+  
+          <!-- Additional Info Field -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Data</mat-label>
+              <mat-label>Additional Info</mat-label>
               <input matInput formControlName="data" />
             </mat-form-field>
           </div>
-
-          <!-- Document Upload (Fixed: Removed from mat-form-field) -->
-          <div class="col-md-6">
-            <label class="form-label selectors-font">Upload Document</label>
-            <input type="file" class="form-control" accept=".pdf, .jpg, .png"
-              (change)="onFileSelect($event, 'consent', i, 'document')">
-          </div>
-
+        
           <!-- Consent Checkbox -->
           <div class="col-md-12">
-            <mat-checkbox formControlName="is_consent">
-              I hereby declare that the information provided in this report is true and accurate to the best of my
-              knowledge.
+            <mat-checkbox formControlName="is_consent" class="w-100">
+              I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
               I consent to the use of this information for the purpose of locating the missing person.
             </mat-checkbox>
           </div>
-
+        
         </div>
+        
       </div>
 
     </mat-card>

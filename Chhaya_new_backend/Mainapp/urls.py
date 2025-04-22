@@ -7,7 +7,7 @@ from .authentication.user_authentication import AuthAPIView
 from .viewsets.filters import filter_Address_ViewSet
 from .viewsets.hospital import HospitalViewSet, HospitalListView
 from .viewsets.person_api import PersonViewSet
-from .viewsets.police_station import PoliceStationViewSet
+from .viewsets.police_station import PoliceStationViewSet, PoliceStationListView
 
 from .match.missing_person_with_UP import MatchMPWithUPAPIView
 from .match.missing_person_with_UB import MatchMPWithUBAPIView
@@ -27,6 +27,7 @@ urlpatterns = [
     path('reset-password/<str:reset_token>/', AuthAPIView.as_view(), name='reset-password-get'),  # ✅ Only for GET
     path('reset-password/', AuthAPIView.as_view(), name='reset-password-post'),  # ✅ Only for POST
     path("api/hospital-name-list/", HospitalListView.as_view(), name="hospital-list"),
+    path("api/police-station-name-list/", PoliceStationListView.as_view(), name="police-station-list"),
     path('api/match/mp-to-ups/<uuid:mp_id>/', MatchMPWithUPAPIView.as_view(), name='match-mp-to-ups'),
     path('api/match/mp-to-ubs/<uuid:mp_id>/', MatchMPWithUBAPIView.as_view(), name='match-mp-to-ubs'),
     path("api/pending-users/", AdminUserApprovalView.as_view(), name="pending-users"),

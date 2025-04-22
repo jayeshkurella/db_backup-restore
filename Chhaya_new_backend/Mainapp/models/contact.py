@@ -9,6 +9,15 @@ class Contact(models.Model):
         PERSONAL = 'personal', 'Personal'
         OFFICE = 'office', 'Office'
         HOME = 'home', 'Home'
+        REFERRAL = 'referral', 'Referral'  # New Referral contact type
+        EMERGENCY = 'emergency', 'Emergency'  # Emergency contact
+        WORK = 'work', 'Work'  # Work-related contact
+        FAMILY = 'family', 'Family'  # Family contact
+        FRIEND = 'friend', 'Friend'  # Friend contact
+        MEDICAL = 'medical', 'Medical'  # Medical contact
+        SCHOOL = 'school', 'School'  # School or educational institution contact
+        LEGAL = 'legal', 'Legal'  # Legal representative or lawyer contact
+        OTHER = 'other', 'Other'  # Any other unspecified contact type
 
     class SocialMediaChoices(models.TextChoices):
         FACEBOOK = 'fb', 'Facebook'

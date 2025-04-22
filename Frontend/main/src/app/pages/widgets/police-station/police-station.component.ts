@@ -107,14 +107,19 @@ export class PoliceStationComponent implements OnInit {
       }
     );
   }
+
   seeMores(police: any) {
     this.dialog.open(PoliceStatioDialogComponent, {
-      width: '800px', // or '90vw' for responsive full width
-      maxWidth: '80vw', // Optional: cap the max width for very large screens
-      data: police
+      width: '800px', 
+      maxWidth: '80vw', 
     });
-  
-  
-  
+  }
+
+
+  seeMorepolicestationdata(policestation: any) {
+    console.log('policesstation', policestation),
+    this.router.navigate(['/widgets/police-station-detail/', policestation.id], {
+      state: { policestation  } 
+    });
   }
 }

@@ -72,6 +72,12 @@ class HospitalSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PoliceStationIdNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PoliceStation
+        fields = ['id', 'name']
+
+
 
 class PoliceStationSerializer(serializers.ModelSerializer):
     station_photo = serializers.ImageField(required=False)  # ✅ Ensure it's an image field

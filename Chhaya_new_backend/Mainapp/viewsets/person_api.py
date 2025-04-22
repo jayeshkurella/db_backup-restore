@@ -90,14 +90,6 @@ class PersonViewSet(viewsets.ViewSet):
         request_body=PersonSerializer,
         responses={201: openapi.Response("Person created successfully")}
     )
-
-
-    def _validate_person_data(self, data):
-        required_fields = ['full_name', 'age', 'gender']
-        for field in required_fields:
-            if field not in data or not data[field]:
-                raise ValueError(f"Missing required field: {field}")
-
     def create(self, request):
         logger.info(f"Incoming data: {request.data}")
         print("data comes",request.data)
@@ -115,8 +107,7 @@ class PersonViewSet(viewsets.ViewSet):
 
                 logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
 
-                # Validate person data
-                self._validate_person_data(data)
+
 
                 # Extract related data
                 addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]

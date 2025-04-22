@@ -5,8 +5,8 @@ from leaflet.admin import LeafletGeoAdmin
 @admin.register(Person)
 class PersonAdmin(LeafletGeoAdmin):
     list_display = (
-        "sr_no", "full_name", "type", "gender", "age", "birth_date","birthtime",
-        "height", "weight", "blood_group", "complexion","photo_photo",
+        "sr_no", "full_name", "type", "gender", "age", "age_range","birth_date","birthtime",
+        "height","height_range", "weight", "blood_group", "complexion","photo_photo",
         "eye_color", "hair_type", "hair_color",
         'street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country',
         "hospital", "_is_confirmed", "_is_deleted", "case_status", "created_at","match_with","reported_date"
@@ -29,10 +29,10 @@ class PersonAdmin(LeafletGeoAdmin):
 
     fieldsets = (
         ("Basic Information", {
-            "fields": ("full_name", "type", "gender", "birth_date", "age", "birthplace","birthtime")
+            "fields": ("full_name", "type", "gender", "birth_date", "age","age_range", "birthplace","birthtime")
         }),
         ("Physical Characteristics", {
-            "fields": ("height", "weight", "complexion", "eye_color", "hair_color", "hair_type", "blood_group","photo_photo")
+            "fields": ("height","height_range", "weight", "complexion", "eye_color", "hair_color", "hair_type", "blood_group","photo_photo")
         }),
         ("Medical & Identification", {
             "fields": ("condition", "Body_Condition", "birth_mark", "distinctive_mark")

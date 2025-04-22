@@ -71,10 +71,10 @@ selectedFileName: any;
       hospital_photo: [''],
       address: this.fb.group({
         address_type: ['', Validators.required],
-        street: ['', Validators.required],
-        appartment_no: ['', Validators.required],
+        street: ['',],
+        appartment_no: ['', ],
         appartment_name: [''],
-        village: ['', Validators.required],
+        village: ['',],
         city: ['', Validators.required],
         district: ['', Validators.required],
         state: ['', Validators.required],
@@ -97,14 +97,17 @@ selectedFileName: any;
   createContactForm(): FormGroup {
     return this.fb.group({
       type: ['', Validators.required],
-      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{3,5}-?[0-9]{6,8}$/)]],
       country_cd: ['', Validators.required],
       email_id: ['', Validators.email],
       company_name: ['' ],
       job_title: [''],
-      website_url: ['', Validators.pattern(/https?:\/\/[\S]+/)],
-      social_media_url: ['', Validators.pattern(/https?:\/\/[\S]+/)],
-      is_primary: [false]
+      website_url: ['',Validators.pattern(/^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/)],
+      social_media_url: [
+        '',
+        Validators.pattern(/^(https?:\/\/)?(www\.)?(facebook|instagram|twitter|linkedin|youtube|tiktok|pinterest)\.com\/[\w\-._~:/?#[\]@!$&'()*+,;=]*$/)
+      ],
+            is_primary: [false]
     });
   }
   
@@ -133,11 +136,14 @@ selectedFileName: any;
   }
 
   onFileChange(event: any): void {
-    const file = event.target.files[0];
+    const file = event.target.files?.[0];
     if (file) {
       this.hospitalForm.patchValue({ hospital_photo: file });
+      this.hospitalForm.get('hospital_photo')?.markAsDirty();
+      this.hospitalForm.get('hospital_photo')?.updateValueAndValidity();
     }
   }
+  
 
   submitForm(): void {
     if (this.hospitalForm.invalid) {

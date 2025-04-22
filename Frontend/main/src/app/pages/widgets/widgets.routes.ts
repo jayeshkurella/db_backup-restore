@@ -10,6 +10,7 @@ import { authGuard } from '../authentication/side-login/auth.guard';
 import { AddPoliceStationComponent } from './police-station/add-police-station/add-police-station.component';
 import { AddHospitalsComponent } from './hospitals/add-hospitals/add-hospitals.component';
 import { HospitalDetailComponentComponent } from './HospitalDetailComponent/HospitalDetailComponent.component';
+import { PoliceStationDetailsComponent } from './police-station/police-station-details/police-station-details.component';
 
 export const WidgetsRoutes: Routes = [
   {
@@ -50,6 +51,10 @@ export const WidgetsRoutes: Routes = [
       {
         path: 'hospital/:id',
         component: HospitalDetailComponentComponent
+      },
+      {
+        path: 'police-station-detail/:id',
+        component: PoliceStationDetailsComponent
       }
     ],
   },

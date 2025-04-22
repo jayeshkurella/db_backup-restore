@@ -17,6 +17,28 @@ class Person(models.Model):
         MALE = 'male', 'Male'
         FEMALE = 'female', 'Female'
 
+    AGE_RANGE_CHOICES = [
+        ("0-5", "0 - 5"),
+        ("6-12", "6 - 12"),
+        ("13-17", "13 - 17"),
+        ("18-24", "18 - 24"),
+        ("25-34", "25 - 34"),
+        ("35-44", "35 - 44"),
+        ("45-54", "45 - 54"),
+        ("55-64", "55 - 64"),
+        ("65-74", "65 - 74"),
+        ("75-84", "75 - 84"),
+        ("85-100", "85+"),
+    ]
+
+    HEIGHT_RANGE_CHOICES = [
+        ("<150", "Less than 150 cm"),
+        ("150-160", "150 - 160 cm"),
+        ("161-170", "161 - 170 cm"),
+        ("171-180", "171 - 180 cm"),
+        ("181-190", "181 - 190 cm"),
+        (">190", "More than 190 cm"),
+    ]
     class ComplexionChoices(models.TextChoices):
         DARK = 'dark', 'Dark'
         MEDIUM = 'medium', 'Medium'
@@ -157,11 +179,19 @@ class Person(models.Model):
     type = models.CharField(max_length=20, choices=TypeChoices.choices,db_index=True)
     full_name = models.CharField(max_length=100,blank=True, null=True,db_index=True)
     birth_date = models.DateField(blank=True, null=True,db_index=True)
-    age = models.IntegerField(blank=True, null=True,db_index=True)
+    age = models.FloatField(blank=True, null=True,db_index=True)
+    age_range = models.CharField(choices=AGE_RANGE_CHOICES,blank=True, null=True,db_index=True)
     birthtime = models.TimeField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GenderChoices.choices,blank=True, null=True,db_index=True)
     birthplace = models.CharField(max_length=255, null=True, blank=True,db_index=True)
     height = models.IntegerField(help_text="Height in CM",blank=True, null=True,db_index=True)
+    height_range = models.CharField(
+        max_length=20,
+        choices=HEIGHT_RANGE_CHOICES,
+        blank=True,
+        null=True,
+        db_index=True
+    )
     weight = models.IntegerField(help_text="Weight in GMS",blank=True, null=True,db_index=True)
     blood_group = models.CharField(max_length=5, choices=BloodGroupChoices.choices,blank=True, null=True,db_index=True)
     complexion = models.CharField(max_length=50, choices=ComplexionChoices.choices,blank=True, null=True,db_index=True)

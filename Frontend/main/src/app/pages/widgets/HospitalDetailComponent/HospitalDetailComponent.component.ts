@@ -21,7 +21,7 @@ import { environment } from 'src/envirnment/envirnment';
        MatButtonModule,
        MatIconModule,
        FormsModule,
-       CommonModule,MatOptionModule,RouterModule,MatDividerModule],
+       CommonModule,MatOptionModule,RouterModule,MatDividerModule,MatChipsModule ],
   templateUrl: './HospitalDetailComponent.component.html',
   styleUrl: './HospitalDetailComponent.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

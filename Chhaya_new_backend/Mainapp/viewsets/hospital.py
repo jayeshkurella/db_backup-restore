@@ -7,6 +7,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db import transaction
 from rest_framework.pagination import PageNumberPagination
+
+from ..Serializers.hospital_Serializer import HospitalIdNameSerializer
 from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer, HospitalSerializer, ContactSerializer
 from ..models import PoliceStation, Hospital, Contact
 from ..pagination import CustomPagination
@@ -204,4 +206,4 @@ class HospitalViewSet(viewsets.ModelViewSet):
 
 class HospitalListView(generics.ListAPIView):
     queryset = Hospital.objects.all().order_by("id")
-    serializer_class = HospitalSerializer
+    serializer_class = HospitalIdNameSerializer

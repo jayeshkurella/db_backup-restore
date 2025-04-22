@@ -26,6 +26,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatIconModule } from '@angular/material/icon';
 
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @Component({
@@ -42,7 +43,8 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     CommonModule,
     NgxMatTimepickerModule,
-    MatIconModule
+    MatIconModule,
+    NgxMaterialTimepickerModule 
   ],
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
@@ -115,13 +117,25 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     })
   }
 
+  formatDateToISO(date: any): string {
+    if (typeof date === 'string') return date; // already formatted
+    return date instanceof Date ? date.toISOString().split('T')[0] : '';
+  }
+
+  formatTimeToHHMM(date: Date): string {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+  
+
   initializeForm() {
     this.personForm = this.fb.group({
-      type: [''],
+      type: ["Missing Person"],
       full_name: [''],
       birth_date: [''],
       age: [''],
-      birthtime: [null],
+      birthtime: [''],   
       gender: [''],
       birthplace: [''],
       height: [''],
@@ -156,7 +170,12 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       firs: this.fb.array([]),
       consent: this.fb.array([]),
     });
-  
+    this.personForm.get('birth_date')?.valueChanges.subscribe(date => {
+      if (date) {
+        const formatted = this.formatDateToISO(date);
+        this.personForm.patchValue({ birth_date: formatted }, { emitEvent: false });
+      }
+    });
     // this.addContact();
     this.addAdditionalInfo();
     this.addLastKnownDetails();

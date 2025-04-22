@@ -59,8 +59,8 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
       address: this.fb.group({
         address_type: ['', Validators.required],
         street: ['', Validators.required],
-        appartment_no: ['',Validators.required],
-        appartment_name: ['',Validators.required],
+        appartment_no: ['',],
+        appartment_name: ['',],
         village: ['',Validators.required],
         city: ['', Validators.required],
         district: ['', Validators.required],
@@ -87,8 +87,11 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
 
   createContactForm(): FormGroup {
     return this.fb.group({
-      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
-      country_cd: ['', Validators.required],
+      phone_no: ['', [
+        Validators.required,
+        Validators.pattern(/^(\+?\d{1,4}[-\s]?)?(\d{2,5}[-\s]?)?(\d{6,10})$/)
+      ]],
+            country_cd: ['', Validators.required],
       email_id: ['', [Validators.required, Validators.email]],
       type: ['', Validators.required],
       company_name: [''],

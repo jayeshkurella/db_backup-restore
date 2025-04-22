@@ -2,7 +2,7 @@
 from django.contrib.gis.geos import Point
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -10,7 +10,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db import transaction
 from rest_framework.pagination import PageNumberPagination
-from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer, ContactSerializer
+from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer, ContactSerializer, \
+    PoliceStationIdNameSerializer
 from ..models import PoliceStation, Contact
 from ..pagination import CustomPagination
 from django.core.cache import cache
@@ -240,4 +241,10 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        
+
+
+
+class PoliceStationListView(generics.ListAPIView):
+    queryset = PoliceStation.objects.all().order_by("id")
+    serializer_class = PoliceStationIdNameSerializer
+    filterset_fields = ['id']

@@ -27,10 +27,17 @@
 
           </mat-form-field>
         </div>
-          <div class="col-md-4">
-            <input type="file" (change)="onFileChange($event)" class="form-control mt-1" />
-            <mat-error *ngIf="hospitalForm.get('hospital_photo')?.hasError('required')">Hospital image is required.</mat-error>
-          </div>
+        <div class="col-md-4">
+          <input
+            type="file"
+            (change)="onFileChange($event)"
+            class="form-control mt-1"
+          />
+          <mat-error *ngIf="hospitalForm.get('hospital_photo')?.hasError('required')">
+            Hospital image is required.
+          </mat-error>
+        </div>
+        
        
       </div>
 
@@ -66,9 +73,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Street</mat-label>
                   <input matInput formControlName="street" type="text" />
-                  <mat-error *ngIf="hospitalForm.get('address.street')?.hasError('required')">
-                    Street is required.
-                  </mat-error>
+  
                 </mat-form-field>
               </div>
             </div>
@@ -78,18 +83,13 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Apartment No.</mat-label>
                   <input matInput formControlName="appartment_no" type="number"/>
-                  <mat-error *ngIf="hospitalForm.get('address.appartment_no')?.hasError('required')">
-                    Apartment No. is required.
-                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Apartment Name</mat-label>
                   <input matInput formControlName="appartment_name" type="text" />
-                  <mat-error *ngIf="hospitalForm.get('address.appartment_name')?.hasError('required')">
-                    Apartment Name is required.
-                  </mat-error>
+                  
                 </mat-form-field>
               </div>
             </div>
@@ -99,9 +99,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Village</mat-label>
                   <input matInput formControlName="village" type="text" />
-                  <mat-error *ngIf="hospitalForm.get('address.village')?.hasError('required')">
-                    Village is required.
-                  </mat-error>
+                  
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -209,7 +207,7 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline" class="w-100">
                       <mat-label>Latitude</mat-label>
-                      <input matInput formControlName="latitude" readonly />
+                      <input matInput formControlName="latitude"  />
                       <mat-error *ngIf="hospitalForm.get('address.location.latitude')?.hasError('required')">
                         Latitude is required.
                       </mat-error>
@@ -220,7 +218,7 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline" class="w-100">
                       <mat-label>Longitude</mat-label>
-                      <input matInput formControlName="longitude" readonly />
+                      <input matInput formControlName="longitude"  />
                       <mat-error *ngIf="hospitalForm.get('address.location.longitude')?.hasError('required')">
                         Longitude is required.
                       </mat-error>
@@ -261,24 +259,49 @@
             <div class="col-md-4">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Phone No</mat-label>
-                <input matInput formControlName="phone_no" type="number"/>
+                <input matInput formControlName="phone_no" type="text" />
                 <mat-error *ngIf="contact.get('phone_no')?.hasError('required')">
                   Phone number is required.
                 </mat-error>
-                <mat-error *ngIf="contact.get('phone_no')?.hasError('pattern')">
-                  Enter a valid phone number.
-                </mat-error>
               </mat-form-field>
+              
             </div>
             <div class="col-md-4">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Country Code</mat-label>
-                <input matInput formControlName="country_cd" type="number" />
+                <mat-select formControlName="country_cd">
+                  <!-- Most Common -->
+                  <mat-option [value]="+91">🇮🇳 +91 (India)</mat-option>
+                  <mat-option [value]="+1">🇺🇸 +1 (USA/Canada)</mat-option>
+                  <mat-option [value]="+44">🇬🇧 +44 (UK)</mat-option>
+                  <mat-option [value]="+61">🇦🇺 +61 (Australia)</mat-option>
+                  <mat-option [value]="+81">🇯🇵 +81 (Japan)</mat-option>
+                  <mat-option [value]="+49">🇩🇪 +49 (Germany)</mat-option>
+                  <mat-option [value]="+33">🇫🇷 +33 (France)</mat-option>
+                  <mat-option [value]="+86">🇨🇳 +86 (China)</mat-option>
+                  <mat-option [value]="+971">🇦🇪 +971 (UAE)</mat-option>
+                  <mat-option [value]="+92">🇵🇰 +92 (Pakistan)</mat-option>
+                  <mat-option [value]="+880">🇧🇩 +880 (Bangladesh)</mat-option>
+                  <mat-option [value]="+94">🇱🇰 +94 (Sri Lanka)</mat-option>
+                  <mat-option [value]="+966">🇸🇦 +966 (Saudi Arabia)</mat-option>
+                  <mat-option [value]="+20">🇪🇬 +20 (Egypt)</mat-option>
+                  <mat-option [value]="+7">🇷🇺 +7 (Russia)</mat-option>
+                  <mat-option [value]="+55">🇧🇷 +55 (Brazil)</mat-option>
+                  <mat-option [value]="+34">🇪🇸 +34 (Spain)</mat-option>
+                  <mat-option [value]="+39">🇮🇹 +39 (Italy)</mat-option>
+                  <mat-option [value]="+63">🇵🇭 +63 (Philippines)</mat-option>
+                  <mat-option [value]="+82">🇰🇷 +82 (South Korea)</mat-option>
+                  <mat-option [value]="+31">🇳🇱 +31 (Netherlands)</mat-option>
+                  <mat-option [value]="+46">🇸🇪 +46 (Sweden)</mat-option>
+                  <mat-option [value]="+41">🇨🇭 +41 (Switzerland)</mat-option>
+                  <mat-option [value]="+234">🇳🇬 +234 (Nigeria)</mat-option>
+                </mat-select>
                 <mat-error *ngIf="contact.get('country_cd')?.hasError('required')">
                   Country code is required.
                 </mat-error>
               </mat-form-field>
             </div>
+            
           </div>
     
           <div class="row">
@@ -318,19 +341,21 @@
                 <mat-label>Website</mat-label>
                 <input matInput formControlName="website_url" type="text" />
                 <mat-error *ngIf="contact.get('website_url')?.hasError('pattern')">
-                  Enter a valid URL.
+                  Enter a valid website URL.
                 </mat-error>
               </mat-form-field>
             </div>
+            
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Social Media</mat-label>
                 <input matInput formControlName="social_media_url" type="text" />
                 <mat-error *ngIf="contact.get('social_media_url')?.hasError('pattern')">
-                  Enter a valid social media link.
+                  Enter a valid social media link (Facebook, Instagram, Twitter, etc.).
                 </mat-error>
               </mat-form-field>
             </div>
+            
             <div class="col-md-3 d-flex align-items-center">
               <mat-checkbox formControlName="is_primary">Primary Contact</mat-checkbox>
             </div>
