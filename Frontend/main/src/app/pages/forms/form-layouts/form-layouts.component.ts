@@ -149,6 +149,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
       addressForm: this.createAddressFormGroup(),
       contactForm: this.createAddresFormGroup(),
+      // change name
 
      
       additional_info: this.fb.array([]),
@@ -163,14 +164,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     this.addFIR();
     this.addConsent();
   }
-  
-
-  
-  
-   
-  
-  
-  
   
   get addresses(): FormArray {
     return this.personForm.get('addresses') as FormArray;
@@ -395,14 +388,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     this.consent.removeAt(index);
   }
 
-  
-
-
-
-  
-  
-
-
   initMap(): void {
     this.map = L.map('mapHome').setView([22.9734, 78.6569], 5); // Center on India with an appropriate zoom level
 
@@ -458,8 +443,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     this.map!.setView([this.latitude, this.longitude], 10);
   }
 
-  
-
   getCurrentLocation(): void {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by this browser.');
@@ -477,8 +460,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     );
   }
 
-
-  
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
@@ -506,98 +487,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   private getFormArray(section: string): FormArray {
     return this.personForm.get(section) as FormArray;
   }
-  
-  
-  
-  
-  
-  
-
-  // onSubmit() {
-  //   // Check if addressForm has valid data and add it to the addresses array
-  //   const addressFormValue = this.personForm.get('addressForm')?.value;
-  //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
-  //     this.addresses.push(this.fb.group(addressFormValue)); 
-  //   }
-  
-  //   const contactFormValue = this.personForm.get('contactForm')?.value;
-  //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
-  //     this.contacts.push(this.fb.group(contactFormValue)); 
-  //   }
-  
-    
-  //  const payload = {
-  //   ...this.personForm.value,
-  //   addresses: this.addresses.value, 
-  //     contacts: this.contacts.value,  
-  // };
-
-  // // Remove temporary forms from the payload
-  // delete payload.addressForm;
-  // delete payload.contactForm;
-
-  // // Log the payload for debugging
-  // console.log("Payload Sent to Backend:", payload);
-
-  // // Create a FormData object to handle file uploads
-  // const formData = new FormData();
-
-  // // Append the JSON payload as a string
-  // formData.append('payload', JSON.stringify(payload));
-
-  // // Append files from last_known_details
-  // if (this.selectedFiles['last_known_details']) {
-  //     this.selectedFiles['last_known_details'].forEach((group, index) => {
-  //         const personPhoto = group['person_photo'];
-  //         const referencePhoto = group['reference_photo'];
-
-  //         if (personPhoto) {
-  //             formData.append(`last_known_details[${index}][person_photo]`, personPhoto, personPhoto.name);
-  //         }
-  //         if (referencePhoto) {
-  //             formData.append(`last_known_details[${index}][reference_photo]`, referencePhoto, referencePhoto.name);
-  //         }
-  //     });
-  // }
-
-  // // Append files from firs
-  // if (this.selectedFiles['firs']) {
-  //     this.selectedFiles['firs'].forEach((group, index) => {
-  //         const firPhoto = group['fir_photo'];
-
-  //         if (firPhoto) {
-  //             formData.append(`firs[${index}][fir_photo]`, firPhoto, firPhoto.name);
-  //         }
-  //     });
-  // }
-
-  // // Append files from consent
-  // if (this.selectedFiles['consent']) {
-  //     this.selectedFiles['consent'].forEach((group, index) => {
-  //         const document = group['document'];
-
-  //         if (document) {
-  //             formData.append(`consent[${index}][document]`, document, document.name);
-  //         }
-  //     });
-  // }
-
-  // // Send FormData to the backend
-  // this.formapi.postMissingPerson(formData).subscribe({
-  //     next: (response) => {
-  //         console.log('Person added successfully!', response);
-  //         alert("Person added successfully");
-  //         this.personForm.reset();
-  //         this.addresses.clear(); // Clear the addresses FormArray
-  //         this.contacts.clear();  // Clear the contacts FormArray
-  //         this.selectedFiles = {}; // Reset selectedFiles
-  //     },
-  //     error: (error) => {
-  //         console.error('Error adding person:', error);
-  //         alert('An error occurred while adding the person. Please try again.');
-  //     },
-  // });
-  // }
 
   onSubmit() {
     // Get the address form value and ensure it's valid
@@ -683,11 +572,4 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     return formattedTime;
   }
   
-  
-
- 
-
-
- 
-
 }
