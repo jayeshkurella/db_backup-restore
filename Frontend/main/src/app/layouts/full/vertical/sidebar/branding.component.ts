@@ -31,6 +31,6 @@ export class BrandingComponent {
 
   resetPage() {
     this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-      this.router.navigate(['/chhaya_web/dashboards/dashboard1']));
+      this.router.navigate(['/dashboards/dashboard1']));
   }
 }
