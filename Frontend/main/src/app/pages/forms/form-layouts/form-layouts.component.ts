@@ -133,9 +133,9 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     this.personForm = this.fb.group({
       type: ["Missing Person"],
       full_name: [''],
-      birth_date: [''],
+      birth_date: [null],
       age: [''],
-      birthtime: [''],   
+      birthtime: [null ],   
       gender: [''],
       birthplace: [''],
       height: [''],
@@ -150,9 +150,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       birth_mark: [''],
       distinctive_mark: [''],
       hospital: [null],
-      document_ids: [''],
-      created_at: [null],
-      updated_at: [null],
+      document_ids: [null],
       created_by: [null],  
       updated_by: [null],  
       _is_deleted: [false],
@@ -307,8 +305,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
         hospital: [null],
         police_station: [null],
         person: [''],
-        created_at: [null],
-        updated_at: [null],
         created_by:  [this.storedPersonId],
         updated_by:  [this.storedPersonId],
       })
@@ -331,8 +327,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
         
         user:  [this.storedPersonId],
         person: [''],
-        created_at: [null],
-        updated_at: [null],
         created_by:  [this.storedPersonId],
         updated_by:  [this.storedPersonId],
       })
@@ -344,15 +338,12 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       this.fb.group({
         person_photo: [null], // URL or Base64 encoded image
         reference_photo: [null], // URL or Base64 encoded image
-        missing_time: [''], // Date-Time Picker
+        missing_time: [null ], // Date-Time Picker
         missing_date: [''], // Date Picker
         last_seen_location: [''],
         missing_location_details: [''],
         address: [null], // Should be linked with Address entity
         person: [''], // Should be linked with Person entity
-  
-        created_at: [null],
-        updated_at: [null],
         created_by:  [this.storedPersonId],
         updated_by:  [this.storedPersonId],
       })
@@ -369,8 +360,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
         police_station: [null], // ForeignKey to PoliceStation
         document: [null], // ForeignKey to Document
         person: [''], // ForeignKey to Person
-        created_at: [null],
-        updated_at: [null],
+        
         created_by:  [this.storedPersonId],
         updated_by:  [this.storedPersonId],
       })
@@ -383,9 +373,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
         data: [''],
         document: [null], 
         person: [''],
-        is_consent: [false,Validators.required],
-        created_at: [null],
-        updated_at: [null],
+        is_consent: [false],
         created_by:  [this.storedPersonId],
         updated_by:  [this.storedPersonId],
       })

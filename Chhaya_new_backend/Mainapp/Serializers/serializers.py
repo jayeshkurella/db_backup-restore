@@ -1,10 +1,30 @@
-import datetime  # Ensure this is imported
+from datetime import datetime, date
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from ..models import Person, Address, Contact, FIR, AdditionalInfo, AdminUser, User, Consent, Document, Hospital, \
     LastKnownDetails, Match, PersonUser, PoliceStation, Volunteer
 
 
+class FlexibleDateField(serializers.DateField):
+    def to_internal_value(self, data):
+        if data in [None, ""]:
+            return None
+
+        if isinstance(data, datetime.datetime):
+            return data.date()
+
+        try:
+            return super().to_internal_value(data)
+        except ValidationError:
+            # Try parsing as datetime if date fails
+            try:
+                if isinstance(data, str) and "T" in data:
+                    return datetime.datetime.strptime(data, "%Y-%m-%dT%H:%M:%S").date()
+            except (ValueError, TypeError):
+                pass
+            raise  # Re-raise original error
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -23,9 +43,22 @@ class MatchSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class LastKnownDetailsSerializer(serializers.ModelSerializer):
+    missing_date = FlexibleDateField(required=False, allow_null=True)
+
     class Meta:
         model = LastKnownDetails
         fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        missing_date = getattr(instance, 'missing_date', None)
+        if isinstance(missing_date, datetime):
+            data['missing_date'] = missing_date.date().isoformat()
+        elif isinstance(missing_date, date):
+            data['missing_date'] = missing_date.isoformat()
+
+        return data
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -90,6 +123,8 @@ class PoliceStationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PersonSerializer(serializers.ModelSerializer):
+    birth_date = FlexibleDateField(required=False, allow_null=True)
+
     addresses = AddressSerializer(many=True)
     contacts = ContactSerializer(many=True)
     additional_info = AdditionalInfoSerializer(many=True)
@@ -101,7 +136,8 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = '__all__'
-        
+
+
     
 class VolunteerSerializer(serializers.ModelSerializer):
     volunteer_Address = AddressSerializer(many=True)

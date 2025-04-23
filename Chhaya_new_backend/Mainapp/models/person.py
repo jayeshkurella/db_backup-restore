@@ -1,9 +1,9 @@
 import uuid
 from django.conf import settings
 from django.contrib.gis.db import models
-from datetime import date
 from .hospital import Hospital
 from django.utils.timezone import now
+from datetime import date
 
 from .user import User
 
@@ -238,7 +238,7 @@ class Person(models.Model):
     location = models.PointField(srid=4326, blank=True, null=True, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
     country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
-    reported_date = models.DateField(default=now)  # Automatically set to today's date
+    reported_date = models.DateField(default=date.today)  # Not now()
 
     match_entity_id = models.UUIDField(
         blank=True,

@@ -9,7 +9,7 @@ class LastKnownDetails(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     person_photo = models.ImageField(blank=True, null=True, help_text="URL or Base64 encoded photo of the person",upload_to='All_Photos')
     reference_photo = models.ImageField(blank=True, null=True, help_text="URL or Base64 encoded reference photo",upload_to='All_Photos')
-    missing_time = models.TimeField(help_text="Exact time the person was last seen",blank=True, null=True)
+    missing_time = models.TimeField(blank=True, null=True)
     missing_date = models.DateField(help_text="Date the person went missing",blank=True, null=True)
     last_seen_location = models.TextField(null=True, blank=True, db_index=True)
     missing_location_details = models.TextField(null=True, blank=True, db_index=True)
