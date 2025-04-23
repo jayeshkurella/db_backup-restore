@@ -72,7 +72,7 @@
         <!-- Age -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Age Range</mat-label>
-          <mat-select formControlName="ageRange">
+          <mat-select formControlName="age_range">
             <mat-option *ngFor="let range of [
                 ['0-5', '0 - 5'],
                 ['6-12', '6 - 12'],
@@ -109,7 +109,7 @@
         <!-- height -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Height (cm)</mat-label>
-          <mat-select formControlName="height">
+          <mat-select formControlName="height_range">
             <mat-option value="<150">Less than 150 cm</mat-option>
             <mat-option value="150-160">150 - 160 cm</mat-option>
             <mat-option value="161-170">161 - 170 cm</mat-option>
@@ -176,6 +176,15 @@
             <mat-option value="Gray">Gray</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <div class="col-md-4">
+          <label class="form-label">Upload Person Photo</label>
+          <input type="file" class="form-control" accept="image/*" (change)="onPersonPhotoSelect($event)" />
+        
+          <div *ngIf="imagePreview" class="mt-2">
+            <img [src]="imagePreview" alt="Photo Preview" width="100" height="100" />
+          </div>
+        </div>
 
       </div>
 
@@ -363,7 +372,7 @@
     <!-- contact Section -->
     <div class="p-3 bg-light-primary  mt-2 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Referral Contacts
       </h5>
     </div>
 
@@ -377,11 +386,19 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Type</mat-label>
             <mat-select formControlName="type">
-              <mat-option value="Personal">Personal</mat-option>
-              <mat-option value="Business">Business</mat-option>
-              <mat-option value="Office">Office</mat-option>
-              <mat-option value="Home">Home</mat-option>
+              <!-- <mat-option value="Personal">Personal</mat-option> -->
+              <!-- <mat-option value="Business">Business</mat-option> -->
+              <!-- <mat-option value="Office">Office</mat-option> -->
+              <mat-option value="Home">Referral Contact</mat-option>
             </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Company Name -->
+        <div class="col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="company_name">
           </mat-form-field>
         </div>
 
@@ -401,13 +418,7 @@
           </mat-form-field>
         </div>
 
-        <!-- Company Name -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Name</mat-label>
-            <input matInput type="text" formControlName="company_name">
-          </mat-form-field>
-        </div>
+        
 
         <!-- Job Title -->
         <!-- <div class="col-md-4">
@@ -790,12 +801,12 @@
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
 
           <!-- Consent Data -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Additional info</mat-label>
               <input matInput formControlName="data" />
             </mat-form-field>
-          </div>
+          </div> -->
 
           <!-- Document Upload (Fixed: Removed from mat-form-field) -->
           <!-- <div class="col-md-6">

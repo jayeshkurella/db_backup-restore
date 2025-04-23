@@ -65,6 +65,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   progress = 0;
   selectedImage: string | ArrayBuffer | null | undefined;
   uploadedFiles: any;
+  imagePreview: string | ArrayBuffer | null = null;
   selectedFiles: { [key: string]: any[] } = {};
   states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -109,11 +110,12 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       full_name: [''],
       birth_date: [null],
       // age: [null],
-      ageRange: [''],
+      age_range: [''],
       birthtime: [null],
       gender: ['Unknown'],
       birthplace: [''],
       height: [''],
+      height_range:[''],
       weight: [''],
       blood_group: [''],
       complexion: [''],
@@ -128,8 +130,9 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       document_ids: [''],
       created_at: [null],
       updated_at: [null],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      created_by: [''],
+      updated_by: [''],
+      photo_photo:[''],
       _is_deleted: [false],
       addresses: this.fb.array([]),
       contacts: this.fb.array([]),
@@ -188,9 +191,9 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
         latitude: [''],
         longitude: [''],
       }),
-      user: [this.storedPersonId],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      // user: [''],
+      // created_by: [''],
+      // updated_by: [''],
     });
   }
   
@@ -198,24 +201,24 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   createContactFormGroup(): FormGroup {
     return this.fb.group({
       phone_no: [''],
-      country_cd: [''],
+      // country_cd: [''],
       email_id: [''],
-      type: [''],
+      type: ['referral'],
       company_name: [''],
-      job_title: [''],
-      website_url: [''],
-      social_media_url: [''],
-      social_media_availability: [''],
+      // job_title: [''],
+      // website_url: [''],
+      // social_media_url: [''],
+      // social_media_availability: [''],
       additional_details: [''],
-      is_primary: [false],
-      user: [this.storedPersonId],
+      // is_primary: [false],
+      // user: [''],
       hospital: [null],
       police_station: [null],
       person: [''],
       created_at: [null],
       updated_at: [null],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      // created_by: [''],
+      // updated_by: [''],
     });
   }
   
@@ -264,12 +267,12 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       id_no: [''],
       education_details: [''],
       occupation_details: [''],
-      user: [this.storedPersonId],
+      // user: [''],
       person: [''],
       created_at: [null],
       updated_at: [null],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      // created_by: [''],
+      // updated_by: [''],
     }));
   }
   
@@ -286,8 +289,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       person: [''],
       created_at: [null],
       updated_at: [null],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      // created_by: [''],
+      // updated_by: [''],
     }));
   }
   
@@ -303,8 +306,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       person: [''],
       created_at: [null],
       updated_at: [null],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      // created_by: [''],
+      // updated_by: [''],
     }));
   }
   
@@ -317,8 +320,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       is_consent: [false, Validators.required],
       created_at: [null],
       updated_at: [null],
-      created_by: [this.storedPersonId],
-      updated_by: [this.storedPersonId],
+      // created_by: [''],
+      // updated_by: [''],
     }));
   }
   
@@ -406,7 +409,19 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
+  onPersonPhotoSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.unidentifiedPersonForm.patchValue({ photo_photo: file });
+  
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
