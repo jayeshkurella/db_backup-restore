@@ -102,8 +102,12 @@ class PersonViewSet(viewsets.ViewSet):
                 elif request.content_type.startswith('multipart/form-data'):
                     payload_str = request.POST.get('payload', '{}')
                     data = json.loads(payload_str)
-                else:
-                    return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+                    if 'photo_photo' in request.FILES:
+                        photo_file = request.FILES['photo_photo']
+                        data['photo_photo'] = photo_file.name
+                    else:
+                        return Response({'error': 'Unsupported media type'},
+                                        status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
                 logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
 
