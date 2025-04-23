@@ -60,7 +60,7 @@ class AdditionalInfo(models.Model):
     mother_tongue = models.CharField(max_length=50, blank=True, null=True,choices=MothertoungueChoices.choices)
     other_known_languages  = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
     id_type = models.CharField(max_length=100, choices=IdTypeChoices.choices,blank=True, null=True)
-    id_no = models.CharField(max_length=100,  help_text="Unique identification number")
+    id_no = models.CharField(max_length=100,  help_text="Unique identification number",blank=True, null=True)
     education_details = models.CharField(max_length=50, blank=True, null=True)
     occupation_details = models.CharField(max_length=50, blank=True, null=True)
 
@@ -76,3 +76,5 @@ class AdditionalInfo(models.Model):
 
     def __str__(self):
         return f"Additional Info - {self.person}"
+
+

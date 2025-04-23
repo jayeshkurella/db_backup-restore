@@ -18,6 +18,7 @@ class FIR(models.Model):
         PENDING = "Pending", "Pending"
 
 
+    fir_photo = models.FileField(upload_to='fir_photos/', null=True, blank=True)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fir_number  = models.CharField(max_length=50,  help_text="Unique FIR number",blank=True, null=True)

@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from ..models import Person, Address, Contact, FIR, AdditionalInfo, AdminUser, User, Consent, Document, Hospital, \
     LastKnownDetails, Match, PersonUser, PoliceStation, Volunteer
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -46,10 +47,12 @@ class AdminUserSerializer(serializers.ModelSerializer):
         model = AdminUser
         fields = '__all__'
 
+
 class AdditionalInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdditionalInfo
         fields = '__all__'
+
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:

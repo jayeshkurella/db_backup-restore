@@ -12,10 +12,11 @@ class Person(models.Model):
         MISSING = 'Missing Person', 'Missing Person'
         Unidentified_Person = 'Unidentified Person', 'Unidentified Person'
         Unidnetified_Body = 'Unidentified Body', 'Unidentified Body'
-    
-    class GenderChoices(models.TextChoices):
-        MALE = 'male', 'Male'
-        FEMALE = 'female', 'Female'
+
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
 
     AGE_RANGE_CHOICES = [
         ("0-5", "0 - 5"),
@@ -68,15 +69,15 @@ class Person(models.Model):
         WAVY = 'WAVY', 'Wavy'
 
     class Eye_colorChoices(models.TextChoices):
-        BLUE = 'BLUE', 'Blue'
-        BROWN = 'BROWN', 'Brown'
-        GREEN = 'GREEN', 'Green'
-        HAZEL = 'HAZEL', 'Hazel'
-        RED = 'RED', 'Red'
-        BLACK = 'BLACK', 'Black'
-        GRAY = 'GRAY', 'Gray'
-        YELLOW = 'YELLOW', 'Yellow'
-        VIOLET = 'VIOLET', 'Violet'
+        blue = 'blue', 'Blue'
+        brown = 'brown', 'Brown'
+        green = 'green', 'Green'
+        hazel = 'hazel', 'Hazel'
+        red = 'red', 'Red'
+        black = 'black', 'Black'
+        gray = 'gray', 'Gray'
+        yellow = 'yellow', 'Yellow'
+        violet = 'violet', 'Violet'
 
     class BloodGroupChoices(models.TextChoices):
         O_POS = 'O+', 'O+'
@@ -182,7 +183,7 @@ class Person(models.Model):
     age = models.FloatField(blank=True, null=True,db_index=True)
     age_range = models.CharField(choices=AGE_RANGE_CHOICES,blank=True, null=True,db_index=True)
     birthtime = models.TimeField(blank=True, null=True)
-    gender = models.CharField(max_length=10, choices=GenderChoices.choices,blank=True, null=True,db_index=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES,blank=True, null=True,db_index=True)
     birthplace = models.CharField(max_length=255, null=True, blank=True,db_index=True)
     height = models.IntegerField(help_text="Height in CM",blank=True, null=True,db_index=True)
     height_range = models.CharField(
