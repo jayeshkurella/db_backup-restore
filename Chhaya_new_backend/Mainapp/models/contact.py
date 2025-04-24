@@ -31,6 +31,7 @@ class Contact(models.Model):
     email_id = models.EmailField(max_length=150, blank=True, null=True, db_index=True)  # Indexed
     type = models.CharField(max_length=10, choices=ContactTypeChoices.choices)
     company_name = models.CharField(max_length=100, blank=True, null=True)
+    person_name = models.CharField(max_length=100, blank=True, null=True)
     job_title = models.CharField(max_length=50, blank=True, null=True)
     website_url = models.TextField(blank=True, null=True)
     social_media_availability = models.CharField(max_length=10, choices=SocialMediaChoices.choices, blank=True, null=True)

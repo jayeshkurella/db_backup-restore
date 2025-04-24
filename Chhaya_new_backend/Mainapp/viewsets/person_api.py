@@ -13,7 +13,8 @@ from ..models.fir import FIR
 from ..access_permision import IsAdminUser , IsVolunteerUser ,AllUserAccess
 from ..pagination import CustomPagination
 from ..Serializers.serializers import PersonSerializer
-from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, Document
+from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, Document, PoliceStation, \
+    Hospital
 from django.db import transaction
 from drf_yasg import openapi
 from django.contrib.gis.geos import Point
@@ -92,7 +93,7 @@ class PersonViewSet(viewsets.ViewSet):
     )
     def create(self, request):
         logger.info(f"Incoming data: {request.data}")
-        print("data comes",request.data)
+        print("data comes", request.data)
         logger.debug("Incoming Data Format: %s", request.content_type)
         try:
             with transaction.atomic():
@@ -107,8 +108,6 @@ class PersonViewSet(viewsets.ViewSet):
 
                 logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
 
-
-
                 # Extract related data
                 addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]
                 contacts_data = [contact for contact in data.get('contacts', []) if any(contact.values())]
@@ -120,17 +119,28 @@ class PersonViewSet(viewsets.ViewSet):
 
                 logger.debug("Filtered Addresses Data: %s", json.dumps(addresses_data, indent=4))
 
+                # Extract hospital instance (if any)
+                hospital_id = data.get('hospital')
+                hospital = None
+                if hospital_id:
+                    try:
+                        hospital = Hospital.objects.get(id=hospital_id)
+                    except Hospital.DoesNotExist:
+                        raise ValueError(f"Hospital with ID {hospital_id} does not exist")
+
                 # Create Person object
-                person_data = {k: v for k, v in data.items() if v not in [None, "", []] and k not in [
-                    'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent'
-                ]}
-                person = Person.objects.create(**person_data)
+                person_data = {
+                    k: v for k, v in data.items()
+                    if v not in [None, "", []] and k not in [
+                        'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent', 'hospital'
+                    ]
+                }
+                person = Person.objects.create(**person_data, hospital=hospital)
                 logger.debug("Person Created: %s", person.id)
 
                 # Extract zero index address and store it directly in the person model
                 if addresses_data:
                     first_address = addresses_data[0]
-                    # Store address fields directly in the Person model
                     person.appartment_name = first_address.get('appartment_name', '')
                     person.appartment_no = first_address.get('appartment_no', '')
                     person.street = first_address.get('street', '')
@@ -141,19 +151,21 @@ class PersonViewSet(viewsets.ViewSet):
                     person.district = first_address.get('district', '')
                     person.state = first_address.get('state', '')
                     person.country = first_address.get('country', '')
-                    person.location = Point(first_address.get('location', {}).get('longitude'),
-                                            first_address.get('location', {}).get('latitude'))
+                    person.location = Point(
+                        first_address.get('location', {}).get('longitude'),
+                        first_address.get('location', {}).get('latitude')
+                    )
                     person.save()
 
-                # Create related objects (for remaining addresses, contacts, etc.)
-                self._create_addresses(person, addresses_data[1:])  # Skip the first address as it is already saved
+                # Create related objects
+                self._create_addresses(person, addresses_data[1:])  # Skip first address
                 self._create_contacts(person, contacts_data)
                 self._create_additional_info(person, additional_info_data)
                 self._create_last_known_details(person, last_known_details_data)
                 self._create_firs(person, firs_data)
                 self._create_consents(person, consents_data)
 
-                # Prepare the final response
+                # Prepare response
                 serializer = PersonSerializer(person)
                 return Response(
                     {'message': 'Person created successfully', 'person_id': str(person.id), 'data': serializer.data},
@@ -214,15 +226,25 @@ class PersonViewSet(viewsets.ViewSet):
         LastKnownDetails.objects.bulk_create(last_known_details)
 
     def _create_firs(self, person, firs_data):
+        fir_objects = []
         for fir in firs_data:
-            logger.debug("FIR Record: %s", fir)
-            if 'fir_date' in fir:
-                logger.debug("Type of fir_date: %s", type(fir['fir_date']))
-        firs = [
-            FIR(person=person, **{k: v for k, v in fir.items() if k != 'person'})
-            for fir in firs_data if isinstance(fir, dict)
-        ]
-        FIR.objects.bulk_create(firs)
+            if not isinstance(fir, dict):
+                continue
+
+            police_station_id = fir.get('police_station')
+            police_station = None
+            if police_station_id:
+                try:
+                    police_station = PoliceStation.objects.get(id=police_station_id)
+                except PoliceStation.DoesNotExist:
+                    raise ValueError(f"PoliceStation with ID {police_station_id} does not exist")
+
+            # Remove 'police_station' and 'person' from data dict for unpacking
+            fir_data = {k: v for k, v in fir.items() if k not in ['police_station', 'person']}
+            fir_obj = FIR(person=person, police_station=police_station, **fir_data)
+            fir_objects.append(fir_obj)
+
+        FIR.objects.bulk_create(fir_objects)
 
     def _create_consents(self, person, consents_data):
         consents = [

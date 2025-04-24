@@ -60,13 +60,13 @@ class Person(models.Model):
         YELLOW = 'yellow', 'Yellow'
 
     class Hair_typeChoices(models.TextChoices):
-        STRAIGHT = 'STRAIGHT', 'Straight'
-        DASHED = 'DASHED', 'Dashed'
-        DOTTED = 'DOTTED', 'Dotted'
-        LONG = 'LONG', 'Long'
-        BROAD = 'BROAD', 'Broad'
-        SHORT = 'SHORT', 'Short'
-        WAVY = 'WAVY', 'Wavy'
+        STRAIGHT =  'straight','STRAIGHT'
+        DASHED =  'dashed','DASHED'
+        DOTTED =  'dotted','DOTTED'
+        LONG = 'long','LONG',
+        BROAD = 'broad','BROAD'
+        SHORT = 'short','SHORT'
+        WAVY = 'wavy','WAVY'
 
     class Eye_colorChoices(models.TextChoices):
         blue = 'blue', 'Blue'
@@ -90,36 +90,36 @@ class Person(models.Model):
         AB_NEG = 'AB-', 'AB-'
 
     class ConditionChoices(models.TextChoices):
-        MEMORY_LOSS = 'MEMORY_LOSS', 'Memory Loss'
-        ANXIETY = 'ANXIETY', 'Anxiety'
-        SHOCK = 'SHOCK', 'Shock'
-        DEPRESSION = 'DEPRESSION', 'Depression'
-        FATIGUE = 'FATIGUE', 'Fatigue'
-        HEADACHE = 'HEADACHE', 'Headache'
-        DIZZINESS = 'DIZZINESS', 'Dizzy'
-        NAUSEARCH = 'NAUSEARCH', 'Nausea'
-        CHEST_PAIN = 'CHEST_PAIN', 'Chest Pain'
+        MEMORY_LOSS = 'memory_loss', 'Memory Loss'
+        ANXIETY = 'anxiety', 'Anxiety'
+        SHOCK = 'shock', 'Shock'
+        DEPRESSION = 'depression', 'Depression'
+        FATIGUE = 'fatigue', 'Fatigue'
+        HEADACHE = 'headache', 'Headache'
+        DIZZINESS = 'dizziness', 'Dizzy'
+        NAUSEARCH = 'nausea', 'Nausea'
+        CHEST_PAIN = 'chest_pain', 'Chest Pain'
 
     class BodyconditionChoices(models.TextChoices):
-        DECOMPOSED = 'DECOMPOSED', 'Decomposed'
-        INTACT = 'INTACT', 'Intact'
-        SKELETAL = 'SKELETAL', 'Skeletal'
-        BURNT = 'BURNT', 'Burnt'
-        FRESH = 'FRESH', 'Fresh'
-        NORMAL = 'NORMAL', 'Normal'
-        UNSTABLE = 'UNSTABLE', 'Unstable'
-        STABLE = 'STABLE', 'Stable'
-        EXCESS = 'EXCESS', 'Excess'
-        UNDERWEIGHT = 'UNDERWEIGHT', 'Underweight'
-        OVERWEIGHT = 'OVERWEIGHT', 'Overweight'
-        OBESE = 'OBESE', 'Obese'
+        DECOMPOSED = 'decomposed', 'Decomposed'
+        INTACT = 'intact', 'Intact'
+        SKELETAL = 'skeletal', 'Skeletal'
+        BURNT = 'burnt', 'Burnt'
+        FRESH = 'fresh', 'Fresh'
+        NORMAL = 'normal', 'Normal'
+        UNSTABLE = 'unstable', 'Unstable'
+        STABLE = 'stable', 'Stable'
+        EXCESS = 'excess', 'Excess'
+        UNDERWEIGHT = 'underweight', 'Underweight'
+        OVERWEIGHT = 'overweight', 'Overweight'
+        OBESE = 'obese', 'Obese'
 
     class AddressTypeChoices(models.TextChoices):
-        PERMANENT = 'PERMANENT', 'Permanent'
-        CURRENT = 'CURRENT', 'Current'
-        OLD = 'OLD', 'Old'
-        HOME = 'HOME', 'Home'
-        OFFICE = 'OFFICE', 'Office'
+        PERMANENT = 'permanent', 'PERMANENT'
+        CURRENT = 'current', 'CURRENT'
+        OLD = 'old', 'OLD'
+        HOME = 'home', 'HOME'
+        OFFICE = 'office', 'OFFICE'
 
     class StateChoices(models.TextChoices):
         ANDHRA_PRADESH = 'Andhra Pradesh', 'Andhra Pradesh'
@@ -211,13 +211,17 @@ class Person(models.Model):
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="updated_%(class)s_set",db_index=True)
     _is_deleted = models.BooleanField(default=False,db_index=True)
     _is_confirmed = models.BooleanField(default=False,db_index=True)
-    photo_photo = models.ImageField(blank=True, null=True, help_text="URL or Base64 encoded photo of the person",upload_to='All_Photos')
+    photo_photo = models.ImageField(blank=True, null=True,upload_to='All_Photos')
 
     date_reported = models.DateField(default=date.today)
     case_status = models.CharField(
         max_length=10,
-        choices=[('Resolved', 'resolved'), ('Pending', 'pending'), ('Matched', 'matched')],
-        default='pending',  # Ensure 'pending' is in lowercase to match the choice value
+        choices=[
+            ('resolved', 'Resolved'),
+            ('pending', 'Pending'),
+            ('matched', 'Matched')
+        ],
+        default='pending',
         db_index=True
     )
 

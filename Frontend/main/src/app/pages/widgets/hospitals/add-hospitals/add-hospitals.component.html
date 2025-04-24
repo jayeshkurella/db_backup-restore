@@ -260,10 +260,16 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Phone No</mat-label>
                 <input matInput formControlName="phone_no" type="text" />
+                
                 <mat-error *ngIf="contact.get('phone_no')?.hasError('required')">
                   Phone number is required.
                 </mat-error>
+                
+                <mat-error *ngIf="contact.get('phone_no')?.hasError('pattern')">
+                  Please enter a valid phone number (numbers only, with or without hyphens, spaces, or parentheses).
+                </mat-error>
               </mat-form-field>
+              
               
             </div>
             <div class="col-md-4">

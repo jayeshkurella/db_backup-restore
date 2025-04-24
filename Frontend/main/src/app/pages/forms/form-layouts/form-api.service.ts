@@ -48,5 +48,25 @@ export class FormApiService {
       map(response => response.body) // Extracting only the body
     );
   }
+
+
+  getHospitalNames(): Observable<any> {
+    const headers = this.createHeaders();
+    return this.http.get(this.apiUrl + "api/hospital-name-list/", { headers, observe: 'response' }).pipe(
+      tap(response => {
+      }),
+      map(response => response.body)
+    );
+  }
+  
+  getPoliceStationNames(): Observable<any> {
+    const headers = this.createHeaders();
+    return this.http.get(this.apiUrl + "api/police-station-name-list/", { headers, observe: 'response' }).pipe(
+      tap(response => {
+      }),
+      map(response => response.body)
+    );
+  }
+  
   
 }

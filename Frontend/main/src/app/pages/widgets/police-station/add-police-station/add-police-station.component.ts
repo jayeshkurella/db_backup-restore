@@ -89,7 +89,7 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
     return this.fb.group({
       phone_no: ['', [
         Validators.required,
-        Validators.pattern(/^(\+?\d{1,4}[-\s]?)?(\d{2,5}[-\s]?)?(\d{6,10})$/)
+        Validators.pattern(/^(\+?\d{1,4}[\s-]?)?(\(?\d{2,6}\)?[\s-]?)?[\d\s-]{5,15}$/)
       ]],
             country_cd: ['', Validators.required],
       email_id: ['', [Validators.required, Validators.email]],

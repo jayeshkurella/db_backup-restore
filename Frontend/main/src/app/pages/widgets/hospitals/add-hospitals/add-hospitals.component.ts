@@ -97,7 +97,7 @@ selectedFileName: any;
   createContactForm(): FormGroup {
     return this.fb.group({
       type: ['', Validators.required],
-      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9]{3,5}-?[0-9]{6,8}$/)]],
+      phone_no: ['', [Validators.required, Validators.pattern(/^[0-9\s\-\(\)]{10,15}$/)]],
       country_cd: ['', Validators.required],
       email_id: ['', Validators.email],
       company_name: ['' ],
