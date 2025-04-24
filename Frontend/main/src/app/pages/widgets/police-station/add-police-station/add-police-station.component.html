@@ -62,12 +62,13 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Address Type</mat-label>
                 <mat-select formControlName="address_type">
-                  <mat-option value="PERMANENT">Permanent</mat-option>
-                  <mat-option value="CURRENT">Current</mat-option>
-                  <mat-option value="OLD">Old</mat-option>
-                  <mat-option value="HOME">Home</mat-option>
-                  <mat-option value="OFFICE">Office</mat-option>
+                  <mat-option value="Permanent">Permanent</mat-option>
+                  <mat-option value="current">Current</mat-option>
+                  <mat-option value="old">Old</mat-option>
+                  <mat-option value="home">Home</mat-option>
+                  <mat-option value="office">Office</mat-option>
                 </mat-select>
+          
                 <mat-error *ngIf="policeStationForm.get('address.address_type')?.hasError('required')">
                   Address type is required
                 </mat-error>
