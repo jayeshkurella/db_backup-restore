@@ -45,8 +45,19 @@ export class FormApiService {
       tap(response => {
         console.log('Response Headers:', response.headers);
       }),
-      map(response => response.body) // Extracting only the body
+      map(response => response.body) 
     );
+  }
+  // Get Police Station List
+ // Get Police Station List
+  getPoliceStationList(): Observable<any[]> {
+    const headers = this.createHeaders();
+    return this.http.get<any[]>(this.apiUrl + 'api/police-station-name-list/', { headers });
+  }
+  
+  getHospitalList(): Observable<any> {
+    const headers = this.createHeaders(); // for token if needed
+    return this.http.get<any>(this.apiUrl + 'api/hospital-name-list/', { headers });
   }
   
 }

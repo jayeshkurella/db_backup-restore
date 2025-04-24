@@ -30,7 +30,6 @@ import { map, marker } from 'leaflet';
 
 @Component({
   selector: 'app-unidentified-person-form',
-  // imports: [MatIcon],
   imports: [
       MaterialModule,
       TablerIconsModule,
@@ -51,7 +50,7 @@ import { map, marker } from 'leaflet';
   providers: [provideNativeDateAdapter(),DatePipe],
 
 })
-// export class UnidentifiedPersonFormComponent OnInit , AfterViewInit{}
+
 export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
   map!: L.Map;
@@ -67,6 +66,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   uploadedFiles: any;
   imagePreview: string | ArrayBuffer | null = null;
   selectedFiles: { [key: string]: any[] } = {};
+  hospitals: any[] = [];
+  policeStations: any[] = [];
   states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
@@ -91,6 +92,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getToken();
     this.initializeForm();
+    this.loadPoliceStations();
+    this.loadHospitals();
   }
 
   ngAfterViewInit(): void {
@@ -123,7 +126,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       hair_type: [''],
       eye_color: [''],
       condition: [''],
-      body_condition: [''],
+      Body_Condition: [''],
       birth_mark: [''],
       distinctive_mark: [''],
       hospital: [null],
@@ -301,6 +304,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       case_status: [''],
       investigation_officer_name: [''],
       investigation_officer_contact: [null],
+      investigation_officer_contacts:[''],
       police_station: [null],
       document: [null],
       person: [''],
@@ -310,7 +314,32 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       // updated_by: [''],
     }));
   }
+
+  loadPoliceStations() {
+    this.formApi.getPoliceStationList().subscribe({
+      next: (data) => {
+        this.policeStations = data;
+        console.log("Police Stations Loaded:", this.policeStations);
+      },
+      error: (err) => {
+        console.error("Error loading police stations", err);
+      }
+    });
+  }
+
+  loadHospitals() {
+    this.formApi.getHospitalList().subscribe({
+      next: (data) => {
+        this.hospitals = data;
+        console.log("Hospitals Loaded:", this.hospitals);
+      },
+      error: (err) => {
+        console.error("Error loading hospitals", err);
+      }
+    });
+  }
   
+
   // Add Consent
   addConsent() {
     this.consent.push(this.fb.group({
@@ -409,18 +438,31 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  onPersonPhotoSelect(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.unidentifiedPersonForm.patchValue({ photo_photo: file });
-  
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+
+  // selectedPhotoFile: File | null = null;
+
+  // onPersonPhotoSelect(event: any) {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     this.selectedPhotoFile = file; // Store file outside the form
+
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.imagePreview = reader.result;
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+
+  // selectedPhotoFile: File | null = null;
+
+  // onPhotoSelected(event: Event): void {
+  //   const fileInput = event.target as HTMLInputElement;
+  //   if (fileInput.files && fileInput.files.length > 0) {
+  //     this.selectedPhotoFile = fileInput.files[0];
+  //   }
+  // }
+
   
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
@@ -445,7 +487,17 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     return this.unidentifiedPersonForm.get(section) as FormArray;
   }
 
-  onSubmit() {
+  // convertFileToBase64(file: File): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result as string);
+  //     reader.onerror = error => reject(error);
+  //   });
+  // }
+  
+
+  async onSubmit() {
     const addressFormValue = this.unidentifiedPersonForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
       this.addresses.push(this.fb.group(addressFormValue));
@@ -476,18 +528,38 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       });
     }
 
+
     const payload = {
       ...this.unidentifiedPersonForm.value,
       birth_date: finalBirthDate,
       birthtime: formattedBirthTime,
       addresses: this.addresses.value,
       contacts: this.contacts.value,
+      // photo_base64: base64Photo,
     };
 
     delete payload.addressForm;
     delete payload.contactForm;
 
-    console.log("Payload Sent to Backend:", payload);
+    const formData = new FormData(); // Create a new FormData instance
+
+    {      // Append form fields to FormData
+      Object.entries(payload).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value)); // For arrays, stringify
+        } else if (value instanceof Blob || typeof value === 'string') {
+          formData.append(key, value as string | Blob); // Cast to string or Blob
+        }
+      });
+
+      // Check if photo is selected before appending it to the FormData
+      // if (this.selectedPhotoFile) {
+      //   formData.append('photo_photo', this.selectedPhotoFile, this.selectedPhotoFile.name);
+      // } else {
+      //   alert("Please upload a person photo.");
+      //   return; // If no photo is selected, do not proceed
+      // }
+    }
 
     this.formApi.postMissingPerson(payload).subscribe({
       next: (response) => {
@@ -503,8 +575,10 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
         alert('An error occurred while adding the person. Please try again.');
       },
     });
+    
   }
-
+  
+  
   formatTime(time: string): string {
     return time ? time.replace(/[“”]/g, '"') : '';
   }
