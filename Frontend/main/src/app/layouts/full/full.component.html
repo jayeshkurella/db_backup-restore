@@ -18,7 +18,7 @@
       <div class="flex-layout">
         <app-sidebar (toggleMobileNav)="sidenav.toggle()" [showToggle]="isOver"></app-sidebar>
         <ng-scrollbar class="position-relative" style="height: 100%">
-          <mat-nav-list class="sidebar-list">
+          <mat-nav-list class="sidebar-list mt-1">
             @for(item of navItems; track item) {
             <app-nav-item [item]="item" (notify)="sidenav.toggle()">
             </app-nav-item>

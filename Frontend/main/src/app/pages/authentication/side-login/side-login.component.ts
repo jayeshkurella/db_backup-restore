@@ -49,12 +49,12 @@ export class AppSideLoginComponent {
         (response) => {
             console.log('Login Successful:', response);
             this.toastr.success('Login successful! Welcome back.', 'Success');
-            this.loginForm.reset();
      // Redirect to intended route (if any), else default
-     const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/forms/form-layouts';
+     const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/forms/Missing-person-form';
      localStorage.removeItem('redirectAfterLogin');
-
      this.router.navigate([redirectUrl]);
+     this.loginForm.reset();
+
   },
   (error) => {
       console.error('Login Failed:', error);

@@ -87,7 +87,8 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   selectedImage: string | ArrayBuffer | null | undefined;
   uploadedFiles: any;
   selectedFiles: { [key: string]: any[] } = {};
-
+  hospitalList: any[] = [];
+  policeStationList: any[] = [];
 
 
   constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe) {
@@ -97,7 +98,28 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     // this.gettoken()
     this.getperson()
     this.initializeForm();
-   
+    this.fetchHospitalList();
+    this.fetchPoliceStationList();
+  }
+
+  fetchHospitalList() {
+    this.formapi.getHospitalNames().subscribe({
+      next: (data) => {
+        this.hospitalList = data;
+        console.log('Hospitals:', this.hospitalList);
+      },
+      error: (err) => console.error('Error fetching hospitals:', err),
+    });
+  }
+
+  fetchPoliceStationList() {
+    this.formapi.getPoliceStationNames().subscribe({
+      next: (data) => {
+        this.policeStationList = data;
+        console.log('Police Stations:', this.policeStationList);
+      },
+      error: (err) => console.error('Error fetching police stations:', err),
+    });
   }
   // ✅ Define gettoken() separately
   gettoken() {
@@ -139,6 +161,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       gender: [''],
       birthplace: [''],
       height: [''],
+      height_range: [''],
       weight: [''],
       blood_group: [''],
       complexion: [''],
@@ -149,6 +172,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       Body_Condition: [''],  
       birth_mark: [''],
       distinctive_mark: [''],
+      photo_photo: [null],
       hospital: [null],
       document_ids: [null],
       created_by: [null],  
@@ -205,20 +229,11 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
   addAddress() {
     if (this.personForm.get('addressForm')?.valid) {
-      // Push addressForm into addresses FormArray
       this.addresses.push(this.fb.group(this.personForm.get('addressForm')?.value));
-  
-      // Log the addresses FormArray
       console.log("Addresses:", this.addresses.value);
-  
-      // Mark the form as dirty to trigger change detection
       this.personForm.markAsDirty();
-  
-      // Reset only addressForm (not entire form)
       this.personForm.get('addressForm')?.reset();
-  
-      // Explicitly reset select fields to their default options
-      this.personForm.get('addressForm.address_type')?.setValue('');
+        this.personForm.get('addressForm.address_type')?.setValue('');
       this.personForm.get('addressForm.state')?.setValue('');
       this.personForm.get('addressForm.country')?.setValue('');
     } else {
@@ -228,19 +243,10 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
   addcontact() {
     if (this.personForm.get('contactForm')?.valid) {
-      // Push addressForm into addresses FormArray
       this.contacts.push(this.fb.group(this.personForm.get('contactForm')?.value));
-  
-      // Log the addresses FormArray
       console.log("contacts:", this.contacts.value);
-  
-      // Mark the form as dirty to trigger change detection
       this.personForm.markAsDirty();
-  
-      // Reset only addressForm (not entire form)
       this.personForm.get('contactForm')?.reset();
-  
-      // Explicitly reset select fields to their default options
       this.personForm.get('contactForm.type')?.setValue('');
       this.personForm.get('contactForm.social_media_availability')?.setValue('');
       this.personForm.get('contactForm.is_primary')?.setValue('');
@@ -314,12 +320,12 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   addAdditionalInfo() {
     this.additionalInfo.push(
       this.fb.group({
-        caste: [''], // Dropdown - CasteChoices
+        caste: [''], 
         subcaste: [''],
-        marital_status: [''], // Dropdown - MaritalStatusChoices
+        marital_status: [''],
         religion: [''],
         mother_tongue: [''],
-        other_known_languages: [''], // Comma-separated list
+        other_known_languages: [''], 
         id_type: [''], // Dropdown - IdTypeChoices
         id_no: [''], // Alphanumeric check
         education_details: [''],
@@ -357,6 +363,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
         case_status: [''], // Case status
         investigation_officer_name: [''], // Officer's name
         investigation_officer_contact: [null], // ForeignKey to Contact
+        investigation_officer_contacts: [''], // ForeignKey to Contact
         police_station: [null], // ForeignKey to PoliceStation
         document: [null], // ForeignKey to Document
         person: [''], // ForeignKey to Person
@@ -371,7 +378,6 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     this.consent.push(
       this.fb.group({
         data: [''],
-        document: [null], 
         person: [''],
         is_consent: [false],
         created_by:  [this.storedPersonId],
@@ -467,21 +473,26 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     );
   }
 
+  selectedFile: string | null = null;
+
+  onFileSelect_person_photo(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+  
+
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
-        // Ensure the section exists in selectedFiles
         if (!this.selectedFiles[section]) {
             this.selectedFiles[section] = [];
         }
-        // Ensure the index exists in the section
         if (!this.selectedFiles[section][index]) {
             this.selectedFiles[section][index] = {};
         }
-        // Store the file in the selectedFiles object
         this.selectedFiles[section][index][field] = file;
-
-        // Optionally, set the file name in the form control for display purposes
         this.getFormArray(section).at(index).get(field)?.setValue(file.name);
     }
   }
@@ -496,74 +507,63 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   }
 
   onSubmit() {
-    // Get the address form value and ensure it's valid
+    
     const addressFormValue = this.personForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
       this.addresses.push(this.fb.group(addressFormValue)); 
     }
   
-    // Get the contact form value and ensure it's valid
     const contactFormValue = this.personForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
       this.contacts.push(this.fb.group(contactFormValue)); 
     }
   
-    // Format birth_date using DatePipe (Ensure it is only a date, no time)
     const birthDate = this.personForm.get('birth_date')?.value;
-    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); // Adjust format as needed
+    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); 
   
-    // If the birth_date is in a Date object, ensure it’s formatted correctly
     let finalBirthDate = formattedBirthDate;
     if (birthDate instanceof Date) {
-      finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  // Format it to 'yyyy-MM-dd'
+      finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  
     }
   
     // Format birthtime (if any)
     const birthTime = this.personForm.get('birthtime')?.value;
-    const formattedBirthTime = this.formatTime(birthTime); // Format birthtime (HH:MM)
+    const formattedBirthTime = this.formatTime(birthTime);
   
-    // Format missing_date for last_known_details (if any)
     const lastKnownDetails = this.personForm.get('last_known_details')?.value;
     if (lastKnownDetails && lastKnownDetails.length > 0) {
       lastKnownDetails.forEach((detail: { missing_date: string | number | Date | null; missing_time: string | null; }) => {
         if (detail.missing_date) {
           detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
         }
-  
-        // Format missing_time (if any)
-        if (detail.missing_time) {
-          detail.missing_time = this.formatTime(detail.missing_time); // Ensure it's formatted properly
+          if (detail.missing_time) {
+          detail.missing_time = this.formatTime(detail.missing_time); 
         }
       });
     }
-  
-    // Prepare the payload with the values from the form
     const payload = {
       ...this.personForm.value,
-      birth_date: finalBirthDate,  // Use formatted birth_date (ensure it's only the date part)
-      birthtime: formattedBirthTime,  // Use formatted birthtime
+      birth_date: finalBirthDate, 
+      birthtime: formattedBirthTime,  
       addresses: this.addresses.value, 
       contacts: this.contacts.value,  
     };
-  
-    // Remove temporary forms from the payload (addressForm and contactForm)
+ 
+    
     delete payload.addressForm;
     delete payload.contactForm;
   
     // Log the payload for debugging purposes
     console.log("Payload Sent to Backend:", payload);
   
-    // Send the JSON data to the backend
     this.formapi.postMissingPerson(payload).subscribe({
       next: (response) => {
         console.log('Person added successfully!', response);
         alert("Person added successfully");
-  
-        // Reset the form after successful submission
-        this.personForm.reset();
-        this.addresses.clear(); // Clear the addresses FormArray
-        this.contacts.clear();  // Clear the contacts FormArray
-        this.selectedFiles = {}; // Reset selected files
+          this.personForm.reset();
+        this.addresses.clear(); 
+        this.contacts.clear();  
+        this.selectedFiles = {}; 
       },
       error: (error) => {
         console.error('Error adding person:', error);
@@ -571,11 +571,11 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       },
     });
   }
+
   
-  // Utility method to format time (HH:MM or HH:MM:SS)
+  
   formatTime(time: string): string {
-    // Ensure time follows the HH:MM or HH:MM:SS format
-    const formattedTime = time ? time.replace(/[“”]/g, '"') : ''; // Replace curly quotes if present
+    const formattedTime = time ? time.replace(/[“”]/g, '"') : ''; 
     return formattedTime;
   }
   

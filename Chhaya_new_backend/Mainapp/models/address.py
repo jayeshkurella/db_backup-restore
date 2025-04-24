@@ -8,11 +8,13 @@ from .user import User
 
 class Address(models.Model):
     class AddressTypeChoices(models.TextChoices):
-        PERMANENT = 'PERMANENT', 'Permanent'
-        CURRENT = 'CURRENT', 'Current'
-        OLD = 'OLD', 'Old'
-        HOME = 'HOME', 'Home'
-        OFFICE = 'OFFICE', 'Office'
+        PERMANENT = 'Permanent', 'PERMANENT'
+        CURRENT = 'current', 'CURRENT'
+        OLD = 'old', 'OLD'
+        HOME = 'home', 'HOME'
+        OFFICE = 'office', 'OFFICE'
+
+
 
     class StateChoices(models.TextChoices):
         ANDHRA_PRADESH = 'Andhra Pradesh', 'Andhra Pradesh'

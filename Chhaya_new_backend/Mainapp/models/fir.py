@@ -18,12 +18,14 @@ class FIR(models.Model):
         PENDING = "Pending", "Pending"
 
 
+    fir_photo = models.FileField(upload_to='fir_photos/', null=True, blank=True)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fir_number  = models.CharField(max_length=50,  help_text="Unique FIR number",blank=True, null=True)
     case_status = models.CharField(max_length=50, blank=True, null=True,choices=CaseStatus.choices, default=CaseStatus.OPEN)
     investigation_officer_name = models.CharField(max_length=50, help_text="Name of the investigation officer",blank=True, null=True)
     investigation_officer_contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
+    investigation_officer_contacts = models.CharField(null=True, blank=True)
     police_station = models.ForeignKey(PoliceStation, on_delete=models.CASCADE,null=True, blank=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE,null=True, blank=True)
     person = models.ForeignKey(Person, on_delete=models.SET_NULL,null=True, blank=True,related_name="firs",)

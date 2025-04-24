@@ -1,6 +1,3 @@
-<!-- ----------------------------------------------------------------------------------------------------- -->
-<!-- Basic Header Form -->
-<!-- ----------------------------------------------------------------------------------------------------- -->
 <div class="person-form-container p-4 bg-white rounded shadow-sm">
   <div class="heading-container">
     <h3 class="main-heading">MISSING PERSON REPORT FORM</h3>
@@ -46,15 +43,13 @@
         
 
 
-        <!-- <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Time of Birth</mat-label>
           <input
             matInput
-            [ngxTimepicker]="picker"
-            formControlName="birthtime"
-            readonly>
-           <ngx-material-timepicker #picker></ngx-material-timepicker>
-        </mat-form-field> -->
+            type="time"
+            formControlName="birthtime">
+        </mat-form-field>
         
         
         
@@ -67,9 +62,8 @@
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Gender</mat-label>
           <mat-select formControlName="gender">
-            <mat-option value="Male">Male</mat-option>
-            <mat-option value="Female">Female</mat-option>
-            <mat-option value="Other">Other</mat-option>
+            <mat-option value="male">Male</mat-option>
+            <mat-option value="female">Female</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -101,7 +95,7 @@
         <!-- Height -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Height (cm)</mat-label>
-          <mat-select formControlName="height">
+          <mat-select formControlName="height_range">
             <mat-option value="<150">Less than 150 cm</mat-option>
             <mat-option value="150-160">150 - 160 cm</mat-option>
             <mat-option value="161-170">161 - 170 cm</mat-option>
@@ -123,38 +117,52 @@
       <div class="d-flex flex-wrap align-items-center w-100">
 
         <!-- Complexion -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-4">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Complexion</mat-label>
           <mat-select formControlName="complexion">
-            <mat-option value="Fair">Fair</mat-option>
-            <mat-option value="Dusky">Dusky</mat-option>
-            <mat-option value="Wheatish">Wheatish</mat-option>
-            <mat-option value="Dark">Dark</mat-option>
+            <mat-option value="fair">Fair</mat-option>
+            <mat-option value="dusky">Dusky</mat-option>
+            <mat-option value="wheatish">Wheatish</mat-option>
+            <mat-option value="dark">Dark</mat-option>
+            <mat-option value="medium">Medium</mat-option>
+            <mat-option value="light">Light</mat-option>
           </mat-select>
         </mat-form-field>
+        
 
         <!-- Hair Color -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-4">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Hair Color</mat-label>
           <mat-select formControlName="hair_color">
-            <mat-option value="Black">Black</mat-option>
-            <mat-option value="Brown">Brown</mat-option>
-            <mat-option value="Grey">Grey</mat-option>
+            <mat-option value="black">Black</mat-option>
+            <mat-option value="brown">Brown</mat-option>
+            <mat-option value="grey">Grey</mat-option>
           </mat-select>
         </mat-form-field>
 
         <!-- Eye Color -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-4">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Eye Color</mat-label>
           <mat-select formControlName="eye_color">
-            <mat-option value="Dark Brown">Dark Brown</mat-option>
-            <mat-option value="Light Brown">Light Brown</mat-option>
-            <mat-option value="Hazel">Hazel</mat-option>
-            <mat-option value="Amber">Amber</mat-option>
-            <mat-option value="Green">Green</mat-option>
-            <mat-option value="Gray">Gray</mat-option>
+            <mat-option value="black">Black</mat-option>
+            <mat-option value="brown">Brown</mat-option>
+            <mat-option value="green">Green</mat-option>
+            <mat-option value="hazel">Hazel</mat-option>
+            <mat-option value="gray">Gray</mat-option>
+            <mat-option value="yellow">Yellow</mat-option>
+            <mat-option value="blue">Blue</mat-option>
+            <mat-option value="violet">Violet</mat-option>
           </mat-select>
         </mat-form-field>
+        
+        <!-- File Uploads -->
+        <div class="col-12 col-md-4 col-lg-3 d-flex flex-column">
+          <label class="form-label selectors-font">Person Photo</label>
+          <input type="file" accept="image/*"
+            class="form-control w-100"
+            (change)="onFileSelect_person_photo($event)">
+        </div>
+        
 
       </div>
 
@@ -174,6 +182,17 @@
             ></textarea>
         </mat-form-field>
 
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Select Hospital</mat-label>
+            <mat-select formControlName="hospital">
+              <mat-option *ngFor="let hospital of hospitalList" [value]="hospital.id">
+                {{ hospital.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
       </div>
 
     </div>
@@ -195,12 +214,12 @@
             <mat-form-field appearance="outline" class="w-100">
               <!-- <mat-label>Address Type</mat-label> -->
               <mat-select formControlName="address_type">
-                <mat-option value="" disabled>Select Address Type</mat-option>
-                <mat-option value="PERMANENT">Permanent</mat-option>
-                <mat-option value="CURRENT">Current</mat-option>
-                <mat-option value="OLD">Old</mat-option>
-                <mat-option value="HOME">Home</mat-option>
-                <mat-option value="OFFICE">Office</mat-option>
+                <mat-option value="" disabled>Address Type</mat-option>
+                <mat-option value="Permanent">Permanent</mat-option>
+                <mat-option value="Current">Current</mat-option>
+                <mat-option value="Old">Old</mat-option>
+                <mat-option value="home">Home</mat-option>
+                <mat-option value="Office">Office</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -288,12 +307,12 @@
 
             <mat-form-field appearance="outline" class="flex-grow-1">
               <mat-label>Latitude</mat-label>
-              <input matInput type="text" formControlName="latitude" readonly>
+              <input matInput type="text" formControlName="latitude" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="flex-grow-1">
               <mat-label>Longitude</mat-label>
-              <input matInput type="text" formControlName="longitude" readonly>
+              <input matInput type="text" formControlName="longitude" >
             </mat-form-field>
           </div>
         </div>
@@ -496,10 +515,10 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Caste</mat-label>
                 <mat-select formControlName="caste">
-                  <mat-option value="Open">Open</mat-option>
-                  <mat-option value="SC">SC</mat-option>
-                  <mat-option value="ST">ST</mat-option>
-                  <mat-option value="OBC">OBC</mat-option>
+                  <mat-option value="open">Open</mat-option>
+                  <mat-option value="sc">SC</mat-option>
+                  <mat-option value="st">ST</mat-option>
+                  <mat-option value="obc">OBC</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -527,9 +546,9 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Marital Status</mat-label>
                 <mat-select formControlName="marital_status">
-                  <mat-option value="Single">Single</mat-option>
-                  <mat-option value="Married">Married</mat-option>
-                  <mat-option value="Divorced">Divorced</mat-option>
+                  <mat-option value="single">Single</mat-option>
+                  <mat-option value="married">Married</mat-option>
+                  <mat-option value="divorced">Divorced</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -622,24 +641,24 @@
 
           <!-- File Uploads -->
           <div class="col-md-6 d-flex flex-column">
-            <label class="form-label selectors-font">Upload Person Photo</label>
+            <label class="form-label selectors-font">Reference Photo</label>
             <input type="file" accept="image/*" (change)="onFileSelect($event, 'last_known_details', i, 'person_photo')"
               class="form-control w-100">
           </div>
 
           <div class="col-md-6 d-flex flex-column">
-            <label class="form-label selectors-font">Upload Reference Photo</label>
+            <label class="form-label selectors-font">Another Reference Photo</label>
             <input type="file" accept="image/*"
               (change)="onFileSelect($event, 'last_known_details', i, 'reference_photo')" class="form-control w-100">
           </div>
 
           <!-- Missing Time -->
-          <!-- <div class="col-md-6">
+          <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Missing Time</mat-label>
               <input matInput type="time" formControlName="missing_time">
             </mat-form-field>
-          </div> -->
+          </div>
 
           <!-- Missing Date -->
           <div class="col-md-6">
@@ -703,7 +722,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <!-- <mat-label>Case Status</mat-label> -->
               <mat-select formControlName="case_status">
-                <mat-option value="">Select Case Status</mat-option>
+                <mat-option value="">Case Status</mat-option>
                 <mat-option value="Open">Open</mat-option>
                 <mat-option value="Resolved">Resolved</mat-option>
                 <mat-option value="In Progress">In Progress</mat-option>
@@ -720,9 +739,14 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Police Station Name & Address</mat-label>
-              <input matInput type="text" formControlName="police_station" >
+              <mat-select formControlName="police_station">
+                <mat-option *ngFor="let station of policeStationList" [value]="station.id">
+                  {{ station.name }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
+          
 
           <!-- Investigating Officer Name -->
           <div class="col-md-4">
@@ -737,7 +761,7 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Contact Number</mat-label>
-              <input matInput type="text" formControlName="investigation_officer_contact"
+              <input matInput type="text" formControlName="investigation_officer_contacts"
                 >
             </mat-form-field>
           </div>
@@ -759,12 +783,12 @@
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
   
           <!-- Additional Info Field -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Additional Info</mat-label>
               <input matInput formControlName="data" />
             </mat-form-field>
-          </div>
+          </div> -->
         
           <!-- Consent Checkbox -->
           <div class="col-md-12">
