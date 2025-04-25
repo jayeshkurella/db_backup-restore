@@ -19,7 +19,7 @@ class VolunteerAdmin(admin.ModelAdmin):
 
     ordering = ('-search_start_date',)
 
-    readonly_fields = ('photo_upload',)
+
 
     fieldsets = (
         ("Personal Details", {

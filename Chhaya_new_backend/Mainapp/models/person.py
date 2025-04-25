@@ -180,7 +180,7 @@ class Person(models.Model):
     type = models.CharField(max_length=20, choices=TypeChoices.choices,db_index=True)
     full_name = models.CharField(max_length=100,blank=True, null=True,db_index=True)
     birth_date = models.DateField(blank=True, null=True,db_index=True)
-    age = models.FloatField(blank=True, null=True,db_index=True)
+    age = models.IntegerField(blank=True, null=True,db_index=True)
     age_range = models.CharField(choices=AGE_RANGE_CHOICES,blank=True, null=True,db_index=True)
     birthtime = models.TimeField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES,blank=True, null=True,db_index=True)
@@ -243,7 +243,8 @@ class Person(models.Model):
     location = models.PointField(srid=4326, blank=True, null=True, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
     country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
-    reported_date = models.DateField(default=date.today)  # Not now()
+    # reported_date = models.DateField(default=date.today)
+    reported_date = models.DateField(default=date.today, editable=False)
 
     match_entity_id = models.UUIDField(
         blank=True,

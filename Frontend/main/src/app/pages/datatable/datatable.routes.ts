@@ -6,7 +6,7 @@ import { UnidentifiedBodiesComponent } from './unidentified-bodies/unidentified-
 import { authGuard } from '../authentication/side-login/auth.guard';
 import { AccessProviderComponent } from './access-provider/access-provider.component';
 
-export const DatatablesRoutes: Routes = [
+export const datatablesRoutes: Routes = [
   {
     path: '',
     canActivate: [authGuard],
@@ -15,10 +15,10 @@ export const DatatablesRoutes: Routes = [
         path: 'missing-person',
         component: AppKichenSinkComponent,
         data: {
-          title: 'Datatable',
+          title: 'datatable',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Datatable' },
+            { title: 'datatable' },
           ],
         },
       },
@@ -26,10 +26,10 @@ export const DatatablesRoutes: Routes = [
         path: 'unidentified-person',
         component: UnidentifiedPersonComponent,
         data: {
-          title: 'Datatable',
+          title: 'datatable',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Datatable' },
+            { title: 'datatable' },
           ],
         },
         
@@ -38,10 +38,10 @@ export const DatatablesRoutes: Routes = [
         path: 'unidentified-bodies',
         component: UnidentifiedBodiesComponent,
         data: {
-          title: 'Datatable',
+          title: 'datatable',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Datatable' },
+            { title: 'datatable' },
           ],
         }, 
       },
@@ -49,10 +49,10 @@ export const DatatablesRoutes: Routes = [
         path: 'admin-access',
         component: AccessProviderComponent,
         data: {
-          title: 'Datatable',
+          title: 'datatable',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Datatable' },
+            { title: 'datatable' },
           ],
         }, 
       }

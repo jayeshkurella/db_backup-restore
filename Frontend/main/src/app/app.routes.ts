@@ -54,7 +54,7 @@ export const routes: Routes = [
         path: 'datatable',
         loadChildren: () =>
           import('./pages/datatable/datatable.routes').then(
-            (m) => m.DatatablesRoutes
+            (m) => m.datatablesRoutes
           ),
       },
       {

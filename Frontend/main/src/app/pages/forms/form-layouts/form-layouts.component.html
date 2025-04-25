@@ -182,7 +182,7 @@
             ></textarea>
         </mat-form-field>
 
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Select Hospital</mat-label>
             <mat-select formControlName="hospital">
@@ -191,7 +191,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
         
       </div>
 
@@ -546,9 +546,17 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Marital Status</mat-label>
                 <mat-select formControlName="marital_status">
+                  <mat-option value="">Marital Status</mat-option>
                   <mat-option value="single">Single</mat-option>
                   <mat-option value="married">Married</mat-option>
                   <mat-option value="divorced">Divorced</mat-option>
+                  <mat-option value="widowed">Widowed</mat-option>
+                  <mat-option value="separated">Separated</mat-option>
+                  <mat-option value="annulled">Annulled</mat-option>
+                  <mat-option value="in_relationship">In a Relationship</mat-option>
+                  <mat-option value="engaged">Engaged</mat-option>
+                  <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
+                  <mat-option value="unknown">Unknown</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>

@@ -20,7 +20,7 @@ export class LoginApiService {
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(this.baseUrl + 'api/users/', { action: 'login', ...credentials }).pipe(
+    return this.http.post(this.baseUrl + '/api/users/', { action: 'login', ...credentials }).pipe(
       tap((response: any) => {
         if (response && response.token) {
           // Store authentication data in localStorage

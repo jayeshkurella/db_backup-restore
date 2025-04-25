@@ -13,7 +13,7 @@ export class RegisterApiService {
 
 
   register(userData: any): Observable<any> {
-    return this.http.post(this.baseUrl+'api/users/', { action: 'register', ...userData });
+    return this.http.post(this.baseUrl+'/api/users/', { action: 'register', ...userData });
   }
 
 }

@@ -51,7 +51,7 @@ class PersonAdmin(LeafletGeoAdmin):
             "fields": ("hospital", "document_ids")
         }),
         ("System Information", {
-            "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted","match_with",'reported_date')
+            "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted","match_with")
         }),
     )
 

@@ -481,40 +481,73 @@ class PersonViewSet(viewsets.ViewSet):
     def get_persons_by_type(self, request, person_type):
         """Return filtered persons based on request parameters"""
         try:
-            # Initialize filters with query params (excluding empty values)
-            filters = {
-                key: value
-                for key, value in request.query_params.items()
-                if value and key not in ['startDate', 'endDate']  # Exclude date params
-            }
+            filters = {}
+            additional_info_filters = {}
 
-            # Handle date filtering separately
+            age_range = request.query_params.get('age_range')
+            age = request.query_params.get('age')
+
+            for key, value in request.query_params.items():
+                if not value or key in ['startDate', 'endDate', 'age_range', 'age']:
+                    continue
+
+                # Fields from related model 'additional_info'
+                if key == 'caste':
+                    additional_info_filters['additional_info__caste'] = value
+                elif key == 'marital_status':
+                    additional_info_filters['additional_info__marital_status'] = value
+                elif key == 'height_range':
+                    filters['height_range'] = value
+                else:
+                    filters[key] = value
+
+            # Handle date filtering
             start_date = request.query_params.get('startDate')
             end_date = request.query_params.get('endDate')
 
-            if start_date:
+            if start_date and start_date != "null":
                 try:
-                    start_date = parser.parse(start_date).date()
-                    filters['date_reported__gte'] = start_date  # ✅ Correct field name
+                    filters['reported_date__gte'] = parser.parse(start_date).date()
                 except (ValueError, TypeError):
-                    pass  # Skip if invalid
+                    pass
 
-            if end_date:
+            if end_date and end_date != "null":
                 try:
-                    end_date = parser.parse(end_date).date()
-                    filters['date_reported__lte'] = end_date  # ✅ Correct field name
+                    filters['reported_date__lte'] = parser.parse(end_date).date()
                 except (ValueError, TypeError):
-                    pass  # Skip if invalid
+                    pass
 
-            # Apply filters to the Person model
+            # Handle age filtering logic safely
+            if age_range and age_range.lower() != "null":
+                try:
+                    lower, upper = map(int, age_range.split('-'))
+                    if 'missing' in person_type.lower():
+                        filters['age__gte'] = lower
+                        filters['age__lte'] = upper
+                    else:
+                        filters['age_range'] = age_range
+
+                    print("Age range filter:", lower, upper)
+                except ValueError:
+                    print("Invalid age_range format:", age_range)
+            else:
+                print("Age range filter: not provided or null")
+
+            if age and person_type == 'missing-persons':
+                filters['age'] = age
+
+            print("Final filters:", filters)
+            print("Additional info filters:", additional_info_filters)
+
             persons = Person.objects.filter(
                 type=person_type,
                 _is_deleted=False,
-                **filters
+                **filters,
+                **additional_info_filters
             ).prefetch_related(
                 'addresses', 'contacts', 'additional_info',
                 'last_known_details', 'firs', 'consent'
-            ).order_by('-created_at')
+            ).order_by('-created_at').distinct()
 
             if not persons.exists():
                 return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
@@ -524,3 +557,144 @@ class PersonViewSet(viewsets.ViewSet):
 
         except Exception as e:
             return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # def get_persons_by_type(self, request, person_type):
+    #     """Return filtered persons based on request parameters"""
+    #
+    #     try:
+    #         filters = {}
+    #         additional_info_filters = {}
+    #
+    #         age_range = request.query_params.get('age_range')
+    #         age = request.query_params.get('age')
+    #
+    #         for key, value in request.query_params.items():
+    #             if not value or key in ['startDate', 'endDate', 'age_range', 'age']:
+    #                 continue
+    #
+    #             # Fields from related model 'additional_info'
+    #             if key == 'caste':
+    #                 additional_info_filters['additional_info__caste'] = value
+    #             elif key == 'marital_status':
+    #                 additional_info_filters['additional_info__marital_status'] = value
+    #             elif key == 'height_range':
+    #                 filters['height_range'] = value
+    #             else:
+    #                 filters[key] = value
+    #
+    #         # Handle date filtering
+    #         start_date = request.query_params.get('startDate')
+    #         end_date = request.query_params.get('endDate')
+    #
+    #         if start_date and start_date != "null":
+    #             try:
+    #                 filters['reported_date__gte'] = parser.parse(start_date).date()
+    #             except (ValueError, TypeError):
+    #                 pass
+    #
+    #         if end_date and end_date != "null":
+    #             try:
+    #                 filters['reported_date__lte'] = parser.parse(end_date).date()
+    #             except (ValueError, TypeError):
+    #                 pass
+    #
+    #         # Handle age filtering logic
+    #         if age_range and age_range.lower() != "null":
+    #             try:
+    #                 lower, upper = map(int, age_range.split('-'))
+    #                 if 'missing' in person_type.lower():  # For missing persons
+    #                     filters['age__gte'] = lower
+    #                     filters['age__lte'] = upper
+    #                 else:  # For unidentified persons/bodies
+    #                     filters['age_range'] = age_range
+    #
+    #                 print("Age range filter:", lower, upper)
+    #             except ValueError:
+    #                 print("Invalid age_range format:", age_range)
+    #         else:
+    #             print("Age range filter: not provided or null")
+    #
+    #         if age and person_type == 'missing-persons':
+    #             filters['age'] = age
+    #
+    #         print("Age range filter:", lower, upper)
+    #         print("Final filters:", filters)
+    #         print("Additional info filters:", additional_info_filters)
+    #
+    #         persons = Person.objects.filter(
+    #             type=person_type,
+    #             _is_deleted=False,
+    #             **filters,
+    #             **additional_info_filters
+    #         ).prefetch_related(
+    #             'addresses', 'contacts', 'additional_info',
+    #             'last_known_details', 'firs', 'consent'
+    #         ).order_by('-created_at').distinct()
+    #
+    #         if not persons.exists():
+    #             return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
+    #
+    #         serializer = PersonSerializer(persons, many=True)
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #
+    #     except Exception as e:
+    #         return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # def get_persons_by_type(self, request, person_type):
+    #     """Return filtered persons based on request parameters"""
+    #     try:
+    #         filters = {}
+    #         additional_info_filters = {}
+    #
+    #         for key, value in request.query_params.items():
+    #             if not value:
+    #                 continue
+    #
+    #             if key == 'startDate' or key == 'endDate':
+    #                 continue  # handle separately below
+    #
+    #             # Fields from related model 'additional_info'
+    #             if key == 'caste':
+    #                 additional_info_filters['additional_info__caste'] = value
+    #             elif key == 'marital_status':
+    #                 additional_info_filters['additional_info__marital_status'] = value
+    #             else:
+    #                 filters[key] = value
+    #
+    #         # Handle date filtering
+    #         start_date = request.query_params.get('startDate')
+    #         end_date = request.query_params.get('endDate')
+    #
+    #         if start_date:
+    #             try:
+    #                 start_date = parser.parse(start_date).date()
+    #                 filters['reported_date__gte'] = start_date
+    #             except (ValueError, TypeError):
+    #                 pass
+    #
+    #         if end_date:
+    #             try:
+    #                 end_date = parser.parse(end_date).date()
+    #                 filters['reported_date__lte'] = end_date
+    #             except (ValueError, TypeError):
+    #                 pass
+    #
+    #         # Combine all filters
+    #         persons = Person.objects.filter(
+    #             type=person_type,
+    #             _is_deleted=False,
+    #             **filters,
+    #             **additional_info_filters
+    #         ).prefetch_related(
+    #             'addresses', 'contacts', 'additional_info',
+    #             'last_known_details', 'firs', 'consent'
+    #         ).order_by('-created_at').distinct()
+    #
+    #         if not persons.exists():
+    #             return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
+    #
+    #         serializer = PersonSerializer(persons, many=True)
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #
+    #     except Exception as e:
+    #         return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)

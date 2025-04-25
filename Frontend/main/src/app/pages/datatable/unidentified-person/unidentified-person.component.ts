@@ -167,8 +167,8 @@ export class UnidentifiedPersonComponent implements AfterViewInit , OnInit{
             console.log("Extracted API Response:", responseData);
 
             if (responseData && Array.isArray(responseData)) {
-                this.pendingPersons = responseData.filter(person => person.case_status === 'Pending') || [];
-                this.resolvedPersons = responseData.filter(person => person.case_status === 'Resolved') || [];
+                this.pendingPersons = responseData.filter(person => person.case_status === 'pending') || [];
+                this.resolvedPersons = responseData.filter(person => person.case_status === 'resolved') || [];
 
                 if (this.dataSourcePending) this.dataSourcePending.data = this.pendingPersons;
                 if (this.dataSourceResolved) this.dataSourceResolved.data = this.resolvedPersons;

@@ -30,7 +30,7 @@ export class FormApiService {
   postMissingPerson(payload: any): Observable<any> {
     const headers = this.createHeaders();  // Get headers with token
     console.log("Payload for Unidentified Person:", payload);
-    return this.http.post<any>(this.apiUrl + "api/persons/", payload, { headers }).pipe(
+    return this.http.post<any>(this.apiUrl + "/api/persons/", payload, { headers }).pipe(
       tap(
         (response: any) => console.log("✅ Response received:", response),
         (error: any) => console.error("❌ Error occurred:", error)
@@ -41,7 +41,7 @@ export class FormApiService {
   // Get All Persons with Authorization Token
   getallPerson(): Observable<any> {
     const headers = this.createHeaders();  // Get headers with token
-    return this.http.get(this.apiUrl + "api/persons/", { headers, observe: 'response' }).pipe(
+    return this.http.get(this.apiUrl + "/api/persons/", { headers, observe: 'response' }).pipe(
       tap(response => {
         console.log('Response Headers:', response.headers);
       }),
@@ -52,12 +52,12 @@ export class FormApiService {
  // Get Police Station List
   getPoliceStationList(): Observable<any[]> {
     const headers = this.createHeaders();
-    return this.http.get<any[]>(this.apiUrl + 'api/police-station-name-list/', { headers });
+    return this.http.get<any[]>(this.apiUrl + '/api/police-station-name-list/', { headers });
   }
   
   getHospitalList(): Observable<any> {
     const headers = this.createHeaders(); // for token if needed
-    return this.http.get<any>(this.apiUrl + 'api/hospital-name-list/', { headers });
+    return this.http.get<any>(this.apiUrl + '/api/hospital-name-list/', { headers });
   }
   
 }

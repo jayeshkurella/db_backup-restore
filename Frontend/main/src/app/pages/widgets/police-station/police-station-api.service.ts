@@ -29,7 +29,7 @@ searchPoliceStations(queryParams: any): Observable<any> {
     .set('district', queryParams.district || '')
     .set('state', queryParams.state || '');
 
-  return this.http.get<any>(`${this.apiurl}api/police-stations/`, { headers, params }).pipe(
+  return this.http.get<any>(`${this.apiurl}/api/police-stations/`, { headers, params }).pipe(
     catchError(error => {
       console.error("Error in searchPoliceStations:", error);
       return throwError(() => error);
@@ -47,7 +47,7 @@ addPoliceStation(data: any): Observable<any> {
 
   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
-  return this.http.post(`${this.apiurl}api/police-stations/`, data, { headers }).pipe(
+  return this.http.post(`${this.apiurl}/api/police-stations/`, data, { headers }).pipe(
     catchError(error => {
       console.error("Error in addPoliceStation:", error);
       return throwError(() => error);
@@ -65,7 +65,7 @@ getAllPoliceStations(page: any): Observable<any> {
 
   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
-  return this.http.get(`${this.apiurl}api/police-stations/?page=${page}`, { headers }).pipe(
+  return this.http.get(`${this.apiurl}/api/police-stations/?page=${page}`, { headers }).pipe(
     catchError(error => {
       console.error("Error in getAllPoliceStations:", error);
       return throwError(() => error);

@@ -10,7 +10,12 @@ class AdditionalInfo(models.Model):
         SC = 'sc', 'Scheduled Caste (SC)'
         ST = 'st', 'Scheduled Tribe (ST)'
         OBC = 'obc', 'Other Backward Class (OBC)'
-        OPEN = 'open', 'Open/General'
+        OPEN = 'open', 'Open / General'
+        NT = 'nt', 'Nomadic Tribes (NT)'
+        SBC = 'sbc', 'Special Backward Class (SBC)'
+        VJ = 'vj', 'Vimukta Jati (VJ)'
+        SEBC = 'sebc', 'Socially and Educationally Backward Class (SEBC)'
+        OTHER = 'other', 'Other'
 
     class SubCasteChoices(models.TextChoices):
         MAHAR ='mahar', 'Mahar'
@@ -23,13 +28,17 @@ class AdditionalInfo(models.Model):
         Teli = 'teli', 'Teli'
         Kumbhar = 'kumbhar', 'Kumbhar'
 
-
-
     class MaritalStatusChoices(models.TextChoices):
-        MARRIED = 'married', 'Married'
         SINGLE = 'single', 'Single'
+        MARRIED = 'married', 'Married'
         DIVORCED = 'divorced', 'Divorced'
-        WIDOW = 'widow', 'Widow/Widower'
+        WIDOWED = 'widowed', 'Widowed'
+        SEPARATED = 'separated', 'Separated'
+        ANNULLED = 'annulled', 'Annulled'
+        IN_RELATIONSHIP = 'in_relationship', 'In a Relationship'
+        ENGAGED = 'engaged', 'Engaged'
+        DOMESTIC_PARTNERSHIP = 'domestic_partnership', 'Domestic Partnership'
+        UNKNOWN = 'unknown', 'Unknown'
 
     class IdTypeChoices(models.TextChoices):
         AADHAR = 'aadhar', 'Aadhar'
@@ -55,7 +64,7 @@ class AdditionalInfo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     caste = models.CharField(max_length=10, choices=CasteChoices.choices,blank=True, null=True)
     subcaste = models.CharField(max_length=50, blank=True, null=True)
-    marital_status = models.CharField(max_length=10, choices=MaritalStatusChoices.choices)
+    marital_status = models.CharField(max_length=50, choices=MaritalStatusChoices.choices)
     religion = models.CharField(max_length=50, blank=True, null=True,choices=ReligionChoices.choices)
     mother_tongue = models.CharField(max_length=50, blank=True, null=True,choices=MothertoungueChoices.choices)
     other_known_languages  = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")

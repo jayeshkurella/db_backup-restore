@@ -281,7 +281,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
  viewDetails(person: any): void {
     const personId = person.id.split('.')[1];
   
-    fetch(`${environment.apiUrl}api/persons/${personId}/`)
+    fetch(`${environment.apiUrl}/api/persons/${personId}/`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to fetch person details: ${response.status}`);
@@ -693,7 +693,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
             const [lng, lat] = geometry.coordinates;
             const latlng: L.LatLngTuple = [lat, lng];
 
-            const personResponse = await fetch(`${environment.apiUrl}api/persons/${personId}/`);
+            const personResponse = await fetch(`${environment.apiUrl}/api/persons/${personId}/`);
             if (!personResponse.ok) throw new Error(`Failed to fetch person details: ${personResponse.status}`);
 
             const personDetails = await personResponse.json();

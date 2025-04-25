@@ -219,26 +219,63 @@ export class AppKichenSinkComponent implements AfterViewInit {
    // ✅ Initialize data sources with empty arrays
    dataSourcePending = new MatTableDataSource<any>([]);
    dataSourceResolved = new MatTableDataSource<any>([]);
-  
+   ngAfterViewInit() {
+    this.dataSourcePending.paginator = this.paginatorPending;
+    this.dataSourceResolved.paginator = this.paginatorResolved;
+  }
 
   @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
   @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
   constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService) {}
-  filters = {
-    full_name: '',
-    city: '',
-    state: '',
-    startDate: null as string | null,  // Change type to string | null
-    endDate: null as string | null,    // Change type to string | null
-    caste: '',
-    age: '',
-    marital_status: '',
-    blood_group: '',
-    height: '',
-    district: '',
-    gender: ''
-};
+    filters = {
+      full_name: '',
+      city: '',
+      state: '',
+      startDate: null as string | null,  // Change type to string | null
+      endDate: null as string | null,    // Change type to string | null
+      caste: '',
+      age_range: '',
+      marital_status: '',
+      blood_group: '',
+      height_range: '',
+      district: '',
+      gender: ''
+  };
+  casteOptions = [
+    { value: 'open', label: 'Open / General' },
+    { value: 'obc', label: 'OBC' },
+    { value: 'sc', label: 'SC' },
+    { value: 'st', label: 'ST' },
+    { value: 'nt', label: 'NT' },
+    { value: 'vj', label: 'VJ' },
+    { value: 'sbc', label: 'SBC' },
+    { value: 'sebc', label: 'SEBC' },
+    { value: 'other', label: 'Other' },
+  ];
+  
+  heightRangeOptions = [
+    { value: '<150', label: 'Less than 150 cm' },
+    { value: '150-160', label: '150 - 160 cm' },
+    { value: '161-170', label: '161 - 170 cm' },
+    { value: '171-180', label: '171 - 180 cm' },
+    { value: '181-190', label: '181 - 190 cm' },
+    { value: '>190', label: 'More than 190 cm' }
+  ];
 
+  ageRanges = [
+    { value: "0-5", label: "0 - 5" },
+    { value: "6-12", label: "6 - 12" },
+    { value: "13-17", label: "13 - 17" },
+    { value: "18-24", label: "18 - 24" },
+    { value: "25-34", label: "25 - 34" },
+    { value: "35-44", label: "35 - 44" },
+    { value: "45-54", label: "45 - 54" },
+    { value: "55-64", label: "55 - 64" },
+    { value: "65-74", label: "65 - 74" },
+    { value: "75-84", label: "75 - 84" },
+    { value: "85-100", label: "85+" }
+  ];
+  
 
 
   pendingPersons: any[] = [];
@@ -251,11 +288,11 @@ export class AppKichenSinkComponent implements AfterViewInit {
       this.allstates = states;
     });
   }
-  ngAfterViewInit(): void {
-    this.dataSourcePending.paginator = this.paginatorPending;
-    this.dataSourceResolved.paginator = this.paginatorResolved;
-    this.dataSource.paginator = this.paginator;
-  }
+  // ngAfterViewInit(): void {
+  //   this.dataSourcePending.paginator = this.paginatorPending;
+  //   this.dataSourceResolved.paginator = this.paginatorResolved;
+  //   this.dataSource.paginator = this.paginator;
+  // }
 
   onStateChange() {
     this.filters.district = '';
@@ -283,89 +320,165 @@ export class AppKichenSinkComponent implements AfterViewInit {
   
 
 
+  // applyFilters(): void {
+  //   this.loading = true;
+  //   this.progressMessage = "🔄 Applying filters...";
+  
+  //   // Safely parse and format dates
+  // const parsedStartDate = this.parseToDate(this.filters.startDate);
+  // const parsedEndDate = this.parseToDate(this.filters.endDate);
+
+  // if (parsedStartDate) {
+  //   this.filters.startDate = this.formatDate(parsedStartDate);
+  // }
+
+  // if (parsedEndDate) {
+  //   this.filters.endDate = this.formatDate(parsedEndDate);
+  // }
+  //   this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
+  //     (response) => {
+  //       this.loading = false;
+  
+  //       const responseData = response?.body || response;
+  //       console.log("Extracted API Response:", responseData);
+  
+  //       if (responseData && Array.isArray(responseData)) {
+  //         this.pendingPersons = responseData.filter(person => person.case_status === 'pending') || [];
+  //         this.resolvedPersons = responseData.filter(person => person.case_status === 'resolved') || [];
+  
+  //         if (this.dataSourcePending) this.dataSourcePending.data = this.pendingPersons;
+  //         if (this.dataSourceResolved) this.dataSourceResolved.data = this.resolvedPersons;
+  
+  //         this.progressMessage = "✅ Filters applied successfully!";
+  //       } else {
+  //         this.pendingPersons = [];
+  //         this.resolvedPersons = [];
+  //         if (this.dataSourcePending) this.dataSourcePending.data = [];
+  //         if (this.dataSourceResolved) this.dataSourceResolved.data = [];
+  
+  //         this.progressMessage = "❌ No data found!";
+  //       }
+  //     },
+  //     (error) => {
+  //       this.loading = false;
+  //       console.error('Error fetching data:', error);
+  //       this.progressMessage = "❌ Error applying filters!";
+  //     }
+  //   );
+  // }
+
   applyFilters(): void {
-    this.loading = true;   // Show full-screen spinner
+    this.loading = true;
     this.progressMessage = "🔄 Applying filters...";
-
-    // Format startDate and endDate before sending the request (as string)
-    // if (this.filters.startDate instanceof Date) {
-    //     this.filters.startDate = this.formatDate(this.filters.startDate);
-    // }
-    // if (this.filters.endDate instanceof Date) {
-    //     this.filters.endDate = this.formatDate(this.filters.endDate);
-    // }
-
-    this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-        (response) => {
-            this.loading = false;  // Hide spinner
-
-            const responseData = response?.body || response;
-            console.log("Extracted API Response:", responseData);
-
-            if (responseData && Array.isArray(responseData)) {
-                this.pendingPersons = responseData.filter(person => person.case_status === 'Pending') || [];
-                this.resolvedPersons = responseData.filter(person => person.case_status === 'Resolved') || [];
-
-                if (this.dataSourcePending) this.dataSourcePending.data = this.pendingPersons;
-                if (this.dataSourceResolved) this.dataSourceResolved.data = this.resolvedPersons;
-
-                this.progressMessage = "✅ Filters applied successfully!";
-            } else {
-                console.error('Unexpected API response:', responseData);
-
-                this.pendingPersons = [];
-                this.resolvedPersons = [];
-                if (this.dataSourcePending) this.dataSourcePending.data = [];
-                if (this.dataSourceResolved) this.dataSourceResolved.data = [];
-
-                this.progressMessage = "❌ No data found!";
-            }
-        },
-        (error) => {
-            this.loading = false;  // Hide spinner
-            console.error('Error fetching data:', error);
-            this.progressMessage = "❌ Error applying filters!";
-        }
-    );
-}
-
-// Helper function to format date in YYYY-MM-DD format
-formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
-    const day = date.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
-    return `${year}-${month}-${day}`;
-}
-
-
-
-
-
-
-
-
-openDialog(obj: any): void {
-  const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
-    width: '80vw', // 80% of the viewport width
-    maxWidth: '900px', // Limit max width
-    data: obj,
-    panelClass: 'custom-dialog-container' 
-  });
-
-  // Ensure `selectedPerson` is set before initializing the map
-  this.selectedPerson = obj; 
-
-  // Delay to allow the dialog to render before initializing the map
-  setTimeout(() => {
-    this.initMap();
-  }, 500);
-
-  dialogRef.afterClosed().subscribe((result) => {
-    if (result?.event === 'Update') {
-      this.updateRowData(result.data);
+    this.filtersApplied = true; // Ensure this is set when filters are applied
+  
+    // Safely parse and format dates
+    const parsedStartDate = this.parseToDate(this.filters.startDate);
+    const parsedEndDate = this.parseToDate(this.filters.endDate);
+  
+    if (parsedStartDate) {
+      this.filters.startDate = this.formatDate(parsedStartDate);
     }
-  });
-}
+  
+    if (parsedEndDate) {
+      this.filters.endDate = this.formatDate(parsedEndDate);
+    }
+  
+    this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
+      (response) => {
+        this.loading = false;
+        const responseData = response?.body || response;
+  
+        // Clear previous data
+        this.dataSourcePending.data = [];
+        this.dataSourceResolved.data = [];
+  
+        if (responseData?.message) {
+          this.progressMessage = responseData.message;
+        } else if (Array.isArray(responseData)) {
+          // Filter and set data
+          this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
+          this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
+  
+          // Connect paginators (needed if data changes)
+          this.dataSourcePending.paginator = this.paginatorPending;
+          this.dataSourceResolved.paginator = this.paginatorResolved;
+  
+          // Reset pagination to first page
+          if (this.paginatorPending) {
+            this.paginatorPending.firstPage();
+          }
+          if (this.paginatorResolved) {
+            this.paginatorResolved.firstPage();
+          }
+  
+          this.progressMessage = responseData.length > 0 
+            ? "✅ Filters applied successfully!" 
+            : "No matching records found";
+        } else {
+          this.progressMessage = "❌ Unexpected response format from server";
+        }
+      },
+      (error) => {
+        this.loading = false;
+        console.error('Error fetching data:', error);
+        this.progressMessage = error.error?.message 
+          ? `❌ ${error.error.message}` 
+          : "❌ Error applying filters!";
+      }
+    );
+  }
+  
+  
+  
+  // ✅ Helper function
+  parseToDate(input: string | null): Date | null {
+    if (!input) return null;
+  
+    const parsed = new Date(input);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+  
+  // ✅ Already existing date formatter
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+  openDialog(obj: any): void {
+    const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
+      width: '80vw', // 80% of the viewport width
+      maxWidth: '900px', // Limit max width
+      data: obj,
+      panelClass: 'custom-dialog-container' 
+    });
+
+    // Ensure `selectedPerson` is set before initializing the map
+    this.selectedPerson = obj; 
+
+    // Delay to allow the dialog to render before initializing the map
+    setTimeout(() => {
+      this.initMap();
+    }, 500);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.event === 'Update') {
+        this.updateRowData(result.data);
+      }
+    });
+  }
 
 
 
