@@ -1,4 +1,23 @@
 .text-muted {
     color: var(--mat-text-color) !important;
   }
-
+  .centered-icon-text {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+  
+  .centered-icon-text mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .centered-icon-text span {
+    line-height: normal;
+  }
+  

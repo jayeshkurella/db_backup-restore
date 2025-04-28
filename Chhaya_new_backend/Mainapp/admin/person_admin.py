@@ -5,7 +5,7 @@ from leaflet.admin import LeafletGeoAdmin
 @admin.register(Person)
 class PersonAdmin(LeafletGeoAdmin):
     list_display = (
-        "sr_no", "full_name", "type", "gender", "age", "age_range","birth_date","birthtime",
+        "person_approve_status","sr_no", "full_name", "type", "gender", "age", "age_range","birth_date","birthtime",
         "height","height_range", "weight", "blood_group", "complexion","photo_photo",
         "eye_color", "hair_type", "hair_color",
         'street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country',
@@ -13,7 +13,7 @@ class PersonAdmin(LeafletGeoAdmin):
     )
 
     list_filter = (
-        "type", "gender", "blood_group", "complexion",
+       "person_approve_status", "type", "gender", "blood_group", "complexion",
         "eye_color", "hair_type", "hair_color", "Body_Condition",
         "_is_confirmed", "_is_deleted", "hospital",
         "condition", "state", "country", "address_type", "case_status"
@@ -51,7 +51,7 @@ class PersonAdmin(LeafletGeoAdmin):
             "fields": ("hospital", "document_ids")
         }),
         ("System Information", {
-            "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted","match_with")
+            "fields": ("created_by", "updated_by", "created_at", "updated_at", "_is_confirmed", "_is_deleted","match_with","person_approve_status")
         }),
     )
 

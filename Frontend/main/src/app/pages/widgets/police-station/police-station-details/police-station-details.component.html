@@ -3,7 +3,7 @@
     <div class="header-section">
       <div class="header-content">
         <div class="title-section">
-          <h1 class="station-name">{{ policestation.name }}</h1>
+          <h5 class="station-name">{{ policestation.name }}</h5>
           <div class="status-badge">
             <mat-chip [color]="policestation.activ_Status === 'Active' ? 'primary' : 'warn'" selected>
               {{ policestation.activ_Status || 'Active' }}
@@ -110,7 +110,6 @@
           </mat-card-title>
           <mat-card-subtitle>Multiple ways to reach this station</mat-card-subtitle>
         </mat-card-header>
-        <mat-divider></mat-divider>
         <mat-card-content>
           <div class="contacts-grid">
             <div class="contact-card" *ngFor="let contact of policestation.police_contact; let i = index">
@@ -146,7 +145,6 @@
           </mat-card-title>
           <mat-card-subtitle>Find us on the map</mat-card-subtitle>
         </mat-card-header>
-        <mat-divider></mat-divider>
         <mat-card-content>
           <div class="map-container" id="policeStationMap"></div>
         </mat-card-content>

@@ -60,6 +60,9 @@ export class UnidentifiedBodiesComponent  implements AfterViewInit , OnInit {
 
   dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action','match_with'];
+  displayedColumnsPending: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
+  displayedColumnsResolved: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action'];
+
 
   selectedPerson: any = null;
   map: L.Map | undefined;
@@ -108,20 +111,54 @@ export class UnidentifiedBodiesComponent  implements AfterViewInit , OnInit {
     ) {}
 
     filters = {
-      full_name :'',
+      full_name: '',
       city: '',
       state: '',
-      year: '',
-      month: '',
-      caste: '', 
-      age: '',
+      startDate: null as string | null,  // Change type to string | null
+      endDate: null as string | null,    // Change type to string | null
+      caste: '',
+      age_range: '',
       marital_status: '',
       blood_group: '',
-      height: '',
-      district:'',
-      gender:''
+      height_range: '',
+      district: '',
+      gender: ''
+  };
+  casteOptions = [
+    { value: 'open', label: 'Open / General' },
+    { value: 'obc', label: 'OBC' },
+    { value: 'sc', label: 'SC' },
+    { value: 'st', label: 'ST' },
+    { value: 'nt', label: 'NT' },
+    { value: 'vj', label: 'VJ' },
+    { value: 'sbc', label: 'SBC' },
+    { value: 'sebc', label: 'SEBC' },
+    { value: 'other', label: 'Other' },
+  ];
   
-    };
+  heightRangeOptions = [
+    { value: '<150', label: 'Less than 150 cm' },
+    { value: '150-160', label: '150 - 160 cm' },
+    { value: '161-170', label: '161 - 170 cm' },
+    { value: '171-180', label: '171 - 180 cm' },
+    { value: '181-190', label: '181 - 190 cm' },
+    { value: '>190', label: 'More than 190 cm' }
+  ];
+
+  ageRanges = [
+    { value: "0-5", label: "0 - 5" },
+    { value: "6-12", label: "6 - 12" },
+    { value: "13-17", label: "13 - 17" },
+    { value: "18-24", label: "18 - 24" },
+    { value: "25-34", label: "25 - 34" },
+    { value: "35-44", label: "35 - 44" },
+    { value: "45-54", label: "45 - 54" },
+    { value: "55-64", label: "55 - 64" },
+    { value: "65-74", label: "65 - 74" },
+    { value: "75-84", label: "75 - 84" },
+    { value: "85-100", label: "85+" }
+  ];
+  
     pendingPersons: any[] = [];
     resolvedPersons: any[] = [];
 
@@ -133,7 +170,6 @@ ngAfterViewInit(): void {
   }
   ngOnInit() {
     this.getStates();
-    console.log("Dialog Template:", this.dialogTemplate);
 
   }
   getStates() {
@@ -164,42 +200,87 @@ ngAfterViewInit(): void {
     }
   }
   applyFilters(): void {
-    this.loading = true;   // Show full-screen spinner
+    this.loading = true;
     this.progressMessage = "🔄 Applying filters...";
-
+    this.filtersApplied = true; // Ensure this is set when filters are applied
+  
+    // Safely parse and format dates
+    const parsedStartDate = this.parseToDate(this.filters.startDate);
+    const parsedEndDate = this.parseToDate(this.filters.endDate);
+  
+    if (parsedStartDate) {
+      this.filters.startDate = this.formatDate(parsedStartDate);
+    }
+  
+    if (parsedEndDate) {
+      this.filters.endDate = this.formatDate(parsedEndDate);
+    }
+  
     this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-        (response) => {
-            this.loading = false;  // Hide spinner
-
-            const responseData = response?.body || response;
-            console.log("Extracted API Response:", responseData);
-
-            if (responseData && Array.isArray(responseData)) {
-                this.pendingPersons = responseData.filter(person => person.case_status === 'Pending') || [];
-                this.resolvedPersons = responseData.filter(person => person.case_status === 'Resolved') || [];
-
-                if (this.dataSourcePending) this.dataSourcePending.data = this.pendingPersons;
-                if (this.dataSourceResolved) this.dataSourceResolved.data = this.resolvedPersons;
-
-                this.progressMessage = "✅ Filters applied successfully!";
-            } else {
-                console.error('Unexpected API response:', responseData);
-
-                this.pendingPersons = [];
-                this.resolvedPersons = [];
-                if (this.dataSourcePending) this.dataSourcePending.data = [];
-                if (this.dataSourceResolved) this.dataSourceResolved.data = [];
-
-                this.progressMessage = "❌ No data found!";
-            }
-        },
-        (error) => {
-            this.loading = false;  // Hide spinner
-            console.error('Error fetching data:', error);
-            this.progressMessage = "❌ Error applying filters!";
+      (response) => {
+        this.loading = false;
+        const responseData = response?.body || response;
+  
+        // Clear previous data
+        this.dataSourcePending.data = [];
+        this.dataSourceResolved.data = [];
+  
+        if (responseData?.message) {
+          this.progressMessage = responseData.message;
+        } else if (Array.isArray(responseData)) {
+          // Filter and set data
+          this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
+          this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
+  
+          console.log("Pending Persons:", this.dataSourcePending.data);
+          console.log("Resolved Persons:", this.dataSourceResolved.data);
+          // Connect paginators (needed if data changes)
+          this.dataSourcePending.paginator = this.paginatorPending;
+          this.dataSourceResolved.paginator = this.paginatorResolved;
+  
+          // Reset pagination to first page
+          if (this.paginatorPending) {
+            this.paginatorPending.firstPage();
+          }
+          if (this.paginatorResolved) {
+            this.paginatorResolved.firstPage();
+          }
+  
+          this.progressMessage = responseData.length > 0 
+            ? "✅ Filters applied successfully!" 
+            : "No matching records found";
+        } else {
+          this.progressMessage = "❌ Unexpected response format from server";
         }
+      },
+      (error) => {
+        this.loading = false;
+        console.error('Error fetching data:', error);
+        this.progressMessage = error.error?.message 
+          ? `❌ ${error.error.message}` 
+          : "❌ Error applying filters!";
+      }
     );
-}
+  }
+  
+  
+  
+  // ✅ Helper function
+  parseToDate(input: string | null): Date | null {
+    if (!input) return null;
+  
+    const parsed = new Date(input);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+  
+  // ✅ Already existing date formatter
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
 
 
   /** Open MatDialog */

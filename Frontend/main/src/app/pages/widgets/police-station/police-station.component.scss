@@ -18,14 +18,63 @@
   }
   
   
-  .search-button {
-    display: flex;
-    height: 100%;
-    justify-content: flex-end;
-    margin-right: 45px;
-  }
   
 .sub-heading{
   line-height: 50px;
   font-weight: 500;
+}
+
+.filter-section {
+  background-color: #f8f9fa;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  align-items: center;
+}
+
+.with-icon .mat-icon {
+  color: rgba(0, 0, 0, 0.54);
+  margin-right: 8px;
+}
+
+.action-buttons-row {
+  grid-column: 1 / -1; /* Makes the row span all columns */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 48px;
+  font-weight: 500;
+}
+
+.add-btn {
+  background-color: white;
+  border: 1px solid #3f51b5;
+  width: 48px;
+  height: 48px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-card {
+  border-radius: 8px !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  background-color: white;
+  border-radius: 4px;
 }

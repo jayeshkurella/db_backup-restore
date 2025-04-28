@@ -8,7 +8,7 @@ from .user import User
 
 class Address(models.Model):
     class AddressTypeChoices(models.TextChoices):
-        PERMANENT = 'Permanent', 'PERMANENT'
+        PERMANENT = 'permanent', 'PERMANENT'
         CURRENT = 'current', 'CURRENT'
         OLD = 'old', 'OLD'
         HOME = 'home', 'HOME'

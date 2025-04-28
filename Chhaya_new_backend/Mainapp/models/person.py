@@ -174,6 +174,12 @@ class Person(models.Model):
         SPAIN = 'Spain', 'Spain'
         NETHERLANDS = 'Netherlands', 'Netherlands'
 
+    Person_STATUS_CHOICES = [
+        ('pending', 'Pending Approval'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
 
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -243,8 +249,9 @@ class Person(models.Model):
     location = models.PointField(srid=4326, blank=True, null=True, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
     country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
-    # reported_date = models.DateField(default=date.today)
     reported_date = models.DateField(default=date.today, editable=False)
+    person_approve_status = models.CharField(max_length=10, choices=Person_STATUS_CHOICES, default='pending')
+
 
     match_entity_id = models.UUIDField(
         blank=True,

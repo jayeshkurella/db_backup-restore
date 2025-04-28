@@ -6,56 +6,52 @@
       <h4 class="mat-headline-6 font-weight-bold">Find Your Local Police Station</h4>
       <p class="mat-body-2 sub-heading">Quick access to emergency services and police stations across the country</p>
     </div>
-  
-    <!-- Right-aligned Button -->
-    <button
-      mat-stroked-button
-      color="primary"
-      class="position-absolute top-0 end-0 mt-1 me-2"
-      (click)="navigateToAddStation()"
-    >
-      Add Police Station
-    </button>
   </div>
   
   
 
   <mat-card class="d-flex justify-content-center m-1">
-    <div class="filter-section rounded m-3 " style="max-width: 100%;">
+    <div class="filter-section rounded m-3" style="max-width: 100%;">
       <form (ngSubmit)="onSearch()" novalidate>
         <div class="filter-grid">
           <!-- Name -->
-          <mat-form-field appearance="outline">
-            <mat-label>Search by Name</mat-label>
-            <input matInput  [(ngModel)]="searchName" name="searchName">
-          </mat-form-field>
-  
-          <!-- City -->
-          <mat-form-field appearance="outline">
-            <mat-label>Search by City</mat-label>
-            <input matInput  [(ngModel)]="searchCity" name="searchCity">
-          </mat-form-field>
-  
-          <!-- District -->
-          <mat-form-field appearance="outline">
-            <mat-label>Search by District</mat-label>
-            <input matInput  [(ngModel)]="searchdistrict" name="searchDistrict">
+          <mat-form-field appearance="outline" class="with-icon">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="searchName" name="searchName" placeholder="Search by name">
+            <mat-icon matPrefix>person</mat-icon>
           </mat-form-field>
   
           <!-- State -->
-          <mat-form-field appearance="outline">
-            <mat-label>Search by State</mat-label>
-            <input matInput [(ngModel)]="searchstate" name="searchState">
+          <mat-form-field appearance="outline" class="with-icon">
+            <mat-label>State</mat-label>
+            <input matInput [(ngModel)]="searchstate" name="searchState" placeholder="Search by state">
+            <mat-icon matPrefix>location_on</mat-icon>
           </mat-form-field>
   
-          <!-- Search Button -->
-           
-          <div class="search-button ">
-            <button mat-stroked-button color="primary">
+          <!-- District -->
+          <mat-form-field appearance="outline" class="with-icon">
+            <mat-label>District</mat-label>
+            <input matInput [(ngModel)]="searchdistrict" name="searchDistrict" placeholder="Search by district">
+            <mat-icon matPrefix>map</mat-icon>
+          </mat-form-field>
+  
+          <!-- City -->
+          <mat-form-field appearance="outline" class="with-icon">
+            <mat-label>City</mat-label>
+            <input matInput [(ngModel)]="searchCity" name="searchCity" placeholder="Search by city">
+            <mat-icon matPrefix>location_city</mat-icon>
+          </mat-form-field>
+  
+          <!-- Action Buttons Row - Centered -->
+          <div class="action-buttons-row">
+            <button mat-raised-button color="primary" class="search-btn">
               <mat-icon>search</mat-icon>&nbsp;Search
             </button>
+            
+            <button mat-icon-button color="primary" class="add-btn" (click)="navigateToAddStation()" matTooltip="Add New Station">
+              <mat-icon>add_circle</mat-icon>
+            </button>
           </div>
-  
         </div>
       </form>
     </div>
@@ -95,8 +91,10 @@
         <mat-card-content class="p-3">
   
           <!-- Name and Status -->
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="fw-bold mb-0">{{ police.name }}</h5>
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
+              {{ police.name }}
+            </h6>
             <span class="badge px-2 py-1"
                   [ngClass]="{
                     'bg-success text-white': police.activ_Status === 'Active',
@@ -105,6 +103,7 @@
               {{ police.activ_Status }}
             </span>
           </div>
+          
   
           <!-- Address and Contact -->
           <div class="d-flex justify-content-between text-muted f-s-14 mb-2">
@@ -120,7 +119,7 @@
   
           <!-- Button -->
           <div class="d-flex justify-content-center mt-3">
-            <button mat-stroked-button color="primary" class="px-4" (click)="seeMorepolicestationdata(police)">
+            <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMorepolicestationdata(police)">
               More Info
             </button>
           </div>

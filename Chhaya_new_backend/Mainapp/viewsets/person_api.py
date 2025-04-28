@@ -38,7 +38,7 @@ class PersonViewSet(viewsets.ViewSet):
         while enforcing restrictions on other actions.
         """
         if self.action == "retrieve":
-            return [AllowAny()]  # No restriction for retrieving a single person
+            return [AllowAny()]
 
         return [permission() for permission in self.permission_classes]
 
@@ -107,6 +107,9 @@ class PersonViewSet(viewsets.ViewSet):
                     return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
                 logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
+                # Set status to pending for non-admin users
+                if not request.user.is_staff:
+                    data['person_approve_status'] = 'pending'
 
                 # Extract related data
                 addresses_data = [addr for addr in data.get('addresses', []) if any(addr.values())]
@@ -558,143 +561,64 @@ class PersonViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # def get_persons_by_type(self, request, person_type):
-    #     """Return filtered persons based on request parameters"""
-    #
-    #     try:
-    #         filters = {}
-    #         additional_info_filters = {}
-    #
-    #         age_range = request.query_params.get('age_range')
-    #         age = request.query_params.get('age')
-    #
-    #         for key, value in request.query_params.items():
-    #             if not value or key in ['startDate', 'endDate', 'age_range', 'age']:
-    #                 continue
-    #
-    #             # Fields from related model 'additional_info'
-    #             if key == 'caste':
-    #                 additional_info_filters['additional_info__caste'] = value
-    #             elif key == 'marital_status':
-    #                 additional_info_filters['additional_info__marital_status'] = value
-    #             elif key == 'height_range':
-    #                 filters['height_range'] = value
-    #             else:
-    #                 filters[key] = value
-    #
-    #         # Handle date filtering
-    #         start_date = request.query_params.get('startDate')
-    #         end_date = request.query_params.get('endDate')
-    #
-    #         if start_date and start_date != "null":
-    #             try:
-    #                 filters['reported_date__gte'] = parser.parse(start_date).date()
-    #             except (ValueError, TypeError):
-    #                 pass
-    #
-    #         if end_date and end_date != "null":
-    #             try:
-    #                 filters['reported_date__lte'] = parser.parse(end_date).date()
-    #             except (ValueError, TypeError):
-    #                 pass
-    #
-    #         # Handle age filtering logic
-    #         if age_range and age_range.lower() != "null":
-    #             try:
-    #                 lower, upper = map(int, age_range.split('-'))
-    #                 if 'missing' in person_type.lower():  # For missing persons
-    #                     filters['age__gte'] = lower
-    #                     filters['age__lte'] = upper
-    #                 else:  # For unidentified persons/bodies
-    #                     filters['age_range'] = age_range
-    #
-    #                 print("Age range filter:", lower, upper)
-    #             except ValueError:
-    #                 print("Invalid age_range format:", age_range)
-    #         else:
-    #             print("Age range filter: not provided or null")
-    #
-    #         if age and person_type == 'missing-persons':
-    #             filters['age'] = age
-    #
-    #         print("Age range filter:", lower, upper)
-    #         print("Final filters:", filters)
-    #         print("Additional info filters:", additional_info_filters)
-    #
-    #         persons = Person.objects.filter(
-    #             type=person_type,
-    #             _is_deleted=False,
-    #             **filters,
-    #             **additional_info_filters
-    #         ).prefetch_related(
-    #             'addresses', 'contacts', 'additional_info',
-    #             'last_known_details', 'firs', 'consent'
-    #         ).order_by('-created_at').distinct()
-    #
-    #         if not persons.exists():
-    #             return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
-    #
-    #         serializer = PersonSerializer(persons, many=True)
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #
-    #     except Exception as e:
-    #         return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
+    def pending_or_rejected(self, request):
+        # Get pending persons
+        pending_persons = Person.objects.filter(person_approve_status='pending')
+        pending_count = pending_persons.count()
 
-    # def get_persons_by_type(self, request, person_type):
-    #     """Return filtered persons based on request parameters"""
-    #     try:
-    #         filters = {}
-    #         additional_info_filters = {}
-    #
-    #         for key, value in request.query_params.items():
-    #             if not value:
-    #                 continue
-    #
-    #             if key == 'startDate' or key == 'endDate':
-    #                 continue  # handle separately below
-    #
-    #             # Fields from related model 'additional_info'
-    #             if key == 'caste':
-    #                 additional_info_filters['additional_info__caste'] = value
-    #             elif key == 'marital_status':
-    #                 additional_info_filters['additional_info__marital_status'] = value
-    #             else:
-    #                 filters[key] = value
-    #
-    #         # Handle date filtering
-    #         start_date = request.query_params.get('startDate')
-    #         end_date = request.query_params.get('endDate')
-    #
-    #         if start_date:
-    #             try:
-    #                 start_date = parser.parse(start_date).date()
-    #                 filters['reported_date__gte'] = start_date
-    #             except (ValueError, TypeError):
-    #                 pass
-    #
-    #         if end_date:
-    #             try:
-    #                 end_date = parser.parse(end_date).date()
-    #                 filters['reported_date__lte'] = end_date
-    #             except (ValueError, TypeError):
-    #                 pass
-    #
-    #         # Combine all filters
-    #         persons = Person.objects.filter(
-    #             type=person_type,
-    #             _is_deleted=False,
-    #             **filters,
-    #             **additional_info_filters
-    #         ).prefetch_related(
-    #             'addresses', 'contacts', 'additional_info',
-    #             'last_known_details', 'firs', 'consent'
-    #         ).order_by('-created_at').distinct()
-    #
-    #         if not persons.exists():
-    #             return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
-    #
-    #         serializer = PersonSerializer(persons, many=True)
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #
-    #     except Exception as e:
-    #         return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        # Get rejected persons
+        rejected_persons = Person.objects.filter(person_approve_status='rejected')
+        rejected_count = rejected_persons.count()
+
+        # Serialize the data
+        pending_serializer = PersonSerializer(pending_persons, many=True)
+        rejected_serializer = PersonSerializer(rejected_persons, many=True)
+
+        return Response({
+            'pending_count': pending_count,
+            'rejected_count': rejected_count,
+            'pending_data': pending_serializer.data,
+            'rejected_data': rejected_serializer.data
+        })
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def approve_person(self, request, pk=None):
+        try:
+            person = Person.objects.get(pk=pk)
+            if person.person_approve_status != 'pending':
+                return Response(
+                    {'error': 'Only pending records can be approved'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            person.person_approve_status = 'approved'
+            person.save()
+            serializer = PersonSerializer(person)
+            return Response(
+                {'message': 'Person approved successfully', 'data': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def reject_person(self, request, pk=None):
+        try:
+            person = Person.objects.get(pk=pk)
+            if person.person_approve_status != 'pending':
+                return Response(
+                    {'error': 'Only pending records can be rejected'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            person.person_approve_status = 'rejected'
+            person.save()
+            serializer = PersonSerializer(person)
+            return Response(
+                {'message': 'Person rejected successfully', 'data': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+

@@ -209,6 +209,9 @@ export class AppKichenSinkComponent implements AfterViewInit {
   progressColor: string = 'bg-primary'; // Corrected type of progressColor
   progressMessage: string = '';
   
+  displayedColumnsPending: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
+  displayedColumnsResolved: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action'];
+
 
   
   displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action','match_with'];
@@ -316,7 +319,8 @@ export class AppKichenSinkComponent implements AfterViewInit {
       });
     }
   }
-
+ 
+  
   
 
 
@@ -400,6 +404,8 @@ export class AppKichenSinkComponent implements AfterViewInit {
           this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
           this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
   
+          console.log("Pending Persons:", this.dataSourcePending.data);
+          console.log("Resolved Persons:", this.dataSourceResolved.data);
           // Connect paginators (needed if data changes)
           this.dataSourcePending.paginator = this.paginatorPending;
           this.dataSourceResolved.paginator = this.paginatorResolved;

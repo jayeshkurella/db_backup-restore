@@ -3,13 +3,16 @@
   <div class="header-section">
     <div class="header-content">
       <div class="title-section">
-        <h3 class="station-name">{{ hospital.name }}</h3>
+        <h5 class="station-name">{{ hospital.name }}</h5>
         <div class="status-badge">
-          <mat-chip [color]="hospital.activ_Status === 'Active' ? 'primary' : 'warn'" selected>
-            {{ hospital.activ_Status || 'Active' }}
-          </mat-chip>
+          <span [ngClass]="{
+              'status-dot': true, 
+              'active': hospital.activ_Status === 'Active',
+              'inactive': hospital.activ_Status !== 'Active'
+            }"></span>
           <span class="last-updated">Last updated: {{ hospital.updated_at | date: 'mediumDate' }}</span>
         </div>
+        
       </div>
       <button mat-stroked-button color="primary" (click)="goBack()" class="back-button">
         <mat-icon>arrow_back</mat-icon> Back to List
@@ -47,7 +50,6 @@
             <mat-icon class="card-icon">location_on</mat-icon> Address Details
           </mat-card-title>
         </mat-card-header>
-        <mat-divider></mat-divider>
         <mat-card-content>
           <div class="address-grid">
             <div class="address-item">
@@ -101,38 +103,38 @@
           </div>
         </mat-card-content>
       </mat-card>
+      
     </div>
 
     <!-- Contacts Section -->
     <mat-card class="contacts-section mat-elevation-z4">
-      <mat-card-header>
-        <mat-card-title>
-          <mat-icon class="card-icon">contacts</mat-icon> Contact Information
-        </mat-card-title>
-        <mat-card-subtitle>Multiple ways to reach this hospital</mat-card-subtitle>
+      <mat-card-header class="header-flex">
+        <div class="header-content">
+          <mat-icon class="card-icon">contacts</mat-icon>
+          <div class="header-text">
+            <mat-card-title>Contact Information</mat-card-title>
+            <mat-card-subtitle>Multiple ways to reach this hospital</mat-card-subtitle>
+          </div>
+        </div>
       </mat-card-header>
-      <mat-divider></mat-divider>
+      
       <mat-card-content>
         <div class="contacts-grid">
           <mat-card *ngFor="let contact of hospital.hospital_contact" class="contact-card mat-elevation-z2">
             <mat-card-header>
-              <mat-card-title>{{ contact.type }}</mat-card-title>
-              <mat-card-subtitle *ngIf="contact.is_primary">
-                <mat-chip color="primary" selected>Primary</mat-chip>
-              </mat-card-subtitle>
+              <mat-card-title>Contact Type: {{ contact.type }}</mat-card-title>
             </mat-card-header>
-            <mat-divider></mat-divider>
             <mat-card-content>
               <div class="contact-item">
-                <mat-icon>call</mat-icon>
+                <mat-icon class="card-icon">call</mat-icon>
                 <span>{{ contact.country_cd }} {{ contact.phone_no }}</span>
               </div>
               <div class="contact-item" *ngIf="contact.email_id">
-                <mat-icon>email</mat-icon>
+                <mat-icon class="card-icon">email</mat-icon>
                 <a [href]="'mailto:' + contact.email_id">{{ contact.email_id }}</a>
               </div>
               <div class="contact-item" *ngIf="contact.website_url">
-                <mat-icon>language</mat-icon>
+                <mat-icon class="card-icon">language</mat-icon>
                 <a [href]="contact.website_url" target="_blank">Visit Website</a>
               </div>
             </mat-card-content>
@@ -147,9 +149,7 @@
         <mat-card-title>
           <mat-icon class="card-icon">map</mat-icon> Hospital Location
         </mat-card-title>
-        <mat-card-subtitle>Find us on the map</mat-card-subtitle>
       </mat-card-header>
-      <mat-divider></mat-divider>
       <mat-card-content>
         <div class="map-container" id="hospitalMap"></div>
       </mat-card-content>

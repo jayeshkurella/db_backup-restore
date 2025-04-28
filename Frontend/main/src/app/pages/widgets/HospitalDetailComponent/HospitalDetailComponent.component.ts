@@ -28,7 +28,7 @@ import { environment } from 'src/envirnment/envirnment';
 })
 export class HospitalDetailComponentComponent implements OnInit { 
   hospital: any;
-environment =environment
+  environment =environment
   constructor(private route: ActivatedRoute, private router: Router) {}
   ngOnInit(): void {
     this.hospital = history.state.hospital;
@@ -63,10 +63,10 @@ environment =environment
   
     // ✅ Define custom icon
     const customIcon = L.icon({
-      iconUrl: 'assets/leaflet/images/green_marker.png', // replace with your actual icon path
-      iconSize: [40, 40],      // size of the icon
-      iconAnchor: [20, 40],    // point of the icon which will correspond to marker's location
-      popupAnchor: [0, -35]    // point from which the popup should open relative to the iconAnchor
+      iconUrl: 'assets/leaflet/images/green_marker.png', 
+      iconSize: [40, 40],      
+      iconAnchor: [20, 40],    
+      popupAnchor: [0, -35]   
     });
   
     // ✅ Add marker with custom icon

@@ -6,15 +6,26 @@ from .address import Address
 
 
 class Hospital(models.Model):
+    ACTIVE = 'Active'
+    INACTIVE = 'Non-Active'
     class HospitalTypeChoices(models.TextChoices):
         GOVERNMENT = 'gvt', 'Government'
-        NON_GOVERNMENT = 'nongvt', 'Non-Government'
+        NON_GOVERNMENT = 'private', 'Private'
 
+    STATUS_CHOICES = [
+        (ACTIVE, 'Active'),
+        (INACTIVE, 'Non-Active'),
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     hospital_photo =models.ImageField(upload_to='Hospitals_photos/', blank=True, null=True)
     name = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.CASCADE,null=True, blank=True,)
     type = models.CharField(max_length=10, choices=HospitalTypeChoices.choices)
+    activ_Status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=ACTIVE,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_%(class)s_set")
