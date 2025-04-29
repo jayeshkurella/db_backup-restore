@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class PersonViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication]  # Require token authentication
-    permission_classes = [IsAuthenticated,IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     parser_classes = (MultiPartParser, FormParser,JSONParser)
     pagination_class = PageNumberPagination

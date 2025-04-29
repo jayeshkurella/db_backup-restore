@@ -8,13 +8,21 @@ from .user import User
 
 class Address(models.Model):
     class AddressTypeChoices(models.TextChoices):
-        PERMANENT = 'permanent', 'PERMANENT'
-        CURRENT = 'current', 'CURRENT'
-        OLD = 'old', 'OLD'
-        HOME = 'home', 'HOME'
-        OFFICE = 'office', 'OFFICE'
-
-
+        PERMANENT = 'permanent', 'PERMANENT'  # Long-term residence
+        CURRENT = 'current', 'CURRENT'  # Current address
+        OLD = 'old', 'OLD'  # Previous address
+        HOME = 'home', 'HOME'  # Home address
+        OFFICE = 'office', 'OFFICE'  # Office or workplace
+        TEMPORARY = 'temporary', 'TEMPORARY'  # Temporary residence
+        BILLING = 'billing', 'BILLING'  # Billing address
+        SHIPPING = 'shipping', 'SHIPPING'  # Shipping address
+        REGISTERED = 'registered', 'REGISTERED'  # Official registered address
+        MAILING = 'mailing', 'MAILING'  # Mailing address (PO Box etc.)
+        VACATION = 'vacation', 'VACATION'  # Vacation or secondary home
+        RENTAL = 'rental', 'RENTAL'  # Rented address
+        STUDENT = 'student', 'STUDENT'  # Address for students (e.g., hostel, dormitory)
+        FAMILY = 'family', 'FAMILY'  # Family address
+        OTHER = 'other', 'OTHER'  # Any other unspecified address
 
     class StateChoices(models.TextChoices):
         ANDHRA_PRADESH = 'Andhra Pradesh', 'Andhra Pradesh'

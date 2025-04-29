@@ -5,7 +5,7 @@
   <div class="row mb-4">
     <div class="col-md-5 text-center">
       <img 
-        [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : '/assets/old/images/Nophoto.png'" 
+        [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : 'assets/old/images/Nophoto.png'" 
         alt="Person Photo" 
         style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
 
@@ -15,14 +15,13 @@
       <p><strong>Age:</strong> {{ data?.age || 'N/A' }}</p>
       <p><strong>Gender:</strong> {{ data?.gender || 'N/A' }}</p>
       <p><strong>Blood Group:</strong> {{ data?.blood_group || 'N/A' }}</p>
-      <p><strong>Condition:</strong> {{ data?.condition || 'N/A' }}</p>
       <p><strong>Last Seen Location:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
     </div>
   </div>
 
   <!-- Appearance Information -->
   <h5 class="mb-3 text-primary">Appearance Information</h5>
-  <p><strong>Height:</strong> {{ data?.height ? data.height + ' cm' : 'N/A' }}</p>
+  <p><strong>Height:</strong> {{ data?.height_range ? data.height_range + ' cm' : 'N/A' }}</p>
   <p><strong>Weight:</strong> {{ data?.weight ? data.weight + ' kg' : 'N/A' }}</p>
   <p><strong>Complexion:</strong> {{ data?.complexion || 'N/A' }}</p>
   <p><strong>Hair Color:</strong> {{ data?.hair_color || 'N/A' }}</p>
@@ -33,22 +32,22 @@
 
   <!-- Contact Information -->
   <h5 class="mb-3 text-primary">Contact Information</h5>
+  <p><strong>Contact Type:</strong> {{ data?.contacts?.[0]?.type || 'N/A' }}</p>
   <p><strong>Phone Number:</strong> {{ data?.contacts?.[0]?.phone_no || 'N/A' }}</p>
   <p><strong>Email:</strong> {{ data?.contacts?.[0]?.email_id || 'N/A' }}</p>
   <p><strong>Social Media:</strong> {{ data?.contacts?.[0]?.social_media_url || 'N/A' }}</p>
-  <p><strong>Contact Type:</strong> {{ data?.contacts?.[0]?.type || 'N/A' }}</p>
 
   <!-- Address Information -->
   <h5 class="mb-3 text-primary">Address Information</h5>
+  <p><strong>Address Type:</strong> {{ data?.address_type || 'N/A' }}</p>
   <p><strong>Street:</strong> {{ data?.street || 'N/A' }}</p>
   <p><strong>Apartment Name:</strong> {{ data?.appartment_name || 'N/A' }}</p>
   <p><strong>Apartment No:</strong> {{ data?.apartment_no || 'N/A' }}</p>
   <p><strong>City:</strong> {{ data?.city || 'N/A' }}</p>
   <p><strong>Village:</strong> {{ data?.village || 'N/A' }}</p>
-  <p><strong>Pincode:</strong> {{ data?.pincode || 'N/A' }}</p>
-  <p><strong>Location:</strong> {{ data?.location || 'N/A' }}</p>
-  <p><strong>Address Type:</strong> {{ data?.address_type || 'N/A' }}</p>
+  <p><strong>District:</strong> {{ data?.district || 'N/A' }}</p>
   <p><strong>State:</strong> {{ data?.state || 'N/A' }}</p>
+  <p><strong>Pincode:</strong> {{ data?.pincode || 'N/A' }}</p>
   <p><strong>Country:</strong> {{ data?.country || 'N/A' }}</p>
   <p><strong>Landmark Details:</strong> {{ data?.landmark_details || 'N/A' }}</p>
 
@@ -75,7 +74,7 @@
   <p><strong>FIR Number:</strong> {{ data?.firs?.[0]?.fir_number || 'N/A' }}</p>
   <p><strong>Case Status:</strong> {{ data?.firs?.[0]?.case_status || 'N/A' }}</p>
   <p><strong>Investigating Officer:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }} ({{ data?.firs?.[0]?.investigating_officer_contact_number || 'N/A' }})</p>
-  <p><strong>Police Station:</strong> {{ data?.firs?.[0]?.police_station || 'N/A' }}</p>
+  <p><strong>Police Station:</strong> {{ data?.firs?.[0]?.police_station.name || 'N/A' }}</p>
 
   <!-- Consent -->
   <h5 class="mb-3 text-primary">Consent</h5>

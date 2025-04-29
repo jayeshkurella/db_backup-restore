@@ -26,9 +26,9 @@ class Contact(models.Model):
         THREADS = 'thread', 'Threads'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    phone_no = models.CharField(max_length=13, blank=True, null=True, db_index=True)  # Indexed
-    country_cd = models.CharField(max_length=5, help_text="Country Code", blank=True, null=True, db_index=True)  # Indexed
-    email_id = models.EmailField(max_length=150, blank=True, null=True, db_index=True)  # Indexed
+    phone_no = models.CharField(max_length=13, blank=True, null=True, db_index=True)
+    country_cd = models.CharField(max_length=5, help_text="Country Code", blank=True, null=True, db_index=True)
+    email_id = models.EmailField(max_length=150, blank=True, null=True, db_index=True)
     type = models.CharField(max_length=10, choices=ContactTypeChoices.choices)
     company_name = models.CharField(max_length=100, blank=True, null=True)
     person_name = models.CharField(max_length=100, blank=True, null=True)

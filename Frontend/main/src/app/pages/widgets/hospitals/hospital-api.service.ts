@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/envirnment/envirnment';
@@ -12,6 +12,30 @@ export class HospitalApiService {
 
   constructor(private http: HttpClient) {}
 
+  searchHospitals(queryParams: any): Observable<any> {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      console.error('No auth token found in localStorage!');
+      return throwError(() => new Error('Unauthorized: No token found'));
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+    const params = new HttpParams()
+      .set('name', queryParams.name || '')
+      .set('city', queryParams.city || '')
+      .set('district', queryParams.district || '')
+      .set('state', queryParams.state || '')
+      .set('type', queryParams.type || '')        // Optional hospital type: 'gvt' or 'private'
+  
+    return this.http.get<any>(`${this.apiurl}/api/hospitals/`, { headers, params }).pipe(
+      catchError(error => {
+        console.error("Error in searchHospitals:", error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
   // Fetch all hospitals
 getAllHospitals(): Observable<any> {
   const authToken = localStorage.getItem('authToken');

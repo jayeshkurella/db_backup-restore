@@ -41,7 +41,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     list_per_page = 20  # Pagination for large datasets
 
     def has_delete_permission(self, request, obj=None):
-        return False  # Prevent deletion from admin panel
+        return True  # Prevent deletion from admin panel
 
     def has_add_permission(self, request):
         return True  # Allow adding new volunteers

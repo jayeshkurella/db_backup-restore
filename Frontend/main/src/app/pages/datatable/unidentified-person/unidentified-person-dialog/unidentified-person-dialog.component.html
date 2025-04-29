@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-4 text-center">
         <img 
-          [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : '/assets/old/images/Nophoto.png'" 
+          [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : 'assets/old/images/Nophoto.png'" 
           class="img-fluid rounded"
           alt="Person Photo"
           style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
@@ -19,6 +19,18 @@
         <p><strong>Reported On:</strong> {{ data?.date_reported || 'N/A' }}</p>
       </div>
     </div>
+
+
+     <!-- Appearance Information -->
+        <h5 class="mb-3 text-primary">Appearance Information</h5>
+        <p><strong>Height:</strong> {{ data?.height_range ? data.height_range + ' cm' : 'N/A' }}</p>
+        <p><strong>Weight:</strong> {{ data?.weight ? data.weight + ' kg' : 'N/A' }}</p>
+        <p><strong>Complexion:</strong> {{ data?.complexion || 'N/A' }}</p>
+        <p><strong>Hair Color:</strong> {{ data?.hair_color || 'N/A' }}</p>
+        <p><strong>Hair Type:</strong> {{ data?.hair_type || 'N/A' }}</p>
+        <p><strong>Eye Color:</strong> {{ data?.eye_color || 'N/A' }}</p>
+        <p><strong>Birth Mark:</strong> {{ data?.birth_mark || 'N/A' }}</p>
+        <p><strong>Distinctive Mark:</strong> {{ data?.distinctive_mark || 'N/A' }}</p>
 
     <hr>
 

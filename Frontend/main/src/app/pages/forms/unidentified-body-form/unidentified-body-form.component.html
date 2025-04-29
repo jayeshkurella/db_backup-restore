@@ -38,9 +38,8 @@
           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
             <mat-label>Gender</mat-label>
             <mat-select formControlName="gender">
-              <mat-option value="Male">Male</mat-option>
-              <mat-option value="Female">Female</mat-option>
-              <mat-option value="Other">Other</mat-option>
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
             </mat-select>
           </mat-form-field>
   
@@ -150,19 +149,21 @@
           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
             <mat-label>Complexion</mat-label>
             <mat-select formControlName="complexion">
-              <mat-option value="Fair">Fair</mat-option>
-              <mat-option value="Dusky">Dusky</mat-option>
-              <mat-option value="Wheatish">Wheatish</mat-option>
-              <mat-option value="Dark">Dark</mat-option>
+              <mat-option value="fair">Fair</mat-option>
+              <mat-option value="dusky">Dusky</mat-option>
+              <mat-option value="wheatish">Wheatish</mat-option>
+              <mat-option value="dark">Dark</mat-option>
+              <mat-option value="medium">Medium</mat-option>
+              <mat-option value="light">Light</mat-option>
             </mat-select>
           </mat-form-field>
   
           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
             <mat-label>Hair Color</mat-label>
             <mat-select formControlName="hair_color">
-              <mat-option value="Black">Black</mat-option>
-              <mat-option value="Brown">Brown</mat-option>
-              <mat-option value="Grey">Grey</mat-option>
+              <mat-option value="black">Black</mat-option>
+              <mat-option value="brown">Brown</mat-option>
+              <mat-option value="grey">Grey</mat-option>
             </mat-select>
           </mat-form-field>
   
@@ -170,12 +171,14 @@
           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
             <mat-label>Eye Color</mat-label>
             <mat-select formControlName="eye_color">
-              <mat-option value="Dark Brown">Dark Brown</mat-option>
-              <mat-option value="Light Brown">Light Brown</mat-option>
-              <mat-option value="Hazel">Hazel</mat-option>
-              <mat-option value="Amber">Amber</mat-option>
-              <mat-option value="Green">Green</mat-option>
-              <mat-option value="Gray">Gray</mat-option>
+              <mat-option value="black">Black</mat-option>
+              <mat-option value="brown">Brown</mat-option>
+              <mat-option value="green">Green</mat-option>
+              <mat-option value="hazel">Hazel</mat-option>
+              <mat-option value="gray">Gray</mat-option>
+              <mat-option value="yellow">Yellow</mat-option>
+              <mat-option value="blue">Blue</mat-option>
+              <mat-option value="violet">Violet</mat-option>
             </mat-select>
           </mat-form-field>
   
@@ -251,22 +254,6 @@
             </mat-form-field>
           </div>
   
-          <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Condition</mat-label>
-              <mat-select formControlName="condition">
-                <mat-option value="memory_loss">Memory Loss</mat-option>
-                <mat-option value="anxiety">Anxiety</mat-option>
-                <mat-option value="shock">Shock</mat-option>
-                <mat-option value="depression">Depression</mat-option>
-                <mat-option value="fatigue">Fatigue</mat-option>
-                <mat-option value="headache">Headache</mat-option>
-                <mat-option value="dizziness">Dizzy</mat-option>
-                <mat-option value="nausea">Nausea</mat-option>
-                <mat-option value="chest_pain">Chest Pain</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
   
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
@@ -309,12 +296,22 @@
               <mat-form-field appearance="outline" class="w-100">
                 <!-- <mat-label>Address Type</mat-label> -->
                 <mat-select formControlName="address_type">
-                  <mat-option value="" disabled>Select Address Type</mat-option>
-                  <mat-option value="PERMANENT">Permanent</mat-option>
-                  <mat-option value="CURRENT">Current</mat-option>
-                  <mat-option value="OLD">Old</mat-option>
-                  <mat-option value="HOME">Home</mat-option>
-                  <mat-option value="OFFICE">Office</mat-option>
+                  <mat-option value="" disabled>Address Type</mat-option>
+                  <mat-option value="permanent">Permanent</mat-option>
+                  <mat-option value="current">Current</mat-option>
+                  <mat-option value="old">Old</mat-option>
+                  <mat-option value="home">Home</mat-option>
+                  <mat-option value="office">Office</mat-option>
+                  <mat-option value="temporary">Temporary</mat-option>
+                  <mat-option value="billing">Billing</mat-option>
+                  <mat-option value="shipping">Shipping</mat-option>
+                  <mat-option value="registered">Registered</mat-option>
+                  <mat-option value="mailing">Mailing</mat-option>
+                  <mat-option value="vacation">Vacation</mat-option>
+                  <mat-option value="rental">Rental</mat-option>
+                  <mat-option value="student">Student</mat-option>
+                  <mat-option value="family">Family</mat-option>
+                  <mat-option value="other">Other</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -624,10 +621,10 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Caste</mat-label>
                   <mat-select formControlName="caste">
-                    <mat-option value="Open">Open</mat-option>
-                    <mat-option value="SC">SC</mat-option>
-                    <mat-option value="ST">ST</mat-option>
-                    <mat-option value="OBC">OBC</mat-option>
+                    <mat-option value="open">Open</mat-option>
+                    <mat-option value="sc">SC</mat-option>
+                    <mat-option value="st">ST</mat-option>
+                    <mat-option value="obc">OBC</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -675,10 +672,10 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Religion</mat-label>
                   <mat-select formControlName="religion">
-                    <mat-option value="Hindu">Hindu</mat-option>
-                    <mat-option value="Muslim">Muslim</mat-option>
-                    <mat-option value="Sikh">Sikh</mat-option>
-                    <mat-option value="Christian">Christian</mat-option>
+                    <mat-option value="hindu">Hindu</mat-option>
+                    <mat-option value="muslim">Muslim</mat-option>
+                    <mat-option value="sikh">Sikh</mat-option>
+                    <mat-option value="christian">Christian</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -688,9 +685,9 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Mother Tongue</mat-label>
                   <mat-select formControlName="mother_tongue">
-                    <mat-option value="Hindi">Hindi</mat-option>
-                    <mat-option value="English">English</mat-option>
-                    <mat-option value="Marathi">Marathi</mat-option>
+                    <mat-option value="hindi">Hindi</mat-option>
+                    <mat-option value="english">English</mat-option>
+                    <mat-option value="marathi">Marathi</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>

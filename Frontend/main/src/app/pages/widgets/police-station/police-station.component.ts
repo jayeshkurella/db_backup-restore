@@ -94,7 +94,6 @@ export class PoliceStationComponent implements OnInit {
     this.policeapi.searchPoliceStations(queryParams).subscribe(
       (res: any) => {
         if (res && res.results) {  // ✅ Fixed: Using res.results instead of res.data
-          console.log("Filtered Police Stations:", res.results);
           this.total_policestation = res.results;
         } else {
           console.log("No police stations found.");

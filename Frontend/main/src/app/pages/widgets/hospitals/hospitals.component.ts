@@ -16,6 +16,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatDividerModule } from '@angular/material/divider';
 import { HospitalDialogComponent } from './hospital-dialog/hospital-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import {  ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-hospitals',
@@ -23,8 +25,8 @@ import { MatDialog } from '@angular/material/dialog';
      MatInputModule,
      MatButtonModule,
      MatIconModule,
-     FormsModule,
-     CommonModule,MatOptionModule,RouterModule,MatDividerModule],
+     FormsModule,ReactiveFormsModule ,
+     CommonModule,MatOptionModule,RouterModule,MatDividerModule,MatSelectModule ],
   templateUrl: './hospitals.component.html',
   styleUrl: './hospitals.component.scss'
 })
@@ -41,6 +43,7 @@ export class HospitalsComponent implements OnInit{
   searchCity: string = '';
   searchstate: string = '';
   searchdistrict: string = '';
+  searchtype: string = '';
   mapp!: L.Map;
   markerr!: L.Marker | null;
   latitude: number | null = null;
@@ -65,12 +68,35 @@ export class HospitalsComponent implements OnInit{
       (data) => {
         if (data) {
           this.allhospitals = data.results; 
-          console.log("data",this.allhospitals)
         } 
       },
     );
   }
 
+  onsearch(): void {
+    const queryParams: any = {
+      name: this.searchName || '',
+      city: this.searchCity || '',
+      district: this.searchdistrict || '',
+      state: this.searchstate || '',
+      type: this.searchtype || '' // Optional hospital type: 'gvt' or 'private'
+
+    };
+    this.hospitalService.searchHospitals(queryParams).subscribe(
+      (data) => {
+        if (data && data.results) {
+          this.allhospitals = data.results; 
+        } else {
+          console.log('No hospitals found');
+          this.allhospitals = []; 
+        }
+      },
+      error => {
+        console.error("Error fetching hospitals:", error);
+        this.allhospitals = [];  
+      }
+    );
+  }
 
   seeMoreHospital(hospital: any) {
     this.dialog.open(HospitalDialogComponent, {

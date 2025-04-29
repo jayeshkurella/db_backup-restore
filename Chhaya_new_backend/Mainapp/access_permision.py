@@ -1,66 +1,77 @@
 from rest_framework.permissions import BasePermission
 
+
 class IsAdminUser(BasePermission):
-    """Allows access only to Admin users."""
+    """Allows access only to Admin users who have full access."""
+
     def has_permission(self, request, view):
-        print("Authenticated:", request.user.is_authenticated)
-        print("User Type:", getattr(request.user, 'user_type', None))
-        return request.user.is_authenticated and getattr(request.user, 'user_type', '') == 'admin'
+        return request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'admin'
 
 
-class IsFamilyUser(BasePermission):
-    """Allows access only to Family users."""
+class BaseUserPermission(BasePermission):
+    """
+    Base class for user permissions that automatically allows admin users
+    and checks specific user_type for non-admin users.
+    """
+    user_type = None  # To be overridden by subclasses
+
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'family'
+        # Admin always has permission
+        if request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'admin':
+            return True
+
+        # Check specific user type for non-admin users
+        return request.user.is_authenticated and getattr(request.user, 'user_type', None) == self.user_type
 
 
-class IsOfficerUser(BasePermission):
-    """Allows access only to Officer users."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'officer'
+class IsFamilyUser(BaseUserPermission):
+    """Allows access to Admin and Family users."""
+    user_type = 'family'
 
 
-class IsReportingUser(BasePermission):
-    """Allows access only to Reporting users."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'reporting'
+class IsOfficerUser(BaseUserPermission):
+    """Allows access to Admin and Officer users."""
+    user_type = 'officer'
 
 
-class IsVolunteerUser(BasePermission):
-    """Allows access only to Volunteer users."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'volunteer'
+class IsReportingUser(BaseUserPermission):
+    """Allows access to Admin and Reporting users."""
+    user_type = 'reporting'
 
 
-class IsPoliceStationUser(BasePermission):
-    """Allows access only to Police Station users."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'police_station'
+class IsVolunteerUser(BaseUserPermission):
+    """Allows access to Admin and Volunteer users."""
+    user_type = 'volunteer'
 
 
-class IsMedicalStaffUser(BasePermission):
-    """Allows access only to Medical Staff users."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'medical_staff'
+class IsPoliceStationUser(BaseUserPermission):
+    """Allows access to Admin and Police Station users."""
+    user_type = 'police_station'
+
+
+class IsMedicalStaffUser(BaseUserPermission):
+    """Allows access to Admin and Medical Staff users."""
+    user_type = 'medical_staff'
 
 
 class AllUserAccess(BasePermission):
     """
-    Allows access to specific user types.
+    Allows access to Admin and specific user types.
     By default, allows all users if no specific user type is provided.
-
-    Usage:
-    - `permission_classes = [AllUserAccess("admin", "officer")]`  # Restrict access
-    - `permission_classes = [AllUserAccess()]`  # Allow all authenticated users
+    Admin always has access regardless of specified types.
     """
 
     def __init__(self, *allowed_user_types):
         self.allowed_user_types = allowed_user_types or [
-            "admin", "family", "officer", "reporting", "volunteer", "police_station", "medical_staff"
+            "family", "officer", "reporting", "volunteer",
+            "police_station", "medical_staff"
         ]
 
     def has_permission(self, request, view):
-        print("Authenticated:", request.user.is_authenticated)
-        print("User Type:", getattr(request.user, "user_type", None))
+        # Admin always has permission
+        if request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'admin':
+            return True
 
-        return request.user.is_authenticated and getattr(request.user, "user_type", "") in self.allowed_user_types
+        # Check if user's type is in allowed types
+        return (request.user.is_authenticated and
+                getattr(request.user, 'user_type', '') in self.allowed_user_types)

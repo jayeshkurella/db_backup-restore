@@ -6,7 +6,7 @@
     <div class="row mb-4">
       <div class="col-md-4 text-center">
         <img 
-          [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : '/assets/old/images/Nophoto.png'" 
+          [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : 'assets/old/images/Nophoto.png'" 
           class="img-fluid rounded" 
           alt="Person Photo"
           style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
@@ -23,7 +23,7 @@
 
     <!-- Appearance -->
     <h5 class="mb-3 text-primary">Appearance</h5>
-    <p><strong>Height:</strong> {{ data?.height ? data.height + ' cm' : 'N/A' }}</p>
+    <p><strong>Height:</strong> {{ data?.height_range ? data.height_range + ' cm' : 'N/A' }}</p>
     <p><strong>Weight:</strong> {{ data?.weight ? data.weight + ' kg' : 'N/A' }}</p>
     <p><strong>Complexion:</strong> {{ data?.complexion || 'N/A' }}</p>
     <p><strong>Hair:</strong> {{ data?.hair_color || 'N/A' }} - {{ data?.hair_type || 'N/A' }}</p>

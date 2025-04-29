@@ -1,4 +1,5 @@
 # views.py
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -26,16 +27,39 @@ class HospitalViewSet(viewsets.ModelViewSet):
     queryset = Hospital.objects.all()
 
     # 🔹 1. LIST Hospitals with Pagination
+
     def list(self, request):
         try:
-            queryset = Hospital.objects.select_related('address').prefetch_related('hospital_contact')
+            name = request.query_params.get('name', '').strip()
+            city = request.query_params.get('city', '').strip()
+            district = request.query_params.get('district', '').strip()
+            state = request.query_params.get('state', '').strip()
+            hospital_type = request.query_params.get('type', '').strip()
+            status_filter = request.query_params.get('status', '').strip()
+
+            filters = Q()
+            if name:
+                filters &= Q(name__icontains=name)
+            if city:
+                filters &= Q(address__city__icontains=city)
+            if district:
+                filters &= Q(address__district__icontains=district)
+            if state:
+                filters &= Q(address__state__icontains=state)
+            if hospital_type:
+                filters &= Q(type__iexact=hospital_type)
+            if status_filter:
+                filters &= Q(activ_Status__iexact=status_filter)
+
+            queryset = Hospital.objects.select_related('address').prefetch_related('hospital_contact').filter(filters)
+
             paginator = CustomPagination()
             paginated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = HospitalSerializer(paginated_queryset, many=True)
             return paginator.get_paginated_response(serializer.data)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
     # 🔹 2. RETRIEVE Hospital by ID
     def retrieve(self, request, pk=None):
         try:
