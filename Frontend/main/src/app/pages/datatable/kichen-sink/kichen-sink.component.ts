@@ -172,6 +172,8 @@ const employees = [
     providers: [DatePipe]
 })
 export class AppKichenSinkComponent implements AfterViewInit {
+  today: Date = new Date();
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

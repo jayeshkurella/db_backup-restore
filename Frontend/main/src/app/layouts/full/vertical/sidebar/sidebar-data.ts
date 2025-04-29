@@ -22,17 +22,17 @@ export const navItems: NavItem[] = [
       children: [
         {
           displayName: 'Missing Person',
-          iconName: 'user',
+          // iconName: 'user',
           route: '/forms/Missing-person-form',
         },
         {
           displayName: 'Unidentified Person',
-          iconName: 'user',
+          // iconName: 'user',
           route: '/forms/Unidentified-person-form',
         },
         {
           displayName: 'Unidentified Body',
-          iconName: 'user',
+          // iconName: 'user',
           route: '/forms/Unidentified-bodies-form',
         },
       ],
@@ -49,17 +49,17 @@ export const navItems: NavItem[] = [
     children: [
       {
         displayName: 'Missing Person',
-        iconName: 'user',
+        // iconName: 'user',
         route: '/datatable/missing-person',
       },
       {
         displayName: 'Unidentified Person',
-        iconName: 'user',
+        // iconName: 'user',
         route: '/datatable/unidentified-person',
       },
       {
         displayName: 'Unidentified Bodies',
-        iconName: 'user',
+        // iconName: 'user',
         route: '/datatable/unidentified-bodies',
       },
     ],

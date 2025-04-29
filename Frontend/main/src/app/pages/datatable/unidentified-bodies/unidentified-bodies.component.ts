@@ -52,6 +52,7 @@ export interface Person {
   
 })
 export class UnidentifiedBodiesComponent  implements AfterViewInit , OnInit {
+  today: Date = new Date();
 
 
 @ViewChild(MatTable, { static: true }) table!: MatTable<any>;

@@ -50,6 +50,8 @@ export interface Person {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UnidentifiedPersonComponent implements AfterViewInit , OnInit{
+  today: Date = new Date();
+
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild('dialogTemplate', { static: true }) dialogTemplate!: TemplateRef<any>;
