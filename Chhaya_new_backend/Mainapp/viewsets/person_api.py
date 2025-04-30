@@ -575,24 +575,38 @@ class PersonViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
     def pending_or_rejected(self, request):
-        # Get pending persons
-        pending_persons = Person.objects.filter(person_approve_status='pending')
-        pending_count = pending_persons.count()
+        try:
+            # Get pending persons
+            pending_persons = Person.objects.filter(person_approve_status='pending')
+            pending_count = pending_persons.count()
 
-        # Get rejected persons
-        rejected_persons = Person.objects.filter(person_approve_status='rejected')
-        rejected_count = rejected_persons.count()
+            # Get rejected persons
+            rejected_persons = Person.objects.filter(person_approve_status='rejected')
+            rejected_count = rejected_persons.count()
 
-        # Serialize the data
-        pending_serializer = PersonSerializer(pending_persons, many=True)
-        rejected_serializer = PersonSerializer(rejected_persons, many=True)
+            # Get approved persons
+            approved_persons = Person.objects.filter(person_approve_status='approved')
+            approved_count = approved_persons.count()
 
-        return Response({
-            'pending_count': pending_count,
-            'rejected_count': rejected_count,
-            'pending_data': pending_serializer.data,
-            'rejected_data': rejected_serializer.data
-        })
+            # Serialize the data
+            pending_serializer = PersonSerializer(pending_persons, many=True)
+            rejected_serializer = PersonSerializer(rejected_persons, many=True)
+            approved_serializer = PersonSerializer(approved_persons, many=True)
+
+            return Response({
+                'pending_count': pending_count,
+                'rejected_count': rejected_count,
+                'approved_count': approved_count,
+                'pending_data': pending_serializer.data,
+                'rejected_data': rejected_serializer.data,
+                'approved_data': approved_serializer.data
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                {'error': 'Something went wrong while fetching person data.', 'details': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def approve_person(self, request, pk=None):
@@ -653,6 +667,37 @@ class PersonViewSet(viewsets.ViewSet):
                 {'message': 'Rejected person approved successfully', 'data': serializer.data},
                 status=status.HTTP_200_OK
             )
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def change_from_approved(self, request, pk=None):
+        try:
+            person = Person.objects.get(pk=pk)
+            new_status = request.data.get('status')
+
+            # Validate allowed transitions
+            if person.person_approve_status != 'approved':
+                return Response(
+                    {'error': 'Only approved records can be changed using this action'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if new_status not in ['pending', 'rejected']:
+                return Response(
+                    {'error': 'Invalid target status. Allowed: pending, rejected'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            person.person_approve_status = new_status
+            person.save()
+
+            serializer = PersonSerializer(person)
+            return Response(
+                {'message': f'Person status changed to {new_status}', 'data': serializer.data},
+                status=status.HTTP_200_OK
+            )
+
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
 

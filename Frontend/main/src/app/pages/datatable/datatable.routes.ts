@@ -5,6 +5,7 @@ import { UnidentifiedPersonComponent } from './unidentified-person/unidentified-
 import { UnidentifiedBodiesComponent } from './unidentified-bodies/unidentified-bodies.component';
 import { authGuard } from '../authentication/side-login/auth.guard';
 import { AccessProviderComponent } from './access-provider/access-provider.component';
+import { AdminGuard } from 'src/app/layouts/full/vertical/sidebar/nav-item/admin.guard.guard';
 
 export const datatablesRoutes: Routes = [
   {
@@ -48,6 +49,7 @@ export const datatablesRoutes: Routes = [
       {
         path: 'admin-access',
         component: AccessProviderComponent,
+        canActivate: [AdminGuard], 
         data: {
           title: 'datatable',
           urls: [

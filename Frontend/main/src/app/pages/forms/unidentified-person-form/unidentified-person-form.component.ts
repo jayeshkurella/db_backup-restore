@@ -27,6 +27,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { map, marker } from 'leaflet';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-unidentified-person-form',
@@ -86,7 +87,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private formApi: FormApiService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -525,15 +527,15 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   
     this.formApi.postMissingPerson(formData).subscribe({
       next: (response) => {
-        alert('Person Body added successfully');
+        this.toastr.success('Unidentified Person Data addedd successfully', 'Success');
         this.unidentifiedPersonForm.reset();
         this.addresses.clear();
         this.contacts.clear();
         this.selectedFile = null;
       },
       error: (error) => {
-        console.error('Error adding person:', error);
-        alert('An error occurred while adding the person.');
+        this.toastr.error('Oops!', 'Something went wrong.');
+
       }
     });
   }

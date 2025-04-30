@@ -82,6 +82,9 @@ export const navItems: NavItem[] = [
     ],
   },
   // {
+  //   navCap: 'Admin',
+  // },
+  // {
   //   displayName: 'Admin-Access',
   //   iconName: 'user',
   //   route: '/datatable/admin-access',

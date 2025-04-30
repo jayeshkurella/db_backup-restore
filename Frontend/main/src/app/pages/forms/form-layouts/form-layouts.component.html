@@ -12,7 +12,7 @@
         Personal Info
       </h5>
     </div>
-    <mat-card class="p-4 m-1 mb-2">
+    <mat-card class="p-4 m-1 mb-3">
     <div class="row g-2 mt-3">
       <div class="d-flex flex-wrap align-items-center w-100">
 
@@ -28,9 +28,9 @@
         </mat-form-field> -->
 
         <!-- Full Name -->
-        <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-4">
+        <mat-form-field appearance="outline"  class="col-12 col-md-6 col-lg-4 border_darkk">
           <mat-label>Full Name</mat-label>
-          <input matInput type="text" formControlName="full_name"  />
+          <input matInput type="text"  formControlName="full_name"  />
         </mat-form-field>
 
         <!-- Date of Birth -->
@@ -156,9 +156,9 @@
         </mat-form-field>
         
         <!-- File Uploads -->
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-3" style="margin-bottom: 20px;">
           <label for="bodyPhotoInput" class="btn btn-outline-primary w-100">
-            Upload Body Photo
+            Person Photo
           </label>
           <input
             id="bodyPhotoInput"
@@ -206,12 +206,12 @@
 
 
     <!-- Address Section -->
-    <div class="p-3 bg-light-primary rounded mt-2 mb-2">
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Address
       </h5>
     </div>
-    <mat-card class="p-4 mb-3">
+    <mat-card class="p-4 mb-4">
     <div formGroupName="addressForm" class="row g-3 m-2">
       <!-- Left Section: Address Fields -->
       <div class="col-md-6">
@@ -374,18 +374,18 @@
         <mat-icon>delete</mat-icon>
         </button>
         </div>
-      </mat-card>
-    <!-- contact Section -->
-    <div class="p-3 bg-light-primary  mt-2 mb-2">
+    </mat-card>
+   
+      <!-- contact Section -->
+    <div class="p-3 bg-light-primary  mt-4 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
       </h5>
-    </div>
+    </div>  
 
     <!-- Contact Information Card -->
-    <mat-card class="p-4">
-      
-    <form formGroupName="contactForm">
+    <mat-card class="p-4 mb-4">
+    <form formGroupName="contactForm" class="row g-3 m-2">
       <div class="row g-3 m-1">
         <!-- Contact Type -->
         <div class="col-md-3">
@@ -479,7 +479,7 @@
         </div>
 
         <!-- Primary Contact Checkbox -->
-        <div class="col-md-3 d-flex align-items-center">
+        <div class="col-md-3 d-flex align-items-center" style="margin-bottom: 20px;">
           <mat-checkbox formControlName="is_primary">Is Primary</mat-checkbox>
         </div>
       </div>
@@ -522,18 +522,20 @@
     </mat-list>
 
 
-  </mat-card>
+    </mat-card>
   
-    <div class="p-3 bg-light-primary  mt-2 mb-2">
+
+
+    <div class="p-3 bg-light-primary  mt-4 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Additional information
       </h5>
     </div>
     
     <!-- Additional Information Card -->
-    <mat-card class="p-4 mb-3 mt-2">
+    <mat-card class="p-4 mb-4 mt-2">
       <div formArrayName="additional_info">
-        <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3">
+        <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
           <div class="row g-3">
 
             <!-- Caste -->
@@ -570,7 +572,7 @@
             <!-- Marital Status -->
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Marital Status</mat-label>
+                <!-- <mat-label>Marital Status</mat-label> -->
                 <mat-select formControlName="marital_status">
                   <mat-option value="">Marital Status</mat-option>
                   <mat-option value="single">Single</mat-option>
@@ -663,7 +665,7 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-2">
+    <div class="p-3 bg-light-primary mt-4 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Missing Data
       </h5>
@@ -671,7 +673,7 @@
 
     <mat-card class="card  p-4 m-2 mb-3">
       <div formArrayName="last_known_details">
-        <div *ngFor="let info of lastKnownDetails.controls; let i = index" [formGroupName]="i" class="row g-3">
+        <div *ngFor="let info of lastKnownDetails.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
 
           <!-- File Uploads -->
           <div class="col-md-6 d-flex flex-column">
@@ -726,7 +728,7 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-2">
+    <div class="p-3 bg-light-primary mt-4 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>Legal Info
       </h5>
@@ -734,7 +736,7 @@
 
     <mat-card class="card  p-4 mb-1">
       <div formArrayName="firs">
-        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
+        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
 
           <!-- FIR Number -->
           <div class="col-md-4">
@@ -742,13 +744,6 @@
               <mat-label>FIR Number</mat-label>
               <input matInput type="text" formControlName="fir_number">
             </mat-form-field>
-          </div>
-
-          <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
-          <div class="col-md-4">
-            <label class="form-label">Upload FIR Photo</label>
-            <input type="file" class="form-control" accept="image/*,application/pdf"
-              (change)="onFileSelect($event, 'firs', i, 'fir_photo')">
           </div>
 
           <!-- Case Status -->
@@ -768,6 +763,20 @@
               </mat-select>
             </mat-form-field>
           </div>
+
+          <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
+            <div class="col-md-4" style="margin-bottom: 20px;">
+              <button mat-stroked-button color="primary" class="w-100" (click)="firInput.click()">
+                Upload FIR Photo
+              </button>
+              <input
+                #firInput
+                type="file"
+                accept="image/*,application/pdf"
+                hidden
+                (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
+              />
+            </div>
 
           <!-- Police Station Name & Address -->
           <div class="col-md-4">
@@ -804,7 +813,7 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-2">
+    <div class="p-3 bg-light-primary mt-4 mb-2">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>consent
       </h5>
@@ -814,16 +823,7 @@
     <mat-card class="card p-4  mb-1">
 
       <div formArrayName="consent">
-        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
-  
-          <!-- Additional Info Field -->
-          <!-- <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Additional Info</mat-label>
-              <input matInput formControlName="data" />
-            </mat-form-field>
-          </div> -->
-        
+        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
           <!-- Consent Checkbox -->
           <div class="col-md-12">
             <mat-checkbox formControlName="is_consent" class="w-100">

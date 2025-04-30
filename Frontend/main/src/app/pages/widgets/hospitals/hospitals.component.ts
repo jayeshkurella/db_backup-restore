@@ -79,7 +79,7 @@ export class HospitalsComponent implements OnInit{
       city: this.searchCity || '',
       district: this.searchdistrict || '',
       state: this.searchstate || '',
-      type: this.searchtype || '' // Optional hospital type: 'gvt' or 'private'
+      type: this.searchtype || '' 
 
     };
     this.hospitalService.searchHospitals(queryParams).subscribe(

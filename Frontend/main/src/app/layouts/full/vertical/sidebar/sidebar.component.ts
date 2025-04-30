@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output ,ChangeDetectorRef } from '@angular/core';
 import { BrandingComponent } from './branding.component';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
@@ -15,31 +15,47 @@ export class SidebarComponent implements OnInit {
   @Input() showToggle = true;
   @Output() toggleMobileNav = new EventEmitter<void>();
   @Output() toggleCollapsed = new EventEmitter<void>();
-
+  constructor(private cd: ChangeDetectorRef) {}
   // 👇 This will override the imported `navItems`
   navItems: NavItem[] = [];
 
   ngOnInit(): void {
-    const userType = localStorage.getItem('user_type');
-    console.log('Current user_type:', userType);
-
-    this.navItems = this.filterNavItemsByUserType(fullNavItems, userType);
+    this.updateNavigation();
+    
+    // Watch for user type changes
+    window.addEventListener('storage', () => {
+      this.updateNavigation();
+    });
   }
 
-  filterNavItemsByUserType(items: NavItem[], userType: string | null): NavItem[] {
-    return items
-      .filter(item => {
-        const allow = !item.condition || item.condition === userType;
-        if (!allow) {
-          console.log(`❌ Hiding: ${item.displayName} for user_type: ${userType}`);
-        }
-        return allow;
-      })
-      .map(item => ({
-        ...item,
-        children: item.children
-          ? this.filterNavItemsByUserType(item.children, userType)
-          : undefined,
-      }));
+  updateNavigation(): void {
+    const userType = localStorage.getItem('user_type')?.toLowerCase().trim();
+    console.log('[NAV] Current user type:', userType);
+    
+    // Create fresh filtered array
+    const filtered = this.filterItems([...fullNavItems], userType);
+    
+    console.log('[NAV] Filtered items:', filtered);
+    this.navItems = filtered;
+    this.cd.detectChanges(); // Force update
+  }
+
+  private filterItems(items: NavItem[], userType?: string): NavItem[] {
+    return items.filter(item => {
+      // Always show section headers
+      if (item.navCap) return true;
+      
+      // Check permissions
+      const hasAccess = !item.condition || item.condition.toLowerCase() === userType;
+      
+      // Filter children if present
+      if (item.children) {
+        item.children = this.filterItems(item.children, userType);
+        return hasAccess && item.children.length > 0;
+      }
+      
+      return hasAccess;
+    });
   }
 }
+

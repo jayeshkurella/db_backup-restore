@@ -27,6 +27,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatIconModule } from '@angular/material/icon';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -91,7 +92,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   policeStationList: any[] = [];
 
 
-  constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe) {
+  constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe, private toastr: ToastrService) {
     
   }
   ngOnInit(): void {
@@ -179,19 +180,17 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
       updated_by: [null],  
       _is_deleted: [false],
 
-     // Addresses array
+     
+     
+
       addresses: this.fb.array([]),
       contacts: this.fb.array([]),
-
-      addressForm: this.createAddressFormGroup(),
-      contactForm: this.createAddresFormGroup(),
-      // change name
-
-     
       additional_info: this.fb.array([]),
       last_known_details: this.fb.array([]),
       firs: this.fb.array([]),
       consent: this.fb.array([]),
+      addressForm: this.createAddressFormGroup(),
+      contactForm: this.createcontactFormGroup(),
     });
     this.personForm.get('birth_date')?.valueChanges.subscribe(date => {
       if (date) {
@@ -294,7 +293,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   }
   
 
-  createAddresFormGroup():FormGroup {
+  createcontactFormGroup():FormGroup {
      return this.fb.group({
         phone_no: [''],
         country_cd: [''],
@@ -510,6 +509,15 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
   onSubmit() {
     const formData = new FormData();
+     // Validate the personForm before proceeding
+  if (this.personForm.invalid) {
+    this.toastr.error('Please fill out all required fields', 'Error');
+    return; // Prevent submitting if the form is invalid
+  }
+
+  // Clear the addresses and contacts array if you're about to add new ones
+  this.addresses.clear();
+  this.contacts.clear();
   
     const addressFormValue = this.personForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
@@ -554,20 +562,20 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   
     // Append image file if available
     if (this.selectedFile) {
-      formData.append('photo_photo', this.selectedFile); // field name must match Django field
+      formData.append('photo_photo', this.selectedFile); 
     }
   
     this.formapi.postMissingPerson(formData).subscribe({
       next: (response) => {
-        alert('Person added successfully');
+        this.toastr.success('Missing Person Added Successfully', 'Success');
         this.personForm.reset();
         this.addresses.clear();
         this.contacts.clear();
         this.selectedFile = null;
       },
       error: (error) => {
-        console.error('Error adding person:', error);
-        alert('An error occurred while adding the person.');
+        this.toastr.error('Oops!', 'Something went wrong.');
+
       }
     });
   }
