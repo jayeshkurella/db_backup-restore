@@ -92,21 +92,33 @@ class PersonViewSet(viewsets.ViewSet):
         responses={201: openapi.Response("Person created successfully")}
     )
     def create(self, request):
-        logger.info(f"Incoming data: {request.data}")
         print("data comes", request.data)
-        logger.debug("Incoming Data Format: %s", request.content_type)
         try:
             with transaction.atomic():
                 # Extract data based on content type
                 if request.content_type == 'application/json':
                     data = request.data
                 elif request.content_type.startswith('multipart/form-data'):
-                    payload_str = request.POST.get('payload', '{}')
-                    data = json.loads(payload_str)
+                    if 'payload' in request.FILES:
+                        payload_file = request.FILES['payload']
+                        try:
+                            # Read the file content and decode as JSON
+                            payload_str = payload_file.read().decode('utf-8')
+                            data = json.loads(payload_str)
+                            print("Incoming data:", data)  # Debug log
+                        except json.JSONDecodeError as e:
+                            return Response({'error': 'Invalid JSON in payload'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({'error': 'Missing payload in request'},
+                                        status=status.HTTP_400_BAD_REQUEST)
+
                 else:
                     return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
                 logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
+                data['photo_photo'] = request.FILES.get('photo_photo')  # Assign uploaded file
+
                 # Set status to pending for non-admin users
                 if not request.user.is_staff:
                     data['person_approve_status'] = 'pending'
@@ -621,4 +633,27 @@ class PersonViewSet(viewsets.ViewSet):
             )
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def reapprove_person(self, request, pk=None):
+        try:
+            person = Person.objects.get(pk=pk)
+
+            if person.person_approve_status != 'rejected':
+                return Response(
+                    {'error': 'Only rejected records can be re-approved'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            person.person_approve_status = 'approved'
+            person.save()
+
+            serializer = PersonSerializer(person)
+            return Response(
+                {'message': 'Rejected person approved successfully', 'data': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
 

@@ -27,16 +27,16 @@ export class FormApiService {
   }
 
   // Post Missing Person with Authorization Token
-  postMissingPerson(payload: any): Observable<any> {
-    const headers = this.createHeaders();  // Get headers with token
-    console.log("Payload for Unidentified Person:", payload);
-    return this.http.post<any>(this.apiUrl + "/api/persons/", payload, { headers }).pipe(
-      tap(
-        (response: any) => console.log("✅ Response received:", response),
-        (error: any) => console.error("❌ Error occurred:", error)
-      )
-    );
-  }
+  postMissingPerson(data: FormData): Observable<any> {
+      const headers = this.createHeaders();  // Get headers with token
+      console.log("Payload for Missing Person:", data);
+      return this.http.post<any>(this.apiUrl + "/api/persons/", data, { headers }).pipe(
+        tap(
+          (response: any) => console.log("✅ Response received:", response),
+          (error: any) => console.error("❌ Error occurred:", error)
+        )
+      );
+    }
 
   // Get All Persons with Authorization Token
   getallPerson(): Observable<any> {

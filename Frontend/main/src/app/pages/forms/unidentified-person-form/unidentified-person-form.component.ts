@@ -373,6 +373,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   removeConsent(index: number) {
     this.consent.removeAt(index);
   }
+
   initMap(): void {
     this.map = L.map('mapHome').setView([22.9734, 78.6569], 5);
 
@@ -439,43 +440,20 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // selectedPhotoFile: File | null = null;
-
-  // onPersonPhotoSelect(event: any) {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     this.selectedPhotoFile = file; // Store file outside the form
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.imagePreview = reader.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // selectedPhotoFile: File | null = null;
-
-  // onPhotoSelected(event: Event): void {
-  //   const fileInput = event.target as HTMLInputElement;
-  //   if (fileInput.files && fileInput.files.length > 0) {
-  //     this.selectedPhotoFile = fileInput.files[0];
-  //   }
-  // }
+  
 
   
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
-      if (!this.selectedFiles[section]) {
-        this.selectedFiles[section] = [];
-      }
-      if (!this.selectedFiles[section][index]) {
-        this.selectedFiles[section][index] = {};
-      }
-      this.selectedFiles[section][index][field] = file;
-
-      this.getFormArray(section).at(index).get(field)?.setValue(file.name);
+        if (!this.selectedFiles[section]) {
+            this.selectedFiles[section] = [];
+        }
+        if (!this.selectedFiles[section][index]) {
+            this.selectedFiles[section][index] = {};
+        }
+        this.selectedFiles[section][index][field] = file;
+        this.getFormArray(section).at(index).get(field)?.setValue(file.name);
     }
   }
 
@@ -487,35 +465,32 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     return this.unidentifiedPersonForm.get(section) as FormArray;
   }
 
-  // convertFileToBase64(file: File): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result as string);
-  //     reader.onerror = error => reject(error);
-  //   });
-  // }
-  
+  selectedFile: string | null = null;
 
-  async onSubmit() {
+  onFileSelect_person_photo(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
+  onSubmit() {
+    const formData = new FormData();
+  
     const addressFormValue = this.unidentifiedPersonForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
       this.addresses.push(this.fb.group(addressFormValue));
     }
-
+  
     const contactFormValue = this.unidentifiedPersonForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
       this.contacts.push(this.fb.group(contactFormValue));
     }
-
+  
     const birthDate = this.unidentifiedPersonForm.get('birth_date')?.value;
-    let finalBirthDate = birthDate instanceof Date
-      ? this.datePipe.transform(birthDate, 'yyyy-MM-dd')
-      : birthDate;
-
-    const birthTime = this.unidentifiedPersonForm.get('birthtime')?.value;
-    const formattedBirthTime = this.formatTime(birthTime);
-
+    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
+    const birthTime = this.formatTime(this.unidentifiedPersonForm.get('birthtime')?.value);
+  
     const lastKnownDetails = this.unidentifiedPersonForm.get('last_known_details')?.value;
     if (lastKnownDetails && lastKnownDetails.length > 0) {
       lastKnownDetails.forEach((detail: any) => {
@@ -527,55 +502,40 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
         }
       });
     }
-
-
+  
+    // Create a clean JSON object
     const payload = {
       ...this.unidentifiedPersonForm.value,
-      birth_date: finalBirthDate,
-      birthtime: formattedBirthTime,
+      birth_date: formattedBirthDate,
+      birthtime: birthTime,
       addresses: this.addresses.value,
       contacts: this.contacts.value,
-      // photo_base64: base64Photo,
     };
-
+  
     delete payload.addressForm;
     delete payload.contactForm;
-
-    const formData = new FormData(); // Create a new FormData instance
-
-    {      // Append form fields to FormData
-      Object.entries(payload).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value)); // For arrays, stringify
-        } else if (value instanceof Blob || typeof value === 'string') {
-          formData.append(key, value as string | Blob); // Cast to string or Blob
-        }
-      });
-
-      // Check if photo is selected before appending it to the FormData
-      // if (this.selectedPhotoFile) {
-      //   formData.append('photo_photo', this.selectedPhotoFile, this.selectedPhotoFile.name);
-      // } else {
-      //   alert("Please upload a person photo.");
-      //   return; // If no photo is selected, do not proceed
-      // }
+  
+    // Append JSON data as a Blob (important!)
+    formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+  
+    // Append image file if available
+    if (this.selectedFile) {
+      formData.append('photo_photo', this.selectedFile); // field name must match Django field
     }
-
-    this.formApi.postMissingPerson(payload).subscribe({
+  
+    this.formApi.postMissingPerson(formData).subscribe({
       next: (response) => {
-        console.log('Person added successfully!', response);
-        alert("Person added successfully");
+        alert('Person Body added successfully');
         this.unidentifiedPersonForm.reset();
         this.addresses.clear();
         this.contacts.clear();
-        this.selectedFiles = {};
+        this.selectedFile = null;
       },
-      error: (error: any) => {
+      error: (error) => {
         console.error('Error adding person:', error);
-        alert('An error occurred while adding the person. Please try again.');
-      },
+        alert('An error occurred while adding the person.');
+      }
     });
-    
   }
   
   

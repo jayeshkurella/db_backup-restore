@@ -129,7 +129,7 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.initMap();  // Ensure the map initializes after the view is fully loaded
+      this.initMap();  
     }, 0);
   }
 
@@ -506,71 +506,138 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
     return this.personForm.get(section) as FormArray;
   }
 
+
+
   onSubmit() {
-    
+    const formData = new FormData();
+  
     const addressFormValue = this.personForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
-      this.addresses.push(this.fb.group(addressFormValue)); 
+      this.addresses.push(this.fb.group(addressFormValue));
     }
   
     const contactFormValue = this.personForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
-      this.contacts.push(this.fb.group(contactFormValue)); 
+      this.contacts.push(this.fb.group(contactFormValue));
     }
   
     const birthDate = this.personForm.get('birth_date')?.value;
-    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); 
-  
-    let finalBirthDate = formattedBirthDate;
-    if (birthDate instanceof Date) {
-      finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  
-    }
-  
-    // Format birthtime (if any)
-    const birthTime = this.personForm.get('birthtime')?.value;
-    const formattedBirthTime = this.formatTime(birthTime);
+    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
+    const birthTime = this.formatTime(this.personForm.get('birthtime')?.value);
   
     const lastKnownDetails = this.personForm.get('last_known_details')?.value;
     if (lastKnownDetails && lastKnownDetails.length > 0) {
-      lastKnownDetails.forEach((detail: { missing_date: string | number | Date | null; missing_time: string | null; }) => {
+      lastKnownDetails.forEach((detail: any) => {
         if (detail.missing_date) {
           detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
         }
-          if (detail.missing_time) {
-          detail.missing_time = this.formatTime(detail.missing_time); 
+        if (detail.missing_time) {
+          detail.missing_time = this.formatTime(detail.missing_time);
         }
       });
     }
+  
+    // Create a clean JSON object
     const payload = {
       ...this.personForm.value,
-      birth_date: finalBirthDate, 
-      birthtime: formattedBirthTime,  
-      addresses: this.addresses.value, 
-      contacts: this.contacts.value,  
+      birth_date: formattedBirthDate,
+      birthtime: birthTime,
+      addresses: this.addresses.value,
+      contacts: this.contacts.value,
     };
- 
-    
+  
     delete payload.addressForm;
     delete payload.contactForm;
   
-    // Log the payload for debugging purposes
-    console.log("Payload Sent to Backend:", payload);
+    // Append JSON data as a Blob (important!)
+    formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
   
-    this.formapi.postMissingPerson(payload).subscribe({
+    // Append image file if available
+    if (this.selectedFile) {
+      formData.append('photo_photo', this.selectedFile); // field name must match Django field
+    }
+  
+    this.formapi.postMissingPerson(formData).subscribe({
       next: (response) => {
-        console.log('Person added successfully!', response);
-        alert("Person added successfully");
-          this.personForm.reset();
-        this.addresses.clear(); 
-        this.contacts.clear();  
-        this.selectedFiles = {}; 
+        alert('Person added successfully');
+        this.personForm.reset();
+        this.addresses.clear();
+        this.contacts.clear();
+        this.selectedFile = null;
       },
       error: (error) => {
         console.error('Error adding person:', error);
-        alert('An error occurred while adding the person. Please try again.');
-      },
+        alert('An error occurred while adding the person.');
+      }
     });
   }
+  
+
+  // onSubmit() {
+    
+  //   const addressFormValue = this.personForm.get('addressForm')?.value;
+  //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
+  //     this.addresses.push(this.fb.group(addressFormValue)); 
+  //   }
+  
+  //   const contactFormValue = this.personForm.get('contactForm')?.value;
+  //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
+  //     this.contacts.push(this.fb.group(contactFormValue)); 
+  //   }
+  
+  //   const birthDate = this.personForm.get('birth_date')?.value;
+  //   const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); 
+  
+  //   let finalBirthDate = formattedBirthDate;
+  //   if (birthDate instanceof Date) {
+  //     finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  
+  //   }
+  
+  //   // Format birthtime (if any)
+  //   const birthTime = this.personForm.get('birthtime')?.value;
+  //   const formattedBirthTime = this.formatTime(birthTime);
+  
+  //   const lastKnownDetails = this.personForm.get('last_known_details')?.value;
+  //   if (lastKnownDetails && lastKnownDetails.length > 0) {
+  //     lastKnownDetails.forEach((detail: { missing_date: string | number | Date | null; missing_time: string | null; }) => {
+  //       if (detail.missing_date) {
+  //         detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
+  //       }
+  //         if (detail.missing_time) {
+  //         detail.missing_time = this.formatTime(detail.missing_time); 
+  //       }
+  //     });
+  //   }
+  //   const payload = {
+  //     ...this.personForm.value,
+  //     birth_date: finalBirthDate, 
+  //     birthtime: formattedBirthTime,  
+  //     addresses: this.addresses.value, 
+  //     contacts: this.contacts.value,  
+  //   };
+ 
+    
+  //   delete payload.addressForm;
+  //   delete payload.contactForm;
+  
+  //   // Log the payload for debugging purposes
+  //   console.log("Payload Sent to Backend:", payload);
+  
+  //   this.formapi.postMissingPerson(payload).subscribe({
+  //     next: (response) => {
+  //       console.log('Person added successfully!', response);
+  //       alert("Person added successfully");
+  //         this.personForm.reset();
+  //       this.addresses.clear(); 
+  //       this.contacts.clear();  
+  //       this.selectedFiles = {}; 
+  //     },
+  //     error: (error) => {
+  //       console.error('Error adding person:', error);
+  //       alert('An error occurred while adding the person. Please try again.');
+  //     },
+  //   });
+  // }
 
   
   

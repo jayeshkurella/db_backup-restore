@@ -6,7 +6,7 @@ from .user import User
 class PoliceStation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=150, unique=True, help_text="Name of the police station")
-    phone_no = models.CharField(max_length=13, blank=True, null=True, help_text="Contact number of the police station")
+    phone_no = models.CharField(max_length=50, blank=True, null=True, help_text="Contact number of the police station")
     station_photo = models.ImageField(upload_to='police_station_photos/', blank=True, null=True)
     address = models.ForeignKey('Address', on_delete=models.CASCADE,blank=True, null=True, related_name='police_stations')
     activ_Status =models.CharField(max_length=10, blank=True, null=True,default='Active',choices=(('Active','Active'),('Inactive','Inactive')))

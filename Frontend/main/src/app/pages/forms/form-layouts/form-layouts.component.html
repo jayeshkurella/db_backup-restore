@@ -156,11 +156,17 @@
         </mat-form-field>
         
         <!-- File Uploads -->
-        <div class="col-12 col-md-4 col-lg-3 d-flex flex-column">
-          <label class="form-label selectors-font">Person Photo</label>
-          <input type="file" accept="image/*"
-            class="form-control w-100"
-            (change)="onFileSelect_person_photo($event)">
+        <div class="col-12 col-md-3">
+          <label for="bodyPhotoInput" class="btn btn-outline-primary w-100">
+            Upload Body Photo
+          </label>
+          <input
+            id="bodyPhotoInput"
+            type="file"
+            accept="image/*"
+            class="d-none"
+            (change)="onFileSelect_person_photo($event)"
+          />
         </div>
         
 

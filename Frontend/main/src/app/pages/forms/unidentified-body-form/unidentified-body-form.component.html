@@ -1,16 +1,4 @@
-<!-- <div class="coming-soon-container">
-    <div class="coming-soon-content">
-      <mat-icon class="coming-soon-icon">hourglass_empty</mat-icon>
-      <h1>Coming Soon</h1>
-      <p>We’re working hard to bring something amazing for you.</p>
-    </div>
-  </div>
-   -->
 
-<!-- ----------------------------------------------------------------------------------------------------- -->
-<!-- Basic Header Form -->
-<!-- ----------------------------------------------------------------------------------------------------- -->
-<!-- <div class="person-form-container p-4 bg-white rounded shadow-sm"> -->
   <div class="unidentified-person-form-container p-4 bg-white rounded shadow-sm">
     <div class="heading-container">
       <h3 class="main-heading">UNIDENTIFIED BODY REPORT FORM</h3>
@@ -143,51 +131,68 @@
         </div> -->
   
         <!-- Third Row -->
-        <div class="d-flex flex-wrap align-items-center w-100">
+        <div class="row align-items-center">
 
           <!-- Complexion -->
-          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
-            <mat-label>Complexion</mat-label>
-            <mat-select formControlName="complexion">
-              <mat-option value="fair">Fair</mat-option>
-              <mat-option value="dusky">Dusky</mat-option>
-              <mat-option value="wheatish">Wheatish</mat-option>
-              <mat-option value="dark">Dark</mat-option>
-              <mat-option value="medium">Medium</mat-option>
-              <mat-option value="light">Light</mat-option>
-            </mat-select>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
-            <mat-label>Hair Color</mat-label>
-            <mat-select formControlName="hair_color">
-              <mat-option value="black">Black</mat-option>
-              <mat-option value="brown">Brown</mat-option>
-              <mat-option value="grey">Grey</mat-option>
-            </mat-select>
-          </mat-form-field>
-  
+          <div class="col-12 col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Complexion</mat-label>
+              <mat-select formControlName="complexion">
+                <mat-option value="fair">Fair</mat-option>
+                <mat-option value="dusky">Dusky</mat-option>
+                <mat-option value="wheatish">Wheatish</mat-option>
+                <mat-option value="dark">Dark</mat-option>
+                <mat-option value="medium">Medium</mat-option>
+                <mat-option value="light">Light</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        
+          <!-- Hair Color -->
+          <div class="col-12 col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Hair Color</mat-label>
+              <mat-select formControlName="hair_color">
+                <mat-option value="black">Black</mat-option>
+                <mat-option value="brown">Brown</mat-option>
+                <mat-option value="grey">Grey</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        
           <!-- Eye Color -->
-          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-            <mat-label>Eye Color</mat-label>
-            <mat-select formControlName="eye_color">
-              <mat-option value="black">Black</mat-option>
-              <mat-option value="brown">Brown</mat-option>
-              <mat-option value="green">Green</mat-option>
-              <mat-option value="hazel">Hazel</mat-option>
-              <mat-option value="gray">Gray</mat-option>
-              <mat-option value="yellow">Yellow</mat-option>
-              <mat-option value="blue">Blue</mat-option>
-              <mat-option value="violet">Violet</mat-option>
-            </mat-select>
-          </mat-form-field>
-  
-          <!-- <div class="col-md-4">
-            <label class="form-label">Body Photo</label>
-            <input type="file" class="form-control" accept="image/*" (change)="onPersonPhotoSelect($event)" />
-          </div> -->
-  
+          <div class="col-12 col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Eye Color</mat-label>
+              <mat-select formControlName="eye_color">
+                <mat-option value="black">Black</mat-option>
+                <mat-option value="brown">Brown</mat-option>
+                <mat-option value="green">Green</mat-option>
+                <mat-option value="hazel">Hazel</mat-option>
+                <mat-option value="gray">Gray</mat-option>
+                <mat-option value="yellow">Yellow</mat-option>
+                <mat-option value="blue">Blue</mat-option>
+                <mat-option value="violet">Violet</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        
+          <!-- File Upload -->
+          <div class="col-12 col-md-3">
+            <label for="bodyPhotoInput" class="btn btn-outline-primary w-100">
+              Upload Body Photo
+            </label>
+            <input
+              id="bodyPhotoInput"
+              type="file"
+              accept="image/*"
+              class="d-none"
+              (change)="onFileSelect_person_photo($event)"
+            />
+          </div>
+        
         </div>
+        
   
         <!-- <div class="d-flex flex-wrap align-items-center w-100"> -->
   

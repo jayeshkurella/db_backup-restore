@@ -7,11 +7,12 @@
     <div class="row mb-4">
       <div class="col-md-5 text-center">
         <img
-          [src]="getImageUrl(person.person_photo)"
-          alt="Person Photo"
-          class="img-fluid rounded"
-          style="height: 100px; width: 90%; object-fit: cover;"
-        />
+            [src]="environment.apiUrl + person.photo_photo"
+            alt="Person Photo"
+            class="img-fluid rounded"
+            style="height: 300px; width: 100%; object-fit: cover;"
+          />
+
       </div>
       <div class="col-md-7">
         <h4>{{ person.full_name }}</h4>
