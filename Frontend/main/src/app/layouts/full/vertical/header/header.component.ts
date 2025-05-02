@@ -110,7 +110,7 @@ export class HeaderComponent implements OnInit  {
   ];
 
   @Output() optionsChange = new EventEmitter<AppSettings>();
-
+  profilePic: string = '';
   constructor(
     private settings: CoreService,
     private vsidenav: CoreService,
@@ -122,13 +122,17 @@ export class HeaderComponent implements OnInit  {
     translate.setDefaultLang('en');
   }
   ngOnInit() {
-    // Subscribe to authentication state changes
-    this.authService.isLoggedIn$.subscribe((status) => {
+    this.authService.profilePic$.subscribe(pic => {
+      this.profilePic = pic || 'assets/images/profile/user-1.jpg';
+    });    this.authService.isLoggedIn$.subscribe((status) => {
       this.isLoggedIn = status;
     });
+    this.authService.initializeProfilePic();  // restore pic on refresh
+
   }
 
   logout() {
+    this.authService.setProfilePic('');  // Clear the picture
     this.authService.logout();
   }
 

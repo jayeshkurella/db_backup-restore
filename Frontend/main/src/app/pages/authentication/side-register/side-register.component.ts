@@ -160,7 +160,8 @@ export class AppSideRegisterComponent {
         (response) => {
             console.log('Registration successful', response);
             alert(response.message);
-            this.errorMessage = '';    this.router.navigate(['/authentication/login']);
+            this.errorMessage = '';   
+            this.router.navigate(['/authentication/login']);
 
           },
           (error) => {

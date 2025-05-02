@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 import uuid
 from django.utils import timezone
 from datetime import timedelta
-
+from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils.timezone import now
 
 
@@ -78,6 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ACTIVE = "active", "Active"
         INACTIVE = "inactive", "Inactive"
         HOLD = "hold", "Hold"
+        REJECTED = 'rejected', 'Rejected'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_type = models.CharField(max_length=20, choices=UserTypeChoices.choices, default=UserTypeChoices.REPORTING)
@@ -86,19 +88,32 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email_id = models.EmailField(max_length=50, unique=True)
-    phone_no = models.CharField(max_length=10, unique=True)
+    phone_no = models.CharField(max_length=10, unique=True ,null=True, blank=True)
     country_code = models.CharField(max_length=5, blank=True, null=True)
+    registered_at = models.DateField(auto_now_add=True ,blank=True, null=True)
 
-    password = models.CharField(max_length=255)
+    password = models.CharField(max_length=255,null=True, blank=True)
     password2 = models.CharField(max_length=255, blank=True, null=True)
     salt = models.CharField(max_length=7, blank=True, null=True)
 
     is_consent = models.BooleanField(default=False)
-    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.PENDING)  # Default Pending
+    status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.HOLD)  # Default Pending
 
     person = models.ForeignKey("Person", on_delete=models.SET_NULL, null=True, blank=True)
     contact = models.ForeignKey("Contact", on_delete=models.SET_NULL, related_name="user_contact", null=True, blank=True)
     consent_id = models.ForeignKey("Consent", on_delete=models.SET_NULL, null=True, blank=True)
+    status_updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='updated_users'
+    )
+
+    google_id = models.CharField(max_length=100, unique=True ,null=True, blank=True)
+    email_by_google = models.EmailField(unique=True,null=True, blank=True)
+    name = models.CharField(max_length=255,null=True, blank=True)
+    picture = models.URLField(blank=True,null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

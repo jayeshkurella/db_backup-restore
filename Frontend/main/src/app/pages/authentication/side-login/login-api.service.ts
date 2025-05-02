@@ -3,19 +3,34 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/envirnment/envirnment';
+declare var google :any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginApiService {
-  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
-  isLoggedIn$ = this.isLoggedInSubject.asObservable(); // Observable to track login state
+  public isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable(); 
 
+  profilePicSubject = new BehaviorSubject<string | null>(null);
+  profilePic$ = this.profilePicSubject.asObservable();
+
+  setProfilePic(picUrl: string) {
+    this.profilePicSubject.next(picUrl);
+    localStorage.setItem('profilePic', picUrl);  
+  }
+
+  initializeProfilePic() {
+    const storedPic = localStorage.getItem('profilePic');
+    if (storedPic) {
+      this.profilePicSubject.next(storedPic);
+    }
+  }
 
   baseUrl = environment.apiUrl
   constructor(private http: HttpClient , private router :Router) {}
 // Check if the user is logged in (Example: Check localStorage or session)
-  private isUserLoggedIn(): boolean {
+ public isUserLoggedIn(): boolean {
     return !!localStorage.getItem('authToken'); // If token exists, user is logged in
   }
 
@@ -39,12 +54,38 @@ export class LoginApiService {
 
   // Call this on logout
   logout() {
+    sessionStorage.clear();
     localStorage.removeItem('authToken');
     localStorage.removeItem('user_type');
     localStorage.removeItem('user_id');
-
-    this.isLoggedInSubject.next(false); // Update state
+    localStorage.removeItem('profilePic');
+    this.isLoggedInSubject.next(false); 
+    google.accounts.id.disableAutoSelect();
     this.router.navigate(['/authentication/login']);
 
   }
-}
+
+
+  // google login
+  loginWithGoogle(token: string) {
+    return this.http.post(this.baseUrl + '/api/users/', {
+      action: 'google_login',
+      token: token,
+      // ...userTypeData
+    });
+    
+  }
+
+  // loginWithGoogle(token: string , userTypeData: any) {
+  //   return this.http.post(this.baseUrl + '/api/users/', {
+  //     action: 'google_login',
+  //     token: token,
+  //     ...userTypeData
+  //   });
+    
+  // }
+
+
+  
+
+}  

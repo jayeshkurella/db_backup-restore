@@ -69,9 +69,8 @@
     <h5 class="text-primary mt-3">Identification & Missing Info</h5>
     <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type }}</p>
     <p><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</p>
-    <p><strong>Missing Date:</strong> {{ person.missing_date }}</p>
+    <p><strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}</p>
     <p><strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}</p>
-    <p><strong>Missing Location Date:</strong> {{ person.last_known_details[0]?.missing_date }}</p>
     <p><strong>Last Seen Location:</strong> {{ person.last_known_details[0]?.last_seen_location }}</p>
     <p><strong>Last Seen Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</p>
   </div>

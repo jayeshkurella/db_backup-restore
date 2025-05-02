@@ -619,6 +619,7 @@ class PersonViewSet(viewsets.ViewSet):
                 )
 
             person.person_approve_status = 'approved'
+            person.approved_by = request.user
             person.save()
             serializer = PersonSerializer(person)
             return Response(
@@ -639,6 +640,7 @@ class PersonViewSet(viewsets.ViewSet):
                 )
 
             person.person_approve_status = 'rejected'
+            person.approved_by = request.user
             person.save()
             serializer = PersonSerializer(person)
             return Response(
@@ -660,6 +662,7 @@ class PersonViewSet(viewsets.ViewSet):
                 )
 
             person.person_approve_status = 'approved'
+            person.approved_by = request.user
             person.save()
 
             serializer = PersonSerializer(person)
@@ -690,6 +693,7 @@ class PersonViewSet(viewsets.ViewSet):
                 )
 
             person.person_approve_status = new_status
+            person.approved_by = request.user
             person.save()
 
             serializer = PersonSerializer(person)
@@ -700,5 +704,6 @@ class PersonViewSet(viewsets.ViewSet):
 
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 

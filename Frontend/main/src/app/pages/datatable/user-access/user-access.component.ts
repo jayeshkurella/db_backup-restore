@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,26 +11,27 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, tap } from 'rxjs';
-import { CasesApprovalService } from './cases-approval.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { forkJoin } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { UserAccessServiceService } from './user-access-service.service';
 interface Person {
   id: string;
-  full_name: string;
-  village?: string;
-  city?: string;
-  state?: string;
-  gender?: string;
-  age?: number;
-  type?: string;
-  person_approve_status: string;
-  case_status?: string;
+  first_name: string;
+  last_name: string;
+  email_id: string;
+  phone_no: string;
+  country_code: string;
+  user_type: string;
+  sub_user_type: string;
+  status: string;
+  status_updated_by?: string;
   selected?: boolean;
+//   registered_at?: string;
 }
 @Component({
-  selector: 'app-access-provider',
+  selector: 'app-user-access',
   imports: [
     CommonModule,
     MatTableModule,
@@ -45,14 +45,15 @@ interface Person {
     MatChipsModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    FormsModule
+    MatSnackBarModule,
+    FormsModule,
+    DatePipe
   ],
-  templateUrl: './access-provider.component.html',
-  styleUrl: './access-provider.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './user-access.component.html',
+  styleUrl: './user-access.component.scss'
 })
-export class AccessProviderComponent implements OnInit{ 
-  displayedColumns: string[] = ['name', 'village', 'city', 'state', 'status', 'actions'];
+export class UserAccessComponent implements OnInit {
+  displayedColumns: string[] = ['full_name', 'email_id', 'phone', 'user_type', 'sub_user_type', 'status', 'status_updated_by', 'actions'];
   displayedColumnsWithSelect = ['select', ...this.displayedColumns];
   pendingPersons: Person[] = [];
   rejectedPersons: Person[] = [];
@@ -61,13 +62,13 @@ export class AccessProviderComponent implements OnInit{
   pendingCount: number = 0;
   rejectedCount: number = 0;
   approvedCount: number = 0;
-  selectedTabIndex = 0; 
+  selectedTabIndex = 0;
   selectAllPending: boolean = false;
   selectAllRejected: boolean = false;
   selectAllApproved: boolean = false;
 
   constructor(
-    private pendingService: CasesApprovalService,
+    private pendingService: UserAccessServiceService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -85,37 +86,28 @@ export class AccessProviderComponent implements OnInit{
     this.pendingService.getPendingData().subscribe({
       next: (response: any) => {
         if (response) {
-          if (response.pending_data) {
-            this.pendingPersons = response.pending_data.map((person: any) => ({
-              ...person,
-              selected: false,
-              person_approve_status: person.person_approve_status || 'pending',
-              case_status: person.case_status || 'pending'
-            }));
-            this.pendingCount = this.pendingPersons.length;
-          }
+          this.pendingPersons = response.pending_data.map((person: any) => ({
+            ...person,
+            selected: false,
+            status: person.status || 'hold'
+          }));
           
-          if (response.rejected_data) {
-            this.rejectedPersons = response.rejected_data.map((person: any) => ({
-              ...person,
-              selected: false,
-              person_approve_status: person.person_approve_status || 'rejected',
-              case_status: person.case_status || 'rejected'
-            }));
-            this.rejectedCount = this.rejectedPersons.length;
-          }
-
-          if (response.approved_data) {
-            this.approvedPersons = response.approved_data.map((person: any) => ({
-              ...person,
-              selected: false,
-              person_approve_status: person.person_approve_status || 'approved',
-              case_status: person.case_status || 'approved'
-            }));
-            this.approvedCount = this.approvedPersons.length;
-          }
-        }
+          this.rejectedPersons = response.rejected_data.map((person: any) => ({
+            ...person,
+            selected: false,
+            status: person.status || 'rejected'
+          }));
   
+          this.approvedPersons = response.approved_data.map((person: any) => ({
+            ...person,
+            selected: false,
+            status: person.status || 'approved'
+          }));
+  
+          this.pendingCount = response.counts?.hold || 0;
+          this.approvedCount = response.counts?.approved || 0;
+          this.rejectedCount = response.counts?.rejected || 0;
+        }
         this.isLoading = false;
       },
       error: (error) => {
@@ -131,23 +123,19 @@ export class AccessProviderComponent implements OnInit{
     });
   }
 
-  private showStatusChangeMessage(person: Person, oldStatus: string, newStatus: string): void {
-    const formattedOldStatus = this.formatStatus(oldStatus);
-    const formattedNewStatus = this.formatStatus(newStatus);
-    
-    this.snackBar.open(
-      `${person.full_name}'s status changed from ${formattedOldStatus} to ${formattedNewStatus}`,
-      'Close', 
-      { duration: 3000 }
-    );
+  getFullName(person: Person): string {
+    return `${person.first_name} ${person.last_name}`.trim();
   }
 
-  private formatStatus(status: string): string {
-    return status.charAt(0).toUpperCase() + status.slice(1);
+  getPhoneNumber(person: Person): string {
+    return ` ${person.phone_no}`;
   }
-  
+  //   getPhoneNumber(person: Person): string {
+//     return `${person.country_code} ${person.phone_no}`;
+//   }
+
   approvePerson(person: Person): void {
-    const oldStatus = person.person_approve_status;
+    const oldStatus = person.status;
     this.pendingService.updatePersonStatus(person.id, 'approved').subscribe({
       next: () => {
         this.loadData();
@@ -158,7 +146,7 @@ export class AccessProviderComponent implements OnInit{
   }
 
   rejectPerson(person: Person): void {
-    const oldStatus = person.person_approve_status;
+    const oldStatus = person.status;
     this.pendingService.updatePersonStatus(person.id, 'rejected').subscribe({
       next: () => {
         this.loadData();
@@ -169,11 +157,11 @@ export class AccessProviderComponent implements OnInit{
   }
 
   setPersonPending(person: Person): void {
-    const oldStatus = person.person_approve_status;
-    this.pendingService.updatePersonStatus(person.id, 'pending').subscribe({
+    const oldStatus = person.status;
+    this.pendingService.updatePersonStatus(person.id, 'hold').subscribe({
       next: () => {
         this.loadData();
-        this.showStatusChangeMessage(person, oldStatus, 'pending');
+        this.showStatusChangeMessage(person, oldStatus, 'hold');
       },
       error: (error) => console.error('Error setting person to pending:', error)
     });
@@ -265,12 +253,14 @@ export class AccessProviderComponent implements OnInit{
       case 1:
         selectedPersons = this.rejectedPersons.filter(p => p.selected);
         break;
+      default:
+        return;
     }
 
     if (selectedPersons.length === 0) return;
 
     const approveRequests = selectedPersons.map(person => {
-      const oldStatus = person.person_approve_status;
+      const oldStatus = person.status;
       return this.pendingService.updatePersonStatus(person.id, 'approved').pipe(
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'approved'))
       );
@@ -295,12 +285,14 @@ export class AccessProviderComponent implements OnInit{
       case 2:
         selectedPersons = this.approvedPersons.filter(p => p.selected);
         break;
+      default:
+        return;
     }
 
     if (selectedPersons.length === 0) return;
 
     const rejectRequests = selectedPersons.map(person => {
-      const oldStatus = person.person_approve_status;
+      const oldStatus = person.status;
       return this.pendingService.updatePersonStatus(person.id, 'rejected').pipe(
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'rejected'))
       );
@@ -322,9 +314,9 @@ export class AccessProviderComponent implements OnInit{
     if (selectedPersons.length === 0) return;
 
     const pendingRequests = selectedPersons.map(person => {
-      const oldStatus = person.person_approve_status;
-      return this.pendingService.updatePersonStatus(person.id, 'pending').pipe(
-        tap(() => this.showStatusChangeMessage(person, oldStatus, 'pending'))
+      const oldStatus = person.status;
+      return this.pendingService.updatePersonStatus(person.id, 'hold').pipe(
+        tap(() => this.showStatusChangeMessage(person, oldStatus, 'hold'))
       );
     });
 
@@ -337,9 +329,31 @@ export class AccessProviderComponent implements OnInit{
     });
   }
 
+  private showStatusChangeMessage(person: Person, oldStatus: string, newStatus: string): void {
+    const name = this.getFullName(person);
+    const formattedOldStatus = this.formatStatus(oldStatus);
+    const formattedNewStatus = this.formatStatus(newStatus);
+    
+    this.snackBar.open(
+      `${name}'s status changed from ${formattedOldStatus} to ${formattedNewStatus}`,
+      'Close', 
+      { duration: 3000 }
+    );
+  }
+
+  private formatStatus(status: string): string {
+    switch(status.toLowerCase()) {
+      case 'hold': return 'Pending';
+      case 'approved': return 'Approved';
+      case 'rejected': return 'Rejected';
+      default: return status;
+    }
+  }
+
   private resetSelectAllStates(): void {
     this.selectAllPending = false;
     this.selectAllRejected = false;
     this.selectAllApproved = false;
   }
+
 }

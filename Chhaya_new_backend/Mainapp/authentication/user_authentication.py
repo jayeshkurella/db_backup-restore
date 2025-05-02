@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .auth_serializer import AuthSerializer
+from .auth_serializer import AuthSerializer, UserSerializer
 from django.contrib.auth import logout
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -24,7 +24,6 @@ from django.db.utils import IntegrityError
 from django.core.mail import send_mail  # For email functionality (optional)
 from django.conf import settings
 
-from ..Serializers.serializers import UserSerializer
 from ..models import User
 
 # class AuthAPIView(APIView):
@@ -377,7 +376,7 @@ from ..models import User
 
 class AuthAPIView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [AllowAny]  # Allow all users by default
+    permission_classes = [AllowAny]
 
     def get_user_data(self, user):
         """Return serialized user data"""
@@ -390,7 +389,6 @@ class AuthAPIView(APIView):
             if not user or not user.is_reset_token_valid():
                 return Response({"error": "Invalid or expired reset token"}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"message": "Valid token. Proceed with password reset."}, status=status.HTTP_200_OK)
-
         return Response({"error": "Reset token required"}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, reset_token=None):
@@ -426,6 +424,9 @@ class AuthAPIView(APIView):
 
         elif action == "delete_profile":
             return self.delete_profile(request)
+
+        elif action == "google_login":
+            return self.google_login(request)
 
         return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -469,7 +470,7 @@ class AuthAPIView(APIView):
             country_code=country_code,
             user_type=user_type,
             sub_user_type=sub_user_type,
-            status="hold",
+            status=User.StatusChoices.HOLD,
             is_consent=is_consent
         )
 
@@ -502,6 +503,74 @@ class AuthAPIView(APIView):
             }, status=status.HTTP_200_OK)
 
         return Response({"error": "Incorrect password. Please try again."}, status=status.HTTP_400_BAD_REQUEST)
+
+    def google_login(self, request):
+        """Handles Google login with ID token"""
+        token = request.data.get("token")
+        if not token:
+            return Response({"error": "Token is required"}, status=400)
+
+        try:
+            from google.oauth2 import id_token
+            from google.auth.transport import requests as google_requests
+
+            id_info = id_token.verify_oauth2_token(
+                token, google_requests.Request(), settings.GOOGLE_CLIENT_ID
+            )
+
+            google_id = id_info["sub"]
+            email = id_info.get("email", "")
+            name = id_info.get("name", "")
+            picture = id_info.get("picture", "")
+            user_type = request.data.get("user_type")
+            sub_user_type = request.data.get("sub_user_type")
+
+            # Check if user exists by Google ID or email
+            user = User.objects.filter(google_id=google_id).first()
+            if not user and email:
+                user = User.objects.filter(email_id=email).first()
+
+            # If user doesn't exist, create a new one
+            if not user:
+                user = User.objects.create(
+                    google_id=google_id,
+                    email_id=email,
+                    first_name=name.split()[0] if name else "",
+                    last_name=" ".join(name.split()[1:]) if name else "",
+                    user_type=user_type or User.UserTypeChoices.REPORTING,
+                    sub_user_type=sub_user_type or "",
+                    picture=picture,
+                    status=User.StatusChoices.HOLD,
+                    phone_no=None,  # Explicitly set to None instead of empty string
+                )
+            else:
+                # Update user details if missing
+                updated = False
+                if not user.google_id:
+                    user.google_id = google_id
+                    updated = True
+                if not user.email_id and email:
+                    user.email_id = email
+                    updated = True
+                if updated:
+                    user.save()
+
+            # Check if account is approved
+            if user.status != User.StatusChoices.ACTIVE:
+                return Response({
+                    "error": "Your account is not approved yet. Please wait for admin approval."
+                }, status=status.HTTP_403_FORBIDDEN)
+
+            # Generate or get token
+            token_obj, _ = Token.objects.get_or_create(user=user)
+            return Response({
+                "message": "Google login successful",
+                "token": token_obj.key,
+                "user": self.get_user_data(user)
+            }, status=200)
+
+        except Exception as e:
+            return Response({"error": f"Google login failed: {str(e)}"}, status=400)
 
     def logout_user(self, request):
         """Handles user logout"""

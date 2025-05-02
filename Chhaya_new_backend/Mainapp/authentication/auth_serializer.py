@@ -5,10 +5,30 @@ from django.contrib.auth.hashers import make_password, check_password
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    status_updated_by = serializers.StringRelatedField(read_only=True)  # Show the admin's email or username
+
     class Meta:
         model = User
-        fields = '__all__'
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = [
+            "id",
+            "user_type",
+            "sub_user_type",
+            "first_name",
+            "last_name",
+            "email_id",
+            "phone_no",
+            "country_code",
+            "is_consent",
+            "status",
+            "status_updated_by",
+            "registered_at",
+            "created_at",
+            "updated_at","google_id", "name", "email_by_google", "picture"
+        ]
+        extra_kwargs = {'password': {'write_only': True},
+                        'status': {'read_only': True}
+                        }
+
 
 
 class AuthSerializer(serializers.Serializer):

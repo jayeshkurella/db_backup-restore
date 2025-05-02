@@ -208,10 +208,11 @@
   <!-- --------------------------------------------------------------- -->
   <button mat-icon-button [matMenuTriggerFor]="profilemenu" aria-label="Profile" class="m-l-8">
     <img
-      src="assets/images/profile/user-1.jpg"
-      class="rounded-circle object-cover icon-35 profile-dd"
-      width="35"
-    />
+    [src]="profilePic"
+    class="rounded-circle object-cover icon-35 profile-dd"
+    width="35"
+  />
+  
   </button>
   
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">

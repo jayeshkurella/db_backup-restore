@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, Renderer2 } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -7,13 +7,42 @@ import { BrandingComponent } from '../../../layouts/full/vertical/sidebar/brandi
 import { LoginApiService } from './login-api.service';
 import { CommonModule } from '@angular/common';  // Import CommonModule
 import { ToastrService } from 'ngx-toastr';
+import { GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig, SocialUser } from '@abacritt/angularx-social-login';
+import { BehaviorSubject } from 'rxjs';
+import { GoogleUserTypeDialogComponent } from './google-user-type-dialog/google-user-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+declare var google :any;
 
 @Component({
+    standalone: true,
     selector: 'app-side-login',
     imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, BrandingComponent,CommonModule],
-    templateUrl: './side-login.component.html'
+    templateUrl: './side-login.component.html',
+    styleUrls: ['./side-login.component.scss'],
+    providers: [
+      {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+          autoLogin: false,
+          providers: [
+            {
+              id: GoogleLoginProvider.PROVIDER_ID,
+              provider: new GoogleLoginProvider('175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com')
+            }
+          ]
+        } as SocialAuthServiceConfig,
+      }
+    ]
 })
-export class AppSideLoginComponent {
+export class AppSideLoginComponent implements AfterViewInit{
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
+    isLoggedIn$ = this.isLoggedInSubject.asObservable(); 
+    private isUserLoggedIn(): boolean {
+      return !!localStorage.getItem('authToken'); 
+    }
+  user: SocialUser | null = null;
+  loggedIn: boolean = false;
+
   options = this.settings.getOptions();
   loginForm: FormGroup;
   submitted = false;
@@ -22,12 +51,15 @@ export class AppSideLoginComponent {
   isPasswordVisible: boolean = false;
   hidePassword: boolean = true; // Initially hide the password
 
-  constructor(private settings: CoreService,private authService: LoginApiService, private router: Router,private fb: FormBuilder,private toastr: ToastrService) {
+  constructor(private settings: CoreService,private authService: LoginApiService, private router: Router,private fb: FormBuilder,private toastr: ToastrService,private renderer: Renderer2,private socialAuthService: SocialAuthService,private dialog: MatDialog)  {
     this.loginForm = this.fb.group({
       email_id: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
    }
+   ngAfterViewInit(): void {
+    this.loadGoogleAuthScript();
+  }
 
   
 
@@ -97,4 +129,82 @@ showError() {
       }
     } 
   }
+
+
+
+
+  // google login
+  private loadGoogleAuthScript(): void {
+    const script = this.renderer.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => this.renderGoogleButton(); 
+    document.body.appendChild(script);
+  }
+  private renderGoogleButton(): void {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id: '175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com',
+        callback: this.handleLogin.bind(this),
+        prompt: 'select_account',
+        auto_select: false 
+      });
+      google.accounts.id.renderButton(document.getElementById('google-login'), {
+        theme: 'red',
+        size: 'large',
+        text: 'continue_with',
+        locale: 'en',
+        width: '250',
+      });
+      google.accounts.id.prompt();
+    } else {
+      console.error("Google API script failed to load.");
+    }
+  }
+  private decodetoken(token:String){
+    return JSON.parse(atob(token.split('.')[1]));
+  }
+  handleLogin(response: any) {
+    if (response) {
+        console.log(response);
+        const token = response.credential;
+        sessionStorage.setItem('googleToken', token);
+
+        this.authService.loginWithGoogle(token).subscribe(
+            (response: any) => {
+                // Check if the response contains an error about account approval
+                if (response.error && response.error.includes('not approved')) {
+                    // Show error message to user
+                    this.toastr.error(response.error);
+                    return;
+                }
+
+                // Save token and user data
+                localStorage.setItem('profilePic', response.user.picture);
+                localStorage.setItem('authToken', response.token);
+                localStorage.setItem('user_type', response.user.user_type);
+                localStorage.setItem('user_id', response.user.id);
+                // 🔁 Update login status
+                this.authService.isLoggedInSubject.next(true);
+
+                // Navigate to form
+                this.router.navigate(['/forms/Missing-person-form']);
+            },
+            (error) => {
+                console.error('Login failed:', error);
+                // Show error message to user
+                if (error.error && error.error.error) {
+                    this.toastr.error(error.error.error);
+                } else {
+                    this.toastr.error('Login failed. Please try again.');
+                }
+            }
+        );
+    }
+ }
+  
+
+
+
 }

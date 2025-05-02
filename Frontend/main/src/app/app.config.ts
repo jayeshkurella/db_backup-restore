@@ -35,6 +35,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig, SocialUser } from '@abacritt/angularx-social-login';
 
 // code view
 import { provideHighlightOptions } from 'ngx-highlightjs';
@@ -46,6 +47,20 @@ export function HttpLoaderFactory(http: HttpClient): any {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+              autoLogin: false,
+              providers: [
+                {
+                  id: GoogleLoginProvider.PROVIDER_ID,
+                  provider: new GoogleLoginProvider('175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com')
+                }
+              ]
+            } as SocialAuthServiceConfig,
+          }
+        
+    ,
     provideAnimationsAsync(), // required animations providers
     provideToastr(), // Toastr providers
     provideZoneChangeDetection({ eventCoalescing: true }),

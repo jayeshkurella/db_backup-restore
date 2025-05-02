@@ -161,7 +161,8 @@ CORS_ALLOW_METHODS = [
     "OPTIONS"
 ]
 
-
+# Google Client ID (replace with your own)
+GOOGLE_CLIENT_ID='175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com'
 
 
 CSRF_TRUSTED_ORIGINS = [
