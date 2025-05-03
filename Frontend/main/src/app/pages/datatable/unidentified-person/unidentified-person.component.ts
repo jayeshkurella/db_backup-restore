@@ -283,7 +283,8 @@ ageRanges = [
   /** Open MatDialog */
   openDialog(person: Person): void {
     const dialogRef = this.dialog.open(UnidentifiedPersonDialogComponent, {
-      width: '600px',
+      width: '80vw', // 80% of the viewport width
+      maxWidth: '900px', // Limit max width
       data: person,
     });
   

@@ -176,20 +176,21 @@
               </mat-select>
             </mat-form-field>
           </div>
+
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+            <mat-label>Hair Type</mat-label>
+            <mat-select formControlName="hair_type">
+              <mat-option value="straight">Straight</mat-option>
+              <mat-option value="dashed">Dashed</mat-option>
+              <mat-option value="dotted">Dotted</mat-option>
+              <mat-option value="long">Long</mat-option>
+              <mat-option value="broad">Broad</mat-option>
+              <mat-option value="short">Short</mat-option>
+              <mat-option value="wavy">Wavy</mat-option>
+            </mat-select>
+          </mat-form-field>
         
-          <!-- File Upload -->
-          <div class="col-12 col-md-3">
-            <label for="bodyPhotoInput" class="btn btn-outline-primary w-100" style="margin-bottom: 20px;">
-              Upload Body Photo
-            </label>
-            <input
-              id="bodyPhotoInput"
-              type="file"
-              accept="image/*"
-              class="d-none"
-              (change)="onFileSelect_person_photo($event)"
-            />
-          </div>
+          
         
         </div>
         
@@ -248,7 +249,7 @@
   
         </div>
         <div class="d-flex flex-wrap align-items-center w-100">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Select Hospitals</mat-label>
               <mat-select formControlName="hospital">
@@ -260,7 +261,7 @@
           </div>
   
   
-          <div class="col-md-6">
+          <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Body Condition</mat-label>
               <mat-select formControlName="Body_Condition">
@@ -278,7 +279,20 @@
                 <mat-option value="obese">Obese</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>        
+          </div>   
+          <!-- File Upload -->
+          <div class="col-12 col-md-4">
+            <label for="bodyPhotoInput" class="btn btn-outline-primary w-100" style="margin-bottom: 20px;">
+              Upload Body Photo
+            </label>
+            <input
+              id="bodyPhotoInput"
+              type="file"
+              accept="image/*"
+              class="d-none"
+              (change)="onFileSelect_person_photo($event)"
+            />
+          </div>     
           
         </div>
   

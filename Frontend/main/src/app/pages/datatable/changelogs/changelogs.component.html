@@ -1,0 +1,42 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="professional-form">
+    <!-- Date Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date</mat-label>
+      <input matInput type="date" formControlName="date" required>
+      <mat-hint>Choose a date</mat-hint>
+    </mat-form-field>
+  
+    <!-- Version Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Version</mat-label>
+      <input matInput formControlName="version" required>
+      <mat-hint>Specify the version number</mat-hint>
+    </mat-form-field>
+  
+    <!-- Added Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>🚀 Added</mat-label>
+      <textarea matInput formControlName="added" rows="3" placeholder="One item per line" required></textarea>
+      <mat-hint>List items you added</mat-hint>
+    </mat-form-field>
+  
+    <!-- Modified Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>✅ Modified</mat-label>
+      <textarea matInput formControlName="modified" rows="3" required></textarea>
+      <mat-hint>Describe modifications made</mat-hint>
+    </mat-form-field>
+  
+    <!-- Tested Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>🧪 Tested</mat-label>
+      <textarea matInput formControlName="tested" rows="3" required></textarea>
+      <mat-hint>Specify tests conducted</mat-hint>
+    </mat-form-field>
+  
+    <!-- Submit Button -->
+    <div class="button-container">
+      <button mat-flat-button color="primary" type="submit" class="add-log-btn" [disabled]="form.invalid">Save Log</button>
+    </div>
+  </form>
+  

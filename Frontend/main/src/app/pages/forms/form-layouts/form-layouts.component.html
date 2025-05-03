@@ -72,7 +72,7 @@
       <!-- Second Row -->
       <div class="d-flex flex-wrap align-items-center w-100">
         <!-- Blood Group -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Blood Group</mat-label>
           <mat-select formControlName="blood_group">
             <mat-option value="A+">A+</mat-option>
@@ -93,7 +93,7 @@
         </mat-form-field>
 
         <!-- Height -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Height (cm)</mat-label>
           <mat-select formControlName="height_range">
             <mat-option value="<150">Less than 150 cm</mat-option>
@@ -106,9 +106,22 @@
         </mat-form-field>
 
         <!-- Weight -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Weight (kg)</mat-label>
           <input matInput type="text" formControlName="weight">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+          <mat-label>Hair Type</mat-label>
+          <mat-select formControlName="hair_type">
+            <mat-option value="straight">Straight</mat-option>
+            <mat-option value="dashed">Dashed</mat-option>
+            <mat-option value="dotted">Dotted</mat-option>
+            <mat-option value="long">Long</mat-option>
+            <mat-option value="broad">Broad</mat-option>
+            <mat-option value="short">Short</mat-option>
+            <mat-option value="wavy">Wavy</mat-option>
+          </mat-select>
         </mat-form-field>
 
       </div>
@@ -128,6 +141,9 @@
             <mat-option value="light">Light</mat-option>
           </mat-select>
         </mat-form-field>
+
+       
+        
         
 
         <!-- Hair Color -->
@@ -709,7 +725,7 @@
           <!-- Location Details -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Location Details</mat-label>
+              <mat-label>Missing Location Details</mat-label>
               <textarea matInput formControlName="missing_location_details"
                ></textarea>
             </mat-form-field>

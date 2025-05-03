@@ -290,7 +290,7 @@
                            style="object-fit: cover;">
                     </span>
                     <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
-                    <span *ngSwitchCase="'age'">{{ element.properties.age || 'Not specified' }}</span>
+                    <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
                     <span *ngSwitchCase="'gender'">
                       <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
                       <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">
@@ -337,7 +337,7 @@
                            style="object-fit: cover;">
                     </span>
                     <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
-                    <span *ngSwitchCase="'age'">{{ element.properties.age || 'Not specified' }}</span>
+                    <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
                     <span *ngSwitchCase="'gender'">
                       <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
                       <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">

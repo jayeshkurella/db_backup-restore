@@ -15,9 +15,14 @@
 
       </div>
       <div class="col-md-7">
-        <h4>{{ person.full_name }}</h4>
-        <p><strong>Age:</strong> {{ person.age }}</p>
-        <p><strong>Gender:</strong> {{ person.gender }}</p>
+        <h3>{{ person.full_name }}</h3>
+        <p *ngIf="person.age !== null && person.age !== undefined">
+          <strong>Age:</strong> {{ person.age }}
+        </p>
+        <p *ngIf="(person.age === null || person.age === undefined) && person.age_range">
+          <strong>Age Range:</strong> {{ person.age_range }}
+        </p>
+                <p><strong>Gender:</strong> {{ person.gender }}</p>
         <p><strong>Blood Group:</strong> {{ person.blood_group }}</p>
         <!-- <p><strong>Condition:</strong> {{ person.condition }}</p> -->
       </div>
@@ -25,7 +30,7 @@
 
     <!-- Appearance Info -->
     <h5 class="text-primary">Appearance Information</h5>
-    <p><strong>Height:</strong> {{ person.height || 'N/A' }}</p>
+    <p><strong>Height:</strong> {{ person.height_range || 'N/A' }}</p>
     <p><strong>Weight:</strong> {{ person.weight || 'N/A' }}</p>
     <p><strong>Complexion:</strong> {{ person.complexion || 'N/A' }}</p>
     <p><strong>Hair Color:</strong> {{ person.hair_color || 'N/A' }}</p>
@@ -34,20 +39,50 @@
     <p><strong>Birth Mark:</strong> {{ person.birth_mark || 'N/A' }}</p>
     <p><strong>Distinctive Mark:</strong> {{ person.distinctive_mark || 'N/A' }}</p>
 
-    <!-- Contact Info -->
-    <h5 class="text-primary mt-3">Contact Information</h5>
-    <p><strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}</p>
-    <p><strong>Email:</strong> {{ person.contacts[0]?.email_id }}</p>
-    <p><strong>Company:</strong> {{ person.contacts[0]?.company_name }}</p>
-    <p><strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}</p>
-    <p><strong>Contact Type:</strong> {{ person.contacts[0]?.type }}</p>
+   <!-- Contact Info -->
+      <h5 class="text-primary mt-3">Contact Information</h5>
+
+      <p *ngIf="person.contacts[0]?.type">
+        <strong>Contact Type:</strong> {{ person.contacts[0]?.type }}
+      </p>
+
+      <!-- Prefer Company Name; fallback to Person Name -->
+      <p *ngIf="person.contacts[0]?.company_name">
+        <strong>Company:</strong> {{ person.contacts[0]?.company_name }}
+      </p>
+      <p *ngIf="!person.contacts[0]?.company_name && person.contacts[0]?.person_name">
+        <strong>Contact Person:</strong> {{ person.contacts[0]?.person_name }}
+      </p>
+
+      <p *ngIf="person.contacts[0]?.job_title">
+        <strong>Job Title:</strong> {{ person.contacts[0]?.job_title }}
+      </p>
+
+      <p *ngIf="person.contacts[0]?.phone_no">
+        <strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}
+      </p>
+
+      <p *ngIf="person.contacts[0]?.email_id">
+        <strong>Email:</strong> {{ person.contacts[0]?.email_id }}
+      </p>
+
+      <p *ngIf="person.contacts[0]?.social_media_url">
+        <strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}
+      </p>
+
+      <p *ngIf="person.contacts[0]?.website_url">
+        <strong>Website:</strong> {{ person.contacts[0]?.website_url }}
+      </p>
+
+      <p *ngIf="person.contacts[0]?.additional_details">
+        <strong>Additional Details:</strong> {{ person.contacts[0]?.additional_details }}
+      </p>
+
 
     <!-- Address Info -->
     <h5 class="text-primary mt-3">Address Information</h5>
     <p><strong>Address Type:</strong> {{ person.address_type }}</p>
     <p><strong>Street:</strong> {{ person.street }}</p>
-    <p><strong>Apartment:</strong> {{ person.appartment_no }}</p>
-    <p><strong>Apartment Name:</strong> {{ person.appartment_name }}</p>
     <p><strong>City:</strong> {{ person.city }}</p>
     <p><strong>Village:</strong> {{ person.village }}</p>
     <p><strong>Landmark:</strong> {{ person.landmark_details }}</p>
@@ -64,15 +99,25 @@
     <p><strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' }}</p>
     <p><strong>Education:</strong> {{ person.additional_info[0]?.education_details }}</p>
     <p><strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}</p>
+    <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type }}</p>
+    <p><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</p>
 
     <!-- Identification -->
     <h5 class="text-primary mt-3">Identification & Missing Info</h5>
-    <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type }}</p>
-    <p><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</p>
+    
     <p><strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}</p>
     <p><strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}</p>
     <p><strong>Last Seen Location:</strong> {{ person.last_known_details[0]?.last_seen_location }}</p>
-    <p><strong>Last Seen Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</p>
+    <p><strong>Missing Location Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</p>
+
+    <h5 class="text-primary mt-3">fir Details</h5>
+    <p><strong>Police Station:</strong> {{ person.fir_details[0]?.police_station }}</p>
+    <p><strong>FIR Number:</strong> {{ person.fir_details[0]?.fir_number }}</p>
+    <p><strong>Case Status:</strong> {{ person.fir_details[0]?.case_status }}</p>
+    <p><strong>Investigation Officer Name:</strong> {{ person.fir_details[0]?.investigation_officer_name }}</p>
+    <p><strong>Investigation Officer Contact Number:</strong> {{ person.fir_details[0]?.investigation_officer_contacts }}</p>
+
+
   </div>
 </mat-dialog-content>
 

@@ -98,14 +98,14 @@
       <div class="d-flex flex-wrap align-items-center w-100">
 
         <!-- Weight -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Weight (kg)</mat-label>
           <input matInput type="text" formControlName="weight">
         </mat-form-field>
 
 
         <!-- Complexion -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Complexion</mat-label>
           <mat-select formControlName="complexion">
             <mat-option value="fair">Fair</mat-option>
@@ -137,7 +137,18 @@
           </mat-select>
         </mat-form-field>
 
-        
+        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+          <mat-label>Hair Type</mat-label>
+          <mat-select formControlName="hair_type">
+            <mat-option value="straight">Straight</mat-option>
+            <mat-option value="dashed">Dashed</mat-option>
+            <mat-option value="dotted">Dotted</mat-option>
+            <mat-option value="long">Long</mat-option>
+            <mat-option value="broad">Broad</mat-option>
+            <mat-option value="short">Short</mat-option>
+            <mat-option value="wavy">Wavy</mat-option>
+          </mat-select>
+        </mat-form-field>
 
       </div>
 
@@ -206,7 +217,7 @@
           </mat-form-field>
         </div>
 
-        <!-- <div class="col-md-4">
+        <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Condition</mat-label>
             <mat-select formControlName="condition">
@@ -221,9 +232,9 @@
               <mat-option value="chest_pain">Chest Pain</mat-option>
             </mat-select>
           </mat-form-field>
-        </div> -->
+        </div>
 
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Body Condition</mat-label>
             <mat-select formControlName="Body_Condition">
@@ -241,7 +252,7 @@
               <mat-option value="obese">Obese</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>  
+        </div>   -->
         
         <div class="col-12 col-md-4">
           <label for="bodyPhotoInput" class="btn btn-outline-primary w-100" style="margin-bottom: 20px;">

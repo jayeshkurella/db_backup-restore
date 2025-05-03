@@ -1,0 +1,73 @@
+<div class="changelog-container">
+  <div class="changelog-header">
+    <h2>Release Changelog</h2>
+    <button mat-raised-button color="primary" (click)="goToAddLog()" class="add-log-btn">
+      Add Change Log
+    </button>
+  </div>
+
+  <div class="changelog-timeline">
+    <div *ngFor="let log of logs" class="log-item">
+      <div class="log-timeline-marker">
+        <div class="log-version-badge">v{{ log.version }}</div>
+        <div class="log-timeline-dot"></div>
+        <div class="log-timeline-line"></div>
+      </div>
+      
+      <mat-card class="log-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon class="log-icon">update</mat-icon>
+            <span class="log-date">{{ log.date | date:'mediumDate' }}</span>
+            <span class="log-version">Version {{ log.version }}</span>
+            <!-- Delete Button -->
+            <button mat-icon-button color="warn" (click)="deleteLog(log.id!)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div *ngIf="log.added.length" class="log-section">
+            <div class="log-section-header">
+              <mat-icon class="section-icon">add_circle</mat-icon>
+              <h4>Added Features</h4>
+            </div>
+            <ul>
+              <li *ngFor="let item of log.added">
+                <mat-icon class="bullet-icon">fiber_manual_record</mat-icon>
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="log.modified.length" class="log-section">
+            <div class="log-section-header">
+              <mat-icon class="section-icon">build</mat-icon>
+              <h4>Improvements</h4>
+            </div>
+            <ul>
+              <li *ngFor="let item of log.modified">
+                <mat-icon class="bullet-icon">fiber_manual_record</mat-icon>
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="log.tested.length" class="log-section">
+            <div class="log-section-header">
+              <mat-icon class="section-icon">verified</mat-icon>
+              <h4>Testing Updates</h4>
+            </div>
+            <ul>
+              <li *ngFor="let item of log.tested">
+                <mat-icon class="bullet-icon">fiber_manual_record</mat-icon>
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

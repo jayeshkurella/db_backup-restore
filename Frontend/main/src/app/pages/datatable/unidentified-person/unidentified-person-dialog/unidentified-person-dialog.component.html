@@ -35,38 +35,88 @@
     <hr>
 
     <div class="row">
-      <div class="col-md-6">
-        <h5 class="text-primary">Contact</h5>
-        <p><strong>Phone:</strong> {{ data?.contacts?.[0]?.phone_no || 'N/A' }}</p>
-        <p><strong>Email:</strong> {{ data?.contacts?.[0]?.email_id || 'N/A' }}</p>
-        <p><strong>Social:</strong> {{ data?.contacts?.[0]?.social_media_url || 'N/A' }}</p>
-        <p><strong>Type:</strong> {{ data?.contacts?.[0]?.type || 'N/A' }}</p>
-      </div>
+      <!-- Contact Info -->
+      <h5 class="text-primary mt-3">Contact Information</h5>
+
+      <p *ngIf="data.contacts[0]?.type">
+        <strong>Contact Type:</strong> {{ data.contacts[0]?.type }}
+      </p>
+
+      <!-- Prefer Company Name; fallback to Person Name -->
+      <p *ngIf="data.contacts[0]?.company_name">
+        <strong>Company:</strong> {{ data.contacts[0]?.company_name }}
+      </p>
+      <p *ngIf="!data.contacts[0]?.company_name && data.contacts[0]?.person_name">
+        <strong>Contact Person:</strong> {{ data.contacts[0]?.person_name }}
+      </p>
+
+      <p *ngIf="data.contacts[0]?.job_title">
+        <strong>Job Title:</strong> {{ data.contacts[0]?.job_title }}
+      </p>
+
+      <p *ngIf="data.contacts[0]?.phone_no">
+        <strong>Phone:</strong> {{ data.contacts[0]?.phone_no }}
+      </p>
+
+      <p *ngIf="data.contacts[0]?.email_id">
+        <strong>Email:</strong> {{ data.contacts[0]?.email_id }}
+      </p>
+
+      <p *ngIf="data.contacts[0]?.social_media_url">
+        <strong>Social Media:</strong> {{ data.contacts[0]?.social_media_url }}
+      </p>
+
+      <p *ngIf="data.contacts[0]?.website_url">
+        <strong>Website:</strong> {{ data.contacts[0]?.website_url }}
+      </p>
+
+      <p *ngIf="data.contacts[0]?.additional_details">
+        <strong>Additional Details:</strong> {{ data.contacts[0]?.additional_details }}
+      </p>
 
       <div class="col-md-6">
         <h5 class="text-primary">Address</h5>
+        <p><strong>Street:</strong> {{ data?.street || 'N/A' }}</p>
+        <p><strong>Appartment No:</strong> {{ data?.appartment_no || 'N/A' }}</p>
+        <p><strong>Appartment Name:</strong> {{ data?.appartment_name || 'N/A' }}</p>
+        <p><strong>Village:</strong> {{ data?.village || 'N/A' }}</p>
         <p><strong>City:</strong> {{ data?.city || 'N/A' }}</p>
+        <p><strong>District:</strong> {{ data?.district || 'N/A' }}</p>
         <p><strong>State:</strong> {{ data?.state || 'N/A' }}</p>
         <p><strong>Country:</strong> {{ data?.country || 'N/A' }}</p>
         <p><strong>Pincode:</strong> {{ data?.pincode || 'N/A' }}</p>
+        <p><strong>Landmark Details:</strong> {{ data?.landmark_details || 'N/A' }}</p>
       </div>
     </div>
 
     <hr>
+    <!-- Education and Occupation -->
+    <h5 class="mb-3 text-primary">Education & Occupation Details</h5>
+    <p><strong>Religion:</strong> {{ data?.additional_info?.[0]?.religion || 'N/A' }}</p>
+    <p><strong>Caste:</strong> {{ data?.additional_info?.[0]?.caste || 'N/A' }}</p>
+    <p><strong>Sub Caste:</strong> {{ data?.additional_info?.[0]?.subcaste || 'N/A' }}</p>
+    <p><strong>Marital Status:</strong> {{ data?.additional_info?.[0]?.marital_status || 'N/A' }}</p>
+    <p><strong>Mother Tongue:</strong> {{ data?.additional_info?.[0]?.mother_tongue || 'N/A' }}</p>
+    <p><strong>Other Known Languages:</strong> {{ data?.additional_info?.[0]?.other_known_languages || 'N/A' }}</p>
+    <p><strong>Educational Details:</strong> {{ data?.additional_info?.[0]?.education_details || 'N/A' }}</p>
+    <p><strong>Occupation:</strong> {{ data?.additional_info?.[0]?.occupation_details || 'N/A' }}</p>
+    <p><strong>Id Type:</strong> {{ data?.additional_info?.[0]?.id_type || 'N/A' }}</p>
+    <p><strong>Id No:</strong> {{ data?.additional_info?.[0]?.id_no || 'N/A' }}</p>
 
+    <!-- <hr>
     <h5 class="text-primary">Missing Info</h5>
     <p><strong>Date:</strong> {{ data?.last_known_details?.[0]?.missing_date || 'N/A' }}</p>
     <p><strong>Time:</strong> {{ data?.last_known_details?.[0]?.missing_time || 'N/A' }}</p>
     <p><strong>Location:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
-    <p><strong>Details:</strong> {{ data?.last_known_details?.[0]?.missing_location_details || 'N/A' }}</p>
+    <p><strong>Details:</strong> {{ data?.last_known_details?.[0]?.missing_location_details || 'N/A' }}</p> -->
 
     <hr>
 
     <h5 class="text-primary">Investigation</h5>
     <p><strong>FIR No.:</strong> {{ data?.firs?.[0]?.fir_number || 'N/A' }}</p>
     <p><strong>Case Status:</strong> {{ data?.firs?.[0]?.case_status || 'N/A' }}</p>
-    <p><strong>Officer:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }}</p>
-    <p><strong>Contact:</strong> {{ data?.firs?.[0]?.investigating_officer_contact_number || 'N/A' }}</p>
+    <p><strong>Officer Name:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }}</p>
+    <p><strong>Contact Number:</strong> {{ data?.firs?.[0]?.investigation_officer_contacts || 'N/A' }}</p>
     <p><strong>Police Station:</strong> {{ data?.firs?.[0]?.police_station || 'N/A' }}</p>
 
     <hr>

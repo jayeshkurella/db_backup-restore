@@ -259,7 +259,7 @@ class Person(models.Model):
     location = models.PointField(srid=4326, blank=True, null=True, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
     country_code = models.CharField(max_length=10, db_index=True, null=True, blank=True)
-    reported_date = models.DateField(default=date.today, editable=False)
+    reported_date = models.DateField(default=date.today)
     person_approve_status = models.CharField(max_length=10, choices=Person_STATUS_CHOICES, default='pending')
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_persons')
 
