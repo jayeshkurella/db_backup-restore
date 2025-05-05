@@ -417,11 +417,12 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   this.unidentifiedBodiesLayer = L.layerGroup();
 
   // Build the CQL filter based on selected filters
-  let cqlFilter = '';
+  let cqlFilter = `person_approve_status='approved'`;
+
 
   if (this.selectedState && this.selectedState !== 'All States') {
-      cqlFilter += `state='${this.selectedState}'`;
-  }
+    cqlFilter += ` AND state='${this.selectedState}'`;
+ }
 
   if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
       if (cqlFilter !== '') {
@@ -514,8 +515,9 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
 
   // WFS request with CQL filters
+  // const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya_demo:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
   const wfsUrl = `${environment.person_geoserver_url}/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=chhaya_demo:Mainapp_person&outputFormat=application/json${cqlFilter ? `&cql_filter=${encodeURIComponent(cqlFilter)}` : ''}`;
-
+  
   fetch(wfsUrl)
       .then(response => {
           if (!response.ok) {
@@ -702,16 +704,15 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
             const imageUrl = personDetails.photo_photo 
                 ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
-                : 'assets/old/images/Chhaya.png';
+                : '/assets/old/images/Chhaya.png';
 
             const popupContent = `
                 <div style="max-width: 400px; padding: 5px;">
                     <img src="${imageUrl}" 
                         alt="Person Image" 
-                        style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;">
+                        style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;"><br>
                     <b>Type:</b> ${personDetails.type || 'N/A'}<br>
                     <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
-                    <b>Age:</b> ${personDetails.age || 'N/A'}<br>
                     <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
                     <b>City:</b> ${personDetails.city || 'N/A'}<br>
                     <b>State:</b> ${personDetails.state || 'N/A'}<br>

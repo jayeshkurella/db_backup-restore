@@ -14,7 +14,7 @@ export class PoliceStationApiService {
 
 
  // Search police stations with filters
-searchPoliceStations(queryParams: any): Observable<any> {
+ searchPoliceStations(queryParams: any): Observable<any> {
   const authToken = localStorage.getItem('authToken');
   if (!authToken) {
     console.error('No auth token found in localStorage!');
@@ -23,11 +23,15 @@ searchPoliceStations(queryParams: any): Observable<any> {
 
   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
-  const params = new HttpParams()
+  let params = new HttpParams()
     .set('name', queryParams.name || '')
     .set('city', queryParams.city || '')
     .set('district', queryParams.district || '')
     .set('state', queryParams.state || '');
+
+  if (queryParams.page) {
+    params = params.set('page', queryParams.page);
+  }
 
   return this.http.get<any>(`${this.apiurl}/api/police-stations/`, { headers, params }).pipe(
     catchError(error => {
@@ -36,6 +40,7 @@ searchPoliceStations(queryParams: any): Observable<any> {
     })
   );
 }
+
 
 // Add a new police station
 addPoliceStation(data: any): Observable<any> {

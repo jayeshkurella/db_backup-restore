@@ -20,12 +20,10 @@
             <mat-icon class="log-icon">update</mat-icon>
             <span class="log-date">{{ log.date | date:'mediumDate' }}</span>
             <span class="log-version">Version {{ log.version }}</span>
-            <!-- Delete Button -->
-            <button mat-icon-button color="warn" (click)="deleteLog(log.id!)">
-              <mat-icon>delete</mat-icon>
-            </button>
+
           </mat-card-title>
         </mat-card-header>
+        
 
         <mat-card-content>
           <div *ngIf="log.added.length" class="log-section">

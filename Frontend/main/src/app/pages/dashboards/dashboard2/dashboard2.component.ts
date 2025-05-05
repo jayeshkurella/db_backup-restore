@@ -17,21 +17,21 @@ import { AppTopProjectsComponent } from '../../../components/dashboard2/top-proj
 
 @Component({
   selector: 'app-dashboard2',
-  imports: [
-    AppWelcomeCardComponent,
-    AppPaymentsComponent,
-    AppProductsComponent,
-    AppRevenueUpdatesTwoComponent,
-    AppSalesOverviewComponent,
-    AppTotalEarningsComponent,
-    AppSalesProfitComponent,
-    AppMonthlyEarningsTwoComponent,
-    AppWeeklyStatsComponent,
-    AppYearlySalesComponent,
-    AppPaymentGatewaysComponent,
-    AppRecentTransactionsComponent,
-    AppTopProjectsComponent,
-  ],
+  // imports: [
+  //   AppWelcomeCardComponent,
+  //   AppPaymentsComponent,
+  //   AppProductsComponent,
+  //   AppRevenueUpdatesTwoComponent,
+  //   AppSalesOverviewComponent,
+  //   AppTotalEarningsComponent,
+  //   AppSalesProfitComponent,
+  //   AppMonthlyEarningsTwoComponent,
+  //   AppWeeklyStatsComponent,
+  //   AppYearlySalesComponent,
+  //   AppPaymentGatewaysComponent,
+  //   AppRecentTransactionsComponent,
+  //   AppTopProjectsComponent,
+  // ],
   templateUrl: './dashboard2.component.html',
 })
 export class AppDashboard2Component {

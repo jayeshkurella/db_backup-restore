@@ -1,12 +1,12 @@
 
 <mat-card class="cardWithShadow m-1">
   <mat-card-content>
-    <div *ngIf="loading" class="spinner-overlay">
+    <!-- <div *ngIf="loading" class="spinner-overlay">
       <div class="spinner-container">
         <mat-progress-spinner mode="indeterminate" diameter="70" color="primary"></mat-progress-spinner>
         <p class="text-white mt-2">{{ progressMessage }}</p>
       </div>
-    </div>
+    </div> -->
   
     <nav aria-label="breadcrumb" class="breadcrumb-container">
       <ol class="breadcrumb mb-2">
@@ -210,6 +210,9 @@
       <mat-card class="cardWithShadow">
         <mat-card-content>
           <div class="table-responsive">
+            <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+              <mat-spinner diameter="50"></mat-spinner>
+            </div>
             <div *ngIf="dataSourcePending.data.length === 0 && filtersApplied" class="text-center text-danger mt-3">
               No pending Bodies found with the applied filters.
             </div>
@@ -298,6 +301,9 @@
       <mat-card class="cardWithShadow">
         <mat-card-content>
           <div class="table-responsive">
+            <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+              <mat-spinner diameter="50"></mat-spinner>
+            </div>
             <div *ngIf="dataSourceResolved.data.length === 0 && filtersApplied" class="text-center text-danger mt-3">
               No Resolved persons found with the applied filters.
             </div>

@@ -1,9 +1,6 @@
 import { Routes } from '@angular/router';
 
 // widgets
-import { AppBannersComponent } from './banners/banners.component';
-import { AppCardsComponent } from './cards/cards.component';
-import { AppChartsComponent } from './charts/charts.component';
 import { PoliceStationComponent } from './police-station/police-station.component';
 import { HospitalsComponent } from './hospitals/hospitals.component';
 import { authGuard } from '../authentication/side-login/auth.guard';

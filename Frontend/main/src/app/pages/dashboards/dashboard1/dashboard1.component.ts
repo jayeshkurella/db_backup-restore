@@ -21,16 +21,12 @@ import { PanalLayerComponent } from "../../../components/dashboard1/panal-layer/
     TablerIconsModule,
     AppTopCardsComponent,
     AppRevenueUpdatesComponent,
-    AppYearlyBreakupComponent,
-    AppMonthlyEarningsComponent,
     AppEmployeeSalaryComponent,
     AppCustomersComponent,
     AppSocialCardComponent,
     AppSellingProductComponent,
     AppWeeklyStatsComponent,
-    AppTopProjectsComponent,
     AppProjectsComponent,
-    PanalLayerComponent
 ],
     templateUrl: './dashboard1.component.html'
 })

@@ -51,7 +51,7 @@ class PersonViewSet(viewsets.ViewSet):
     def list(self, request):
         try:
             # Get and order the queryset
-            queryset = Person.objects.filter(_is_deleted=False).prefetch_related(
+            queryset = Person.objects.filter(_is_deleted=False,person_approve_status='approved').prefetch_related(
                 'addresses', 'contacts', 'additional_info',
                 'last_known_details', 'firs', 'consent'
             ).order_by('-created_at')
@@ -78,7 +78,7 @@ class PersonViewSet(viewsets.ViewSet):
     )
     def retrieve(self, request, pk=None):
         try:
-            person = Person.objects.filter(_is_deleted=False).prefetch_related(
+            person = Person.objects.filter(_is_deleted=False,person_approve_status='approved').prefetch_related(
                 'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs','consent').get(pk=pk)
             serializer = PersonSerializer(person)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -156,6 +156,7 @@ class PersonViewSet(viewsets.ViewSet):
                 # Extract zero index address and store it directly in the person model
                 if addresses_data:
                     first_address = addresses_data[0]
+                    person.address_type = first_address.get('address_type', '')
                     person.appartment_name = first_address.get('appartment_name', '')
                     person.appartment_no = first_address.get('appartment_no', '')
                     person.street = first_address.get('street', '')
@@ -166,10 +167,21 @@ class PersonViewSet(viewsets.ViewSet):
                     person.district = first_address.get('district', '')
                     person.state = first_address.get('state', '')
                     person.country = first_address.get('country', '')
-                    person.location = Point(
-                        first_address.get('location', {}).get('longitude'),
-                        first_address.get('location', {}).get('latitude')
-                    )
+                    # Safe location parsing and validation
+                    location_data = first_address.get('location', {})
+                    raw_lat = location_data.get('latitude')
+                    raw_lon = location_data.get('longitude')
+
+                    try:
+                        lat = float(str(raw_lat).strip())
+                        lon = float(str(raw_lon).strip())
+
+                        if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+                            raise ValueError("Latitude must be between -90 and 90, and longitude between -180 and 180.")
+
+                        person.location = Point(lon, lat)  # GeoDjango expects (lon, lat)
+                    except (ValueError, TypeError) as e:
+                        raise ValueError(f"Invalid coordinates provided: {e}")
                     person.save()
 
                 # Create related objects
@@ -556,6 +568,7 @@ class PersonViewSet(viewsets.ViewSet):
 
             persons = Person.objects.filter(
                 type=person_type,
+                person_approve_status='approved',
                 _is_deleted=False,
                 **filters,
                 **additional_info_filters

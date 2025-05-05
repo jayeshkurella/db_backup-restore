@@ -72,44 +72,50 @@
   
   
   
-  <div class="row p-2 ">
-    <!-- Dynamic Hospital Cards -->
-    <div class="col-sm-6 col-lg-4 mb-3 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
-      <mat-card class="cardWithShadow overflow-hidden w-100">
-        
-        <!-- Image Section -->
-        <div class="position-relative">
-          <img
-            *ngIf="hospital.hospital_photo; else placeholder"
-            [src]="environment.apiUrl + hospital.hospital_photo"
-            class="w-100 object-fit-cover"
-            style="height: 200px; border-radius: 8px;"
-            alt="{{ hospital.name }}"
-          />
-          <ng-template #placeholder>
-            <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
-              <mat-icon fontIcon="image" style="font-size: 3rem; color: #ccc;"></mat-icon>
-            </div>
-          </ng-template>
-        </div>
+  <div class="row p-2">
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
   
-        <!-- Card Content -->
-        <mat-card-content class="p-3 pb-2">
-          
-          <!-- Name and Type -->
-          <div class="d-flex justify-content-between align-items-start mb-2">
-            <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
-              {{ hospital.name }}
-            </h6>
-            <span class="badge px-2 py-1"
-                  [ngClass]="{
-                    'bg-success text-white': hospital.type === 'Government',
-                    'bg-warning text-white': hospital.type !== 'Government'
-                  }">
-              {{ hospital.type }}
-            </span>
+    <!-- Hospital Cards -->
+    <ng-container *ngIf="!loading">
+      <!-- Show cards if hospitals exist -->
+      <div class="col-sm-6 col-lg-4 mb-3 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
+        <mat-card class="cardWithShadow overflow-hidden w-100">
+          <!-- Image Section -->
+          <div class="position-relative">
+            <img
+              *ngIf="hospital.hospital_photo; else placeholder"
+              [src]="environment.apiUrl + hospital.hospital_photo"
+              class="w-100 object-fit-cover"
+              style="height: 200px; border-radius: 8px;"
+              alt="{{ hospital.name }}"
+            />
+            <ng-template #placeholder>
+              <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                <mat-icon fontIcon="image" style="font-size: 3rem; color: #ccc;"></mat-icon>
+              </div>
+            </ng-template>
           </div>
-          <!-- Address and Contact -->
+    
+          <!-- Card Content -->
+          <mat-card-content class="p-3 pb-2">
+            <!-- Name and Type -->
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
+                {{ hospital.name }}
+              </h6>
+              <span class="badge px-2 py-1"
+                    [ngClass]="{
+                      'bg-success text-white': hospital.type === 'Government',
+                      'bg-warning text-white': hospital.type !== 'Government'
+                    }">
+                {{ hospital.type }}
+              </span>
+            </div>
+            
+            <!-- Address and Contact -->
             <div class="d-flex justify-content-between text-muted f-s-14 mb-2 align-items-center">
               <div class="centered-icon-text">
                 <mat-icon fontIcon="location_on"></mat-icon>
@@ -120,23 +126,38 @@
                 <span>{{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}</span>
               </div>
             </div>
-          
-          
-          
-          
-          <!-- More Info Button -->
-          <div class="mt-3">
-            <button mat-stroked-button color="primary" class="w-100 px-3 py-2" (click)="seeMoreHospitaldata(hospital)">
-              More Info
-            </button>
-          </div>
-          
+            
+            <!-- More Info Button -->
+            <div class="mt-3">
+              <button mat-stroked-button color="primary" class="w-100 px-3 py-2" (click)="seeMoreHospitaldata(hospital)">
+                More Info
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
   
-        </mat-card-content>
-      </mat-card>
-    </div>
+      <!-- Show empty message when no hospitals -->
+      <div *ngIf="allhospitals.length === 0" class="col-12 text-center py-5">
+        <mat-icon class="text-muted" style="font-size: 48px;">search_off</mat-icon>
+        <h5 class="text-muted mt-3">No hospitals found</h5>
+      </div>
+      <!-- Paginator -->
+      <div class="col-12 d-flex justify-content-center mt-3" *ngIf="totalHospitalItems > 0">
+        <mat-paginator
+          [length]="totalHospitalItems"
+          [pageSize]="itemsPerPage"
+          [pageIndex]="currentPage - 1"
+          (page)="onHospitalPageChange($event)"
+          aria-label="Hospital list pagination">
+        </mat-paginator>
+      </div>
+
+    </ng-container>
+    
   </div>
-  
+
+
   </mat-card>
   
   

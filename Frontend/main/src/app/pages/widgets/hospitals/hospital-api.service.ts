@@ -21,12 +21,14 @@ export class HospitalApiService {
   
     const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
   
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('name', queryParams.name || '')
       .set('city', queryParams.city || '')
       .set('district', queryParams.district || '')
       .set('state', queryParams.state || '')
-      .set('type', queryParams.type || '')        // Optional hospital type: 'gvt' or 'private'
+      .set('type', queryParams.type || '')
+      .set('page', queryParams.page || 1)
+      .set('page_size', queryParams.page_size );  // optional customization
   
     return this.http.get<any>(`${this.apiurl}/api/hospitals/`, { headers, params }).pipe(
       catchError(error => {
@@ -35,6 +37,7 @@ export class HospitalApiService {
       })
     );
   }
+  
   
   // Fetch all hospitals
 getAllHospitals(): Observable<any> {

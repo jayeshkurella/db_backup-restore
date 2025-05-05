@@ -15,6 +15,9 @@ import { MatOptionModule } from '@angular/material/core';
 import { Router, RouterModule } from '@angular/router';
 import { PoliceStatioDialogComponent } from './police-statio-dialog/police-statio-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { delay } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-police-station',
@@ -23,7 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    CommonModule,MatOptionModule,RouterModule],
+    CommonModule,MatOptionModule,RouterModule,MatProgressSpinnerModule,MatPaginatorModule ],
   templateUrl: './police-station.component.html',
   styleUrl: './police-station.component.scss'
 })
@@ -47,6 +50,18 @@ export class PoliceStationComponent implements OnInit {
   latitude: number | null = null;
   longitude: number | null = null;
   markerMissing: any; 
+
+  searchFilters = {
+    name: '',
+    city: '',
+    district: '',
+    state: ''
+  };
+  
+
+  currentPage: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 5; // Adjust as needed
   constructor(private policeapi:PoliceStationApiService,private fb: FormBuilder ,private router: Router,private dialog: MatDialog) { }
 
  
@@ -65,47 +80,59 @@ export class PoliceStationComponent implements OnInit {
 
   
 
-  getallPolicestation(page:any): void { 
-    this.policeapi.searchPoliceStations(page).subscribe(
+  loading: boolean = false;
+
+  getallPolicestation(page: number = 1): void {
+    this.loading = true;
+    this.currentPage = page;
+  
+    const queryParams: any = {
+      name: this.searchFilters.name || '',
+      city: this.searchFilters.city || '',
+      district: this.searchFilters.district || '',
+      state: this.searchFilters.state || '',
+      page: this.currentPage
+    };
+  
+    this.policeapi.searchPoliceStations(queryParams).subscribe(
       (res: any) => {
-        if (res && res.results && Array.isArray(res.results)) {
-          this.total_policestation = res.results;  
-          console.log('Police stations found:', this.total_policestation);
-        } else {
-          console.log('No police stations found');
-          this.total_policestation = [];
-        }
+        this.total_policestation = res.results || [];
+        this.totalItems = res.count || 0;
+        this.loading = false;
       },
       error => {
         console.error("Error fetching police stations:", error);
-        this.total_policestation = [];  
+        this.total_policestation = [];
+        this.totalItems = 0;
+        this.loading = false;
       }
     );
   }
   
+  
+  
+  // Modified search method
   onSearch(): void {
-    const queryParams: any = {
+    this.currentPage = 1;
+    this.searchFilters = {
       name: this.searchName || '',
       city: this.searchCity || '',
       district: this.searchdistrict || '',
       state: this.searchstate || ''
     };
-  
-    this.policeapi.searchPoliceStations(queryParams).subscribe(
-      (res: any) => {
-        if (res && res.results) {  // ✅ Fixed: Using res.results instead of res.data
-          this.total_policestation = res.results;
-        } else {
-          console.log("No police stations found.");
-          this.total_policestation = [];
-        }
-      },
-      error => {
-        console.error('Error during search:', error);
-        this.total_policestation = [];
-      }
-    );
+    this.getallPolicestation(this.currentPage);
   }
+  
+  
+  
+  // Pagination event handler
+  onPageChange(event: any): void {
+    this.currentPage = event.pageIndex + 1;
+    this.itemsPerPage = event.pageSize;
+  
+    this.getallPolicestation(this.currentPage);
+  }
+  
 
   seeMores(police: any) {
     this.dialog.open(PoliceStatioDialogComponent, {

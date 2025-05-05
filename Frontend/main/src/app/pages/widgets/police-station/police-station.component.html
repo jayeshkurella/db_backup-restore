@@ -68,73 +68,90 @@
   
 
   <div class="row p-2 mt-1">
-    <div class="col-sm-6 col-lg-4 d-flex align-items-stretch" *ngFor="let police of total_policestation">
-      <mat-card class="cardWithShadow overflow-hidden w-100">
-        
-        <!-- Image Section -->
-        <div class="position-relative">
-          <img
-            *ngIf="police.station_photo; else placeholder"
-            [src]="environment.apiUrl + police.station_photo"
-            class="w-100 object-fit-cover"
-            style="height: 200px; border-radius: 8px;"
-            alt="{{ police.name }}"
-          />
-          <ng-template #placeholder>
-            <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
-              <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
-            </div>
-          </ng-template>
-        </div>
-  
-        <!-- Card Content -->
-        <mat-card-content class="p-3">
-  
-          <!-- Name and Status -->
-          <div class="d-flex justify-content-between align-items-start mb-2">
-            <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
-              {{ police.name }}
-            </h6>
-            <span class="badge px-2 py-1"
-                  [ngClass]="{
-                    'bg-success text-white': police.activ_Status === 'Active',
-                    'bg-danger text-white': police.activ_Status !== 'Active'
-                  }">
-              {{ police.activ_Status }}
-            </span>
-          </div>
-          
-  
-          <!-- Address and Contact -->
-          <div class="d-flex justify-content-between text-muted f-s-14 mb-2">
-            <div class="d-flex align-items-center">
-              <i class="bi bi-geo-alt me-1"></i>
-              {{ police.address_details.city }}, {{ police.address_details.state }}
-            </div>
-            <div class="d-flex align-items-center">
-              <i class="bi bi-telephone me-1"></i>
-              {{ police.police_contact[0]?.phone_no }}
-            </div>
-          </div>
-  
-          <!-- Button -->
-          <div class="d-flex justify-content-center mt-3">
-            <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMorepolicestationdata(police)">
-              More Info
-            </button>
-          </div>
-  
-        </mat-card-content>
-      </mat-card>
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+      <mat-spinner diameter="50"></mat-spinner>
     </div>
+  
+    <!-- Police Station Cards -->
+    <ng-container *ngIf="!loading">
+      <div class="col-sm-6 col-lg-4 d-flex align-items-stretch" *ngFor="let police of total_policestation">
+        <mat-card class="cardWithShadow overflow-hidden w-100">
+          
+          <!-- Image Section -->
+          <div class="position-relative">
+            <img
+              *ngIf="police.station_photo; else placeholder"
+              [src]="environment.apiUrl + police.station_photo"
+              class="w-100 object-fit-cover"
+              style="height: 200px; border-radius: 8px;"
+              alt="{{ police.name }}"
+            />
+            <ng-template #placeholder>
+              <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+              </div>
+            </ng-template>
+          </div>
+  
+          <!-- Card Content -->
+          <mat-card-content class="p-3">
+  
+            <!-- Name and Status -->
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
+                {{ police.name }}
+              </h6>
+              <span class="badge px-2 py-1"
+                    [ngClass]="{
+                      'bg-success text-white': police.activ_Status === 'Active',
+                      'bg-danger text-white': police.activ_Status !== 'Active'
+                    }">
+                {{ police.activ_Status }}
+              </span>
+            </div>
+  
+            <!-- Address and Contact -->
+            <div class="d-flex justify-content-between text-muted f-s-14 mb-2">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-geo-alt me-1"></i>
+                {{ police.address_details.city }}, {{ police.address_details.state }}
+              </div>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-telephone me-1"></i>
+                {{ police.police_contact[0]?.phone_no || 'N/A' }}
+              </div>
+            </div>
+  
+            <!-- Button -->
+            <div class="d-flex justify-content-center mt-3">
+              <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMorepolicestationdata(police)">
+                More Info
+              </button>
+            </div>
+  
+          </mat-card-content>
+        </mat-card>
+      </div>
+  
+      <!-- Empty State -->
+      <div *ngIf="total_policestation?.length === 0" class="col-12 text-center py-5">
+        <mat-icon class="text-muted" style="font-size: 48px;">location_off</mat-icon>
+        <h5 class="text-muted mt-3">No police stations found</h5>
+      </div>
+    </ng-container>
   </div>
-  
-  
-  
-  
-  <!-- No Police Station Available -->
-  <div *ngIf="total_policestation?.length === 0">
-    <p>No Police Station Available.</p>
+<!-- Pagination -->
+<div class="row mt-3">
+  <div class="col-12 d-flex justify-content-center">
+    <mat-paginator *ngIf="!loading && totalItems > 0"
+      [length]="totalItems"
+      [pageSize]="itemsPerPage"
+      [pageIndex]="currentPage - 1"
+      (page)="onPageChange($event)"
+      aria-label="Select page">
+    </mat-paginator>
   </div>
+</div>
 
 </mat-card>
