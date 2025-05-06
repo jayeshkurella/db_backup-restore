@@ -8,8 +8,10 @@ from .address import Address
 class Hospital(models.Model):
     ACTIVE = 'Active'
     INACTIVE = 'Non-Active'
+
     class HospitalTypeChoices(models.TextChoices):
         GOVERNMENT = 'gvt', 'Government'
+        SEMI_GOVERNMENT = 'semi_gvt', 'Semi-Government'
         NON_GOVERNMENT = 'private', 'Private'
 
     STATUS_CHOICES = [

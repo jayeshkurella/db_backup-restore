@@ -18,6 +18,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { delay } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { UnidentifiedpersonApiService } from '../../datatable/unidentified-person/unidentifiedperson-api.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-police-station',
@@ -26,7 +28,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    CommonModule,MatOptionModule,RouterModule,MatProgressSpinnerModule,MatPaginatorModule ],
+    CommonModule,MatOptionModule,RouterModule,MatProgressSpinnerModule,MatPaginatorModule,MatSelectModule ],
   templateUrl: './police-station.component.html',
   styleUrl: './police-station.component.scss'
 })
@@ -41,10 +43,10 @@ export class PoliceStationComponent implements OnInit {
   map: L.Map | undefined;
   marker: L.Marker | undefined;
   searchQuery: string = '';  
-  searchName: string = '';
-  searchCity: string = '';
-  searchstate: string = '';
-  searchdistrict: string = '';
+  // searchName: string = '';
+  // searchCity: string = '';
+  // searchstate: string = '';
+  // searchdistrict: string = '';
   mapp!: L.Map;
   markerr!: L.Marker | null;
   latitude: number | null = null;
@@ -58,15 +60,23 @@ export class PoliceStationComponent implements OnInit {
     state: ''
   };
   
+  isAdmin: boolean = false;
 
   currentPage: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 5; // Adjust as needed
-  constructor(private policeapi:PoliceStationApiService,private fb: FormBuilder ,private router: Router,private dialog: MatDialog) { }
+  itemsPerPage: number = 6;
+  allstates: string[] = [];
+  alldistricts: string[] = [];
+  allcities: string[] = [];
+  constructor(private policeapi:PoliceStationApiService,private fb: FormBuilder ,private router: Router,private dialog: MatDialog,private missingPersonService: UnidentifiedpersonApiService) { }
 
  
 
   ngOnInit(): void {
+    const userType = localStorage.getItem('user_type');
+    this.isAdmin = userType === 'admin';
+    this.getStates();
+
     this.getallPolicestation(1);
   }
  
@@ -114,15 +124,9 @@ export class PoliceStationComponent implements OnInit {
   // Modified search method
   onSearch(): void {
     this.currentPage = 1;
-    this.searchFilters = {
-      name: this.searchName || '',
-      city: this.searchCity || '',
-      district: this.searchdistrict || '',
-      state: this.searchstate || ''
-    };
+    // No need to reassign searchFilters - it's already bound to the form
     this.getallPolicestation(this.currentPage);
   }
-  
   
   
   // Pagination event handler
@@ -147,5 +151,33 @@ export class PoliceStationComponent implements OnInit {
     this.router.navigate(['/widgets/police-station-detail/', policestation.id], {
       state: { policestation  } 
     });
+  }
+
+  getStates() {
+    this.missingPersonService.getStates().subscribe(states => {
+      this.allstates = states;
+    });
+  }
+  onStateChange() {
+    this.searchFilters.district = '';
+    this.searchFilters.city = '';
+    this.alldistricts = [];
+    this.allcities = [];
+
+    if (this.searchFilters.state) {
+      this.missingPersonService.getDistricts(this.searchFilters.state).subscribe(districts => {
+        this.alldistricts = districts;
+      });
+    }
+  }
+  onDistrictChange() {
+    this.searchFilters.city = '';
+    this.allcities = [];
+
+    if (this.searchFilters.district) {
+      this.missingPersonService.getCities(this.searchFilters.district).subscribe(cities => {
+        this.allcities = cities;
+      });
+    }
   }
 }

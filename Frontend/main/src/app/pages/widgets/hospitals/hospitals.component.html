@@ -1,78 +1,70 @@
-<mat-card class="text-center mat-elevation-z2 py-4 m-2">
-  <div class="d-flex justify-content-between align-items-start flex-wrap mb-3 border-bottom">
-  
-    <!-- Headings Section (Centered Vertically) -->
-    <div class="flex-grow-1 text-center">
-      <h4 class="mat-headline m-0">
-        Find Your Local Hospital
-      </h4>
-      <p class="mat-subheading-1  pb-2 d-inline-block" style="line-height: 50px;">
-        Quick access to emergency medical services and hospitals across the country
-      </p>
-    </div>
+<div class="px-3 py-3 mat-elevation-z1">
+  <!-- Header Row: Left Title + Right Add Button -->
+  <div class="d-flex justify-content-end align-items-end ">
+    <button *ngIf="isAdmin"
+            mat-flat-button
+            color="primary"
+            (click)="addhospital()"
+            class="d-flex align-items-center">
+      <mat-icon>add</mat-icon>&nbsp;Add Hospital
+    </button>
   </div>
+  
 
-  <mat-card class="d-flex justify-content-center m-1">
-    <div class="filter-section rounded m-3" style="max-width: 100%;">
-      <form (ngSubmit)="onsearch()" novalidate>
-        <!-- First Row - Search Fields -->
-        <div class="filter-row">
-          <!-- Name -->
-          <mat-form-field appearance="outline" class="with-icon">
-            <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="searchName" name="searchName" placeholder="Search by name">
-            <mat-icon matPrefix>person</mat-icon>
-          </mat-form-field>
-  
-          <!-- State -->
-          <mat-form-field appearance="outline" class="with-icon">
-            <mat-label>State</mat-label>
-            <input matInput [(ngModel)]="searchstate" name="searchState" placeholder="Search by state">
-            <mat-icon matPrefix>location_on</mat-icon>
-          </mat-form-field>
-  
-          <!-- District -->
-          <mat-form-field appearance="outline" class="with-icon">
-            <mat-label>District</mat-label>
-            <input matInput [(ngModel)]="searchdistrict" name="searchDistrict" placeholder="Search by district">
-            <mat-icon matPrefix>map</mat-icon>
-          </mat-form-field>
-  
-          <!-- City -->
-          <mat-form-field appearance="outline" class="with-icon">
-            <mat-label>City</mat-label>
-            <input matInput [(ngModel)]="searchCity" name="searchCity" placeholder="Search by city">
-            <mat-icon matPrefix>location_city</mat-icon>
-          </mat-form-field>
-  
-          <!-- Hospital Type (Dropdown) -->
-          <mat-form-field appearance="outline" class="with-icon">
-            <mat-label>Type</mat-label>
-            <mat-select [(ngModel)]="searchtype" name="searchType">
-              <mat-option value="">All</mat-option>
-              <mat-option value="gvt">Government</mat-option>
-              <mat-option value="private">Private</mat-option>
-            </mat-select>
-            <mat-icon matPrefix>category</mat-icon>
-          </mat-form-field>
-        </div>
-  
-        <!-- Second Row - Action Buttons (Centered) -->
-        <div class="action-row">
-          <button mat-raised-button color="primary" class="search-btn" type="submit">
-            <mat-icon>search</mat-icon>&nbsp;Search
-          </button>
-          <button mat-icon-button color="primary" class="add-btn" (click)="addhospital()" matTooltip="Add New Hospital" type="button">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-        </div>
-      </form>
+  <form (ngSubmit)="onsearch()" novalidate>
+    <h6 class="mb-3">Search Filters</h6>
+
+    <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mb-3">
+      
+      <!-- Name -->
+      <mat-form-field appearance="outline" class="with-icon flex-grow-1 ">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="searchName" name="searchName" placeholder="Search by name" (ngModelChange)="onsearch()">
+        <mat-icon matPrefix>Hospital</mat-icon>
+      </mat-form-field>
+
+      <!-- State -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <mat-select [(ngModel)]="searchstate" name="state" (selectionChange)="onStateChange()" (ngModelChange)="onsearch()">
+          <mat-option value="">State</mat-option>
+          <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- District -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <mat-select [(ngModel)]="searchdistrict" name="district" (selectionChange)="onDistrictChange()" (ngModelChange)="onsearch()">
+          <mat-option value="">District</mat-option>
+          <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- City -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <mat-select [(ngModel)]="searchCity" name="city" (ngModelChange)="onsearch()">
+          <mat-option value="">City</mat-option>
+          <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Hospital Type -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <mat-select [(ngModel)]="searchtype" name="type" (ngModelChange)="onsearch()">
+          <mat-option value="">All Types</mat-option>
+          <mat-option value="gvt">Government</mat-option>
+          <mat-option value="semi_gvt">Semi-Government</mat-option>
+          <mat-option value="private">Private</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Search Button -->
+      <!-- <button mat-flat-button color="primary" class="d-flex align-items-center" style="margin-bottom: 17px;">
+        <mat-icon>search</mat-icon>&nbsp;Search
+      </button> -->
     </div>
-  </mat-card>
-  
-  
-  
-  <div class="row p-2">
+  </form>
+
+  <div class="row p-2 mt-1">
     <!-- Loading Spinner -->
     <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
       <mat-spinner diameter="50"></mat-spinner>
@@ -80,86 +72,86 @@
   
     <!-- Hospital Cards -->
     <ng-container *ngIf="!loading">
-      <!-- Show cards if hospitals exist -->
-      <div class="col-sm-6 col-lg-4 mb-3 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
+      <div class="col-sm-6 col-lg-4 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
         <mat-card class="cardWithShadow overflow-hidden w-100">
+          
           <!-- Image Section -->
           <div class="position-relative">
             <img
               *ngIf="hospital.hospital_photo; else placeholder"
               [src]="environment.apiUrl + hospital.hospital_photo"
-              class="w-100 object-fit-cover"
+              class="w-100 object-fit-cover p-1"
               style="height: 200px; border-radius: 8px;"
               alt="{{ hospital.name }}"
             />
             <ng-template #placeholder>
               <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
-                <mat-icon fontIcon="image" style="font-size: 3rem; color: #ccc;"></mat-icon>
+                <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
               </div>
             </ng-template>
           </div>
-    
+  
           <!-- Card Content -->
-          <mat-card-content class="p-3 pb-2">
+          <mat-card-content class="p-3">
+  
             <!-- Name and Type -->
-            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex justify-content-between align-items-start">
               <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
                 {{ hospital.name }}
               </h6>
               <span class="badge px-2 py-1"
                     [ngClass]="{
-                      'bg-success text-white': hospital.type === 'Government',
-                      'bg-warning text-white': hospital.type !== 'Government'
+                      'bg-success text-white': hospital.type === 'gvt',
+                      'bg-info text-white': hospital.type === 'semi-government',
+                      'bg-warning text-white': hospital.type === 'private'
                     }">
-                {{ hospital.type }}
+                {{ hospital.type | titlecase }}
               </span>
+
             </div>
-            
+  
             <!-- Address and Contact -->
-            <div class="d-flex justify-content-between text-muted f-s-14 mb-2 align-items-center">
-              <div class="centered-icon-text">
-                <mat-icon fontIcon="location_on"></mat-icon>
-                <span>{{ hospital.address_details.city }}, {{ hospital.address_details.state }}</span>
+            <div class="d-flex justify-content-between text-muted f-s-14 mb-5">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-geo-alt me-1"></i>
+                {{ hospital.address_details.city }}, {{ hospital.address_details.state }}
               </div>
-              <div class="centered-icon-text">
-                <mat-icon fontIcon="call"></mat-icon>
-                <span>{{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}</span>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-telephone me-1"></i>
+                {{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}
               </div>
             </div>
-            
-            <!-- More Info Button -->
-            <div class="mt-3">
-              <button mat-stroked-button color="primary" class="w-100 px-3 py-2" (click)="seeMoreHospitaldata(hospital)">
+  
+            <!-- Button -->
+            <div class="d-flex justify-content-center mt-3">
+              <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMoreHospitaldata(hospital)">
                 More Info
               </button>
             </div>
+  
           </mat-card-content>
         </mat-card>
       </div>
   
-      <!-- Show empty message when no hospitals -->
-      <div *ngIf="allhospitals.length === 0" class="col-12 text-center py-5">
-        <mat-icon class="text-muted" style="font-size: 48px;">search_off</mat-icon>
+      <!-- Empty State -->
+      <div *ngIf="allhospitals?.length === 0" class="col-12 text-center py-5">
+        <mat-icon class="text-muted" style="font-size: 48px;">location_off</mat-icon>
         <h5 class="text-muted mt-3">No hospitals found</h5>
       </div>
-      <!-- Paginator -->
-      <div class="col-12 d-flex justify-content-center mt-3" *ngIf="totalHospitalItems > 0">
-        <mat-paginator
-          [length]="totalHospitalItems"
-          [pageSize]="itemsPerPage"
-          [pageIndex]="currentPage - 1"
-          (page)="onHospitalPageChange($event)"
-          aria-label="Hospital list pagination">
-        </mat-paginator>
-      </div>
-
     </ng-container>
-    
   </div>
-
-
-  </mat-card>
   
-  
-  
-  
+  <!-- Pagination -->
+  <div class="row mt-3">
+    <div class="col-12 d-flex justify-content-center">
+      <mat-paginator *ngIf="!loading && totalHospitalItems > 0"
+        [length]="totalHospitalItems"
+        [pageSize]="itemsPerPage"
+        [pageIndex]="currentPage - 1"
+        [hidePageSize]="true"
+        (page)="onHospitalPageChange($event)"
+        aria-label="Select page">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

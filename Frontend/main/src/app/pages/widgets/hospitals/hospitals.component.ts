@@ -20,6 +20,7 @@ import {  ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { UnidentifiedpersonApiService } from '../../datatable/unidentified-person/unidentifiedperson-api.service';
 
 @Component({
   selector: 'app-hospitals',
@@ -54,14 +55,27 @@ export class HospitalsComponent implements OnInit{
   environment = environment;
   allhospitals:any = []
   totalHospitalItems = 0;
-  itemsPerPage = 5;
+  itemsPerPage = 6;
   currentPage = 1;
-  constructor( private hospitalService: HospitalApiService,private fb: FormBuilder,private router :Router,private dialog: MatDialog){}
+  allstates: string[] = [];
+  alldistricts: string[] = [];
+  allcities: string[] = [];
+  isAdmin: boolean = false;
+  constructor( private hospitalService: HospitalApiService,private fb: FormBuilder,private router :Router,private dialog: MatDialog,private missingPersonService: UnidentifiedpersonApiService){}
   
-  
+  searchFilters = {
+    name: '',
+    city: '',
+    district: '',
+    state: ''
+  };
 
   ngOnInit(): void {
+    const userType = localStorage.getItem('user_type');
+    this.isAdmin = userType === 'admin';
     this.fetchHospitalData()
+    this.getStates();
+
   
   }
 
@@ -152,5 +166,32 @@ export class HospitalsComponent implements OnInit{
     });
   }
   
+  getStates() {
+    this.missingPersonService.getStates().subscribe(states => {
+      this.allstates = states;
+    });
+  }
+  onStateChange() {
+    this.searchFilters.district = '';
+    this.searchFilters.city = '';
+    this.alldistricts = [];
+    this.allcities = [];
+
+    if (this.searchFilters.state) {
+      this.missingPersonService.getDistricts(this.searchFilters.state).subscribe(districts => {
+        this.alldistricts = districts;
+      });
+    }
+  }
+  onDistrictChange() {
+    this.searchFilters.city = '';
+    this.allcities = [];
+
+    if (this.searchFilters.district) {
+      this.missingPersonService.getCities(this.searchFilters.district).subscribe(cities => {
+        this.allcities = cities;
+      });
+    }
+  }
   
 }

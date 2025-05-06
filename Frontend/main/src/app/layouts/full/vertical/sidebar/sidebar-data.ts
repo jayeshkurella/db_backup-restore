@@ -2,11 +2,11 @@ import { authGuard } from 'src/app/pages/authentication/side-login/auth.guard';
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
-  {
-    displayName: 'Home',
-    iconName: 'aperture',
-    route: '/dashboards/dashboard1',
-  },
+  // {
+  //   displayName: 'Home',
+  //   iconName: 'aperture',
+  //   route: '/dashboards/dashboard1',
+  // },
   // {
   //   displayName: 'Internal',
   //   iconName: 'home',
@@ -64,23 +64,36 @@ export const navItems: NavItem[] = [
       },
     ],
   },
-   {
-    displayName: 'Resources',
-    iconName: 'layout',
-    route: 'widgets',
-    children: [
-      {
-        displayName: 'Police-Station',
-        iconName: 'shield',
-        route: 'widgets/police-station',
-      },
-      {
-        displayName: 'Hospitals',
-        iconName: 'hospital',
-        route: 'widgets/hospitals',
-      },
-    ],
+  {
+    navCap: 'Resources',
   },
+  {
+    displayName: 'Police-Station',
+    iconName: 'shield',
+    route: 'widgets/police-station',
+  },
+  {
+    displayName: 'Hospitals',
+    iconName: 'hospital',
+    route: 'widgets/hospitals',
+  },
+  //  {
+  //   displayName: 'Resources',
+  //   iconName: 'layout',
+  //   route: 'widgets',
+  //   children: [
+  //     {
+  //       displayName: 'Police-Station',
+  //       iconName: 'shield',
+  //       route: 'widgets/police-station',
+  //     },
+  //     {
+  //       displayName: 'Hospitals',
+  //       iconName: 'hospital',
+  //       route: 'widgets/hospitals',
+  //     },
+  //   ],
+  // },
   {
     navCap: 'Admin',
   },

@@ -589,32 +589,48 @@ class PersonViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
     def pending_or_rejected(self, request):
         try:
-            # Get pending persons
-            pending_persons = Person.objects.filter(person_approve_status='pending')
-            pending_count = pending_persons.count()
+            # Fetch all persons in one query
+            persons = Person.objects.all()
+            serialized_data = PersonSerializer(persons, many=True).data
 
-            # Get rejected persons
-            rejected_persons = Person.objects.filter(person_approve_status='rejected')
-            rejected_count = rejected_persons.count()
+            # Group data by status fields
+            summary = {
+                'pending': [],
+                'approved': [],
+                'rejected': [],
+                'on_hold': [],
+                'suspended': []
+            }
 
-            # Get approved persons
-            approved_persons = Person.objects.filter(person_approve_status='approved')
-            approved_count = approved_persons.count()
+            for person in serialized_data:
+                approve_status = person.get('person_approve_status')
+                status_field = person.get('status')
 
-            # Serialize the data
-            pending_serializer = PersonSerializer(pending_persons, many=True)
-            rejected_serializer = PersonSerializer(rejected_persons, many=True)
-            approved_serializer = PersonSerializer(approved_persons, many=True)
+                if approve_status == 'pending':
+                    summary['pending'].append(person)
+                elif approve_status == 'approved':
+                    summary['approved'].append(person)
+                elif approve_status == 'rejected':
+                    summary['rejected'].append(person)
 
+                if approve_status == 'on_hold':
+                    summary['on_hold'].append(person)
+                elif approve_status == 'suspended':
+                    summary['suspended'].append(person)
+
+            # Return counts and data
             return Response({
-                'pending_count': pending_count,
-                'rejected_count': rejected_count,
-                'approved_count': approved_count,
-                'pending_data': pending_serializer.data,
-                'rejected_data': rejected_serializer.data,
-                'approved_data': approved_serializer.data
+                'pending_count': len(summary['pending']),
+                'approved_count': len(summary['approved']),
+                'rejected_count': len(summary['rejected']),
+                'on_hold_count': len(summary['on_hold']),
+                'suspended_count': len(summary['suspended']),
+                'pending_data': summary['pending'],
+                'approved_data': summary['approved'],
+                'rejected_data': summary['rejected'],
+                'on_hold_data': summary['on_hold'],
+                'suspended_data': summary['suspended'],
             }, status=status.HTTP_200_OK)
-
         except Exception as e:
             return Response(
                 {'error': 'Something went wrong while fetching person data.', 'details': str(e)},
@@ -718,5 +734,53 @@ class PersonViewSet(viewsets.ViewSet):
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def suspend_person(self, request, pk=None):
+        try:
+            person = Person.objects.get(pk=pk)
+            reason = request.data.get('reason')
 
+            if not reason:
+                return Response(
+                    {'error': 'Reason is required to suspend a person'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            person.person_approve_status = 'suspended'
+            person.status_reason = reason
+            person.approved_by = request.user
+            person.save()
+
+            serializer = PersonSerializer(person)
+            return Response(
+                {'message': 'Person suspended successfully', 'data': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def hold_person(self, request, pk=None):
+        try:
+            person = Person.objects.get(pk=pk)
+            reason = request.data.get('reason')
+
+            if not reason:
+                return Response(
+                    {'error': 'Reason is required to put a person on hold'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            person.person_approve_status = 'on_hold'
+            person.status_reason = reason
+            person.approved_by = request.user
+            person.save()
+
+            serializer = PersonSerializer(person)
+            return Response(
+                {'message': 'Person put on hold successfully', 'data': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
 

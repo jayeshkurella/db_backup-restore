@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'src/app/services/core.service';
+import { Location } from '@angular/common'; // Add this import
 
 @Component({
   selector: 'app-branding',
+  standalone: true, // Add this for Angular 14+ standalone components
+
   imports: [],
   template: `
 
@@ -27,10 +30,40 @@ import { CoreService } from 'src/app/services/core.service';
 })
 export class BrandingComponent {
   options = this.settings.getOptions();
-  constructor(private settings: CoreService, private router : Router) {}
+  constructor(private settings: CoreService, private router : Router,private location: Location) {}
+  private isRefreshing = false;
 
   resetPage() {
-    this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-      this.router.navigate(['/dashboards/dashboard1']));
+    if (this.isRefreshing) return;
+    this.isRefreshing = true;
+
+    // Get current navigation details
+    const currentUrl = this.router.url;
+    const targetUrl = '/dashboards/dashboard1';
+
+    try {
+      if (currentUrl === targetUrl) {
+        // If already on target page, force reload
+        window.location.reload();
+      } else {
+        // Navigate to target and then reload
+        this.router.navigateByUrl(targetUrl, { skipLocationChange: false })
+          .then(() => {
+            window.location.reload();
+          })
+          .catch(() => {
+            // Fallback if navigation fails
+            window.location.href = targetUrl;
+          });
+      }
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      // Final fallback
+      window.location.href = targetUrl;
+    } finally {
+      setTimeout(() => {
+        this.isRefreshing = false;
+      }, 1000);
+    }
   }
 }

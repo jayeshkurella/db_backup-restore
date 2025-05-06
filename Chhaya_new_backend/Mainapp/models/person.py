@@ -188,6 +188,9 @@ class Person(models.Model):
         ('pending', 'Pending Approval'),
         ('approved', 'Approved'),
         ('rejected', 'Rejected'),
+        ('suspended', 'Suspended'),
+        ('on_hold', 'On Hold'),
+        ('archived', 'Archived'),
     ]
 
 
@@ -263,6 +266,7 @@ class Person(models.Model):
     person_approve_status = models.CharField(max_length=10, choices=Person_STATUS_CHOICES, default='pending')
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_persons')
 
+    status_reason = models.TextField(blank=True, null=True, help_text="Reason for suspension or hold")
 
     match_entity_id = models.UUIDField(
         blank=True,

@@ -14,17 +14,9 @@ export const WidgetsRoutes: Routes = [
     path: '',
     canActivate : [authGuard],
     children: [
-      
       {
         path: 'police-station',
         component: PoliceStationComponent,
-        data: {
-          title: 'Charts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Charts' },
-          ],
-        },
       },
       {
         path: 'add-police-station',
@@ -33,13 +25,6 @@ export const WidgetsRoutes: Routes = [
       {
         path: 'hospitals',
         component: HospitalsComponent,
-        data: {
-          title: 'Charts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Charts' },
-          ],
-        },
       },
       {
         path: 'add-hospitals',

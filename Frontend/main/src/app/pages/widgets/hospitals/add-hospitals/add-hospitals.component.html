@@ -21,6 +21,7 @@
             <mat-select formControlName="type">
               <mat-option value="">Select Type</mat-option>
               <mat-option value="gvt">Government</mat-option>
+              <mat-option value="semi_gvt">Semi Government</mat-option>
               <mat-option value="private">Non-Government</mat-option>
             </mat-select>
             <mat-error *ngIf="hospitalForm.get('type')?.hasError('required')">Hospital type is required.</mat-error>
