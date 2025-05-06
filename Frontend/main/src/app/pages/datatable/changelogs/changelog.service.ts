@@ -23,8 +23,8 @@ constructor(private http: HttpClient) {}
 
 
   getLogs(): Observable<DailyChangeLog[]> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<DailyChangeLog[]>(`${this.apiUrl}/api/changelogs/`,{ headers });
+    // const headers = this.getAuthHeaders();
+    return this.http.get<DailyChangeLog[]>(`${this.apiUrl}/api/changelogs/`);
   }
   
   addLog(log: DailyChangeLog): Observable<any> {

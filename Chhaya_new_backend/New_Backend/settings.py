@@ -131,8 +131,8 @@ import os
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+MEDIA_ROOT = '/home/administrator/chhaya-data/images'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -143,7 +143,7 @@ if os.name == 'nt':
     os.environ['PATH'] = os.path.join(VENV_BASE, 'Lib\\site-packages\\osgeo') + ';' + os.environ['PATH']
     os.environ['PROJ_LIB'] = os.path.join(VENV_BASE, 'Lib\\site-packages\\osgeo\\data\\proj')
 
-#GDAL_LIBRARY_PATH = r'C:\Users\sanke\Desktop\Chhaya_FullStack\Chhaya_new_backend\env\Lib\site-packages\osgeo\gdal.dll'
+# GDAL_LIBRARY_PATH = r'C:\Users\sanke\Desktop\Chhaya_FullStack\Chhaya_new_backend\env\Lib\site-packages\osgeo\gdal.dll'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
@@ -176,8 +176,7 @@ CSRF_TRUSTED_ORIGINS = [
 AUTH_USER_MODEL = 'Mainapp.User'  
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Ensure this is present
-    # Add any custom backends here
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 
