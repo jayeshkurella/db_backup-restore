@@ -129,6 +129,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       eye_color: [''],
       condition: [''],
       Body_Condition: [''],
+      up_condition: [[]],  
       birth_mark: [''],
       distinctive_mark: [''],
       hospital: [null],

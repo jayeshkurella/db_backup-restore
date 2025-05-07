@@ -96,6 +96,14 @@ class PoliceStationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PersonSerializer(serializers.ModelSerializer):
+    bodies_condition = serializers.ListField(
+        child=serializers.ChoiceField(choices=Person.BodyconditionChoices.choices),
+        required=False
+    )
+    up_condition = serializers.ListField(
+        child=serializers.ChoiceField(choices=Person.ConditionChoices.choices),
+        required=False
+    )
 
     addresses = AddressSerializer(many=True)
     contacts = ContactSerializer(many=True)

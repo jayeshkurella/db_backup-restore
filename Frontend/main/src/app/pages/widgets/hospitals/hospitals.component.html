@@ -1,7 +1,7 @@
 <div class="px-3 py-3 mat-elevation-z1">
   <!-- Header Row: Left Title + Right Add Button -->
   <div class="d-flex justify-content-end align-items-end ">
-    <button *ngIf="isAdmin"
+    <button *ngIf="isLoggedIn && isAdmin"
             mat-flat-button
             color="primary"
             (click)="addhospital()"

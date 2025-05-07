@@ -13,14 +13,6 @@ export class HospitalApiService {
   constructor(private http: HttpClient) {}
 
   searchHospitals(queryParams: any): Observable<any> {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      console.error('No auth token found in localStorage!');
-      return throwError(() => new Error('Unauthorized: No token found'));
-    }
-  
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-  
     let params = new HttpParams()
       .set('name', queryParams.name || '')
       .set('city', queryParams.city || '')
@@ -28,9 +20,9 @@ export class HospitalApiService {
       .set('state', queryParams.state || '')
       .set('type', queryParams.type || '')
       .set('page', queryParams.page || 1)
-      .set('page_size', queryParams.page_size );  // optional customization
+      .set('page_size', queryParams.page_size );  // default fallback
   
-    return this.http.get<any>(`${this.apiurl}/api/hospitals/`, { headers, params }).pipe(
+    return this.http.get<any>(`${this.apiurl}/api/hospitals/`, { params }).pipe(
       catchError(error => {
         console.error("Error in searchHospitals:", error);
         return throwError(() => error);
@@ -38,24 +30,15 @@ export class HospitalApiService {
     );
   }
   
-  
-  // Fetch all hospitals
-getAllHospitals(): Observable<any> {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    console.error('No auth token found in localStorage!');
-    return throwError(() => new Error('Unauthorized: No token found'));
+  getAllHospitals(): Observable<any> {
+    return this.http.get<any>(`${this.apiurl}/api/hospitals/`).pipe(
+      catchError(error => {
+        console.error("Error in getAllHospitals:", error);
+        return throwError(() => error);
+      })
+    );
   }
-
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-  return this.http.get<any>(`${this.apiurl}/api/hospitals/`, { headers }).pipe(
-    catchError(error => {
-      console.error("Error in getAllHospitals:", error);
-      return throwError(() => error);
-    })
-  );
-}
+  
 
 // Add a hospital
 addHospital(hospitalData: any): Observable<any> {

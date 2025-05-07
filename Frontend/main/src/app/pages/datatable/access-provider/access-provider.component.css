@@ -18,9 +18,11 @@
     gap: 8px;
     flex-wrap: wrap;
 
+
     button {
-      height: 52px;
+      height: 42px;
       white-space: nowrap;
+      margin-top: 10px;
 
       &[disabled] {
         opacity: 0.6;
@@ -83,7 +85,7 @@
   font-size: 0.8em;
   font-weight: 500;
   
-  &.pending {
+  &.pending,&.suspended,&.hold,&.approved {
     background-color: #FFF3E0;
     color: #E65100;
   }
@@ -121,4 +123,26 @@ table {
   &[disabled] {
     background-color: #ffcdd2;
   }
+  .mat-tooltip {
+    font-size: 13px;
+    background-color: #424242;
+  }
+  
+}
+
+
+.table-wrapper {
+  max-height: 400px; /* Set this based on your requirement */
+  overflow-y: auto;  /* Allows vertical scrolling */
+}
+
+th.mat-header-cell {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Ensures the header doesn't overlap with table data */
+  z-index: 1; /* Ensures header is above the table body */
+}
+
+table {
+  width: 100%;
 }

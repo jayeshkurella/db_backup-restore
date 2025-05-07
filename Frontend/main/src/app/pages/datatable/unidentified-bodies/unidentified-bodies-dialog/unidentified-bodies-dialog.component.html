@@ -6,7 +6,7 @@
     <div class="row mb-4">
       <div class="col-md-4 text-center">
         <img 
-          [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : 'assets/old/images/Nophoto.png'" 
+          [src]="data?.photo_photo ? (environment.apiUrl + data?.photo_photo) : '/assets/old/images/Nophoto.png'" 
           class="img-fluid rounded" 
           alt="Person Photo"
           style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
@@ -16,8 +16,9 @@
         <p><strong>Age:</strong> {{ data?.age || 'N/A' }}</p>
         <p><strong>Gender:</strong> {{ data?.gender || 'N/A' }}</p>
         <p><strong>Blood Group:</strong> {{ data?.blood_group || 'N/A' }}</p>
-        <p><strong>Body Condition:</strong> {{ data?.Body_Condition || 'N/A' }}</p>
-        <p><strong>Last Seen:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
+        <p><strong>Body Condition:</strong> 
+          {{ data?.bodies_condition ? (data.bodies_condition | json) : 'N/A' }}
+        </p>        
       </div>
     </div>
 
@@ -110,14 +111,14 @@
     <h5 class="mb-3 text-primary">Missing Info</h5>
     <p><strong>Date:</strong> {{ data?.last_known_details?.[0]?.missing_date || 'N/A' }}</p>
     <p><strong>Time:</strong> {{ data?.last_known_details?.[0]?.missing_time || 'N/A' }}</p>
-    <p><strong>Location:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
-    <p><strong>Details:</strong> {{ data?.last_known_details?.[0]?.missing_location_details || 'N/A' }}</p>
+    <p><strong>Last Seen Details:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
+    <p><strong>Missing Location Details:</strong> {{ data?.last_known_details?.[0]?.missing_location_details || 'N/A' }}</p>
 
     <!-- FIR & Investigation -->
     <h5 class="mb-3 text-primary">Investigation</h5>
     <p><strong>FIR:</strong> {{ data?.firs?.[0]?.fir_number || 'N/A' }}</p>
     <p><strong>Status:</strong> {{ data?.firs?.[0]?.case_status || 'N/A' }}</p>
-    <p><strong>Officer:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }} ({{ data?.firs?.[0]?.investigating_officer_contact_number || 'N/A' }})</p>
+    <p><strong>Officer:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }} ({{ data?.firs?.[0]?.investigation_officer_contacts || 'N/A' }})</p>
     <p><strong>Police Station:</strong> {{ data?.firs?.[0]?.police_station || 'N/A' }}</p>
 
     <!-- Consent -->

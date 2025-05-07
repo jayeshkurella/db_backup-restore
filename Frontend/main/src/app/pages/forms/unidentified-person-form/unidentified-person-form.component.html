@@ -7,12 +7,13 @@
   <form [formGroup]="unidentifiedPersonForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
     <!-- Personal Info Section -->
-    <div class="p-3 bg-light-primary rounded">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
+    <div class="p-3 bg-light-primary rounded d-flex align-items-center" style="min-height: 60px;">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Personal Info
       </h5>
     </div>
+
     <mat-card class="p-3 m-1 mb-4">
     <div class="row g-2 mt-3">
       <div class="d-flex flex-wrap align-items-center w-100">
@@ -219,7 +220,7 @@
         <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Condition</mat-label>
-            <mat-select formControlName="condition">
+            <mat-select formControlName="up_condition" multiple>
               <mat-option value="memory_loss">Memory Loss</mat-option>
               <mat-option value="anxiety">Anxiety</mat-option>
               <mat-option value="shock">Shock</mat-option>
@@ -253,9 +254,11 @@
           </mat-form-field>
         </div>   -->
         
-        <div class="col-12 col-md-4">
-          <label for="bodyPhotoInput" class="btn btn-outline-primary w-100" style="margin-bottom: 20px;">
-            Upload  Photo
+        <div class="col-12 col-md-4" style="margin-bottom: 20px;cursor: pointer;">
+          <label for="bodyPhotoInput"
+          class="form-control d-flex align-items-center justify-content-center gap-3 text-body"style="cursor: pointer;">
+            <i class="bi bi-upload"></i>  
+            Person Photo
           </label>
           <input
             id="bodyPhotoInput"
@@ -273,10 +276,11 @@
 
 
     <!-- Address Section -->
-    <div class="p-3 bg-light-primary rounded mt-2 mb-2">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Address
       </h5>
+      <button mat-flat-button color="primary" type="button" (click)="addAddress()">Add Another Address</button>
     </div>
     <mat-card class="p-4 mb-4">
     <div formGroupName="addressForm" class="row g-3 m-2 ">
@@ -381,31 +385,29 @@
       <!-- Right Section: Map & Location -->
       <div class="col-md-6">
         <div formGroupName="location">
-          <div id="mapHome" style="height: 250px; border: 1px solid black; border-radius: 5px; z-index: 1;"></div>
+          <div class="d-flex gap-2">
 
-          <div class="d-flex gap-2 mt-3">
-            <button type="button" mat-icon-button (click)="getCurrentLocation()">
+            <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+              <mat-label>Latitude</mat-label>
+              <input matInput type="text" formControlName="latitude" />
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="flex-grow-1">
+              <mat-label>Longitude</mat-label>
+              <input matInput type="text" formControlName="longitude" />
+            </mat-form-field>
+
+            <button type="button" mat-icon-button (click)="getCurrentLocation()" matTooltip="Fetch your current location">
               <mat-icon>my_location</mat-icon>
             </button>
 
-            <mat-form-field appearance="outline" class="flex-grow-1">
-              <mat-label>Latitude</mat-label>
-              <input matInput type="text" formControlName="latitude">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="flex-grow-1">
-              <mat-label>Longitude</mat-label>
-              <input matInput type="text" formControlName="longitude">
-            </mat-form-field>
+            
           </div>
+          <div id="mapHome" style="height: 250px; border: 1px solid black; border-radius: 5px; z-index: 1;"></div>
         </div>
       </div>
     </div>
 
-    <!-- Add Address Button -->
-    <div class="d-flex justify-content-end mt-1">
-      <button mat-flat-button color="primary" type="button" (click)="addAddress()">Add Another Address</button>
-    </div>
     
 
     <!-- Display Added Addresses -->
@@ -444,11 +446,12 @@
 
 
     <!-- contact Section -->
-    <div class="p-3 bg-light-primary  mt-2 mb-2">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Referral Contacts
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
       </h5>
-    </div>
+        <button mat-flat-button color="primary" type="button" (click)="addContact()">Add Another Contact</button>
+    </div>  
 
     <!-- Contact Information Card -->
     <mat-card class="p-4 mb-4">
@@ -539,24 +542,11 @@
           </mat-form-field>
         </div> -->
 
-        <div class="col-md-6">
+        <div class="col-md-12">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Additional Notes</mat-label>
-            <input matInput type="text" formControlName="additional_details">
+            <textarea matInput type="text" formControlName="additional_details"></textarea>
           </mat-form-field>
-        </div>
-
-        <!-- Primary Contact Checkbox -->
-        <!-- <div class="col-md-3 d-flex align-items-center">
-          <mat-checkbox formControlName="is_primary">Is Primary</mat-checkbox>
-        </div> -->
-
-        <!-- Add Contact Button -->
-        <!-- <div class="d-flex justify-content-end mt-1">
-          <button mat-flat-button color="primary" type="button" (click)="addContact()">Add Another Contact</button>
-        </div> -->
-        <div class="col-md-6 d-flex justify-content-end">
-          <button mat-flat-button color="primary" type="button" (click)="addContact()">Add Another Contact</button>
         </div>
       </div>
 
@@ -597,11 +587,12 @@
 
   </mat-card>
   
-    <div class="p-3 bg-light-primary  mt-2 mb-2">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Additional information
-      </h5>
-    </div>
+  <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+    <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+      <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+      Additional Information
+    </h5>
+  </div>
     
     <!-- Additional Information Card -->
     <mat-card class="p-4 mb-3 mt-2 mb-4">
@@ -736,16 +727,33 @@
     </mat-card>
 
 
-    <div class="p-3 bg-light-primary mt-2 mb-2">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>Legal Info
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        Legal Info
       </h5>
     </div>
 
     <mat-card class="card  p-4 mb-1 mb-4">
       <div formArrayName="firs">
         <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-
+        <!-- Case Status -->
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <!-- <mat-label>Case Status</mat-label> -->
+            <mat-select formControlName="case_status">
+              <mat-option value="">Case Status</mat-option>
+              <mat-option value="Open">Open</mat-option>
+              <mat-option value="Resolved">Resolved</mat-option>
+              <mat-option value="In Progress">In Progress</mat-option>
+              <mat-option value="Closed">Closed</mat-option>
+              <mat-option value="Reopened">Reopened</mat-option>
+              <mat-option value="Pending">Pending</mat-option>
+              <mat-option value="Found Alive">Found Alive</mat-option>
+              <mat-option value="Deceased">Deceased</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
           <!-- FIR Number -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
@@ -753,37 +761,20 @@
               <input matInput type="text" formControlName="fir_number">
             </mat-form-field>
           </div>
-          <!-- Case Status -->
-          <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <!-- <mat-label>Case Status</mat-label> -->
-              <mat-select formControlName="case_status">
-                <mat-option value="">Case Status</mat-option>
-                <mat-option value="Open">Open</mat-option>
-                <mat-option value="Resolved">Resolved</mat-option>
-                <mat-option value="In Progress">In Progress</mat-option>
-                <mat-option value="Closed">Closed</mat-option>
-                <mat-option value="Reopened">Reopened</mat-option>
-                <mat-option value="Pending">Pending</mat-option>
-                <mat-option value="Found Alive">Found Alive</mat-option>
-                <mat-option value="Deceased">Deceased</mat-option>
-              </mat-select>
-            </mat-form-field>
+          
+        <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
+          <div class="col-md-4" style="margin-bottom: 20px;">
+            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
+              <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
+            </button>
+            <input
+              #firInput
+              type="file"
+              accept="image/*,application/pdf"
+              hidden
+              (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
+            />
           </div>
-
-          <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
-            <div class="col-md-4" style="margin-bottom: 20px;">
-              <button mat-stroked-button color="primary" class="w-100" (click)="firInput.click()">
-                Upload FIR Photo
-              </button>
-              <input
-                #firInput
-                type="file"
-                accept="image/*,application/pdf"
-                hidden
-                (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
-              />
-            </div>
 
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
@@ -818,9 +809,10 @@
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary mt-2 mb-2">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-2">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>consent
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        consent
       </h5>
     </div>
 
@@ -829,21 +821,6 @@
 
       <div formArrayName="consent">
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
-
-          <!-- Consent Data -->
-          <!-- <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Additional info</mat-label>
-              <input matInput formControlName="data" />
-            </mat-form-field>
-          </div> -->
-
-          <!-- Document Upload (Fixed: Removed from mat-form-field) -->
-          <!-- <div class="col-md-6">
-            <label class="form-label selectors-font">Upload Document</label>
-            <input type="file" class="form-control" accept=".pdf, .jpg, .png"
-              (change)="onFileSelect($event, 'consent', i, 'document')">
-          </div> -->
 
           <!-- Consent Checkbox -->
           <div class="col-md-12">
@@ -862,9 +839,19 @@
 
 
     <!-- Submit & Cancel Buttons -->
-    <div class="d-flex justify-content-start mt-4">
-      <button mat-flat-button class="bg-error text-white me-3">Cancel</button>
-      <button mat-flat-button color="primary">SUBMIT REPORT</button>
+    <div class="d-flex justify-content-between mt-4 space-down">
+      <button mat-flat-button class="bg-error text-white">Cancel</button>
+
+      <span
+        [matTooltip]="'Please accept the consent  before submitting.'"
+        [matTooltipDisabled]="consent.controls[0].get('is_consent')?.value"
+        matTooltipPosition="above"
+      >
+        <button mat-flat-button color="primary" class="ms-auto"
+                [disabled]="!consent.controls[0].get('is_consent')?.value">
+          SUBMIT
+        </button>
+      </span>
     </div>
 
   </form>

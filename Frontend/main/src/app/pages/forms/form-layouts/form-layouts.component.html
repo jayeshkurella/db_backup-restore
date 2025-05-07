@@ -6,8 +6,8 @@
   <form [formGroup]="personForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
     <!-- Personal Info Section -->
-    <div class="p-4 bg-light-primary rounded d-flex align-items-center" style="min-height: 60px;">
-      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+    <div class="p-3 bg-light-primary rounded">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Personal Info
       </h5>
@@ -119,7 +119,6 @@
 
       <!-- Third Row -->
       <div class="d-flex flex-wrap align-items-center w-100">
-
         <!-- Complexion -->
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
           <mat-label>Complexion</mat-label>
@@ -165,9 +164,9 @@
         <!-- File Uploads -->
         <div class="col-12 col-md-3 mb-3">
           <label for="bodyPhotoInput"
-          class="form-control d-flex align-items-center justify-content-center gap-3 text-body">
+          class="form-control d-flex align-items-center justify-content-center gap-3 text-body" style="cursor: pointer;">
             <i class="bi bi-upload"></i>  
-            Person Photo
+            Person Photo  
           </label>
           <input
             id="bodyPhotoInput"
@@ -187,7 +186,6 @@
 
       <!-- Fourth Row -->
       <div class="d-flex flex-wrap align-items-center w-100">
-
         <!-- Birthmark -->
         <mat-form-field appearance="outline" class="col-12 col-md-6">
           <mat-label>Birthmark Details</mat-label>

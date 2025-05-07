@@ -27,23 +27,48 @@ export class CasesApprovalService {
     );
   }
 
-  updatePersonStatus(id: string, status: string): Observable<any> {
+  updatePersonStatus(id: string, status: string, reason?: string): Observable<any> {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       return throwError(() => new Error('Unauthorized: No token found'));
     }
-
+  
     const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-    return this.http.patch(
-      `${this.apiUrl}/api/persons/${id}/`,
-      { person_approve_status: status },
-      { headers }
-    ).pipe(
-      catchError(error => {
-        console.error('Error updating status:', error);
-        return throwError(() => error);
-      })
-    );
+  
+    if (status === 'on_hold') {
+      return this.http.post<any>(
+        `${this.apiUrl}/api/persons/${id}/hold_person/`, 
+        { reason },
+        { headers }
+      ).pipe(
+        map(response => ({
+          ...response,
+          id: response.id || id,
+          full_name: response.full_name || 'Unknown',
+          village: response.village || '',
+          city: response.city || '',
+          state: response.state || '',
+          person_approve_status: 'on_hold',
+          case_status: 'on_hold',
+          status_reason: reason
+        })),
+        catchError(error => {
+          console.error('Error putting person on hold:', error);
+          return throwError(() => error);
+        })
+      );
+    } else {
+      return this.http.patch<any>(
+        `${this.apiUrl}/api/persons/${id}/`,  
+        { person_approve_status: status },
+        { headers }
+      ).pipe(
+        catchError(error => {
+          console.error('Error updating status:', error);
+          return throwError(() => error);
+        })
+      );
+    }
   }
 
 }

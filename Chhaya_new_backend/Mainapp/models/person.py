@@ -220,6 +220,8 @@ class Person(models.Model):
     eye_color = models.CharField(max_length=50, choices=Eye_colorChoices.choices, blank=True, null=True,db_index=True)
     condition = models.CharField(max_length=20, choices=ConditionChoices.choices, blank=True, null=True,db_index=True)
     Body_Condition = models.CharField(max_length=50, blank=True, null=True,choices=BodyconditionChoices.choices,db_index=True)
+    bodies_condition =models.JSONField(default=list, blank=True)
+    up_condition = models.JSONField(default=list, blank=True)
     birth_mark = models.CharField(max_length=100, blank=True, null=True)
     distinctive_mark = models.CharField(max_length=100, blank=True, null=True)
     hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)

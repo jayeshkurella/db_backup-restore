@@ -15,7 +15,7 @@
       <p><strong>Age:</strong> {{ data?.age || 'N/A' }}</p>
       <p><strong>Gender:</strong> {{ data?.gender || 'N/A' }}</p>
       <p><strong>Blood Group:</strong> {{ data?.blood_group || 'N/A' }}</p>
-      <p><strong>Last Seen Location:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
+      <!-- <p><strong>Last Seen Location:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p> -->
     </div>
   </div>
 
@@ -66,20 +66,17 @@
   <h5 class="mb-3 text-primary">Identification & Missing Details</h5>
   <p><strong>Missing Date:</strong> {{ data?.last_known_details?.[0]?.missing_date || 'N/A' }}</p>
   <p><strong>Missing Time:</strong> {{ data?.last_known_details?.[0]?.missing_time || 'N/A' }}</p>
-  <p><strong>Missing Location:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
-  <p><strong>Location Details:</strong> {{ data?.last_known_details?.[0]?.missing_location_details || 'N/A' }}</p>
+  <p><strong>Last Seen Details:</strong> {{ data?.last_known_details?.[0]?.last_seen_location || 'N/A' }}</p>
+  <p><strong>Missing Location Details:</strong> {{ data?.last_known_details?.[0]?.missing_location_details || 'N/A' }}</p>
 
   <!-- Investigation Details -->
   <h5 class="mb-3 text-primary">Investigation Details</h5>
   <p><strong>FIR Number:</strong> {{ data?.firs?.[0]?.fir_number || 'N/A' }}</p>
   <p><strong>Case Status:</strong> {{ data?.firs?.[0]?.case_status || 'N/A' }}</p>
-  <p><strong>Investigating Officer:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }} ({{ data?.firs?.[0]?.investigating_officer_contact_number || 'N/A' }})</p>
+  <p><strong>Investigating Officer:</strong> {{ data?.firs?.[0]?.investigation_officer_name || 'N/A' }} ({{ data?.firs?.[0]?.investigation_officer_contacts || 'N/A' }})</p>
   <p><strong>Police Station:</strong> {{ data?.firs?.[0]?.police_station.name || 'N/A' }}</p>
 
-  <!-- Consent -->
-  <h5 class="mb-3 text-primary">Consent</h5>
-  <p><strong>Consent:</strong> {{ data?.consent?.[0]?.is_consent || 'N/A' }}</p>
-  <p><strong>Data:</strong> {{ data?.consent?.[0]?.data || 'N/A' }}</p>
+
  <!-- Map Section -->
  <h5 class="mb-3 text-primary">Location of Missing Person</h5>
 <div class="row mb-3">

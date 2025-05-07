@@ -26,7 +26,7 @@ export class MissingPersonApiService {
     return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, { 
       params, 
       headers: headers, 
-      observe: 'response' // Include full response for debugging
+      observe: 'response' 
     }).pipe(
       tap(response => console.log("Response Headers:", response.headers)),
       catchError(error => {

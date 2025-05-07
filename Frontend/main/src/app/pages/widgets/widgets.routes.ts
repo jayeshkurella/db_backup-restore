@@ -12,15 +12,16 @@ import { PoliceStationDetailsComponent } from './police-station/police-station-d
 export const WidgetsRoutes: Routes = [
   {
     path: '',
-    canActivate : [authGuard],
     children: [
       {
         path: 'police-station',
         component: PoliceStationComponent,
+        
       },
       {
         path: 'add-police-station',
         component: AddPoliceStationComponent,
+        canActivate : [authGuard],
       },
       {
         path: 'hospitals',
@@ -29,6 +30,7 @@ export const WidgetsRoutes: Routes = [
       {
         path: 'add-hospitals',
         component:AddHospitalsComponent,
+        canActivate : [authGuard],
       },
       {
         path: 'hospital/:id',

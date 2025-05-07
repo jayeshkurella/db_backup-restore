@@ -19,6 +19,7 @@ from django.db.models import Q
 
 import json
 
+from rest_framework.permissions import AllowAny, IsAuthenticated  # ✅ Imports
 
 class PoliceStationViewSet(viewsets.ModelViewSet):
     """
@@ -29,8 +30,13 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
     queryset = PoliceStation.objects.all()
     parser_classes = (MultiPartParser, FormParser)  # ✅ Allow file uploads
 
+    def get_permissions(self):
+        if self.request.method in ['GET', 'HEAD', 'OPTIONS']:
+            return [AllowAny()]  # Public access for safe methods
+        return [IsAuthenticated()]
 
-    # 🔹 1. LIST Police Stations with Pagination
+
+        # 🔹 1. LIST Police Stations with Pagination
     def list(self, request):
         try:
             # Extract query parameters

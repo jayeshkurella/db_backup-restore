@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -13,11 +13,18 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, tap } from 'rxjs';
+import {  catchError, finalize, tap } from 'rxjs';
 import { CasesApprovalService } from './cases-approval.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { HoldReasonDialogComponent } from './hold-reason-dialog/hold-reason-dialog.component';
+import { forkJoin, of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { SuspendReasonDialogComponent } from './suspend-reason-dialog/suspend-reason-dialog.component';
 
-interface Person {
+
+export interface Person {
   id: string;
   full_name: string;
   village?: string;
@@ -29,6 +36,8 @@ interface Person {
   person_approve_status: string;
   case_status?: string;
   selected?: boolean;
+  status_reason?: string | null;
+  reason?: string;   
 }
 @Component({
   selector: 'app-access-provider',
@@ -45,30 +54,43 @@ interface Person {
     MatChipsModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    FormsModule
+    FormsModule,
+    HoldReasonDialogComponent,
+    ScrollingModule,
+    MatTooltipModule
   ],
   templateUrl: './access-provider.component.html',
   styleUrl: './access-provider.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccessProviderComponent implements OnInit{ 
-  displayedColumns: string[] = ['name', 'village', 'city', 'state', 'status', 'actions'];
+export class AccessProviderComponent implements OnInit { 
+  displayedColumns: string[] = ['name', 'village', 'city', 'state', 'status'];
   displayedColumnsWithSelect = ['select', ...this.displayedColumns];
+  displayedColumnsWithReason = [...this.displayedColumnsWithSelect, 'reason'];
+
   pendingPersons: Person[] = [];
-  rejectedPersons: Person[] = [];
+  holdPersons: Person[] = [];
+  suspendedPersons: Person[] = [];
   approvedPersons: Person[] = [];
+  
   isLoading: boolean = true;
+  isProcessing: boolean = false;
   pendingCount: number = 0;
-  rejectedCount: number = 0;
+  holdCount: number = 0;
+  suspendedCount: number = 0;
   approvedCount: number = 0;
+  
   selectedTabIndex = 0; 
   selectAllPending: boolean = false;
-  selectAllRejected: boolean = false;
+  selectAllHold: boolean = false;
+  selectAllSuspended: boolean = false;
   selectAllApproved: boolean = false;
 
   constructor(
     private pendingService: CasesApprovalService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -77,149 +99,305 @@ export class AccessProviderComponent implements OnInit{
 
   loadData(): void {
     this.isLoading = true;
-    this.pendingPersons = [];
-    this.rejectedPersons = [];
-    this.approvedPersons = [];
     this.resetSelectAllStates();
+    this.cdr.markForCheck();
   
-    this.pendingService.getPendingData().subscribe({
-      next: (response: any) => {
-        if (response) {
-          if (response.pending_data) {
-            this.pendingPersons = response.pending_data.map((person: any) => ({
-              ...person,
-              selected: false,
-              person_approve_status: person.person_approve_status || 'pending',
-              case_status: person.case_status || 'pending'
-            }));
-            this.pendingCount = this.pendingPersons.length;
-          }
-          
-          if (response.rejected_data) {
-            this.rejectedPersons = response.rejected_data.map((person: any) => ({
-              ...person,
-              selected: false,
-              person_approve_status: person.person_approve_status || 'rejected',
-              case_status: person.case_status || 'rejected'
-            }));
-            this.rejectedCount = this.rejectedPersons.length;
-          }
-
-          if (response.approved_data) {
-            this.approvedPersons = response.approved_data.map((person: any) => ({
-              ...person,
-              selected: false,
-              person_approve_status: person.person_approve_status || 'approved',
-              case_status: person.case_status || 'approved'
-            }));
-            this.approvedCount = this.approvedPersons.length;
-          }
-        }
-  
+    this.pendingService.getPendingData().pipe(
+      finalize(() => {
         this.isLoading = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
+      next: (response: any) => {
+        this.processResponseData(response);
       },
       error: (error) => {
         console.error('Error fetching data:', error);
-        this.pendingPersons = [];
-        this.rejectedPersons = [];
-        this.approvedPersons = [];
-        this.pendingCount = 0;
-        this.rejectedCount = 0;
-        this.approvedCount = 0;
-        this.isLoading = false;
+        this.resetData();
+        this.snackBar.open('Failed to load data', 'Close', { duration: 3000 });
       }
     });
   }
 
+  private processResponseData(response: any): void {
+    // Process data in chunks to prevent UI blocking
+    setTimeout(() => {
+      this.pendingPersons = this.processPersonArray(response.pending_data, 'pending');
+      this.pendingCount = this.pendingPersons.length;
+      this.cdr.markForCheck();
+    });
+
+    setTimeout(() => {
+      this.holdPersons = this.processPersonArray(response.on_hold_data, 'on_hold');
+      this.holdCount = this.holdPersons.length;
+      this.cdr.markForCheck();
+    });
+
+    setTimeout(() => {
+      this.suspendedPersons = this.processPersonArray(response.suspended_data, 'suspended');
+      this.suspendedCount = this.suspendedPersons.length;
+      this.cdr.markForCheck();
+    });
+
+    setTimeout(() => {
+      this.approvedPersons = this.processPersonArray(response.approved_data, 'approved');
+      this.approvedCount = this.approvedPersons.length;
+      this.cdr.markForCheck();
+    });
+  }
+
+  private processPersonArray(data: any[], status: string): Person[] {
+    return (data || []).map((person: any) => ({
+      ...person,
+      selected: false,
+      person_approve_status: person.person_approve_status || status,
+      case_status: person.case_status || status,
+      status_reason: person.status_reason || null
+    }));
+  }
+
+  private resetData(): void {
+    this.pendingPersons = [];
+    this.holdPersons = [];
+    this.suspendedPersons = [];
+    this.approvedPersons = [];
+    this.pendingCount = 0;
+    this.holdCount = 0;
+    this.suspendedCount = 0;
+    this.approvedCount = 0;
+    this.cdr.markForCheck();
+  }
+
   private showStatusChangeMessage(person: Person, oldStatus: string, newStatus: string): void {
-    const formattedOldStatus = this.formatStatus(oldStatus);
-    const formattedNewStatus = this.formatStatus(newStatus);
-    
     this.snackBar.open(
-      `${person.full_name}'s status changed from ${formattedOldStatus} to ${formattedNewStatus}`,
+      `${person.full_name}'s status changed from ${this.formatStatus(oldStatus)} to ${this.formatStatus(newStatus)}`,
       'Close', 
       { duration: 3000 }
     );
   }
 
   private formatStatus(status: string): string {
-    return status.charAt(0).toUpperCase() + status.slice(1);
+    return status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   }
   
   approvePerson(person: Person): void {
     const oldStatus = person.person_approve_status;
-    this.pendingService.updatePersonStatus(person.id, 'approved').subscribe({
+    this.isProcessing = true;
+    this.cdr.markForCheck();
+    
+    this.pendingService.updatePersonStatus(person.id, 'approved').pipe(
+      finalize(() => {
+        this.isProcessing = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
       next: () => {
         this.loadData();
         this.showStatusChangeMessage(person, oldStatus, 'approved');
       },
-      error: (error) => console.error('Error approving person:', error)
+      error: (error) => {
+        console.error('Error approving person:', error);
+        this.snackBar.open('Failed to approve person', 'Close', { duration: 3000 });
+      }
     });
   }
 
-  rejectPerson(person: Person): void {
-    const oldStatus = person.person_approve_status;
-    this.pendingService.updatePersonStatus(person.id, 'rejected').subscribe({
-      next: () => {
-        this.loadData();
-        this.showStatusChangeMessage(person, oldStatus, 'rejected');
-      },
-      error: (error) => console.error('Error rejecting person:', error)
+  suspendPerson(person: Person): void {
+    const dialogRef = this.dialog.open(SuspendReasonDialogComponent, {
+      width: '500px',
+      data: { personName: person.full_name }
+    });
+  
+    dialogRef.afterClosed().subscribe(reason => {
+      if (reason) {
+        const oldStatus = person.person_approve_status;
+        this.isProcessing = true;
+        this.cdr.markForCheck();
+        
+        this.pendingService.updatePersonStatus(person.id, 'suspended', reason).pipe(
+          finalize(() => {
+            this.isProcessing = false;
+            this.cdr.markForCheck();
+          })
+        ).subscribe({
+          next: () => {
+            this.loadData();
+            this.showStatusChangeMessage(person, oldStatus, 'suspended');
+          },
+          error: (error) => {
+            console.error('Error suspending person:', error);
+            this.snackBar.open('Failed to suspend person', 'Close', { duration: 3000 });
+          }
+        });
+      }
     });
   }
 
   setPersonPending(person: Person): void {
     const oldStatus = person.person_approve_status;
-    this.pendingService.updatePersonStatus(person.id, 'pending').subscribe({
+    this.isProcessing = true;
+    this.cdr.markForCheck();
+    
+    this.pendingService.updatePersonStatus(person.id, 'pending').pipe(
+      finalize(() => {
+        this.isProcessing = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
       next: () => {
         this.loadData();
         this.showStatusChangeMessage(person, oldStatus, 'pending');
       },
-      error: (error) => console.error('Error setting person to pending:', error)
+      error: (error) => {
+        console.error('Error setting person to pending:', error);
+        this.snackBar.open('Failed to set person to pending', 'Close', { duration: 3000 });
+      }
     });
   }
 
+  holdPerson(person: Person): void {
+    const dialogRef = this.dialog.open(HoldReasonDialogComponent, {
+      width: '500px',
+      data: { personName: person.full_name }
+    });
+  
+    dialogRef.afterClosed().subscribe(reason => {
+      if (reason) {
+        const oldStatus = person.person_approve_status;
+        this.isProcessing = true;
+        this.cdr.markForCheck();
+        
+        this.pendingService.updatePersonStatus(person.id, 'on_hold', reason).pipe(
+          finalize(() => {
+            this.isProcessing = false;
+            this.cdr.markForCheck();
+          })
+        ).subscribe({
+          next: () => {
+            this.loadData();
+            this.showStatusChangeMessage(person, oldStatus, 'on_hold');
+          },
+          error: (error) => {
+            console.error('Error putting person on hold:', error);
+            this.snackBar.open('Failed to put person on hold', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+
+  holdSelected(): void {
+    if (this.selectedTabIndex !== 0) return;
+  
+    const selectedPersons = this.pendingPersons.filter(p => p.selected);
+    if (selectedPersons.length === 0) {
+      this.snackBar.open('No persons selected', 'Close', { duration: 3000 });
+      return;
+    }
+  
+    const dialogRef = this.dialog.open(HoldReasonDialogComponent, {
+      width: '500px',
+      data: { 
+        multiple: true,
+        count: selectedPersons.length 
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe(reason => {
+      if (reason) {
+        this.isProcessing = true;
+        this.cdr.markForCheck();
+        
+        const holdRequests = selectedPersons.map(person => 
+          this.pendingService.updatePersonStatus(person.id, 'on_hold', reason).pipe(
+            catchError(error => {
+              console.error(`Error putting person ${person.id} on hold:`, error);
+              return of(null);
+            })
+          )
+        );
+  
+        forkJoin(holdRequests).pipe(
+          finalize(() => {
+            this.isProcessing = false;
+            this.cdr.markForCheck();
+          })
+        ).subscribe({
+          next: (responses) => {
+            this.loadData();
+            this.snackBar.open(
+              `Successfully put ${responses.filter(r => r !== null).length} of ${selectedPersons.length} person(s) on hold`,
+              'Close', 
+              { duration: 5000 }
+            );
+          },
+          error: () => {
+            this.snackBar.open('Some hold operations failed', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+  
   getCurrentDataSource() {
     switch(this.selectedTabIndex) {
       case 0: return this.pendingPersons;
-      case 1: return this.rejectedPersons;
-      case 2: return this.approvedPersons;
+      case 1: return this.holdPersons;
+      case 2: return this.suspendedPersons;
+      case 3: return this.approvedPersons;
       default: return this.pendingPersons;
     }
   }
 
   toggleSelectAllPending(checked: boolean): void {
     this.selectAllPending = checked;
-    this.pendingPersons.forEach(person => {
-      person.selected = checked;
-    });
+    this.pendingPersons.forEach(person => person.selected = checked);
+    this.cdr.markForCheck();
   }
 
-  toggleSelectAllRejected(checked: boolean): void {
-    this.selectAllRejected = checked;
-    this.rejectedPersons.forEach(person => {
-      person.selected = checked;
-    });
+  toggleSelectAllHold(checked: boolean): void {
+    this.selectAllHold = checked;
+    this.holdPersons.forEach(person => person.selected = checked);
+    this.cdr.markForCheck();
+  }
+
+  toggleSelectAllSuspended(checked: boolean): void {
+    this.selectAllSuspended = checked;
+    this.suspendedPersons.forEach(person => person.selected = checked);
+    this.cdr.markForCheck();
   }
 
   toggleSelectAllApproved(checked: boolean): void {
     this.selectAllApproved = checked;
-    this.approvedPersons.forEach(person => {
-      person.selected = checked;
-    });
+    this.approvedPersons.forEach(person => person.selected = checked);
+    this.cdr.markForCheck();
+  }
+
+  isIndeterminateHold(): boolean {
+    const selectedCount = this.holdPersons.filter(p => p.selected).length;
+    return selectedCount > 0 && selectedCount < this.holdPersons.length;
   }
 
   updateSelectAllState(): void {
-    if (this.selectedTabIndex === 0) {
-      const pendingSelectedCount = this.pendingPersons.filter(p => p.selected).length;
-      this.selectAllPending = pendingSelectedCount === this.pendingPersons.length && this.pendingPersons.length > 0;
-    } else if (this.selectedTabIndex === 1) {
-      const rejectedSelectedCount = this.rejectedPersons.filter(p => p.selected).length;
-      this.selectAllRejected = rejectedSelectedCount === this.rejectedPersons.length && this.rejectedPersons.length > 0;
-    } else if (this.selectedTabIndex === 2) {
-      const approvedSelectedCount = this.approvedPersons.filter(p => p.selected).length;
-      this.selectAllApproved = approvedSelectedCount === this.approvedPersons.length && this.approvedPersons.length > 0;
+    switch(this.selectedTabIndex) {
+      case 0: 
+        this.selectAllPending = this.pendingPersons.length > 0 && 
+          this.pendingPersons.every(p => p.selected);
+        break;
+      case 1:
+        this.selectAllHold = this.holdPersons.length > 0 && 
+          this.holdPersons.every(p => p.selected);
+        break;
+      case 2:
+        this.selectAllSuspended = this.suspendedPersons.length > 0 && 
+          this.suspendedPersons.every(p => p.selected);
+        break;
+      case 3:
+        this.selectAllApproved = this.approvedPersons.length > 0 && 
+          this.approvedPersons.every(p => p.selected);
+        break;
     }
+    this.cdr.markForCheck();
   }
 
   isIndeterminatePending(): boolean {
@@ -227,9 +405,9 @@ export class AccessProviderComponent implements OnInit{
     return selectedCount > 0 && selectedCount < this.pendingPersons.length;
   }
 
-  isIndeterminateRejected(): boolean {
-    const selectedCount = this.rejectedPersons.filter(p => p.selected).length;
-    return selectedCount > 0 && selectedCount < this.rejectedPersons.length;
+  isIndeterminateSuspended(): boolean {
+    const selectedCount = this.suspendedPersons.filter(p => p.selected).length;
+    return selectedCount > 0 && selectedCount < this.suspendedPersons.length;
   }
 
   isIndeterminateApproved(): boolean {
@@ -239,107 +417,187 @@ export class AccessProviderComponent implements OnInit{
 
   hasSelectedItems(): boolean {
     switch(this.selectedTabIndex) {
-      case 0: return this.pendingPersons.some(person => person.selected);
-      case 1: return this.rejectedPersons.some(person => person.selected);
-      case 2: return this.approvedPersons.some(person => person.selected);
+      case 0: return this.pendingPersons.some(p => p.selected);
+      case 1: return this.holdPersons.some(p => p.selected);
+      case 2: return this.suspendedPersons.some(p => p.selected);
+      case 3: return this.approvedPersons.some(p => p.selected);
       default: return false;
     }
   }
 
   selectedCount(): number {
     switch(this.selectedTabIndex) {
-      case 0: return this.pendingPersons.filter(person => person.selected).length;
-      case 1: return this.rejectedPersons.filter(person => person.selected).length;
-      case 2: return this.approvedPersons.filter(person => person.selected).length;
+      case 0: return this.pendingPersons.filter(p => p.selected).length;
+      case 1: return this.holdPersons.filter(p => p.selected).length;
+      case 2: return this.suspendedPersons.filter(p => p.selected).length;
+      case 3: return this.approvedPersons.filter(p => p.selected).length;
       default: return 0;
     }
   }
 
   approveSelected(): void {
     let selectedPersons: Person[] = [];
-    
-    switch(this.selectedTabIndex) {
-      case 0: 
+  
+    switch (this.selectedTabIndex) {
+      case 0:
         selectedPersons = this.pendingPersons.filter(p => p.selected);
         break;
-      case 1:
-        selectedPersons = this.rejectedPersons.filter(p => p.selected);
+      case 1: 
+        selectedPersons = this.holdPersons.filter(p => p.selected);
         break;
+      case 2:
+        selectedPersons = this.suspendedPersons.filter(p => p.selected);
+        break;
+      case 3:
+        selectedPersons = this.approvedPersons.filter(p => p.selected);
+        break;
+      default:
+        selectedPersons = [];
     }
-
+  
     if (selectedPersons.length === 0) return;
-
+  
+    this.isProcessing = true;
+    this.cdr.markForCheck();
+    this.snackBar.open(`Processing ${selectedPersons.length} items...`, '', { duration: 3000 });
+    
     const approveRequests = selectedPersons.map(person => {
       const oldStatus = person.person_approve_status;
       return this.pendingService.updatePersonStatus(person.id, 'approved').pipe(
-        tap(() => this.showStatusChangeMessage(person, oldStatus, 'approved'))
+        tap(() => this.showStatusChangeMessage(person, oldStatus, 'approved')),
+        catchError(error => {
+          console.error(`Error approving person ${person.id}:`, error);
+          this.snackBar.open(`Failed to approve ${person.full_name}`, 'Close', { duration: 3000 });
+          return of(null);
+        })
       );
     });
-
-    forkJoin(approveRequests).subscribe({
+  
+    forkJoin(approveRequests).pipe(
+      finalize(() => {
+        this.isProcessing = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
       next: () => {
         this.loadData();
         this.resetSelectAllStates();
+        this.snackBar.open(`Successfully processed ${selectedPersons.length} items`, 'Close', { duration: 3000 });
       },
-      error: (error) => console.error('Error approving selected persons:', error)
+      error: (error) => {
+        console.error('Error in bulk approve operation:', error);
+        this.snackBar.open('Some operations failed', 'Close', { duration: 3000 });
+      }
     });
   }
-
-  rejectSelected(): void {
+  
+  suspendSelected(): void {
     let selectedPersons: Person[] = [];
     
     switch(this.selectedTabIndex) {
       case 0: 
         selectedPersons = this.pendingPersons.filter(p => p.selected);
         break;
-      case 2:
+      case 1: 
+        selectedPersons = this.holdPersons.filter(p => p.selected);
+        break;
+      case 3:
         selectedPersons = this.approvedPersons.filter(p => p.selected);
         break;
+      default: return;
     }
-
+  
     if (selectedPersons.length === 0) return;
-
-    const rejectRequests = selectedPersons.map(person => {
-      const oldStatus = person.person_approve_status;
-      return this.pendingService.updatePersonStatus(person.id, 'rejected').pipe(
-        tap(() => this.showStatusChangeMessage(person, oldStatus, 'rejected'))
-      );
+  
+    const dialogRef = this.dialog.open(SuspendReasonDialogComponent, {
+      width: '500px',
+      data: { 
+        multiple: true,
+        count: selectedPersons.length 
+      }
     });
-
-    forkJoin(rejectRequests).subscribe({
-      next: () => {
-        this.loadData();
-        this.resetSelectAllStates();
-      },
-      error: (error) => console.error('Error rejecting selected persons:', error)
+  
+    dialogRef.afterClosed().subscribe(reason => {
+      if (reason) {
+        this.isProcessing = true;
+        this.cdr.markForCheck();
+        
+        const suspendRequests = selectedPersons.map(person => {
+          const oldStatus = person.person_approve_status;
+          return this.pendingService.updatePersonStatus(person.id, 'suspended', reason).pipe(
+            tap(() => this.showStatusChangeMessage(person, oldStatus, 'suspended')),
+            catchError(error => {
+              console.error(`Error suspending person ${person.id}:`, error);
+              this.snackBar.open(`Failed to suspend ${person.full_name}`, 'Close', { duration: 3000 });
+              return of(null);
+            })
+          );
+        });
+      
+        forkJoin(suspendRequests).pipe(
+          finalize(() => {
+            this.isProcessing = false;
+            this.cdr.markForCheck();
+          })
+        ).subscribe({
+          next: () => {
+            this.loadData();
+            this.resetSelectAllStates();
+            this.snackBar.open(`Successfully suspended ${selectedPersons.length} items`, 'Close', { duration: 3000 });
+          },
+          error: (error) => {
+            console.error('Error in bulk suspend operation:', error);
+            this.snackBar.open('Some suspensions failed', 'Close', { duration: 3000 });
+          }
+        });
+      }
     });
   }
   
   setPendingSelected(): void {
-    if (this.selectedTabIndex !== 2) return;
+    if (this.selectedTabIndex !== 3) return;
 
     const selectedPersons = this.approvedPersons.filter(p => p.selected);
     if (selectedPersons.length === 0) return;
 
+    this.isProcessing = true;
+    this.cdr.markForCheck();
+    
     const pendingRequests = selectedPersons.map(person => {
       const oldStatus = person.person_approve_status;
       return this.pendingService.updatePersonStatus(person.id, 'pending').pipe(
-        tap(() => this.showStatusChangeMessage(person, oldStatus, 'pending'))
+        tap(() => this.showStatusChangeMessage(person, oldStatus, 'pending')),
+        catchError(error => {
+          console.error(`Error setting person ${person.id} to pending:`, error);
+          this.snackBar.open(`Failed to set ${person.full_name} to pending`, 'Close', { duration: 3000 });
+          return of(null);
+        })
       );
     });
 
-    forkJoin(pendingRequests).subscribe({
+    forkJoin(pendingRequests).pipe(
+      finalize(() => {
+        this.isProcessing = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
       next: () => {
         this.loadData();
         this.resetSelectAllStates();
+        this.snackBar.open(`Successfully set ${selectedPersons.length} items to pending`, 'Close', { duration: 3000 });
       },
-      error: (error) => console.error('Error setting selected persons to pending:', error)
+      error: (error) => {
+        console.error('Error in bulk pending operation:', error);
+        this.snackBar.open('Some operations failed', 'Close', { duration: 3000 });
+      }
     });
   }
 
   private resetSelectAllStates(): void {
     this.selectAllPending = false;
-    this.selectAllRejected = false;
+    this.selectAllHold = false;
+    this.selectAllSuspended = false;
     this.selectAllApproved = false;
+    this.cdr.markForCheck();
   }
 }

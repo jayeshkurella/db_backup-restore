@@ -1,174 +1,230 @@
-<div class="approval-container">
-    <mat-card>
-      <mat-card-content>
+<div class="approval-container p-2">
+  <mat-card>
+    <mat-card-content>
+      
+      <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+        <mat-tab label="Pending ({{pendingCount}})"></mat-tab>
+        <mat-tab label="Hold ({{holdCount}})"></mat-tab>
+        <mat-tab label="Suspended ({{suspendedCount}})"></mat-tab>
+        <mat-tab label="Approved ({{approvedCount}})"></mat-tab>
+      </mat-tab-group>
+
+      <div class="select-all-container">
+          <div class="select-action-wrapper">
+            <div class="select-box">
+              <mat-checkbox color="primary" 
+                *ngIf="selectedTabIndex === 0"
+                [checked]="selectAllPending"
+                [indeterminate]="isIndeterminatePending()"
+                (change)="toggleSelectAllPending($event.checked)">
+                Select All Pending ({{pendingCount}})
+              </mat-checkbox>
+
+              <mat-checkbox color="primary" 
+                *ngIf="selectedTabIndex === 1"
+                [checked]="selectAllHold"
+                [indeterminate]="isIndeterminateHold()"
+                (change)="toggleSelectAllHold($event.checked)">
+                Select All Hold ({{holdCount}})
+              </mat-checkbox>
         
-        <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-          <mat-tab label="Pending ({{pendingCount}})"></mat-tab>
-          <mat-tab label="Rejected ({{rejectedCount}})"></mat-tab>
-          <mat-tab label="Approved ({{approvedCount}})"></mat-tab>
-        </mat-tab-group>
-  
-        <div class="select-all-container">
-            <div class="select-action-wrapper">
-              <div class="select-box">
-                <mat-checkbox color="primary" 
-                  *ngIf="selectedTabIndex === 0"
-                  [checked]="selectAllPending"
-                  [indeterminate]="isIndeterminatePending()"
-                  (change)="toggleSelectAllPending($event.checked)">
-                  Select All Pending ({{pendingCount}})
-                </mat-checkbox>
-          
-                <mat-checkbox color="primary" 
-                  *ngIf="selectedTabIndex === 1"
-                  [checked]="selectAllRejected"
-                  [indeterminate]="isIndeterminateRejected()"
-                  (change)="toggleSelectAllRejected($event.checked)">
-                  Select All Rejected ({{rejectedCount}})
-                </mat-checkbox>
+              <mat-checkbox color="primary" 
+                *ngIf="selectedTabIndex === 2"
+                [checked]="selectAllSuspended"
+                [indeterminate]="isIndeterminateSuspended()"
+                (change)="toggleSelectAllSuspended($event.checked)">
+                Select All Suspended ({{suspendedCount}})
+              </mat-checkbox>
 
-                <mat-checkbox color="primary" 
-                    *ngIf="selectedTabIndex === 2"
-                    [checked]="selectAllApproved"
-                    [indeterminate]="isIndeterminateApproved()"
-                    (change)="toggleSelectAllApproved($event.checked)">
-                    Select All Approved ({{approvedCount}})
-                </mat-checkbox>
-
-              </div>
-          
-              <div class="action-buttons">
-                <ng-container *ngIf="selectedTabIndex === 0">
-                  <button mat-stroked-button color="primary" 
-                          (click)="approveSelected()"
-                          [disabled]="!hasSelectedItems()">
-                    Approve Selected ({{selectedCount()}})
-                  </button>
-                  <button mat-stroked-button color="warn" 
-                          (click)="rejectSelected()"
-                          [disabled]="!hasSelectedItems()"
-                          class="reject-button">
-                    Reject Selected ({{selectedCount()}})
-                  </button>
-                </ng-container>
-            
-                <ng-container *ngIf="selectedTabIndex === 1">
-                  <button mat-stroked-button color="primary" 
-                          (click)="approveSelected()"
-                          [disabled]="!hasSelectedItems()">
-                    Approve Selected ({{selectedCount()}})
-                  </button>
-                </ng-container>
-          
-                <ng-container *ngIf="selectedTabIndex === 2">
-                  <button mat-stroked-button color="warn" 
-                          (click)="rejectSelected()"
-                          [disabled]="!hasSelectedItems()"
-                          class="reject-button">
-                    Reject Selected ({{selectedCount()}})
-                  </button>
-                  <button mat-stroked-button 
-                          (click)="setPendingSelected()"
-                          [disabled]="!hasSelectedItems()">
-                    Set as Pending ({{selectedCount()}})
-                  </button>
-                </ng-container>
-              </div>
+              <mat-checkbox color="primary" 
+                  *ngIf="selectedTabIndex === 3"
+                  [checked]="selectAllApproved"
+                  [indeterminate]="isIndeterminateApproved()"
+                  (change)="toggleSelectAllApproved($event.checked)">
+                  Select All Approved ({{approvedCount}})
+              </mat-checkbox>
             </div>
-          </div>
-          
-  
-        <div *ngIf="isLoading" class="loading-spinner">
-          <mat-spinner diameter="50"></mat-spinner>
-        </div>
-  
-        <table *ngIf="!isLoading" mat-table [dataSource]="getCurrentDataSource()" class="mat-elevation-z1">
-
-            <ng-container matColumnDef="select">
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
-                <td mat-cell *matCellDef="let person">
-                  <mat-checkbox color="primary" 
-                               [(ngModel)]="person.selected"
-                               (click)="$event.stopPropagation()"
-                               (change)="updateSelectAllState()">
-                  </mat-checkbox>
-                </td>
+        
+            <div class="action-buttons">
+              <ng-container *ngIf="selectedTabIndex === 0">
+                <button mat-stroked-button color="primary" 
+                        (click)="approveSelected()"
+                        [disabled]="!hasSelectedItems()">
+                  Approve Selected ({{selectedCount()}})
+                </button>
+                <button mat-stroked-button color="warn" 
+                        (click)="suspendSelected()"
+                        [disabled]="!hasSelectedItems()"
+                        class="reject-button">
+                  Reject Selected ({{selectedCount()}})
+                </button>
+                <button mat-stroked-button 
+                        (click)="holdSelected()"
+                        [disabled]="!hasSelectedItems()">
+                  Hold Selected ({{selectedCount()}})
+                </button>
               </ng-container>
 
+              <ng-container *ngIf="selectedTabIndex === 1">
+                <button mat-stroked-button color="primary" 
+                        (click)="approveSelected()"
+                        [disabled]="!hasSelectedItems()">
+                  Approve Selected ({{selectedCount()}})
+                </button>
+                <button mat-stroked-button color="warn" 
+                        (click)="suspendSelected()"
+                        [disabled]="!hasSelectedItems()"
+                        class="reject-button">
+                  Reject Selected ({{selectedCount()}})
+                </button>
+              </ng-container>
+          
+              <ng-container *ngIf="selectedTabIndex === 2">
+                <button mat-stroked-button color="primary" 
+                        (click)="approveSelected()"
+                        [disabled]="!hasSelectedItems()">
+                  Approve Selected ({{selectedCount()}})
+                </button>
+              </ng-container>
+        
+              <ng-container *ngIf="selectedTabIndex === 3">
+                <button mat-stroked-button color="warn" 
+                        (click)="suspendSelected()"
+                        [disabled]="!hasSelectedItems()"
+                        class="reject-button">
+                  Reject Selected ({{selectedCount()}})
+                </button>
+                <button mat-stroked-button 
+                        (click)="setPendingSelected()"
+                        [disabled]="!hasSelectedItems()">
+                  Set as Pending ({{selectedCount()}})
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+      <div *ngIf="isLoading" class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+      <div class="table-wrapper">
+
+      <table *ngIf="!isLoading" mat-table [dataSource]="getCurrentDataSource()" class="mat-elevation-z1">
+
+          <ng-container matColumnDef="select">
+              <th class="select-header" mat-header-cell *matHeaderCellDef>
+              </th>
+              <td mat-cell *matCellDef="let person">
+                <mat-checkbox color="primary" 
+                             [(ngModel)]="person.selected"
+                             (click)="$event.stopPropagation()"
+                             (change)="updateSelectAllState()">
+                </mat-checkbox>
+              </td>
+          </ng-container>
+
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>NAME</th>
-            <td mat-cell *matCellDef="let person">
+              <th mat-header-cell *matHeaderCellDef>NAME</th>
+              <td mat-cell *matCellDef="let person">
               <div class="name-cell">
-                <div class="name">{{person.full_name}}</div>
-                <div class="details" *ngIf="person.type">
-                    <span *ngIf="person.type">{{person.type}}</span>
+                  <div class="name">{{person.full_name}}</div>
+                  <div class="details" *ngIf="person.type">
+                      <span *ngIf="person.type">{{person.type}}</span>
                   </div>
               </div>
-            </td>
+              </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="village">
-            <th mat-header-cell *matHeaderCellDef>VILLAGE</th>
-            <td mat-cell *matCellDef="let person">{{person.village}}</td>
+              <th mat-header-cell *matHeaderCellDef>VILLAGE</th>
+              <td mat-cell *matCellDef="let person">{{person.village}}</td>
           </ng-container>
-  
+
           <ng-container matColumnDef="city">
-            <th mat-header-cell *matHeaderCellDef>CITY</th>
-            <td mat-cell *matCellDef="let person">{{person.city}}</td>
+              <th mat-header-cell *matHeaderCellDef>CITY</th>
+              <td mat-cell *matCellDef="let person">{{person.city}}</td>
           </ng-container>
-  
+
           <ng-container matColumnDef="state">
-            <th mat-header-cell *matHeaderCellDef>STATE</th>
-            <td mat-cell *matCellDef="let person">{{person.state}}</td>
+              <th mat-header-cell *matHeaderCellDef>STATE</th>
+              <td mat-cell *matCellDef="let person">{{person.state}}</td>
           </ng-container>
-  
+
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>STATUS</th>
-            <td mat-cell *matCellDef="let person">
+              <th mat-header-cell *matHeaderCellDef>STATUS</th>
+              <td mat-cell *matCellDef="let person">
               <span class="status-badge" [class.pending]="person.person_approve_status === 'pending'"
-                                 [class.approved]="person.person_approve_status === 'approved'"
-                                 [class.rejected]="person.person_approve_status === 'rejected'">
-                {{person.person_approve_status | titlecase}}
+                                   [class.hold]="person.person_approve_status === 'on_hold'"
+                                   [class.approved]="person.person_approve_status === 'approved'"
+                                   [class.suspended]="person.person_approve_status === 'suspended'">
+                  {{person.person_approve_status | titlecase}}
               </span>
-            </td>
+              </td>
           </ng-container>
-  
+
+          <ng-container matColumnDef="reason">
+              <th mat-header-cell *matHeaderCellDef>REASON</th>
+              <td mat-cell *matCellDef="let person">
+                  <span *ngIf="person.status_reason">{{person.status_reason}}</span>
+                  <span *ngIf="!person.status_reason">-</span>
+              </td>
+          </ng-container>
+
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
             <td mat-cell *matCellDef="let person">
               <ng-container *ngIf="selectedTabIndex === 0">
-                <button mat-icon-button color="primary" (click)="approvePerson(person)" *ngIf="person.person_approve_status === 'pending'">
+                <button mat-icon-button color="primary" (click)="approvePerson(person)" *ngIf="person.person_approve_status === 'pending'" matTooltip="Approve Person">
                   <mat-icon>check</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" (click)="rejectPerson(person)" *ngIf="person.person_approve_status === 'pending'">
+                <button mat-icon-button color="warn" (click)="suspendPerson(person)" *ngIf="person.person_approve_status === 'pending'" matTooltip="Reject Person">
                   <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button (click)="holdPerson(person)" *ngIf="person.person_approve_status === 'pending'" matTooltip="Put On Hold">
+                  <mat-icon>pause</mat-icon>
                 </button>
                 <span *ngIf="person.person_approve_status !== 'pending'">-</span>
               </ng-container>
-              
+          
               <ng-container *ngIf="selectedTabIndex === 1">
-                <button mat-icon-button color="primary" (click)="approvePerson(person)">
+                <button mat-icon-button color="primary" (click)="approvePerson(person)" *ngIf="person.person_approve_status === 'on_hold'" matTooltip="Approve Person">
                   <mat-icon>check</mat-icon>
                 </button>
-                <span *ngIf="person.person_approve_status !== 'rejected'">-</span>
-              </ng-container>
-
-              <ng-container *ngIf="selectedTabIndex === 2">
-                <button mat-icon-button color="warn" (click)="rejectPerson(person)">
+                <button mat-icon-button color="warn" (click)="suspendPerson(person)" *ngIf="person.person_approve_status === 'on_hold'" matTooltip="Reject Person">
                   <mat-icon>close</mat-icon>
                 </button>
-                <button mat-icon-button (click)="setPersonPending(person)">
-                  <mat-icon>schedule</mat-icon>
+                <span *ngIf="person.person_approve_status !== 'on_hold'">-</span>
+              </ng-container>
+          
+              <ng-container *ngIf="selectedTabIndex === 2">
+                <button mat-icon-button color="primary" (click)="approvePerson(person)" matTooltip="Approve Person">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <span *ngIf="person.person_approve_status !== 'suspended'">-</span>
+              </ng-container>
+          
+              <ng-container *ngIf="selectedTabIndex === 3">
+                <button mat-icon-button color="warn" (click)="suspendPerson(person)" matTooltip="Reject Person">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button (click)="holdPerson(person)" matTooltip="Put On Hold">
+                  <mat-icon>pause</mat-icon>
                 </button>
                 <span *ngIf="person.person_approve_status !== 'approved'">-</span>
               </ng-container>
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsWithSelect"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsWithSelect;"></tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-  </div>
+          <tr mat-header-row *matHeaderRowDef="
+              selectedTabIndex === 1 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason', 'actions'] : 
+              selectedTabIndex === 2 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason','actions'] : 
+              ['select', 'name', 'village', 'city', 'state', 'status', 'actions']"></tr>
+          <tr mat-row *matRowDef="let row; columns: 
+              selectedTabIndex === 1 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason', 'actions'] : 
+              selectedTabIndex === 2 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason','actions'] : 
+              ['select', 'name', 'village', 'city', 'state', 'status', 'actions']"></tr>
+      </table>
+    </div>
+    </mat-card-content>
+  </mat-card>
+</div>

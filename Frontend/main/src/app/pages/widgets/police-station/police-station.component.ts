@@ -61,6 +61,8 @@ export class PoliceStationComponent implements OnInit {
   };
   
   isAdmin: boolean = false;
+  isLoggedIn = false;
+
 
   currentPage: number = 1;
   totalItems: number = 0;
@@ -75,6 +77,8 @@ export class PoliceStationComponent implements OnInit {
   ngOnInit(): void {
     const userType = localStorage.getItem('user_type');
     this.isAdmin = userType === 'admin';
+    const token = localStorage.getItem('authToken');
+    this.isLoggedIn = !!token;
     this.getStates();
 
     this.getallPolicestation(1);

@@ -17,6 +17,7 @@ from django.core.cache import cache
 from rest_framework import generics
 import json
 from django.contrib.gis.geos import Point
+from rest_framework.permissions import AllowAny, IsAuthenticated  # ✅ Imports
 
 class HospitalViewSet(viewsets.ModelViewSet):
     """
@@ -25,6 +26,11 @@ class HospitalViewSet(viewsets.ModelViewSet):
     serializer_class = HospitalSerializer
     pagination_class = CustomPagination
     queryset = Hospital.objects.all()
+
+    def get_permissions(self):
+        if self.request.method in ['GET', 'HEAD', 'OPTIONS']:
+            return [AllowAny()]  # Public access for safe methods
+        return [IsAuthenticated()]
 
     # 🔹 1. LIST Hospitals with Pagination
 

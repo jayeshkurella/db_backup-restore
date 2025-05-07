@@ -61,6 +61,8 @@ export class HospitalsComponent implements OnInit{
   alldistricts: string[] = [];
   allcities: string[] = [];
   isAdmin: boolean = false;
+  isLoggedIn = false;
+
   constructor( private hospitalService: HospitalApiService,private fb: FormBuilder,private router :Router,private dialog: MatDialog,private missingPersonService: UnidentifiedpersonApiService){}
   
   searchFilters = {
@@ -73,6 +75,8 @@ export class HospitalsComponent implements OnInit{
   ngOnInit(): void {
     const userType = localStorage.getItem('user_type');
     this.isAdmin = userType === 'admin';
+    const token = localStorage.getItem('authToken');
+    this.isLoggedIn = !!token;
     this.fetchHospitalData()
     this.getStates();
 

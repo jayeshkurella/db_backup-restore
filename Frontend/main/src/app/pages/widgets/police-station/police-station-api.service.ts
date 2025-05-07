@@ -15,14 +15,6 @@ export class PoliceStationApiService {
 
  // Search police stations with filters
  searchPoliceStations(queryParams: any): Observable<any> {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    console.error('No auth token found in localStorage!');
-    return throwError(() => new Error('Unauthorized: No token found'));
-  }
-
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
   let params = new HttpParams()
     .set('name', queryParams.name || '')
     .set('city', queryParams.city || '')
@@ -33,13 +25,14 @@ export class PoliceStationApiService {
     params = params.set('page', queryParams.page);
   }
 
-  return this.http.get<any>(`${this.apiurl}/api/police-stations/`, { headers, params }).pipe(
+  return this.http.get<any>(`${this.apiurl}/api/police-stations/`, { params }).pipe(
     catchError(error => {
       console.error("Error in searchPoliceStations:", error);
       return throwError(() => error);
     })
   );
 }
+
 
 
 // Add a new police station
@@ -62,20 +55,13 @@ addPoliceStation(data: any): Observable<any> {
 
 // Fetch all police stations (with pagination)
 getAllPoliceStations(page: any): Observable<any> {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    console.error('No auth token found in localStorage!');
-    return throwError(() => new Error('Unauthorized: No token found'));
-  }
-
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-  return this.http.get(`${this.apiurl}/api/police-stations/?page=${page}`, { headers }).pipe(
+  return this.http.get(`${this.apiurl}/api/police-stations/?page=${page}`).pipe(
     catchError(error => {
       console.error("Error in getAllPoliceStations:", error);
       return throwError(() => error);
     })
   );
 }
+
 
 }

@@ -6,7 +6,7 @@ from leaflet.admin import LeafletGeoAdmin
 class PersonAdmin(LeafletGeoAdmin):
     list_display = (
         "person_approve_status","reported_date","sr_no", "full_name", "type", "gender", "age", "age_range","birth_date","birthtime",
-        "height","height_range", "weight", "blood_group", "complexion","photo_photo",
+        "height","height_range", "weight", "blood_group", "complexion","photo_photo","bodies_condition","up_condition",
         "eye_color", "hair_type", "hair_color",
         'street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country',
         "hospital", "_is_confirmed", "_is_deleted", "case_status", "created_at","match_with",
@@ -35,7 +35,7 @@ class PersonAdmin(LeafletGeoAdmin):
             "fields": ("height","height_range", "weight", "complexion", "eye_color", "hair_color", "hair_type", "blood_group","photo_photo")
         }),
         ("Medical & Identification", {
-            "fields": ("condition", "Body_Condition", "birth_mark", "distinctive_mark")
+            "fields": ("condition", "Body_Condition", "birth_mark", "distinctive_mark","bodies_condition","up_condition")
         }),
         ("Address Information", {
             "fields": (
