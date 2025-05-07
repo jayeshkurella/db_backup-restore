@@ -8,6 +8,8 @@ import { AddPoliceStationComponent } from './police-station/add-police-station/a
 import { AddHospitalsComponent } from './hospitals/add-hospitals/add-hospitals.component';
 import { HospitalDetailComponentComponent } from './HospitalDetailComponent/HospitalDetailComponent.component';
 import { PoliceStationDetailsComponent } from './police-station/police-station-details/police-station-details.component';
+import { VolunteersdataComponent } from './volunteers/volunteersdata/volunteersdata.component';
+import { VolunteersComponent } from './volunteers/volunteers.component';
 
 export const WidgetsRoutes: Routes = [
   {
@@ -39,7 +41,14 @@ export const WidgetsRoutes: Routes = [
       {
         path: 'police-station-detail/:id',
         component: PoliceStationDetailsComponent
-      }
+      },
+      {
+        path: 'volunteers',
+        component: VolunteersComponent,
+      },
+      { path: 'volunteersdata/:id',
+        component: VolunteersdataComponent 
+      },
     ],
   },
 ];

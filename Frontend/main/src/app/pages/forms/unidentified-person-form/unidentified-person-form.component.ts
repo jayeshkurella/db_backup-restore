@@ -210,7 +210,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       // country_cd: [''],
       email_id: [''],
       type: ['referral'],
-      company_name: [''],
+      person_name: [''],
       // job_title: [''],
       // website_url: [''],
       // social_media_url: [''],

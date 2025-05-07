@@ -28,48 +28,20 @@ export const datatablesRoutes: Routes = [
       {
         path: 'missing-person',
         component: AppKichenSinkComponent,
-        data: {
-          title: 'datatable',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'datatable' },
-          ],
-        },
+        
       },
       {
         path: 'unidentified-person',
         component: UnidentifiedPersonComponent,
-        data: {
-          title: 'datatable',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'datatable' },
-          ],
-        },
-        
       },
       {
         path: 'unidentified-bodies',
         component: UnidentifiedBodiesComponent,
-        data: {
-          title: 'datatable',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'datatable' },
-          ],
-        }, 
       },
       {
         path: 'admin-access',
         component: AccessProviderComponent,
         canActivate: [AdminGuard], 
-        data: {
-          title: 'datatable',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'datatable' },
-          ],
-        }, 
       },
       {
         path: 'User-access',

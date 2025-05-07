@@ -55,7 +55,6 @@ export interface Person {
     MatProgressSpinnerModule,
     MatTabsModule,
     FormsModule,
-    HoldReasonDialogComponent,
     ScrollingModule,
     MatTooltipModule
   ],
@@ -114,7 +113,7 @@ export class AccessProviderComponent implements OnInit {
       error: (error) => {
         console.error('Error fetching data:', error);
         this.resetData();
-        this.snackBar.open('Failed to load data', 'Close', { duration: 3000 });
+        this.snackBar.open('Failed to load data', 'Close', { duration: 1000 });
       }
     });
   }
@@ -172,7 +171,7 @@ export class AccessProviderComponent implements OnInit {
     this.snackBar.open(
       `${person.full_name}'s status changed from ${this.formatStatus(oldStatus)} to ${this.formatStatus(newStatus)}`,
       'Close', 
-      { duration: 3000 }
+      { duration: 1000 }
     );
   }
 
@@ -197,7 +196,7 @@ export class AccessProviderComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error approving person:', error);
-        this.snackBar.open('Failed to approve person', 'Close', { duration: 3000 });
+        this.snackBar.open('Failed to approve person', 'Close', { duration: 1000 });
       }
     });
   }
@@ -226,7 +225,7 @@ export class AccessProviderComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error suspending person:', error);
-            this.snackBar.open('Failed to suspend person', 'Close', { duration: 3000 });
+            this.snackBar.open('Failed to suspend person', 'Close', { duration: 1000 });
           }
         });
       }
@@ -250,7 +249,7 @@ export class AccessProviderComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error setting person to pending:', error);
-        this.snackBar.open('Failed to set person to pending', 'Close', { duration: 3000 });
+        this.snackBar.open('Failed to set person to pending', 'Close', { duration: 1000 });
       }
     });
   }
@@ -279,7 +278,7 @@ export class AccessProviderComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error putting person on hold:', error);
-            this.snackBar.open('Failed to put person on hold', 'Close', { duration: 3000 });
+            this.snackBar.open('Failed to put person on hold', 'Close', { duration: 1000 });
           }
         });
       }
@@ -291,7 +290,7 @@ export class AccessProviderComponent implements OnInit {
   
     const selectedPersons = this.pendingPersons.filter(p => p.selected);
     if (selectedPersons.length === 0) {
-      this.snackBar.open('No persons selected', 'Close', { duration: 3000 });
+      this.snackBar.open('No persons selected', 'Close', { duration: 1000 });
       return;
     }
   
@@ -332,7 +331,7 @@ export class AccessProviderComponent implements OnInit {
             );
           },
           error: () => {
-            this.snackBar.open('Some hold operations failed', 'Close', { duration: 3000 });
+            this.snackBar.open('Some hold operations failed', 'Close', { duration: 1000 });
           }
         });
       }
@@ -459,7 +458,7 @@ export class AccessProviderComponent implements OnInit {
   
     this.isProcessing = true;
     this.cdr.markForCheck();
-    this.snackBar.open(`Processing ${selectedPersons.length} items...`, '', { duration: 3000 });
+    this.snackBar.open(`Processing ${selectedPersons.length} items...`, '', { duration: 1000 });
     
     const approveRequests = selectedPersons.map(person => {
       const oldStatus = person.person_approve_status;
@@ -467,7 +466,7 @@ export class AccessProviderComponent implements OnInit {
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'approved')),
         catchError(error => {
           console.error(`Error approving person ${person.id}:`, error);
-          this.snackBar.open(`Failed to approve ${person.full_name}`, 'Close', { duration: 3000 });
+          this.snackBar.open(`Failed to approve ${person.full_name}`, 'Close', { duration: 1000 });
           return of(null);
         })
       );
@@ -482,11 +481,11 @@ export class AccessProviderComponent implements OnInit {
       next: () => {
         this.loadData();
         this.resetSelectAllStates();
-        this.snackBar.open(`Successfully processed ${selectedPersons.length} items`, 'Close', { duration: 3000 });
+        this.snackBar.open(`Successfully processed ${selectedPersons.length} items`, 'Close', { duration: 1000 });
       },
       error: (error) => {
         console.error('Error in bulk approve operation:', error);
-        this.snackBar.open('Some operations failed', 'Close', { duration: 3000 });
+        this.snackBar.open('Some operations failed', 'Close', { duration: 1000 });
       }
     });
   }
@@ -528,7 +527,7 @@ export class AccessProviderComponent implements OnInit {
             tap(() => this.showStatusChangeMessage(person, oldStatus, 'suspended')),
             catchError(error => {
               console.error(`Error suspending person ${person.id}:`, error);
-              this.snackBar.open(`Failed to suspend ${person.full_name}`, 'Close', { duration: 3000 });
+              this.snackBar.open(`Failed to suspend ${person.full_name}`, 'Close', { duration: 1000 });
               return of(null);
             })
           );
@@ -543,11 +542,11 @@ export class AccessProviderComponent implements OnInit {
           next: () => {
             this.loadData();
             this.resetSelectAllStates();
-            this.snackBar.open(`Successfully suspended ${selectedPersons.length} items`, 'Close', { duration: 3000 });
+            this.snackBar.open(`Successfully suspended ${selectedPersons.length} items`, 'Close', { duration: 1000 });
           },
           error: (error) => {
             console.error('Error in bulk suspend operation:', error);
-            this.snackBar.open('Some suspensions failed', 'Close', { duration: 3000 });
+            this.snackBar.open('Some suspensions failed', 'Close', { duration: 1000 });
           }
         });
       }
@@ -569,7 +568,7 @@ export class AccessProviderComponent implements OnInit {
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'pending')),
         catchError(error => {
           console.error(`Error setting person ${person.id} to pending:`, error);
-          this.snackBar.open(`Failed to set ${person.full_name} to pending`, 'Close', { duration: 3000 });
+          this.snackBar.open(`Failed to set ${person.full_name} to pending`, 'Close', { duration: 1000 });
           return of(null);
         })
       );
@@ -584,11 +583,11 @@ export class AccessProviderComponent implements OnInit {
       next: () => {
         this.loadData();
         this.resetSelectAllStates();
-        this.snackBar.open(`Successfully set ${selectedPersons.length} items to pending`, 'Close', { duration: 3000 });
+        this.snackBar.open(`Successfully set ${selectedPersons.length} items to pending`, 'Close', { duration: 1000 });
       },
       error: (error) => {
         console.error('Error in bulk pending operation:', error);
-        this.snackBar.open('Some operations failed', 'Close', { duration: 3000 });
+        this.snackBar.open('Some operations failed', 'Close', { duration: 1000 });
       }
     });
   }

@@ -44,7 +44,7 @@
       <p *ngIf="data.contacts[0]?.company_name">
         <strong>Company:</strong> {{ data.contacts[0]?.company_name }}
       </p>
-      <p *ngIf="!data.contacts[0]?.company_name && data.contacts[0]?.person_name">
+      <p *ngIf="data.contacts[0]?.person_name">
         <strong>Contact Person:</strong> {{ data.contacts[0]?.person_name }}
       </p>
 
