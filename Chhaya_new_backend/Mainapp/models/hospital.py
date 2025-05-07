@@ -21,7 +21,7 @@ class Hospital(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     hospital_photo =models.ImageField(upload_to='Hospitals_photos/', blank=True, null=True)
     name = models.CharField(max_length=255)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE,null=True, blank=True,)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE,null=True, blank=True,related_name='hospitals')
     type = models.CharField(max_length=10, choices=HospitalTypeChoices.choices)
     activ_Status = models.CharField(
         max_length=10,

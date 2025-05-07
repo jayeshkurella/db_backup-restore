@@ -23,10 +23,10 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { merge } from 'rxjs';
 import { FormApiService } from './form-api.service';
 import { CommonModule, DatePipe } from '@angular/common';
-import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatIconModule } from '@angular/material/icon';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 import { ToastrService } from 'ngx-toastr';
 
 
@@ -43,9 +43,8 @@ import { ToastrService } from 'ngx-toastr';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    NgxMatTimepickerModule,
     MatIconModule,
-    NgxMaterialTimepickerModule 
+    NgxMaterialTimepickerModule ,
   ],
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
@@ -90,9 +89,12 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   selectedFiles: { [key: string]: any[] } = {};
   hospitalList: any[] = [];
   policeStationList: any[] = [];
+  today: string;
 
 
   constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe, private toastr: ToastrService) {
+    this.today = new Date().toISOString().split('T')[0];
+
     
   }
   ngOnInit(): void {

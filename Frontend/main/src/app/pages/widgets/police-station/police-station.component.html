@@ -9,7 +9,7 @@
 
 
 <form (ngSubmit)="onSearch()" novalidate>
-  <h6 class="mb-3">Search Filters</h6>
+  <h6 class="mb-3">Search By Filters</h6>
 
   <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mb-3">
     
@@ -17,14 +17,14 @@
     <mat-form-field appearance="outline" class="with-icon flex-grow-1">
       <mat-label>Name</mat-label>
       <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by name">
-      <mat-icon matPrefix>person</mat-icon>
+      <mat-icon matPrefix>shield</mat-icon>
     </mat-form-field>
 
     <!-- State -->
     <mat-form-field appearance="outline" class="w-auto min-width-200">
       <!-- <mat-label>State</mat-label> -->
       <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()" (ngModelChange)="onSearch()">
-        <mat-option value="">States</mat-option>
+        <mat-option value="">State</mat-option>
         <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -33,7 +33,7 @@
     <mat-form-field appearance="outline" class="w-auto min-width-200">
       <!-- <mat-label>District</mat-label> -->
       <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()" (ngModelChange)="onSearch()">
-        <mat-option value="">Districts</mat-option>
+        <mat-option value="">District</mat-option>
         <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -42,7 +42,7 @@
     <mat-form-field appearance="outline" class="w-auto min-width-200">
       <!-- <mat-label>City</mat-label> -->
       <mat-select [(ngModel)]="searchFilters.city" name="city" (ngModelChange)="onSearch()">
-        <mat-option value="">Cities</mat-option>
+        <mat-option value="">City</mat-option>
         <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
       </mat-select>
     </mat-form-field>

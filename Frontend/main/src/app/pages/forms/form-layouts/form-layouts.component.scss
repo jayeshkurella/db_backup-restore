@@ -9,7 +9,7 @@
   .main-heading {
     font-size: 18px; /* Larger font size */
     font-weight: bold; /* Make it bold */
-    color: #005ab4; /* Dark color for contrast */
+    color: #000000; /* Dark color for contrast */
     text-transform: uppercase; /* Make the text uppercase for added impact */
     letter-spacing: 1.5px; /* Slightly increase letter spacing */
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
@@ -217,4 +217,10 @@
    .custom-outline-dark {
     color: #000;
     border-color: #000 !important;
+  }
+
+
+  .space-down{
+    
+    margin-bottom: 100px;
   }

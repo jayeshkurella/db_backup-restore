@@ -12,7 +12,7 @@
   
 
   <form (ngSubmit)="onsearch()" novalidate>
-    <h6 class="mb-3">Search Filters</h6>
+    <h6 class="mb-3">Search By Filters</h6>
 
     <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mb-3">
       
@@ -50,7 +50,7 @@
       <!-- Hospital Type -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <mat-select [(ngModel)]="searchtype" name="type" (ngModelChange)="onsearch()">
-          <mat-option value="">All Types</mat-option>
+          <mat-option value="">Type</mat-option>
           <mat-option value="gvt">Government</mat-option>
           <mat-option value="semi_gvt">Semi-Government</mat-option>
           <mat-option value="private">Private</mat-option>

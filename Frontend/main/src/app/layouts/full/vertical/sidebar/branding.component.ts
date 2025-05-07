@@ -31,39 +31,18 @@ import { Location } from '@angular/common'; // Add this import
 export class BrandingComponent {
   options = this.settings.getOptions();
   constructor(private settings: CoreService, private router : Router,private location: Location) {}
-  private isRefreshing = false;
 
   resetPage() {
-    if (this.isRefreshing) return;
-    this.isRefreshing = true;
-
-    // Get current navigation details
-    const currentUrl = this.router.url;
-    const targetUrl = '/dashboards/dashboard1';
-
-    try {
-      if (currentUrl === targetUrl) {
-        // If already on target page, force reload
-        window.location.reload();
-      } else {
-        // Navigate to target and then reload
-        this.router.navigateByUrl(targetUrl, { skipLocationChange: false })
-          .then(() => {
+    const currentUrl = this.location.path();
+    if (currentUrl === '/dashboards/dashboard1') {
+      window.location.reload(); // Force full page reload if already on the same page
+    } else {
+      this.router.navigate(['/dashboards/dashboard1'])
+        .then(() => {
+          if (this.location.path() === '/dashboards/dashboard1') {
             window.location.reload();
-          })
-          .catch(() => {
-            // Fallback if navigation fails
-            window.location.href = targetUrl;
-          });
-      }
-    } catch (error) {
-      console.error('Refresh failed:', error);
-      // Final fallback
-      window.location.href = targetUrl;
-    } finally {
-      setTimeout(() => {
-        this.isRefreshing = false;
-      }, 1000);
+          }
+        });
     }
   }
 }

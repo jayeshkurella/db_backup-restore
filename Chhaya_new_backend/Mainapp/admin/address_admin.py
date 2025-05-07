@@ -6,7 +6,7 @@ from leaflet.admin import LeafletGeoAdmin
 
 @admin.register(Address)
 class AddressAdmin(LeafletGeoAdmin):
-    list_display = ('sr_no', 'address_type', 'city', 'state', 'pincode', 'country', 'is_active', 'created_at', 'updated_at')
+    list_display = ('sr_no', 'address_type', 'city', 'state', 'pincode', 'country', 'is_active',"get_hospital_names", 'created_at', 'updated_at')
     list_filter = ('address_type', 'state', 'country', 'is_active', 'created_at')
     search_fields = ('street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country')
     ordering = ('-created_at',)
@@ -17,6 +17,11 @@ class AddressAdmin(LeafletGeoAdmin):
         ('Related Entities', {'fields': ('user', 'person','volunteer', 'created_by', 'updated_by')}),
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
+
+    def get_hospital_names(self, obj):
+        return ", ".join([hospital.name for hospital in obj.hospitals.all()]) or "-"
+
+    get_hospital_names.short_description = 'Hospitals'
 
     def sr_no(self, obj):
         queryset = Address.objects.order_by('created_at')
