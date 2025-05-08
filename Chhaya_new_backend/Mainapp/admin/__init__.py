@@ -15,5 +15,6 @@ from .person_admin import *
 from .user_admin import *
 from .volunteer_admin import *
 from .change_log import  *
+from .missingperson_match import PersonMatchHistoryAdmin
 
 

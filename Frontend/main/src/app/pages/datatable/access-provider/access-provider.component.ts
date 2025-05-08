@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,18 +12,22 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
-import {  catchError, finalize, tap } from 'rxjs';
+import { forkJoin, of, Subject, Subscription } from 'rxjs';
+import { tap, catchError, finalize, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CasesApprovalService } from './cases-approval.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { HoldReasonDialogComponent } from './hold-reason-dialog/hold-reason-dialog.component';
+import { SuspendReasonDialogComponent } from './suspend-reason-dialog/suspend-reason-dialog.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { HoldReasonDialogComponent } from './hold-reason-dialog/hold-reason-dialog.component';
-import { forkJoin, of } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { SuspendReasonDialogComponent } from './suspend-reason-dialog/suspend-reason-dialog.component';
+import { MissingPersonApiService } from '../kichen-sink/missing-person-api.service';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormApiService } from '../../forms/form-layouts/form-api.service';
 
-
-export interface Person {
+interface Person {
   id: string;
   full_name: string;
   village?: string;
@@ -39,8 +42,26 @@ export interface Person {
   status_reason?: string | null;
   reason?: string;   
 }
+
+interface CaseFilters {
+  city: string;
+  state: string;
+  district: string;
+  village: string;
+  caseId: string;
+  police_station: string;
+}
+
+enum PersonStatus {
+  PENDING = 'pending',
+  HOLD = 'on_hold',
+  APPROVED = 'approved',
+  SUSPENDED = 'suspended'
+}
+
 @Component({
   selector: 'app-access-provider',
+  standalone: true,
   imports: [
     CommonModule,
     MatTableModule,
@@ -56,7 +77,10 @@ export interface Person {
     MatTabsModule,
     FormsModule,
     ScrollingModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatOptionModule,
+    MatFormField,
+    MatSelect
   ],
   templateUrl: './access-provider.component.html',
   styleUrl: './access-provider.component.css',
@@ -74,6 +98,7 @@ export class AccessProviderComponent implements OnInit {
   
   isLoading: boolean = true;
   isProcessing: boolean = false;
+  isFilterLoading: boolean = false;
   pendingCount: number = 0;
   holdCount: number = 0;
   suspendedCount: number = 0;
@@ -84,16 +109,124 @@ export class AccessProviderComponent implements OnInit {
   selectAllHold: boolean = false;
   selectAllSuspended: boolean = false;
   selectAllApproved: boolean = false;
+  allstates: any;
+  filtersApplied: boolean = false; 
+  allcities: any;
+  alldistricts: any;
+  allvillages: any;
+  policeStationList: any[] = [];
+  
+  private filterSubject = new Subject<{filter: string, value: string}>();
+  private filterSubscription?: Subscription;
+
+  filters: CaseFilters = {
+    city: '',
+    state: '',
+    district: '',
+    village: '',
+    caseId: '',
+    police_station: ''  
+  };
 
   constructor(
     private pendingService: CasesApprovalService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private missingPersonService: MissingPersonApiService,
+    private formapi: FormApiService
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+    this.getStates();
+    this.fetchPoliceStationList();
+    
+    this.filterSubscription = this.filterSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged((prev, curr) => 
+        prev.filter === curr.filter && prev.value === curr.value
+      )
+    ).subscribe(() => {
+      this.applyFilters();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.filterSubscription?.unsubscribe();
+  }
+
+  getStates() {
+    this.missingPersonService.getStates().subscribe(states => {
+      this.allstates = states;
+    });
+  }
+
+  onStateChange() {
+    this.filters.district = '';
+    this.filters.city = '';
+    this.filters.village = '';
+    this.alldistricts = [];
+    this.allcities = [];
+    this.allvillages = [];
+
+    if (this.filters.state) {
+      this.missingPersonService.getDistricts(this.filters.state).subscribe(districts => {
+        this.alldistricts = districts;
+      });
+    }
+    this.triggerFilter('state', this.filters.state);
+  }
+
+  onDistrictChange() {
+    this.filters.city = '';
+    this.filters.village = '';
+    this.allcities = [];
+    this.allvillages = [];
+
+    if (this.filters.district) {
+      this.missingPersonService.getCities(this.filters.district).subscribe(cities => {
+        this.allcities = cities;
+      });
+    }
+    this.triggerFilter('district', this.filters.district);
+  }
+
+  onCityChange() {
+    this.filters.village = '';
+    this.allvillages = [];
+
+    if (this.filters.city) {
+      this.missingPersonService.getVillages(this.filters.city).subscribe(villages => {
+        this.allvillages = villages;
+      });
+    }
+    this.triggerFilter('city', this.filters.city);
+  }
+
+  onCaseIdChange() {
+    this.triggerFilter('caseId', this.filters.caseId);
+  }
+
+  onVillageChange() {
+    this.triggerFilter('village', this.filters.village);
+  }
+  onPoliceStationChange() {
+    this.triggerFilter('police_station', this.filters.police_station);
+  }
+
+  private triggerFilter(filterName: string, value: string): void {
+    this.filterSubject.next({filter: filterName, value});
+  }
+
+  fetchPoliceStationList() {
+    this.formapi.getPoliceStationNames().subscribe({
+      next: (data) => {
+        this.policeStationList = data;
+        console.log('Police Stations:', this.policeStationList);
+      },
+      error: (err) => console.error('Error fetching police stations:', err),
+    });
   }
 
   loadData(): void {
@@ -101,7 +234,11 @@ export class AccessProviderComponent implements OnInit {
     this.resetSelectAllStates();
     this.cdr.markForCheck();
   
-    this.pendingService.getPendingData().pipe(
+    const request = this.filtersApplied 
+      ? this.pendingService.getPendingData(this.filters)
+      : this.pendingService.getPendingData();
+  
+    request.pipe(
       finalize(() => {
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -118,8 +255,70 @@ export class AccessProviderComponent implements OnInit {
     });
   }
 
+  applyFilters(): void {
+    this.isLoading = true;
+    this.isFilterLoading = true;
+    this.cdr.markForCheck();
+    this.filtersApplied = this.hasActiveFilters();
+  
+    const currentFilters = {...this.filters};
+    
+    const cleanFilters: any = {};
+    Object.keys(this.filters).forEach(key => {
+      if (this.filters[key as keyof CaseFilters]) {
+        cleanFilters[key] = this.filters[key as keyof CaseFilters];
+      }
+    });
+  
+    this.pendingService.getPendingData(cleanFilters).pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.isFilterLoading = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
+      next: (response) => {
+        if (this.areFiltersSame(currentFilters)) {
+          this.processResponseData(response);
+        }
+      },
+      error: (error) => {
+        console.error('Filter error:', error);
+        this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
+      }
+    });
+  }
+
+  private hasActiveFilters(): boolean {
+    return Object.values(this.filters).some(value => value !== '');
+  }
+
+  private getCleanFilters(): CaseFilters {
+    return Object.fromEntries(
+      Object.entries(this.filters).filter(([_, value]) => value !== '')
+    ) as CaseFilters;
+  }
+
+  private areFiltersSame(compareFilters: CaseFilters): boolean {
+    return Object.keys(this.filters).every(key => 
+      this.filters[key as keyof CaseFilters] === compareFilters[key as keyof CaseFilters]
+    );
+  }
+  
+  resetFilters(): void {
+    this.filters = {
+      city: '',
+      state: '',
+      district: '',
+      village: '',
+      caseId: '',
+      police_station: '' 
+    };
+    this.loadData();
+    this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
+  }
+
   private processResponseData(response: any): void {
-    // Process data in chunks to prevent UI blocking
     setTimeout(() => {
       this.pendingPersons = this.processPersonArray(response.pending_data, 'pending');
       this.pendingCount = this.pendingPersons.length;
@@ -286,9 +485,19 @@ export class AccessProviderComponent implements OnInit {
   }
 
   holdSelected(): void {
-    if (this.selectedTabIndex !== 0) return;
+    let selectedPersons: Person[] = [];
+    
+    switch (this.selectedTabIndex) {
+      case 0: 
+        selectedPersons = this.pendingPersons.filter(p => p.selected);
+        break;
+      case 3: 
+        selectedPersons = this.approvedPersons.filter(p => p.selected);
+        break;
+      default:
+        return; 
+    }
   
-    const selectedPersons = this.pendingPersons.filter(p => p.selected);
     if (selectedPersons.length === 0) {
       this.snackBar.open('No persons selected', 'Close', { duration: 1000 });
       return;
@@ -307,14 +516,16 @@ export class AccessProviderComponent implements OnInit {
         this.isProcessing = true;
         this.cdr.markForCheck();
         
-        const holdRequests = selectedPersons.map(person => 
-          this.pendingService.updatePersonStatus(person.id, 'on_hold', reason).pipe(
+        const holdRequests = selectedPersons.map(person => {
+          const oldStatus = person.person_approve_status;
+          return this.pendingService.updatePersonStatus(person.id, 'on_hold', reason).pipe(
+            tap(() => this.showStatusChangeMessage(person, oldStatus, 'on_hold')),
             catchError(error => {
               console.error(`Error putting person ${person.id} on hold:`, error);
               return of(null);
             })
-          )
-        );
+          );
+        });
   
         forkJoin(holdRequests).pipe(
           finalize(() => {
@@ -323,9 +534,10 @@ export class AccessProviderComponent implements OnInit {
           })
         ).subscribe({
           next: (responses) => {
+            const successCount = responses.filter(r => r !== null).length;
             this.loadData();
             this.snackBar.open(
-              `Successfully put ${responses.filter(r => r !== null).length} of ${selectedPersons.length} person(s) on hold`,
+              `Successfully put ${successCount} of ${selectedPersons.length} person(s) on hold`,
               'Close', 
               { duration: 5000 }
             );
@@ -337,7 +549,7 @@ export class AccessProviderComponent implements OnInit {
       }
     });
   }
-  
+
   getCurrentDataSource() {
     switch(this.selectedTabIndex) {
       case 0: return this.pendingPersons;

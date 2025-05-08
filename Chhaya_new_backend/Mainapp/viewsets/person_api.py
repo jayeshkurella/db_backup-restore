@@ -1,6 +1,9 @@
 import logging
 from datetime import datetime
+from uuid import UUID
+
 from dateutil import parser
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
@@ -589,8 +592,28 @@ class PersonViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
     def pending_or_rejected(self, request):
         try:
-            # Fetch all persons in one query
-            persons = Person.objects.all()
+            # Extract filter parameters from query string
+            state = request.query_params.get('state')
+            district = request.query_params.get('district')
+            city = request.query_params.get('city')
+            village = request.query_params.get('village')
+            police_station = request.query_params.get('police_station')
+
+            # Build dynamic filters using Q
+            filters = Q()
+            if state:
+                filters &= Q(state__iexact=state)
+            if district:
+                filters &= Q(district__iexact=district)
+            if city:
+                filters &= Q(city__iexact=city)
+            if village:
+                filters &= Q(village__iexact=village)
+            if police_station:
+                filters &= Q(firs__police_station__id=UUID(police_station))
+
+            # Apply filters to the queryset
+            persons = Person.objects.filter(filters)
             serialized_data = PersonSerializer(persons, many=True).data
 
             # Group data by status fields
@@ -612,13 +635,11 @@ class PersonViewSet(viewsets.ViewSet):
                     summary['approved'].append(person)
                 elif approve_status == 'rejected':
                     summary['rejected'].append(person)
-
-                if approve_status == 'on_hold':
+                elif approve_status == 'on_hold':
                     summary['on_hold'].append(person)
                 elif approve_status == 'suspended':
                     summary['suspended'].append(person)
 
-            # Return counts and data
             return Response({
                 'pending_count': len(summary['pending']),
                 'approved_count': len(summary['approved']),

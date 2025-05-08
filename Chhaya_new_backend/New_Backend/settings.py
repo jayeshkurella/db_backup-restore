@@ -71,7 +71,7 @@ WSGI_APPLICATION = 'New_Backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-#
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -200,52 +200,6 @@ os.makedirs(LOG_DIR, exist_ok=True)
 # Generate dynamic log file names with date
 today_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {  
-#             'format': '{levelname} {asctime} {module} {message}',
-#             'style': '{',
-#         },
-#         'simple': {  
-#             'format': '{levelname} {message}',
-#             'style': '{',
-#         },
-#     },
-#     'handlers': {
-#         'django_log_file': {  
-#             'level': 'DEBUG',
-#             'class': 'logging.handlers.TimedRotatingFileHandler',
-#             'filename': os.path.join(LOG_DIR, f'django_{today_date}.log'),
-#             'when': 'midnight', 
-#             'interval': 1, 
-#             'backupCount': 7,  
-#             'formatter': 'verbose',
-#         },
-#         'user_log_file': {  
-#             'level': 'DEBUG',
-#             'class': 'logging.handlers.TimedRotatingFileHandler',
-#             'filename': os.path.join(LOG_DIR, f'user_activity_{today_date}.log'),
-#             'when': 'midnight',  
-#             'interval': 1, 
-#             'backupCount': 7,  
-#             'formatter': 'verbose',
-#         },
-#     },
-#     'loggers': {
-#         'django': {  
-#             'handlers': ['django_log_file'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#         'user_activity': {  
-#             'handlers': ['user_log_file'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#     },
-# }
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

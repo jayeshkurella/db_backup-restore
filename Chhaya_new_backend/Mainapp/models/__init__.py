@@ -15,3 +15,4 @@ from .user import User
 from .volunteer import Volunteer
 from .dummy_table import dummy_Table
 from .change_log import ChangeLog
+from .person_match_history import PersonMatchHistory
