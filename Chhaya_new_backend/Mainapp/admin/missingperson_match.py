@@ -7,6 +7,7 @@ from Mainapp.models import PersonMatchHistory
 class PersonMatchHistoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'match_id',
         'missing_person',
         'unidentified_person',
         'score',

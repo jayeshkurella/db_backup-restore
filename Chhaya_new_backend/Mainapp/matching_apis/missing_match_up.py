@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
 
@@ -40,13 +41,15 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                 unidentified_person=up,
                 match_type='matched' if score >= 70 else 'potential',
                 score=score,
-                match_parameters=self._get_match_parameters(missing_person, up)
+                match_parameters=self._get_match_parameters(missing_person, up),
+                created_by = request.user
             )
 
             if score >= 70:
                 newly_matched.append({
                     'person': PersonSerializer(up).data,
-                    'score': score
+                    'score': score,
+                    'match_id': match_record.match_id
                 })
 
         # Categorize previously matched ones with scores
@@ -60,12 +63,14 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                 'person': up_data,
                 'score': match.score,
                 'match_type': match.match_type,
+                'match_id': match.match_id,
                 'created_at': match.created_at
             }
 
             if match.match_type == 'matched':
                 previously_matched.append(match_data)
             elif match.match_type == 'rejected':
+                match_data['reject_reason'] = match.reject_reason
                 rejected.append(match_data)
             elif match.match_type == 'confirmed':
                 confirmed.append(match_data)
@@ -194,3 +199,32 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
             'hair_color_match': mp.hair_color == up.hair_color,
             'eye_color_match': mp.eye_color == up.eye_color
         }
+
+    @action(detail=True, methods=['post'], url_path='match-reject')
+    def match_reject(self, request, pk=None):
+        match_id = request.data.get('match_id')
+        reject_reason = request.data.get('reject_reason')
+
+        if not match_id:
+            return Response({"error": "match_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not reject_reason:
+            return Response({"error": "reject_reason is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Now, match_id is treated as a regular string, not UUID
+            match = PersonMatchHistory.objects.get(match_id=match_id, missing_person_id=pk)
+
+            if match.match_type in ['confirmed', 'rejected']:
+                return Response({"error": f"Match already {match.match_type}."}, status=status.HTTP_400_BAD_REQUEST)
+
+            match.match_type = 'rejected'
+            match.reject_reason = reject_reason
+            match.updated_by = request.user
+            match.save()
+
+            return Response({"message": "Match rejected successfully."}, status=status.HTTP_200_OK)
+
+        except PersonMatchHistory.DoesNotExist:
+            return Response({"error": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
+

@@ -3,8 +3,14 @@ from django.db import models
 
 from Mainapp.models import Person
 from .user import User
+import random
+import string
+from django.utils.timezone import now
 
-
+def generate_custom_match_id():
+    date_str = now().strftime("%Y%m%d")  # Only date
+    suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    return f"MATCH-{date_str}-{suffix}"
 class PersonMatchHistory(models.Model):
 
     MATCH_TYPE_CHOICES = [
@@ -19,11 +25,20 @@ class PersonMatchHistory(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    match_id = models.CharField(
+        max_length=30,
+        default=generate_custom_match_id,
+        unique=True,
+        editable=False,
+        blank=True,
+        null=True
+    )
     missing_person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='mp_matches')
     unidentified_person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='up_matches')
     match_type = models.CharField(max_length=20, choices=MATCH_TYPE_CHOICES)
     score = models.IntegerField(null=True, blank=True)  # Add this field
     match_parameters = models.JSONField(default=dict, help_text="Detailed matching parameters")
+    reject_reason = models.TextField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

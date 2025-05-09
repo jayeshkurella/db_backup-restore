@@ -9,4 +9,17 @@
     border-bottom: 1px solid #ccc; /* or use your desired color */
   }
   
+  .version-text {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  
+  .light-text .version-text {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .dark-text .version-text {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
   

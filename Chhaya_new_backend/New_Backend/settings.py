@@ -148,10 +148,11 @@ if os.name == 'nt':
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    # 'https://products.coderize.in',
     'http://localhost:4200',
-    'http://63.250.52.91'
+    'http://63.250.52.91',
+    'http://tracemapr.com'
 ]
+
 
 CORS_ALLOW_METHODS = [
     "GET",
