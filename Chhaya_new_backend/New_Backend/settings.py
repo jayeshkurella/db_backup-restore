@@ -148,9 +148,13 @@ if os.name == 'nt':
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
+    'https://.tracemapr.com',
+    'http://.tracemapr.com',
     'http://localhost:4200',
+    'https://products.coderize.in',
     'http://63.250.52.91',
-    'http://tracemapr.com'
+
+
 ]
 
 
@@ -171,7 +175,9 @@ CSRF_TRUSTED_ORIGINS = [
     'https://products.coderize.in/chhaya/',
     'http://localhost:4200',
     'http://localhost:8080',
-    'http://63.250.52.91'
+    'http://63.250.52.91',
+    'https://.tracemapr.com',
+    'http://.tracemapr.com'
 
 ]
 

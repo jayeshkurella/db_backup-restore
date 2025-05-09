@@ -5,20 +5,11 @@ import { Location } from '@angular/common'; // Add this import
 
 @Component({
   selector: 'app-branding',
-  standalone: true, // Add this for Angular 14+ standalone components
-
+  standalone: true, 
   imports: [],
-  template: `
-
-    <a (click)="resetPage()"  class="logodark" style="cursor: pointer;" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Refresh" data-animation="false">
-      <img
-        src="https://i.postimg.cc/c4cNmDdV/favicon-32x32.png"
-        class="align-middle m-2"
-        alt="logo"
-      />
-  </a>
-
-    <a (click)="resetPage()" class="logolight" style="cursor: pointer;"aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Refresh" data-animation="false">
+   template: `
+    <a (click)="resetPage($event)" class="logodark" style="cursor: pointer;" aria-hidden="true" 
+       data-toggle="tooltip" data-placement="bottom" title="Refresh" data-animation="false">
       <img
         src="https://i.postimg.cc/c4cNmDdV/favicon-32x32.png"
         class="align-middle m-2"
@@ -26,23 +17,30 @@ import { Location } from '@angular/common'; // Add this import
       />
     </a>
 
+    <a (click)="resetPage($event)" class="logolight" style="cursor: pointer;" aria-hidden="true" 
+       data-toggle="tooltip" data-placement="bottom" title="Refresh" data-animation="false">
+      <img
+        src="https://i.postimg.cc/c4cNmDdV/favicon-32x32.png"
+        class="align-middle m-2"
+        alt="logo"
+      />
+    </a>
   `,
 })
 export class BrandingComponent {
   options = this.settings.getOptions();
   constructor(private settings: CoreService, private router : Router,private location: Location) {}
 
-  resetPage() {
+resetPage(event: Event) {
+    event.preventDefault(); 
     const currentUrl = this.location.path();
+
     if (currentUrl === '/dashboards/dashboard1') {
-      window.location.reload(); // Force full page reload if already on the same page
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/dashboards/dashboard1']);
+      });
     } else {
-      this.router.navigate(['/dashboards/dashboard1'])
-        .then(() => {
-          if (this.location.path() === '/dashboards/dashboard1') {
-            window.location.reload();
-          }
-        });
+      this.router.navigate(['/dashboards/dashboard1']);
     }
   }
 }

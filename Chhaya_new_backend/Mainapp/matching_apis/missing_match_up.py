@@ -73,6 +73,7 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                 match_data['reject_reason'] = match.reject_reason
                 rejected.append(match_data)
             elif match.match_type == 'confirmed':
+                match_data['confirmation_note'] =match.confirmation_note
                 confirmed.append(match_data)
 
         return Response({
@@ -224,6 +225,132 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
             match.save()
 
             return Response({"message": "Match rejected successfully."}, status=status.HTTP_200_OK)
+
+        except PersonMatchHistory.DoesNotExist:
+            return Response({"error": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], url_path='match-unreject')
+    def match_unreject(self, request, pk=None):
+        match_id = request.data.get('match_id')
+        new_status = request.data.get('new_status', 'matched')  # default back to 'matched'
+        unreject_reason = request.data.get('unreject_reason')
+
+        if not match_id:
+            return Response({"error": "match_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if new_status not in ['matched', 'potential']:
+            return Response({"error": "Invalid new_status. Use 'matched' or 'potential'."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        if not unreject_reason:
+            return Response({"error": "unreject_reason is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            match = PersonMatchHistory.objects.get(match_id=match_id, missing_person_id=pk)
+
+            if match.match_type != 'rejected':
+                return Response({"error": f"Match is not rejected. Current status is {match.match_type}."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            match.match_type = new_status
+            match.reject_reason = None
+            match.unreject_reason = unreject_reason
+            match.updated_by = request.user
+            match.save()
+
+            return Response({"message": f"Match status reverted to '{new_status}' successfully."},
+                            status=status.HTTP_200_OK)
+
+        except PersonMatchHistory.DoesNotExist:
+            return Response({"error": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], url_path='match-confirm')
+    def match_confirm(self, request, pk=None):
+        match_id = request.data.get('match_id')
+        confirmation_note = request.data.get('confirmation_note', '')
+
+        if not match_id:
+            return Response({"error": "match_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            match = PersonMatchHistory.objects.get(match_id=match_id, missing_person_id=pk)
+
+            if match.match_type in ['confirmed', 'rejected']:
+                return Response({"error": f"Match already {match.match_type}."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Update match record
+            match.match_type = 'confirmed'
+            match.confirmation_note = confirmation_note
+            match.match_with = 'Unidentified Person'
+            match.updated_by = request.user
+            match.save()
+
+            mp = match.missing_person
+            up = match.unidentified_person
+
+            mp.case_status = 'resolved'
+            mp.updated_by = request.user
+            mp.match_with = 'Unidentified Person'
+            mp.matched_person_id = up.id
+            mp.save()
+            up.case_status = 'resolved'
+            up.match_with = 'Missing Person'
+            up.matched_person_id = mp.id
+            up.updated_by = request.user
+            up.save()
+
+            return Response({"message": "Match confirmed successfully."}, status=status.HTTP_200_OK)
+
+        except PersonMatchHistory.DoesNotExist:
+            return Response({"error": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'], url_path='match-unconfirm')
+    def match_unconfirm(self, request, pk=None):
+        match_id = request.data.get('match_id')
+        new_status = request.data.get('new_status', 'matched')  # default back to 'matched'
+        reason = request.data.get('unconfirm_reason')
+
+        if not match_id:
+            return Response({"error": "match_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not reason:
+            return Response({"error": "unconfirm_reason is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if new_status not in ['matched', 'potential']:
+            return Response({"error": "Invalid new_status. Use 'matched' or 'potential'."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            match = PersonMatchHistory.objects.get(match_id=match_id, missing_person_id=pk)
+
+            if match.match_type != 'confirmed':
+                return Response({"error": f"Match is not confirmed. Current status is {match.match_type}."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            match.match_type = new_status
+            match.confirmation_note = None
+            match.unconfirm_reason = reason
+            match.updated_by = request.user
+            match.save()
+
+            # Reset MP (missing person)
+            mp = match.missing_person
+            mp.case_status = 'pending'
+            mp.match_with = None
+            mp.matched_person_id = None
+            mp.updated_by = request.user
+            mp.save()
+
+            # Reset UP (unidentified person)
+            up = match.unidentified_person
+            up.case_status = 'pending'
+            up.match_with = None
+            up.matched_person_id = None
+            up.updated_by = request.user
+            up.save()
+
+            return Response({"message": f"Match unconfirmed. Status reverted to '{new_status}'."},
+                            status=status.HTTP_200_OK)
 
         except PersonMatchHistory.DoesNotExist:
             return Response({"error": "Match not found."}, status=status.HTTP_404_NOT_FOUND)

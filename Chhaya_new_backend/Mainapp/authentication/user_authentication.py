@@ -473,6 +473,28 @@ class AuthAPIView(APIView):
             status=User.StatusChoices.HOLD,
             is_consent=is_consent
         )
+        # ✅ Send email notification
+        try:
+            subject = "Welcome to Our Platform"
+            message = (
+                f"Hi {first_name},\n\n"
+                "Thank you for registering with us.\n"
+                "Your account is currently under review and will be activated once approved by the admin.\n\n"
+                "Regards,\nSupport Team"
+            )
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email_id],
+                fail_silently=False
+            )
+        except Exception as e:
+            return Response({
+                "message": "User registered successfully, but email sending failed.",
+                "error": str(e),
+                "user": self.get_user_data(user)
+            }, status=status.HTTP_201_CREATED)
 
         return Response({
             "message": "User registered successfully. Awaiting admin approval.",
@@ -543,6 +565,16 @@ class AuthAPIView(APIView):
                     status=User.StatusChoices.HOLD,
                     phone_no=None,  # Explicitly set to None instead of empty string
                 )
+
+                # Send email notification upon registration (if the account is on hold)
+                send_mail(
+                    "Account Registration Pending Approval",
+                    "Your account has been registered successfully and is awaiting admin approval.",
+                    settings.DEFAULT_FROM_EMAIL,
+                    [user.email_id],
+                    fail_silently=False,
+                )
+
             else:
                 # Update user details if missing
                 updated = False
@@ -560,6 +592,16 @@ class AuthAPIView(APIView):
                 return Response({
                     "error": "Your account is not approved yet. Please wait for admin approval."
                 }, status=status.HTTP_403_FORBIDDEN)
+
+            # Send email notification upon successful approval
+            if user.status == User.StatusChoices.ACTIVE:
+                send_mail(
+                    "Account Approved",
+                    "Your account has been approved and is now active.",
+                    settings.DEFAULT_FROM_EMAIL,
+                    [user.email_id],
+                    fail_silently=False,
+                )
 
             # Generate or get token
             token_obj, _ = Token.objects.get_or_create(user=user)

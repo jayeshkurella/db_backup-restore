@@ -6,7 +6,8 @@ from rest_framework import status
 from django.db.models import Q
 from django.utils.timezone import now
 
-
+from django.core.mail import send_mail
+from django.conf import settings
 from Mainapp.authentication.auth_serializer import User, UserSerializer
 
 
@@ -58,8 +59,10 @@ class AdminUserApprovalView(APIView):
 
             if action == "approve":
                 user.status = User.StatusChoices.ACTIVE
+                self.send_status_change_email(user, "approved")
             elif action == "reject":
                 user.status = User.StatusChoices.REJECTED
+                self.send_status_change_email(user, "rejected")
             elif action == "hold":
                 user.status = User.StatusChoices.HOLD
             else:
@@ -73,3 +76,35 @@ class AdminUserApprovalView(APIView):
 
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def send_status_change_email(self, user, action):
+        """Sends an email notification after user status change"""
+        subject = ""
+        message = ""
+
+        if action == "approved":
+            subject = "Your Account has been Approved"
+            message = (
+                f"Hello {user.first_name},\n\n"
+                "We are pleased to inform you that your account has been approved. You can now access all the features of our platform.\n\n"
+                "Thank you for your patience and welcome aboard!\n\n"
+                "Best regards,\nThe Team"
+            )
+        elif action == "rejected":
+            subject = "Your Account has been Rejected"
+            message = (
+                f"Hello {user.first_name},\n\n"
+                "Unfortunately, your account has been rejected. Please contact support for further assistance.\n\n"
+                "Best regards,\nThe Team"
+            )
+
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email_id],
+                fail_silently=False
+            )
+        except Exception as e:
+            print(f"Error sending email: {str(e)}")

@@ -1,26 +1,43 @@
-.google-container {
-    text-align: center;
-    background: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    width: 300px;
-    margin: auto;
-  }
-  
-  #google-login {
-    background-color: #4285F4;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    display: inline-block;
-    margin-top: 10px;
-    transition: background 0.3s;
-  }
-  
-  #google-login:hover {
-    background-color: #357ae8;
-  }
-  
+/* Add this CSS to your stylesheet */
+#google-login {
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: white;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  border: 1px solid #dadce0;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+#google-login:hover {
+  background-color: #f8f9fa;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 
+              0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+#google-login img {
+  width: 18px; /* Slightly larger icon */
+  height: 18px;
+}
+
+.m-r-10 {
+  margin-right: 5px; /* Slightly more spacing */
+}
+
+
+/* If you prefer bold simplicity */
+.chhaya-heading {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem; /* 36px */
+  color: #2B2E4A;
+  text-align: center;
+  margin: 0.75rem 0;
+}
+
+.chhaya-brand {
+  color: #F58200;
+  font-weight: 800;
+}

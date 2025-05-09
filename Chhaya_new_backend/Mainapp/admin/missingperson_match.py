@@ -13,6 +13,7 @@ class PersonMatchHistoryAdmin(admin.ModelAdmin):
         'score',
         'match_type',
         'created_by',
+        'updated_by',
         'created_at',
     )
     list_filter = ('match_type', 'created_at',)

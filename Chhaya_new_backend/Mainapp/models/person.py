@@ -287,6 +287,7 @@ class Person(models.Model):
         null=True,
         help_text="The type of the matched entity"
     )
+    matched_person_id = models.UUIDField(null=True, blank=True, help_text="UUID of the matched person")
 
     def __str__(self):
         return f"{self.full_name} ({self.type})"

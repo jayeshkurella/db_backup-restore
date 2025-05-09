@@ -39,6 +39,9 @@ class PersonMatchHistory(models.Model):
     score = models.IntegerField(null=True, blank=True)  # Add this field
     match_parameters = models.JSONField(default=dict, help_text="Detailed matching parameters")
     reject_reason = models.TextField(null=True, blank=True)
+    unreject_reason = models.TextField(null=True, blank=True)
+    confirmation_note = models.TextField(null=True, blank=True)
+    unconfirm_reason = models.TextField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
