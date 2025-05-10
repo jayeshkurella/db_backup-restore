@@ -10,6 +10,9 @@ import { AppSideForgotPasswordComponent } from './side-forgot-password/side-forg
 import { AppSideLoginComponent } from './side-login/side-login.component';
 import { AppSideRegisterComponent } from './side-register/side-register.component';
 import { AppSideTwoStepsComponent } from './side-two-steps/side-two-steps.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ChangepasswordComponent } from './changepassword/changepassword.component';
+import { EditprofileComponent } from './editprofile/editprofile.component';
 
 export const AuthenticationRoutes: Routes = [
   {
@@ -55,6 +58,18 @@ export const AuthenticationRoutes: Routes = [
         path: 'side-two-steps',
         component: AppSideTwoStepsComponent,
       },
+      {
+        path: 'reset-password/:token',
+        component: ResetPasswordComponent
+      },
+      {
+        path: 'change-password',
+        component: ChangepasswordComponent
+      },
+      {
+        path: 'edit-profile',
+        component: EditprofileComponent
+      }
     ],
   },
 ];

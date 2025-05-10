@@ -1,0 +1,76 @@
+<div class="profile-container">
+  <mat-card class="profile-card mat-elevation-z8">
+    <div class="profile-header">
+      <div class="avatar-container">
+        <img [src]="user?.picture || user?.profile_image || 'assets/default-avatar.png'" 
+             class="profile-avatar" alt="Profile picture">
+        <div class="status-indicator" [ngClass]="{'active': user?.status === 'active'}"></div>
+      </div>
+      <div class="profile-title">
+        <h1>{{ user?.first_name }} {{ user?.last_name }}</h1>
+        <div class="user-meta">
+          <span class="user-type">{{ user?.user_type | titlecase }}</span>
+          <span *ngIf="user?.sub_user_type" class="user-subtype">• {{ user?.sub_user_type | titlecase }}</span>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider class="divider"></mat-divider>
+
+    <mat-card-content>
+      <div class="profile-details">
+        <div class="detail-row">
+          <mat-icon class="detail-icon">email</mat-icon>
+          <div class="detail-content">
+            <div class="detail-label">Email</div>
+            <div class="detail-value">{{ user?.email_id || 'Not provided' }}</div>
+          </div>
+        </div>
+
+    
+
+        <div class="detail-row">
+        <mat-icon class="detail-icon">phone</mat-icon>
+        <div class="detail-content">
+            <div class="detail-label">Phone Number</div>
+            <div class="detail-value">
+            {{ user?.phone_no || 'Not provided' }}
+            </div>
+        </div>
+        </div>
+
+
+        <div class="detail-row">
+          <mat-icon class="detail-icon">verified_user</mat-icon>
+          <div class="detail-content">
+            <div class="detail-label">Account Status</div>
+            <div class="detail-value">
+              <span class="status-badge" [ngClass]="user?.status">{{ user?.status | titlecase }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <mat-icon class="detail-icon">calendar_today</mat-icon>
+          <div class="detail-content">
+            <div class="detail-label">Member Since</div>
+            <div class="detail-value">{{ user?.registered_at | date:'mediumDate' }}</div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-divider class="divider"></mat-divider>
+
+    <mat-card-actions class="profile-actions">
+      <button mat-flat-button color="primary" class="action-button" (click)="editProfile()">
+        <mat-icon>edit</mat-icon> Edit Profile
+      </button>
+      <button mat-stroked-button color="primary" class="action-button" [routerLink]="'/dashboards/dashboard1'">
+  <mat-icon>home</mat-icon>
+  Home
+</button>
+
+    </mat-card-actions>
+  </mat-card>
+</div>

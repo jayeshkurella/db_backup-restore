@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -33,6 +33,9 @@ export class LoginApiService {
  public isUserLoggedIn(): boolean {
     return !!localStorage.getItem('authToken'); // If token exists, user is logged in
   }
+  public getLoggedInUserId(): string | null {
+  return localStorage.getItem('user_id'); // Return the raw string
+ }
 
   login(credentials: any): Observable<any> {
     return this.http.post(this.baseUrl + '/api/users/', { action: 'login', ...credentials }).pipe(
@@ -76,14 +79,66 @@ export class LoginApiService {
     
   }
 
-  // loginWithGoogle(token: string , userTypeData: any) {
-  //   return this.http.post(this.baseUrl + '/api/users/', {
-  //     action: 'google_login',
-  //     token: token,
-  //     ...userTypeData
-  //   });
-    
-  // }
+  forgotPassword(email: string): Observable<any> {
+    const payload = {
+      action: 'forgot-password',
+      email_id: email,
+    };
+    return this.http.post(`${this.baseUrl}/api/users/`, payload);
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    const payload = {
+      action: 'reset-password',
+      token,
+      new_password: newPassword,
+    };
+    return this.http.post(`${this.baseUrl}/api/users/`, payload);
+  }
+
+  changePassword(data: { old_password: string; new_password: string }): Observable<any> {
+      const token = localStorage.getItem('authToken'); // Or sessionStorage
+      const headers = new HttpHeaders().set('Authorization', `Token ${token}`);
+
+  const payload = {
+    action: 'change-password',
+    ...data
+  };
+    return this.http.post(`${this.baseUrl}/api/users/`, payload,{ headers });
+  }
+
+  deleteProfile(): Observable<any> {
+    const token = localStorage.getItem('authToken'); // Or sessionStorage
+    const headers = new HttpHeaders().set('Authorization', `Token ${token}`);
+
+    const payload = {
+      action: 'delete_profile',
+    };
+    return this.http.post(`${this.baseUrl}/api/users/`, payload, { headers });
+  }
+
+  editProfile(userId: number, formData: FormData): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+        'Authorization': `Token ${token}`
+        // Don't set Content-Type - let browser handle it for FormData
+    });
+
+    return this.http.put(`${this.baseUrl}/api/users/`, formData, { headers });
+  }
+
+  getUserProfile(userId: string): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders().set('Authorization', `Token ${token}`);
+  const body = {
+    action: 'get_profile',
+    pk: userId
+  };
+
+  return this.http.post(`${this.baseUrl}/api/users/`, body, { headers });
+}
+
+
 
 
   

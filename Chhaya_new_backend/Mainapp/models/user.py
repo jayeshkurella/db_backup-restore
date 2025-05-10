@@ -109,6 +109,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         on_delete=models.SET_NULL,
         related_name='updated_users'
     )
+    profile_image_upload = models.ImageField(upload_to='profile_images/', null=True, blank=True)
 
     google_id = models.CharField(max_length=100, unique=True ,null=True, blank=True)
     email_by_google = models.EmailField(unique=True,null=True, blank=True)
@@ -133,7 +134,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_reset_token_valid(self):
         """Check if the reset token is valid (e.g., expires after 1 hour)."""
         if self.reset_token_created_at:
-            return (now() - self.reset_token_created_at).total_seconds() < 3600  # 1 hour
+            time_difference = (now() - self.reset_token_created_at).total_seconds()
+            print(f"Time difference: {time_difference} seconds")
+            return time_difference < 300  # 1 hour
         return False
 
     def save(self, *args, **kwargs):
@@ -146,6 +149,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             f"Saving User: {self.email_id}, {self.first_name}, {self.last_name}, {self.user_type}, {self.sub_user_type}"
         )
         super().save(*args, **kwargs)
+
+    def get_profile_image(self):
+        if self.picture:
+            return self.picture  # Google users
+        if self.profile_image_upload:
+            return self.profile_image_upload.url  # Form users with uploaded image
+        return '/static/images/default-avatar.png'
 
     def __str__(self):
         return f"{self.email_id} ({self.user_type} - {self.sub_user_type})" if self.sub_user_type else f"{self.email_id} ({self.user_type})"

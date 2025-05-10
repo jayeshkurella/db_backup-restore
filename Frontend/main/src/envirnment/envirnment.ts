@@ -1,7 +1,6 @@
 export const environment = {
     production: false,
     // apiUrl: 'http://localhost:8000',
-    // apiUrl: 'http://63.250.52.91:8090',
     apiUrl: 'https://tracemapr.com/backend',
     geo_url : "https://products.coderize.in/geoserver/GeoFlow_WCD/wms/",
 

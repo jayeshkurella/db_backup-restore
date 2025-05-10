@@ -219,17 +219,40 @@
   </button>
   
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
-    <div class="p-y-12 p-x-32">
-      <!-- Show Login Button If Not Logged In -->
-      <a *ngIf="!isLoggedIn" [routerLink]="['/authentication/login']" mat-stroked-button color="primary" class="w-100">
-        Log In
-      </a>
+    <div class="p-y-12 p-x-32 p-2 m-2">
+  <!-- Login Button -->
+  <a *ngIf="!isLoggedIn" [routerLink]="['/authentication/login']" 
+     mat-stroked-button color="primary" 
+     class="w-100 m-b-8">
+    Log In
+
+  </a>
+
+  <!-- Edit Profile -->
+    <button *ngIf="isLoggedIn" mat-stroked-button color="primary" class="w-100 m-b-8"
+            [routerLink]="['/authentication/edit-profile']">
+      Edit Profile
+    </button>
   
-      <!-- Show Logout Button If Logged In -->
-      <button *ngIf="isLoggedIn" mat-stroked-button color="warn" class="w-100" (click)="logout()">
-        Log Out
-      </button>
-    </div>
+  <!-- Change Password Button -->
+  <button *ngIf="isLoggedIn" mat-stroked-button color="accent" 
+          class="w-100 m-b-8" 
+          [routerLink]="['/authentication/change-password']">
+    Change Password
+  </button>
+
+  <button *ngIf="isLoggedIn" mat-stroked-button color="warn" class="w-100 m-b-8"
+            (click)="confirmDeleteProfile()">
+      Delete Account
+    </button>
+  
+  <!-- Logout Button -->
+  <button *ngIf="isLoggedIn" mat-stroked-button color="warn" 
+          class="w-100" 
+          (click)="logout()">
+    Log Out
+  </button>
+</div>
   </mat-menu>
   
 </mat-toolbar>

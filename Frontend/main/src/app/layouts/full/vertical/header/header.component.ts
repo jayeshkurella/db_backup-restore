@@ -12,12 +12,13 @@ import { navItems } from '../sidebar/sidebar-data';
 import { TranslateService } from '@ngx-translate/core';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AppSettings } from 'src/app/config';
 import { LoginApiService } from 'src/app/pages/authentication/side-login/login-api.service';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 interface notifications {
   id: number;
@@ -58,11 +59,14 @@ interface quicklinks {
         MaterialModule,
     ],
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.css'],  // Linking the CSS file here
+    styleUrls: ['./header.component.css'],  
 
     encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit  {
+
+ 
+
   @Input() showToggle = true;
   @Input() toggleChecked = false;
   @Output() toggleMobileNav = new EventEmitter<void>();
@@ -116,7 +120,8 @@ export class HeaderComponent implements OnInit  {
     private vsidenav: CoreService,
     public dialog: MatDialog,
     private translate: TranslateService,
-    private authService: LoginApiService
+    private authService: LoginApiService,
+    private router: Router,
 
   ) {
     translate.setDefaultLang('en');
@@ -134,6 +139,25 @@ export class HeaderComponent implements OnInit  {
   logout() {
     this.authService.setProfilePic('');  // Clear the picture
     this.authService.logout();
+  }
+
+  confirmDeleteProfile() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Account Deletion',
+        message: 'Are you sure you want to delete your account? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.authService.deleteProfile().subscribe(() => {
+          this.router.navigate(['/authentication/login']);
+        });
+      }
+    });
   }
 
   options = this.settings.getOptions();
