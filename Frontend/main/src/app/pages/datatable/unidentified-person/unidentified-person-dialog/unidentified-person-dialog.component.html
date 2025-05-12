@@ -15,7 +15,9 @@
         <p><strong>Age:</strong> {{ data?.age || 'N/A' }}</p>
         <p><strong>Gender:</strong> {{ data?.gender || 'N/A' }}</p>
         <p><strong>Blood Group:</strong> {{ data?.blood_group || 'N/A' }}</p>
-        <p><strong>Condition:</strong> {{ data?.up_condition ? (data.up_condition | json): 'N/A' }}</p>
+        <p><strong>Person Condition:</strong> 
+        {{ data?.up_condition?.length ? data.up_condition.join(', ') : 'N/A' }}
+      </p>
         <p><strong>Reported On:</strong> {{ data?.date_reported || 'N/A' }}</p>
       </div>
     </div>

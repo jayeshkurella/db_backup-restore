@@ -173,7 +173,6 @@
   <mat-card-header class="d-flex">
     <div class="m-r-auto">
       <mat-card-title>Filtered Persons</mat-card-title>
-      <mat-card-subtitle>Missing, Unidentified Persons & Bodies</mat-card-subtitle>
     </div>
   </mat-card-header>
   <mat-card-content>
@@ -181,7 +180,7 @@
     <mat-tab-group>
       <!-- Missing Persons Tab -->
       <mat-tab label="Missing Persons">
-        <div class="table-responsive mt-3">
+        <div class="table-responsive mt-1">
           <table mat-table [dataSource]="filteredMissingPersonssss" class="w-100">
             <!-- Sr No. Column -->
             <ng-container matColumnDef="srNo">
@@ -256,9 +255,9 @@
             <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Action</th>
               <td mat-cell *matCellDef="let element">
-                <button mat-flat-button class="f-s-12 bg-secondary text-white" (click)="viewDetails(element)">
-                  View
-                </button>
+               <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
+                <mat-icon class="f-s-00">visibility</mat-icon>
+              </button>
               </td>
             </ng-container>
 
@@ -270,7 +269,7 @@
 
       <!-- Unidentified Persons Tab -->
       <mat-tab label="Unidentified Persons">
-        <div class="table-responsive mt-3">
+        <div class="table-responsive mt-1">
           <table mat-table [dataSource]="filteredUnidentifiedPersonssss" class="w-100">
             <!-- Same column definitions as above -->
             <ng-container *ngFor="let column of displayedColumns">
@@ -300,9 +299,9 @@
                     <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
                     <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
                     <span *ngSwitchCase="'action'">
-                      <button mat-flat-button class="f-s-12 bg-secondary text-white" (click)="viewDetails(element)">
-                        View
-                      </button>
+                      <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
+                <mat-icon class="f-s-00">visibility</mat-icon>
+              </button>
                     </span>
                   </ng-container>
                 </td>
@@ -317,7 +316,7 @@
 
       <!-- Unidentified Bodies Tab -->
       <mat-tab label="Unidentified Bodies">
-        <div class="table-responsive mt-3">
+        <div class="table-responsive mt-1">
           <table mat-table [dataSource]="filteredunidentifiedboidessss" class="w-100">
             <!-- Same column definitions as above -->
             <ng-container *ngFor="let column of displayedColumns">
@@ -347,10 +346,10 @@
                     <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
                     <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
                     <span *ngSwitchCase="'action'">
-                      <button mat-flat-button class="f-s-12 bg-secondary text-white" (click)="viewDetails(element)">
-                        View
-                      </button>
-                    </span>
+                    <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
+                <mat-icon class="f-s-00">visibility</mat-icon>
+              </button>
+                  </span>
                   </ng-container>
                 </td>
               </ng-container>

@@ -53,8 +53,14 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
   initializeForm(): void {
     this.policeStationForm = this.fb.group({
       name: ['', Validators.required],
-      phone_no: ['', [Validators.required, Validators.pattern(/^(\+?\d{1,4}[\s-]?)?(\(?\d{2,6}\)?[\s-]?)?[\d\s-]{5,15}$/)]
-      ],
+      phone_no: [
+            '',
+            [
+              Validators.required,
+              Validators.pattern(/^\+?[\d\s\-()]{7,20}$/)
+            ]
+          ]
+          ,
       station_photo: ['',Validators.required],
       activ_Status: ['', Validators.required],
       address: this.fb.group({

@@ -1,0 +1,171 @@
+
+
+<mat-progress-spinner
+  *ngIf="isLoading"
+  mode="indeterminate"
+  color="primary"
+  class="d-block mx-auto my-4"
+></mat-progress-spinner>
+
+<mat-card class="mat-elevation-z4 p-3">
+  <div class="d-flex justify-content-end p-2">
+    <button mat-flat-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+
+  <mat-dialog-content class="mat-typography">
+    <div *ngIf="person" class="container">
+      <!-- Person Overview -->
+      <div class="d-flex mb-4">
+        <div class="flex-shrink-0 me-4">
+          <img
+            [src]="environment.apiUrl + person.photo_photo"
+            alt="Person Photo"
+            class="img-fluid rounded"
+            style="height: 300px; width: auto; object-fit: cover;"
+          />
+        </div>
+        <div class="flex-grow-1">
+          <h3>{{ person.full_name | titlecase}}</h3>
+
+          <p *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
+            <strong>Age:</strong> {{ person.age }}
+          </p>
+
+          <p *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
+            <strong>Age Range:</strong> {{ person.age_range }}
+          </p>
+
+          <p><strong>Gender:</strong> {{ person.gender | titlecase}}</p>
+          <p><strong>Blood Group:</strong> {{ person.blood_group }}</p>
+
+          <p *ngIf="person.type === 'Unidentified Person'">
+            <strong>Condition:</strong> {{ person.condition | titlecase}}
+          </p>
+
+          <p *ngIf="person.type === 'Unidentified Body'">
+            <strong>Body Condition:</strong> {{ person.Body_Condition | titlecase}}
+          </p>
+        </div>
+      </div>
+    <mat-divider></mat-divider>
+
+      <!-- Appearance Info -->
+      <h5 class="text-primary">Appearance Information</h5>
+      <mat-list>
+        <mat-list-item><strong>Height:</strong> {{ person.height_range || 'N/A' }}</mat-list-item>
+        <mat-list-item><strong>Weight:</strong> {{ person.weight || 'N/A' }}</mat-list-item>
+        <mat-list-item><strong>Complexion:</strong> {{ person.complexion || 'N/A'| titlecase }}</mat-list-item>
+        <mat-list-item><strong>Hair Color:</strong> {{ person.hair_color || 'N/A' | titlecase}}</mat-list-item>
+        <mat-list-item><strong>Hair Type:</strong> {{ person.hair_type || 'N/A'| titlecase }}</mat-list-item>
+        <mat-list-item><strong>Eye Color:</strong> {{ person.eye_color || 'N/A' | titlecase}}</mat-list-item>
+        <mat-list-item><strong>Birth Mark:</strong> {{ person.birth_mark || 'N/A' }}</mat-list-item>
+        <mat-list-item><strong>Distinctive Mark:</strong> {{ person.distinctive_mark || 'N/A' }}</mat-list-item>
+      </mat-list>
+    <mat-divider></mat-divider>
+
+      <!-- Contact and Address Info (Two Columns) -->
+      <div class="row mt-3">
+        <!-- Left Column (Address Info) -->
+        <div class="col-md-6">
+          <h5 class="text-primary">Address Information</h5>
+          <mat-list>
+            <mat-list-item><strong>Address Type:</strong> {{ person.address_type | titlecase}}</mat-list-item>
+            <mat-list-item><strong>Street:</strong> {{ person.street }}</mat-list-item>
+            <mat-list-item><strong>Village:</strong> {{ person.village | titlecase}}</mat-list-item>
+            <mat-list-item><strong>City:</strong> {{ person.city | titlecase}}</mat-list-item>
+            <mat-list-item><strong>District:</strong> {{ person.district | titlecase}}</mat-list-item>
+            <mat-list-item><strong>State:</strong> {{ person.state | titlecase }}</mat-list-item>
+            <mat-list-item><strong>Country:</strong> {{ person.country | titlecase }}</mat-list-item>
+            <mat-list-item><strong>Landmark:</strong> {{ person.landmark_details }}</mat-list-item>
+
+          </mat-list>
+        </div>
+
+        <!-- Right Column (Contact Info) -->
+        <div class="col-md-6">
+          <h5 class="text-primary">Contact Information</h5>
+          <mat-list>
+            <mat-list-item *ngIf="person.contacts[0]?.type">
+              <strong>Contact Type:</strong> {{ person.contacts[0]?.type | titlecase}}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.phone_no">
+              <strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.email_id">
+              <strong>Email:</strong> {{ person.contacts[0]?.email_id }}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.company_name">
+              <strong>Company:</strong> {{ person.contacts[0]?.company_name | titlecase}}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.person_name">
+              <strong>Contact Person:</strong> {{ person.contacts[0]?.person_name | titlecase}}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.job_title">
+              <strong>Job Title:</strong> {{ person.contacts[0]?.job_title | titlecase}}
+            </mat-list-item>
+            
+            <mat-list-item *ngIf="person.contacts[0]?.social_media_url">
+              <strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.website_url">
+              <strong>Website:</strong> {{ person.contacts[0]?.website_url }}
+            </mat-list-item>
+            <mat-list-item *ngIf="person.contacts[0]?.additional_details">
+              <strong>Additional Details:</strong> {{ person.contacts[0]?.additional_details }}
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    <mat-divider></mat-divider>
+
+      <div class="row mt-3">
+       
+        <div class="col-md-6">
+            <!-- Education & Occupation -->
+      <h5 class="text-primary mt-3">Educational & Occupation Details</h5>
+      <mat-list>
+        <mat-list-item><strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' | titlecase }}</mat-list-item>
+        <mat-list-item><strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' | titlecase }}</mat-list-item>
+        <mat-list-item><strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' | titlecase }}</mat-list-item>
+        <mat-list-item><strong>Marital Status:</strong> {{ person.additional_info[0]?.marital_status || 'N/A' | titlecase }}</mat-list-item>
+        <mat-list-item><strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' | titlecase }}</mat-list-item>
+        <mat-list-item><strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' | titlecase }}</mat-list-item>
+        <mat-list-item><strong>Education:</strong> {{ person.additional_info[0]?.education_details }}</mat-list-item>
+        <mat-list-item><strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}</mat-list-item>
+        <mat-list-item><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type | titlecase }}</mat-list-item>
+        <mat-list-item><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</mat-list-item>
+      </mat-list>
+        </div>
+        <div class="col-md-6">
+            <!-- Identification -->
+      <h5 class="text-primary mt-3">Missing Details</h5>
+      <mat-list>
+        <mat-list-item><strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}</mat-list-item>
+        <mat-list-item><strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}</mat-list-item>
+        <mat-list-item><strong>Last Seen Details:</strong> {{ person.last_known_details[0]?.last_seen_location }}</mat-list-item>
+        <mat-list-item><strong>Missing Location Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</mat-list-item>
+      </mat-list>
+        </div>
+    </div>
+      
+    <mat-divider></mat-divider>
+      
+
+      <h5 class="text-primary mt-3">FIR Details</h5>
+      <mat-list>
+        <mat-list-item><strong>Police Station:</strong> {{ person.firs[0]?.police_station | titlecase}}</mat-list-item>
+        <mat-list-item><strong>FIR Number:</strong> {{ person.firs[0]?.fir_number }}</mat-list-item>
+        <mat-list-item><strong>Case Status:</strong> {{ person.firs[0]?.case_status | titlecase}}</mat-list-item>
+        <mat-list-item><strong>Investigation Officer Name:</strong> {{ person.firs[0]?.investigation_officer_name | titlecase}}</mat-list-item>
+        <mat-list-item><strong>Investigation Officer Contact Number:</strong> {{ person.firs[0]?.investigation_officer_contacts }}</mat-list-item>
+      </mat-list>
+    </div>
+  </mat-dialog-content>
+  <div class="d-flex justify-content-start p-2">
+    <button mat-flat-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+</mat-card>

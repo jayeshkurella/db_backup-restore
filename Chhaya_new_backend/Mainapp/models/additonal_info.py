@@ -45,6 +45,7 @@ class AdditionalInfo(models.Model):
         PAN = 'pan', 'PAN'
         DL = 'dl', 'Driving License'
         PASSPORT = 'passport', 'Passport'
+        VoterID = 'voterID', 'VoterID'
 
     class ReligionChoices(models.TextChoices):
         HINDU = 'hindu', 'Hindu'

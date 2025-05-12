@@ -104,14 +104,15 @@
 
     <!-- Education & Occupation -->
     <h5 class="text-primary mt-3">Educational & Occupation Details</h5>
-    <p><strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' }}</p>
-    <p><strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' }}</p>
-    <p><strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' }}</p>
-    <p><strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' }}</p>
-    <p><strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' }}</p>
+    <p><strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' | titlecase }}</p>
+    <p><strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' | titlecase}}</p>
+    <p><strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' | titlecase}}</p>
+    <p><strong>Marital Status:</strong> {{ person.additional_info[0]?.marital_status || 'N/A' | titlecase }}</p>
+    <p><strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' | titlecase}}</p>
+    <p><strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' | titlecase }}</p>
     <p><strong>Education:</strong> {{ person.additional_info[0]?.education_details }}</p>
     <p><strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}</p>
-    <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type }}</p>
+    <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type | titlecase }}</p>
     <p><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</p>
 
     <!-- Identification -->
@@ -119,7 +120,7 @@
     
     <p><strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}</p>
     <p><strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}</p>
-    <p><strong>Last Seen Location:</strong> {{ person.last_known_details[0]?.last_seen_location }}</p>
+    <p><strong>Last Seen Details:</strong> {{ person.last_known_details[0]?.last_seen_location }}</p>
     <p><strong>Missing Location Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</p>
 
     <h5 class="text-primary mt-3">fir Details</h5>

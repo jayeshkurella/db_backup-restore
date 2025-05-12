@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
+import { PersonDetailsComponent } from './components/dashboard1/revenue-updates/person-details/person-details.component';
 
 export const routes: Routes = [
   {
@@ -71,6 +72,8 @@ export const routes: Routes = [
             (m) => m.UiComponentsRoutes
           ),
       },
+      { path: 'person/:id', component: PersonDetailsComponent },
+
     ],
   },
   {

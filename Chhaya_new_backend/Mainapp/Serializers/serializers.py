@@ -65,6 +65,7 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FIRSerializer(serializers.ModelSerializer):
+    police_station =serializers.StringRelatedField(read_only=True)
     class Meta:
         model = FIR
         fields = '__all__'
@@ -96,6 +97,7 @@ class PoliceStationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PersonSerializer(serializers.ModelSerializer):
+
     bodies_condition = serializers.ListField(
         child=serializers.ChoiceField(choices=Person.BodyconditionChoices.choices),
         required=False

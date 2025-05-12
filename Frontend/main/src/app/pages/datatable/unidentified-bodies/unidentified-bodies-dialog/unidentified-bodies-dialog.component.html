@@ -17,8 +17,9 @@
         <p><strong>Gender:</strong> {{ data?.gender || 'N/A' }}</p>
         <p><strong>Blood Group:</strong> {{ data?.blood_group || 'N/A' }}</p>
         <p><strong>Body Condition:</strong> 
-          {{ data?.bodies_condition ? (data.bodies_condition | json) : 'N/A' }}
-        </p>        
+  {{ data?.bodies_condition?.length ? data.bodies_condition.join(', ') : 'N/A' }}
+</p>
+        
       </div>
     </div>
 

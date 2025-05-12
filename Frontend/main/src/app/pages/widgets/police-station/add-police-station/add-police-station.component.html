@@ -18,7 +18,7 @@
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Phone Number</mat-label>
-          <input matInput formControlName="phone_no" type="number" required>
+          <input matInput formControlName="phone_no" type="text" required>
           <mat-error *ngIf="policeStationForm.get('phone_no')?.hasError('required')">
             Phone number is required
           </mat-error>
@@ -292,9 +292,10 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Website</mat-label>
-                <input matInput formControlName="website_url" type="url">
+                <input matInput formControlName="website_url" type="url" placeholder="Enter the official website URL">
               </mat-form-field>
             </div>
+
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Social Media</mat-label>

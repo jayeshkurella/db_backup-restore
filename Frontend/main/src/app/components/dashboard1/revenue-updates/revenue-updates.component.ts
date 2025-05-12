@@ -6,6 +6,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as L from 'leaflet';
 
@@ -171,7 +172,8 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     private http: HttpClient,
     private filterService :MapApiService,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
   ) {
   }
   ngAfterViewInit(): void {
@@ -223,6 +225,9 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     this.http.get<any[]>('assets/state.json').subscribe(data => {
       this.stateCoordinates = data;
       this.allstates = data.map(state => state.name); 
+      if (this.selectedState && this.selectedState !== 'All States') {
+    this.onStateChange(this.selectedState);
+  }
     });
   }
 
@@ -255,48 +260,55 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
   filterDataByFilters(): void {
         this.moveMapToState(this.selectedState);
 
-        if (this.selectedState && this.selectedState !== 'All States') {
-            this.onStateChange(this.selectedState);
-        }
+        const shouldLoadState = this.selectedState && this.selectedState !== 'All States' && this.district?.length === 0;
+    const shouldLoadDistrict = this.selectedDistrict && this.selectedDistrict !== 'All Districts' && this.city?.length === 0;
+    const shouldLoadCity = this.selectedCity && this.selectedCity !== 'All Cities' && this.village?.length === 0;
 
-        if (this.selectedDistrict && this.selectedDistrict !== 'All Districts') {
-            this.onDistrictChange(this.selectedDistrict);
-        }
+    if (shouldLoadState) {
+        this.onStateChange(this.selectedState);
+    }
 
-        if (this.selectedCity && this.selectedCity !== 'All Cities') {
-            this.onCityChange(this.selectedCity);
-        }
+    if (shouldLoadDistrict) {
+        this.onDistrictChange(this.selectedDistrict);
+    }
 
-        if (this.selectedVillage && this.selectedVillage !== 'All Villages') {
-            this.onVillageChange(this.selectedVillage);
-        }
+    if (shouldLoadCity) {
+        this.onCityChange(this.selectedCity);
+    }
+
+    this.initOperationalLayers();
+
  }
 
 
   
 
+  viewDetails(person: any): void {
+  const personId = person.id.split('.')[1];
+  console.log(personId)
+  this.router.navigate(['/person', personId]);
+ }
   
   
+//  viewDetails(person: any): void {
+//     const personId = person.id.split('.')[1];
   
- viewDetails(person: any): void {
-    const personId = person.id.split('.')[1];
-  
-    fetch(`${environment.apiUrl}/api/persons/${personId}/`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch person details: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        this.dialog.open(DialogModelViewComponent, {
-          width: '55vw',
-          maxWidth: 'none',
-          data: data, 
-        });
-      })
-      .catch(error => console.error('Error fetching person details:', error));
-  }
+//     fetch(`${environment.apiUrl}/api/persons/${personId}/`)
+//       .then(response => {
+//         if (!response.ok) {
+//           throw new Error(`Failed to fetch person details: ${response.status}`);
+//         }
+//         return response.json();
+//       })
+//       .then(data => {
+//         this.dialog.open(DialogModelViewComponent, {
+//           width: '55vw',
+//           maxWidth: 'none',
+//           data: data, 
+//         });
+//       })
+//       .catch(error => console.error('Error fetching person details:', error));
+//   }
     
 
   private missingPersonLayer: L.LayerGroup = L.layerGroup();
@@ -384,13 +396,25 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
         return;
       }
   
-      this.initOperationalLayers(); // 🔁 re-fetch data with updated date
+      this.initOperationalLayers(); 
     }
   }
-  
+    showNoDataMessage() {
+        // Displaying a console message
+        console.log("No data available for the current filters");
+
+        // Display a message using Angular Material Snackbar
+        this.snackBar.open('No data available for the current filters', 'OK', {
+            duration: 3000,  // The duration for which the snackbar is visible (in milliseconds)
+            horizontalPosition: 'center',  // Snackbar position horizontally
+            verticalPosition: 'bottom',  // Snackbar position vertically
+            panelClass: ['custom-snackbar'], // Optional: you can style it further
+        });
+    }
+
 
   formatDate(date: Date): string {
-    return date.toISOString().split('T')[0]; // returns '2025-04-20'
+    return date.toISOString().split('T')[0]; 
   }
 
  initOperationalLayers() {
@@ -412,9 +436,6 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
       shadowSize: [41, 41]
   });
 
-  this.missingPersonLayer = L.layerGroup();
-  this.unidentifiedPersonLayer = L.layerGroup();
-  this.unidentifiedBodiesLayer = L.layerGroup();
 
   // Build the CQL filter based on selected filters
   let cqlFilter = `person_approve_status='approved'`;
@@ -493,7 +514,9 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
   if (this.selectedStartDate && this.selectedEndDate) {
     const startDate = new Date(this.selectedStartDate);
+    startDate.setHours(0, 0, 0, 0); 
     const endDate = new Date(this.selectedEndDate);
+    endDate.setHours(23, 59, 59, 999);
   
     if (startDate > endDate) {
       console.error("Invalid date range: Start date cannot be after End date.");
@@ -501,12 +524,16 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     } else {
       const formattedStart = this.formatDate(startDate);
       const formattedEnd = this.formatDate(endDate);
-  
+      // Log the formatted dates
+      console.log("Formatted Start Date:", formattedStart);
+      console.log("Formatted End Date:", formattedEnd)
+        
       if (cqlFilter !== '') {
         cqlFilter += ' AND ';
       }
   
       cqlFilter += `reported_date BETWEEN '${formattedStart}' AND '${formattedEnd}'`;
+      
     }
   }
   
@@ -525,7 +552,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
           }
           return response.json();
       })
-      .then(async (data) => { // ✅ Make this async to handle markers better
+      .then(async (data) => { 
           if (!data.features || data.features.length === 0) {
               console.warn("No features returned by GeoServer for the applied filter.");
               this.missingPersonsCount = 0;
@@ -534,6 +561,15 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
               this.maleCount = 0;
               this.femaleCount = 0;
               this.pendingcount = 0;
+              this.missingPersonLayer.clearLayers();
+              this.unidentifiedPersonLayer.clearLayers();
+              this.unidentifiedBodiesLayer.clearLayers();
+               // Clear the filtered data arrays
+              this.filteredData = [];
+              this.filteredMissingPersonssss = [];
+              this.filteredUnidentifiedPersonssss = [];
+              this.filteredunidentifiedboidessss = [];
+              this.showNoDataMessage();
               return;
           }
 
@@ -741,7 +777,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     });
 
     await Promise.all(markerPromises);
-}
+ }
 
 
 

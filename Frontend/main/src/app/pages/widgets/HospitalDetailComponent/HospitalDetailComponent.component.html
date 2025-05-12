@@ -133,10 +133,12 @@
                 <mat-icon class="card-icon">email</mat-icon>
                 <a [href]="'mailto:' + contact.email_id">{{ contact.email_id }}</a>
               </div>
-              <div class="contact-item" *ngIf="contact.website_url">
-                <mat-icon class="card-icon">language</mat-icon>
-                <a [href]="contact.website_url" target="_blank">Visit Website</a>
-              </div>
+              <div class="contact-item" *ngIf="contact.website_url ">
+                  <mat-icon>language</mat-icon>
+                  <a [href]="sanitizeUrl(contact.website_url)" target="_blank" rel="noopener noreferrer">
+                    Visit Website
+                  </a>
+                </div> 
             </mat-card-content>
           </mat-card>
         </div>

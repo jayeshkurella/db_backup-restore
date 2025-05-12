@@ -67,7 +67,16 @@ export class PoliceStationDetailsComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/widgets/police-station']);
   }
+  sanitizeUrl(url: string): string {
+  const trimmedUrl = url.trim();
   
+  // Add https:// protocol if the URL doesn't have one
+  if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+    return `https://${trimmedUrl}`;
+  }
+  
+  return trimmedUrl;
+}
 
 
 }

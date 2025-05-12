@@ -528,7 +528,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   
     this.formApi.postMissingPerson(formData).subscribe({
       next: (response) => {
-        this.toastr.success('Unidentified Person Data addedd successfully', 'Success');
+        this.toastr.success('Unidentified Person Data Added successfully', 'Success');
         this.unidentifiedPersonForm.reset();
         this.addresses.clear();
         this.contacts.clear();

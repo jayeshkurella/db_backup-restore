@@ -247,7 +247,7 @@ class AuthAPIView(APIView):
             # Check if account is approved
             if user.status != User.StatusChoices.ACTIVE:
                 return Response({
-                    "error": "Your account is not approved yet. Please wait for admin approval."
+                    "error": "User registered successfully.Your account is not approved yet. Please wait for admin approval."
                 }, status=status.HTTP_403_FORBIDDEN)
 
             # Send email notification upon successful approval
