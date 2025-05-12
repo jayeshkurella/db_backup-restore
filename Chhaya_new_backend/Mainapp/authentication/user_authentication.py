@@ -291,11 +291,12 @@ class AuthAPIView(APIView):
         user.reset_token_created_at = timezone.now()
         user.save()
 
-        reset_url = f"http://localhost:4200/authentication/reset-password/{reset_token}"
+        # reset_url = f"http://localhost:4200/authentication/reset-password/{reset_token}"
+        reset_url = f"https://tracemapr.com/authentication/reset-password/{reset_token}"
         try:
             send_mail(
                 "Password Reset Request",
-                f"Click the link below to reset your password:\n{reset_url}\nThis link will expire in 30 minutes.",
+                f"Click the link below to reset your password:\n{reset_url}\nThis link will expire in 05 minutes.",
                 settings.DEFAULT_FROM_EMAIL,
                 [email_id],
                 fail_silently=False,

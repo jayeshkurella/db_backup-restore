@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'New_Backend.wsgi.application'
 #         'PORT': '5432',
 #     }
 # }
-
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
