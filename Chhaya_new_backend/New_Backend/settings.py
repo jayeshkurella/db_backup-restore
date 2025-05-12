@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken'
-    # 'csp'
+
 
     
 ]
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    'csp.middleware.CSPMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
@@ -224,20 +223,3 @@ EMAIL_HOST_PASSWORD = 'yvun jgkh lueq fodt'
 DEFAULT_FROM_EMAIL = 'sanketlodheofficial@gmail.com'
 
 
-#
-# # Enable CSP in report-only mode during testing (set to False in production)
-# CSP_REPORT_ONLY = True
-#
-# # New CSP format (django-csp >= 4.0)
-# CONTENT_SECURITY_POLICY = {
-#     'default-src': "'self'",
-#     'script-src': "'self' 'unsafe-inline'",  # Allow inline scripts (remove in production if possible)
-#     'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
-#     'font-src': "'self' https://fonts.gstatic.com",
-#     'img-src': "'self' data: blob:",
-#     'connect-src': "'self' https://tracemapr.com https://products.coderize.in",
-#     'object-src': "'none'",  # Disallows <object>, <embed>, <applet>
-#     'base-uri': "'self'",  # Restricts base URL for relative URLs
-#     'form-action': "'self'",  # Restricts form submissions
-#     'frame-ancestors': "'none'",  # Prevents embedding in iframes (XSS protection)
-# }
