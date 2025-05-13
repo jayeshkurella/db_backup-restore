@@ -85,10 +85,6 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
         })
 
     def calculate_match_score(self, mp, up):
-        """
-        Calculates a match score between a Missing Person (mp) and an Unidentified Person (up),
-        based on various physical attributes.
-        """
         score = 0
 
         # Gender match (25 points)
@@ -112,7 +108,6 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
 
         # Age match (30 points max)
         if mp.age is not None and up.age_range is not None:
-            # Assuming age_range is in format like "20-30" or similar
             try:
                 min_age, max_age = map(int, up.age_range.split('-'))
                 if min_age <= mp.age <= max_age:
@@ -135,18 +130,17 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
 
         # Height match (25 points max)
         if mp.height_range and up.height_range:
-            # Both have height ranges - check if they overlap
             mp_min, mp_max = self._parse_height_range(mp.height_range)
             up_min, up_max = self._parse_height_range(up.height_range)
 
-            if mp_min <= up_max and mp_max >= up_min:  # If ranges overlap
-                score += 25
-            elif (mp_min - 5 <= up_max and mp_max + 5 >= up_min):  # If within 5cm
-                score += 15
-            elif (mp_min - 10 <= up_max and mp_max + 10 >= up_min):  # If within 10cm
-                score += 5
+            if mp_min is not None and up_min is not None and mp_max is not None and up_max is not None:
+                if mp_min <= up_max and mp_max >= up_min:
+                    score += 25
+                elif (mp_min - 5 <= up_max and mp_max + 5 >= up_min):
+                    score += 15
+                elif (mp_min - 10 <= up_max and mp_max + 10 >= up_min):
+                    score += 5
         elif mp.height is not None and up.height is not None:
-            # Fallback if height ranges not available but heights are
             height_diff = abs(mp.height - up.height)
             if height_diff <= 5:
                 score += 25
@@ -169,16 +163,9 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
         if mp.distinctive_mark and up.distinctive_mark and mp.distinctive_mark.lower() == up.distinctive_mark.lower():
             score += 25
 
-
-
         return min(score, 100)  # Cap score at 100%
 
     def _parse_height_range(self, height_range):
-        """
-        Helper method to parse height range string into min and max values.
-        Assumes format like "150-160" or similar.
-        Returns (min_height, max_height) tuple.
-        """
         try:
             min_h, max_h = map(int, height_range.split('-'))
             return min_h, max_h
