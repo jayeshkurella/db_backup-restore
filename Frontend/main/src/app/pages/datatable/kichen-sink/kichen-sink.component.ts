@@ -34,6 +34,7 @@ import { environment } from 'src/envirnment/envirnment';
 import { MissingPersonApiService } from './missing-person-api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
 
 export interface Employee {
   id: number;
@@ -172,6 +173,7 @@ const employees = [
     providers: [DatePipe]
 })
 export class AppKichenSinkComponent implements AfterViewInit {
+
   today: Date = new Date();
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
@@ -231,7 +233,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
 
   @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
   @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
-  constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService) {}
+  constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService,private router:Router) {}
     filters = {
       full_name: '',
       city: '',
@@ -326,52 +328,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
   
 
 
-  // applyFilters(): void {
-  //   this.loading = true;
-  //   this.progressMessage = "🔄 Applying filters...";
   
-  //   // Safely parse and format dates
-  // const parsedStartDate = this.parseToDate(this.filters.startDate);
-  // const parsedEndDate = this.parseToDate(this.filters.endDate);
-
-  // if (parsedStartDate) {
-  //   this.filters.startDate = this.formatDate(parsedStartDate);
-  // }
-
-  // if (parsedEndDate) {
-  //   this.filters.endDate = this.formatDate(parsedEndDate);
-  // }
-  //   this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-  //     (response) => {
-  //       this.loading = false;
-  
-  //       const responseData = response?.body || response;
-  //       console.log("Extracted API Response:", responseData);
-  
-  //       if (responseData && Array.isArray(responseData)) {
-  //         this.pendingPersons = responseData.filter(person => person.case_status === 'pending') || [];
-  //         this.resolvedPersons = responseData.filter(person => person.case_status === 'resolved') || [];
-  
-  //         if (this.dataSourcePending) this.dataSourcePending.data = this.pendingPersons;
-  //         if (this.dataSourceResolved) this.dataSourceResolved.data = this.resolvedPersons;
-  
-  //         this.progressMessage = "✅ Filters applied successfully!";
-  //       } else {
-  //         this.pendingPersons = [];
-  //         this.resolvedPersons = [];
-  //         if (this.dataSourcePending) this.dataSourcePending.data = [];
-  //         if (this.dataSourceResolved) this.dataSourceResolved.data = [];
-  
-  //         this.progressMessage = "❌ No data found!";
-  //       }
-  //     },
-  //     (error) => {
-  //       this.loading = false;
-  //       console.error('Error fetching data:', error);
-  //       this.progressMessage = "❌ Error applying filters!";
-  //     }
-  //   );
-  // }
 
   applyFilters(): void {
     this.loading = true;
@@ -455,15 +412,6 @@ export class AppKichenSinkComponent implements AfterViewInit {
     return `${year}-${month}-${day}`;
   }
   
-
-
-
-
-
-
-
-
-
 
   openDialog(obj: any): void {
     const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
@@ -577,6 +525,27 @@ export class AppKichenSinkComponent implements AfterViewInit {
     }
     return null;
   }
+
+
+  onMatchWithUP(uuid: string): void {
+  this.missingPersonService.matchMissingPersonWithUP(uuid).subscribe({
+    next: response => {
+      const resultData = response.body;
+      console.log('Matched with UP:', resultData);
+
+      this.router.navigate(['/datatable/match-up-result'], {
+        state: { data: resultData }
+      });
+    },
+    error: err => {
+      console.error('Failed to match with UP:', err);
+    }
+  });
+}
+
+
+
+  
 }
 
 @Component({
@@ -642,4 +611,34 @@ export class AppKichenSinkDialogContentComponent {
       this.local_data.imagePath = reader.result;
     };
   }
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+

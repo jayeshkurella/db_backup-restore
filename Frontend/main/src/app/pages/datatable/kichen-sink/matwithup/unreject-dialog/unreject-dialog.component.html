@@ -1,0 +1,11 @@
+<h4 class="header" mat-dialog-title>Unreject Match</h4>
+<div mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Reason for Unrejecting</mat-label>
+    <textarea matInput [(ngModel)]="unrejectReason"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button (click)="onNoClick()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()">Unreject</button>
+</div>

@@ -1,0 +1,11 @@
+<h4 class="header">Reject Match</h4>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" style="width: 100%;">
+    <mat-label>Reason for rejection</mat-label>
+    <textarea matInput [(ngModel)]="reason" rows="3" placeholder="Enter reason"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="warn" (click)="onSubmit()" [disabled]="!reason">Submit</button>
+</mat-dialog-actions>

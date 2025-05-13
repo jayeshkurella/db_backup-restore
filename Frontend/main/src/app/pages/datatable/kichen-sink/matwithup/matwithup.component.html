@@ -1,0 +1,339 @@
+
+<div class="toolbar-row">
+  <mat-toolbar color="primary" class="toolbar">
+    <div class="toolbar-content">
+      <div class="left-content">
+        <span class="title">AI-Powered Matching System</span>
+        <p class="subtext">View and manage matches between missing and unidentified persons</p>
+      </div>
+
+      <div class="right-buttons">
+        <!-- <button mat-stroked-button class="custom-button" (click)="onMatchWithUP(uuid)">
+          Rematch
+        </button> -->
+
+        <button mat-stroked-button class="custom-button" (click)="goBack()">
+          <mat-icon class="icon-default">arrow_back</mat-icon> Go Back
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+</div>
+
+
+
+
+<mat-tab-group mat-align-tabs="center" class="tabs" backgroundColor="accent">
+  <mat-tab label="Newly Matched">
+  <ng-container *ngIf="matchData.newly_matched.length > 0; else noData">
+    <div *ngFor="let match of matchData.newly_matched" class="match-card">
+      <div class="card-body">
+        <!-- Missing Person Section -->
+        <div class="person-block">
+          <h5>Missing Person</h5>
+          <div class="info-pairs">
+            <div class="info-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ matchData.missing_person?.full_name || 'Name not available' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ matchData.missing_person?.age || 'Unknown' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Gender:</span>
+              <span class="value">{{ matchData.missing_person?.gender || 'Unknown' | titlecase }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Last Seen:</span>
+              <span class="value">{{ matchData.missing_person?.last_known_details?.[0]?.missing_date | date }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Location:</span>
+              <span class="value">
+                {{ matchData.missing_person?.city || 'Unknown' | titlecase }},
+                {{ matchData.missing_person?.state || '' | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Match Score -->
+        <div class="match-score-chip">
+          {{ match.score || 0 }}% Match
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <!-- Unidentified Person Section -->
+        <div class="person-block">
+          <h5>Unidentified Person</h5>
+          <div class="info-pairs">
+            <div class="info-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ match.person?.full_name || 'Name not available' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ match.person?.age_range || 'Unknown' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Gender:</span>
+              <span class="value">{{ match.person?.gender || 'Unknown' | titlecase }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Found Date:</span>
+              <span class="value">{{ match.person?.reported_date | date }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Location:</span>
+              <span class="value">
+                {{ match.person?.city || 'Unknown' }}, 
+                {{ match.person?.state || '' | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer mt-3">
+        <span class="updated-date">Last updated: {{ match.created_at | date:'yyyy-MM-dd' }}</span>
+        <div class="action-buttons">
+          <button mat-stroked-button class="custom-button">
+            <mat-icon class="icon-default">chevron_right</mat-icon> View Details
+          </button>
+          <button mat-stroked-button class="custom-button">
+            <mat-icon class="icon-success">check_circle</mat-icon> Confirm
+          </button>
+          <button mat-stroked-button class="custom-button" (click)="onRejectMatch(match.match_id)">
+            <mat-icon class="icon-danger">cancel</mat-icon> Reject
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <ng-template #noData>
+    <p class="no-data-message">No newly matched cases available.</p>
+  </ng-template>
+</mat-tab>
+
+  <mat-tab label="Previously Matched" >
+  <ng-container *ngIf="matchData.previously_matched?.length > 0; else noData">
+    <div *ngFor="let match of matchData.previously_matched" class="match-card">
+      <div class="card-body">
+
+        <!-- Missing Person Section -->
+        <div class="person-block">
+        <h6 class="mb-3">Missing Person</h6>
+
+        <div class="info-pairs">
+          <div class="info-row">
+            <span class="label">Name:</span>
+            <span class="value">{{ matchData.missing_person?.full_name || 'Name not available' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Age:</span>
+            <span class="value">{{ matchData.missing_person?.age || 'Unknown' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Gender:</span>
+            <span class="value">{{ matchData.missing_person?.gender || 'Unknown' | titlecase }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Last Seen:</span>
+              <span class="value">{{ matchData.missing_person?.last_known_details?.[0]?.missing_date }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Location:</span>
+            <span class="value">
+              {{ matchData.missing_person?.city || 'Unknown' | titlecase }},
+              {{ matchData.missing_person?.state || '' | titlecase}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+        <!-- Match Score -->
+        <div class="match-score-chip">
+          {{ match.score || 0 }}% Match
+        </div>
+        
+
+         <div class="vertical-divider"></div>
+
+        <!-- Unidentified Person Section -->
+        <div class="person-block">
+            <h6 class="mb-3">Unidentified Person</h6>
+
+            <div class="info-pairs">
+              <div class="info-row">
+                <span class="label">Name:</span>
+                <span class="value">{{ match.person?.full_name || 'Name not available' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Age:</span>
+                <span class="value">{{ match.person?.age_range || 'Unknown' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Gender:</span>
+                <span class="value">{{ match.person?.gender || 'Unknown' | titlecase }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Found Date:</span>
+                <span class="value">{{ match.person?.reported_date | date }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Location:</span>
+                <span class="value">
+                  {{ match.person?.city || 'Unknown' }}, {{ match.person?.state || '' | titlecase}}
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer mt-3">
+        <span class="updated-date">Last updated: {{ match.created_at | date:'yyyy-MM-dd' }}</span>
+        <div class="action-buttons">
+          <button mat-stroked-button class="custom-button">
+            <mat-icon class="icon-default">chevron_right</mat-icon> View Details
+          </button>
+
+          <button mat-stroked-button class="custom-button">
+            <mat-icon class="icon-success">check_circle</mat-icon> Confirm
+          </button>
+
+          <button mat-stroked-button class="custom-button" (click)="onRejectMatch(match.match_id)">
+            <mat-icon class="icon-danger">cancel</mat-icon> Reject
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noData>
+    <p class="no-data-message">No matches available.</p>
+  </ng-template>
+ </mat-tab>
+
+
+  <mat-tab label="Rejected">
+  <ng-container *ngIf="matchData.rejected.length > 0; else noData">
+    <!-- Single *ngFor at the correct level -->
+    <div *ngFor="let match of matchData.rejected" class="match-card">
+      <div class="card-body">
+        <!-- Missing Person Section -->
+        <div class="person-block">
+          <h6 class="mb-3">Missing Person</h6>
+          <div class="info-pairs">
+            <div class="info-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ matchData.missing_person?.full_name || 'Name not available' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ matchData.missing_person?.age || 'Unknown' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Gender:</span>
+              <span class="value">{{ matchData.missing_person?.gender || 'Unknown' | titlecase }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Last Seen:</span>
+              <span class="value">{{ matchData.missing_person?.last_known_details?.[0]?.missing_date | date }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Location:</span>
+              <span class="value">
+                {{ matchData.missing_person?.city || 'Unknown' | titlecase }},
+                {{ matchData.missing_person?.state || '' | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Match Score -->
+        <div class="match-score-chip">
+          {{ match.score || 0 }}% Match
+        </div>
+        <div class="vertical-divider"></div>
+        <!-- Unidentified Person Section -->
+        <div class="person-block">
+          <h6 class="mb-3">Unidentified Person</h6>
+          <div class="info-pairs">
+            <div class="info-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ match.person?.full_name || 'Name not available' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ match.person?.age_range || 'Unknown' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Gender:</span>
+              <span class="value">{{ match.person?.gender || 'Unknown' | titlecase }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Found Date:</span>
+              <span class="value">{{ match.person?.reported_date | date }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Location:</span>
+              <span class="value">
+                {{ match.person?.city || 'Unknown' }}, 
+                {{ match.person?.state || '' | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-card class="reason-card">
+        <div class="flex-row">
+          <mat-icon color="warn">cancel</mat-icon>
+          <span class="reason-text">Reason To Reject :{{ match.reject_reason }}</span>
+        </div>
+      </mat-card>
+
+
+      <!-- Footer -->
+      <div class="card-footer mt-3">
+        <span class="updated-date">Last updated: {{ match.created_at | date:'yyyy-MM-dd' }}</span>
+        <div class="action-buttons">
+          <button mat-stroked-button class="custom-button">
+            <mat-icon class="icon-default">chevron_right</mat-icon> View Details
+          </button>
+          
+          <button mat-stroked-button class="custom-button" (click)="onUnrejectMatch(match.match_id)">
+            <mat-icon class="icon-success">check_circle</mat-icon> Un-Reject
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <ng-template #noData>
+    <p class="no-data-message">No rejected matches available.</p>
+  </ng-template>
+ </mat-tab>
+
+  <mat-tab label="Confirmed">
+    <ng-container *ngIf="matchData.confirmed.length > 0; else noData">
+      <ng-container *ngFor="let match of matchData.confirmed">
+        <!-- Your match content here -->
+      </ng-container>
+    </ng-container>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #noData>
+  <p class="no-data">No matches available in this category.</p>
+</ng-template>
+
+

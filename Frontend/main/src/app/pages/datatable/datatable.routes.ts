@@ -9,6 +9,7 @@ import { AdminGuard } from 'src/app/layouts/full/vertical/sidebar/nav-item/admin
 import { UserAccessComponent } from './user-access/user-access.component';
 import { ChangelogsComponent } from './changelogs/changelogs.component';
 import { ChangelogviewComponent } from './changelogview/changelogview.component';
+import { MatwithupComponent } from './kichen-sink/matwithup/matwithup.component';
 
 export const datatablesRoutes: Routes = [
   {
@@ -30,6 +31,7 @@ export const datatablesRoutes: Routes = [
         component: AppKichenSinkComponent,
         
       },
+      { path: 'match-up-result', component: MatwithupComponent },
       {
         path: 'unidentified-person',
         component: UnidentifiedPersonComponent,

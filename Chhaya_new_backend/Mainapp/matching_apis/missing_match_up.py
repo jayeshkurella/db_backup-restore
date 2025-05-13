@@ -45,7 +45,7 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                 created_by = request.user
             )
 
-            if score >= 70:
+            if score >= 50:
                 newly_matched.append({
                     'person': PersonSerializer(up).data,
                     'score': score,
@@ -93,6 +93,21 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
 
         # Gender match (25 points)
         if mp.gender and up.gender and mp.gender.lower() == up.gender.lower():
+            score += 25
+
+        if mp.blood_group and up.blood_group and mp.blood_group.lower() == up.blood_group.lower():
+            score += 25
+
+        if mp.complexion and up.complexion and mp.complexion.lower() == up.complexion.lower():
+            score += 25
+
+        if mp.hair_color and up.hair_color and mp.hair_color.lower() == up.hair_color.lower():
+            score += 25
+
+        if mp.hair_type and up.hair_type and mp.hair_type.lower() == up.hair_type.lower():
+            score += 25
+
+        if mp.eye_color and up.eye_color and mp.eye_color.lower() == up.eye_color.lower():
             score += 25
 
         # Age match (30 points max)
@@ -148,17 +163,13 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
             elif weight_diff <= 1000:  # 1 kg difference
                 score += 10
 
-        # Complexion match (10 points)
-        if mp.complexion and up.complexion and mp.complexion.lower() == up.complexion.lower():
-            score += 10
+        if mp.birth_mark and up.birth_mark and mp.birth_mark.lower() == up.birth_mark.lower():
+            score += 25
 
-        # Hair color match (10 points)
-        if mp.hair_color and up.hair_color and mp.hair_color.lower() == up.hair_color.lower():
-            score += 10
+        if mp.distinctive_mark and up.distinctive_mark and mp.distinctive_mark.lower() == up.distinctive_mark.lower():
+            score += 25
 
-        # Eye color match (10 points)
-        if mp.eye_color and up.eye_color and mp.eye_color.lower() == up.eye_color.lower():
-            score += 10
+
 
         return min(score, 100)  # Cap score at 100%
 
