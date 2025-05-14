@@ -139,6 +139,7 @@ export class HeaderComponent implements OnInit  {
   logout() {
     this.authService.setProfilePic('');  // Clear the picture
     this.authService.logout();
+    this.router.navigate(['/authentication/login']);
   }
 
   confirmDeleteProfile() {

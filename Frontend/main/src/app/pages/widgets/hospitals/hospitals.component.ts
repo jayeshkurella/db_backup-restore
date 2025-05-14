@@ -105,44 +105,45 @@ export class HospitalsComponent implements OnInit{
 }
 
   
-  onsearch(page: number = 1): void {
-    this.loading = true;
-    this.currentPage = page;
-  
-    const queryParams: any = {
-      name: this.searchName || '',
-      city: this.searchCity || '',
-      district: this.searchdistrict || '',
-      state: this.searchstate || '',
-      type: this.searchtype || '',
-      page: this.currentPage,
-      page_size: this.itemsPerPage
-    };
-  
-    this.hospitalService.searchHospitals(queryParams).subscribe(
-      (data) => {
-        setTimeout(() => {
-          if (data && data.results) {
-            console.log('Hospital data:', data); // Debugging log
-            this.allhospitals = data.results;
-            this.totalHospitalItems = data.count;
-          } else {
-            this.allhospitals = [];
-            this.totalHospitalItems = 0;
-          }
-          this.loading = false;
-        }, 1000);
-      },
-      (error) => {
-        setTimeout(() => {
-          console.error("Error fetching hospitals:", error);
+ onsearch(page: number = 1): void {
+  this.loading = true;
+  this.currentPage = page;
+
+  const queryParams: any = {
+    name: this.searchFilters.name || '',
+    city: this.searchFilters.city || '',
+    district: this.searchFilters.district || '',
+    state: this.searchFilters.state || '',
+    type: this.searchtype || '',
+    page: this.currentPage,
+    page_size: this.itemsPerPage
+  };
+
+  this.hospitalService.searchHospitals(queryParams).subscribe(
+    (data) => {
+      setTimeout(() => {
+        if (data && data.results) {
+          console.log('Hospital data:', data); // Debugging log
+          this.allhospitals = data.results;
+          this.totalHospitalItems = data.count;
+        } else {
           this.allhospitals = [];
           this.totalHospitalItems = 0;
-          this.loading = false;
-        }, 1000);
-      }
-    );
-  }
+        }
+        this.loading = false;
+      }, 1000);
+    },
+    (error) => {
+      setTimeout(() => {
+        console.error("Error fetching hospitals:", error);
+        this.allhospitals = [];
+        this.totalHospitalItems = 0;
+        this.loading = false;
+      }, 1000);
+    }
+  );
+}
+
   
   onHospitalPageChange(event: any): void {
     this.currentPage = event.pageIndex + 1; // 0-based index

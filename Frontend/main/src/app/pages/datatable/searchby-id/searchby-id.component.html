@@ -1,1 +1,342 @@
-<p>searchby-id works!</p>
+<div class="search-container container py-4">
+  <h1 class="text-center fw-bold mb-2">Case Search</h1>
+  <p class="text-center text-muted mb-4">Enter a case ID to view complete case details</p>
+
+  <form (submit)="searchCase()" class="mb-5">
+    <div class="row g-3 justify-content-center">
+      <div class="col-md-8 col-lg-9">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Enter Case ID</mat-label>
+          <input 
+            matInput 
+            [(ngModel)]="caseId" 
+            name="caseId"
+            placeholder="e.g., MP-202505-MUM-0001"
+            required
+          >
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 col-lg-3 d-flex align-items-start">
+        <button 
+          mat-flat-button 
+          color="primary" 
+          class="w-100 py-2"
+          type="submit"
+          [disabled]="isLoading"
+        >
+          Search
+          <mat-spinner *ngIf="isLoading" diameter="20" class="ms-2 d-inline-block"></mat-spinner>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <ng-container *ngIf="caseData">
+    <mat-card class="mb-4 shadow-sm">
+      <mat-card-header class="border-bottom pb-3 mb-3">
+        <mat-card-title class="fw-bold fs-3">{{ caseData.case_id || 'Case Details' }}</mat-card-title>
+        <mat-card-subtitle class="d-flex align-items-center gap-2 mt-2">
+          <span >{{ caseData.type }}</span>
+          <span class="badge fs-6" 
+            [ngClass]="{
+              'status-pending': caseData.case_status === 'pending',
+              'status-resolved': caseData.case_status === 'resolved',
+              'status-closed': caseData.case_status === 'closed'
+            }">
+            {{ caseData.case_status || 'Unknown' }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="mat-typography">
+        <!-- Basic Information -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Basic Information</mat-card-title>
+          <div class="row g-3">
+            <div class="col-md-2" *ngIf="caseData.photo_photo">
+              <img
+                [src]="environment.apiUrl + caseData.photo_photo"
+                alt="Case Photo"
+                class="img-fluid rounded shadow-sm"
+              />
+            </div>
+            <div class="col-md-10">
+              <div class="row g-3">
+                <div class="col-sm-6 col-md-4">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Reported Date</p>
+                  <p class="mb-0">{{ caseData.reported_date || 'Not available' }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Full Name</p>
+                  <p class="mb-0">{{ caseData.full_name || 'Not available' | titlecase }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Gender</p>
+                  <p class="mb-0">{{ caseData.gender || 'Not available' | titlecase }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4" *ngIf="caseData.type === 'Missing Person' && caseData.age !== null && caseData.age !== undefined">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Age</p>
+                  <p class="mb-0">{{ caseData.age }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4" *ngIf="(caseData.type === 'Unidentified Person' || caseData.type === 'Unidentified Body') && caseData.age_range">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Age Range</p>
+                  <p class="mb-0">{{ caseData.age_range }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Blood Group</p>
+                  <p class="mb-0">{{ caseData.blood_group || 'Not available' }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4" *ngIf="caseData.type === 'Unidentified Person'">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Condition</p>
+                  <p class="mb-0">{{ caseData.condition | titlecase }}</p>
+                </div>
+                <div class="col-sm-6 col-md-4" *ngIf="caseData.type === 'Unidentified Body'">
+                  <p class="mb-1 text-muted small text-uppercase fw-bold">Body Condition</p>
+                  <p class="mb-0">{{ caseData.Body_Condition | titlecase }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Appearance Information -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Appearance Information</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Height</p>
+              <p class="mb-0">{{ caseData.height || caseData.height_range || 'Not available' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Weight</p>
+              <p class="mb-0">{{ caseData.weight || 'Not available' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Complexion</p>
+              <p class="mb-0">{{ caseData.complexion || 'Not available' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Hair Color</p>
+              <p class="mb-0">{{ caseData.hair_color || 'Not available' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Hair Type</p>
+              <p class="mb-0">{{ caseData.hair_type || 'Not available' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Eye Color</p>
+              <p class="mb-0">{{ caseData.eye_color || 'Not available' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Birth Mark</p>
+              <p class="mb-0">{{ caseData.birth_mark || 'None reported' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Distinctive Mark</p>
+              <p class="mb-0">{{ caseData.distinctive_mark || 'None reported' }}</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Address Information -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Address Information</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Address Type</p>
+              <p class="mb-0">{{ caseData.address_type | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Street</p>
+              <p class="mb-0">{{ caseData.street || 'Not available' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Village</p>
+              <p class="mb-0">{{ caseData.village | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">City</p>
+              <p class="mb-0">{{ caseData.city | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">District</p>
+              <p class="mb-0">{{ caseData.district | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">State</p>
+              <p class="mb-0">{{ caseData.state | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Country</p>
+              <p class="mb-0">{{ caseData.country | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Landmark</p>
+              <p class="mb-0">{{ caseData.landmark_details || 'Not available' }}</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Contact Information -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Contact Information</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.type">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Contact Type</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.type | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.phone_no">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Phone</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.phone_no }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.email_id">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Email</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.email_id }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.company_name">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Company</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.company_name | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.person_name">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Contact Person</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.person_name | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.job_title">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Job Title</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.job_title | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.social_media_url">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Social Media</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.social_media_url }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.website_url">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Website</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.website_url }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="caseData.contacts[0]?.additional_details">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Additional Details</p>
+              <p class="mb-0">{{ caseData.contacts[0]?.additional_details }}</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Personal Details -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Personal Details</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Caste</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.caste || 'N/A' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Sub Caste</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.subcaste || 'N/A' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Religion</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.religion || 'N/A' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Marital Status</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.marital_status || 'N/A' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Mother Tongue</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.mother_tongue || 'N/A' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Languages Known</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.other_known_languages || 'N/A' | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Education</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.education_details || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Occupation</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.occupation_details || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">ID Type</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.id_type | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">ID Number</p>
+              <p class="mb-0">{{ caseData.additional_info[0]?.id_no || 'N/A' }}</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Missing Details -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Missing Details</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Missing Date</p>
+              <p class="mb-0">{{ caseData.last_known_details[0]?.missing_date || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Missing Time</p>
+              <p class="mb-0">{{ caseData.last_known_details[0]?.missing_time || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Last Seen Details</p>
+              <p class="mb-0">{{ caseData.last_known_details[0]?.last_seen_location || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Missing Location</p>
+              <p class="mb-0">{{ caseData.last_known_details[0]?.missing_location_details || 'N/A' }}</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- FIR Details -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">FIR Details</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Police Station</p>
+              <p class="mb-0">{{ caseData.firs[0]?.police_station | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">FIR Number</p>
+              <p class="mb-0">{{ caseData.firs[0]?.fir_number || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Case Status</p>
+              <p class="mb-0">{{ caseData.firs[0]?.case_status | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Investigation Officer</p>
+              <p class="mb-0">{{ caseData.firs[0]?.investigation_officer_name | titlecase }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Officer Contact</p>
+              <p class="mb-0">{{ caseData.firs[0]?.investigation_officer_contacts || 'N/A' }}</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Consent Information -->
+        <mat-card class="mb-4 p-3">
+          <mat-card-title class="fs-5 fw-bold mb-3 pb-2 border-bottom">Consent Information</mat-card-title>
+          <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Consent Given</p>
+              <p class="mb-0">{{ caseData.consent[0]?.is_consent ? 'Yes' : 'No' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Consent Type</p>
+              <p class="mb-0">{{ caseData.consent[0]?.consent_type || 'N/A' }}</p>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <p class="mb-1 text-muted small text-uppercase fw-bold">Consent Details</p>
+              <p class="mb-0">{{ caseData.consent[0]?.consent_details || 'N/A' }}</p>
+            </div>
+          </div>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

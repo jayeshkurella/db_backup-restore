@@ -16,11 +16,11 @@
     
     <!-- First Row (5 Fields) -->
     <div class="row">
-      <!-- <div class="col-lg-2 col-md-2">
+      <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input matInput placeholder="Full Name" [(ngModel)]="filters.full_name"  />
         </mat-form-field>
-      </div> -->
+      </div>
       
   
       <div class="col-lg-2 col-md-2">
@@ -47,8 +47,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      
-  
+
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <!-- <mat-label>City</mat-label> -->
@@ -61,7 +60,7 @@
         </mat-form-field>
       </div>
             <!-- Start Date Picker -->
-      <div class="col-lg-3 col-md-3">
+      <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Start Date</mat-label>
           <input matInput [matDatepicker]="startPicker" [(ngModel)]="filters.startDate" placeholder="Choose start date">
@@ -70,7 +69,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-lg-3 col-md-3">
+      <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>End Date</mat-label>
           <input matInput 
@@ -183,12 +182,11 @@
     </div>
     <div class="row mt-3">
       <div class="col-12 text-center">
-        <button mat-flat-button 
-                class="btn btn-outline-primary" 
-                (click)="applyFilters()" 
-                [disabled]="!anyFilterSelected()">
-          <mat-icon>search</mat-icon> Search
-        </button>
+        <button mat-flat-button class="btn btn-outline-primary" 
+        (click)="applyFilters()"
+        [disabled]="!hasFiltersApplied()">
+  <mat-icon>search</mat-icon> Search
+</button>
       </div>
     </div>
     

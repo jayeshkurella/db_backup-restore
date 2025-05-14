@@ -35,6 +35,10 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
         for up in eligible_ups:
             score = self.calculate_match_score(missing_person, up)
 
+            # Skip if gender doesn't match (score will be 0)
+            if score == 0:
+                continue
+
             # Create match history record
             match_record = PersonMatchHistory.objects.create(
                 missing_person=missing_person,
@@ -42,7 +46,7 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                 match_type='matched' if score >= 70 else 'potential',
                 score=score,
                 match_parameters=self._get_match_parameters(missing_person, up),
-                created_by = request.user
+                created_by=request.user
             )
 
             if score >= 50:
@@ -52,12 +56,20 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                     'match_id': match_record.match_id
                 })
 
+        # Sort newly_matched by score (highest first)
+        newly_matched.sort(key=lambda x: x['score'], reverse=True)
+
         # Categorize previously matched ones with scores
         previously_matched = []
         rejected = []
         confirmed = []
 
         for match in history_qs:
+            # Skip if genders don't match (shouldn't happen with new logic, but for historical records)
+            if (match.missing_person.gender and match.unidentified_person.gender and
+                    match.missing_person.gender.lower() != match.unidentified_person.gender.lower()):
+                continue
+
             up_data = PersonSerializer(match.unidentified_person).data
             match_data = {
                 'person': up_data,
@@ -73,8 +85,13 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
                 match_data['reject_reason'] = match.reject_reason
                 rejected.append(match_data)
             elif match.match_type == 'confirmed':
-                match_data['confirmation_note'] =match.confirmation_note
+                match_data['confirmation_note'] = match.confirmation_note
                 confirmed.append(match_data)
+
+        # Sort all lists by score (highest first)
+        previously_matched.sort(key=lambda x: x['score'], reverse=True)
+        rejected.sort(key=lambda x: x['score'], reverse=True)
+        confirmed.sort(key=lambda x: x['score'], reverse=True)
 
         return Response({
             "newly_matched": newly_matched,
@@ -86,11 +103,20 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
 
     def calculate_match_score(self, mp, up):
         score = 0
+        gender_mismatch = False
 
-        # Gender match (25 points)
-        if mp.gender and up.gender and mp.gender.lower() == up.gender.lower():
-            score += 25
+        # Gender check (must match for any potential match)
+        if mp.gender and up.gender:
+            if mp.gender.lower() != up.gender.lower():
+                gender_mismatch = True
+            else:
+                score += 25  # Gender match points
 
+        # If gender doesn't match, return 0 immediately
+        if gender_mismatch:
+            return 0
+
+        # Continue with other scoring criteria
         if mp.blood_group and up.blood_group and mp.blood_group.lower() == up.blood_group.lower():
             score += 25
 

@@ -117,7 +117,7 @@ export const navItems: NavItem[] = [
     navCap: 'Logs',
   },
   {
-    displayName: 'Chanage Log',
+    displayName: 'Change Log',
     iconName: 'check',
     route: '/datatable/change-log',
   },

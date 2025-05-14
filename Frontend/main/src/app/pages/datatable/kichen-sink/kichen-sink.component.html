@@ -1,13 +1,6 @@
 
 <mat-card class="cardWithShadow m-1">
   <mat-card-content>
-    <!-- <div *ngIf="loading" class="spinner-overlay">
-      <div class="spinner-container">
-        <mat-progress-spinner mode="indeterminate" diameter="70" color="primary"></mat-progress-spinner>
-        <p class="text-white mt-2">{{ progressMessage }}</p>
-      </div>
-    </div> -->
-    
     <nav aria-label="breadcrumb" class="breadcrumb-container">
       <ol class="breadcrumb mb-2">
         <li class="breadcrumb-item active" aria-current="page">Search Missing Person</li>
@@ -186,9 +179,11 @@
     </div>
     <div class="row mt-3">
       <div class="col-12 text-center">
-        <button mat-flat-button  class="btn btn-outline-primary" (click)="applyFilters()">
-          <mat-icon>search</mat-icon> Search
-        </button>
+        <button mat-flat-button class="btn btn-outline-primary" 
+        (click)="applyFilters()"
+        [disabled]="!hasFiltersApplied()">
+      <mat-icon>search</mat-icon> Search
+    </button>
       </div>
     </div>
     
@@ -272,7 +267,7 @@
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
-                  <button mat-icon-button color="primary" (click)="openDialog(person)">
+                  <button mat-icon-button color="primary" (click)="viewDetails(person)">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 </td>
@@ -283,8 +278,8 @@
                 <button mat-button color="primary" (click)="onMatchWithUP(person.id)">
                   Match with UP
                 </button>
-                <button mat-button color="accent" (click)="onMatchWithUP(person.id)">
-                  Match with UB
+                <button mat-button color="accent">
+                  Coming Soon
                 </button>
               </td>
             </ng-container>

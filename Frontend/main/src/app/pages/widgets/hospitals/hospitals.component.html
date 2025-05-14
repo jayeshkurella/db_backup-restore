@@ -9,57 +9,61 @@
             color="primary"
             (click)="addhospital()"
             class="d-flex align-items-center">
-      <mat-icon>add</mat-icon>&nbsp;Add Hospital
+      <mat-icon>add</mat-icon>Add New
     </button>
   </div>
   
 
   <form (ngSubmit)="onsearch()" novalidate>
-    <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mb-3">
-      <!-- Name -->
-      <mat-form-field appearance="outline" class="with-icon ">
-        <input matInput [(ngModel)]="searchName" name="searchName" placeholder="Search by name">
-      </mat-form-field>
+    <!-- Parent Container -->
+  <div class="w-100 d-flex flex-wrap gap-2 align-items-end border-bottom pb-3 mb-2">
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="with-icon">
+      <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by name">
+    </mat-form-field>
 
-      <!-- State -->
-      <mat-form-field appearance="outline" class="w-auto min-width-200">
-        <mat-select [(ngModel)]="searchstate" name="state" (selectionChange)="onStateChange()">
-          <mat-option value="">All States</mat-option>
-          <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <!-- State -->
+    <mat-form-field appearance="outline" class="w-auto min-width-200">
+      <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()">
+        <mat-option value="">All States</mat-option>
+        <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- District -->
-      <mat-form-field appearance="outline" class="w-auto min-width-200">
-        <mat-select [(ngModel)]="searchdistrict" name="district" (selectionChange)="onDistrictChange()">
-          <mat-option value="">District</mat-option>
-          <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <!-- District -->
+    <mat-form-field appearance="outline" class="w-auto min-width-200">
+      <mat-select [(ngModel)]="searchFilters.district" name="district"(selectionChange)="onDistrictChange()">
+        <mat-option value="">District</mat-option>
+        <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- City -->
-      <mat-form-field appearance="outline" class="w-auto min-width-200">
-        <mat-select [(ngModel)]="searchCity" name="city">
-          <mat-option value="">City</mat-option>
-          <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <!-- City -->
+    <mat-form-field appearance="outline" class="w-auto min-width-200">
+      <mat-select [(ngModel)]="searchFilters.city" name="city">
+        <mat-option value="">City</mat-option>
+        <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- Hospital Type -->
-      <mat-form-field appearance="outline" class="w-auto min-width-200">
-        <mat-select [(ngModel)]="searchtype" name="type" >
-          <mat-option value="">Type</mat-option>
-          <mat-option value="gvt">Government</mat-option>
-          <mat-option value="semi_gvt">Semi-Government</mat-option>
-          <mat-option value="private">Private</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <!-- Hospital Type -->
+    <mat-form-field appearance="outline" class="w-auto min-width-200">
+      <mat-select [(ngModel)]="searchtype" name="type">
+        <mat-option value="">Type</mat-option>
+        <mat-option value="gvt">Government</mat-option>
+        <mat-option value="semi_gvt">Semi-Government</mat-option>
+        <mat-option value="private">Private</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- Search Button -->
-      <button mat-flat-button color="primary" class="d-flex align-items-center" style="margin-bottom: 17px;">
+    <!-- Search Button -->
+    <div class="mb-3 " style="margin-left:20px;">
+      <button mat-flat-button color="primary">
         <mat-icon>search</mat-icon>&nbsp;Search
       </button>
     </div>
+  </div>
+
   </form>
 
   <div class="row p-2 mt-1">

@@ -10,10 +10,11 @@ import { MatSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-changepassword',
-  imports: [ReactiveFormsModule,CommonModule,MatFormField,MatLabel,MatError,MatInputModule,MatSpinner,MatIcon,MatProgressBar,MatCard,MatCardHeader,MatCardTitle,MatCardSubtitle,MatCardContent,MatCardActions,RouterModule],
+  imports: [ReactiveFormsModule,CommonModule,MatFormField,MatLabel,MatError,MatInputModule,MatSpinner,MatIcon,MatProgressBar,MatCard,MatCardHeader,MatCardTitle,MatCardSubtitle,MatCardContent,MatCardActions,RouterModule,MatButton],
   templateUrl: './changepassword.component.html',
   styleUrl: './changepassword.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +29,7 @@ export class ChangepasswordComponent {
     private fb: FormBuilder,
     private userService: LoginApiService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.passwordForm = this.fb.group({
       old_password: ['', Validators.required],
@@ -96,5 +97,9 @@ export class ChangepasswordComponent {
       horizontalPosition: 'right',
       verticalPosition: 'top'
     });
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboards/dashboard1']);
   }
 }

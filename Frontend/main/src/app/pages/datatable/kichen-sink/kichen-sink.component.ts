@@ -543,7 +543,26 @@ export class AppKichenSinkComponent implements AfterViewInit {
   });
 }
 
+hasFiltersApplied(): boolean {
+  return !(
+    !this.filters.full_name &&
+    !this.filters.state &&
+    !this.filters.district &&
+    !this.filters.city &&
+    !this.filters.startDate &&
+    !this.filters.endDate &&
+    !this.filters.caste &&
+    !this.filters.gender &&
+    !this.filters.age_range &&
+    !this.filters.marital_status &&
+    !this.filters.blood_group &&
+    !this.filters.height_range
+  );
+}
 
+viewDetails(person: Person): void {
+      this.router.navigate(['/datatable/missing-person/person-view', person.id]);
+  }
 
   
 }
