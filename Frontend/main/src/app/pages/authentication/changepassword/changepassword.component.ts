@@ -74,8 +74,8 @@ export class ChangepasswordComponent {
     this.userService.changePassword(this.passwordForm.value).subscribe({
       next: (res) => {
         this.showSnackbar(res.message || 'Password updated successfully', 'success');
-        this.passwordForm.reset();
-        setTimeout(() => this.router.navigate(['/dashboard']), 1500);
+        setTimeout(() => this.router.navigate(['authentication/login']));
+         this.passwordForm.reset();
       },
       error: (err) => {
         this.showSnackbar(

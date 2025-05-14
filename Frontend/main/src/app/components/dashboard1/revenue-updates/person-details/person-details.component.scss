@@ -1,62 +1,17 @@
-/* Person Details Dialog Styles */
-.person-photo-container {
-  height: 300px;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
+.compact-view {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-.person-photo-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.compact-view .mat-expansion-panel {
+  margin-bottom: 8px;
 }
 
-.detail-section {
-  background-color: #f8f9fa;
-  border-left: 4px solid #3f51b5;
+.compact-view .mat-list-item {
+  height: auto !important;
+  padding: 4px 0;
 }
 
-.section-title {
-  color: #3f51b5;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.detail-item {
-  margin-bottom: 0.5rem;
-  display: flex;
-}
-
-.detail-label {
-  font-weight: 500;
-  color: #555;
-  min-width: 140px;
-  display: inline-block;
-}
-
-.detail-value {
-  color: #333;
-  flex: 1;
-}
-
-.person-header-card {
-  background-color: white;
-  border: 1px solid #e0e0e0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .detail-item {
-    flex-direction: column;
-  }
-  
-  .detail-label {
-    min-width: auto;
-    margin-bottom: 0.25rem;
-  }
+.compact-view mat-card {
+  padding: 12px;
 }

@@ -48,6 +48,10 @@ export const navItems: NavItem[] = [
     route: '/datatable',
     children: [
       {
+        displayName: 'Search by ID',
+        // iconName: 'user',
+        route: '/datatable/search-by-id',
+      },{
         displayName: 'Missing Person',
         // iconName: 'user',
         route: '/datatable/missing-person',
@@ -108,9 +112,15 @@ export const navItems: NavItem[] = [
     iconName: 'check',
     route: '/datatable/User-access',
     condition: 'admin', 
-  }
-
-
+  },
+ {
+    navCap: 'Logs',
+  },
+  {
+    displayName: 'Chanage Log',
+    iconName: 'check',
+    route: '/datatable/change-log',
+  },
 
   
 

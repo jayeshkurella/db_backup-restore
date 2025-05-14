@@ -87,26 +87,23 @@ export class HospitalsComponent implements OnInit{
     this.router.navigate(['/widgets/add-hospitals']);
   }
   fetchHospitalData(): void {
-    this.loading = true;
-    this.hospitalService.getAllHospitals().subscribe(
-      (data) => {
-        setTimeout(() => {
-          if (data) {
-            console.log('Data fetched:', data);  // Debugging log
-            this.allhospitals = data.results;
-            this.totalHospitalItems = data.count; // Ensure this is set
-          }
-          this.loading = false;
-        }, 2000); // 2-second delay
-      },
-      (error) => {
-        setTimeout(() => {
-          this.loading = false;
-          console.error("Error fetching hospitals:", error);
-        }, 2000);
+  this.loading = true;
+  this.hospitalService.getAllHospitals().subscribe(
+    (data) => {
+      if (data) {
+        console.log('Data fetched:', data);  // Debugging log
+        this.allhospitals = data.results;
+        this.totalHospitalItems = data.count; // Ensure this is set
       }
-    );
-  }
+      this.loading = false;
+    },
+    (error) => {
+      this.loading = false;
+      console.error("Error fetching hospitals:", error);
+    }
+  );
+}
+
   
   onsearch(page: number = 1): void {
     this.loading = true;

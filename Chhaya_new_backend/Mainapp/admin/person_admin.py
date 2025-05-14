@@ -5,7 +5,7 @@ from leaflet.admin import LeafletGeoAdmin
 @admin.register(Person)
 class PersonAdmin(LeafletGeoAdmin):
     list_display = (
-        "person_approve_status","reported_date","sr_no", "full_name", "type", "gender", "age", "age_range","birth_date","birthtime",
+       "case_id", "person_approve_status","reported_date","sr_no", "full_name", "type", "gender", "age", "age_range","birth_date","birthtime",
         "height","height_range", "weight", "blood_group", "complexion","photo_photo","bodies_condition","up_condition",
         "eye_color", "hair_type", "hair_color",
         'street', 'appartment_no', 'appartment_name', 'village', 'city', 'district', 'state', 'pincode', 'country',
@@ -20,7 +20,7 @@ class PersonAdmin(LeafletGeoAdmin):
     )
 
     search_fields = (
-        "full_name", "distinctive_mark", "birth_mark", "document_ids",
+       "case_id", "full_name", "distinctive_mark", "birth_mark", "document_ids",
         "city", "district", "village", "street", "landmark_details"
     )
 
@@ -29,7 +29,7 @@ class PersonAdmin(LeafletGeoAdmin):
 
     fieldsets = (
         ("Basic Information", {
-            "fields": ("full_name", "type", "gender", "birth_date", "age","age_range", "birthplace","birthtime")
+            "fields": ("case_id","full_name", "type", "gender", "birth_date", "age","age_range", "birthplace","birthtime")
         }),
         ("Physical Characteristics", {
             "fields": ("height","height_range", "weight", "complexion", "eye_color", "hair_color", "hair_type", "blood_group","photo_photo")

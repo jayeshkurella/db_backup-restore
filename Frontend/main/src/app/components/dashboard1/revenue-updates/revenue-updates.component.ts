@@ -35,6 +35,7 @@ import { DialogModelViewComponent } from './dialog-model-view/dialog-model-view.
     MatDatepickerModule,
     MatNativeDateModule, ],
   templateUrl: './revenue-updates.component.html',
+  styleUrls: ['./revenue-updates.component.css'],
 })
 export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
@@ -256,6 +257,7 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     }
   }
   
+  
 
   filterDataByFilters(): void {
         this.moveMapToState(this.selectedState);
@@ -290,26 +292,6 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
  }
   
   
-//  viewDetails(person: any): void {
-//     const personId = person.id.split('.')[1];
-  
-//     fetch(`${environment.apiUrl}/api/persons/${personId}/`)
-//       .then(response => {
-//         if (!response.ok) {
-//           throw new Error(`Failed to fetch person details: ${response.status}`);
-//         }
-//         return response.json();
-//       })
-//       .then(data => {
-//         this.dialog.open(DialogModelViewComponent, {
-//           width: '55vw',
-//           maxWidth: 'none',
-//           data: data, 
-//         });
-//       })
-//       .catch(error => console.error('Error fetching person details:', error));
-//   }
-    
 
   private missingPersonLayer: L.LayerGroup = L.layerGroup();
   private unidentifiedPersonLayer: L.LayerGroup = L.layerGroup();
@@ -427,13 +409,32 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
     this.missingPersonLayer = L.layerGroup();
     this.unidentifiedPersonLayer = L.layerGroup();
     this.unidentifiedBodiesLayer = L.layerGroup();
-  const customIcon = L.icon({
-      iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'assets/leaflet/images/marker-shadow.png',
-      shadowSize: [41, 41]
+  // const customIcon = L.icon({
+  //     iconUrl: 'assets/leaflet/images/marker-icon-2x.png',
+  //     iconSize: [25, 41],
+  //     iconAnchor: [12, 41],
+  //     popupAnchor: [1, -34],
+  //     shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+  //     shadowSize: [41, 41]
+  // });
+
+  // Define male and female icons
+  const maleIcon = L.icon({
+    iconUrl: 'assets/old/images/malee.png', 
+    iconSize: [32, 32],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    // shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+    shadowSize: [41, 41]
+  });
+
+  const femaleIcon = L.icon({
+    iconUrl: 'assets/old/images/woman.png', 
+    iconSize: [32, 32],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    // shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+    shadowSize: [41, 41]
   });
 
 
@@ -674,14 +675,18 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
           this.displayFilteredDataDetails();
 
           // Load initial subset of points (e.g., first 100 points)
+          // const initialPoints = data.features.slice(0, 100);
+          // this.addMarkersToMap(initialPoints, customIcon);
+
           const initialPoints = data.features.slice(0, 100);
-          this.addMarkersToMap(initialPoints, customIcon);
+          this.addMarkersToMap(initialPoints, maleIcon, femaleIcon);
+
 
           // Load remaining points asynchronously
           const remainingPoints = data.features.slice(100);
           if (remainingPoints.length > 0) {
               setTimeout(() => {
-                  this.addMarkersToMap(remainingPoints, customIcon);
+                 this.addMarkersToMap(remainingPoints, maleIcon, femaleIcon);
               }, 1000); // Delay to ensure initial points are rendered first
           }
 
@@ -709,75 +714,143 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
 
  }
 
+ async addMarkersToMap(features: any[], maleIcon: L.Icon, femaleIcon: L.Icon) {
+  if (!this.map) {
+    console.error("Map is not initialized yet.");
+    return;
+  }
+
+  const markerPromises = features.map(async (feature: any) => {
+    try {
+      const fullPersonId = feature.id;
+      const personId = fullPersonId.split('.')[1];
+      const geometry = feature.geometry;
+
+      if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
+        console.warn("Invalid or missing 'geometry' data for feature:", feature);
+        return null;
+      }
+
+      const [lng, lat] = geometry.coordinates;
+      const latlng: L.LatLngTuple = [lat, lng];
+
+      const personResponse = await fetch(`${environment.apiUrl}/api/persons/${personId}/`);
+      if (!personResponse.ok) throw new Error(`Failed to fetch person details: ${personResponse.status}`);
+
+      const personDetails = await personResponse.json();
+
+      // Choose icon based on gender
+      const icon = personDetails.gender === 'female' ? femaleIcon : maleIcon;
+      const marker = L.marker(latlng, { icon });
+
+      const imageUrl = personDetails.photo_photo 
+        ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
+        : '/assets/old/images/Chhaya.png';
+
+      const popupContent = `
+        <div style="max-width: 300px;">
+          <img src="${imageUrl}" 
+              alt="Person Image" 
+              style="width: 200px; height: 200px; object-fit: contain; margin: 10px 0;"><br>
+          <b>Type:</b> ${personDetails.type || 'N/A'}<br>
+          <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
+          <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+          <b>City:</b> ${personDetails.city || 'N/A'}<br>
+          <b>State:</b> ${personDetails.state || 'N/A'}<br>
+          <b>Country:</b> ${personDetails.country || 'N/A'}<br>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent);
+
+      // Add to respective layer group
+      const type = personDetails.type;
+      if (type === 'Missing Person') {
+        this.missingPersonLayer.addLayer(marker);
+      } else if (type === 'Unidentified Person') {
+        this.unidentifiedPersonLayer.addLayer(marker);
+      } else if (type === 'Unidentified Body') {
+        this.unidentifiedBodiesLayer.addLayer(marker);
+      }
+
+      return marker;
+    } catch (error) {
+      console.error("Error processing feature:", feature, error);
+      return null;
+    }
+  });
+
+  await Promise.all(markerPromises);
+}
  
 
-  async addMarkersToMap(features: any[], customIcon: L.Icon) {
-    if (!this.map) {
-        console.error("Map is not initialized yet.");
-        return;
-    }
+//   async addMarkersToMap(features: any[], customIcon: L.Icon) {
+//     if (!this.map) {
+//         console.error("Map is not initialized yet.");
+//         return;
+//     }
 
-    const markerPromises = features.map(async (feature: any) => {
-        try {
-            const fullPersonId = feature.id;
-            const personId = fullPersonId.split('.')[1];
-            const geometry = feature.geometry;
+//     const markerPromises = features.map(async (feature: any) => {
+//         try {
+//             const fullPersonId = feature.id;
+//             const personId = fullPersonId.split('.')[1];
+//             const geometry = feature.geometry;
 
-            if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
-                console.warn("Invalid or missing 'geometry' data for feature:", feature);
-                return null;
-            }
+//             if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 2) {
+//                 console.warn("Invalid or missing 'geometry' data for feature:", feature);
+//                 return null;
+//             }
 
-            const [lng, lat] = geometry.coordinates;
-            const latlng: L.LatLngTuple = [lat, lng];
+//             const [lng, lat] = geometry.coordinates;
+//             const latlng: L.LatLngTuple = [lat, lng];
 
-            const personResponse = await fetch(`${environment.apiUrl}/api/persons/${personId}/`);
-            if (!personResponse.ok) throw new Error(`Failed to fetch person details: ${personResponse.status}`);
+//             const personResponse = await fetch(`${environment.apiUrl}/api/persons/${personId}/`);
+//             if (!personResponse.ok) throw new Error(`Failed to fetch person details: ${personResponse.status}`);
 
-            const personDetails = await personResponse.json();
+//             const personDetails = await personResponse.json();
 
-            const marker = L.marker(latlng, { icon: customIcon });
+//             const marker = L.marker(latlng, { icon: customIcon });
 
-            const imageUrl = personDetails.photo_photo 
-                ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
-                : '/assets/old/images/Chhaya.png';
+//             const imageUrl = personDetails.photo_photo 
+//                 ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
+//                 : '/assets/old/images/Chhaya.png';
 
-            const popupContent = `
-                <div style="max-width: 400px; padding: 5px;">
-                    <img src="${imageUrl}" 
-                        alt="Person Image" 
-                        style="width: 100%; max-width: 400px; max-height: 400px; object-fit: contain; margin: 10px 0;"><br>
-                    <b>Type:</b> ${personDetails.type || 'N/A'}<br>
-                    <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
-                    <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-                    <b>City:</b> ${personDetails.city || 'N/A'}<br>
-                    <b>State:</b> ${personDetails.state || 'N/A'}<br>
-                    <b>Country:</b> ${personDetails.country || 'N/A'}<br>
-                </div>
-            `;
+//             const popupContent = `
+//                 <div style="max-width: 300px;">
+//                     <img src="${imageUrl}" 
+//                         alt="Person Image" 
+//                         style="width: 200px; height: 200px; object-fit: contain;margin: 10px 0;"><br>
+//                     <b>Type:</b> ${personDetails.type || 'N/A'}<br>
+//                     <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
+//                     <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
+//                     <b>City:</b> ${personDetails.city || 'N/A'}<br>
+//                     <b>State:</b> ${personDetails.state || 'N/A'}<br>
+//                     <b>Country:</b> ${personDetails.country || 'N/A'}<br>
+//                 </div>
+//             `;
 
-            marker.bindPopup(popupContent);
+//             marker.bindPopup(popupContent);
 
-            // Add to respective layer group
-            const type = personDetails.type;
-            if (type === 'Missing Person') {
-                this.missingPersonLayer.addLayer(marker);
-            } else if (type === 'Unidentified Person') {
-                this.unidentifiedPersonLayer.addLayer(marker);
-            } else if (type === 'Unidentified Body') {
-                this.unidentifiedBodiesLayer.addLayer(marker);
-            }
+//             // Add to respective layer group
+//             const type = personDetails.type;
+//             if (type === 'Missing Person') {
+//                 this.missingPersonLayer.addLayer(marker);
+//             } else if (type === 'Unidentified Person') {
+//                 this.unidentifiedPersonLayer.addLayer(marker);
+//             } else if (type === 'Unidentified Body') {
+//                 this.unidentifiedBodiesLayer.addLayer(marker);
+//             }
 
-            return marker;
+//             return marker;
 
-        } catch (error) {
-            console.error("Error processing feature:", feature, error);
-            return null;
-        }
-    });
+//         } catch (error) {
+//             console.error("Error processing feature:", feature, error);
+//             return null;
+//         }
+//     });
 
-    await Promise.all(markerPromises);
- }
+//     await Promise.all(markerPromises);
+//  }
 
 
 

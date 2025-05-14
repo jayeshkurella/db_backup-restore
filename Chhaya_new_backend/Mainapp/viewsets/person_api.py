@@ -153,7 +153,8 @@ class PersonViewSet(viewsets.ViewSet):
                         'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent', 'hospital'
                     ]
                 }
-                person = Person.objects.create(**person_data, hospital=hospital)
+                # person = Person.objects.create(**person_data, hospital=hospital)
+                person = Person(**person_data, hospital=hospital)
                 logger.debug("Person Created: %s", person.id)
 
                 # Extract zero index address and store it directly in the person model
@@ -495,6 +496,18 @@ class PersonViewSet(viewsets.ViewSet):
             return Response({'message': 'All persons deleted successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='search/(?P<case_id>[^/.]+)')
+    def retrieve_by_case_id(self, request, case_id=None):
+        try:
+            person = Person.objects.get(case_id=case_id, _is_deleted=False, person_approve_status='approved')
+            serializer = PersonSerializer(person)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Person.DoesNotExist:
+            return Response({'error': f'Person with Case ID {case_id} not found or is not approved'},
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=['get'], url_path='missing-persons')
     def missing_persons(self, request):

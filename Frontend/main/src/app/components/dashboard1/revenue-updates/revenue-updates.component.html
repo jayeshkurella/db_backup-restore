@@ -2,151 +2,94 @@
   <mat-card-content>
     <div class="containerx h-100">
       <!-- Filters Section -->
-      <div class="row">
+      <div class="filter-container">
+  <!-- First Row -->
+  <div class="filter-row">
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedState" placeholder="Maharashtra" (selectionChange)="onStateChange($event.value)">
+        <mat-option value="">All States</mat-option>
+        <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <div class="col-12">
-          <div class="location-filter-wrapper overflow-auto">
-            <div class="d-flex flex-nowrap gap-3 align-items-start">
-          
-              <!-- State -->
-              <div style="min-width: 200px;">
-                <mat-form-field appearance="outline" floatLabel="always" class="w-100">
-                  <!-- <mat-label>State</mat-label> -->
-                  <mat-select [(ngModel)]="selectedState" (selectionChange)="onStateChange($event.value)">
-                    <mat-option [value]="">State</mat-option>
-                    <mat-option *ngFor="let state of allstates" [value]="state">
-                      {{ state }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-          
-              <!-- District -->
-              <div style="min-width: 200px;">
-                <mat-form-field appearance="outline" class="w-100">
-                  <!-- <mat-label>District</mat-label> -->
-                  <mat-select [(ngModel)]="selectedDistrict" (selectionChange)="onDistrictChange($event.value)">
-                    <mat-option value="All Districts">District</mat-option>
-                    <mat-option *ngFor="let district of alldistricts" [value]="district">
-                      {{ district }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-          
-              <!-- City -->
-              <div style="min-width: 200px;">
-                <mat-form-field appearance="outline" class="w-100">
-                  <!-- <mat-label>City</mat-label> -->
-                  <mat-select [(ngModel)]="selectedCity" (selectionChange)="onCityChange($event.value)">
-                    <mat-option value="All Cities">City</mat-option>
-                    <mat-option *ngFor="let city of allcities" [value]="city">
-                      {{ city }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-          
-              <!-- Village -->
-              <div style="min-width: 200px;">
-                <mat-form-field appearance="outline" class="w-100">
-                  <!-- <mat-label>Village</mat-label> -->
-                  <mat-select [(ngModel)]="selectedVillage" (selectionChange)="onVillageChange($event.value)">
-                    <mat-option value="All Villages">Village</mat-option>
-                    <mat-option *ngFor="let village of allVillages" [value]="village">
-                      {{ village }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-          
-              <!-- Case Status -->
-              <div style="min-width: 265px;">
-                <mat-form-field appearance="outline" class="w-100">
-                  <!-- <mat-label>Case Status</mat-label> -->
-                  <mat-select [(ngModel)]="selectedcase" (selectionChange)="filterDataByFilters()">
-                    <mat-option value="All Cases">Case Status</mat-option>
-                    <mat-option value="resolved">Resolved</mat-option>
-                    <mat-option value="pending">Pending</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-          
-            </div>
-          </div>
-          
-        </div>
-        
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedDistrict" placeholder="District" (selectionChange)="onDistrictChange($event.value)">
+        <mat-option value="">All Districts</mat-option>
+        <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        
-        <div class="filter-wrapper overflow-auto">
-          <div class="d-flex flex-nowrap gap-3 align-items-start">
-        
-            <!-- Gender Filter -->
-            <div style="min-width: 200px;">
-              <mat-form-field appearance="outline" class="w-100">
-                <!-- <mat-label>Gender</mat-label> -->
-                <mat-select [(ngModel)]="selectedgender" (selectionChange)="filterDataByFilters()">
-                  <mat-option value="All Genders">Gender</mat-option>
-                  <mat-option value="male">Male</mat-option>
-                  <mat-option value="female">Female</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-        
-            <!-- Height Filter -->
-            <div style="min-width: 200px;">
-              <mat-form-field appearance="outline" class="w-100">
-                <!-- <mat-label>Height Range</mat-label> -->
-                <mat-select [(ngModel)]="selectedHeightRange" (selectionChange)="filterDataByFilters()">
-                  <mat-option value="All Heights">Height</mat-option>
-                  <mat-option value="133-150">133-150 cm</mat-option>
-                  <mat-option value="151-180">151-180 cm</mat-option>
-                  <mat-option value="Above 180">Above 180 cm</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-        
-            <!-- Age Range -->
-            <div style="min-width: 200px;">
-              <mat-form-field appearance="outline" class="w-100">
-                <!-- <mat-label>Age Range</mat-label> -->
-                <mat-select [(ngModel)]="selectedAgeRange" (selectionChange)="filterDataByFilters()">
-                  <mat-option value="All Ages">Age</mat-option>
-                  <mat-option value="0-18">0-18</mat-option>
-                  <mat-option value="18-30">18-30</mat-option>
-                  <mat-option value="30-50">30-50</mat-option>
-                  <mat-option value="50-70">50-70</mat-option>
-                  <mat-option value="Above 70">Above 70</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-        
-            <!-- Start Date -->
-            <div style="min-width: 200px;">
-              <mat-form-field appearance="outline" class="w-100">
-                <!-- <mat-label>Start Date</mat-label> -->
-                <input matInput [(ngModel)]="selectedStartDate" (change)="filterDataByFilters()"  (ngModelChange)="onDateChange()" [matDatepicker]="startPicker" placeholder="Start Date" />
-                <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-                <mat-datepicker #startPicker></mat-datepicker>
-              </mat-form-field>
-            </div>
-        
-            <!-- End Date -->
-            <div style="min-width: 200px;">
-              <mat-form-field appearance="outline" class="w-100">
-                <!-- <mat-label>End Date</mat-label> -->
-                <input matInput [(ngModel)]="selectedEndDate" (change)="filterDataByFilters()"  (ngModelChange)="onDateChange()" [matDatepicker]="endPicker" placeholder="End Date" />
-                <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
-                <mat-datepicker #endPicker></mat-datepicker>
-              </mat-form-field>
-            </div>
-        
-          </div>
-        </div>
-        
-        
-      </div>
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedCity" placeholder="City" (selectionChange)="onCityChange($event.value)">
+        <mat-option value="">All Cities</mat-option>
+        <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedVillage" placeholder="Village">
+        <mat-option value="">All Villages</mat-option>
+        <mat-option *ngFor="let village of allVillages" [value]="village">{{ village }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedcase" placeholder="Case Status">
+        <mat-option value="">All Cases</mat-option>
+        <mat-option value="resolved">Resolved</mat-option>
+        <mat-option value="pending">Pending</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="search-btn" (click)="filterDataByFilters()">
+      Search
+    </button>
+  </div>
+
+  <!-- Second Row -->
+  <div class="filter-row">
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedgender" placeholder="Gender">
+        <mat-option value="">All Genders</mat-option>
+        <mat-option value="male">Male</mat-option>
+        <mat-option value="female">Female</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedHeightRange" placeholder="Height">
+        <mat-option value="">All Heights</mat-option>
+        <mat-option value="133-150">133-150 cm</mat-option>
+        <mat-option value="151-180">151-180 cm</mat-option>
+        <mat-option value="Above 180">Above 180 cm</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="selectedAgeRange" placeholder="Age">
+        <mat-option value="">All Ages</mat-option>
+        <mat-option value="0-18">0-18</mat-option>
+        <mat-option value="18-30">18-30</mat-option>
+        <mat-option value="30-50">30-50</mat-option>
+        <mat-option value="50-70">50-70</mat-option>
+        <mat-option value="Above 70">Above 70</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <input matInput [(ngModel)]="selectedStartDate" [matDatepicker]="startPicker" placeholder="5/13/2025">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <input matInput [(ngModel)]="selectedEndDate" [matDatepicker]="endPicker" placeholder="5/14/2025">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>
+
       <!-- Map Section -->
       <div class="row">
         <div class="col">

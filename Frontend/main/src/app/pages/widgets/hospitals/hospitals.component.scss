@@ -1,6 +1,21 @@
 .text-muted {
     color: var(--mat-text-color) !important;
   }
+
+   
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+
   .centered-icon-text {
     display: flex;
     align-items: center;

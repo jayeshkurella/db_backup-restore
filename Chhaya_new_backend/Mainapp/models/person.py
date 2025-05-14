@@ -1,6 +1,8 @@
 import uuid
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.db import transaction
+
 from .hospital import Hospital
 from django.utils.timezone import now
 from datetime import date
@@ -193,8 +195,7 @@ class Person(models.Model):
         ('archived', 'Archived'),
     ]
 
-
-
+    case_id = models.CharField(max_length=30, unique=True, editable=True,blank=True, null=True, db_index=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(max_length=20, choices=TypeChoices.choices,db_index=True)
     full_name = models.CharField(max_length=100,blank=True, null=True,db_index=True)
@@ -288,6 +289,34 @@ class Person(models.Model):
         help_text="The type of the matched entity"
     )
     matched_person_id = models.UUIDField(null=True, blank=True, help_text="UUID of the matched person")
+
+
+    def save(self, *args, **kwargs):
+        if not self.case_id:
+            self.case_id = self.generate_case_id()
+        super().save(*args, **kwargs)
+
+    def generate_case_id(self):
+        case_type_map = {
+            'Missing Person': 'MP',
+            'Unidentified Person': 'UP',
+            'Unidentified Body': 'UB',
+        }
+
+        case_type_code = case_type_map.get(self.type, 'XX')
+        report_date = self.reported_date or date.today()
+        year_month = report_date.strftime("%Y%m")
+        location_code = (self.city[:3].upper() if self.city else 'XXX')
+
+        with transaction.atomic():
+            count = Person.objects.filter(
+                type=self.type,
+                city=self.city,
+                reported_date__year=report_date.year,
+                reported_date__month=report_date.month
+            ).select_for_update().count() + 1
+
+        return f"{case_type_code}-{year_month}-{location_code}-{count:04d}"
 
     def __str__(self):
         return f"{self.full_name} ({self.type})"

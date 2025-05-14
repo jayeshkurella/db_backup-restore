@@ -231,7 +231,7 @@
   <!-- Edit Profile -->
     <button *ngIf="isLoggedIn" mat-stroked-button color="primary" class="w-100 m-b-8"
             [routerLink]="['/authentication/edit-profile']">
-      Edit Profile
+      Profile
     </button>
   
   <!-- Change Password Button -->
@@ -241,10 +241,10 @@
     Change Password
   </button>
 
-  <button *ngIf="isLoggedIn" mat-stroked-button color="warn" class="w-100 m-b-8"
+  <!-- <button *ngIf="isLoggedIn" mat-stroked-button color="warn" class="w-100 m-b-8"
             (click)="confirmDeleteProfile()">
       Delete Account
-    </button>
+    </button> -->
   
   <!-- Logout Button -->
   <button *ngIf="isLoggedIn" mat-stroked-button color="warn" 
