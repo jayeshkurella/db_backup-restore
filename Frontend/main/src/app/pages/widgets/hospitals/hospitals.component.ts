@@ -165,7 +165,7 @@ export class HospitalsComponent implements OnInit{
   seeMoreHospitaldata(hospital: any) {
     this.router.navigate(['/widgets/hospital', hospital.id], {
       state: { hospital } 
-    });
+    }); 
   }
   
   getStates() {

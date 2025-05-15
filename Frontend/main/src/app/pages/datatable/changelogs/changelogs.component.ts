@@ -4,10 +4,11 @@ import { ChangelogService } from './changelog.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-changelogs',
-  imports: [MatFormFieldModule,ReactiveFormsModule,MatInputModule],
+  imports: [MatFormFieldModule,ReactiveFormsModule,MatInputModule,MatCardModule],
   templateUrl: './changelogs.component.html',
   styleUrl: './changelogs.component.scss'
 })

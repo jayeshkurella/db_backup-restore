@@ -5,247 +5,224 @@
   class="d-block mx-auto my-2"
 ></mat-progress-spinner>
 
-<mat-card class="mat-elevation-z4 p-2 compact-view">
+<mat-card class="mat-elevation-z4 p-3 compact-view">
   <mat-dialog-content class="mat-typography">
     <div *ngIf="person" class="container">
       <!-- Person Overview - Compact Header -->
-      <div class="d-flex mb-2 align-items-start">
-            <!-- Image -->
-            <div class="flex-shrink-0 me-3">
-              <img
-                [src]="environment.apiUrl + person.photo_photo"
-                alt="Person Photo"
-                class="img-fluid rounded"
-                style="max-height: 300px; width: auto; object-fit: cover;"
-              />
-            </div>
+      <div class="d-flex mb-4 align-items-start flex-wrap">
+  <!-- Image -->
+  <div class="flex-shrink-0 me-4 mb-3">
+    <img
+      [src]="environment.apiUrl + person.photo_photo"
+      alt="Person Photo"
+      class="img-fluid rounded"
+      style="max-height: 250px; width: auto; object-fit: cover;"
+    />
+  </div>
 
-            <!-- Details -->
-            <div class="flex-grow-1 mt-5">
-              <div *ngIf="person.type">
-                <strong>Type:</strong> {{ person.type | titlecase }}
-              </div>
+  <!-- Details -->
+  <div class="flex-grow-1">
+    <div class="mb-2"><strong>Case ID:</strong> {{ person.case_id }}</div>
+    <div class="mb-2" *ngIf="person.type">
+      <strong>Type:</strong> {{ person.type | titlecase }}
+    </div>
 
-              <h4 class="mb-2">{{ person.full_name | titlecase }}</h4>
+    <h5 class="mb-3">{{ person.full_name | titlecase }}</h5>
 
-              <!-- Wrapped Info with Gaps -->
-              <div class=" flex-wrap gap-3">
-                <div *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
-                  <strong>Age:</strong> {{ person.age }}
-                </div>
-                <div *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
-                  <strong>Age Range:</strong> {{ person.age_range }}
-                </div>
-                <div><strong>Gender:</strong> {{ person.gender | titlecase }}</div>
-                <div *ngIf="person.blood_group"><strong>Blood Group:</strong> {{ person.blood_group }}</div>
-                <div *ngIf="person.type === 'Unidentified Person' && person.condition">
-                  <strong>Condition:</strong> {{ person.condition | titlecase }}
-                </div>
-                <div *ngIf="person.type === 'Unidentified Body' && person.Body_Condition">
-                  <strong>Body Condition:</strong> {{ person.Body_Condition | titlecase }}
-                </div>
-              </div>
-            </div>
+    <!-- Horizontal Info Grid -->
+    <div class="d-flex flex-wrap gap-3">
+      <div *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
+        <strong>Age:</strong> {{ person.age }}
+      </div>
+      <div *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
+        <strong>Age Range:</strong> {{ person.age_range }}
+      </div>
+      <div><strong>Gender:</strong> {{ person.gender | titlecase }}</div>
+      <div *ngIf="person.blood_group"><strong>Blood Group:</strong> {{ person.blood_group }}</div>
+      <div *ngIf="person.type === 'Unidentified Person' && person.condition">
+        <strong>Condition:</strong> {{ person.condition | titlecase }}
+      </div>
+      <div *ngIf="person.type === 'Unidentified Body' && person.Body_Condition">
+        <strong>Body Condition:</strong> {{ person.Body_Condition | titlecase }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+      <!-- Appearance Info - Now as a simple section -->
+      <div class="mb-4 flex-grow-1">
+        <h5 class="mb-2">Appearance Information</h5>
+        <div class="row">
+          <div class="col-md-6" *ngIf="person.height_range">
+            <strong>Height:</strong> {{ person.height_range || 'N/A' }}
           </div>
-
-
-      <!-- Appearance Info - Compact Grid -->
-      <mat-accordion class="mb-2">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Appearance Information</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-md-6" *ngIf="person.height_range">
-              <strong>Height:</strong> {{ person.height_range || 'N/A' }}
-            </div>
-            <div class="col-md-6" *ngIf="person.weight">
-              <strong>Weight:</strong> {{ person.weight || 'N/A' }}
-            </div>
-            <div class="col-md-6" *ngIf="person.complexion">
-              <strong>Complexion:</strong> {{ person.complexion || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.hair_color">
-              <strong>Hair Color:</strong> {{ person.hair_color || 'N/A' | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.hair_type">
-              <strong>Hair Type:</strong> {{ person.hair_type || 'N/A'| titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.eye_color">
-              <strong>Eye Color:</strong> {{ person.eye_color || 'N/A' | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.birth_mark">
-              <strong>Birth Mark:</strong> {{ person.birth_mark || 'N/A' }}
-            </div>
-            <div class="col-md-6" *ngIf="person.distinctive_mark">
-              <strong>Distinctive Mark:</strong> {{ person.distinctive_mark || 'N/A' }}
-            </div>
+          <div class="col-md-6" *ngIf="person.weight">
+            <strong>Weight:</strong> {{ person.weight || 'N/A' }}
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
+          <div class="col-md-6" *ngIf="person.complexion">
+            <strong>Complexion:</strong> {{ person.complexion || 'N/A' | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.hair_color">
+            <strong>Hair Color:</strong> {{ person.hair_color || 'N/A' | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.hair_type">
+            <strong>Hair Type:</strong> {{ person.hair_type || 'N/A'| titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.eye_color">
+            <strong>Eye Color:</strong> {{ person.eye_color || 'N/A' | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.birth_mark">
+            <strong>Birth Mark:</strong> {{ person.birth_mark || 'N/A' }}
+          </div>
+          <div class="col-md-6" *ngIf="person.distinctive_mark">
+            <strong>Distinctive Mark:</strong> {{ person.distinctive_mark || 'N/A' }}
+          </div>
+        </div>
+      </div>
+<mat-divider></mat-divider>
       <!-- Address Information -->
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Address Information</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-md-6" *ngIf="person.address_type">
-              <strong>Address Type:</strong> {{ person.address_type | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.street">
-              <strong>Street:</strong> {{ person.street }}
-            </div>
-            <div class="col-md-6" *ngIf="person.village">
-              <strong>Village:</strong> {{ person.village | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.city">
-              <strong>City:</strong> {{ person.city | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.district">
-              <strong>District:</strong> {{ person.district | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.state">
-              <strong>State:</strong> {{ person.state | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.country">
-              <strong>Country:</strong> {{ person.country | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.landmark_details">
-              <strong>Landmark:</strong> {{ person.landmark_details }}
-            </div>
+      <div class="mb-4">
+        <h5 class="mb-2">Address Information</h5>
+        <div class="row">
+          <div class="col-md-6" *ngIf="person.address_type">
+            <strong>Address Type:</strong> {{ person.address_type | titlecase}}
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
+          <div class="col-md-6" *ngIf="person.street">
+            <strong>Street:</strong> {{ person.street }}
+          </div>
+          <div class="col-md-6" *ngIf="person.village">
+            <strong>Village:</strong> {{ person.village | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.city">
+            <strong>City:</strong> {{ person.city | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.district">
+            <strong>District:</strong> {{ person.district | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.state">
+            <strong>State:</strong> {{ person.state | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.country">
+            <strong>Country:</strong> {{ person.country | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.landmark_details">
+            <strong>Landmark:</strong> {{ person.landmark_details }}
+          </div>
+        </div>
+      </div>
+<mat-divider></mat-divider>
       <!-- Contact Information -->
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Contact Information</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-md-6" *ngIf="person.contacts[0]?.type">
-              <strong>Contact Type:</strong> {{ person.contacts[0]?.type | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.phone_no">
-              <strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.email_id">
-              <strong>Email:</strong> {{ person.contacts[0]?.email_id }}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.company_name">
-              <strong>Company:</strong> {{ person.contacts[0]?.company_name | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.person_name">
-              <strong>Contact Person:</strong> {{ person.contacts[0]?.person_name | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.job_title">
-              <strong>Job Title:</strong> {{ person.contacts[0]?.job_title | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.social_media_url">
-              <strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}
-            </div>
-            <div class="col-md-6" *ngIf="person.contacts[0]?.website_url">
-              <strong>Website:</strong> {{ person.contacts[0]?.website_url }}
-            </div>
-            <div class="col-md-12" *ngIf="person.contacts[0]?.additional_details">
-              <strong>Additional Details:</strong> {{ person.contacts[0]?.additional_details }}
-            </div>
+      <div class="mb-4">
+        <h5 class="mb-2">Contact Information</h5>
+        <div class="row">
+          <div class="col-md-6" *ngIf="person.contacts[0]?.type">
+            <strong>Contact Type:</strong> {{ person.contacts[0]?.type | titlecase}}
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
+          <div class="col-md-6" *ngIf="person.contacts[0]?.phone_no">
+            <strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}
+          </div>
+          <div class="col-md-6" *ngIf="person.contacts[0]?.email_id">
+            <strong>Email:</strong> {{ person.contacts[0]?.email_id }}
+          </div>
+          <div class="col-md-6" *ngIf="person.contacts[0]?.company_name">
+            <strong>Company:</strong> {{ person.contacts[0]?.company_name | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.contacts[0]?.person_name">
+            <strong>Contact Person:</strong> {{ person.contacts[0]?.person_name | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.contacts[0]?.job_title">
+            <strong>Job Title:</strong> {{ person.contacts[0]?.job_title | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.contacts[0]?.social_media_url">
+            <strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}
+          </div>
+          <div class="col-md-6" *ngIf="person.contacts[0]?.website_url">
+            <strong>Website:</strong> {{ person.contacts[0]?.website_url }}
+          </div>
+          <div class="col-md-12" *ngIf="person.contacts[0]?.additional_details">
+            <strong>Additional Details:</strong> {{ person.contacts[0]?.additional_details }}
+          </div>
+        </div>
+      </div>
+<mat-divider></mat-divider>
       <!-- Education & Occupation -->
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Educational & Occupation Details</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.caste">
-              <strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.subcaste">
-              <strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.religion">
-              <strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.marital_status">
-              <strong>Marital Status:</strong> {{ person.additional_info[0]?.marital_status || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.mother_tongue">
-              <strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.other_known_languages">
-              <strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.education_details">
-              <strong>Education:</strong> {{ person.additional_info[0]?.education_details }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.occupation_details">
-              <strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.id_type">
-              <strong>ID Type:</strong> {{ person.additional_info[0]?.id_type | titlecase }}
-            </div>
-            <div class="col-md-6" *ngIf="person.additional_info[0]?.id_no">
-              <strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}
-            </div>
+      <div class="mb-4">
+        <h5 class="mb-2">Educational & Occupation Details</h5>
+        <div class="row">
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.caste">
+            <strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' | titlecase }}
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.subcaste">
+            <strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.religion">
+            <strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.marital_status">
+            <strong>Marital Status:</strong> {{ person.additional_info[0]?.marital_status || 'N/A' | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.mother_tongue">
+            <strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.other_known_languages">
+            <strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.education_details">
+            <strong>Education:</strong> {{ person.additional_info[0]?.education_details }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.occupation_details">
+            <strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.id_type">
+            <strong>ID Type:</strong> {{ person.additional_info[0]?.id_type | titlecase }}
+          </div>
+          <div class="col-md-6" *ngIf="person.additional_info[0]?.id_no">
+            <strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}
+          </div>
+        </div>
+      </div>
+<mat-divider></mat-divider>
       <!-- Missing Details -->
-      <mat-accordion *ngIf="person.type === 'Missing Person'">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Missing Details</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-md-6" *ngIf="person.last_known_details[0]?.missing_date">
-              <strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}
-            </div>
-            <div class="col-md-6" *ngIf="person.last_known_details[0]?.missing_time">
-              <strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}
-            </div>
-            <div class="col-md-6" *ngIf="person.last_known_details[0]?.last_seen_location">
-              <strong>Person Last Seen Details:</strong> {{ person.last_known_details[0]?.last_seen_location }}
-            </div>
-            <div class="col-md-6" *ngIf="person.last_known_details[0]?.missing_location_details">
-              <strong>Missing Location Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}
-            </div>
+      <div class="mb-4" *ngIf="person.type === 'Missing Person'">
+        <h5 class="mb-2">Missing Details</h5>
+        <div class="row">
+          <div class="col-md-6" *ngIf="person.last_known_details[0]?.missing_date">
+            <strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
+          <div class="col-md-6" *ngIf="person.last_known_details[0]?.missing_time">
+            <strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}
+          </div>
+          <div class="col-md-6" *ngIf="person.last_known_details[0]?.last_seen_location">
+            <strong>Person Last Seen Details:</strong> {{ person.last_known_details[0]?.last_seen_location }}
+          </div>
+          <div class="col-md-6" *ngIf="person.last_known_details[0]?.missing_location_details">
+            <strong>Missing Location Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}
+          </div>
+        </div>
+      </div>
+<mat-divider></mat-divider>
       <!-- FIR Details -->
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>FIR Details</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-md-6" *ngIf="person.firs[0]?.police_station">
-              <strong>Police Station:</strong> {{ person.firs[0]?.police_station | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.firs[0]?.fir_number">
-              <strong>FIR Number:</strong> {{ person.firs[0]?.fir_number }}
-            </div>
-            <div class="col-md-6" *ngIf="person.firs[0]?.case_status">
-              <strong>Case Status:</strong> {{ person.firs[0]?.case_status | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.firs[0]?.investigation_officer_name">
-              <strong>Investigation Officer Name:</strong> {{ person.firs[0]?.investigation_officer_name | titlecase}}
-            </div>
-            <div class="col-md-6" *ngIf="person.firs[0]?.investigation_officer_contacts">
-              <strong>Investigation Officer Contact Number:</strong> {{ person.firs[0]?.investigation_officer_contacts }}
-            </div>
+      <div class="mb-4">
+        <h5 class="mb-2">FIR Details</h5>
+        <div class="row">
+          <div class="col-md-6" *ngIf="person.firs[0]?.police_station">
+            <strong>Police Station:</strong> {{ person.firs[0]?.police_station | titlecase}}
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
+          <div class="col-md-6" *ngIf="person.firs[0]?.fir_number">
+            <strong>FIR Number:</strong> {{ person.firs[0]?.fir_number }}
+          </div>
+          <div class="col-md-6" *ngIf="person.firs[0]?.case_status">
+            <strong>Case Status:</strong> {{ person.firs[0]?.case_status | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.firs[0]?.investigation_officer_name">
+            <strong>Investigation Officer Name:</strong> {{ person.firs[0]?.investigation_officer_name | titlecase}}
+          </div>
+          <div class="col-md-6" *ngIf="person.firs[0]?.investigation_officer_contacts">
+            <strong>Investigation Officer Contact Number:</strong> {{ person.firs[0]?.investigation_officer_contacts }}
+          </div>
+        </div>
+      </div>
 
       <div class="d-flex justify-content-start mt-2">
         <button mat-flat-button (click)="goBack()" class="back-btn">

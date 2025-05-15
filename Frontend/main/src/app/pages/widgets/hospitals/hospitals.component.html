@@ -1,17 +1,20 @@
-<div class="header-container">
-  <h2 class="page-title">Hospitals</h2>
-</div>
+
 <div class="px-3 py-3 mat-elevation-z1">
   <!-- Header Row: Left Title + Right Add Button -->
-  <div class="d-flex justify-content-end align-items-end mb-3">
-    <button *ngIf="isLoggedIn && isAdmin"
-            mat-flat-button
-            color="primary"
-            (click)="addhospital()"
-            class="d-flex align-items-center">
-      <mat-icon>add</mat-icon>Add New
-    </button>
-  </div>
+<div class="header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+  <h2 class="page-title" style="margin: 0;">Hospitals</h2>
+
+  <button *ngIf="isLoggedIn && isAdmin"
+          mat-flat-button
+          color="primary"
+          (click)="addhospital()"
+          class="d-flex align-items-center"
+          style="width: 105px;">
+    <mat-icon>add</mat-icon>&nbsp;Add
+  </button>
+</div>
+
+
   
 
   <form (ngSubmit)="onsearch()" novalidate>

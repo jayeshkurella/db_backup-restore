@@ -3,6 +3,7 @@
     <h3 class="main-heading">MISSING PERSON REPORT FORM</h3>
   </div>
 
+
   <form [formGroup]="personForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
     <!-- Personal Info Section -->
@@ -162,12 +163,13 @@
         </mat-form-field>
         
         <!-- File Uploads -->
-        <div class="col-12 col-md-3 mb-3">
+        <!-- <div class="col-12 col-md-3 mb-3">
           <label for="bodyPhotoInput"
           class="form-control d-flex align-items-center justify-content-center gap-3 text-body" style="cursor: pointer;">
             <i class="bi bi-upload"></i>  
             Person Photo  
           </label>
+          
           <input
             id="bodyPhotoInput"
             type="file"
@@ -175,13 +177,20 @@
             class="d-none"
             (change)="onFileSelect_person_photo($event)"
           />
+        </div> -->
+    
+        <div class="col-md-3" style="margin-bottom: 20px;">
+          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+            <mat-icon>cloud_upload</mat-icon>Person Photo
+          </button>
+          <input
+            #personPhotoInput
+            type="file"
+            accept="image/*"
+            hidden
+            (change)="onFileSelect_person_photo($event)"
+          />
         </div>
-        
-        
-
-        
-        
-
       </div>
 
       <!-- Fourth Row -->
@@ -688,7 +697,8 @@
             <!-- <label class="form-label selectors-font">Reference Photo</label> -->
             <button mat-stroked-button color="primary" class="w-100" type="button" (click)="fileInput1.click()">
               <mat-icon>cloud_upload</mat-icon> Upload Reference Photo
-            </button>
+            </button> 
+            
             <input #fileInput1 type="file" accept="image/*"
                    (change)="onFileSelect($event, 'last_known_details', i, 'person_photo')" 
                    hidden class="form-control w-100">
@@ -850,9 +860,8 @@
     <!-- Consent & Submission -->
     <mat-card class="card p-4  mb-1">
 
-      <div formArrayName="consent">
+      <!-- <div formArrayName="consent">
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-          <!-- Consent Checkbox -->
           <div class="col-md-12">
             <mat-checkbox formControlName="is_consent" class="w-100">
               I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
@@ -862,7 +871,29 @@
         
         </div>
         
-      </div>
+      </div> -->
+
+      <div formArrayName="consent">
+  <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+    
+    <!-- Bootstrap Checkbox -->
+    <div class="form-check col-md-12">
+      <input
+        class="form-check-input border-primary"
+        type="checkbox"
+        [formControlName]="'is_consent'"
+        id="consentCheck{{ i }}"
+        
+      />
+      <label class="form-check-label" [for]="'consentCheck' + i">
+        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
+        I consent to the use of this information for the purpose of locating the missing person.
+      </label>
+    </div>
+
+  </div>
+</div>
+
 
     </mat-card>
 
@@ -883,9 +914,6 @@
           </button>
         </span>
       </div>
-
-
-    
 
   </form>
 </div>

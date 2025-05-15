@@ -47,3 +47,50 @@
 
 // RTL Theme
 @use "rtl/rtl";
+
+
+.leaflet-container a.leaflet-popup-close-button {
+     position: absolute !important;
+    left: 360px !important;
+    top: 15px !important;
+  padding: 4px 4px 0 0;
+  border: none;
+  width: 25px !important;
+  height: 26px !important;
+  font: 20px Tahoma, Verdana, sans-serif;
+  color: #c3c3c3;
+  text-decoration: none;
+  font-weight: bold;
+//   background: transparent;
+  font-size: 24px !important;
+ 
+}
+
+.leaflet-popup-content-wrapper {
+  width: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.leaflet-popup-tip {
+  display: none !important;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  backdrop-filter: none !important;
+}
+

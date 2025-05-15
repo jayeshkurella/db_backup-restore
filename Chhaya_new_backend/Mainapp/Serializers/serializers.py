@@ -120,7 +120,21 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-    
+class ApprovePersonSerializer(serializers.ModelSerializer):
+
+    # addresses = AddressSerializer(many=True)
+    # contacts = ContactSerializer(many=True)
+    # additional_info = AdditionalInfoSerializer(many=True)
+    # last_known_details = LastKnownDetailsSerializer(many=True)
+    # firs = FIRSerializer(many=True)
+    # consent = ConsentSerializer(many=True)
+    # hospital = HospitalSerializer()
+
+    class Meta:
+        model = Person
+        fields = ['id','full_name', 'city', 'village', 'state', 'person_approve_status','status_reason']
+
+
 class VolunteerSerializer(serializers.ModelSerializer):
     volunteer_Address = AddressSerializer(many=True)
     volunteer_contact = ContactSerializer(many=True)

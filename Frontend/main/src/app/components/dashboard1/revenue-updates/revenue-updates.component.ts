@@ -747,19 +747,77 @@ export class AppRevenueUpdatesComponent implements OnInit ,AfterViewInit {
         ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}` 
         : '/assets/old/images/Chhaya.png';
 
-      const popupContent = `
-        <div style="max-width: 300px;">
-          <img src="${imageUrl}" 
-              alt="Person Image" 
-              style="width: 200px; height: 200px; object-fit: contain; margin: 10px 0;"><br>
-          <b>Type:</b> ${personDetails.type || 'N/A'}<br>
-          <b>Name:</b> ${personDetails.full_name || 'N/A'}<br>
-          <b>Gender:</b> ${personDetails.gender || 'N/A'}<br>
-          <b>City:</b> ${personDetails.city || 'N/A'}<br>
-          <b>State:</b> ${personDetails.state || 'N/A'}<br>
-          <b>Country:</b> ${personDetails.country || 'N/A'}<br>
-        </div>
-      `;
+  const popupContent = `
+  <div style="width: 370px; font-family: 'Segoe UI', sans-serif; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); overflow: hidden;">
+
+  <!-- Header -->
+  <div style="background-color: #fbbc04; padding: 10px; text-align: center; font-weight: bold; font-size: 16px;">
+    TraceMapr Case Information
+  </div>
+
+  <!-- Body -->
+  <div style="display: flex; padding: 16px; background: white;">
+
+    <!-- Left: Image and Basic Info -->
+    <div style="width: 100px; text-align: center; margin-right: 12px;">
+      <img src="${imageUrl || 'assets/old/images/Chhaya.png'}" 
+           onerror="this.src='https://via.placeholder.com/80?text=No+Image'" 
+           alt="Person Photo"
+           style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+      <div style="font-weight: bold; font-size: 14px; margin-top: 8px;">${personDetails.full_name || 'N/A'}</div>
+      <div style="font-size: 13px; color: #555;">
+        Age: ${personDetails.age || 'N/A'} | 
+        ${personDetails.gender ? personDetails.gender.charAt(0).toUpperCase() + personDetails.gender.slice(1).toLowerCase() : 'N/A'}
+      </div>
+    </div>
+
+    <!-- Right: Info -->
+    <div style="flex: 1;">
+      <div style="margin-bottom: 8px;">
+        <span style="display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 12px; margin-right: 6px; background-color: #f8d7da; color: #721c24;">
+          ${personDetails.type || 'Missing'}
+        </span>
+        <span style="display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 12px; background-color: #fff3cd; color: #856404;">
+          ${personDetails.case_status || 'Pending'}
+        </span>
+      </div>
+
+            <div style="margin-bottom: 6px; font-size: 14px;">
+        <strong>Address:</strong><br>
+        ${personDetails.city || 'N/A'}, ${personDetails.state || 'N/A'}, ${personDetails.country || 'N/A'}
+      </div>
+
+
+      <div style="margin-bottom: 6px; font-size: 14px;">
+        <strong>Police Station:</strong><br>
+        ${personDetails.firs && personDetails.firs.length > 0 ? personDetails.firs[0].police_station || 'N/A' : 'N/A'}
+      </div>
+
+      <div style="font-size: 14px;">
+        <strong>Case ID:</strong><br>
+        ${personDetails.case_id || 'N/A'}
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="font-size: 11px; color: #999; text-align: right; padding: 0 12px 8px; font-style: italic;">
+    TraceMapr by Chhaya Foundation
+  </div>
+</div>
+
+`;
+
+
+
+
+
+
+
+
+
+
+
 
       marker.bindPopup(popupContent);
 

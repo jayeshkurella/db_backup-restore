@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { LoginApiService } from '../../authentication/side-login/login-api.service';
 
 @Component({
   selector: 'app-changelogview',
@@ -15,8 +16,10 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class ChangelogviewComponent implements OnInit {
   logs: DailyChangeLog[] = [];
-
-  constructor(private logService: ChangelogService,private router: Router,) {}
+isLoggedIn = false;
+  constructor(private logService: ChangelogService,private router: Router,private authService: LoginApiService) {
+    this.isLoggedIn = this.authService.isUserLoggedIn(); 
+  }
 
   ngOnInit() {
     this.loadLogs();

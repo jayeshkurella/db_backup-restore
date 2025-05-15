@@ -15,7 +15,7 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 
 @Component({
   selector: 'app-person-details',
-  imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatListItem,MatList,MatCardTitle,MatIcon,MatCard,MatButton,MatDivider,MatSpinner,MatExpansionPanel,MatExpansionPanelTitle,MatExpansionPanelHeader,MatAccordion],
+  imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatIcon,MatCard,MatButton,MatDivider,MatSpinner,MatDivider],
   templateUrl: './person-details.component.html',
   styleUrl: './person-details.component.scss'
 })

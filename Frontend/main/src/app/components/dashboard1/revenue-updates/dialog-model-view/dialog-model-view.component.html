@@ -5,39 +5,52 @@
 
     <!-- Person Overview -->
     <div class="row mb-4">
-      <div class="col-md-5 text-center">
-        <img
-            [src]="environment.apiUrl + person.photo_photo"
-            alt="Person Photo"
-            class="img-fluid rounded"
-            style="height: 300px; width: 100%; object-fit: cover;"
-          />
+  <!-- Photo Section -->
+  <div class="col-md-5 text-center">
+    <img
+      [src]="environment.apiUrl + person.photo_photo"
+      alt="Person Photo"
+      class="img-fluid rounded"
+      style="height: 300px; width: 100%; object-fit: cover;"
+    />
+  </div>
 
+  <!-- Details Section -->
+  <div class="col-md-7">
+    <h3 class="mb-3">{{ person.full_name }}</h3>
+
+    <div class="row mb-2">
+      <div class="col-sm-4 font-weight-bold">Age:</div>
+      <div class="col-sm-8" *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
+        {{ person.age }}
       </div>
-      <div class="col-md-7">
-        <h3>{{ person.full_name }}</h3>
-      
-        <p *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
-          <strong>Age:</strong> {{ person.age }}
-        </p>
-      
-        <p *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
-          <strong>Age Range:</strong> {{ person.age_range }}
-        </p>
-      
-        <p><strong>Gender:</strong> {{ person.gender }}</p>
-        <p><strong>Blood Group:</strong> {{ person.blood_group }}</p>
-      
-        <p *ngIf="person.type === 'Unidentified Person'">
-          <strong>Condition:</strong> {{ person.condition }}
-        </p>
-      
-        <p *ngIf="person.type === 'Unidentified Body'">
-          <strong>Body Condition:</strong> {{ person.Body_Condition }}
-        </p>
+      <div class="col-sm-8" *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
+        {{ person.age_range }}
       </div>
-      
     </div>
+
+    <div class="row mb-2">
+      <div class="col-sm-4 font-weight-bold">Gender:</div>
+      <div class="col-sm-8">{{ person.gender }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-sm-4 font-weight-bold">Blood Group:</div>
+      <div class="col-sm-8">{{ person.blood_group }}</div>
+    </div>
+
+    <div class="row mb-2" *ngIf="person.type === 'Unidentified Person'">
+      <div class="col-sm-4 font-weight-bold">Condition:</div>
+      <div class="col-sm-8">{{ person.condition }}</div>
+    </div>
+
+    <div class="row mb-2" *ngIf="person.type === 'Unidentified Body'">
+      <div class="col-sm-4 font-weight-bold">Body Condition:</div>
+      <div class="col-sm-8">{{ person.Body_Condition }}</div>
+    </div>
+  </div>
+</div>
+
 
     <!-- Appearance Info -->
     <h5 class="text-primary">Appearance Information</h5>

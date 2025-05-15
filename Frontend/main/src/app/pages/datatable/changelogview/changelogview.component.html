@@ -1,12 +1,13 @@
 <div class="changelog-container">
   <div class="changelog-header">
     <h2> Change log</h2>
-    <button mat-raised-button color="primary" (click)="goToAddLog()" class="add-log-btn">
-      Add Change Log
-    </button>
+   <button *ngIf="isLoggedIn" mat-raised-button color="primary" (click)="goToAddLog()" class="add-log-btn">
+  Add Log
+</button>
+
   </div>
 
-  <div class="changelog-timeline">
+  <div class="changelog-timeline Mat-caption">
     <div *ngFor="let log of logs" class="log-item">
       <div class="log-timeline-marker">
         <div class="log-version-badge">v{{ log.version }}</div>
@@ -29,7 +30,7 @@
           <div *ngIf="log.added.length" class="log-section">
             <div class="log-section-header">
               <mat-icon class="section-icon">add_circle</mat-icon>
-              <h4>Added Features</h4>
+              <h4 >Added Features</h4>
             </div>
             <ul>
               <li *ngFor="let item of log.added">

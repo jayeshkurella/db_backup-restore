@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from 'src/envirnment/envirnment';
 import { IdserviceService } from './idservice.service';
+import { Router } from '@angular/router';
 // import { MatListItem } from '@angular/material/list';
 // import { MatList } from '@angular/material/list';
 // import { MatDivider } from '@angular/material/divider';
@@ -41,7 +42,8 @@ export class SearchbyIDComponent {
 
   constructor(
     private caseService: IdserviceService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+     private router: Router
   ) {}
 
   searchCase() {
@@ -71,5 +73,8 @@ export class SearchbyIDComponent {
   return fullPath;
   }
 
+  goBack(): void {
+    this.router.navigate(['datatable/missing-person']);
+  }
 
 }

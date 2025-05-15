@@ -4,7 +4,7 @@ from uuid import UUID
 
 from dateutil import parser
 from django.db.models import Q
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
@@ -12,10 +12,13 @@ from rest_framework.permissions import IsAuthenticated ,AllowAny
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import status
+
+from .pending_person_pagination import PendingPersonPagination
 from ..models.fir import FIR
 from ..access_permision import IsAdminUser , IsVolunteerUser ,AllUserAccess
 from ..pagination import CustomPagination
-from ..Serializers.serializers import PersonSerializer
+from ..Serializers.serializers import PersonSerializer, ApprovePersonSerializer
 from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, Document, PoliceStation, \
     Hospital
 from django.db import transaction
@@ -603,6 +606,83 @@ class PersonViewSet(viewsets.ViewSet):
             return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
+    # def pending_or_rejected(self, request):
+    #     try:
+    #         # Extract filter parameters from query string
+    #         state = request.query_params.get('state')
+    #         district = request.query_params.get('district')
+    #         city = request.query_params.get('city')
+    #         village = request.query_params.get('village')
+    #         police_station = request.query_params.get('police_station')
+    #
+    #         # Build dynamic filters using Q
+    #         filters = Q()
+    #         if state:
+    #             filters &= Q(state__iexact=state)
+    #         if district:
+    #             filters &= Q(district__iexact=district)
+    #         if city:
+    #             filters &= Q(city__iexact=city)
+    #         if village:
+    #             filters &= Q(village__iexact=village)
+    #         if police_station:
+    #             filters &= Q(firs__police_station__id=UUID(police_station))
+    #
+    #         # Apply filters to the queryset
+    #         persons = Person.objects.filter(filters)
+    #
+    #         # Group data by status fields
+    #         summary = {
+    #             'pending': [],
+    #             'approved': [],
+    #             'rejected': [],
+    #             'on_hold': [],
+    #             'suspended': []
+    #         }
+    #
+    #         for person in persons:
+    #             approve_status = person.person_approve_status
+    #             # status_field = person.status
+    #             serialized = ApprovePersonSerializer(person).data
+    #
+    #             if approve_status == 'pending':
+    #                 summary['pending'].append(serialized)
+    #             elif approve_status == 'approved':
+    #                 summary['approved'].append(serialized)
+    #             elif approve_status == 'rejected':
+    #                 summary['rejected'].append(serialized)
+    #             elif approve_status == 'on_hold':
+    #                 summary['on_hold'].append(serialized)
+    #             elif approve_status == 'suspended':
+    #                 summary['suspended'].append(serialized)
+    #
+    #         # Combine all for pagination (you can choose to paginate one category at a time if needed)
+    #         combined_data = (
+    #                 summary['pending'] +
+    #                 summary['approved'] +
+    #                 summary['rejected'] +
+    #                 summary['on_hold'] +
+    #                 summary['suspended']
+    #         )
+    #
+    #         # Paginate combined data
+    #         paginator = PendingPersonPagination()
+    #         page = paginator.paginate_queryset(combined_data, request)
+    #         return paginator.get_paginated_response({
+    #             'pending_count': len(summary['pending']),
+    #             'approved_count': len(summary['approved']),
+    #             'rejected_count': len(summary['rejected']),
+    #             'on_hold_count': len(summary['on_hold']),
+    #             'suspended_count': len(summary['suspended']),
+    #             'results': page
+    #         })
+    #
+    #     except Exception as e:
+    #         return Response(
+    #             {'error': 'Something went wrong while fetching person data.', 'details': str(e)},
+    #             status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    #         )
+
     def pending_or_rejected(self, request):
         try:
             # Extract filter parameters from query string

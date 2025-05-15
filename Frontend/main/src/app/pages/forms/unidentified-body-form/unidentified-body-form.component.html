@@ -1,5 +1,4 @@
-
-  <div class="unidentified-person-form-container p-4 bg-white rounded shadow-sm">
+<div class="unidentified-person-form-container p-4 bg-white rounded shadow-sm">
     <div class="heading-container">
       <h3 class="main-heading">UNIDENTIFIED BODY REPORT FORM</h3>
     </div>
@@ -214,7 +213,7 @@
 
       
           <!-- Body Photo Upload -->
-          <div class="col-12 col-md-4">
+          <!-- <div class="col-12 col-md-4">
             <label for="bodyPhotoInput"
           class="form-control d-flex align-items-center justify-content-center gap-3 text-body" style="cursor: pointer;">
             <i class="bi bi-upload"></i>  
@@ -227,6 +226,18 @@
             class="d-none"
             (change)="onFileSelect_person_photo($event)"
           />
+          </div> -->
+            <div class="col-md-4" style="margin-bottom: 20px;">
+            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+              <mat-icon>cloud_upload</mat-icon>Person Photo
+            </button>
+            <input
+              #personPhotoInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileSelect_person_photo($event)"
+            />
           </div>
       
         </div>
@@ -730,10 +741,9 @@
       <!-- Consent & Submission -->
       <mat-card class="card p-4  mb-1">
   
-        <div formArrayName="consent">
+        <!-- <div formArrayName="consent">
           <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
-  
-            <!-- Consent Checkbox -->
+
             <div class="col-md-12">
               <mat-checkbox formControlName="is_consent">
                 I hereby declare that the information provided in this report is true and accurate to the best of my
@@ -743,7 +753,29 @@
             </div>
   
           </div>
-        </div>
+        </div> -->
+
+          <div formArrayName="consent">
+  <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+    
+    <!-- Bootstrap Checkbox -->
+    <div class="form-check col-md-12">
+      <input
+        class="form-check-input border-primary"
+        type="checkbox"
+        [formControlName]="'is_consent'"
+        id="consentCheck{{ i }}"
+
+      />
+      <label class="form-check-label" [for]="'consentCheck' + i">
+        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
+        I consent to the use of this information for the purpose of locating the missing person.
+      </label>
+    </div>
+
+  </div>
+</div>
+
   
       </mat-card>
   

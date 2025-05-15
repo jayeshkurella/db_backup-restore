@@ -1,6 +1,8 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="professional-form">
+
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="professional-form">
     <!-- Date Field -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field appearance="outline" class="full-width mat-caption">
       <mat-label>Date</mat-label>
       <input matInput type="date" formControlName="date" required>
       <mat-hint>Choose a date</mat-hint>
@@ -39,4 +41,8 @@
       <button mat-flat-button color="primary" type="submit" class="add-log-btn" [disabled]="form.invalid">Save Log</button>
     </div>
   </form>
+
+
+  <!-- Form for adding changelogs -->
+
   
