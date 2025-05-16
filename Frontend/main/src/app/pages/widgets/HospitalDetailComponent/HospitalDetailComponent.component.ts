@@ -72,7 +72,6 @@ export class HospitalDetailComponentComponent implements OnInit {
     // ✅ Add marker with custom icon
     L.marker([lat, lng], { icon: customIcon })
       .addTo(map)
-      .bindPopup(this.hospital.name)
       .openPopup();
   }
 

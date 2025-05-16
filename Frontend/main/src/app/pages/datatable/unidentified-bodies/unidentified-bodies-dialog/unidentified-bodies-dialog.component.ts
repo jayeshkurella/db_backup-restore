@@ -1,67 +1,63 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/envirnment/envirnment';
-import * as L from 'leaflet';
-
+// import { MatList, MatListItem } from '@angular/material/list';
+import { MatCard} from '@angular/material/card';
+import { MatSpinner } from '@angular/material/progress-spinner';
+import { MatCardTitle } from '@angular/material/card';
+import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 
 @Component({
   selector: 'app-unidentified-bodies-dialog',
-  imports: [MatDialogModule, MatButtonModule, CommonModule],
+   imports: [MatDialogModule,SafeTitlecasePipe,MatCardTitle ,MatButtonModule ,CommonModule,MatIcon,MatCard,MatButton,MatSpinner],
   templateUrl: './unidentified-bodies-dialog.component.html',
   styleUrl: './unidentified-bodies-dialog.component.scss'
 })
 export class UnidentifiedBodiesDialogComponent {
-environment =environment
-    constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
-   map: any;
-    marker: any;
-    ngAfterViewInit(): void {
-      setTimeout(() => this.initMap(), 400);
+
+    environment = environment;
+    person: any;
+  isLoading = false;
+    constructor(private route: ActivatedRoute, private http: HttpClient,private router :Router) {}
+  
+    ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+  
+    if (!id) {
+      console.error('Missing or invalid ID in route');
+      return;
     }
   
-    initMap(): void {
-      const location = this.parseWKT(this.data.location);
-      if (!location) {
-        console.error('No valid coordinates found');
-        return;
+    this.isLoading = true;
+  
+    this.http.get<any>(`${environment.apiUrl}/api/persons/${id}/`).subscribe({
+      next: (data) => {
+        console.log('Person Data:', data);
+        this.person = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading person data:', err);
+        this.isLoading = false;
       }
+    });
+  }
   
-      if (this.map) this.map.remove();
+   getImageUrl(imagePath: string): string {
+    return imagePath ? `${environment.apiUrl}${imagePath}` : '/assets/old/images/Chhaya.png';
+  }
   
-      this.map = L.map('map', {
-        center: [location.lat, location.lng],
-        zoom: 13,
-        attributionControl: false,
-      });
   
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-      }).addTo(this.map);
   
-      const customIcon = L.icon({
-        iconUrl: 'assets/leaflet/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowUrl: 'assets/leaflet/images/marker-shadow.png',
-        shadowSize: [41, 41],
-      });
-  
-      this.marker = L.marker([location.lat, location.lng], { icon: customIcon })
-        .addTo(this.map)
-        .bindPopup(`<p><strong>Location</strong></p><p>Coordinates: ${location.lat}, ${location.lng}</p>`)
-        .openPopup();
-  
-      this.map.setView([location.lat, location.lng], 13);
-      this.map.invalidateSize();
+   goBack(): void {
+      this.router.navigate(['/datatable/unidentified-bodies']); // Navigate to the main component or home route
     }
   
-    parseWKT(wkt: string | null): { lat: number; lng: number } | null {
-      if (!wkt) return null;
-      const match = wkt.match(/POINT\s?\(([-\d.]+)\s+([-\d.]+)\)/);
-      return match ? { lng: parseFloat(match[1]), lat: parseFloat(match[2]) } : null;
-    }
+
   
 }

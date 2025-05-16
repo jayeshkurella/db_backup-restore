@@ -60,7 +60,6 @@ export class PoliceStationDetailsComponent implements OnInit {
 
     L.marker([lat, lng], { icon: customIcon })
       .addTo(map)
-      .bindPopup(this.policestation.name)
       .openPopup();
   }
 

@@ -1,4 +1,3 @@
-
 <mat-card class="cardWithShadow m-1">
   <mat-card-content>
     <!-- <div *ngIf="loading" class="spinner-overlay">
@@ -13,6 +12,9 @@
         <li class="breadcrumb-item active" aria-current="page">Search Unidentified Person</li>
       </ol>
     </nav>
+
+
+
     
     <!-- First Row (5 Fields) -->
     <div class="row">
@@ -213,7 +215,7 @@
               <mat-spinner diameter="50"></mat-spinner>
             </div>
             <div *ngIf="dataSourcePending.data.length === 0 && filtersApplied" class="text-center text-danger mt-3">
-              No pending persons found with the applied filters.
+              No Data Found.
             </div>
 
             <table *ngIf="dataSourcePending.data.length > 0" mat-table [dataSource]="dataSourcePending" class="w-100">              <ng-container matColumnDef="sr">
@@ -267,10 +269,18 @@
                 <td mat-cell *matCellDef="let person">{{ person.date_reported }}</td>
               </ng-container>
 
-              <ng-container matColumnDef="action">
+              <!-- <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
                   <button mat-icon-button color="primary" (click)="openDialog(person)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+              </ng-container> -->
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let person">
+                  <button mat-icon-button color="primary" (click)="viewDetails(person)">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 </td>
@@ -304,12 +314,12 @@
               <mat-spinner diameter="50"></mat-spinner>
             </div>
             <div *ngIf="dataSourceResolved.data.length === 0 && filtersApplied" class="text-center text-danger mt-3">
-              No Resolved persons found with the applied filters.
+              No Data Found.
             </div>
             
 
             <table *ngIf="dataSourceResolved.data.length > 0" mat-table [dataSource]="dataSourceResolved" class="w-100">              <ng-container matColumnDef="sr">
-                <th mat-header-cell *matHeaderCellDef>#</th>
+                <th mat-header-cell *matHeaderCellDef>S.No</th>
                 <td mat-cell *matCellDef="let person; let i = index">
                   {{ i + 1 + (paginatorResolved.pageIndex * paginatorResolved.pageSize) }}
                 </td>
@@ -338,15 +348,24 @@
                 <td mat-cell *matCellDef="let person">{{ person.gender }}</td>
               </ng-container>
 
+            
               <ng-container matColumnDef="date_of_missing">
                 <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
-                <td mat-cell *matCellDef="let person">{{ person.date_reported | date: 'fullDate' }}</td>
+                <td mat-cell *matCellDef="let person">{{ person.date_reported }}</td>
               </ng-container>
 
-              <ng-container matColumnDef="action">
+              <!-- <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
                   <button mat-icon-button color="primary" (click)="openDialog(person)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+              </ng-container> -->
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let person">
+                  <button mat-icon-button color="primary" (click)="viewDetails(person)">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 </td>
@@ -364,7 +383,3 @@
     </ng-template>
   </mat-tab>
 </mat-tab-group>
-
-
-
-

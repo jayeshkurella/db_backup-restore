@@ -16,7 +16,7 @@ export const navItems: NavItem[] = [
     navCap: 'Person',
   },
   {
-      displayName: 'Add Person',
+      displayName: 'Add',
       iconName: 'file-description',
       route: '/forms',
       children: [
@@ -43,12 +43,12 @@ export const navItems: NavItem[] = [
   //   route: '/forms/form-layouts',
   // },
   {
-    displayName: 'Search Case',
+    displayName: 'Search',
     iconName: 'search',
     route: '/datatable',
     children: [
       {
-        displayName: 'Search by ID',
+        displayName: 'Search By ID',
         // iconName: 'user',
         route: '/datatable/search-by-id',
       },{

@@ -25,6 +25,7 @@ import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UnidentifiedbodyApiService } from './unidentifiedbody-api.service';
 import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies-dialog/unidentified-bodies-dialog.component';
+import { Router } from '@angular/router';
 export interface Person {
   id: number;
   full_name: string;
@@ -108,7 +109,8 @@ export class UnidentifiedBodiesComponent  implements AfterViewInit , OnInit {
       @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
       public dialog: MatDialog,
       public datePipe: DatePipe,
-      private missingPersonService: UnidentifiedbodyApiService
+      private missingPersonService: UnidentifiedbodyApiService,
+      private router: Router,
     ) {}
 
     filters = {
@@ -284,18 +286,9 @@ ngAfterViewInit(): void {
   
 
 
-  /** Open MatDialog */
-  openDialog(person: Person): void {
-      const dialogRef = this.dialog.open(UnidentifiedBodiesDialogComponent, {
-        width: '80vw', // 80% of the viewport width
-         maxWidth: '900px', // Limit max width
-        data: person,
-      });
-    
-      dialogRef.afterOpened().subscribe(() => {
-        setTimeout(() => this.initMap(), 300);
-      });
-    }
+  /** Open MatDialog */viewDetails(person: Person): void {
+          this.router.navigate(['/datatable/unidentified-bodies/person-view', person.id]);
+      }
   
   
   

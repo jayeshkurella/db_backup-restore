@@ -16,8 +16,6 @@
     color: var(--mat-text-color) !important;
   }
 
-
-
   .contact-info {
     display: flex;
     flex-wrap: wrap;
@@ -43,4 +41,10 @@
   .me-3 {
     margin-right: 15px;
   }
-  
+
+mat-error {
+  color: red;
+}
+.heading{
+  font-size: 18px;
+}

@@ -281,5 +281,7 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
         }
     );
 }
-
+goBack(): void {
+      this.router.navigate(['/widgets/police-station']); // Navigate to the main component or home route
+    }
 }

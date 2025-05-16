@@ -25,6 +25,7 @@ import { UnidentifiedpersonApiService } from './unidentifiedperson-api.service';
 import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UnidentifiedPersonDialogComponent } from './unidentified-person-dialog/unidentified-person-dialog.component';
+import { Router } from '@angular/router';
 export interface Person {
   id: number;
   full_name: string;
@@ -103,7 +104,8 @@ export class UnidentifiedPersonComponent implements AfterViewInit , OnInit{
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private missingPersonService: UnidentifiedpersonApiService
+    private missingPersonService: UnidentifiedpersonApiService,
+    private router: Router,
   ) {}
   filters = {
     full_name: '',
@@ -280,18 +282,9 @@ ageRanges = [
   }
 
 
-  /** Open MatDialog */
-  openDialog(person: Person): void {
-    const dialogRef = this.dialog.open(UnidentifiedPersonDialogComponent, {
-      width: '80vw', // 80% of the viewport width
-      maxWidth: '900px', // Limit max width
-      data: person,
-    });
-  
-    dialogRef.afterOpened().subscribe(() => {
-      setTimeout(() => this.initMap(), 300);
-    });
-  }
+  viewDetails(person: Person): void {
+        this.router.navigate(['/datatable/unidentified-person/person-view', person.id]);
+    }
   
   
   

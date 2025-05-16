@@ -1,18 +1,18 @@
-<h5 mat-dialog-title>Edit Profile</h5>
+<h5 mat-dialog-title class="mt-1">Edit Profile</h5>
 
 <mat-dialog-content>
   <form [formGroup]="editForm" (ngSubmit)="onSave()">
     <div class="row">
-      <div class="col">
+      <div class="col mt-2">
         <mat-form-field appearance="outline">
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="first_name" required>
+          <input matInput formControlName="first_name" required >
           <mat-error *ngIf="editForm.get('first_name')?.hasError('required')">
             First name is required
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="col">
+      <div class="col mt-2">
         <mat-form-field appearance="outline">
           <mat-label>Last Name</mat-label>
           <input matInput formControlName="last_name" required>
@@ -23,21 +23,31 @@
       </div>
     </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email_id" type="email" required>
-      <mat-error *ngIf="editForm.get('email_id')?.hasError('required')">
-        Email is required
-      </mat-error>
-      <mat-error *ngIf="editForm.get('email_id')?.hasError('email')">
-        Please enter a valid email
-      </mat-error>
-    </mat-form-field>
+    <div class="row mt-1">
+      <div class="col mt-2">
+        <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email_id" type="email" required>
+        <mat-error *ngIf="editForm.get('email_id')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="editForm.get('email_id')?.hasError('email')">
+          Please enter a valid email
+        </mat-error>
+        </mat-form-field>
+      </div>
+        <div class="col mt-2">
+          <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="phone_no" type="tel">
+        </mat-form-field>
+        </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Phone Number</mat-label>
-      <input matInput formControlName="phone_no" type="tel">
-    </mat-form-field>
+    </div>
+
+    
+
+    
 
     <div class="image-upload-section">
       <div class="current-image" *ngIf="currentImage">

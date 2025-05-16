@@ -1,28 +1,44 @@
-
+<!-- <div class="header-container">
+  <h2 class="page-title">Hospitals</h2>
+</div> -->
 <div class="px-3 py-3 mat-elevation-z1">
   <!-- Header Row: Left Title + Right Add Button -->
-<div class="header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-  <h2 class="page-title" style="margin: 0;">Hospitals</h2>
-
-  <button *ngIf="isLoggedIn && isAdmin"
-          mat-flat-button
-          color="primary"
-          (click)="addhospital()"
-          class="d-flex align-items-center"
-          style="width: 105px;">
-    <mat-icon>add</mat-icon>&nbsp;Add
-  </button>
+  <!-- <div class="d-flex justify-content-end align-items-end mb-3">
+    <button *ngIf="isLoggedIn && isAdmin"
+            mat-flat-button
+            color="primary"
+            (click)="addhospital()"
+            class="d-flex align-items-center">
+      <mat-icon>add</mat-icon>Add
+    </button>
+  </div> -->
+  <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+  <h2 class="page-title">Hospitals</h2>
+  
+  <!-- <div>
+    <button *ngIf="isLoggedIn && isAdmin" mat-flat-button color="primary" (click)="addhospital()" class="d-flex align-items-center"style="width: 97px;"  >
+      <mat-icon>add</mat-icon>&nbsp;Add
+    </button>
+  </div> -->
+  <div class="mb-1">
+    <button *ngIf="isLoggedIn && isAdmin"
+            mat-flat-button
+            color="primary"
+            (click)="addhospital()"
+            class="d-flex align-items-center"
+            style="width: 99px; margin-right: 7px;">
+      <mat-icon>add</mat-icon>&nbsp;Add
+    </button>
+  </div>
 </div>
 
-
   
-
   <form (ngSubmit)="onsearch()" novalidate>
     <!-- Parent Container -->
   <div class="w-100 d-flex flex-wrap gap-2 align-items-end border-bottom pb-3 mb-2">
     <!-- Name -->
     <mat-form-field appearance="outline" class="with-icon">
-      <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by name">
+      <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name">
     </mat-form-field>
 
     <!-- State -->
@@ -36,7 +52,7 @@
     <!-- District -->
     <mat-form-field appearance="outline" class="w-auto min-width-200">
       <mat-select [(ngModel)]="searchFilters.district" name="district"(selectionChange)="onDistrictChange()">
-        <mat-option value="">District</mat-option>
+        <mat-option value="">All Districts</mat-option>
         <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -44,7 +60,7 @@
     <!-- City -->
     <mat-form-field appearance="outline" class="w-auto min-width-200">
       <mat-select [(ngModel)]="searchFilters.city" name="city">
-        <mat-option value="">City</mat-option>
+        <mat-option value="">All Cities</mat-option>
         <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
       </mat-select>
     </mat-form-field>

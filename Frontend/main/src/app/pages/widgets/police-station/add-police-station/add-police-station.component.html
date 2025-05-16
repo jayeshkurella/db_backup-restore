@@ -1,6 +1,6 @@
-<mat-card class=" m-2">
-  <div class="p-3 bg-light-primary text-center rounded">
-    <h5>Add Police Station Information</h5>
+<mat-card class=" m-2 cardheader">
+  <div class="p-3 bg-light-primary rounded ms-3 mt-1">
+    <h5 class="heading">Details</h5>
   </div>
   <form [formGroup]="policeStationForm" (ngSubmit)="submitForm()" class="container-fluid py-3 px-3">
 
@@ -27,13 +27,22 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6">
-        <!-- <label for="photo">Station Photo</label> -->
+      <!-- <div class="col-md-6">
         <input type="file" id="photo" class="form-control" (change)="onFileChange($event)">
-        <!-- <mat-error *ngIf="policeStationForm.get('station_photo')?.hasError('required')">
-          Photo is required
-        </mat-error> -->
-      </div>
+      </div> -->
+
+      <div class="col-md-6" style="margin-bottom: 20px;">
+          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="policestationPhotoInput.click()">
+            <mat-icon>cloud_upload</mat-icon>Police Station Photo
+            </button>
+            <input
+              #policestationPhotoInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileChange($event)"
+            />
+        </div>
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Status</mat-label>
@@ -49,8 +58,8 @@
     </div>
 
     <!-- Address Section -->
-    <div class="p-3 bg-light-primary text-center rounded mt-2">
-      <h5>Address Details</h5>
+    <div class="p-3 bg-light-primary rounded mt-2">
+      <h5 class="heading">Address Details</h5>
     </div>
     <mat-card class="mt-2 p-2">
       <div formGroupName="address" class="p-3">
@@ -65,7 +74,6 @@
                   <mat-option value="permanent">Permanent</mat-option>
                   <mat-option value="current">Current</mat-option>
                   <mat-option value="old">Old</mat-option>
-                  <mat-option value="home">Home</mat-option>
                   <mat-option value="office">Office</mat-option>
                 </mat-select>
           
@@ -178,7 +186,7 @@
 
       
           <!-- Right Side: Map and Location fields -->
-          <div class="col-md-6" formGroupName="location">
+          <!-- <div class="col-md-6" formGroupName="location">
             <div id="mapAddStation" style="height: 200px; margin-bottom: 1rem; z-index: 1;"></div>
             <div class="row align-items-center">
               <div class="col-md-2 text-center">
@@ -207,15 +215,64 @@
               
             </div>
             
-          </div>
+          </div> -->
+          <div class="col-md-6">
+  <div formGroupName="location">
+    <!-- Latitude & Longitude Fields + Location Button -->
+    <div class="d-flex gap-2 align-items-start mb-2">
+      
+      <!-- Latitude Field -->
+      <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+        <mat-label>Latitude</mat-label>
+        <input matInput type="number" formControlName="latitude" />
+        <mat-error *ngIf="policeStationForm.get('address.location.latitude')?.hasError('required')">
+          Latitude is required.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Longitude Field -->
+      <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+        <mat-label>Longitude</mat-label>
+        <input matInput type="number" formControlName="longitude" />
+        <mat-error *ngIf="policeStationForm.get('address.location.longitude')?.hasError('required')">
+          Longitude is required.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Get Current Location Button -->
+      <button
+        type="button"
+        mat-icon-button
+        color="primary"
+        (click)="getCurrentLocation()"
+        matTooltip="Fetch your current location"
+      >
+        <mat-icon>my_location</mat-icon>
+      </button>
+    </div>
+
+    <!-- Map Container -->
+    <div id="mapAddStation" style="height: 200px; border: 1px solid black; border-radius: 5px; z-index: 1;"></div>
+  </div>
+</div>
+
+
+
+
+
+
         </div>
       </div>
       
   </mat-card>
     <!-- Contact Info -->
-    <div class="p-3 bg-light-primary text-center rounded mt-2">
-      <h5>contacts Details</h5>
-    </div>
+    <!-- <div class="p-3 bg-light-primary rounded mt-2">
+      <h5 class="heading">contacts Details</h5>
+    </div> -->
+    <div class="p-3 bg-light-primary rounded d-flex justify-content-between align-items-center">
+        <h5 class="heading">Contact Details</h5>
+        <button type="button" mat-flat-button color="accent" (click)="addContact()">Add Contact</button>
+      </div>
     <mat-card  class="mt-2 p-2">
       <div formArrayName="police_contact">
         <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class=" p-3 mb-3 rounded">
@@ -280,7 +337,7 @@
           </div>
     
           <div class="row">
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email_id" type="email">
@@ -288,7 +345,14 @@
                   Email is required
                 </mat-error>
               </mat-form-field>
+            </div> -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email_id" type="email">
+              </mat-form-field>
             </div>
+
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Website</mat-label>
@@ -340,21 +404,22 @@
       </div>
     
       <!-- Add Contact aligned to the right -->
-      <div class="text-end m-2">
+      <!-- <div class="text-end m-2">
         <button type="button" mat-flat-button color="accent" (click)="addContact()">Add Contact</button>
-      </div>
+      </div> -->
     </mat-card>
     
     <!-- Submit -->
-    <div class="text-end mt-4 d-flex justify-content-start gap-2">
-      <button mat-flat-button class="btn btn-outline-primary" color="primary" type="submit">
-        <mat-icon>save</mat-icon> Submit
-      </button>
-    </div>
+    <div class="d-flex justify-content-between align-items-center mt-4 gap-2">
+  <button mat-flat-button (click)="goBack()" class="back-btn">
+    <mat-icon>arrow_back</mat-icon> Back
+  </button>
+
+  <button mat-stroked-button color="primary" type="submit" class="me-3">
+    Submit
+  </button>
+</div>
+
 
   </form>
 </mat-card>
-
-
-
-  

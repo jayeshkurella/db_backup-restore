@@ -12,6 +12,8 @@ import { ChangelogviewComponent } from './changelogview/changelogview.component'
 import { MatwithupComponent } from './kichen-sink/matwithup/matwithup.component';
 import { SearchbyIDComponent } from './searchby-id/searchby-id.component';
 import { DetaildataComponent } from './detaildata/detaildata.component';
+import { UnidentifiedPersonDialogComponent } from './unidentified-person/unidentified-person-dialog/unidentified-person-dialog.component';
+import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies/unidentified-bodies-dialog/unidentified-bodies-dialog.component';
 
 export const datatablesRoutes: Routes = [
   {
@@ -62,7 +64,14 @@ export const datatablesRoutes: Routes = [
         path: 'missing-person/person-view/:id',
         component: DetaildataComponent,
       },
-      
+      {
+        path: 'unidentified-person/person-view/:id',
+        component: UnidentifiedPersonDialogComponent,
+      },
+      {
+        path: 'unidentified-bodies/person-view/:id',
+        component: UnidentifiedBodiesDialogComponent,
+      },
     ],
   },
 ];

@@ -1,27 +1,29 @@
-
-  
-  .breadcrumb-item {
-    // font-weight: 600;
-    color: var(--mat-text-color);
-  }
-  .spinner-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* Dark transparent background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999; /* Ensure it appears above everything */
+.s1 {
+  padding-left: 8px;
 }
 
-.spinner-container {
-    text-align: center;
-    color: white;
-}
-.text-muted {
-  color: var(--mat-text-color) !important;
+.btn-height {
+  margin-bottom: 20px;
+  margin-left: 450px;
 }
 
+.case-detail-label {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.case-detail-value {
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+
+.case-detail-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.case-detail-main-title {
+  font-size: 18px;
+  font-weight: bold;
+}

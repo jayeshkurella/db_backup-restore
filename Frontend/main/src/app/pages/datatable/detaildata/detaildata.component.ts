@@ -7,12 +7,13 @@ import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/envirnment/envirnment';
 import { MatList, MatListItem } from '@angular/material/list';
-import { MatCard} from '@angular/material/card';
+import { MatCard, MatCardTitle} from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
 import { MatSpinner } from '@angular/material/progress-spinner';
+import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 @Component({
   selector: 'app-detaildata',
-   imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatListItem,MatList,MatIcon,MatCard,MatButton,MatDivider,MatSpinner],
+   imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatListItem,MatList,MatIcon,MatCard,MatButton,MatDivider,MatSpinner,SafeTitlecasePipe,MatCardTitle],
   templateUrl: './detaildata.component.html',
   styleUrl: './detaildata.component.scss'
 })

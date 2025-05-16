@@ -11,6 +11,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from 'src/envirnment/envirnment';
 import { IdserviceService } from './idservice.service';
 import { Router } from '@angular/router';
+import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 // import { MatListItem } from '@angular/material/list';
 // import { MatList } from '@angular/material/list';
 // import { MatDivider } from '@angular/material/divider';
@@ -26,7 +27,8 @@ import { Router } from '@angular/router';
     MatIconModule,
     FormsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    SafeTitlecasePipe,
     // MatListItem,
     // MatList,
     // MatDivider
@@ -73,8 +75,8 @@ export class SearchbyIDComponent {
   return fullPath;
   }
 
-  goBack(): void {
-    this.router.navigate(['datatable/missing-person']);
-  }
+  // goBack(): void {
+  //   this.router.navigate(['datatable/missing-person']);
+  // }
 
 }

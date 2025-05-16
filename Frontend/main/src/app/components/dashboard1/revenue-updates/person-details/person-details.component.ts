@@ -12,10 +12,11 @@ import { MatDivider } from '@angular/material/divider';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { SafeTitlecasePipe } from './safe-titlecase.pipe';
 
 @Component({
   selector: 'app-person-details',
-  imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatIcon,MatCard,MatButton,MatDivider,MatSpinner,MatDivider],
+  imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatIcon,MatCard,MatButton,MatSpinner,SafeTitlecasePipe,MatCardTitle],
   templateUrl: './person-details.component.html',
   styleUrl: './person-details.component.scss'
 })

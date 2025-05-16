@@ -240,5 +240,7 @@ selectedFileName: any;
         }
     );
 }
- 
+ goBack(): void {
+      this.router.navigate(['/widgets/hospitals']); // Navigate to the main component or home route
+    }
 }
