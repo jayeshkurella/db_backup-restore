@@ -13,7 +13,9 @@
   <form (submit)="searchCase()" class="w-100 mb-1">
     <div class="row g-2 g-md-3">
       <div class="col-12 col-md-8 col-lg-3">
+        
         <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Case ID</mat-label>
           <input 
             matInput 
             [(ngModel)]="caseId" 

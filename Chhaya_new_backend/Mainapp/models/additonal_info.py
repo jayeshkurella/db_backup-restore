@@ -41,11 +41,11 @@ class AdditionalInfo(models.Model):
         UNKNOWN = 'unknown', 'Unknown'
 
     class IdTypeChoices(models.TextChoices):
-        AADHAR = 'aadhar', 'Aadhar'
-        PAN = 'pan', 'PAN'
-        DL = 'dl', 'Driving License'
+        AADHAR = 'aadhar_card', 'Aadhar Card'
+        PAN = 'pan_card', 'PAN Card'
+        DL = 'driving_license', 'Driving License'
         PASSPORT = 'passport', 'Passport'
-        VoterID = 'voterID', 'VoterID'
+        VOTER_ID = 'voter_id_card', 'Voter ID Card'
 
     class ReligionChoices(models.TextChoices):
         HINDU = 'hindu', 'Hindu'

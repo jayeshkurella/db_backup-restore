@@ -41,9 +41,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" class="search-btn" (click)="filterDataByFilters()">
-      Search
-    </button>
+    
   </div>
 
   <!-- Second Row -->
@@ -59,34 +57,62 @@
     <mat-form-field appearance="outline">
       <mat-select [(ngModel)]="selectedHeightRange" placeholder="Height">
         <mat-option value="">All Heights</mat-option>
-        <mat-option value="133-150">133-150 cm</mat-option>
-        <mat-option value="151-180">151-180 cm</mat-option>
-        <mat-option value="Above 180">Above 180 cm</mat-option>
+        <mat-option value="<150">Less than 150 cm</mat-option>
+        <mat-option value="150-160">150 - 160 cm</mat-option>
+        <mat-option value="161-170">161 - 170 cm</mat-option>
+        <mat-option value="171-180">171 - 180 cm</mat-option>
+        <mat-option value="181-190">181 - 190 cm</mat-option>
+        <mat-option value=">190">More than 190 cm</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedAgeRange" placeholder="Age">
-        <mat-option value="">All Ages</mat-option>
-        <mat-option value="0-18">0-18</mat-option>
-        <mat-option value="18-30">18-30</mat-option>
-        <mat-option value="30-50">30-50</mat-option>
-        <mat-option value="50-70">50-70</mat-option>
-        <mat-option value="Above 70">Above 70</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-select [(ngModel)]="selectedAgeRange" placeholder="Age">
+    <mat-option value="">All Ages</mat-option>
+    <mat-option value="0-5">0 - 5</mat-option>
+    <mat-option value="6-12">6 - 12</mat-option>
+    <mat-option value="13-17">13 - 17</mat-option>
+    <mat-option value="18-24">18 - 24</mat-option>
+    <mat-option value="25-34">25 - 34</mat-option>
+    <mat-option value="35-44">35 - 44</mat-option>
+    <mat-option value="45-54">45 - 54</mat-option>
+    <mat-option value="55-64">55 - 64</mat-option>
+    <mat-option value="65-74">65 - 74</mat-option>
+    <mat-option value="75-84">75 - 84</mat-option>
+    <mat-option value="85-100">85+</mat-option>
+  </mat-select>
+</mat-form-field>
 
     <mat-form-field appearance="outline">
-      <input matInput [(ngModel)]="selectedStartDate" [matDatepicker]="startPicker" placeholder="5/13/2025">
-      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-      <mat-datepicker #startPicker></mat-datepicker>
-    </mat-form-field>
+  <input
+    matInput
+    [matDatepicker]="startPicker"
+    [(ngModel)]="selectedStartDate"
+    (dateChange)="onStartDateChange($event.value)"
+    [max]="maxSelectableDate"
+    placeholder="Select start date"
+  />
+  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+  <mat-datepicker #startPicker></mat-datepicker>
+</mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <input matInput [(ngModel)]="selectedEndDate" [matDatepicker]="endPicker" placeholder="5/14/2025">
-      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-      <mat-datepicker #endPicker></mat-datepicker>
-    </mat-form-field>
+<mat-form-field appearance="outline">
+  <input
+    matInput
+    [matDatepicker]="endPicker"
+    [(ngModel)]="selectedEndDate"
+    (dateChange)="onEndDateChange($event.value)"
+    [min]="selectedStartDate"
+    [max]="maxEndDate || maxSelectableDate"
+    placeholder="Select end date"
+  />
+  <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+  <mat-datepicker #endPicker></mat-datepicker>
+</mat-form-field>
+
+ <button mat-flat-button color="primary" class="search-btn btn-btn-outline" (click)="filterDataByFilters()">
+      Search
+    </button>
   </div>
 </div>
 

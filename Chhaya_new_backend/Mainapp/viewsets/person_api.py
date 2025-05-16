@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 from uuid import UUID
+from rest_framework.exceptions import NotFound
 
 from dateutil import parser
 from django.db.models import Q
@@ -608,14 +609,14 @@ class PersonViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
     # def pending_or_rejected(self, request):
     #     try:
-    #         # Extract filter parameters from query string
+    #         # Extract filters
     #         state = request.query_params.get('state')
     #         district = request.query_params.get('district')
     #         city = request.query_params.get('city')
     #         village = request.query_params.get('village')
     #         police_station = request.query_params.get('police_station')
+    #         case_id = request.query_params.get('case_id')
     #
-    #         # Build dynamic filters using Q
     #         filters = Q()
     #         if state:
     #             filters &= Q(state__iexact=state)
@@ -625,13 +626,13 @@ class PersonViewSet(viewsets.ViewSet):
     #             filters &= Q(city__iexact=city)
     #         if village:
     #             filters &= Q(village__iexact=village)
+    #         if case_id:
+    #             filters &= Q(case_id__iexact=case_id)
     #         if police_station:
     #             filters &= Q(firs__police_station__id=UUID(police_station))
     #
-    #         # Apply filters to the queryset
     #         persons = Person.objects.filter(filters)
     #
-    #         # Group data by status fields
     #         summary = {
     #             'pending': [],
     #             'approved': [],
@@ -641,41 +642,24 @@ class PersonViewSet(viewsets.ViewSet):
     #         }
     #
     #         for person in persons:
-    #             approve_status = person.person_approve_status
-    #             # status_field = person.status
-    #             serialized = ApprovePersonSerializer(person).data
+    #             status_key = person.person_approve_status
+    #             if status_key in summary:
+    #                 summary[status_key].append(ApprovePersonSerializer(person).data)
     #
-    #             if approve_status == 'pending':
-    #                 summary['pending'].append(serialized)
-    #             elif approve_status == 'approved':
-    #                 summary['approved'].append(serialized)
-    #             elif approve_status == 'rejected':
-    #                 summary['rejected'].append(serialized)
-    #             elif approve_status == 'on_hold':
-    #                 summary['on_hold'].append(serialized)
-    #             elif approve_status == 'suspended':
-    #                 summary['suspended'].append(serialized)
-    #
-    #         # Combine all for pagination (you can choose to paginate one category at a time if needed)
-    #         combined_data = (
-    #                 summary['pending'] +
-    #                 summary['approved'] +
-    #                 summary['rejected'] +
-    #                 summary['on_hold'] +
-    #                 summary['suspended']
-    #         )
-    #
-    #         # Paginate combined data
+    #         # Paginate each group safely
     #         paginator = PendingPersonPagination()
-    #         page = paginator.paginate_queryset(combined_data, request)
-    #         return paginator.get_paginated_response({
-    #             'pending_count': len(summary['pending']),
-    #             'approved_count': len(summary['approved']),
-    #             'rejected_count': len(summary['rejected']),
-    #             'on_hold_count': len(summary['on_hold']),
-    #             'suspended_count': len(summary['suspended']),
-    #             'results': page
-    #         })
+    #         paginated_response = {}
+    #
+    #         for status_key, data_list in summary.items():
+    #             paginated_response[f"{status_key}_count"] = len(data_list)
+    #             try:
+    #                 paginated_page = paginator.paginate_queryset(data_list, request)
+    #                 paginated_response[status_key] = paginated_page
+    #             except NotFound:
+    #                 # Page out of range, return empty list
+    #                 paginated_response[status_key] = []
+    #
+    #         return Response(paginated_response, status=status.HTTP_200_OK)
     #
     #     except Exception as e:
     #         return Response(
@@ -691,6 +675,8 @@ class PersonViewSet(viewsets.ViewSet):
             city = request.query_params.get('city')
             village = request.query_params.get('village')
             police_station = request.query_params.get('police_station')
+            case_id = request.query_params.get('case_id')
+
 
             # Build dynamic filters using Q
             filters = Q()
@@ -702,6 +688,8 @@ class PersonViewSet(viewsets.ViewSet):
                 filters &= Q(city__iexact=city)
             if village:
                 filters &= Q(village__iexact=village)
+            if case_id:
+                filters &= Q(case_id__iexact=case_id)
             if police_station:
                 filters &= Q(firs__police_station__id=UUID(police_station))
 
