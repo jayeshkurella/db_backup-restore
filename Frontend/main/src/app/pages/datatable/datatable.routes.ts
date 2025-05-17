@@ -14,6 +14,7 @@ import { SearchbyIDComponent } from './searchby-id/searchby-id.component';
 import { DetaildataComponent } from './detaildata/detaildata.component';
 import { UnidentifiedPersonDialogComponent } from './unidentified-person/unidentified-person-dialog/unidentified-person-dialog.component';
 import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies/unidentified-bodies-dialog/unidentified-bodies-dialog.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 export const datatablesRoutes: Routes = [
   {
@@ -72,6 +73,11 @@ export const datatablesRoutes: Routes = [
         path: 'unidentified-bodies/person-view/:id',
         component: UnidentifiedBodiesDialogComponent,
       },
+      {
+        path: 'privacy-policy',
+        component: PrivacypolicyComponent,
+      }
+
     ],
   },
 ];

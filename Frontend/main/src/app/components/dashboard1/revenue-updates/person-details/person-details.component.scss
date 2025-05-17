@@ -15,3 +15,38 @@
 .compact-view mat-card {
   padding: 12px;
 }
+
+.back-btn {
+  margin-right: 25px; /* This will push the button to the right */
+}
+
+/* Remove the .s1 padding if you want the title flush left */
+.s1 {
+  padding-left: 8px;
+}
+
+.btn-height {
+  margin-bottom: 20px;
+  margin-left: 450px;
+}
+
+.case-detail-label {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.case-detail-value {
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+
+.case-detail-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.case-detail-main-title {
+  font-size: 18px;
+  font-weight: bold;
+}

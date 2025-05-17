@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .authentication.admin_user_management import AdminUserApprovalView
 from .authentication.user_authentication import AuthAPIView
+from .viewsets.casetype_apis import PendingPersonsView, ApprovedPersonsView, RejectedPersonsView, OnHoldPersonsView, \
+    SuspendedPersonsView, StatusCountView
 from .viewsets.filters import filter_Address_ViewSet
 from .viewsets.hospital import HospitalViewSet, HospitalListView
 from .viewsets.person_api import PersonViewSet
@@ -33,6 +35,12 @@ urlpatterns = [
     path("api/police-station-name-list/", PoliceStationListView.as_view(), name="police-station-list"),
     path("api/pending-users/", AdminUserApprovalView.as_view(), name="pending-users"),
     path("api/users/approve/<uuid:user_id>/", AdminUserApprovalView.as_view(), name="admin-approve-user"),
+    path('api/persons_status/pending/', PendingPersonsView.as_view(), name='pending-persons'),
+    path('api/persons_status/approved/', ApprovedPersonsView.as_view(), name='approved-persons'),
+    path('api/persons_status/rejected/', RejectedPersonsView.as_view(), name='rejected-persons'),
+    path('api/persons_status/on_hold/', OnHoldPersonsView.as_view(), name='on-hold-persons'),
+    path('api/persons_status/suspended/', SuspendedPersonsView.as_view(), name='suspended-persons'),
+    path('api/persons_status/status_counts/', StatusCountView.as_view(), name='status-counts'),
 ]
 
 if settings.DEBUG:

@@ -1,6 +1,10 @@
 :host {
   display: block;
 }
+
+mat-error {
+  color: red;
+}
 .coming-soon-container {
   display: flex;
   justify-content: center;
@@ -55,4 +59,8 @@
 .space-down{
     
   margin-bottom: 100px;
+}
+
+.consent-link{
+  cursor: pointer;
 }

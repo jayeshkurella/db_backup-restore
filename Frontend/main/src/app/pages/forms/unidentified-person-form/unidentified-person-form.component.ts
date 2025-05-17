@@ -8,12 +8,14 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -28,6 +30,8 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { map, marker } from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
+import { UpconsentComponent } from './upconsent/upconsent.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-unidentified-person-form',
@@ -88,7 +92,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private formApi: FormApiService,
     private datePipe: DatePipe,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -111,17 +116,25 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
 
   initializeForm() {
     this.unidentifiedPersonForm = this.fb.group({
+            full_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+          birth_date: [null],
+          age_range: ['', [Validators.pattern(/^[0-9]+$/)]],
+          gender: ['', Validators.required],
+          height: ['', [Validators.max(250), Validators.pattern(/^[0-9]+$/)]],
+          weight: ['', [Validators.max(200), Validators.pattern(/^[0-9]+$/)]],
+            birth_mark: ['', Validators.maxLength(250)],
+          distinctive_mark: ['', Validators.maxLength(250)],
       type: ['Unidentified Person'],
-      full_name: [''],
-      birth_date: [null],
-      // age: [null],
-      age_range: [''],
-      birthtime: [null],
-      gender: ['Unknown'],
+      // full_name: [''],
+      // birth_date: [null],
+      age: [null],
+      // age_range: [''],
+      // birthtime: [null],
+      // gender: ['Unknown'],
       birthplace: [''],
-      height: [''],
+      // height: [''],
       height_range:[''],
-      weight: [''],
+      // weight: [''],
       blood_group: [''],
       complexion: [''],
       hair_color: [''],
@@ -130,8 +143,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       condition: [''],
       Body_Condition: [''],
       up_condition: [[]],  
-      birth_mark: [''],
-      distinctive_mark: [''],
+      // birth_mark: [''],
+      // distinctive_mark: [''],
       hospital: [null],
       document_ids: [''],
       created_at: [null],
@@ -182,17 +195,25 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   }
   createAddressFormGroup(): FormGroup {
     return this.fb.group({
+          street: ['', [Validators.pattern(/^[a-zA-Z0-9\s]{1,30}$/)]],
+    village: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    city: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    district: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    state: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    country: ['', [Validators.pattern(/^[a-zA-Z\s]{1,15}$/)]],
+    pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
+    landmark_details: ['', Validators.maxLength(30)],
       address_type: [''],
-      street: [''],
+      // street: [''],
       appartment_no: [''],
       appartment_name: [''],
-      village: [''],
-      city: [''],
-      district: [''],
-      state: [''],
-      country: [''],
-      pincode: [''],
-      landmark_details: [''],
+      // village: [''],
+      // city: [''],
+      // district: [''],
+      // state: [''],
+      // country: [''],
+      // pincode: [''],
+      // landmark_details: [''],
       location: this.fb.group({
         latitude: [''],
         longitude: [''],
@@ -206,16 +227,20 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   // Correct method to create Contact FormGroup
   createContactFormGroup(): FormGroup {
     return this.fb.group({
-      phone_no: [''],
+          person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
+    phone_no: ['', [Validators.pattern(/^[0-9]{10}$/)]],
+    email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+    additional_details: ['', Validators.maxLength(200)],
+      // phone_no: [''],
       // country_cd: [''],
-      email_id: [''],
+      // email_id: [''],
       type: ['referral'],
-      person_name: [''],
+      // person_name: [''],
       // job_title: [''],
       // website_url: [''],
       // social_media_url: [''],
       // social_media_availability: [''],
-      additional_details: [''],
+      // additional_details: [''],
       // is_primary: [false],
       // user: [''],
       hospital: [null],
@@ -263,16 +288,19 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   // Add additional info
   addAdditionalInfo() {
     this.additionalInfo.push(this.fb.group({
-      caste: [''],
-      subcaste: [''],
-      marital_status: [''],
-      religion: [''],
-      mother_tongue: [''],
-      other_known_languages: [''],
-      id_type: [''],
-      id_no: [''],
-      education_details: [''],
-      occupation_details: [''],
+        caste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    subcaste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    marital_status: [''],
+    religion: [''],
+    mother_tongue: [''],
+    other_known_languages: ['', this.languageValidator],
+    id_type: [''],
+    id_no: ['', Validators.pattern(/^[a-zA-Z0-9]+$/)],
+    education_details: [''],
+    occupation_details: ['', Validators.maxLength(30)],
+      // caste: [''],
+      // subcaste: [''],
+      // marital_status: [''],
       // user: [''],
       person: [''],
       created_at: [null],
@@ -280,6 +308,22 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
       // created_by: [''],
       // updated_by: [''],
     }));
+  }
+  languageValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    
+    const languages = control.value.split(',').map((lang: string) => lang.trim());
+    
+    if (languages.length > 5) {
+      return { tooManyLanguages: true };
+    }
+    
+    const invalidChars = languages.some((lang: string) => !/^[a-zA-Z\s]+$/.test(lang));
+    if (invalidChars) {
+      return { invalidLanguageChars: true };
+    }
+    
+    return null;
   }
   
   // Add last known details
@@ -303,12 +347,12 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   // Add FIR
   addFIR() {
     this.firs.push(this.fb.group({
-      fir_number: [''],
-      case_status: [''],
-      investigation_officer_name: [''],
-      investigation_officer_contact: [null],
-      investigation_officer_contacts:[''],
-      police_station: [null],
+          fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9]{1,20}$/)]],
+        case_status: [''],
+        investigation_officer_contact: [null],
+            investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    investigation_officer_contacts: ['', Validators.pattern(/^[0-9]+$/)],
+      police_station: ['', [Validators.pattern(/^[a-zA-Z\s]{1,50}$/)]],
       document: [null],
       person: [''],
       created_at: [null],
@@ -545,4 +589,20 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   formatTime(time: string): string {
     return time ? time.replace(/[“”]/g, '"') : '';
   }
+
+  openConsentDialog() {
+        const dialogRef = this.dialog.open(UpconsentComponent, {
+          width: '80vw',  
+          maxWidth: '90vw' ,
+          height: '80vh',
+          maxHeight: '90vh',
+          autoFocus: false
+        });
+      
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.consent.controls[0].get('is_consent')?.setValue(true);
+          }
+        });
+      }
 }

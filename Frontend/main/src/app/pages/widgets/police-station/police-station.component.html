@@ -1,71 +1,63 @@
 
 
-<div  class="px-3 py-3 mat-elevation-z2">
-  <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
-  <h2 class="page-title" style="margin: 0; ">Police Station</h2>
-  
-  <div>
-    <button *ngIf="isLoggedIn && isAdmin" mat-flat-button color="primary" (click)="navigateToAddStation()" class="d-flex align-items-center"style="width: 100px;"  >
-      <mat-icon>add</mat-icon>&nbsp;Add
-    </button>
+<div class="page-container mat-elevation-z2">
+  <div class="header-container">
+    <h2 class="page-title">Police Station</h2>
+    <div>
+      <button *ngIf="isLoggedIn && isAdmin"
+              mat-flat-button
+              color="primary"
+              (click)="navigateToAddStation()"
+              class="action-btn">
+        <mat-icon class="add-icon">add</mat-icon><span style="margin-right: 15px;">Add</span>
+      </button>
+    </div>
   </div>
-</div>
+  <form (ngSubmit)="onSearch()" novalidate>
 
+    <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mt-3 mb-2">
+      
+      <!-- Name -->
+      <mat-form-field appearance="outline" class="with-icon flex-grow-1">
+        <!-- <mat-label>Name</mat-label> -->
+        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name">
+      </mat-form-field>
 
-<form (ngSubmit)="onSearch()" novalidate>
+      <!-- State -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <!-- <mat-label>State</mat-label> -->
+        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()" >
+          <mat-option value="">All States</mat-option>
+          <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mt-3 mb-3">
-    
-    <!-- Name -->
-    <mat-form-field appearance="outline" class="with-icon flex-grow-1">
-      <!-- <mat-label>Name</mat-label> -->
-      <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by name">
-    </mat-form-field>
+      <!-- District -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <!-- <mat-label>District</mat-label> -->
+        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()" >
+          <mat-option value="">All Districts</mat-option>
+          <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- State -->
-    <mat-form-field appearance="outline" class="w-auto min-width-200">
-      <!-- <mat-label>State</mat-label> -->
-      <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()" >
-        <mat-option value="">All States</mat-option>
-        <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- City -->
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
+        <!-- <mat-label>City</mat-label> -->
+        <mat-select [(ngModel)]="searchFilters.city" name="city" >
+          <mat-option value="">City</mat-option>
+          <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- District -->
-    <mat-form-field appearance="outline" class="w-auto min-width-200">
-      <!-- <mat-label>District</mat-label> -->
-      <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()" >
-        <mat-option value="">District</mat-option>
-        <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Search Button -->
+      <button mat-flat-button color="primary" class="d-flex align-items-center" style="margin-bottom: 17px;">
+        <mat-icon>search</mat-icon>&nbsp;Search
+      </button>
 
-    <!-- City -->
-    <mat-form-field appearance="outline" class="w-auto min-width-200">
-      <!-- <mat-label>City</mat-label> -->
-      <mat-select [(ngModel)]="searchFilters.city" name="city" >
-        <mat-option value="">City</mat-option>
-        <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Search Button -->
-    <button mat-flat-button color="primary" class="d-flex align-items-center" style="margin-bottom: 17px;">
-      <mat-icon>search</mat-icon>&nbsp;Search
-    </button>
-
-  </div>
-</form>
-
-
-
-
-  
-  
-
-
-
-  <div class="row p-2 mt-1">
+    </div>
+  </form>
+   <div class="row p-2 mt-1">
     <!-- Loading Spinner -->
     <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
       <mat-spinner diameter="50"></mat-spinner>
@@ -153,5 +145,19 @@
     </div>
   </div>
   
-
 </div>
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+ 
+

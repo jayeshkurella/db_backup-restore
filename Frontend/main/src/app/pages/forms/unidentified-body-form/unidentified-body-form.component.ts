@@ -8,18 +8,20 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { MatDialog } from '@angular/material/dialog';
 import { merge } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
@@ -27,6 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { map, marker } from 'leaflet';
 import { FormApiService } from '../unidentified-person-form/forms-api-up.service';
 import { ToastrService } from 'ngx-toastr';
+import { UbconsentComponent } from './ubconsent/ubconsent.component';
 
 @Component({
   selector: 'app-unidentified-body-form',
@@ -81,6 +84,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       "Germany", "United Kingdom", "France", "Brazil", "Australia", "Canada"
     ];
     unidentifiedBodyForm!: FormGroup;
+    // createAddressFormGroup!:FormFroup;
     storedPersonId: string | null = null;
   
     selectedFileName: string = '';
@@ -89,7 +93,8 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       private fb: FormBuilder,
       private formApi: FormApiService,
       private datePipe: DatePipe,
-      private toastr: ToastrService
+      private toastr: ToastrService,
+      private dialog: MatDialog,
     ) {}
   
     ngOnInit(): void {
@@ -109,20 +114,37 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       this.storedPersonId = localStorage.getItem('user_id');
       console.log(this.storedPersonId, "id");
     }
+    
+    openConsentDialog() {
+      const dialogRef = this.dialog.open(UbconsentComponent, {
+        width: '80vw',  
+        maxWidth: '90vw' ,
+        height: '80vh',
+        maxHeight: '90vh',
+        autoFocus: false
+      });
+    
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.consent.controls[0].get('is_consent')?.setValue(true);
+        }
+      });
+    }
   
     initializeForm() {
       this.unidentifiedBodyForm = this.fb.group({
+       full_name: ['',[ Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+      birth_date: [null],
+      age_range: ['', [Validators.pattern(/^\d{1,3}-\d{1,3}$/)]],
+      gender: ['', Validators.required],
+      height: ['', [Validators.max(250), Validators.pattern(/^[0-9]+$/)]],
+      weight: ['', [Validators.max(200), Validators.pattern(/^[0-9]+$/)]],
+      birth_mark: ['', Validators.maxLength(250)],
+      distinctive_mark: ['', Validators.maxLength(250)],
         type: ['Unidentified Body'],
-        full_name: [''],
-        birth_date: [null],
-        // age: [null],
-        age_range: [''],
         birthtime: [null],
-        gender: [''],
         birthplace: [''],
-        height: [''],
         height_range:[''],
-        weight: [''],
         blood_group: [''],
         complexion: [''],
         hair_color: [''],
@@ -131,8 +153,6 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
         condition: [''],
         Body_Condition: [''],    
         bodies_condition: [[]],      
-        birth_mark: [''],
-        distinctive_mark: [''],
         hospital: [null],
         document_ids: [''],
         created_at: [null],
@@ -156,7 +176,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       this.addFIR();
       this.addConsent();
     }
-  
+
     // Getters for FormArrays
     get addresses(): FormArray {
       return this.unidentifiedBodyForm.get('addresses') as FormArray;
@@ -183,17 +203,18 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     }
     createAddressFormGroup(): FormGroup {
       return this.fb.group({
+        street: ['', [Validators.pattern(/^[a-zA-Z0-9\s]{1,30}$/)]],
+    village: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    city: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    district: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    state: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    country: ['', [Validators.pattern(/^[a-zA-Z\s]{1,15}$/)]],
+    pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
+    landmark_details: ['', Validators.maxLength(30)],
         address_type: [''],
-        street: [''],
+        // street: [''],
         appartment_no: [''],
         appartment_name: [''],
-        village: [''],
-        city: [''],
-        district: [''],
-        state: [''],
-        country: [''],
-        pincode: [''],
-        landmark_details: [''],
         location: this.fb.group({
           latitude: [''],
           longitude: [''],
@@ -204,20 +225,21 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       });
     }
     
+
+
     // Correct method to create Contact FormGroup
     createContactFormGroup(): FormGroup {
       return this.fb.group({
-        phone_no: [''],
-        // country_cd: [''],
-        email_id: [''],
-        type: ['referral'],
-        company_name: [''],
-        person_name: [''],
+          type: ['referral'],
+    person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
+    phone_no: ['', [Validators.pattern(/^[0-9]{10}$/)]],
+    email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+    additional_details: ['', Validators.maxLength(200)],
         // job_title: [''],
         // website_url: [''],
         // social_media_url: [''],
         // social_media_availability: [''],
-        additional_details: [''],
+        // additional_details: [''],
         // is_primary: [false],
         // user: [''],
         hospital: [null],
@@ -229,6 +251,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
         // updated_by: [''],
       });
     }
+
     
     // Add address logic
     addAddress() {
@@ -265,25 +288,41 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     // Add additional info
     addAdditionalInfo() {
       this.additionalInfo.push(this.fb.group({
-        caste: [''],
-        subcaste: [''],
-        marital_status: [''],
-        religion: [''],
-        mother_tongue: [''],
-        other_known_languages: [''],
-        id_type: [''],
-        id_no: [''],
-        education_details: [''],
-        occupation_details: [''],
-        // user: [''],
         person: [''],
         created_at: [null],
         updated_at: [null],
         // created_by: [''],
         // updated_by: [''],
+      caste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    subcaste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    marital_status: [''],
+    religion: [''],
+    mother_tongue: [''],
+    other_known_languages: ['', this.languageValidator],
+    id_type: [''],
+    id_no: ['', Validators.pattern(/^[a-zA-Z0-9]+$/)],
+    education_details: [''],
+    occupation_details: ['', Validators.maxLength(30)]
       }));
     }
-    
+
+languageValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return null;
+  
+  const languages = control.value.split(',').map((lang: string) => lang.trim());
+  
+  if (languages.length > 5) {
+    return { tooManyLanguages: true };
+  }
+  
+  const invalidChars = languages.some((lang: string) => !/^[a-zA-Z\s]+$/.test(lang));
+  if (invalidChars) {
+    return { invalidLanguageChars: true };
+  }
+  
+  return null;
+}
+
     // Add last known details
     addLastKnownDetails() {
       this.lastKnownDetails.push(this.fb.group({
@@ -305,12 +344,12 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     // Add FIR
     addFIR() {
       this.firs.push(this.fb.group({
-        fir_number: [''],
+    fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9]{1,20}$/)]],
         case_status: [''],
-        investigation_officer_name: [''],
         investigation_officer_contact: [null],
-        investigation_officer_contacts:[''],
-        police_station: [null],
+            investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+    investigation_officer_contacts: ['', Validators.pattern(/^[0-9]+$/)],
+      police_station: ['', [Validators.pattern(/^[a-zA-Z\s]{1,50}$/)]],
         document: [null],
         person: [''],
         created_at: [null],
@@ -319,7 +358,8 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
         // updated_by: [''],
       }));
     }
-  
+
+
     loadPoliceStations() {
       this.formApi.getPoliceStationList().subscribe({
         next: (data:any) => {
@@ -358,6 +398,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
         // updated_by: [''],
       }));
     }
+
     
     // Remove functions
     removeAddress(index: number) {
@@ -530,7 +571,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     
       this.formApi.postMissingPerson(formData).subscribe({
         next: (response) => {
-          this.toastr.success('Body Data added  successfully', 'Success');
+          this.toastr.success('Body Data Added Successfully', 'Success');
           this.unidentifiedBodyForm.reset();
           this.addresses.clear();
           this.contacts.clear();
@@ -546,5 +587,3 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       return time ? time.replace(/[“”]/g, '"') : '';
     }
 }
-
-

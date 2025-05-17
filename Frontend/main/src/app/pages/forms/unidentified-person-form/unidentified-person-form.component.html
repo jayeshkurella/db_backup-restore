@@ -22,6 +22,9 @@
             <mat-option value="male">Male</mat-option>
             <mat-option value="female">Female</mat-option>
           </mat-select>
+            <mat-error *ngIf="unidentifiedPersonForm.get('gender')?.hasError('required')">
+              Please select Gender
+            </mat-error>
         </mat-form-field>
 
 
@@ -88,6 +91,12 @@
             <mat-option value="181-190">181 - 190 cm</mat-option>
             <mat-option value=">190">More than 190 cm</mat-option>
           </mat-select>
+          <mat-error *ngIf="unidentifiedPersonForm.get('height')?.hasError('max')">
+              Height cannot exceed 250cm
+            </mat-error>
+            <mat-error *ngIf="unidentifiedPersonForm.get('height')?.hasError('pattern')">
+              Please enter a valid number
+            </mat-error>
         </mat-form-field>
 
         
@@ -100,6 +109,12 @@
         <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
           <mat-label>Weight (kg)</mat-label>
           <input matInput type="text" formControlName="weight">
+          <mat-error *ngIf="unidentifiedPersonForm.get('weight')?.hasError('max')">
+              Weight cannot exceed 200kg
+            </mat-error>
+            <mat-error *ngIf="unidentifiedPersonForm.get('weight')?.hasError('pattern')">
+              Please enter a valid number
+            </mat-error>
         </mat-form-field>
 
 
@@ -194,6 +209,9 @@
         <mat-form-field appearance="outline" class="col-12 col-md-6">
           <mat-label>Birthmark Details</mat-label>
           <textarea matInput formControlName="birth_mark" rows="3" ></textarea>
+          <mat-error *ngIf="unidentifiedPersonForm.get('birth_mark')?.hasError('maxlength')">
+              Maximum 250 characters allowed
+            </mat-error>
         </mat-form-field>
 
         <!-- Distinctive Marks -->
@@ -201,6 +219,9 @@
           <mat-label>Distinctive Marks</mat-label>
           <textarea matInput formControlName="distinctive_mark" rows="3"
             ></textarea>
+            <mat-error *ngIf="unidentifiedPersonForm.get('distinctive_mark')?.hasError('maxlength')">
+              Maximum 250 characters allowed
+            </mat-error>
         </mat-form-field>
 
       </div>
@@ -269,17 +290,17 @@
         </div> -->
 
         <div class="col-md-4" style="margin-bottom: 20px;">
-  <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
-    <mat-icon>cloud_upload</mat-icon>Person Photo
-  </button>
-  <input
-    #personPhotoInput
-    type="file"
-    accept="image/*"
-    hidden
-    (change)="onFileSelect_person_photo($event)"
-  />
-</div>
+          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+            <mat-icon>cloud_upload</mat-icon>Person Photo
+            </button>
+            <input
+              #personPhotoInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileSelect_person_photo($event)"
+            />
+        </div>
 
         
       </div>
@@ -321,6 +342,9 @@
                 <mat-option value="family">Family</mat-option>
                 <mat-option value="other">Other</mat-option>
               </mat-select>
+              <mat-error *ngIf="unidentifiedPersonForm.get('address_type')?.hasError('maxlength')">
+                  Maximum 200 characters allowed
+                </mat-error>
             </mat-form-field>
           </div>
 
@@ -328,20 +352,28 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Street</mat-label>
               <input matInput type="text" formControlName="street">
+              <mat-error *ngIf="unidentifiedPersonForm.get('street')?.hasError('pattern')">
+                  Street must be alphanumeric and up to 30 characters
+                </mat-error>
             </mat-form-field>
           </div>
-
-          <!-- <div class="col-md-6">
+        <div class="col-md-12">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Apartment Number</mat-label>
-              <input matInput type="text" formControlName="appartment_no">
+              <mat-label>Landmark Details</mat-label>
+              <textarea matInput formControlName="landmark_details" rows="1"></textarea>
+                <mat-error *ngIf="unidentifiedPersonForm.get('landmark_details')?.hasError('maxlength')">
+                  Maximum 30 characters allowed
+                </mat-error>
             </mat-form-field>
-          </div> -->
+          </div>
 
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Village</mat-label>
               <input matInput type="text" formControlName="village">
+              <mat-error *ngIf="unidentifiedPersonForm.get('village')?.hasError('pattern')">
+                  Village must contain only letters and be up to 30 characters
+                </mat-error>
             </mat-form-field>
           </div>
 
@@ -349,6 +381,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>City</mat-label>
               <input matInput type="text" formControlName="city">
+              
             </mat-form-field>
           </div>
 
@@ -356,6 +389,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>District</mat-label>
               <input matInput type="text" formControlName="district">
+              
             </mat-form-field>
           </div>
 
@@ -366,6 +400,7 @@
                 <mat-option value="" disabled>State</mat-option>
                 <mat-option *ngFor="let state of states" [value]="state">{{ state }}</mat-option>
               </mat-select>
+              
             </mat-form-field>
           </div>
 
@@ -373,6 +408,9 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Pincode</mat-label>
               <input matInput type="text" formControlName="pincode">
+              <mat-error *ngIf="unidentifiedPersonForm.get('pincode')?.hasError('pattern')">
+                  Please enter a valid pincode (up to 15 digits)
+                </mat-error>
             </mat-form-field>
           </div>
 
@@ -386,12 +424,7 @@
             </mat-form-field>
           </div>
 
-          <div class="col-md-12">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Landmark Details</mat-label>
-              <textarea matInput formControlName="landmark_details" rows="1"></textarea>
-            </mat-form-field>
-          </div>
+        
         </div>
       </div>
 
@@ -489,6 +522,9 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Name</mat-label>
             <input matInput type="text" formControlName="person_name">
+            <mat-error *ngIf="unidentifiedPersonForm.get('person_name')?.hasError('pattern')">
+                Name must contain only letters
+              </mat-error>
           </mat-form-field>
         </div>
 
@@ -497,6 +533,9 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Phone Number</mat-label>
             <input matInput type="text" formControlName="phone_no">
+            <mat-error *ngIf="unidentifiedPersonForm.get('phone_no')?.hasError('pattern')">
+                Please enter a valid 10-digit phone number
+              </mat-error>
           </mat-form-field>
         </div>
 
@@ -505,6 +544,9 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email_id">
+            <mat-error *ngIf="unidentifiedPersonForm.get('email_id')?.hasError('pattern')">
+                Please enter a valid email address
+              </mat-error>
           </mat-form-field>
         </div>
 
@@ -559,6 +601,9 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Additional Notes</mat-label>
             <textarea matInput type="text" formControlName="additional_details"></textarea>
+            <mat-error *ngIf="unidentifiedPersonForm.get('additional_details')?.hasError('maxlength')">
+                Maximum 200 characters allowed
+              </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -693,6 +738,12 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Other Known Languages</mat-label>
                 <input matInput type="text" formControlName="other_known_languages">
+                <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('tooManyLanguages')">
+                  Maximum 5 languages allowed
+                </mat-error>
+                <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('invalidLanguageChars')">
+                  Languages can only contain letters
+                </mat-error>
               </mat-form-field>
             </div>
 
@@ -701,11 +752,11 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Identification Type</mat-label>
                 <mat-select formControlName="id_type">
-                  <mat-option value="aadhar">Aadhar Card</mat-option>
-                  <mat-option value="pan">Pan Card</mat-option>
-                  <mat-option value="dl">Driving License</mat-option>
+                  <mat-option value="aadhar_card">Aadhar Card</mat-option>
+                  <mat-option value="pan_card">Pan Card</mat-option>
+                  <mat-option value="driving_license">Driving License</mat-option>
                   <mat-option value="passport">Passport</mat-option>
-                  <mat-option value="voterID">VoterID</mat-option>
+                  <mat-option value="voter_id_card">VoterID</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -715,6 +766,9 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Identification Card Number</mat-label>
                 <input matInput type="text" formControlName="id_no">
+                <mat-error *ngIf="additionalInfo.controls[i].get('id_no')?.hasError('pattern')">
+                  ID number must be alphanumeric
+                </mat-error>
               </mat-form-field>
             </div>
 
@@ -723,6 +777,7 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Educational Details</mat-label>
                 <input matInput type="text" formControlName="education_details">
+
               </mat-form-field>
             </div>
 
@@ -731,6 +786,9 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Occupation</mat-label>
                 <input matInput type="text" formControlName="occupation_details">
+                <mat-error *ngIf="additionalInfo.controls[i].get('occupation_details')?.hasError('maxlength')">
+                  Maximum 30 characters allowed
+                </mat-error>
               </mat-form-field>
             </div>
 
@@ -847,24 +905,15 @@
       </div> -->
 
         <div formArrayName="consent">
-  <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-    
-    <!-- Bootstrap Checkbox -->
-    <div class="form-check col-md-12">
-      <input
-        class="form-check-input border-primary"
-        type="checkbox"
-        [formControlName]="'is_consent'"
-        id="consentCheck{{ i }}"
-      />
-      <label class="form-check-label" [for]="'consentCheck' + i">
-        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
-        I consent to the use of this information for the purpose of locating the missing person.
-      </label>
-    </div>
-
-  </div>
-</div>
+          <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+        
+            <!-- Bootstrap Checkbox -->
+            <div class="col-md-12 consent-link">
+              <a (click)="openConsentDialog()">Click to open and acknowledge the consent document before proceeding.</a>
+            </div>
+        
+          </div>
+        </div>
 
 
     </mat-card>
@@ -873,7 +922,7 @@
 
     <!-- Submit & Cancel Buttons -->
     <div class="d-flex justify-content-between mt-4 space-down">
-      <button mat-flat-button class="bg-error text-white">Cancel</button>
+      <button mat-flat-button color="primary">Cancel</button>
 
       <span
         [matTooltip]="'Please accept the consent  before submitting.'"

@@ -15,7 +15,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 
-from .pending_person_pagination import PendingPersonPagination
+# from .pending_person_pagination import PendingPersonPagination
 from ..models.fir import FIR
 from ..access_permision import IsAdminUser , IsVolunteerUser ,AllUserAccess
 from ..pagination import CustomPagination
@@ -607,66 +607,6 @@ class PersonViewSet(viewsets.ViewSet):
             return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
-    # def pending_or_rejected(self, request):
-    #     try:
-    #         # Extract filters
-    #         state = request.query_params.get('state')
-    #         district = request.query_params.get('district')
-    #         city = request.query_params.get('city')
-    #         village = request.query_params.get('village')
-    #         police_station = request.query_params.get('police_station')
-    #         case_id = request.query_params.get('case_id')
-    #
-    #         filters = Q()
-    #         if state:
-    #             filters &= Q(state__iexact=state)
-    #         if district:
-    #             filters &= Q(district__iexact=district)
-    #         if city:
-    #             filters &= Q(city__iexact=city)
-    #         if village:
-    #             filters &= Q(village__iexact=village)
-    #         if case_id:
-    #             filters &= Q(case_id__iexact=case_id)
-    #         if police_station:
-    #             filters &= Q(firs__police_station__id=UUID(police_station))
-    #
-    #         persons = Person.objects.filter(filters)
-    #
-    #         summary = {
-    #             'pending': [],
-    #             'approved': [],
-    #             'rejected': [],
-    #             'on_hold': [],
-    #             'suspended': []
-    #         }
-    #
-    #         for person in persons:
-    #             status_key = person.person_approve_status
-    #             if status_key in summary:
-    #                 summary[status_key].append(ApprovePersonSerializer(person).data)
-    #
-    #         # Paginate each group safely
-    #         paginator = PendingPersonPagination()
-    #         paginated_response = {}
-    #
-    #         for status_key, data_list in summary.items():
-    #             paginated_response[f"{status_key}_count"] = len(data_list)
-    #             try:
-    #                 paginated_page = paginator.paginate_queryset(data_list, request)
-    #                 paginated_response[status_key] = paginated_page
-    #             except NotFound:
-    #                 # Page out of range, return empty list
-    #                 paginated_response[status_key] = []
-    #
-    #         return Response(paginated_response, status=status.HTTP_200_OK)
-    #
-    #     except Exception as e:
-    #         return Response(
-    #             {'error': 'Something went wrong while fetching person data.', 'details': str(e)},
-    #             status=status.HTTP_500_INTERNAL_SERVER_ERROR
-    #         )
-
     def pending_or_rejected(self, request):
         try:
             # Extract filter parameters from query string

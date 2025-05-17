@@ -1,0 +1,127 @@
+.legal-documents-container {
+  width: 100%;
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+}
+
+.document-header {
+  color:inherit;
+  padding: 20px;
+  border-radius: 4px 4px 0 0;
+  margin-bottom: 20px;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.header-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
+}
+
+.effective-date {
+  opacity: 0.8;
+  font-size: 0.9em;
+}
+
+.legal-tabs {
+  margin-bottom: 20px;
+}
+
+.tab-content {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.document-section {
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  color:inherit;
+}
+
+.section-header mat-icon {
+  margin-right: 10px;
+}
+
+.subsection {
+  margin-bottom: 25px;
+  padding-left: 20px;
+  border-left: 3px solid #e0e0e0;
+}
+
+.subsection h3 {
+  display: flex;
+  align-items: center;
+  color:inherit;
+  margin-bottom: 10px;
+}
+
+.subsection h3 mat-icon {
+  margin-right: 10px;
+  color:inherit;
+}
+
+.content-list {
+  padding-left: 20px;
+}
+
+.content-list li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.document-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.contact-info {
+  margin-bottom: 20px;
+}
+
+.contact-info h3 {
+  display: flex;
+  align-items: center;
+ color:inherit;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.contact-info mat-icon {
+  margin-right: 10px;
+  color:inherit;
+}
+
+.acceptance-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tab-content {
+    padding: 15px;
+  }
+  
+  .subsection {
+    padding-left: 10px;
+  }
+}

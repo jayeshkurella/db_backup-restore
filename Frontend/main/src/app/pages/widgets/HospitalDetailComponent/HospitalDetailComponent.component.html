@@ -5,11 +5,6 @@
       <div class="title-section">
         <h5 class="station-name">{{ hospital.name }}</h5>
         <div class="status-badge">
-          <span [ngClass]="{
-              'status-dot': true, 
-              'active': hospital.activ_Status === 'Active',
-              'inactive': hospital.activ_Status !== 'Active'
-            }"></span>
           <span class="last-updated">Last updated: {{ hospital.updated_at | date: 'mediumDate' }}</span>
         </div>
         

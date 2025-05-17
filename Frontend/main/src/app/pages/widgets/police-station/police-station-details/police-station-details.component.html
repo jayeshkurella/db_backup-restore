@@ -5,9 +5,6 @@
         <div class="title-section">
           <h5 class="station-name">{{ policestation.name }}</h5>
           <div class="status-badge">
-            <mat-chip [color]="policestation.activ_Status === 'Active' ? 'primary' : 'warn'" selected>
-              {{ policestation.activ_Status || 'Active' }}
-            </mat-chip>
             <span class="last-updated">Last updated: {{ policestation.updated_at | date: 'mediumDate' }}</span>
           </div>
         </div>

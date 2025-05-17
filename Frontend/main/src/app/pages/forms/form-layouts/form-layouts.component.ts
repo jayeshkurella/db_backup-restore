@@ -28,6 +28,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { MpconsentComponent } from './mpconsent/mpconsent.component';
 
 
 @Component({
@@ -92,11 +94,27 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   today: string;
 
 
-  constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe, private toastr: ToastrService,private dialog: MatDialog) {
     this.today = new Date().toISOString().split('T')[0];
-
-    
   }
+
+openConsentDialog() {
+  const dialogRef = this.dialog.open(MpconsentComponent, {
+    width: '80vw',  
+    maxWidth: '90vw' ,
+    height: '80vh',
+    maxHeight: '90vh',
+    autoFocus: false
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.consent.controls[0].get('is_consent')?.setValue(true);
+    }
+  });
+}
+
+
   ngOnInit(): void {
     // this.gettoken()
     this.getperson()
@@ -381,8 +399,8 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
         data: [''],
         person: [''],
         is_consent: [false],
-        created_by:  [this.storedPersonId],
-        updated_by:  [this.storedPersonId],
+        created_by: [this.storedPersonId],
+        updated_by:[this.storedPersonId],
       })
     );
   }

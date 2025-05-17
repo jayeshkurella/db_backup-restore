@@ -3,9 +3,11 @@
     <h3 class="main-heading">MISSING PERSON REPORT FORM</h3>
   </div>
 
-
-  <form [formGroup]="personForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-
+  <form
+    [formGroup]="personForm"
+    (ngSubmit)="onSubmit()"
+    enctype="multipart/form-data"
+  >
     <!-- Personal Info Section -->
     <div class="p-3 bg-light-primary rounded">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
@@ -13,157 +15,152 @@
         Personal Info
       </h5>
     </div>
-    
 
     <mat-card class="p-4 m-1 mb-4">
-    <div class="row g-3 m-2">
-      <div class="d-flex flex-wrap align-items-center w-100">
+      <div class="row g-3 m-2">
+        <div class="d-flex flex-wrap align-items-center w-100">
+          <!-- Full Name -->
+          <mat-form-field
+            appearance="outline"
+            class="col-12 col-md-6 col-lg-4 border_darkk"
+          >
+            <mat-label>Full Name</mat-label>
+            <input matInput type="text" formControlName="full_name" />
+          </mat-form-field>
 
-        <!-- Full Name -->
-        <mat-form-field appearance="outline"  class="col-12 col-md-6 col-lg-4 border_darkk">
-          <mat-label>Full Name</mat-label>
-          <input matInput type="text"  formControlName="full_name"  />
-        </mat-form-field>
+          <!-- Date of Birth -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Date of Birth</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="birth_date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
 
-        <!-- Date of Birth -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Date of Birth</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="birth_date">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Time of Birth</mat-label>
+            <input matInput type="time" formControlName="birthtime" />
+          </mat-form-field>
 
+          <!-- Age -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Age</mat-label>
+            <input matInput type="number" formControlName="age" />
+          </mat-form-field>
+          <!-- Gender -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Time of Birth</mat-label>
-          <input
-            matInput
-            type="time"
-            formControlName="birthtime">
-        </mat-form-field>
-        
-        
-        
-        <!-- Age -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Age</mat-label>
-          <input matInput type="number" formControlName="age">
-        </mat-form-field>
-        <!-- Gender -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Gender</mat-label>
-          <mat-select formControlName="gender">
-            <mat-option value="male">Male</mat-option>
-            <mat-option value="female">Female</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <!-- Second Row -->
+        <div class="d-flex flex-wrap align-items-center w-100">
+          <!-- Blood Group -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Blood Group</mat-label>
+            <mat-select formControlName="blood_group">
+              <mat-option value="A+">A+</mat-option>
+              <mat-option value="A-">A-</mat-option>
+              <mat-option value="B+">B+</mat-option>
+              <mat-option value="B-">B-</mat-option>
+              <mat-option value="AB+">AB+</mat-option>
+              <mat-option value="AB-">AB-</mat-option>
+              <mat-option value="O+">O+</mat-option>
+              <mat-option value="O-">O-</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-      </div>
+          <!-- Place of Birth -->
+          <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-3">
+            <mat-label>Place of Birth</mat-label>
+            <input matInput formControlName="birthplace" />
+          </mat-form-field>
 
-      <!-- Second Row -->
-      <div class="d-flex flex-wrap align-items-center w-100">
-        <!-- Blood Group -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Blood Group</mat-label>
-          <mat-select formControlName="blood_group">
-            <mat-option value="A+">A+</mat-option>
-            <mat-option value="A-">A-</mat-option>
-            <mat-option value="B+">B+</mat-option>
-            <mat-option value="B-">B-</mat-option>
-            <mat-option value="AB+">AB+</mat-option>
-            <mat-option value="AB-">AB-</mat-option>
-            <mat-option value="O+">O+</mat-option>
-            <mat-option value="O-">O-</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <!-- Height -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Height (cm)</mat-label>
+            <mat-select formControlName="height_range">
+              <mat-option value="<150">Less than 150 cm</mat-option>
+              <mat-option value="150-160">150 - 160 cm</mat-option>
+              <mat-option value="161-170">161 - 170 cm</mat-option>
+              <mat-option value="171-180">171 - 180 cm</mat-option>
+              <mat-option value="181-190">181 - 190 cm</mat-option>
+              <mat-option value=">190">More than 190 cm</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <!-- Place of Birth -->
-        <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-3">
-          <mat-label>Place of Birth</mat-label>
-          <input matInput formControlName="birthplace">
-        </mat-form-field>
+          <!-- Weight -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+            <mat-label>Weight (kg)</mat-label>
+            <input matInput type="text" formControlName="weight" />
+          </mat-form-field>
 
-        <!-- Height -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Height (cm)</mat-label>
-          <mat-select formControlName="height_range">
-            <mat-option value="<150">Less than 150 cm</mat-option>
-            <mat-option value="150-160">150 - 160 cm</mat-option>
-            <mat-option value="161-170">161 - 170 cm</mat-option>
-            <mat-option value="171-180">171 - 180 cm</mat-option>
-            <mat-option value="181-190">181 - 190 cm</mat-option>
-            <mat-option value=">190">More than 190 cm</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+            <mat-label>Hair Type</mat-label>
+            <mat-select formControlName="hair_type">
+              <mat-option value="straight">Straight</mat-option>
+              <mat-option value="dashed">Dashed</mat-option>
+              <mat-option value="dotted">Dotted</mat-option>
+              <mat-option value="long">Long</mat-option>
+              <mat-option value="broad">Broad</mat-option>
+              <mat-option value="short">Short</mat-option>
+              <mat-option value="wavy">Wavy</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <!-- Weight -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
-          <mat-label>Weight (kg)</mat-label>
-          <input matInput type="text" formControlName="weight">
-        </mat-form-field>
+        <!-- Third Row -->
+        <div class="d-flex flex-wrap align-items-center w-100">
+          <!-- Complexion -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+            <mat-label>Complexion</mat-label>
+            <mat-select formControlName="complexion">
+              <mat-option value="fair">Fair</mat-option>
+              <mat-option value="dusky">Dusky</mat-option>
+              <mat-option value="wheatish">Wheatish</mat-option>
+              <mat-option value="dark">Dark</mat-option>
+              <mat-option value="medium">Medium</mat-option>
+              <mat-option value="light">Light</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
-          <mat-label>Hair Type</mat-label>
-          <mat-select formControlName="hair_type">
-            <mat-option value="straight">Straight</mat-option>
-            <mat-option value="dashed">Dashed</mat-option>
-            <mat-option value="dotted">Dotted</mat-option>
-            <mat-option value="long">Long</mat-option>
-            <mat-option value="broad">Broad</mat-option>
-            <mat-option value="short">Short</mat-option>
-            <mat-option value="wavy">Wavy</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <!-- Hair Color -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+            <mat-label>Hair Color</mat-label>
+            <mat-select formControlName="hair_color">
+              <mat-option value="black">Black</mat-option>
+              <mat-option value="brown">Brown</mat-option>
+              <mat-option value="grey">Grey</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-      </div>
+          <!-- Eye Color -->
+          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
+            <mat-label>Eye Color</mat-label>
+            <mat-select formControlName="eye_color">
+              <mat-option value="black">Black</mat-option>
+              <mat-option value="brown">Brown</mat-option>
+              <mat-option value="green">Green</mat-option>
+              <mat-option value="hazel">Hazel</mat-option>
+              <mat-option value="gray">Gray</mat-option>
+              <mat-option value="yellow">Yellow</mat-option>
+              <mat-option value="blue">Blue</mat-option>
+              <mat-option value="violet">Violet</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-      <!-- Third Row -->
-      <div class="d-flex flex-wrap align-items-center w-100">
-        <!-- Complexion -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
-          <mat-label>Complexion</mat-label>
-          <mat-select formControlName="complexion">
-            <mat-option value="fair">Fair</mat-option>
-            <mat-option value="dusky">Dusky</mat-option>
-            <mat-option value="wheatish">Wheatish</mat-option>
-            <mat-option value="dark">Dark</mat-option>
-            <mat-option value="medium">Medium</mat-option>
-            <mat-option value="light">Light</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-       
-        
-        
-
-        <!-- Hair Color -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
-          <mat-label>Hair Color</mat-label>
-          <mat-select formControlName="hair_color">
-            <mat-option value="black">Black</mat-option>
-            <mat-option value="brown">Brown</mat-option>
-            <mat-option value="grey">Grey</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- Eye Color -->
-        <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-3">
-          <mat-label>Eye Color</mat-label>
-          <mat-select formControlName="eye_color">
-            <mat-option value="black">Black</mat-option>
-            <mat-option value="brown">Brown</mat-option>
-            <mat-option value="green">Green</mat-option>
-            <mat-option value="hazel">Hazel</mat-option>
-            <mat-option value="gray">Gray</mat-option>
-            <mat-option value="yellow">Yellow</mat-option>
-            <mat-option value="blue">Blue</mat-option>
-            <mat-option value="violet">Violet</mat-option>
-          </mat-select>
-        </mat-form-field>
-        
-        <!-- File Uploads -->
-        <!-- <div class="col-12 col-md-3 mb-3">
+          <!-- File Uploads -->
+          <!-- <div class="col-12 col-md-3 mb-3">
           <label for="bodyPhotoInput"
           class="form-control d-flex align-items-center justify-content-center gap-3 text-body" style="cursor: pointer;">
             <i class="bi bi-upload"></i>  
@@ -178,37 +175,46 @@
             (change)="onFileSelect_person_photo($event)"
           />
         </div> -->
-    
-        <div class="col-md-3" style="margin-bottom: 20px;">
-          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
-            <mat-icon>cloud_upload</mat-icon>Person Photo
-          </button>
-          <input
-            #personPhotoInput
-            type="file"
-            accept="image/*"
-            hidden
-            (change)="onFileSelect_person_photo($event)"
-          />
+
+          <div class="col-md-3" style="margin-bottom: 20px">
+            <button
+              mat-stroked-button
+              color="primary"
+              class="w-100"
+              type="button"
+              (click)="personPhotoInput.click()"
+            >
+              <mat-icon>cloud_upload</mat-icon>Person Photo
+            </button>
+            <input
+              #personPhotoInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileSelect_person_photo($event)"
+            />
+          </div>
         </div>
-      </div>
 
-      <!-- Fourth Row -->
-      <div class="d-flex flex-wrap align-items-center w-100">
-        <!-- Birthmark -->
-        <mat-form-field appearance="outline" class="col-12 col-md-6">
-          <mat-label>Birthmark Details</mat-label>
-          <textarea matInput formControlName="birth_mark" rows="3" ></textarea>
-        </mat-form-field>
+        <!-- Fourth Row -->
+        <div class="d-flex flex-wrap align-items-center w-100">
+          <!-- Birthmark -->
+          <mat-form-field appearance="outline" class="col-12 col-md-6">
+            <mat-label>Birthmark Details</mat-label>
+            <textarea matInput formControlName="birth_mark" rows="3"></textarea>
+          </mat-form-field>
 
-        <!-- Distinctive Marks -->
-        <mat-form-field appearance="outline" class="col-12 col-md-6">
-          <mat-label>Distinctive Marks</mat-label>
-          <textarea matInput formControlName="distinctive_mark" rows="3"
+          <!-- Distinctive Marks -->
+          <mat-form-field appearance="outline" class="col-12 col-md-6">
+            <mat-label>Distinctive Marks</mat-label>
+            <textarea
+              matInput
+              formControlName="distinctive_mark"
+              rows="3"
             ></textarea>
-        </mat-form-field>
+          </mat-form-field>
 
-        <!-- <div class="col-md-4">
+          <!-- <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Select Hospital</mat-label>
             <mat-select formControlName="hospital">
@@ -218,341 +224,416 @@
             </mat-select>
           </mat-form-field>
         </div> -->
-        
+        </div>
       </div>
-
-    </div>
     </mat-card>
 
-
     <!-- Address Section -->
-    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+    <div
+      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center"
+    >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Address
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        Address
       </h5>
-      <button mat-flat-button color="primary" type="button" (click)="addAddress()">Add Another Address</button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="addAddress()"
+      >
+        Add Another Address
+      </button>
     </div>
-    
+
     <mat-card class="p-4 mb-4">
-    <div formGroupName="addressForm" class="row g-3 m-2">
-      <!-- Left Section: Address Fields -->
-      <div class="col-md-6">
-        <div class="row g-2">
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <!-- <mat-label>Address Type</mat-label> -->
-              <mat-select formControlName="address_type">
-                <mat-option value="" disabled>Address Type</mat-option>
-                <mat-option value="permanent">Permanent</mat-option>
-                <mat-option value="current">Current</mat-option>
-                <mat-option value="old">Old</mat-option>
-                <mat-option value="home">Home</mat-option>
-                <mat-option value="office">Office</mat-option>
-                <mat-option value="temporary">Temporary</mat-option>
-                <mat-option value="billing">Billing</mat-option>
-                <mat-option value="shipping">Shipping</mat-option>
-                <mat-option value="registered">Registered</mat-option>
-                <mat-option value="mailing">Mailing</mat-option>
-                <mat-option value="vacation">Vacation</mat-option>
-                <mat-option value="rental">Rental</mat-option>
-                <mat-option value="student">Student</mat-option>
-                <mat-option value="family">Family</mat-option>
-                <mat-option value="other">Other</mat-option>
-              </mat-select>
-              
-            </mat-form-field>
-          </div>
+      <div formGroupName="addressForm" class="row g-3 m-2">
+        <!-- Left Section: Address Fields -->
+        <div class="col-md-6">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <!-- <mat-label>Address Type</mat-label> -->
+                <mat-select formControlName="address_type">
+                  <mat-option value="" disabled>Address Type</mat-option>
+                  <mat-option value="permanent">Permanent</mat-option>
+                  <mat-option value="current">Current</mat-option>
+                  <mat-option value="old">Old</mat-option>
+                  <mat-option value="home">Home</mat-option>
+                  <mat-option value="office">Office</mat-option>
+                  <mat-option value="temporary">Temporary</mat-option>
+                  <mat-option value="billing">Billing</mat-option>
+                  <mat-option value="shipping">Shipping</mat-option>
+                  <mat-option value="registered">Registered</mat-option>
+                  <mat-option value="mailing">Mailing</mat-option>
+                  <mat-option value="vacation">Vacation</mat-option>
+                  <mat-option value="rental">Rental</mat-option>
+                  <mat-option value="student">Student</mat-option>
+                  <mat-option value="family">Family</mat-option>
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Street</mat-label>
-              <input matInput type="text" formControlName="street">
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Street</mat-label>
+                <input matInput type="text" formControlName="street" />
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Apartment Number</mat-label>
-              <input matInput type="text" formControlName="appartment_no">
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Apartment Number</mat-label>
+                <input matInput type="text" formControlName="appartment_no" />
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Village</mat-label>
-              <input matInput type="text" formControlName="village">
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Village</mat-label>
+                <input matInput type="text" formControlName="village" />
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>City</mat-label>
-              <input matInput type="text" formControlName="city">
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="city" />
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>District</mat-label>
-              <input matInput type="text" formControlName="district">
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>District</mat-label>
+                <input matInput type="text" formControlName="district" />
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <!-- <mat-label>State</mat-label> -->
-              <mat-select formControlName="state">
-                <mat-option value="" disabled>State</mat-option>
-                <mat-option *ngFor="let state of states" [value]="state">{{ state }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <!-- <mat-label>State</mat-label> -->
+                <mat-select formControlName="state">
+                  <mat-option value="" disabled>State</mat-option>
+                  <mat-option *ngFor="let state of states" [value]="state">{{
+                    state
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Pincode</mat-label>
-              <input matInput type="text" formControlName="pincode">
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Pincode</mat-label>
+                <input matInput type="text" formControlName="pincode" />
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <!-- <mat-label>Country</mat-label> -->
-              <mat-select formControlName="country">
-                <mat-option value="" disabled>Country</mat-option>
-                <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <!-- <mat-label>Country</mat-label> -->
+                <mat-select formControlName="country">
+                  <mat-option value="" disabled>Country</mat-option>
+                  <mat-option
+                    *ngFor="let country of countries"
+                    [value]="country"
+                    >{{ country }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Landmark Details</mat-label>
-              <textarea matInput formControlName="landmark_details" rows="1"></textarea>
-            </mat-form-field>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Landmark Details</mat-label>
+                <textarea
+                  matInput
+                  formControlName="landmark_details"
+                  rows="1"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Section: Map & Location -->
+        <div class="col-md-6">
+          <div formGroupName="location">
+            <div class="d-flex gap-2">
+              <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+                <mat-label>Latitude</mat-label>
+                <input matInput type="text" formControlName="latitude" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="flex-grow-1">
+                <mat-label>Longitude</mat-label>
+                <input matInput type="text" formControlName="longitude" />
+              </mat-form-field>
+
+              <button
+                type="button"
+                mat-icon-button
+                (click)="getCurrentLocation()"
+                matTooltip="Fetch your current location"
+              >
+                <mat-icon>my_location</mat-icon>
+              </button>
+            </div>
+            <div
+              id="mapHome"
+              style="
+                height: 250px;
+                border: 1px solid black;
+                border-radius: 5px;
+                z-index: 1;
+              "
+            ></div>
           </div>
         </div>
       </div>
 
-      <!-- Right Section: Map & Location -->
-      <div class="col-md-6">
-        <div formGroupName="location">
-          <div class="d-flex gap-2">
-
-            <mat-form-field appearance="outline" class="flex-grow-1 me-2">
-              <mat-label>Latitude</mat-label>
-              <input matInput type="text" formControlName="latitude" />
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline" class="flex-grow-1">
-              <mat-label>Longitude</mat-label>
-              <input matInput type="text" formControlName="longitude" />
-            </mat-form-field>
-
-            <button type="button" mat-icon-button (click)="getCurrentLocation()" matTooltip="Fetch your current location">
-              <mat-icon>my_location</mat-icon>
-            </button>
-
-            
-          </div>
-          <div id="mapHome" style="height: 250px; border: 1px solid black; border-radius: 5px; z-index: 1;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Display Added Addresses -->
-        <div *ngFor="let address of addresses.controls; let i = index" 
-        class="d-flex align-items-center justify-content-between border-bottom py-2">
+      <!-- Display Added Addresses -->
+      <div
+        *ngFor="let address of addresses.controls; let i = index"
+        class="d-flex align-items-center justify-content-between border-bottom py-2"
+      >
         <div class="flex-grow-1">
-        <span class="address-title d-flex align-items-center">
-        <mat-icon color="primary" class="me-2">place</mat-icon>
-        <strong>{{ address.get('address_type')?.value || 'No type' }}:</strong>
-        </span>
-        <span class="address-text text-muted">
-        {{ 
-          (address.get('street')?.value ? address.get('street')?.value + ', ' : '') +
-          (address.get('appartment_no')?.value ? 'Apt ' + address.get('appartment_no')?.value + ', ' : '') +
-          (address.get('village')?.value ? address.get('village')?.value + ', ' : '') +
-          (address.get('city')?.value ? address.get('city')?.value + ', ' : '') +
-          (address.get('district')?.value ? address.get('district')?.value + ', ' : '') +
-          (address.get('state')?.value ? address.get('state')?.value + ' - ' : '') +
-          (address.get('pincode')?.value ? address.get('pincode')?.value : '') +
-          (address.get('country')?.value ? ', ' + address.get('country')?.value : '')
-        }}
-        </span>
-        <!-- <div *ngIf="address.get('location')?.value">
+          <span class="address-title d-flex align-items-center">
+            <mat-icon color="primary" class="me-2">place</mat-icon>
+            <strong
+              >{{ address.get("address_type")?.value || "No type" }}:</strong
+            >
+          </span>
+          <span class="address-text text-muted">
+            {{
+              (address.get("street")?.value
+                ? address.get("street")?.value + ", "
+                : "") +
+                (address.get("appartment_no")?.value
+                  ? "Apt " + address.get("appartment_no")?.value + ", "
+                  : "") +
+                (address.get("village")?.value
+                  ? address.get("village")?.value + ", "
+                  : "") +
+                (address.get("city")?.value
+                  ? address.get("city")?.value + ", "
+                  : "") +
+                (address.get("district")?.value
+                  ? address.get("district")?.value + ", "
+                  : "") +
+                (address.get("state")?.value
+                  ? address.get("state")?.value + " - "
+                  : "") +
+                (address.get("pincode")?.value
+                  ? address.get("pincode")?.value
+                  : "") +
+                (address.get("country")?.value
+                  ? ", " + address.get("country")?.value
+                  : "")
+            }}
+          </span>
+          <!-- <div *ngIf="address.get('location')?.value">
           <span class="text-muted">
              Lat: {{ address.get('location.latitude')?.value }}, 
             Long: {{ address.get('location.longitude')?.value }}
           </span>
         </div> -->
-        
         </div>
-        <button mat-icon-button color="warn" type="button" (click)="removeAddress(i)">
-        <mat-icon>delete</mat-icon>
+        <button
+          mat-icon-button
+          color="warn"
+          type="button"
+          (click)="removeAddress(i)"
+        >
+          <mat-icon>delete</mat-icon>
         </button>
-        </div>
+      </div>
     </mat-card>
-   
-      <!-- contact Section -->
-    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+
+    <!-- contact Section -->
+    <div
+      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center"
+    >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
-        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        Contact
       </h5>
-        <button mat-flat-button color="primary" type="button" (click)="addcontact()">Add Another Contact</button>
-    </div>  
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="addcontact()"
+      >
+        Add Another Contact
+      </button>
+    </div>
 
     <!-- Contact Information Card -->
     <mat-card class="p-4 mb-4">
-    <form formGroupName="contactForm" class="row g-3 m-2">
-      <div class="row g-3 m-1">
-        <!-- Contact Type -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Type</mat-label>
-            <mat-select formControlName="type">
-              <mat-option value="personal">Personal</mat-option>
-              <mat-option value="office">Office</mat-option>
-              <mat-option value="home">Home</mat-option>
-              <mat-option value="referral">Referral</mat-option>
-              <mat-option value="emergency">Emergency</mat-option>
-              <mat-option value="work">Work</mat-option>
-              <mat-option value="family">Family</mat-option>
-              <mat-option value="friend">Friend</mat-option>
-              <mat-option value="medical">Medical</mat-option>
-              <mat-option value="school">School</mat-option>
-              <mat-option value="legal">Legal</mat-option>
-              <mat-option value="other">Other</mat-option>
-            </mat-select>
-            
-          </mat-form-field>
-        </div>
+      <form formGroupName="contactForm" class="row g-3 m-2">
+        <div class="row g-3 m-1">
+          <!-- Contact Type -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Type</mat-label>
+              <mat-select formControlName="type">
+                <mat-option value="personal">Personal</mat-option>
+                <mat-option value="office">Office</mat-option>
+                <mat-option value="home">Home</mat-option>
+                <mat-option value="referral">Referral</mat-option>
+                <mat-option value="emergency">Emergency</mat-option>
+                <mat-option value="work">Work</mat-option>
+                <mat-option value="family">Family</mat-option>
+                <mat-option value="friend">Friend</mat-option>
+                <mat-option value="medical">Medical</mat-option>
+                <mat-option value="school">School</mat-option>
+                <mat-option value="legal">Legal</mat-option>
+                <mat-option value="other">Other</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-        <!-- Phone Number -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Phone Number</mat-label>
-            <input matInput type="text" formControlName="phone_no">
-          </mat-form-field>
-        </div>
+          <!-- Phone Number -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Phone Number</mat-label>
+              <input matInput type="text" formControlName="phone_no" />
+            </mat-form-field>
+          </div>
 
-        <!-- Email -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email_id">
-          </mat-form-field>
-        </div>
+          <!-- Email -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email_id" />
+            </mat-form-field>
+          </div>
 
-        <!-- Company Name -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Company Name</mat-label>
-            <input matInput type="text" formControlName="company_name">
-          </mat-form-field>
-        </div>
+          <!-- Company Name -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Company Name</mat-label>
+              <input matInput type="text" formControlName="company_name" />
+            </mat-form-field>
+          </div>
 
-        <!-- Job Title -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Job Title</mat-label>
-            <input matInput type="text" formControlName="job_title">
-          </mat-form-field>
-        </div>
+          <!-- Job Title -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Job Title</mat-label>
+              <input matInput type="text" formControlName="job_title" />
+            </mat-form-field>
+          </div>
 
-        <!-- Website URL -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Website URL</mat-label>
-            <input matInput type="url" formControlName="website_url">
-          </mat-form-field>
-        </div>
+          <!-- Website URL -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Website URL</mat-label>
+              <input matInput type="url" formControlName="website_url" />
+            </mat-form-field>
+          </div>
 
-        <!-- Social Media Platform -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Social Media</mat-label>
-            <mat-select formControlName="social_media_availability">
-              <mat-option value="fb">Facebook</mat-option>
-              <mat-option value="insta">Instagram</mat-option>
-              <mat-option value="x">X (Twitter)</mat-option>
-              <mat-option value="thread">Threads</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          <!-- Social Media Platform -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Social Media</mat-label>
+              <mat-select formControlName="social_media_availability">
+                <mat-option value="fb">Facebook</mat-option>
+                <mat-option value="insta">Instagram</mat-option>
+                <mat-option value="x">X (Twitter)</mat-option>
+                <mat-option value="thread">Threads</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-        <!-- Social Media URL -->
-        <div class="col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Social Media URL</mat-label>
-            <input matInput type="text" formControlName="social_media_url">
-          </mat-form-field>
-        </div>
+          <!-- Social Media URL -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Social Media URL</mat-label>
+              <input matInput type="text" formControlName="social_media_url" />
+            </mat-form-field>
+          </div>
 
-        <!-- Additional Notes -->
-        <div class="col-md-12">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Additional Notes</mat-label>
-            <textarea matInput type="text" formControlName="additional_details"></textarea>
-          </mat-form-field>
-        </div>
+          <!-- Additional Notes -->
+          <div class="col-md-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Additional Notes</mat-label>
+              <textarea
+                matInput
+                type="text"
+                formControlName="additional_details"
+              ></textarea>
+            </mat-form-field>
+          </div>
 
-        <!-- Primary Contact Checkbox -->
-        <!-- <div class="col-md-3 d-flex align-items-center" style="margin-bottom: 20px;">
+          <!-- Primary Contact Checkbox -->
+          <!-- <div class="col-md-3 d-flex align-items-center" style="margin-bottom: 20px;">
           <mat-checkbox formControlName="is_primary">Is Primary</mat-checkbox>
         </div> -->
-      </div>
-    </form>
-  
-    <mat-list class="m">
-      <mat-list-item *ngFor="let contact of contacts.controls; let i = index">
-        <div class="w-100 d-flex align-items-center justify-content-between">
-          <div class="contact-line">
-            <span class="contact-type">
-              <mat-icon class="text-primary">person</mat-icon>
-              <strong>{{ contact.get('type')?.value }}:</strong>
-            </span>
-            
-            <span class="contact-info">
-              📞 {{ contact.get('phone_no')?.value || '' }} | 
-              ✉️ {{ contact.get('email_id')?.value || '' }} | 
-              🏢 {{ contact.get('company_name')?.value || '' }} | 
-              {{ contact.get('job_title')?.value || '' }} | 
-              <span *ngIf="contact.get('social_media_availability')?.value">
-                🌍 {{ contact.get('social_media_availability')?.value }} | 
-                <a href="{{ contact.get('social_media_url')?.value }}" target="_blank" class="text-primary">Profile</a> |
-              </span>
-              ⭐ {{ contact.get('is_primary')?.value ? 'Primary' : '' }}
-            </span>
-          </div>
-    
-          <!-- Remove Button -->
-          <button mat-icon-button color="warn" type="button" (click)="removecontact(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
         </div>
-      </mat-list-item>
-    </mat-list>
+      </form>
 
+      <mat-list class="m">
+        <mat-list-item *ngFor="let contact of contacts.controls; let i = index">
+          <div class="w-100 d-flex align-items-center justify-content-between">
+            <div class="contact-line">
+              <span class="contact-type">
+                <mat-icon class="text-primary">person</mat-icon>
+                <strong>{{ contact.get("type")?.value }}:</strong>
+              </span>
 
+              <span class="contact-info">
+                📞 {{ contact.get("phone_no")?.value || "" }} | ✉️
+                {{ contact.get("email_id")?.value || "" }} | 🏢
+                {{ contact.get("company_name")?.value || "" }} |
+                {{ contact.get("job_title")?.value || "" }} |
+                <span *ngIf="contact.get('social_media_availability')?.value">
+                  🌍 {{ contact.get("social_media_availability")?.value }} |
+                  <a
+                    href="{{ contact.get('social_media_url')?.value }}"
+                    target="_blank"
+                    class="text-primary"
+                    >Profile</a
+                  >
+                  |
+                </span>
+                ⭐ {{ contact.get("is_primary")?.value ? "Primary" : "" }}
+              </span>
+            </div>
+
+            <!-- Remove Button -->
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="removecontact(i)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      </mat-list>
     </mat-card>
-  
 
-
-    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+    <div
+      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
+      style="min-height: 60px"
+    >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Additional Information
       </h5>
     </div>
-    
-    
+
     <!-- Additional Information Card -->
     <mat-card class="p-4 mb-4 mt-2">
       <div formArrayName="additional_info">
-        <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+        <div
+          *ngFor="let info of additionalInfo.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-3 p-3"
+        >
           <div class="row g-3">
-
             <!-- Caste -->
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
@@ -596,9 +677,13 @@
                   <mat-option value="widowed">Widowed</mat-option>
                   <mat-option value="separated">Separated</mat-option>
                   <mat-option value="annulled">Annulled</mat-option>
-                  <mat-option value="in_relationship">In a Relationship</mat-option>
+                  <mat-option value="in_relationship"
+                    >In a Relationship</mat-option
+                  >
                   <mat-option value="engaged">Engaged</mat-option>
-                  <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
+                  <mat-option value="domestic_partnership"
+                    >Domestic Partnership</mat-option
+                  >
                   <mat-option value="unknown">Unknown</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -633,7 +718,11 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Other Known Languages</mat-label>
-                <input matInput type="text" formControlName="other_known_languages">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="other_known_languages"
+                />
               </mat-form-field>
             </div>
 
@@ -655,7 +744,7 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Identification Card Number</mat-label>
-                <input matInput type="text" formControlName="id_no">
+                <input matInput type="text" formControlName="id_no" />
               </mat-form-field>
             </div>
 
@@ -663,7 +752,11 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Educational Details</mat-label>
-                <input matInput type="text" formControlName="education_details">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="education_details"
+                />
               </mat-form-field>
             </div>
 
@@ -671,56 +764,88 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Occupation</mat-label>
-                <input matInput type="text" formControlName="occupation_details">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="occupation_details"
+                />
               </mat-form-field>
             </div>
-
           </div>
         </div>
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+    <div
+      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
+      style="min-height: 60px"
+    >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Missing Data
       </h5>
     </div>
-    
 
-    <mat-card class="card  p-4 m-2 mb-3">
+    <mat-card class="card p-4 m-2 mb-3">
       <div formArrayName="last_known_details">
-        <div *ngFor="let info of lastKnownDetails.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-
+        <div
+          *ngFor="let info of lastKnownDetails.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-3 p-3"
+        >
           <!-- File Uploads -->
           <div class="col-md-6 d-flex flex-column">
             <!-- <label class="form-label selectors-font">Reference Photo</label> -->
-            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="fileInput1.click()">
+            <button
+              mat-stroked-button
+              color="primary"
+              class="w-100"
+              type="button"
+              (click)="fileInput1.click()"
+            >
               <mat-icon>cloud_upload</mat-icon> Upload Reference Photo
-            </button> 
-            
-            <input #fileInput1 type="file" accept="image/*"
-                   (change)="onFileSelect($event, 'last_known_details', i, 'person_photo')" 
-                   hidden class="form-control w-100">
+            </button>
+
+            <input
+              #fileInput1
+              type="file"
+              accept="image/*"
+              (change)="
+                onFileSelect($event, 'last_known_details', i, 'person_photo')
+              "
+              hidden
+              class="form-control w-100"
+            />
           </div>
-          
+
           <div class="col-md-6 d-flex flex-column">
             <!-- <label class="form-label selectors-font">Another Reference Photo</label> -->
-            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="fileInput2.click()">
+            <button
+              mat-stroked-button
+              color="primary"
+              class="w-100"
+              type="button"
+              (click)="fileInput2.click()"
+            >
               <mat-icon>cloud_upload</mat-icon> Upload Another Reference Photo
             </button>
-            <input #fileInput2 type="file" accept="image/*"
-                   (change)="onFileSelect($event, 'last_known_details', i, 'reference_photo')" 
-                   hidden class="form-control w-100">
+            <input
+              #fileInput2
+              type="file"
+              accept="image/*"
+              (change)="
+                onFileSelect($event, 'last_known_details', i, 'reference_photo')
+              "
+              hidden
+              class="form-control w-100"
+            />
           </div>
-          
-          
 
           <!-- Missing Time -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Missing Time</mat-label>
-              <input matInput type="time" formControlName="missing_time">
+              <input matInput type="time" formControlName="missing_time" />
             </mat-form-field>
           </div>
 
@@ -728,19 +853,28 @@
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Missing Date</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="missing_date" [max]="today">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="missing_date"
+                [max]="today"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           </div>
-          
 
           <!-- Location Details -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Missing Location Details</mat-label>
-              <textarea matInput formControlName="missing_location_details"
-               ></textarea>
+              <textarea
+                matInput
+                formControlName="missing_location_details"
+              ></textarea>
             </mat-form-field>
           </div>
 
@@ -748,27 +882,33 @@
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Last Seen Details</mat-label>
-              <textarea matInput formControlName="last_seen_location"
-               ></textarea>
+              <textarea
+                matInput
+                formControlName="last_seen_location"
+              ></textarea>
             </mat-form-field>
           </div>
-
         </div>
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+    <div
+      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
+      style="min-height: 60px"
+    >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Legal Info
       </h5>
     </div>
-    
 
-    <mat-card class="card  p-4 mb-1">
+    <mat-card class="card p-4 mb-1">
       <div formArrayName="firs">
-        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-
+        <div
+          *ngFor="let info of firs.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-3 p-3"
+        >
           <!-- Case Status -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
@@ -790,47 +930,54 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>FIR Number</mat-label>
-              <input matInput type="text" formControlName="fir_number">
+              <input matInput type="text" formControlName="fir_number" />
             </mat-form-field>
           </div>
 
-          
-
           <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
-            <div class="col-md-4" style="margin-bottom: 20px;">
-              <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
-                <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
-              </button>
-              <input
-                #firInput
-                type="file"
-                accept="image/*,application/pdf"
-                hidden
-                (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
-              />
-            </div>
-            
-            
+          <div class="col-md-4" style="margin-bottom: 20px">
+            <button
+              mat-stroked-button
+              color="primary"
+              class="w-100"
+              type="button"
+              (click)="firInput.click()"
+            >
+              <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
+            </button>
+            <input
+              #firInput
+              type="file"
+              accept="image/*,application/pdf"
+              hidden
+              (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
+            />
+          </div>
 
           <!-- Police Station Name & Address -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Police Station Name & Address</mat-label>
               <mat-select formControlName="police_station">
-                <mat-option *ngFor="let station of policeStationList" [value]="station.id">
+                <mat-option
+                  *ngFor="let station of policeStationList"
+                  [value]="station.id"
+                >
                   {{ station.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          
 
           <!-- Investigating Officer Name -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Name</mat-label>
-              <input matInput type="text" formControlName="investigation_officer_name"
-                >
+              <input
+                matInput
+                type="text"
+                formControlName="investigation_officer_name"
+              />
             </mat-form-field>
           </div>
 
@@ -838,82 +985,61 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Contact Number</mat-label>
-              <input matInput type="text" formControlName="investigation_officer_contacts"
-                >
+              <input
+                matInput
+                type="text"
+                formControlName="investigation_officer_contacts"
+              />
             </mat-form-field>
           </div>
-
         </div>
       </div>
     </mat-card>
 
-    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+    <div
+      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
+      style="min-height: 60px"
+    >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         consent
       </h5>
     </div>
-    
-    
-    
 
     <!-- Consent & Submission -->
-    <mat-card class="card p-4  mb-1">
-
-      <!-- <div formArrayName="consent">
-        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-          <div class="col-md-12">
-            <mat-checkbox formControlName="is_consent" class="w-100">
-              I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
-              I consent to the use of this information for the purpose of locating the missing person.
-            </mat-checkbox>
-          </div>
-        
-        </div>
-        
-      </div> -->
-
+    <mat-card class="card p-4 mb-1">
       <div formArrayName="consent">
-  <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-    
-    <!-- Bootstrap Checkbox -->
-    <div class="form-check col-md-12">
-      <input
-        class="form-check-input border-primary"
-        type="checkbox"
-        [formControlName]="'is_consent'"
-        id="consentCheck{{ i }}"
-        
-      />
-      <label class="form-check-label" [for]="'consentCheck' + i">
-        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
-        I consent to the use of this information for the purpose of locating the missing person.
-      </label>
-    </div>
-
-  </div>
-</div>
-
-
+        <div
+          *ngFor="let info of consent.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-3 p-3"
+        >
+         <!-- Consent Agreement Link -->
+          <div class="col-md-12 consent-link">
+            <a  (click)="openConsentDialog()">Click to open and acknowledge the consent document before proceeding.</a>
+          </div>
+        </div>
+      </div>
     </mat-card>
 
+    <!-- Submit & Cancel Buttons -->
+    <div class="d-flex justify-content-between mt-4 space-down">
+      <button mat-flat-button color="primary">Cancel</button>
 
-
-     <!-- Submit & Cancel Buttons -->
-      <div class="d-flex justify-content-between mt-4 space-down">
-        <button mat-flat-button class="bg-error text-white">Cancel</button>
-
-        <span
-          [matTooltip]="'Please accept the consent  before submitting.'"
-          [matTooltipDisabled]="consent.controls[0].get('is_consent')?.value"
-          matTooltipPosition="above"
+      <span
+        [matTooltip]="'Please accept the consent  before submitting.'"
+        [matTooltipDisabled]="consent.controls[0].get('is_consent')?.value"
+        matTooltipPosition="above"
+      >
+        <button
+          mat-flat-button
+          color="primary"
+          class="ms-auto"
+          [disabled]="!consent.controls[0].get('is_consent')?.value"
         >
-          <button mat-flat-button color="primary" class="ms-auto"
-                  [disabled]="!consent.controls[0].get('is_consent')?.value">
-            SUBMIT
-          </button>
-        </span>
-      </div>
-
+          SUBMIT
+        </button>
+      </span>
+    </div>
   </form>
 </div>

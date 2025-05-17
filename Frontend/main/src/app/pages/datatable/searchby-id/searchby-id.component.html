@@ -1,54 +1,52 @@
-<div class="search-container container py-4 border-bottom">
+<div class="search-container container py-2">
 
-<div class="d-flex flex-column align-items-start">
-
-  <div class="d-flex w-100 mb-1 align-items-center justify-content-between">
-<div style="font-size: 20px;">
-  <h6 class="s1">Case Search By ID</h6>
-</div>
-  <!-- <button mat-flat-button (click)="goBack()" class="back-btn">
-    <mat-icon>arrow_back</mat-icon> Back
-  </button> -->
-</div>
-  <form (submit)="searchCase()" class="w-100 mb-1">
-    <div class="row g-2 g-md-3">
-      <div class="col-5">
-        <mat-form-field appearance="outline" class="w-100">
-          <input 
-            matInput 
-            [(ngModel)]="caseId" 
-            name="caseId"
-            placeholder="e.g., MP-202505-MUM-0001"
-            required
-          >
-        </mat-form-field>
-      </div>
-
-      <div class="col-12 col-md-4 col-lg-2">
-        <button 
-          mat-flat-button 
-          color="primary" 
-          class="w-100 d-flex align-items-center justify-content-center btn-height"
-          type="submit"
-          [disabled]="isLoading"
-        >
-          <mat-icon class="me-2">search</mat-icon>
-          <span>Search</span>
-          <mat-spinner 
-            *ngIf="isLoading" 
-            diameter="20" 
-            class="ms-2 d-inline-block"
-          ></mat-spinner>
-        </button>
+<div class="white-card p-3 mb-2">
+  <div class="d-flex flex-column align-items-start">
+    <div class="d-flex w-100 mb-1 align-items-center justify-content-between">
+      <div style="font-size: 20px;">
+        <h6 class="s1">Search By Case ID</h6>
       </div>
     </div>
-  </form>
 
+    <form (submit)="searchCase()" class="w-100 mb-1">
+      <div class="row g-2 g-md-3">
+        <div class="col-12 col-md-5">
+          <mat-form-field appearance="outline" class="w-100">
+            <input 
+              matInput 
+              [(ngModel)]="caseId" 
+              name="caseId"
+              placeholder="e.g., MP-202505-MUM-0001"
+              required
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-md-4 col-lg-2">
+          <button 
+            mat-flat-button 
+            color="primary" 
+            class="w-100 d-flex align-items-center justify-content-center btn-height"
+            type="submit"
+            [disabled]="isLoading"
+          >
+            <mat-icon class="me-2">search</mat-icon>
+            <span>Search</span>
+            <mat-spinner 
+              *ngIf="isLoading" 
+              diameter="20" 
+              class="ms-2 d-inline-block"
+            ></mat-spinner>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+  <mat-divider></mat-divider>
    <ng-container *ngIf="caseData">
-    <!-- <mat-card class="mb-3 shadow-sm">  -->
 
-      <mat-card-content class="mat-typography">
+      <mat-card-content class="mat-typography mt-2">
   <!-- Basic Information -->
   <mat-card class="mb-4 p-3">
     <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Basic Information</mat-card-title>

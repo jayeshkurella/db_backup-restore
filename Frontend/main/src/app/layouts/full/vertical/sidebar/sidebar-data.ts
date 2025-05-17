@@ -48,7 +48,7 @@ export const navItems: NavItem[] = [
     route: '/datatable',
     children: [
       {
-        displayName: 'Search By ID',
+        displayName: 'By Case ID',
         // iconName: 'user',
         route: '/datatable/search-by-id',
       },{
@@ -121,6 +121,14 @@ export const navItems: NavItem[] = [
     iconName: 'check',
     route: '/datatable/change-log',
   },
+  // {
+  //   navCap: 'Policy',
+  // },
+  // {
+  //   displayName: 'Privacy Policy',
+  //   iconName: 'check',
+  //   route: '/datatable/privacy-policy',
+  // },
 
   
 

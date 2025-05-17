@@ -202,7 +202,7 @@
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Mother Tongue</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.mother_tongue || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.mother_tongue  | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Languages Known</p>

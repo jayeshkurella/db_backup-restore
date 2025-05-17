@@ -12,6 +12,7 @@ import { environment } from 'src/envirnment/envirnment';
 import { IdserviceService } from './idservice.service';
 import { Router } from '@angular/router';
 import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
+import { MatDivider } from '@angular/material/divider';
 // import { MatListItem } from '@angular/material/list';
 // import { MatList } from '@angular/material/list';
 // import { MatDivider } from '@angular/material/divider';
@@ -29,9 +30,7 @@ import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates
     MatProgressSpinnerModule,
     MatSnackBarModule,
     SafeTitlecasePipe,
-    // MatListItem,
-    // MatList,
-    // MatDivider
+    MatDivider
   ],  templateUrl: './searchby-id.component.html',
   styleUrl: './searchby-id.component.scss'
 })

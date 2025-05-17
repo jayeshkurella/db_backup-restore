@@ -1,51 +1,57 @@
 <div class="unidentified-person-form-container p-4 bg-white rounded shadow-sm">
-    <div class="heading-container">
-      <h3 class="main-heading">UNIDENTIFIED BODY REPORT FORM</h3>
-    </div>
-  
-    <form [formGroup]="unidentifiedBodyForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-  
-      <!-- Personal Info Section -->
-      <div class="p-3 bg-light-primary rounded">
-        <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
-          <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
-          Personal Info
-        </h5>
-      </div>
+  <div class="heading-container">
+    <h3 class="main-heading">UNIDENTIFIED BODY REPORT FORM</h3>
+  </div>
 
-      <mat-card class="p-4 m-1 mb-4">
-        <div class="row g-2 p-3">
-          <!-- Full Name -->
-          <div class="col-12 col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Full Name</mat-label>
-              <input matInput type="text" formControlName="full_name"/>
-            </mat-form-field>
-          </div>
-      
-          <!-- Gender -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Gender</mat-label>
-              <mat-select formControlName="gender">
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Date of Birth -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Date of Birth</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="birth_date">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </div>
-      
-          <!-- Age Range -->
-          <div class="col-12 col-md-3">
+  <form [formGroup]="unidentifiedBodyForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <!-- Personal Info Section -->
+    <div class="p-3 bg-light-primary rounded">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        Personal Info
+      </h5>
+    </div>
+
+    <mat-card class="p-4 m-1 mb-4">
+      <div class="row g-2 p-3">
+        <!-- Full Name -->
+        <div class="col-12 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Full Name</mat-label>
+            <input matInput type="text" formControlName="full_name" maxlength="30" />
+            <mat-error *ngIf="unidentifiedBodyForm.get('full_name')?.hasError('pattern') && unidentifiedBodyForm.get('full_name')?.touched">
+  Name must contain only letters (A-Z) and be up to 30 characters
+</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Gender -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <!-- <mat-label>Gender</mat-label> -->
+            <mat-select formControlName="gender" required>
+              <mat-option value="">Select Gender</mat-option>
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+            </mat-select>
+            <mat-error *ngIf="unidentifiedBodyForm.get('gender')?.hasError('required')">
+              Please select the Gender
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birth_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Age Range -->
+      <div class="col-12 col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Age Range</mat-label>
               <mat-select formControlName="age_range">
@@ -58,139 +64,149 @@
                   {{ range[1] }}
                 </mat-option>
               </mat-select>
+              
             </mat-form-field>
           </div>
-      
-          <!-- Blood Group -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Blood Group</mat-label>
-              <mat-select formControlName="blood_group">
-                <mat-option value="A+">A+</mat-option>
-                <mat-option value="O+">O+</mat-option>
-                <mat-option value="B+">B+</mat-option>
-                <mat-option value="AB+">AB+</mat-option>
-                <mat-option value="AB-">AB-</mat-option>
-                <mat-option value="A-">A-</mat-option>
-                <mat-option value="O-">O-</mat-option>
-                <mat-option value="B-">B-</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Height -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Height (cm)</mat-label>
-              <mat-select formControlName="height_range">
-                <mat-option value="<150">Less than 150 cm</mat-option>
-                <mat-option value="150-160">150 - 160 cm</mat-option>
-                <mat-option value="161-170">161 - 170 cm</mat-option>
-                <mat-option value="171-180">171 - 180 cm</mat-option>
-                <mat-option value="181-190">181 - 190 cm</mat-option>
-                <mat-option value=">190">More than 190 cm</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Weight -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Weight (kg)</mat-label>
-              <input matInput type="text" formControlName="weight">
-            </mat-form-field>
-          </div>
-      
-          <!-- Complexion -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Complexion</mat-label>
-              <mat-select formControlName="complexion">
-                <mat-option value="fair">Fair</mat-option>
-                <mat-option value="dusky">Dusky</mat-option>
-                <mat-option value="wheatish">Wheatish</mat-option>
-                <mat-option value="dark">Dark</mat-option>
-                <mat-option value="medium">Medium</mat-option>
-                <mat-option value="light">Light</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Hair Color -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Hair Color</mat-label>
-              <mat-select formControlName="hair_color">
-                <mat-option value="black">Black</mat-option>
-                <mat-option value="brown">Brown</mat-option>
-                <mat-option value="grey">Grey</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Eye Color -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Eye Color</mat-label>
-              <mat-select formControlName="eye_color">
-                <mat-option value="black">Black</mat-option>
-                <mat-option value="brown">Brown</mat-option>
-                <mat-option value="green">Green</mat-option>
-                <mat-option value="hazel">Hazel</mat-option>
-                <mat-option value="gray">Gray</mat-option>
-                <mat-option value="yellow">Yellow</mat-option>
-                <mat-option value="blue">Blue</mat-option>
-                <mat-option value="violet">Violet</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Hair Type -->
-          <div class="col-12 col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Hair Type</mat-label>
-              <mat-select formControlName="hair_type">
-                <mat-option value="straight">Straight</mat-option>
-                <mat-option value="dashed">Dashed</mat-option>
-                <mat-option value="dotted">Dotted</mat-option>
-                <mat-option value="long">Long</mat-option>
-                <mat-option value="broad">Broad</mat-option>
-                <mat-option value="short">Short</mat-option>
-                <mat-option value="wavy">Wavy</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Birthmark -->
-          <div class="col-12 col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Birthmark Details</mat-label>
-              <textarea matInput formControlName="birth_mark" rows="3"></textarea>
-            </mat-form-field>
-          </div>
-      
-          <!-- Distinctive Marks -->
-          <div class="col-12 col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Distinctive Marks</mat-label>
-              <textarea matInput formControlName="distinctive_mark" rows="3"></textarea>
-            </mat-form-field>
-          </div>
-      
-          <!-- Select Hospital -->
-          <div class="col-12 col-md-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Select Hospitals</mat-label>
-              <mat-select formControlName="hospital">
-                <mat-option *ngFor="let hospital of hospitals" [value]="hospital.id">
-                  {{ hospital.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-      
-          <!-- Body Condition -->
-         <!-- Body Condition -->
+        <!-- Blood Group -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Blood Group</mat-label>
+            <mat-select formControlName="blood_group">
+              <mat-option value="A+">A+</mat-option>
+              <mat-option value="O+">O+</mat-option>
+              <mat-option value="B+">B+</mat-option>
+              <mat-option value="AB+">AB+</mat-option>
+              <mat-option value="AB-">AB-</mat-option>
+              <mat-option value="A-">A-</mat-option>
+              <mat-option value="O-">O-</mat-option>
+              <mat-option value="B-">B-</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Height -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Height (cm)</mat-label>
+            <input matInput type="number" formControlName="height" max="250" />
+            <mat-error *ngIf="unidentifiedBodyForm.get('height')?.hasError('max')">
+              Height cannot exceed 250cm
+            </mat-error>
+            <mat-error *ngIf="unidentifiedBodyForm.get('height')?.hasError('pattern')">
+              Please enter a valid number
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Weight -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Weight (kg)</mat-label>
+            <input matInput type="number" formControlName="weight" max="200" />
+            <mat-error *ngIf="unidentifiedBodyForm.get('weight')?.hasError('max')">
+              Weight cannot exceed 200kg
+            </mat-error>
+            <mat-error *ngIf="unidentifiedBodyForm.get('weight')?.hasError('pattern')">
+              Please enter a valid number
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Complexion -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Complexion</mat-label>
+            <mat-select formControlName="complexion">
+              <mat-option value="fair">Fair</mat-option>
+              <mat-option value="dusky">Dusky</mat-option>
+              <mat-option value="wheatish">Wheatish</mat-option>
+              <mat-option value="dark">Dark</mat-option>
+              <mat-option value="medium">Medium</mat-option>
+              <mat-option value="light">Light</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Hair Color -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Hair Color</mat-label>
+            <mat-select formControlName="hair_color">
+              <mat-option value="black">Black</mat-option>
+              <mat-option value="brown">Brown</mat-option>
+              <mat-option value="grey">Grey</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Eye Color -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Eye Color</mat-label>
+            <mat-select formControlName="eye_color">
+              <mat-option value="black">Black</mat-option>
+              <mat-option value="brown">Brown</mat-option>
+              <mat-option value="green">Green</mat-option>
+              <mat-option value="hazel">Hazel</mat-option>
+              <mat-option value="gray">Gray</mat-option>
+              <mat-option value="yellow">Yellow</mat-option>
+              <mat-option value="blue">Blue</mat-option>
+              <mat-option value="violet">Violet</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Hair Type -->
+        <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Hair Type</mat-label>
+            <mat-select formControlName="hair_type">
+              <mat-option value="straight">Straight</mat-option>
+              <mat-option value="dashed">Dashed</mat-option>
+              <mat-option value="dotted">Dotted</mat-option>
+              <mat-option value="long">Long</mat-option>
+              <mat-option value="broad">Broad</mat-option>
+              <mat-option value="short">Short</mat-option>
+              <mat-option value="wavy">Wavy</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Birthmark -->
+        <div class="col-12 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Birthmark Details</mat-label>
+            <textarea matInput formControlName="birth_mark" rows="3" maxlength="250"></textarea>
+            <mat-error *ngIf="unidentifiedBodyForm.get('birth_mark')?.hasError('maxlength')">
+              Maximum 250 characters allowed
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Distinctive Marks -->
+        <div class="col-12 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Distinctive Marks</mat-label>
+            <textarea matInput formControlName="distinctive_mark" rows="3" maxlength="250"></textarea>
+            <mat-error *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.hasError('maxlength')">
+              Maximum 250 characters allowed
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Select Hospital -->
+        <div class="col-12 col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Select Hospitals</mat-label>
+            <mat-select formControlName="hospital">
+              <mat-option *ngFor="let hospital of hospitals" [value]="hospital.id">
+                {{ hospital.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Body Condition -->
         <div class="col-12 col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Body Condition</mat-label>
@@ -211,152 +227,135 @@
           </mat-form-field>
         </div>
 
-      
-          <!-- Body Photo Upload -->
-          <!-- <div class="col-12 col-md-4">
-            <label for="bodyPhotoInput"
-          class="form-control d-flex align-items-center justify-content-center gap-3 text-body" style="cursor: pointer;">
-            <i class="bi bi-upload"></i>  
-            Person Photo  
-          </label>
+        <!-- Body Photo Upload -->
+        <div class="col-md-4" style="margin-bottom: 20px;">
+          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+            <mat-icon>cloud_upload</mat-icon>Person Photo
+          </button>
           <input
-            id="bodyPhotoInput"
+            #personPhotoInput
             type="file"
             accept="image/*"
-            class="d-none"
+            hidden
             (change)="onFileSelect_person_photo($event)"
           />
-          </div> -->
-            <div class="col-md-4" style="margin-bottom: 20px;">
-            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
-              <mat-icon>cloud_upload</mat-icon>Person Photo
-            </button>
-            <input
-              #personPhotoInput
-              type="file"
-              accept="image/*"
-              hidden
-              (change)="onFileSelect_person_photo($event)"
-            />
-          </div>
-      
         </div>
-      </mat-card>
-      
-  
-  
-      <!-- Address Section -->
-      <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+      </div>
+    </mat-card>
+
+    <!-- Address Section -->
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Address
       </h5>
       <button mat-flat-button color="primary" type="button" (click)="addAddress()">Add Another Address</button>
     </div>
-      <mat-card class="p-3 mb-4">
+    
+    <mat-card class="p-3 mb-4">
       <div formGroupName="addressForm" class="row g-3 m-2">
         <!-- Left Section: Address Fields -->
         <div class="col-md-6">
           <div class="row g-2">
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
-                <!-- <mat-label>Address Type</mat-label> -->
                 <mat-select formControlName="address_type">
                   <mat-option value="" disabled>Address Type</mat-option>
                   <mat-option value="permanent">Permanent</mat-option>
                   <mat-option value="current">Current</mat-option>
                   <mat-option value="old">Old</mat-option>
-                  <mat-option value="home">Home</mat-option>
-                  <mat-option value="office">Office</mat-option>
-                  <mat-option value="temporary">Temporary</mat-option>
-                  <mat-option value="billing">Billing</mat-option>
-                  <mat-option value="shipping">Shipping</mat-option>
-                  <mat-option value="registered">Registered</mat-option>
-                  <mat-option value="mailing">Mailing</mat-option>
-                  <mat-option value="vacation">Vacation</mat-option>
-                  <mat-option value="rental">Rental</mat-option>
-                  <mat-option value="student">Student</mat-option>
-                  <mat-option value="family">Family</mat-option>
-                  <mat-option value="other">Other</mat-option>
                 </mat-select>
+                <mat-error *ngIf="unidentifiedBodyForm.get('address_type')?.hasError('maxlength')">
+                  Maximum 200 characters allowed
+                </mat-error>
               </mat-form-field>
             </div>
-  
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Street</mat-label>
-                <input matInput type="text" formControlName="street">
+                <input matInput type="text" formControlName="street" maxlength="30">
+                <mat-error *ngIf="unidentifiedBodyForm.get('street')?.hasError('pattern')">
+                  Street must be alphanumeric and up to 30 characters
+                </mat-error>
               </mat-form-field>
             </div>
-  
-            <!-- <div class="col-md-6">
+              <div class="col-md-12">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Apartment Number</mat-label>
-                <input matInput type="text" formControlName="appartment_no">
+                <mat-label>Landmark Details</mat-label>
+                <textarea matInput formControlName="landmark_details" rows="1" maxlength="30"></textarea>
+                <mat-error *ngIf="unidentifiedBodyForm.get('landmark_details')?.hasError('maxlength')">
+                  Maximum 30 characters allowed
+                </mat-error>
               </mat-form-field>
-            </div> -->
-  
+            </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Village</mat-label>
-                <input matInput type="text" formControlName="village">
+                <input matInput type="text" formControlName="village" maxlength="30">
+                <mat-error *ngIf="unidentifiedBodyForm.get('village')?.hasError('pattern')">
+                  Village must contain only letters and be up to 30 characters
+                </mat-error>
               </mat-form-field>
             </div>
-  
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>City</mat-label>
-                <input matInput type="text" formControlName="city">
+                <input matInput type="text" formControlName="city" maxlength="30">
+                <mat-error *ngIf="unidentifiedBodyForm.get('city')?.hasError('pattern')">
+                  City must contain only letters and be up to 30 characters
+                </mat-error>
               </mat-form-field>
             </div>
-  
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>District</mat-label>
-                <input matInput type="text" formControlName="district">
+                <input matInput type="text" formControlName="district" maxlength="30">
+                <mat-error *ngIf="unidentifiedBodyForm.get('district')?.hasError('pattern')">
+                  District must contain only letters and be up to 30 characters
+                </mat-error>
               </mat-form-field>
             </div>
-  
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>State</mat-label>
-                <mat-select formControlName="state">
-                  <mat-option value="" disabled>State</mat-option>
-                  <mat-option *ngFor="let state of states" [value]="state">{{ state }}</mat-option>
-                </mat-select>
+                <input matInput type="text" formControlName="state" maxlength="30">
+                <mat-error *ngIf="unidentifiedBodyForm.get('state')?.hasError('pattern')">
+                  State must contain only letters and be up to 30 characters
+                </mat-error>
               </mat-form-field>
             </div>
-  
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Pincode</mat-label>
-                <input matInput type="text" formControlName="pincode">
+                <input matInput type="text" formControlName="pincode" maxlength="15">
+                <mat-error *ngIf="unidentifiedBodyForm.get('pincode')?.hasError('pattern')">
+                  Please enter a valid pincode (up to 15 digits)
+                </mat-error>
               </mat-form-field>
             </div>
-  
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Country</mat-label>
-                <mat-select formControlName="country">
-                  <mat-option value="" disabled>Country</mat-option>
-                  <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
-                </mat-select>
+                <input matInput type="text" formControlName="country" maxlength="15">
+                <mat-error *ngIf="unidentifiedBodyForm.get('country')?.hasError('pattern')">
+                  Country must contain only letters and be up to 15 characters
+                </mat-error>
               </mat-form-field>
             </div>
-  
-            <div class="col-md-12">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Landmark Details</mat-label>
-                <textarea matInput formControlName="landmark_details" rows="1"></textarea>
-              </mat-form-field>
-            </div>
+
+            
           </div>
         </div>
-  
+
         <!-- Right Section: Map & Location -->
         <div class="col-md-6">
           <div formGroupName="location">
             <div class="d-flex gap-2">
-  
               <mat-form-field appearance="outline" class="flex-grow-1 me-2">
                 <mat-label>Latitude</mat-label>
                 <input matInput type="text" formControlName="latitude" />
@@ -366,115 +365,109 @@
                 <mat-label>Longitude</mat-label>
                 <input matInput type="text" formControlName="longitude" />
               </mat-form-field>
-  
+
               <button type="button" mat-icon-button (click)="getCurrentLocation()" matTooltip="Fetch your current location">
                 <mat-icon>my_location</mat-icon>
               </button>
-  
-              
             </div>
             <div id="mapHome" style="height: 250px; border: 1px solid black; border-radius: 5px; z-index: 1;"></div>
           </div>
         </div>
       </div>
-  
-     
-      
-  
+
       <!-- Display Added Addresses -->
-          <div *ngFor="let address of addresses.controls; let i = index" 
-          class="d-flex align-items-center justify-content-between border-bottom py-2">
-          <div class="flex-grow-1">
+      <div *ngFor="let address of addresses.controls; let i = index" 
+           class="d-flex align-items-center justify-content-between border-bottom py-2">
+        <div class="flex-grow-1">
           <span class="address-title d-flex align-items-center">
-          <mat-icon color="primary" class="me-2">place</mat-icon>
-          <strong>{{ address.get('address_type')?.value || 'No type' }}:</strong>
+            <mat-icon color="primary" class="me-2">place</mat-icon>
+            <strong>{{ address.get('address_type')?.value || 'No type' }}:</strong>
           </span>
           <span class="address-text text-muted">
-          {{ 
-            (address.get('street')?.value ? address.get('street')?.value + ', ' : '') +
-            (address.get('appartment_no')?.value ? 'Apt ' + address.get('appartment_no')?.value + ', ' : '') +
-            (address.get('village')?.value ? address.get('village')?.value + ', ' : '') +
-            (address.get('city')?.value ? address.get('city')?.value + ', ' : '') +
-            (address.get('district')?.value ? address.get('district')?.value + ', ' : '') +
-            (address.get('state')?.value ? address.get('state')?.value + ' - ' : '') +
-            (address.get('pincode')?.value ? address.get('pincode')?.value : '') +
-            (address.get('country')?.value ? ', ' + address.get('country')?.value : '')
-          }}
+            {{ 
+              (address.get('street')?.value ? address.get('street')?.value + ', ' : '') +
+              (address.get('appartment_no')?.value ? 'Apt ' + address.get('appartment_no')?.value + ', ' : '') +
+              (address.get('village')?.value ? address.get('village')?.value + ', ' : '') +
+              (address.get('city')?.value ? address.get('city')?.value + ', ' : '') +
+              (address.get('district')?.value ? address.get('district')?.value + ', ' : '') +
+              (address.get('state')?.value ? address.get('state')?.value + ' - ' : '') +
+              (address.get('pincode')?.value ? address.get('pincode')?.value : '') +
+              (address.get('country')?.value ? ', ' + address.get('country')?.value : '')
+            }}
           </span>
-          <!-- <div *ngIf="address.get('location')?.value">
-            <span class="text-muted">
-               Lat: {{ address.get('location.latitude')?.value }}, 
-              Long: {{ address.get('location.longitude')?.value }}
-            </span>
-          </div> -->
-          
-          </div>
-          <button mat-icon-button color="warn" type="button" (click)="removeAddress(i)">
+        </div>
+        <button mat-icon-button color="warn" type="button" (click)="removeAddress(i)">
           <mat-icon>delete</mat-icon>
-          </button>
-          </div>
-      </mat-card>
+        </button>
+      </div>
+    </mat-card>
 
+    <!-- Contact Section -->
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
+      </h5>
+      <button mat-flat-button color="primary" type="button" (click)="addContact()">Add Another Contact</button>
+    </div>
 
-      <!-- contact Section -->
-      <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
-        <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
-          <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler> Contact
-        </h5>
-          <button mat-flat-button color="primary" type="button" (click)="addContact()">Add Another Contact</button>
-      </div> 
-  
-      <!-- Contact Information Card -->
-      <mat-card class="p-3 mb-4">
-        
+    <!-- Contact Information Card -->
+    <mat-card class="p-3 mb-4">
       <form formGroupName="contactForm">
         <div class="row g-2 m-1">
           <!-- Contact Type -->
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
-              <!-- <mat-label>Type</mat-label> -->
               <mat-select formControlName="type">
-                <!-- <mat-option value="Personal">Personal</mat-option> -->
-                <!-- <mat-option value="Business">Business</mat-option> -->
-                <!-- <mat-option value="Office">Office</mat-option> -->
                 <mat-option value="referral">Referral Contact</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-  
+
           <!-- Company Name -->
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Name</mat-label>
               <input matInput type="text" formControlName="person_name">
+              <mat-error *ngIf="unidentifiedBodyForm.get('person_name')?.hasError('pattern')">
+                Name must contain only letters
+              </mat-error>
             </mat-form-field>
           </div>
-  
+
           <!-- Phone Number -->
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Phone Number</mat-label>
-              <input matInput type="text" formControlName="phone_no">
+              <input matInput type="text" formControlName="phone_no" maxlength="10">
+              <mat-error *ngIf="unidentifiedBodyForm.get('phone_no')?.hasError('pattern')">
+                Please enter a valid 10-digit phone number
+              </mat-error>
             </mat-form-field>
           </div>
-  
+
           <!-- Email -->
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email_id">
+              <mat-error *ngIf="unidentifiedBodyForm.get('email_id')?.hasError('pattern')">
+                Please enter a valid email address
+              </mat-error>
             </mat-form-field>
           </div>
-  
+
           <div class="col-md-12">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Additional Notes</mat-label>
-              <textarea matInput type="text" formControlName="additional_details"></textarea>
+              <textarea matInput type="text" formControlName="additional_details" maxlength="200"></textarea>
+              <mat-error *ngIf="unidentifiedBodyForm.get('additional_details')?.hasError('maxlength')">
+                Maximum 200 characters allowed
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
       </form>
-    
+
       <mat-list class="mt-1">
         <mat-list-item *ngFor="let contact of contacts.controls; let i = index">
           <div class="w-100 d-flex align-items-center justify-content-between">
@@ -488,12 +481,7 @@
                 📞 {{ contact.get('phone_no')?.value || '' }} | 
                 ✉️ {{ contact.get('email_id')?.value || '' }} | 
                 🏢 {{ contact.get('company_name')?.value || '' }} | 
-                {{ contact.get('job_title')?.value || '' }} | 
-                <span *ngIf="contact.get('social_media_availability')?.value">
-                  🌍 {{ contact.get('social_media_availability')?.value }} | 
-                  <a href="{{ contact.get('social_media_url')?.value }}" target="_blank" class="text-primary">Profile</a> |
-                </span>
-                ⭐ {{ contact.get('is_primary')?.value ? 'Primary' : '' }}
+                {{ contact.get('job_title')?.value || '' }}
               </span>
             </div>
       
@@ -504,10 +492,9 @@
           </div>
         </mat-list-item>
       </mat-list>
-  
-  
     </mat-card>
     
+    <!-- Additional Information Section -->
     <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
@@ -515,163 +502,153 @@
       </h5>
     </div>
       
-      <!-- Additional Information Card -->
-      <mat-card class="p-4 mb-4 mt-2">
-        <div formArrayName="additional_info">
-          <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-            <div class="row g-2">
-  
-              <!-- Caste -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Caste</mat-label>
-                  <mat-select formControlName="caste">
-                    <mat-option value="open">Open</mat-option>
-                    <mat-option value="sc">SC</mat-option>
-                    <mat-option value="st">ST</mat-option>
-                    <mat-option value="obc">OBC</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-  
-              <!-- Subcaste -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Subcaste</mat-label>
-                  <mat-select formControlName="subcaste">
-                    <mat-option value="mahar">Mahar</mat-option>
-                    <mat-option value="chambhar">Chambhar</mat-option>
-                    <mat-option value="brahmin">Brahmin</mat-option>
-                    <mat-option value="gurdian">Gurdian</mat-option>
-                    <mat-option value="maratha">Maratha</mat-option>
-                    <mat-option value="rajput">Rajput</mat-option>
-                    <mat-option value="jain">Jain</mat-option>
-                    <mat-option value="teli">Teli</mat-option>
-                    <mat-option value="kumbhar">Kumbhar</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-  
-              <!-- Marital Status -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <!-- <mat-label>Marital Status</mat-label> -->
-                  <mat-select formControlName="marital_status">
-                    <mat-option value="">Marital Status</mat-option>
-                    <mat-option value="single">Single</mat-option>
-                    <mat-option value="married">Married</mat-option>
-                    <mat-option value="divorced">Divorced</mat-option>
-                    <mat-option value="widowed">Widowed</mat-option>
-                    <mat-option value="separated">Separated</mat-option>
-                    <mat-option value="annulled">Annulled</mat-option>
-                    <mat-option value="in_relationship">In a Relationship</mat-option>
-                    <mat-option value="engaged">Engaged</mat-option>
-                    <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
-                    <mat-option value="unknown">Unknown</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-  
-              <!-- Religion -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Religion</mat-label>
-                  <mat-select formControlName="religion">
-                    <mat-option value="hindu">Hindu</mat-option>
-                    <mat-option value="muslim">Muslim</mat-option>
-                    <mat-option value="sikh">Sikh</mat-option>
-                    <mat-option value="christian">Christian</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-  
-              <!-- Mother Tongue -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Mother Tongue</mat-label>
-                  <mat-select formControlName="mother_tongue">
-                    <mat-option value="hindi">Hindi</mat-option>
-                    <mat-option value="english">English</mat-option>
-                    <mat-option value="marathi">Marathi</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-  
-              <!-- Known Languages -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Other Known Languages</mat-label>
-                  <input matInput type="text" formControlName="other_known_languages">
-                </mat-form-field>
-              </div>
-  
-              <!-- Identification Type -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Identification Type</mat-label>
-                  <mat-select formControlName="id_type">
-                  <mat-option value="aadhar">Aadhar Card</mat-option>
-                  <mat-option value="pan">Pan Card</mat-option>
-                  <mat-option value="dl">Driving License</mat-option>
-                  <mat-option value="passport">Passport</mat-option>
-                  <mat-option value="voterID">VoterID</mat-option>
+    <!-- Additional Information Card -->
+    <mat-card class="p-4 mb-4 mt-2">
+      <div formArrayName="additional_info">
+        <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+          <div class="row g-2">
+            <!-- Caste -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Caste</mat-label>
+                <input matInput type="text" formControlName="caste" maxlength="30">
+                <mat-error *ngIf="additionalInfo.controls[i].get('caste')?.hasError('pattern')">
+                  Caste must contain only letters and be up to 30 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Subcaste -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Subcaste</mat-label>
+                <input matInput type="text" formControlName="subcaste" maxlength="30">
+                <mat-error *ngIf="additionalInfo.controls[i].get('subcaste')?.hasError('pattern')">
+                  Subcaste must contain only letters and be up to 30 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Marital Status -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-select formControlName="marital_status">
+                  <mat-option value="">Marital Status</mat-option>
+                  <mat-option value="single">Single</mat-option>
+                  <mat-option value="married">Married</mat-option>
+                  <mat-option value="divorced">Divorced</mat-option>
+                  <mat-option value="widowed">Widowed</mat-option>
                 </mat-select>
-                </mat-form-field>
-              </div>
-  
-              <!-- Identification Card Number -->
-              <div class="col-md-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Identification Card Number</mat-label>
-                  <input matInput type="text" formControlName="id_no">
-                </mat-form-field>
-              </div>
-  
-              <!-- Educational Details -->
-              <div class="col-md-6">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Educational Details</mat-label>
-                  <input matInput type="text" formControlName="education_details">
-                </mat-form-field>
-              </div>
-  
-              <!-- Occupation -->
-              <div class="col-md-6">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Occupation</mat-label>
-                  <input matInput type="text" formControlName="occupation_details">
-                </mat-form-field>
-              </div>
-  
+              </mat-form-field>
+            </div>
+
+            <!-- Religion -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Religion</mat-label>
+                <mat-select formControlName="religion">
+                  <mat-option value="hindu">Hindu</mat-option>
+                  <mat-option value="muslim">Muslim</mat-option>
+                  <mat-option value="sikh">Sikh</mat-option>
+                  <mat-option value="christian">Christian</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Mother Tongue -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Mother Tongue</mat-label>
+                <mat-select formControlName="mother_tongue">
+                  <mat-option value="hindi">Hindi</mat-option>
+                  <mat-option value="english">English</mat-option>
+                  <mat-option value="marathi">Marathi</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Known Languages -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Other Known Languages</mat-label>
+                <input matInput type="text" formControlName="other_known_languages">
+                <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('tooManyLanguages')">
+                  Maximum 5 languages allowed
+                </mat-error>
+                <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('invalidLanguageChars')">
+                  Languages can only contain letters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Identification Type -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Identification Type</mat-label>
+                <mat-select formControlName="id_type">
+                  <mat-option value="aadhar_card">Aadhar Card</mat-option>
+                  <mat-option value="pan_card">Pan Card</mat-option>
+                  <mat-option value="driving_license">Driving License</mat-option>
+                  <mat-option value="passport">Passport</mat-option>
+                  <mat-option value="voter_id_card">VoterID</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Identification Card Number -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Identification Card Number</mat-label>
+                <input matInput type="text" formControlName="id_no">
+                <mat-error *ngIf="additionalInfo.controls[i].get('id_no')?.hasError('pattern')">
+                  ID number must be alphanumeric
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Educational Details -->
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Educational Details</mat-label>
+                <input matInput type="text" formControlName="education_details">
+              </mat-form-field>
+            </div>
+
+            <!-- Occupation -->
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Occupation</mat-label>
+                <input matInput type="text" formControlName="occupation_details" maxlength="30">
+                <mat-error *ngIf="additionalInfo.controls[i].get('occupation_details')?.hasError('maxlength')">
+                  Maximum 30 characters allowed
+                </mat-error>
+              </mat-form-field>
             </div>
           </div>
         </div>
-      </mat-card>
-  
-      <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
-        <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
-          <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
-          Legal Info
-        </h5>
       </div>
-  
-      <mat-card class="card  p-4 mb-4">
-        <div formArrayName="firs">
-          <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-2 p-3">
-            <!-- Case Status -->
+    </mat-card>
+
+    <!-- Legal Info Section -->
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        Legal Info
+      </h5>
+    </div>
+
+    <mat-card class="card  p-4 mb-4">
+      <div formArrayName="firs">
+        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-2 p-3">
+          <!-- Case Status -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
-              <!-- <mat-label>Case Status</mat-label> -->
               <mat-select formControlName="case_status">
                 <mat-option value="">Case Status</mat-option>
                 <mat-option value="Open">Open</mat-option>
                 <mat-option value="Resolved">Resolved</mat-option>
                 <mat-option value="In Progress">In Progress</mat-option>
                 <mat-option value="Closed">Closed</mat-option>
-                <mat-option value="Reopened">Reopened</mat-option>
-                <mat-option value="Pending">Pending</mat-option>
-                <mat-option value="Found Alive">Found Alive</mat-option>
-                <mat-option value="Deceased">Deceased</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -680,110 +657,85 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>FIR Number</mat-label>
-              <input matInput type="text" formControlName="fir_number">
+              <input matInput type="text" formControlName="fir_number" maxlength="20">
+              <mat-error *ngIf="firs.controls[i].get('fir_number')?.hasError('pattern')">
+                FIR Number must be alphanumeric and up to 20 characters
+              </mat-error>
             </mat-form-field>
           </div>
 
-        <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
-            <div class="col-md-4" style="margin-bottom: 20px;">
-              <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
-                <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
-              </button>
-              <input
-                #firInput
-                type="file"
-                accept="image/*,application/pdf"
-                hidden
-                (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
-              />
-            </div>
-  
-            <div class="col-md-4">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Police Station Name</mat-label>
-                <mat-select formControlName="police_station">
-                  <mat-option *ngFor="let station of policeStations" [value]="station.id">
-                    {{ station.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-  
-            <!-- Investigating Officer Name -->
-            <div class="col-md-4">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Investigating Officer's Name</mat-label>
-                <input matInput type="text" formControlName="investigation_officer_name"
-                  >
-              </mat-form-field>
-            </div>
-  
-            <!-- Investigating Officer Contact -->
-            <div class="col-md-4">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Investigating Officer's Contact Number</mat-label>
-                <input matInput type="text" formControlName="investigation_officer_contacts"
-                  >
-              </mat-form-field>
-            </div>
-  
+          <!-- Upload FIR Photo -->
+          <div class="col-md-4" style="margin-bottom: 20px;">
+            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
+              <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
+            </button>
+            <input
+              #firInput
+              type="file"
+              accept="image/*,application/pdf"
+              hidden
+              (change)="onFileSelect($event, 'firs', i, 'document')"
+            />
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Police Station Name</mat-label>
+              <input matInput type="text" formControlName="police_station" maxlength="50">
+              <mat-error *ngIf="firs.controls[i].get('police_station')?.hasError('pattern')">
+                Police station name must contain only letters and be up to 50 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Investigating Officer Name -->
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Investigating Officer's Name</mat-label>
+              <input matInput type="text" formControlName="investigation_officer_name" maxlength="30">
+              <mat-error *ngIf="firs.controls[i].get('investigation_officer_name')?.hasError('pattern')">
+                Name must contain only letters and be up to 30 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Investigating Officer Contact -->
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Investigating Officer's Contact Number</mat-label>
+              <input matInput type="text" formControlName="investigation_officer_contacts">
+              <mat-error *ngIf="firs.controls[i].get('investigation_officer_contacts')?.hasError('pattern')">
+                Please enter a valid phone number
+              </mat-error>
+            </mat-form-field>
           </div>
         </div>
-      </mat-card>
-  
-      <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
-        <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
-          <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
-          consent
-        </h5>
       </div>
-  
-      <!-- Consent & Submission -->
-      <mat-card class="card p-4  mb-1">
-  
-        <!-- <div formArrayName="consent">
-          <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
+    </mat-card>
 
-            <div class="col-md-12">
-              <mat-checkbox formControlName="is_consent">
-                I hereby declare that the information provided in this report is true and accurate to the best of my
-                knowledge.
-                I consent to the use of this information for the purpose of locating the missing person.
-              </mat-checkbox>
-            </div>
-  
-          </div>
-        </div> -->
-
-          <div formArrayName="consent">
-  <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-    
-    <!-- Bootstrap Checkbox -->
-    <div class="form-check col-md-12">
-      <input
-        class="form-check-input border-primary"
-        type="checkbox"
-        [formControlName]="'is_consent'"
-        id="consentCheck{{ i }}"
-
-      />
-      <label class="form-check-label" [for]="'consentCheck' + i">
-        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
-        I consent to the use of this information for the purpose of locating the missing person.
-      </label>
+    <!-- Consent Section -->
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+        <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
+        consent
+      </h5>
     </div>
 
-  </div>
-</div>
-
-  
-      </mat-card>
-  
+    <!-- Consent & Submission -->
+    <mat-card class="card p-4 mb-1">
+      <div formArrayName="consent">
+        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+          <div class="col-md-12 consent-link">
+            <a  (click)="openConsentDialog()">Click to open and acknowledge the consent document before proceeding.</a>
+          </div>
+        </div>
+      </div>
+    </mat-card>
   
   
       <!-- Submit & Cancel Buttons -->
       <div class="d-flex justify-content-between mt-4 space-down">
-        <button mat-flat-button class="bg-error text-white">Cancel</button>
+        <button mat-flat-button color="primary">Cancel</button>
 
         <span
           [matTooltip]="'Please accept the consent  before submitting.'"

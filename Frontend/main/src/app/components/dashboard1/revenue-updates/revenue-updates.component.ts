@@ -1029,15 +1029,17 @@ maxSelectableDate: Date | null = null;
             onerror="this.src='https://via.placeholder.com/80?text=No+Image'" 
             alt="Person Photo"
             style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-        <div style="font-weight: bold; font-size: 14px; margin-top: 8px;">${personDetails.full_name.charAt(0).toUpperCase() + personDetails.full_name.slice(1).toLowerCase() || 'N/A'}</div>
+        <div style="font-weight: bold; font-size: 14px; margin-top: 8px;">${personDetails.full_name 
+        ? personDetails.full_name.charAt(0).toUpperCase() + personDetails.full_name.slice(1).toLowerCase()
+        : 'N/A'}</div>
         <div style="font-size: 13px; color: #555;">
             ${personDetails.type === 'Missing Person'
             ? `Age: ${personDetails.age || 'N/A'}`
             : `Age: ${personDetails.age_range || 'N/A'}`}
             |
-            ${personDetails.gender
-            ? personDetails.gender.charAt(0).toUpperCase() + personDetails.gender.slice(1).toLowerCase()
-            : 'N/A'}
+            ${personDetails.gender 
+              ? personDetails.gender.charAt(0).toUpperCase() + personDetails.gender.slice(1).toLowerCase()
+              : 'N/A'}
           </div>
 
       </div>
@@ -1051,7 +1053,10 @@ maxSelectableDate: Date | null = null;
           <span style="display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 12px; 
                 background-color: ${personDetails.case_status.toLowerCase() === 'resolved' ? '#d4edda' : '#fff3cd'}; 
                 color: ${personDetails.case_status.toLowerCase() === 'resolved' ? '#155724' : '#856404'};">
-            ${personDetails.case_status.charAt(0).toUpperCase() + personDetails.case_status.slice(1).toLowerCase()}
+            ${personDetails.case_status 
+            ? personDetails.case_status.charAt(0).toUpperCase() + personDetails.case_status.slice(1).toLowerCase()
+            : 'N/A'}
+
           </span>
         </div>
 
