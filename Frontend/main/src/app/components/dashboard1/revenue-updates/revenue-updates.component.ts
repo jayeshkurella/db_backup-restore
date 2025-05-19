@@ -1008,7 +1008,7 @@ maxSelectableDate: Date | null = null;
         const marker = L.marker(latlng, { icon });
 
         const imageUrl = personDetails.photo_photo
-          ? `${environment.apiUrl.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}`
+          ? `${environment.ImgUrlss.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}`
           : '/assets/old/images/Chhaya.png';
 
  const popupContent = `
@@ -1026,7 +1026,6 @@ maxSelectableDate: Date | null = null;
       <!-- Left: Image and Basic Info -->
       <div style="width: 120px; text-align: center; margin-right: 12px;">
         <img src="${imageUrl || 'assets/old/images/Chhaya.png'}" 
-            onerror="this.src='https://via.placeholder.com/80?text=No+Image'" 
             alt="Person Photo"
             style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
         <div style="font-weight: bold; font-size: 14px; margin-top: 8px;">${personDetails.full_name 
@@ -1169,7 +1168,7 @@ maxSelectableDate: Date | null = null;
   
   getImageUrl(photoPath: string | null | undefined): string {
     if (photoPath) {
-        const baseUrl = environment.apiUrl.replace(/\/$/, '');
+        const baseUrl = environment.ImgUrlss.replace(/\/$/, '');
         const cleanPath = photoPath.replace(/^\//, '');
         
         // Ensure the /media/ prefix is added if not already present

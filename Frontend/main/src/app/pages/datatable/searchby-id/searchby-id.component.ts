@@ -29,8 +29,7 @@ import { MatDivider } from '@angular/material/divider';
     FormsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    SafeTitlecasePipe,
-    MatDivider
+    SafeTitlecasePipe
   ],  templateUrl: './searchby-id.component.html',
   styleUrl: './searchby-id.component.scss'
 })
@@ -70,7 +69,7 @@ export class SearchbyIDComponent {
     });
   }
   getImageUrl(imagePath: string): string {
-  const fullPath = imagePath ? `${environment.apiUrl}${imagePath}` : 'assets/old/images/Chhaya.png';
+  const fullPath = imagePath ? `${environment.ImgUrlss}${imagePath}` : 'assets/old/images/Chhaya.png';
   return fullPath;
   }
 

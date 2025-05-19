@@ -49,17 +49,32 @@ class AdditionalInfo(models.Model):
 
     class ReligionChoices(models.TextChoices):
         HINDU = 'hindu', 'Hindu'
-        MUSLIM = 'muslim','Muslim'
+        MUSLIM = 'muslim', 'Muslim'
         SIKH = 'sikh', 'Sikh'
-        CHRISTIAN = 'cristian','Cristian'
+        CHRISTIAN = 'christian', 'Christian'
+        BUDDHIST = 'buddhist', 'Buddhist'
+        JAIN = 'jain', 'Jain'
+        ZOROASTRIAN = 'zoroastrian', 'Zoroastrian'
+        JEWISH = 'jewish', 'Jewish'
+        ATHEIST = 'atheist', 'Atheist'
+        OTHER = 'other', 'Other'
 
     class MothertoungueChoices(models.TextChoices):
         HINDI = 'hindi', 'Hindi'
         ENGLISH = 'english', 'English'
         BENGALI = 'bengali', 'Bengali'
-        MALAYALAM = 'malayalam', 'Malayalam'
+        MARATHI = 'marathi', 'Marathi'
         TAMIL = 'tamil', 'Tamil'
-        TELEGRAM = 'telegram', 'Telegram'
+        TELUGU = 'telugu', 'Telugu'
+        MALAYALAM = 'malayalam', 'Malayalam'
+        KANNADA = 'kannada', 'Kannada'
+        PUNJABI = 'punjabi', 'Punjabi'
+        GUJARATI = 'gujarati', 'Gujarati'
+        URDU = 'urdu', 'Urdu'
+        ORIYA = 'oriya', 'Oriya'
+        ASSAMESE = 'assamese', 'Assamese'
+        SINDHI = 'sindhi', 'Sindhi'
+        NEPALI = 'nepali', 'Nepali'
         OTHER = 'other', 'Other'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

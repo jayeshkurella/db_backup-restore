@@ -16,6 +16,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -89,13 +90,14 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
   
     selectedFileName: string = '';
 
-    constructor(
+       constructor(
       private fb: FormBuilder,
       private formApi: FormApiService,
       private datePipe: DatePipe,
       private toastr: ToastrService,
       private dialog: MatDialog,
     ) {}
+  
   
     ngOnInit(): void {
       this.getToken();
@@ -114,33 +116,127 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       this.storedPersonId = localStorage.getItem('user_id');
       console.log(this.storedPersonId, "id");
     }
-    
-    openConsentDialog() {
-      const dialogRef = this.dialog.open(UbconsentComponent, {
-        width: '80vw',  
-        maxWidth: '90vw' ,
-        height: '80vh',
-        maxHeight: '90vh',
-        autoFocus: false
-      });
-    
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.consent.controls[0].get('is_consent')?.setValue(true);
-        }
-      });
+
+allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedBodyForm' | 'firsForm'): boolean {
+  const charCode = event.key.charCodeAt(0);
+  const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
+
+  const isValidChar =
+    (charCode >= 65 && charCode <= 90) ||  // A-Z
+    (charCode >= 97 && charCode <= 122) || // a-z
+    charCode === 32 ||                      // space
+    allowedKeys.includes(event.keyCode);   // navigation keys
+
+  let form;
+  switch (formGroup) {
+    case 'contactForm':
+      form = this.contactForm;
+      break;
+    case 'unidentifiedBodyForm':
+      form = this.unidentifiedBodyForm;
+      break;
+    case 'firsForm':
+      form = this.firsForm;
+      break;
+  }
+
+  const control = form.get(controlName);
+
+  if (!isValidChar) {
+    control?.setErrors({ invalidChars: true });
+    event.preventDefault();
+    return false;
+  } else {
+    // Clear error if valid
+    const currentErrors = control?.errors;
+    if (currentErrors?.['invalidChars']) {
+      delete currentErrors['invalidChars'];
+      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
     }
-  
+    return true;
+  }
+}
+
+allowOnlyNumbers(event: KeyboardEvent): boolean {
+  const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+  if (allowedKeys.includes(event.key)) {
+    return true;
+  }
+
+  const isNumber = /^[0-9]$/.test(event.key);
+  const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
+
+  const control =
+    inputName === 'weight' ? this.unidentifiedBodyForm.get('weight') :
+    inputName === 'pincode' ? this.addressForm.get('pincode') :
+    inputName === 'phone_no' ? this.contactForm.get('phone_no') :
+    inputName === 'investigation_officer_contacts' ? this.firsForm?.get('investigation_officer_contacts') : // Add this line
+    null;
+
+  if (!isNumber) {
+    control?.setErrors({ ...control.errors, invalidChars: true });
+    event.preventDefault();
+    return false;
+  } else {
+    const currentErrors = control?.errors;
+    if (currentErrors?.['invalidChars']) {
+      delete currentErrors['invalidChars'];
+      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+    }
+    return true;
+  }
+}
+
+// Restricts age to max 200 even while typing
+restrictMaxAge(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  let value = input.valueAsNumber;
+
+  if (value > 200) {
+    input.value = '200'; // Force-set to max 200
+    this.unidentifiedBodyForm.get('weight')?.setValue(200); // Update form control
+    this.unidentifiedBodyForm.get('weight')?.setErrors({ max: true }); // Show error
+  }
+}
+// Unified method for both village and city
+allowTextInput(event: KeyboardEvent, controlName: string): boolean {
+  const charCode = event.key.charCodeAt(0);
+  const allowedKeys = [8, 9, 13, 37, 38, 39, 40];
+  const isValidChar = 
+    (charCode >= 65 && charCode <= 90) ||
+    (charCode >= 97 && charCode <= 122) ||
+    charCode === 32 ||
+    charCode === 45 ||
+    allowedKeys.includes(charCode);
+
+  if (!isValidChar) {
+    this.addressForm.get(controlName)?.setErrors({ invalidChars: true });
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+preventSpecialCharacters(event: KeyboardEvent) {
+  const allowedChars = /[a-zA-Z0-9 ]/;  // Allows letters, numbers, and spaces
+  if (!allowedChars.test(event.key)) {
+    event.preventDefault();
+  }
+}
     initializeForm() {
       this.unidentifiedBodyForm = this.fb.group({
-       full_name: ['',[ Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-      birth_date: [null],
-      age_range: ['', [Validators.pattern(/^\d{1,3}-\d{1,3}$/)]],
-      gender: ['', Validators.required],
-      height: ['', [Validators.max(250), Validators.pattern(/^[0-9]+$/)]],
-      weight: ['', [Validators.max(200), Validators.pattern(/^[0-9]+$/)]],
-      birth_mark: ['', Validators.maxLength(250)],
-      distinctive_mark: ['', Validators.maxLength(250)],
+
+          full_name: ['', [  Validators.maxLength(30) ]],
+    birth_date: [null],
+    age_range: [''],
+  weight: ['', [Validators.min(1),  Validators.max(200)]],
+
+     gender: ['', Validators.required],
+
+     height: ['', [Validators.pattern(/^[0-9]*$/), Validators.max(250)]],
+
+     birth_mark: ['', [Validators.maxLength(250),Validators.pattern(/^[a-zA-Z\s]*$/) ]],
+  distinctive_mark: ['', [Validators.maxLength(250),Validators.pattern(/^[a-zA-Z\s]*$/)]],
         type: ['Unidentified Body'],
         birthtime: [null],
         birthplace: [''],
@@ -185,6 +281,13 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     get contacts(): FormArray {
       return this.unidentifiedBodyForm.get('contacts') as FormArray;
     }
+    get addressForm(): FormGroup {
+      return this.unidentifiedBodyForm.get('addressForm') as FormGroup;
+    }
+
+    get contactForm(): FormGroup {
+      return this.unidentifiedBodyForm.get('contactForm') as FormGroup;
+    }
   
     get additionalInfo(): FormArray {
       return this.unidentifiedBodyForm.get('additional_info') as FormArray;
@@ -192,6 +295,9 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
   
     get lastKnownDetails(): FormArray {
       return this.unidentifiedBodyForm.get('last_known_details') as FormArray;
+    }
+    get firsForm(): FormGroup {
+      return this.unidentifiedBodyForm.get('firs') as FormGroup;
     }
   
     get firs(): FormArray {
@@ -203,45 +309,71 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     }
     createAddressFormGroup(): FormGroup {
       return this.fb.group({
-        street: ['', [Validators.pattern(/^[a-zA-Z0-9\s]{1,30}$/)]],
-    village: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    city: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    district: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    state: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    country: ['', [Validators.pattern(/^[a-zA-Z\s]{1,15}$/)]],
+
+    district: [''],
+    state: [''],
+    country: [''],
+
     pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
-    landmark_details: ['', Validators.maxLength(30)],
+    landmark_details: ['',[Validators.maxLength(50), this.landmarkValidator() ]],
+    street: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z0-9\s]*$/) ]],
+    village: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z\s-]*$/) ]],
+
+    city: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z\s]*$/) ]],
+
         address_type: [''],
         // street: [''],
         appartment_no: [''],
         appartment_name: [''],
+        // location: this.fb.group({
+        //   latitude: [''],
+        //   longitude: [''],
+        // }),
         location: this.fb.group({
-          latitude: [''],
-          longitude: [''],
-        }),
+        latitude: ['', [Validators.required, this.coordinateValidator()]],
+        longitude: ['', [Validators.required, this.coordinateValidator()]],
+      }),
         // user: [''],
         // created_by: [''],
         // updated_by: [''],
       });
     }
-    
+    coordinateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
 
+      const pattern = /^-?\d{1,3}(\.\d+)?$/;
+      return pattern.test(value) ? null : { invalidCoordinate: true };
+    };
+  }
+    
+landmarkValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const value = control.value;
+    if (!value) return null;
+
+    // Allow letters, numbers, spaces, and ,.-#
+    const pattern = /^[a-zA-Z0-9\s,.\-#]+$/;
+    return pattern.test(value) ? null : { invalidLandmark: true };
+  };
+}
 
     // Correct method to create Contact FormGroup
     createContactFormGroup(): FormGroup {
       return this.fb.group({
           type: ['referral'],
-    person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
-    phone_no: ['', [Validators.pattern(/^[0-9]{10}$/)]],
-    email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+          person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
+    phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
+    // email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+     email_id: [
+    null,
+    Validators.compose([
+      Validators.maxLength(50),
+      Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    ])
+  ],
     additional_details: ['', Validators.maxLength(200)],
-        // job_title: [''],
-        // website_url: [''],
-        // social_media_url: [''],
-        // social_media_availability: [''],
-        // additional_details: [''],
-        // is_primary: [false],
-        // user: [''],
         hospital: [null],
         police_station: [null],
         person: [''],
@@ -252,38 +384,58 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
       });
     }
 
-    
-    // Add address logic
-    addAddress() {
-      const addressForm = this.unidentifiedBodyForm.get('addressForm');
-      if (addressForm?.valid) {
-        this.addresses.push(this.fb.group(addressForm.value));
-        console.log("Addresses:", this.addresses.value);
-        this.unidentifiedBodyForm.markAsDirty();
-        addressForm.reset();
-        addressForm.get('address_type')?.setValue('');
-        addressForm.get('state')?.setValue('');
-        addressForm.get('country')?.setValue('');
-      } else {
-        alert("Please fill in all required fields before adding another address.");
-      }
+addAddress() {
+  const addressForm = this.unidentifiedBodyForm.get('addressForm');
+
+  if (addressForm) {
+    // Mark all fields as touched to trigger validation errors
+    addressForm.markAllAsTouched();
+
+    if (addressForm.valid) {
+      // Add the current address to the list
+      this.addresses.push(this.fb.group(addressForm.value));
+
+      // Optional: console log for debugging
+      console.log('Addresses:', this.addresses.value);
+
+      // Reset the form and optionally set default values
+      addressForm.reset();
+      addressForm.get('address_type')?.setValue('');
+      addressForm.get('state')?.setValue('');
+      addressForm.get('country')?.setValue('');
+
+      // Mark the main form as dirty since a new address is added
+      this.unidentifiedBodyForm.markAsDirty();
+    } else {
+      alert('Please fill in all required address fields before adding another address.');
     }
-    
-    // Add contact logic
-    addContact() {
-      const contactForm = this.unidentifiedBodyForm.get('contactForm');
-      if (contactForm?.valid) {
-        this.contacts.push(this.fb.group(contactForm.value));
-        console.log("Contacts:", this.contacts.value);
-        this.unidentifiedBodyForm.markAsDirty();
-        contactForm.reset();
-        contactForm.get('type')?.setValue('');
-        contactForm.get('social_media_availability')?.setValue('');
-        contactForm.get('is_primary')?.setValue('');
-      } else {
-        alert("Please fill in all required fields before adding another contact.");
-      }
+  }
+}
+addContact() {
+  const contactForm = this.unidentifiedBodyForm.get('contactForm');
+
+  if (contactForm) {
+
+    contactForm.markAllAsTouched();
+
+    if (contactForm.valid) {
+
+      this.contacts.push(this.fb.group(contactForm.value));
+
+      console.log('Contacts:', this.contacts.value);
+
+      contactForm.reset();
+      contactForm.get('type')?.setValue('');
+      contactForm.get('social_media_availability')?.setValue('');
+      contactForm.get('is_primary')?.setValue('');
+
+      this.unidentifiedBodyForm.markAsDirty();
+    } else {
+      alert('Please fill in all required contact fields before adding another contact.');
     }
+  }
+}
+
     
     // Add additional info
     addAdditionalInfo() {
@@ -300,10 +452,11 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{
     mother_tongue: [''],
     other_known_languages: ['', this.languageValidator],
     id_type: [''],
-    id_no: ['', Validators.pattern(/^[a-zA-Z0-9]+$/)],
+    // id_no: ['', Validators.pattern(/^[a-zA-Z0-9]+$/)],
+    id_no: ['', [Validators.pattern(/^[a-zA-Z0-9]+$/),Validators.maxLength(15)]],
     education_details: [''],
-    occupation_details: ['', Validators.maxLength(30)]
-      }));
+occupation_details: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z0-9 ]*$/) ]]      
+}));
     }
 
 languageValidator(control: AbstractControl): ValidationErrors | null {
@@ -347,10 +500,12 @@ languageValidator(control: AbstractControl): ValidationErrors | null {
     fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9]{1,20}$/)]],
         case_status: [''],
         investigation_officer_contact: [null],
-            investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    investigation_officer_contacts: ['', Validators.pattern(/^[0-9]+$/)],
-      police_station: ['', [Validators.pattern(/^[a-zA-Z\s]{1,50}$/)]],
+            // investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)],[  Validators.maxLength(30) ]],
+    investigation_officer_name: ['',[Validators.maxLength(30)]],
+    investigation_officer_contacts: ['',[Validators.pattern(/^[0-9]{1,10}$/)]],
+      police_station: ['',],
         document: [null],
+        fir_photo:[null],
         person: [''],
         created_at: [null],
         updated_at: [null],
@@ -571,7 +726,7 @@ languageValidator(control: AbstractControl): ValidationErrors | null {
     
       this.formApi.postMissingPerson(formData).subscribe({
         next: (response) => {
-          this.toastr.success('Body Data Added Successfully', 'Success');
+          this.toastr.success('Body Data added  successfully', 'Success');
           this.unidentifiedBodyForm.reset();
           this.addresses.clear();
           this.contacts.clear();
@@ -585,5 +740,28 @@ languageValidator(control: AbstractControl): ValidationErrors | null {
     
     formatTime(time: string): string {
       return time ? time.replace(/[“”]/g, '"') : '';
+    }
+
+
+   openConsentDialog() {
+      const dialogRef = this.dialog.open(UbconsentComponent, {
+        width: '80vw',  
+        maxWidth: '90vw' ,
+        height: '80vh',
+        maxHeight: '90vh',
+        autoFocus: false
+      });
+    
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.consent.controls[0].get('is_consent')?.setValue(true);
+        }
+      });
+    }
+    onConsentChange(event: Event) {
+      const checked = (event.target as HTMLInputElement).checked;
+      if (checked) {
+        this.openConsentDialog();
+      }
     }
 }

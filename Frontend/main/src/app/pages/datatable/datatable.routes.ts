@@ -27,6 +27,10 @@ export const datatablesRoutes: Routes = [
     component: ChangelogsComponent,
    
   },
+   {
+      path: 'search-by-id',
+      component: SearchbyIDComponent,
+    },
   {
     path: '',
     canActivate: [authGuard],
@@ -38,10 +42,6 @@ export const datatablesRoutes: Routes = [
       },
       { path: 'match-up-result', 
         component: MatwithupComponent 
-      },
-      {
-        path: 'search-by-id',
-        component: SearchbyIDComponent,
       },
       {
         path: 'unidentified-person',

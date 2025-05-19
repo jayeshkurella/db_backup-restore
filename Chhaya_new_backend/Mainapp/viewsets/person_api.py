@@ -41,14 +41,12 @@ class PersonViewSet(viewsets.ViewSet):
 
     def get_permissions(self):
         """
-        Override this method to allow unrestricted access to `retrieve`
-        while enforcing restrictions on other actions.
+        Allow unrestricted access to `retrieve` and `retrieve_by_case_id`,
+        enforce authentication for other actions.
         """
-        if self.action == "retrieve":
+        if self.action in ["retrieve", "retrieve_by_case_id"]:
             return [AllowAny()]
-
         return [permission() for permission in self.permission_classes]
-
 
         # 🔹 1. LIST all persons
     @swagger_auto_schema(
@@ -262,6 +260,7 @@ class PersonViewSet(viewsets.ViewSet):
 
     def _create_firs(self, person, firs_data):
         fir_objects = []
+
         for fir in firs_data:
             if not isinstance(fir, dict):
                 continue
@@ -274,9 +273,19 @@ class PersonViewSet(viewsets.ViewSet):
                 except PoliceStation.DoesNotExist:
                     raise ValueError(f"PoliceStation with ID {police_station_id} does not exist")
 
-            # Remove 'police_station' and 'person' from data dict for unpacking
-            fir_data = {k: v for k, v in fir.items() if k not in ['police_station', 'person']}
+            fir_photo = fir.pop('fir_photo', None)
+
+            # 🔥 Exclude unwanted keys, especially "document"
+            fir_data = {
+                k: v for k, v in fir.items()
+                if k not in ['police_station', 'person', 'fir_photo', 'document']
+            }
+
             fir_obj = FIR(person=person, police_station=police_station, **fir_data)
+
+            if fir_photo and isinstance(fir_photo, str):
+                fir_obj.fir_photo.name = f'fir_photos/{fir_photo}'
+
             fir_objects.append(fir_obj)
 
         FIR.objects.bulk_create(fir_objects)

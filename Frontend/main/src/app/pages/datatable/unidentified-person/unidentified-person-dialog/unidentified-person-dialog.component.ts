@@ -50,7 +50,7 @@ export class UnidentifiedPersonDialogComponent {
   }
   
    getImageUrl(imagePath: string): string {
-    return imagePath ? `${environment.apiUrl}${imagePath}` : 'assets/old/images/Chhaya.png';
+    return imagePath ? `${environment.ImgUrlss}${imagePath}` : 'assets/old/images/Chhaya.png';
   }
   
   

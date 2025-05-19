@@ -20,7 +20,7 @@ export class DialogModelViewComponent {
   }
 
   getImageUrl(imagePath: string): string {
-    const fullPath = imagePath ? `${environment.apiUrl}${imagePath}` : 'assets/old/images/Chhaya.png';
+    const fullPath = imagePath ? `${environment.ImgUrlss}${imagePath}` : 'assets/old/images/Chhaya.png';
     return fullPath;
   }
   

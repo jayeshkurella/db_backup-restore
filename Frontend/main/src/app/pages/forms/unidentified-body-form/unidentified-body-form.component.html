@@ -15,16 +15,54 @@
     <mat-card class="p-4 m-1 mb-4">
       <div class="row g-2 p-3">
         <!-- Full Name -->
+
         <div class="col-12 col-md-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Full Name</mat-label>
-            <input matInput type="text" formControlName="full_name" maxlength="30" />
-            <mat-error *ngIf="unidentifiedBodyForm.get('full_name')?.hasError('pattern') && unidentifiedBodyForm.get('full_name')?.touched">
-  Name must contain only letters (A-Z) and be up to 30 characters
-</mat-error>
+            <input 
+                matInput 
+                type="text" 
+                formControlName="full_name" 
+                maxlength="30" 
+                (keypress)="allowOnlyLetters($event,'full_name','unidentifiedBodyForm')"
+            />
+            <mat-error *ngIf="unidentifiedBodyForm.get('full_name')?.invalid && unidentifiedBodyForm.get('full_name')?.touched">
+        
+                <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['invalidChars']">
+                    Numbers and special Symbols not allowed
+                </span>
+                <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['maxlength']">
+                    Maximum 30 characters allowed
+                </span>
+            </mat-error>
           </mat-form-field>
         </div>
+        
 
+          <!-- <mat-form-field appearance="outline" class="col-16 col-md-6 col-lg-4 border_darkk">
+            <mat-label>Full Name</mat-label>
+            <input 
+                matInput 
+                type="text" 
+                formControlName="full_name" 
+                maxlength="30" 
+                (keypress)="allowOnlyLetters($event)"
+            />
+            <mat-hint align="end" *ngIf="unidentifiedBodyForm.get('full_name')?.value">
+              {{ unidentifiedBodyForm.get('full_name')?.value.length }}
+            </mat-hint>
+
+            <mat-error *ngIf="unidentifiedBodyForm.get('full_name')?.invalid && unidentifiedBodyForm.get('full_name')?.touched">
+        
+                <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['invalidChars']">
+                    Numbers and special Symbols not allowed
+                </span>
+                <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['maxlength']">
+                    Maximum 30 characters allowed
+                </span>
+            </mat-error>
+        </mat-form-field> -->
+        
         <!-- Gender -->
         <div class="col-12 col-md-3">
           <mat-form-field appearance="outline" class="w-100">
@@ -51,7 +89,17 @@
         </div>
 
         <!-- Age Range -->
-      <div class="col-12 col-md-3">
+        <!-- <div class="col-12 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Age Range</mat-label>
+            <input matInput type="text" formControlName="age_range" />
+            <mat-error *ngIf="unidentifiedBodyForm.get('age_range')?.hasError('pattern')">
+              Please enter a valid numeric value
+            </mat-error>
+          </mat-form-field>
+        </div> -->
+        <!-- Age Range -->
+          <div class="col-12 col-md-3 ">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Age Range</mat-label>
               <mat-select formControlName="age_range">
@@ -64,11 +112,12 @@
                   {{ range[1] }}
                 </mat-option>
               </mat-select>
-              
+            
             </mat-form-field>
           </div>
+
         <!-- Blood Group -->
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-3 ">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Blood Group</mat-label>
             <mat-select formControlName="blood_group">
@@ -85,33 +134,64 @@
         </div>
 
         <!-- Height -->
-        <div class="col-12 col-md-3">
-           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Height (cm)</mat-label>
-            <mat-select formControlName="height_range">
-              <mat-option value="<150">Less than 150 cm</mat-option>
-              <mat-option value="150-160">150 - 160 cm</mat-option>
-              <mat-option value="161-170">161 - 170 cm</mat-option>
-              <mat-option value="171-180">171 - 180 cm</mat-option>
-              <mat-option value="181-190">181 - 190 cm</mat-option>
-              <mat-option value=">190">More than 190 cm</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <!-- Weight -->
-        <div class="col-12 col-md-3">
+        <!-- <div class="col-12 col-md-3">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Weight (kg)</mat-label>
-            <input matInput type="number" formControlName="weight" max="200" />
-            <mat-error *ngIf="unidentifiedBodyForm.get('weight')?.hasError('max')">
-              Weight cannot exceed 200kg
+            <mat-label>Height (cm)</mat-label>
+            <input matInput type="number" formControlName="height" max="250" />
+            <mat-error *ngIf="unidentifiedBodyForm.get('height')?.hasError('max')">
+              Height cannot exceed 250cm
             </mat-error>
-            <mat-error *ngIf="unidentifiedBodyForm.get('weight')?.hasError('pattern')">
+            <mat-error *ngIf="unidentifiedBodyForm.get('height')?.hasError('pattern')">
               Please enter a valid number
             </mat-error>
           </mat-form-field>
+        </div> -->
+
+        <!-- Weight -->
+        <div class="col-12 col-md-3 ">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Height (cm)</mat-label>
+          <mat-select formControlName="height_range">
+            <mat-option value="<150">Less than 150 cm</mat-option>
+            <mat-option value="150-160">150 - 160 cm</mat-option>
+            <mat-option value="161-170">161 - 170 cm</mat-option>
+            <mat-option value="171-180">171 - 180 cm</mat-option>
+            <mat-option value="181-190">181 - 190 cm</mat-option>
+            <mat-option value=">190">More than 190 cm</mat-option>
+          </mat-select>
+          </mat-form-field>
         </div>
+
+    
+<!-- Age -->
+          <!-- Weight Field -->
+      <div class="col-12 col-md-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Weight</mat-label>
+          <input 
+            matInput 
+            type="number" 
+            formControlName="weight" 
+            (keypress)="allowOnlyNumbers($event)" 
+            (input)="restrictMaxAge($event)"  
+            min="1"
+            max="200" 
+          />
+          <mat-error *ngIf="unidentifiedBodyForm.get('weight')?.invalid && unidentifiedBodyForm.get('weight')?.touched">
+            <!-- Error for non-numeric input -->
+            <span *ngIf="unidentifiedBodyForm.get('weight')?.errors?.['invalidChars']">
+              Only numbers are allowed
+            </span>
+            <!-- Error for min/max age -->
+            <span *ngIf="unidentifiedBodyForm.get('weight')?.errors?.['min']">
+              Age must be at least 1
+            </span>
+            <span *ngIf="unidentifiedBodyForm.get('weight')?.errors?.['max']">
+              Age cannot exceed 200
+            </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
 
         <!-- Complexion -->
         <div class="col-12 col-md-3">
@@ -173,13 +253,24 @@
           </mat-form-field>
         </div>
 
-        <!-- Birthmark -->
         <div class="col-12 col-md-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Birthmark Details</mat-label>
-            <textarea matInput formControlName="birth_mark" rows="3" maxlength="250"></textarea>
-            <mat-error *ngIf="unidentifiedBodyForm.get('birth_mark')?.hasError('maxlength')">
-              Maximum 250 characters allowed
+            <textarea
+              matInput
+              formControlName="birth_mark"
+              rows="3"
+              maxlength="250"
+              (keypress)="allowOnlyLetters($event, 'birth_mark','unidentifiedBodyForm')"> <!-- Apply letter-only restriction -->
+            </textarea>
+
+            <mat-error *ngIf="unidentifiedBodyForm.get('birth_mark')?.invalid && unidentifiedBodyForm.get('birth_mark')?.touched">
+              <span *ngIf="unidentifiedBodyForm.get('birth_mark')?.errors?.['invalidChars']">
+                Only letters (A-Z) and spaces are allowed
+              </span>
+              <span *ngIf="unidentifiedBodyForm.get('birth_mark')?.errors?.['maxlength']">
+                Maximum 250 characters allowed
+              </span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -188,9 +279,20 @@
         <div class="col-12 col-md-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Distinctive Marks</mat-label>
-            <textarea matInput formControlName="distinctive_mark" rows="3" maxlength="250"></textarea>
-            <mat-error *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.hasError('maxlength')">
-              Maximum 250 characters allowed
+            <textarea
+              matInput
+              formControlName="distinctive_mark"
+              rows="3"
+              maxlength="250"
+              (keypress)="allowOnlyLetters($event, 'distinctive_mark','unidentifiedBodyForm')"> <!-- Apply letter-only restriction -->
+            </textarea>
+            <mat-error *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.invalid && unidentifiedBodyForm.get('distinctive_mark')?.touched">
+              <span *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.errors?.['invalidChars']">
+                Only letters (A-Z) and spaces are allowed
+              </span>
+              <span *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.errors?.['maxlength']">
+                Maximum 250 characters allowed
+              </span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -265,46 +367,86 @@
                   <mat-option value="current">Current</mat-option>
                   <mat-option value="old">Old</mat-option>
                 </mat-select>
-                <mat-error *ngIf="unidentifiedBodyForm.get('address_type')?.hasError('maxlength')">
-                  Maximum 200 characters allowed
-                </mat-error>
+              
               </mat-form-field>
             </div>
 
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Street</mat-label>
-                <input matInput type="text" formControlName="street" maxlength="30">
-                <mat-error *ngIf="unidentifiedBodyForm.get('street')?.hasError('pattern')">
-                  Street must be alphanumeric and up to 30 characters
+                <input matInput 
+                      type="text" 
+                      formControlName="street"
+                      maxlength="15"
+                      (blur)="addressForm.get('street')"
+                      (keypress)="preventSpecialCharacters($event)">
+  
+                <mat-error *ngIf="addressForm.get('street')?.hasError('maxlength')">
+                  Maximum 15 characters or numbers allowed
                 </mat-error>
-              </mat-form-field>
-            </div>
-              <div class="col-md-12">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Landmark Details</mat-label>
-                <textarea matInput formControlName="landmark_details" rows="1" maxlength="30"></textarea>
-                <mat-error *ngIf="unidentifiedBodyForm.get('landmark_details')?.hasError('maxlength')">
-                  Maximum 30 characters allowed
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Village</mat-label>
-                <input matInput type="text" formControlName="village" maxlength="30">
-                <mat-error *ngIf="unidentifiedBodyForm.get('village')?.hasError('pattern')">
-                  Village must contain only letters and be up to 30 characters
+
+                <mat-error *ngIf="addressForm.get('street')?.hasError('specialChars') && addressForm.get('street')?.touched">
+                  Special characters are not allowed
                 </mat-error>
               </mat-form-field>
             </div>
 
+            <div class="col-md-12">
+                <form [formGroup]="addressForm" novalidate>
+                  <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Landmark Details</mat-label>
+                <textarea matInput formControlName="landmark_details" rows="1"></textarea>
+                <mat-error *ngIf="addressForm.get('addressForm.landmark_details')?.touched && addressForm.get('addressForm.landmark_details')?.hasError('maxlength')">
+                  Maximum 150 characters allowed.
+                </mat-error>
+                <mat-error *ngIf="addressForm.get('addressForm.landmark_details')?.touched && addressForm.get('addressForm.landmark_details')?.hasError('invalidLandmark')">
+                  Only letters, numbers, spaces, and , . - # are allowed.
+                </mat-error>
+              </mat-form-field>
+                </form>
+
+            </div>
+
+          
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Village</mat-label>
+                <input 
+                  matInput 
+                  type="text" 
+                  formControlName="village"
+                  maxlength="30"
+                  (keypress)="allowTextInput($event, 'village')"
+                >
+                <mat-error *ngIf="addressForm.get('village')?.invalid && addressForm.get('village')?.touched">
+                  <span *ngIf="addressForm.get('village')?.errors?.['invalidChars']">
+                    Only letters allowed
+                  </span>
+                  <span *ngIf="addressForm.get('village')?.errors?.['maxlength']">
+                    Maximum 30 characters allowed
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>City</mat-label>
-                <input matInput type="text" formControlName="city" maxlength="30">
-                <mat-error *ngIf="unidentifiedBodyForm.get('city')?.hasError('pattern')">
-                  City must contain only letters and be up to 30 characters
+                <input 
+                  matInput 
+                  type="text" 
+                  formControlName="city"
+                  maxlength="30"
+                  (keypress)="allowTextInput($event, 'city')"
+                >
+                <mat-error *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
+                  <span *ngIf="addressForm.get('city')?.errors?.['invalidChars']">
+                    Only letters allowed
+                  </span>
+                  <span *ngIf="addressForm.get('city')?.errors?.['maxlength']">
+                    Maximum 30 characters allowed
+                  </span>
                 </mat-error>
               </mat-form-field>
             </div>
@@ -312,44 +454,70 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>District</mat-label>
-                <input matInput type="text" formControlName="district" maxlength="30">
-                <mat-error *ngIf="unidentifiedBodyForm.get('district')?.hasError('pattern')">
-                  District must contain only letters and be up to 30 characters
+                <!-- <input matInput type="text" formControlName="district" maxlength="30"> -->
+                 <input 
+                  matInput 
+                  type="text" 
+                  formControlName="district"
+                  maxlength="30"
+                  (keypress)="allowTextInput($event, 'district')"
+                >
+                <mat-error *ngIf="addressForm.get('district')?.invalid && addressForm.get('district')?.touched">
+                  <span *ngIf="addressForm.get('district')?.errors?.['invalidChars']">
+                    Only letters allowed
+                  </span>
+                  <span *ngIf="addressForm.get('district')?.errors?.['maxlength']">
+                    Maximum 30 characters allowed
+                  </span>
                 </mat-error>
+                
               </mat-form-field>
             </div>
 
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>State</mat-label>
-                <input matInput type="text" formControlName="state" maxlength="30">
-                <mat-error *ngIf="unidentifiedBodyForm.get('state')?.hasError('pattern')">
-                  State must contain only letters and be up to 30 characters
-                </mat-error>
+                <mat-select formControlName="state">
+                <mat-option value="" disabled>State</mat-option>
+                <mat-option *ngFor="let state of states" [value]="state">{{ state }}</mat-option>
+              </mat-select>
+              
               </mat-form-field>
             </div>
 
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Pincode</mat-label>
-                <input matInput type="text" formControlName="pincode" maxlength="15">
-                <mat-error *ngIf="unidentifiedBodyForm.get('pincode')?.hasError('pattern')">
-                  Please enter a valid pincode (up to 15 digits)
+                <input 
+                  matInput 
+                  type="text" 
+                  formControlName="pincode" 
+                  maxlength="15"
+                  (keypress)="allowOnlyNumbers($event)"
+                >
+                <mat-error *ngIf="addressForm.get('pincode')?.invalid && addressForm.get('pincode')?.touched">
+                  <span *ngIf="addressForm.get('pincode')?.errors?.['invalidChars']">
+                    Only numbers are allowed.
+                  </span>
+                  <span *ngIf="addressForm.get('pincode')?.errors?.['pattern']">
+                    Please enter a valid pincode (1–15 digits).
+                  </span>
                 </mat-error>
               </mat-form-field>
+
             </div>
+
 
             <div class="col-md-6">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Country</mat-label>
-                <input matInput type="text" formControlName="country" maxlength="15">
-                <mat-error *ngIf="unidentifiedBodyForm.get('country')?.hasError('pattern')">
-                  Country must contain only letters and be up to 15 characters
-                </mat-error>
-              </mat-form-field>
-            </div>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-select formControlName="country">
+                <mat-option value="" disabled>Country</mat-option>
+                <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
             
+
           </div>
         </div>
 
@@ -360,11 +528,19 @@
               <mat-form-field appearance="outline" class="flex-grow-1 me-2">
                 <mat-label>Latitude</mat-label>
                 <input matInput type="text" formControlName="latitude" />
+                <mat-error
+                  *ngIf="addressForm.get('addressForm.location.latitude')?.touched && addressForm.get('addressForm.location.latitude')?.hasError('invalidCoordinate')">
+                  Enter a valid number (e.g., 12.3456).
+                </mat-error>
               </mat-form-field>
-              
+
               <mat-form-field appearance="outline" class="flex-grow-1">
                 <mat-label>Longitude</mat-label>
                 <input matInput type="text" formControlName="longitude" />
+                <mat-error
+                  *ngIf="addressForm.get('addressForm.location.longitude')?.touched && addressForm.get('addressForm.location.longitude')?.hasError('invalidCoordinate')">
+                  Enter a valid number (e.g., 77.1234).
+                </mat-error>
               </mat-form-field>
 
               <button type="button" mat-icon-button (click)="getCurrentLocation()" matTooltip="Fetch your current location">
@@ -419,40 +595,97 @@
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-select formControlName="type">
-                <mat-option value="referral">Referral Contact</mat-option>
-              </mat-select>
+              <mat-option value="personal">Personal</mat-option>
+              <mat-option value="office">Office</mat-option>
+              <mat-option value="home">Home</mat-option>
+              <mat-option value="referral">Referral</mat-option>
+              <mat-option value="emergency">Emergency</mat-option>
+              <mat-option value="work">Work</mat-option>
+              <mat-option value="family">Family</mat-option>
+              <mat-option value="friend">Friend</mat-option>
+              <mat-option value="medical">Medical</mat-option>
+              <mat-option value="school">School</mat-option>
+              <mat-option value="legal">Legal</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
             </mat-form-field>
           </div>
 
           <!-- Company Name -->
+          
           <div class="col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Name</mat-label>
-              <input matInput type="text" formControlName="person_name">
-              <mat-error *ngIf="unidentifiedBodyForm.get('person_name')?.hasError('pattern')">
-                Name must contain only letters
-              </mat-error>
-            </mat-form-field>
+             <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Name</mat-label>
+                <input 
+                matInput 
+                type="text" 
+                formControlName="person_name" 
+                maxlength="30" 
+                (keypress)="allowOnlyLetters($event,'person_name','contactForm')"
+            />
+            <mat-hint align="end" *ngIf="contactForm.get('person_name')?.value">
+              {{ contactForm.get('person_name')?.value.length }}
+            </mat-hint>
+
+            <mat-error *ngIf="contactForm.get('person_name')?.invalid && contactForm.get('person_name')?.touched">
+        
+                <span *ngIf="contactForm.get('person_name')?.errors?.['invalidChars']">
+                    Numbers, special Symbols not allowed
+                </span>
+                <span *ngIf="contactForm.get('person_name')?.errors?.['maxlength']">
+                    Maximum 30 characters allowed
+                </span>
+            </mat-error>
+
+              </mat-form-field>
+
           </div>
 
           <!-- Phone Number -->
+          
           <div class="col-md-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Phone Number</mat-label>
-              <input matInput type="text" formControlName="phone_no" maxlength="10">
-              <mat-error *ngIf="unidentifiedBodyForm.get('phone_no')?.hasError('pattern')">
-                Please enter a valid 10-digit phone number
-              </mat-error>
-            </mat-form-field>
-          </div>
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Phone Number</mat-label>
+                <input 
+                  matInput 
+                  type="text" 
+                  formControlName="phone_no" 
+                  maxlength="10"
+                  (keypress)="allowOnlyNumbers($event)"
+                >
+                <mat-error *ngIf="contactForm.get('phone_no')?.invalid && contactForm.get('phone_no')?.touched">
+                  <span *ngIf="contactForm.get('phone_no')?.errors?.['invalidChars']">
+                    Only numbers are allowed.
+                  </span>
+                  <span *ngIf="contactForm.get('phone_no')?.errors?.['pattern']">
+                    Please enter a valid phone number (1–10 digits).
+                  </span>
+                </mat-error>
+              </mat-form-field>
+
+            </div>
+
 
           <!-- Email -->
+    
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email_id">
-              <mat-error *ngIf="unidentifiedBodyForm.get('email_id')?.hasError('pattern')">
-                Please enter a valid email address
+              <input
+                matInput
+                type="email"
+                formControlName="email_id"
+                placeholder="Email"
+                maxlength="50"
+              />
+
+              <mat-error *ngIf="contactForm.get('email_id')?.touched && contactForm.get('email_id')?.invalid">
+                <span *ngIf="contactForm.get('email_id')?.hasError('pattern')">
+                  Please enter valid email. It should start with letter.
+                </span>
+                <span *ngIf="contactForm.get('email_id')?.hasError('maxlength')">
+                  Email cannot exceed 50 characters.
+                </span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -460,12 +693,18 @@
           <div class="col-md-12">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Additional Notes</mat-label>
-              <textarea matInput type="text" formControlName="additional_details" maxlength="200"></textarea>
-              <mat-error *ngIf="unidentifiedBodyForm.get('additional_details')?.hasError('maxlength')">
+              <textarea matInput
+                        formControlName="additional_details"
+                        maxlength="200"
+                        ></textarea>
+
+              <mat-error *ngIf="contactForm.get('additional_details')?.hasError('maxlength')">
                 Maximum 200 characters allowed
               </mat-error>
             </mat-form-field>
           </div>
+
+
         </div>
       </form>
 
@@ -512,10 +751,12 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Caste</mat-label>
-                <input matInput type="text" formControlName="caste" maxlength="30">
-                <mat-error *ngIf="additionalInfo.controls[i].get('caste')?.hasError('pattern')">
-                  Caste must contain only letters and be up to 30 characters
-                </mat-error>
+                <mat-select formControlName="caste">
+                  <mat-option value="open">Open</mat-option>
+                  <mat-option value="sc">SC</mat-option>
+                  <mat-option value="st">ST</mat-option>
+                  <mat-option value="obc">OBC</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
 
@@ -523,10 +764,17 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Subcaste</mat-label>
-                <input matInput type="text" formControlName="subcaste" maxlength="30">
-                <mat-error *ngIf="additionalInfo.controls[i].get('subcaste')?.hasError('pattern')">
-                  Subcaste must contain only letters and be up to 30 characters
-                </mat-error>
+                <mat-select formControlName="subcaste">
+                  <mat-option value="mahar">Mahar</mat-option>
+                  <mat-option value="chambhar">Chambhar</mat-option>
+                  <mat-option value="brahmin">Brahmin</mat-option>
+                  <mat-option value="gurdian">Gurdian</mat-option>
+                  <mat-option value="maratha">Maratha</mat-option>
+                  <mat-option value="rajput">Rajput</mat-option>
+                  <mat-option value="jain">Jain</mat-option>
+                  <mat-option value="teli">Teli</mat-option>
+                  <mat-option value="kumbhar">Kumbhar</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
 
@@ -539,6 +787,12 @@
                   <mat-option value="married">Married</mat-option>
                   <mat-option value="divorced">Divorced</mat-option>
                   <mat-option value="widowed">Widowed</mat-option>
+                  <mat-option value="separated">Separated</mat-option>
+                  <mat-option value="annulled">Annulled</mat-option>
+                  <mat-option value="in_relationship">In a Relationship</mat-option>
+                  <mat-option value="engaged">Engaged</mat-option>
+                  <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
+                  <mat-option value="unknown">Unknown</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -555,6 +809,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
+
 
             <!-- Mother Tongue -->
             <div class="col-md-3">
@@ -573,12 +828,13 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Other Known Languages</mat-label>
                 <input matInput type="text" formControlName="other_known_languages">
+                <!-- <mat-hint>Enter up to 5 languages separated by commas</mat-hint>
                 <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('tooManyLanguages')">
                   Maximum 5 languages allowed
                 </mat-error>
                 <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('invalidLanguageChars')">
                   Languages can only contain letters
-                </mat-error>
+                </mat-error> -->
               </mat-form-field>
             </div>
 
@@ -597,13 +853,34 @@
             </div>
 
             <!-- Identification Card Number -->
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Identification Card Number</mat-label>
                 <input matInput type="text" formControlName="id_no">
                 <mat-error *ngIf="additionalInfo.controls[i].get('id_no')?.hasError('pattern')">
                   ID number must be alphanumeric
                 </mat-error>
+              </mat-form-field>
+            </div> -->
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Identification Card Number</mat-label>
+                <input matInput 
+                      type="text" 
+                      formControlName="id_no"
+                      maxlength="15"
+                      (blur)="additionalInfo.controls[i].get('id_no')"
+                      (keypress)="preventSpecialCharacters($event)">
+  
+                <mat-error *ngIf="additionalInfo.controls[i].get('id_no')?.hasError('maxlength')">
+                  Maximum 15 characters or allowed
+                </mat-error>
+
+                <mat-error *ngIf="additionalInfo.controls[i].get('id_no')?.hasError('specialChars') && additionalInfo.controls[i].get('id_no')?.touched">
+                  Special characters are not allowed
+                </mat-error>
+                
               </mat-form-field>
             </div>
 
@@ -616,15 +893,25 @@
             </div>
 
             <!-- Occupation -->
-            <div class="col-md-6">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Occupation</mat-label>
-                <input matInput type="text" formControlName="occupation_details" maxlength="30">
-                <mat-error *ngIf="additionalInfo.controls[i].get('occupation_details')?.hasError('maxlength')">
-                  Maximum 30 characters allowed
-                </mat-error>
-              </mat-form-field>
-            </div>
+        
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Occupation</mat-label>
+                  <input matInput 
+                        type="text" 
+                        formControlName="occupation_details"
+                        (blur)="additionalInfo.controls[i].get('occupation_details')?.markAsTouched()"
+                        (keypress)="preventSpecialCharacters($event)"/>
+
+          
+                  <mat-error *ngIf="additionalInfo.controls[i].get('occupation_details')?.hasError('maxlength')">
+                    Maximum 30 characters allowed
+                  </mat-error>
+                  <mat-error *ngIf="additionalInfo.controls[i].get('occupation_details')?.hasError('pattern')">
+                Special characters are not allowed
+              </mat-error>
+                </mat-form-field>
+              </div>
           </div>
         </div>
       </div>
@@ -675,41 +962,74 @@
               type="file"
               accept="image/*,application/pdf"
               hidden
-              (change)="onFileSelect($event, 'firs', i, 'document')"
+              (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
             />
           </div>
 
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Police Station Name</mat-label>
-              <input matInput type="text" formControlName="police_station" maxlength="50">
-              <mat-error *ngIf="firs.controls[i].get('police_station')?.hasError('pattern')">
-                Police station name must contain only letters and be up to 50 characters
-              </mat-error>
+              <mat-label>Police Station Name & Address</mat-label>
+              <mat-select formControlName="police_station">
+                <mat-option *ngFor="let station of policeStations" [value]="station.id">
+                  {{ station.name }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 
           <!-- Investigating Officer Name -->
           <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Investigating Officer's Name</mat-label>
+            <!-- <mat-form-field appearance="outline" class="w-100"> -->
+              <!-- <mat-label>Investigating Officer's Name</mat-label>
               <input matInput type="text" formControlName="investigation_officer_name" maxlength="30">
               <mat-error *ngIf="firs.controls[i].get('investigation_officer_name')?.hasError('pattern')">
                 Name must contain only letters and be up to 30 characters
               </mat-error>
+            </mat-form-field> -->
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Investigating Officer's Name</mat-label>
+              <input 
+                matInput 
+                type="text" 
+                formControlName="investigation_officer_name" 
+                maxlength="30"
+                (keypress)="allowOnlyLetters($event, 'investigation_officer_name', 'firsForm')"
+              >
+              <mat-error *ngIf="firs.controls[i].get('investigation_officer_name')?.errors">
+                <span *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['invalidChars']">
+                  Name must contain only letters and spaces
+                </span>
+                <span *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['maxlength']">
+                  Maximum 30 characters allowed
+                </span>
+              </mat-error>
             </mat-form-field>
+
           </div>
 
           <!-- Investigating Officer Contact -->
+
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Contact Number</mat-label>
-              <input matInput type="text" formControlName="investigation_officer_contacts">
-              <mat-error *ngIf="firs.controls[i].get('investigation_officer_contacts')?.hasError('pattern')">
-                Please enter a valid phone number
+              <input 
+                matInput 
+                type="text" 
+                formControlName="investigation_officer_contacts"
+                maxlength="10"
+                (keypress)="allowOnlyNumbers($event)"
+              >
+              <mat-error *ngIf="firs.controls[i].get('investigation_officer_contacts')?.touched && firs.controls[i].get('investigation_officer_contacts')?.invalid">
+                <span *ngIf="firs.controls[i].get('investigation_officer_contacts')?.errors?.['invalidChars']">
+                  Only numbers are allowed.
+                </span>
+                <span *ngIf="firs.controls[i].get('investigation_officer_contacts')?.errors?.['pattern']">
+                  Please enter a valid phone number (1–15 digits).
+                </span>
               </mat-error>
             </mat-form-field>
           </div>
+
         </div>
       </div>
     </mat-card>
@@ -726,29 +1046,32 @@
     <mat-card class="card p-4 mb-1">
       <div formArrayName="consent">
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-          <div class="col-md-12 consent-link">
-            <a  (click)="openConsentDialog()">Click to open and acknowledge the consent document before proceeding.</a>
+          <div class="col-md-12 consent-link d-flex align-items-center p-4 " style="gap: 10px; padding: 10px 0;margin-left: 15px;">
+            <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
+              style="width: 18px; height: 18px; cursor: pointer;" />
+            <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: #333;">
+              To proceed, please open the consent document and acknowledge it by checking the box.
+            </label>
           </div>
+
+
         </div>
       </div>
     </mat-card>
-  
-  
-      <!-- Submit & Cancel Buttons -->
-      <div class="d-flex justify-content-between mt-4 space-down">
-        <button mat-flat-button color="primary">Cancel</button>
 
-        <span
-          [matTooltip]="'Please accept the consent  before submitting.'"
-          [matTooltipDisabled]="consent.controls[0].get('is_consent')?.value"
-          matTooltipPosition="above"
-        >
-          <button mat-flat-button color="primary" class="ms-auto"
-                  [disabled]="!consent.controls[0].get('is_consent')?.value">
-            SUBMIT
-          </button>
-        </span>
-      </div>
-  
-    </form>
-  </div>
+
+    <!-- Submit & Cancel Buttons -->
+    <div class="d-flex justify-content-between mt-4 space-down">
+      <button mat-flat-button color="primary">Cancel</button>
+
+      <span [matTooltip]="'Please accept the consent  before submitting.'"
+        [matTooltipDisabled]="consent.controls[0].get('is_consent')?.value" matTooltipPosition="above">
+        <button mat-flat-button color="primary" class="ms-auto"
+          [disabled]="!consent.controls[0].get('is_consent')?.value">
+          SUBMIT
+        </button>
+      </span>
+    </div>
+
+  </form>
+</div>

@@ -4,8 +4,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { Component, OnInit ,AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup ,FormArray } from '@angular/forms';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, AbstractControl, ValidatorFn } from '@angular/forms';
 
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
@@ -46,13 +46,13 @@ import { MpconsentComponent } from './mpconsent/mpconsent.component';
     ReactiveFormsModule,
     CommonModule,
     MatIconModule,
-    NgxMaterialTimepickerModule ,
+    NgxMaterialTimepickerModule,
   ],
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
-  providers: [provideNativeDateAdapter(),DatePipe],
+  providers: [provideNativeDateAdapter(), DatePipe],
 })
-export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
+export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
   storedPersonId: string | null = null;
@@ -60,20 +60,20 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   marker!: L.Marker | null;
   latitude: number | null = null;
   longitude: number | null = null;
-  markerMissing: any; 
+  markerMissing: any;
   showLoader = false;
   loading = false;
   progress = 0;
   geocoder: any;
-  markerLayer: any; 
-  fileToUpload:any
+  markerLayer: any;
+  fileToUpload: any
   age: number | any;
   addedAddresses: any[] = [];
   missingPersonForm!: FormGroup;
   latcoordinate: any
   lngcoordinate: any
   personForm!: FormGroup;
-  selectedMapId = 'defaultMapId'; 
+  selectedMapId = 'defaultMapId';
   states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
@@ -94,25 +94,32 @@ export class AppFormLayoutsComponent implements OnInit , AfterViewInit{
   today: string;
 
 
-  constructor(private fb: FormBuilder,private formapi:FormApiService,private datePipe: DatePipe, private toastr: ToastrService,private dialog: MatDialog) {
+  constructor(private fb: FormBuilder, private formapi: FormApiService, private datePipe: DatePipe, private toastr: ToastrService, private dialog: MatDialog) {
     this.today = new Date().toISOString().split('T')[0];
   }
 
-openConsentDialog() {
-  const dialogRef = this.dialog.open(MpconsentComponent, {
-    width: '80vw',  
-    maxWidth: '90vw' ,
-    height: '80vh',
-    maxHeight: '90vh',
-    autoFocus: false
-  });
+  openConsentDialog() {
+    const dialogRef = this.dialog.open(MpconsentComponent, {
+      width: '80vw',
+      maxWidth: '90vw',
+      height: '80vh',
+      maxHeight: '90vh',
+      autoFocus: false
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.consent.controls[0].get('is_consent')?.setValue(true);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.consent.controls[0].get('is_consent')?.setValue(true);
+      }
+    });
+  }
+
+   onConsentChange(event: Event) {
+      const checked = (event.target as HTMLInputElement).checked;
+      if (checked) {
+        this.openConsentDialog();
+      }
     }
-  });
-}
 
 
   ngOnInit(): void {
@@ -150,12 +157,12 @@ openConsentDialog() {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.initMap();  
+      this.initMap();
     }, 0);
   }
 
-  getperson(){
-    this.formapi.getallPerson().subscribe((data)=>{
+  getperson() {
+    this.formapi.getallPerson().subscribe((data) => {
       console.log(data)
     })
   }
@@ -170,38 +177,148 @@ openConsentDialog() {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
-  
+
+  alphabeticValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (!control.value) return null;
+
+      const value = control.value.trim();
+
+      // Check if it's just spaces after trimming
+      if (value === '') {
+        return { onlySpaces: true };
+      }
+
+      // Check for leading space in original value (before trimming)
+      if (/^\s/.test(control.value)) {
+        return { leadingSpace: true };
+      }
+
+      // Allow only letters and spaces between words (e.g., "John Doe")
+      if (!/^[A-Za-z ]+$/.test(value)) {
+        return { invalidCharacters: true };
+      }
+
+      return null; // Valid input
+    };
+  }
+  pastDateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const selectedDate = control.value;
+      if (!selectedDate) return null;
+
+      const today = new Date();
+      // Remove time portion for comparison
+      today.setHours(0, 0, 0, 0);
+
+      if (new Date(selectedDate) > today) {
+        return { futureDate: true };
+      }
+
+      return null;
+    };
+  }
+
+  weightValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (value === null || value === '') return null;
+
+      const numberValue = parseFloat(value);
+      if (isNaN(numberValue) || numberValue < 0 || numberValue > 200) {
+        return { invalidWeight: true };
+      }
+      return null;
+    };
+  }
+
+  textOnlyValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value?.trim();
+      if (!value) return null; // empty is okay
+
+      // Only allow letters and spaces
+      if (!/^[A-Za-z ]+$/.test(value)) {
+        return { invalidCharacters: true };
+      }
+
+      return null;
+    };
+  }
+  numericOnlyValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      const pattern = /^\d+$/; // only digits
+      return pattern.test(value) ? null : { invalidPincode: true };
+    };
+  }
+  landmarkValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      // Allow letters, numbers, spaces, and ,.-#
+      const pattern = /^[a-zA-Z0-9\s,.\-#]+$/;
+      return pattern.test(value) ? null : { invalidLandmark: true };
+    };
+  }
+
+  coordinateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      const pattern = /^-?\d{1,3}(\.\d+)?$/;
+      return pattern.test(value) ? null : { invalidCoordinate: true };
+    };
+  }
+  phoneNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      // Only digits, length between 10 and 15
+      const pattern = /^\d{10,10}$/;
+
+      return pattern.test(value) ? null : { invalidPhone: true };
+    };
+  }
+
+
+
 
   initializeForm() {
     this.personForm = this.fb.group({
       type: ["Missing Person"],
-      full_name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]*$/), Validators.maxLength(30)]],
-      birth_date: [null],
-      age: [{value: '', readonly: true}], 
-      birthtime: [null ],   
+      full_name: ['', Validators.compose([Validators.maxLength(30), this.alphabeticValidator()])],
+      birth_date: [null, this.pastDateValidator()],
+      age: [{ value: '', readonly: true }],
+      birthtime: [null],
       gender: [''],
-      birthplace: [''],
+      birthplace: ['', Validators.compose([Validators.maxLength(30), this.alphabeticValidator()])],
       height: [''],
       height_range: [''],
-      weight: [''],
+      weight: ['', Validators.compose([Validators.min(0), Validators.max(200), this.weightValidator()])],
       blood_group: [''],
       complexion: [''],
       hair_color: [''],
       hair_type: [''],
       eye_color: [''],
       condition: [''],
-      Body_Condition: [''],  
-      birth_mark: [''],
-      distinctive_mark: [''],
+      Body_Condition: [''],
+      birth_mark: ['', [Validators.maxLength(250), this.textOnlyValidator()]],
+      distinctive_mark: ['', [Validators.maxLength(250), this.textOnlyValidator()]],
       photo_photo: [null],
       hospital: [null],
       document_ids: [null],
-      created_by: [null],  
-      updated_by: [null],  
+      created_by: [null],
+      updated_by: [null],
       _is_deleted: [false],
 
-     
-     
+
+
 
       addresses: this.fb.array([]),
       contacts: this.fb.array([]),
@@ -212,37 +329,37 @@ openConsentDialog() {
       addressForm: this.createAddressFormGroup(),
       contactForm: this.createcontactFormGroup(),
     });
-     this.personForm.get('birth_date')?.valueChanges.subscribe(date => {
-    if (date) {
-      // Format the date to ISO
-      const formatted = this.formatDateToISO(date);
-      this.personForm.patchValue({ birth_date: formatted }, { emitEvent: false });
-      
-      // Calculate age
-      const age = this.calculateAge(new Date(date));
-      this.personForm.get('age')?.setValue(age, { emitEvent: false });
-    } else {
-      this.personForm.get('age')?.setValue(null, { emitEvent: false });
-    }
-  });
+    this.personForm.get('birth_date')?.valueChanges.subscribe(date => {
+      if (date) {
+        // Format the date to ISO
+        const formatted = this.formatDateToISO(date);
+        this.personForm.patchValue({ birth_date: formatted }, { emitEvent: false });
+
+        // Calculate age
+        const age = this.calculateAge(new Date(date));
+        this.personForm.get('age')?.setValue(age, { emitEvent: false });
+      } else {
+        this.personForm.get('age')?.setValue(null, { emitEvent: false });
+      }
+    });
     // this.addContact();
     this.addAdditionalInfo();
     this.addLastKnownDetails();
     this.addFIR();
     this.addConsent();
   }
-  
+
   calculateAge(birthDate: Date): number {
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-  
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
   }
-  
-  return age;
-}
   get addresses(): FormArray {
     return this.personForm.get('addresses') as FormArray;
   }
@@ -254,7 +371,7 @@ openConsentDialog() {
   }
   get lastKnownDetails() {
     return this.personForm.get('last_known_details') as FormArray;
- }
+  }
   get firs() {
     return this.personForm.get('firs') as FormArray;
   }
@@ -262,7 +379,7 @@ openConsentDialog() {
     return this.personForm.get('consent') as FormArray;
   }
 
- 
+
 
   addAddress() {
     if (this.personForm.get('addressForm')?.valid) {
@@ -270,7 +387,7 @@ openConsentDialog() {
       console.log("Addresses:", this.addresses.value);
       this.personForm.markAsDirty();
       this.personForm.get('addressForm')?.reset();
-        this.personForm.get('addressForm.address_type')?.setValue('');
+      this.personForm.get('addressForm.address_type')?.setValue('');
       this.personForm.get('addressForm.state')?.setValue('');
       this.personForm.get('addressForm.country')?.setValue('');
     } else {
@@ -287,16 +404,11 @@ openConsentDialog() {
       this.personForm.get('contactForm.type')?.setValue('');
       this.personForm.get('contactForm.social_media_availability')?.setValue('');
       this.personForm.get('contactForm.is_primary')?.setValue('');
-    
+
     } else {
       alert("Please fill in all required fields before adding another contact.");
     }
   }
-  
-  
-  
-  
-
   // Remove an address
   removeAddress(index: number) {
     this.addresses.removeAt(index);
@@ -304,95 +416,106 @@ openConsentDialog() {
   removecontact(index: number) {
     this.contacts.removeAt(index);
   }
-  
 
-  
+
+
   createAddressFormGroup(): FormGroup {
     return this.fb.group({
       address_type: [''],
-      street: [''],
+      street: ['', [Validators.maxLength(30), this.textOnlyValidator()]],
       appartment_no: [''],
-      appartment_name: [''],
-      village: [''],
-      city: [''],
-      district: [''],
+      appartment_name: ['', [Validators.maxLength(30), this.textOnlyValidator()]],
+      village: ['', Validators.compose([Validators.maxLength(30), this.alphabeticValidator()])],
+      city: ['', Validators.compose([Validators.maxLength(30), this.alphabeticValidator()])],
+      district: ['', Validators.compose([Validators.maxLength(30), this.alphabeticValidator()])],
       state: [''],
       user: [this.storedPersonId],
-      pincode: [''],
+      pincode: ['', [Validators.minLength(6), Validators.maxLength(15), this.numericOnlyValidator()]],
       country: [''],
-      landmark_details: [''],
+      landmark_details: ['', [Validators.maxLength(50), this.landmarkValidator()]],
       location: this.fb.group({
-        latitude: [''],
-        longitude: [''],
+        latitude: ['', [Validators.required, this.coordinateValidator()]],
+        longitude: ['', [Validators.required, this.coordinateValidator()]],
       }),
       created_by: [this.storedPersonId],
-      updated_by:[this.storedPersonId],
+      updated_by: [this.storedPersonId],
     });
   }
-  
 
-  createcontactFormGroup():FormGroup {
-     return this.fb.group({
-        phone_no: [''],
-        country_cd: [''],
-        email_id: [''],
-        type: [''], // Should be a dropdown with ContactTypeChoices
-        company_name: [''],
-        job_title: [''],
-        website_url: [''],
-        social_media_url: [''],
-        social_media_availability: [''], // Should be a dropdown with SocialMediaChoices
-        additional_details: [''],
-        is_primary: [false],
-        user: [this.storedPersonId],
-        hospital: [null],
-        police_station: [null],
-        person: [''],
-        created_by:  [this.storedPersonId],
-        updated_by:  [this.storedPersonId],
-      })
-    
+
+  createcontactFormGroup(): FormGroup {
+    return this.fb.group({
+      phone_no: ['', [this.phoneNumberValidator()]],
+      country_cd: [''],
+      email_id: ['', Validators.compose([
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)])],
+      type: [''],
+      company_name: ['', Validators.compose([
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-zA-Z ]+$/)
+      ])],
+      job_title: ['', Validators.compose([
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-zA-Z ]+$/)
+      ])],
+      website_url: ['', Validators.pattern(/^(https?:\/\/)?([\w\-]+\.)+[\w]{2,}(\/\S*)?$/)],
+      social_media_url: ['', Validators.compose([
+        Validators.maxLength(100),
+        Validators.pattern(/^(https?:\/\/)?((([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})|(\d{1,3}(\.\d{1,3}){3}))(:\d+)?(\/[^\s]*)?$/)
+      ])],
+      social_media_availability: [''],
+      additional_details: ['', Validators.maxLength(200)],
+      is_primary: [false],
+      user: [this.storedPersonId],
+      hospital: [null],
+      police_station: [null],
+      person: [''],
+      created_by: [this.storedPersonId],
+      updated_by: [this.storedPersonId],
+    })
+
   }
-  
+
   addAdditionalInfo() {
     this.additionalInfo.push(
       this.fb.group({
-        caste: [''], 
+        caste: [''],
         subcaste: [''],
         marital_status: [''],
         religion: [''],
         mother_tongue: [''],
-        other_known_languages: [''], 
-        id_type: [''], // Dropdown - IdTypeChoices
-        id_no: [''], // Alphanumeric check
+        other_known_languages: [''],
+        id_type: [''], 
+        id_no: [''], 
         education_details: [''],
         occupation_details: [''],
-        
-        user:  [this.storedPersonId],
+
+        user: [this.storedPersonId],
         person: [''],
-        created_by:  [this.storedPersonId],
-        updated_by:  [this.storedPersonId],
+        created_by: [this.storedPersonId],
+        updated_by: [this.storedPersonId],
       })
     );
   }
-  
-  addLastKnownDetails() { 
+
+  addLastKnownDetails() {
     this.lastKnownDetails.push(
       this.fb.group({
         person_photo: [null], // URL or Base64 encoded image
         reference_photo: [null], // URL or Base64 encoded image
-        missing_time: [null ], // Date-Time Picker
+        missing_time: [null], // Date-Time Picker
         missing_date: [''], // Date Picker
-        last_seen_location: [''],
-        missing_location_details: [''],
+         missing_location_details: ['', Validators.maxLength(200)],
+        last_seen_location: ['', Validators.maxLength(200)],
         address: [null], // Should be linked with Address entity
         person: [''], // Should be linked with Person entity
-        created_by:  [this.storedPersonId],
-        updated_by:  [this.storedPersonId],
+        created_by: [this.storedPersonId],
+        updated_by: [this.storedPersonId],
       })
     );
   }
-  
+
   addFIR() {
     this.firs.push(
       this.fb.group({
@@ -404,13 +527,13 @@ openConsentDialog() {
         police_station: [null], // ForeignKey to PoliceStation
         document: [null], // ForeignKey to Document
         person: [''], // ForeignKey to Person
-        
-        created_by:  [this.storedPersonId],
-        updated_by:  [this.storedPersonId],
+
+        created_by: [this.storedPersonId],
+        updated_by: [this.storedPersonId],
       })
     );
   }
-  
+
   addConsent() {
     this.consent.push(
       this.fb.group({
@@ -418,11 +541,11 @@ openConsentDialog() {
         person: [''],
         is_consent: [false],
         created_by: [this.storedPersonId],
-        updated_by:[this.storedPersonId],
+        updated_by: [this.storedPersonId],
       })
     );
   }
-  
+
 
   // Remove dynamically added fields
   removeAdditionalInfo(index: number) {
@@ -449,7 +572,7 @@ openConsentDialog() {
     this.map.on('click', (event: L.LeafletMouseEvent) => {
       this.updateLocation(event.latlng.lat, event.latlng.lng);
     });
- }
+  }
 
 
   updateLocation(lat: number, lng: number): void {
@@ -518,23 +641,23 @@ openConsentDialog() {
       this.selectedFile = file;
     }
   }
-  
+
 
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
-        if (!this.selectedFiles[section]) {
-            this.selectedFiles[section] = [];
-        }
-        if (!this.selectedFiles[section][index]) {
-            this.selectedFiles[section][index] = {};
-        }
-        this.selectedFiles[section][index][field] = file;
-        this.getFormArray(section).at(index).get(field)?.setValue(file.name);
+      if (!this.selectedFiles[section]) {
+        this.selectedFiles[section] = [];
+      }
+      if (!this.selectedFiles[section][index]) {
+        this.selectedFiles[section][index] = {};
+      }
+      this.selectedFiles[section][index][field] = file;
+      this.getFormArray(section).at(index).get(field)?.setValue(file.name);
     }
   }
-  
-  
+
+
   removeFile(section: string, index: number, field: string) {
     this.getFormArray(section).at(index).get(field)?.setValue(null);
   }
@@ -547,30 +670,30 @@ openConsentDialog() {
 
   onSubmit() {
     const formData = new FormData();
-     // Validate the personForm before proceeding
-  if (this.personForm.invalid) {
-    this.toastr.error('Please fill out all required fields', 'Error');
-    return; // Prevent submitting if the form is invalid
-  }
+    // Validate the personForm before proceeding
+    if (this.personForm.invalid) {
+      this.toastr.error('Please fill out all required fields', 'Error');
+      return; // Prevent submitting if the form is invalid
+    }
 
-  // Clear the addresses and contacts array if you're about to add new ones
-  this.addresses.clear();
-  this.contacts.clear();
-  
+    // Clear the addresses and contacts array if you're about to add new ones
+    this.addresses.clear();
+    this.contacts.clear();
+
     const addressFormValue = this.personForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
       this.addresses.push(this.fb.group(addressFormValue));
     }
-  
+
     const contactFormValue = this.personForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
       this.contacts.push(this.fb.group(contactFormValue));
     }
-  
+
     const birthDate = this.personForm.get('birth_date')?.value;
     const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
     const birthTime = this.formatTime(this.personForm.get('birthtime')?.value);
-  
+
     const lastKnownDetails = this.personForm.get('last_known_details')?.value;
     if (lastKnownDetails && lastKnownDetails.length > 0) {
       lastKnownDetails.forEach((detail: any) => {
@@ -582,7 +705,7 @@ openConsentDialog() {
         }
       });
     }
-  
+
     // Create a clean JSON object
     const payload = {
       ...this.personForm.value,
@@ -591,18 +714,18 @@ openConsentDialog() {
       addresses: this.addresses.value,
       contacts: this.contacts.value,
     };
-  
+
     delete payload.addressForm;
     delete payload.contactForm;
-  
+
     // Append JSON data as a Blob (important!)
     formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-  
+
     // Append image file if available
     if (this.selectedFile) {
-      formData.append('photo_photo', this.selectedFile); 
+      formData.append('photo_photo', this.selectedFile);
     }
-  
+
     this.formapi.postMissingPerson(formData).subscribe({
       next: (response) => {
         this.toastr.success('Missing Person Added Successfully', 'Success');
@@ -617,32 +740,32 @@ openConsentDialog() {
       }
     });
   }
-  
+
 
   // onSubmit() {
-    
+
   //   const addressFormValue = this.personForm.get('addressForm')?.value;
   //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
   //     this.addresses.push(this.fb.group(addressFormValue)); 
   //   }
-  
+
   //   const contactFormValue = this.personForm.get('contactForm')?.value;
   //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
   //     this.contacts.push(this.fb.group(contactFormValue)); 
   //   }
-  
+
   //   const birthDate = this.personForm.get('birth_date')?.value;
   //   const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); 
-  
+
   //   let finalBirthDate = formattedBirthDate;
   //   if (birthDate instanceof Date) {
   //     finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  
   //   }
-  
+
   //   // Format birthtime (if any)
   //   const birthTime = this.personForm.get('birthtime')?.value;
   //   const formattedBirthTime = this.formatTime(birthTime);
-  
+
   //   const lastKnownDetails = this.personForm.get('last_known_details')?.value;
   //   if (lastKnownDetails && lastKnownDetails.length > 0) {
   //     lastKnownDetails.forEach((detail: { missing_date: string | number | Date | null; missing_time: string | null; }) => {
@@ -661,14 +784,14 @@ openConsentDialog() {
   //     addresses: this.addresses.value, 
   //     contacts: this.contacts.value,  
   //   };
- 
-    
+
+
   //   delete payload.addressForm;
   //   delete payload.contactForm;
-  
+
   //   // Log the payload for debugging purposes
   //   console.log("Payload Sent to Backend:", payload);
-  
+
   //   this.formapi.postMissingPerson(payload).subscribe({
   //     next: (response) => {
   //       console.log('Person added successfully!', response);
@@ -685,11 +808,11 @@ openConsentDialog() {
   //   });
   // }
 
-  
-  
+
+
   formatTime(time: string): string {
-    const formattedTime = time ? time.replace(/[“”]/g, '"') : ''; 
+    const formattedTime = time ? time.replace(/[“”]/g, '"') : '';
     return formattedTime;
   }
-  
+
 }
