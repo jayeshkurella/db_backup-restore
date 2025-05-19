@@ -20,12 +20,15 @@
       <div class="row g-3 m-2">
         <div class="d-flex flex-wrap align-items-center w-100">
           <!-- Full Name -->
-          <mat-form-field
-            appearance="outline"
-            class="col-12 col-md-6 col-lg-4 border_darkk"
-          >
+          <mat-form-field appearance="outline" class="col-12 col-md-6 col-lg-4 border_darkk">
             <mat-label>Full Name</mat-label>
             <input matInput type="text" formControlName="full_name" />
+            <mat-error *ngIf="personForm.get('full_name')?.hasError('pattern')">
+              Only alphabetic characters allowed
+            </mat-error>
+            <mat-error *ngIf="personForm.get('full_name')?.hasError('maxlength')">
+              Maximum 30 characters allowed
+            </mat-error>
           </mat-form-field>
 
           <!-- Date of Birth -->
@@ -49,9 +52,9 @@
           </mat-form-field>
 
           <!-- Age -->
-          <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
+           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
             <mat-label>Age</mat-label>
-            <input matInput type="number" formControlName="age" />
+            <input matInput type="number" formControlName="age" readonly />
           </mat-form-field>
           <!-- Gender -->
           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
@@ -284,8 +287,8 @@
 
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Apartment Number</mat-label>
-                <input matInput type="text" formControlName="appartment_no" />
+                <mat-label>Apartment Name</mat-label>
+                <input matInput type="text" formControlName="appartment_name" />
               </mat-form-field>
             </div>
 
@@ -1002,7 +1005,7 @@
     >
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
-        consent
+        Consent
       </h5>
     </div>
 

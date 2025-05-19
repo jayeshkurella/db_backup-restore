@@ -86,15 +86,16 @@
 
         <!-- Height -->
         <div class="col-12 col-md-3">
-          <mat-form-field appearance="outline" class="w-100">
+           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Height (cm)</mat-label>
-            <input matInput type="number" formControlName="height" max="250" />
-            <mat-error *ngIf="unidentifiedBodyForm.get('height')?.hasError('max')">
-              Height cannot exceed 250cm
-            </mat-error>
-            <mat-error *ngIf="unidentifiedBodyForm.get('height')?.hasError('pattern')">
-              Please enter a valid number
-            </mat-error>
+            <mat-select formControlName="height_range">
+              <mat-option value="<150">Less than 150 cm</mat-option>
+              <mat-option value="150-160">150 - 160 cm</mat-option>
+              <mat-option value="161-170">161 - 170 cm</mat-option>
+              <mat-option value="171-180">171 - 180 cm</mat-option>
+              <mat-option value="181-190">181 - 190 cm</mat-option>
+              <mat-option value=">190">More than 190 cm</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
 
@@ -717,7 +718,7 @@
     <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px;">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
-        consent
+        Consent
       </h5>
     </div>
 

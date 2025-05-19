@@ -175,9 +175,9 @@ openConsentDialog() {
   initializeForm() {
     this.personForm = this.fb.group({
       type: ["Missing Person"],
-      full_name: [''],
+      full_name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]*$/), Validators.maxLength(30)]],
       birth_date: [null],
-      age: [''],
+      age: [{value: '', readonly: true}], 
       birthtime: [null ],   
       gender: [''],
       birthplace: [''],
@@ -212,12 +212,19 @@ openConsentDialog() {
       addressForm: this.createAddressFormGroup(),
       contactForm: this.createcontactFormGroup(),
     });
-    this.personForm.get('birth_date')?.valueChanges.subscribe(date => {
-      if (date) {
-        const formatted = this.formatDateToISO(date);
-        this.personForm.patchValue({ birth_date: formatted }, { emitEvent: false });
-      }
-    });
+     this.personForm.get('birth_date')?.valueChanges.subscribe(date => {
+    if (date) {
+      // Format the date to ISO
+      const formatted = this.formatDateToISO(date);
+      this.personForm.patchValue({ birth_date: formatted }, { emitEvent: false });
+      
+      // Calculate age
+      const age = this.calculateAge(new Date(date));
+      this.personForm.get('age')?.setValue(age, { emitEvent: false });
+    } else {
+      this.personForm.get('age')?.setValue(null, { emitEvent: false });
+    }
+  });
     // this.addContact();
     this.addAdditionalInfo();
     this.addLastKnownDetails();
@@ -225,6 +232,17 @@ openConsentDialog() {
     this.addConsent();
   }
   
+  calculateAge(birthDate: Date): number {
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  
+  return age;
+}
   get addresses(): FormArray {
     return this.personForm.get('addresses') as FormArray;
   }
