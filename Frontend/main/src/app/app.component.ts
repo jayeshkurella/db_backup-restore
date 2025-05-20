@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoginApiService } from './pages/authentication/side-login/login-api.service';
 
 @Component({
     selector: 'app-root',
@@ -7,5 +8,12 @@ import { RouterOutlet } from '@angular/router';
     templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'Modernize Angular Admin Tempplate';
+  constructor(private authService: LoginApiService) {}
+
+  ngOnInit(): void {
+  const savedUser = localStorage.getItem('user');
+  if (savedUser) {
+    this.authService.setUser(JSON.parse(savedUser));
+  }
+}
 }

@@ -40,3 +40,28 @@
     
   }
 }
+/* Container to control hover behavior */
+.image-container {
+  display: inline-block; 
+  overflow: visible !important; /* Allows image to expand outside container */
+}
+
+/* Default small rounded image */
+.hover-zoom {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%; /* Fully rounded (adjust if needed) */
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Bigger size on hover */
+.hover-zoom:hover {
+  transform: scale(2.0); /* Adjust scale factor as needed */
+  z-index: 0; /* Ensures it appears above other elements */
+  position: relative; /* Needed for proper layering */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Optional: adds depth */
+}
+
+

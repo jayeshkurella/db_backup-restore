@@ -59,5 +59,14 @@ export class UnidentifiedBodiesDialogComponent {
     }
   
 
-  
+  getPhotoUrl(person: any): string {
+  const type = person?.type;
+
+  if (type === 'Unidentified Body') {
+    return 'assets/old/images/body_default.jpeg'; // Default for Unidentified Body
+  }
+
+  return 'assets/old/images/body_default.jpeg'; // Default for everyone else
+}
+
 }

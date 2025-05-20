@@ -383,6 +383,8 @@ hasFiltersApplied(): boolean {
     !this.filters.blood_group &&
     !this.filters.height_range
   );
+
+  
 }
 
 
@@ -396,6 +398,15 @@ hasFiltersApplied(): boolean {
 
 
 
+getPhotoUrl(person: any): string {
+  const type = person?.type;
+
+  if (type === 'Unidentified Body') {
+    return 'assets/old/images/body_default.jpeg'; // Special default for Unidentified Body
+  }
+
+  return 'assets/old/images/body_default.jpeg'; // One default image for everyone else
+}
 
 
 

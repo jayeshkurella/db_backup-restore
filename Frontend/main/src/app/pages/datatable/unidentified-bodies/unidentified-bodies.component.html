@@ -198,7 +198,7 @@
 </mat-card>
 <!-- Show message when filters are not applied -->
 <div *ngIf="!filtersApplied" class="text-center text-muted mt-3">
-  Oops! Looks like you need to apply some filters to start your search
+  Kindly apply some filters to start your search.
 </div>
 
 <mat-tab-group class="custom-tabs m-1 mb-1 ">
@@ -228,8 +228,12 @@
               <ng-container matColumnDef="photo">
                 <th mat-header-cell *matHeaderCellDef>Photo</th>
                 <td mat-cell *matCellDef="let person">
-                  <img [src]="person.photo_photo ? (environment.ImgUrlss + person.photo_photo) : 'assets/old/images/Chhaya.png'"
-                       alt="Person Photo" class="rounded-circle" width="60" />
+             <img
+          [src]="getPhotoUrl(person)"
+          alt="Person Photo"
+          class="rounded-circle"
+          width="50"
+        />
                 </td>
               </ng-container>
 
@@ -327,12 +331,17 @@
               </ng-container>
 
               <ng-container matColumnDef="photo">
-                <th mat-header-cell *matHeaderCellDef>Photo</th>
-                <td mat-cell *matCellDef="let person">
-                  <img [src]="person.photo_photo ? (environment.ImgUrlss + person.photo_photo) : 'assets/images/pngwing.com.png'"
-                       alt="Person Photo" class="rounded-circle" width="80" />
-                </td>
-              </ng-container>
+              <th mat-header-cell *matHeaderCellDef>Photo</th>
+              <td mat-cell *matCellDef="let person">
+                <img
+              [src]="getPhotoUrl(person)"
+              alt="Person Photo"
+              class="rounded-circle"
+              width="80"
+            />
+              </td>
+            </ng-container>
+
 
               <ng-container matColumnDef="full_name">
                 <th mat-header-cell *matHeaderCellDef>Full Name</th>

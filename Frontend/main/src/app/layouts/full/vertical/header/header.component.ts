@@ -64,7 +64,7 @@ interface quicklinks {
     encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit  {
-
+  user: any;
  
 
   @Input() showToggle = true;
@@ -122,11 +122,16 @@ export class HeaderComponent implements OnInit  {
     private translate: TranslateService,
     private authService: LoginApiService,
     private router: Router,
+    
 
   ) {
     translate.setDefaultLang('en');
   }
   ngOnInit() {
+      this.authService.user$.subscribe(user => {
+    this.user = user;
+  });
+  
     this.authService.profilePic$.subscribe(pic => {
       this.profilePic = pic || 'assets/images/profile/user-1.jpg';
     });    this.authService.isLoggedIn$.subscribe((status) => {
@@ -136,7 +141,13 @@ export class HeaderComponent implements OnInit  {
 
   }
 
+  onImageError(event: Event): void {
+  (event.target as HTMLImageElement).src = 'assets/images/profile/user-1.jpg';
+}
+
   logout() {
+     this.authService.setUser(null);
+    localStorage.removeItem('user');
     this.authService.setProfilePic('');  // Clear the picture
     this.authService.logout();
     this.router.navigate(['/authentication/login']);

@@ -12,6 +12,16 @@ export class LoginApiService {
   public isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
   isLoggedIn$ = this.isLoggedInSubject.asObservable(); 
 
+  private userSubject = new BehaviorSubject<any>(null);
+  user$ = this.userSubject.asObservable();
+
+  setUser(user: any) {
+    this.userSubject.next(user);
+  }
+
+  getUser(): any {
+    return this.userSubject.value;
+  }
   profilePicSubject = new BehaviorSubject<string | null>(null);
   profilePic$ = this.profilePicSubject.asObservable();
 

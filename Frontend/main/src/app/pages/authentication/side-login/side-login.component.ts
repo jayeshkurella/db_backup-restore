@@ -11,35 +11,35 @@ import { GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig, Social
 import { BehaviorSubject } from 'rxjs';
 import { GoogleUserTypeDialogComponent } from './google-user-type-dialog/google-user-type-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-declare var google :any;
+declare var google: any;
 
 @Component({
-    standalone: true,
-    selector: 'app-side-login',
-    imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, BrandingComponent,CommonModule],
-    templateUrl: './side-login.component.html',
-    styleUrls: ['./side-login.component.scss'],
-    providers: [
-      {
-        provide: 'SocialAuthServiceConfig',
-        useValue: {
-          autoLogin: false,
-          providers: [
-            {
-              id: GoogleLoginProvider.PROVIDER_ID,
-              provider: new GoogleLoginProvider('175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com')
-            }
-          ]
-        } as SocialAuthServiceConfig,
-      }
-    ]
-})
-export class AppSideLoginComponent implements AfterViewInit{
-  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
-    isLoggedIn$ = this.isLoggedInSubject.asObservable(); 
-    private isUserLoggedIn(): boolean {
-      return !!localStorage.getItem('authToken'); 
+  standalone: true,
+  selector: 'app-side-login',
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, BrandingComponent, CommonModule],
+  templateUrl: './side-login.component.html',
+  styleUrls: ['./side-login.component.scss'],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com')
+          }
+        ]
+      } as SocialAuthServiceConfig,
     }
+  ]
+})
+export class AppSideLoginComponent implements AfterViewInit {
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  private isUserLoggedIn(): boolean {
+    return !!localStorage.getItem('authToken');
+  }
   user: SocialUser | null = null;
   loggedIn: boolean = false;
 
@@ -51,17 +51,17 @@ export class AppSideLoginComponent implements AfterViewInit{
   isPasswordVisible: boolean = false;
   hidePassword: boolean = true; // Initially hide the password
 
-  constructor(private settings: CoreService,private authService: LoginApiService, private router: Router,private fb: FormBuilder,private toastr: ToastrService,private renderer: Renderer2,private socialAuthService: SocialAuthService,private dialog: MatDialog)  {
+  constructor(private settings: CoreService, private authService: LoginApiService, private router: Router, private fb: FormBuilder, private toastr: ToastrService, private renderer: Renderer2, private socialAuthService: SocialAuthService, private dialog: MatDialog) {
     this.loginForm = this.fb.group({
       email_id: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
-   }
-   ngAfterViewInit(): void {
+  }
+  ngAfterViewInit(): void {
     this.loadGoogleAuthScript();
   }
 
-  
+
 
   get f() {
     return this.loginForm.controls;
@@ -72,47 +72,49 @@ export class AppSideLoginComponent implements AfterViewInit{
     console.log('Form Submitted:', this.loginForm.value);
 
     if (this.loginForm.invalid) {
-        console.log('Invalid Form:', this.loginForm.errors);
-        alert('Please enter a valid email and password.');
-        return;
+      console.log('Invalid Form:', this.loginForm.errors);
+      alert('Please enter a valid email and password.');
+      return;
     }
 
     this.authService.login(this.loginForm.value).subscribe(
-        (response) => {
-            console.log('Login Successful:', response);
-            this.toastr.success('Login successful! Welcome back.', 'Success');
-     // Redirect to intended route (if any), else default
-     const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/forms/Missing-person-form';
-     localStorage.removeItem('redirectAfterLogin');
-     this.router.navigate([redirectUrl]);
-     this.loginForm.reset();
+      (response) => {
+        console.log('Login Successful:', response);
+        this.authService.setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        this.toastr.success('Login successful! Welcome back.', 'Success');
+        // Redirect to intended route (if any), else default
+        const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/forms/Missing-person-form';
+        localStorage.removeItem('redirectAfterLogin');
+        this.router.navigate([redirectUrl]);
+        this.loginForm.reset();
 
-  },
-  (error) => {
-      console.error('Login Failed:', error);
+      },
+      (error) => {
+        console.error('Login Failed:', error);
 
-      if (error.error?.error) {
+        if (error.error?.error) {
           let errorMessage = error.error.error;
 
           if (errorMessage.includes("No account found")) {
-              alert('No account found with this email. Please check or register.');
+            alert('No account found with this email. Please check or register.');
           } else if (errorMessage.includes("Incorrect password")) {
-              alert('Incorrect password. Please try again.');
+            alert('Incorrect password. Please try again.');
           } else if (errorMessage.includes("not approved yet")) {
-              alert('Your account is not approved yet. Please wait for admin approval.');
+            alert('Your account is not approved yet. Please wait for admin approval.');
           } else {
-              alert(errorMessage);
+            alert(errorMessage);
           }
-      } else {
-        this.showError();
+        } else {
+          this.showError();
+        }
       }
+    );
   }
-);
-}
 
-showError() {
-  this.toastr.error('This is not good!', 'Oops!');
-}
+  showError() {
+    this.toastr.error('This is not good!', 'Oops!');
+  }
 
   togglePasswordVisibility(field: string) {
     if (field === 'password') {
@@ -127,7 +129,7 @@ showError() {
         passwordInput.type = 'password';
         toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
       }
-    } 
+    }
   }
 
 
@@ -139,7 +141,7 @@ showError() {
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
-    script.onload = () => this.renderGoogleButton(); 
+    script.onload = () => this.renderGoogleButton();
     document.body.appendChild(script);
   }
   private renderGoogleButton(): void {
@@ -148,7 +150,7 @@ showError() {
         client_id: '175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com',
         callback: this.handleLogin.bind(this),
         prompt: 'select_account',
-        auto_select: false 
+        auto_select: false
       });
       google.accounts.id.renderButton(document.getElementById('google-login'), {
         theme: 'red',
@@ -162,48 +164,49 @@ showError() {
       console.error("Google API script failed to load.");
     }
   }
-  private decodetoken(token:String){
+  private decodetoken(token: String) {
     return JSON.parse(atob(token.split('.')[1]));
   }
   handleLogin(response: any) {
     if (response) {
-        console.log(response);
-        const token = response.credential;
-        sessionStorage.setItem('googleToken', token);
+      console.log(response);
+      const token = response.credential;
+      sessionStorage.setItem('googleToken', token);
 
-        this.authService.loginWithGoogle(token).subscribe(
-            (response: any) => {
-                // Check if the response contains an error about account approval
-                if (response.error && response.error.includes('not approved')) {
-                    // Show error message to user
-                    this.toastr.error(response.error);
-                    return;
-                }
+      this.authService.loginWithGoogle(token).subscribe(
+        (response: any) => {
+          // Check if the response contains an error about account approval
+          if (response.error && response.error.includes('not approved')) {
+            // Show error message to user
+            this.toastr.error(response.error);
+            return;
+          }
+          this.authService.setUser(response.user);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          // Save token and user data
+          localStorage.setItem('profilePic', response.user.picture);
+          localStorage.setItem('authToken', response.token);
+          localStorage.setItem('user_type', response.user.user_type);
+          localStorage.setItem('user_id', response.user.id);
+          // 🔁 Update login status
+          this.authService.isLoggedInSubject.next(true);
 
-                // Save token and user data
-                localStorage.setItem('profilePic', response.user.picture);
-                localStorage.setItem('authToken', response.token);
-                localStorage.setItem('user_type', response.user.user_type);
-                localStorage.setItem('user_id', response.user.id);
-                // 🔁 Update login status
-                this.authService.isLoggedInSubject.next(true);
-
-                // Navigate to form
-                this.router.navigate(['/forms/Missing-person-form']);
-            },
-            (error) => {
-                console.error('Login failed:', error);
-                // Show error message to user
-                if (error.error && error.error.error) {
-                    this.toastr.error(error.error.error);
-                } else {
-                    this.toastr.error('Login failed. Please try again.');
-                }
-            }
-        );
+          // Navigate to form
+          this.router.navigate(['/forms/Missing-person-form']);
+        },
+        (error) => {
+          console.error('Login failed:', error);
+          // Show error message to user
+          if (error.error && error.error.error) {
+            this.toastr.error(error.error.error);
+          } else {
+            this.toastr.error('Login failed. Please try again.');
+          }
+        }
+      );
     }
- }
-  
+  }
+
 
 
 

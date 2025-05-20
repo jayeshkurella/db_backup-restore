@@ -1,14 +1,9 @@
-
-
 <div class="page-container mat-elevation-z2">
   <div class="header-container">
     <h2 class="page-title">Police Station</h2>
     <div>
-      <button *ngIf="isLoggedIn && isAdmin"
-              mat-flat-button
-              color="primary"
-              (click)="navigateToAddStation()"
-              class="action-btn">
+      <button *ngIf="isLoggedIn && isAdmin" mat-flat-button color="primary" (click)="navigateToAddStation()"
+        class="action-btn">
         <mat-icon class="add-icon">add</mat-icon><span style="margin-right: 15px;">Add</span>
       </button>
     </div>
@@ -16,7 +11,7 @@
   <form (ngSubmit)="onSearch()" novalidate>
 
     <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mt-3 mb-2">
-      
+
       <!-- Name -->
       <mat-form-field appearance="outline" class="with-icon flex-grow-1">
         <!-- <mat-label>Name</mat-label> -->
@@ -26,7 +21,7 @@
       <!-- State -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>State</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()" >
+        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()">
           <mat-option value="">All States</mat-option>
           <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
         </mat-select>
@@ -35,7 +30,7 @@
       <!-- District -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>District</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()" >
+        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()">
           <mat-option value="">All Districts</mat-option>
           <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
         </mat-select>
@@ -44,7 +39,7 @@
       <!-- City -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>City</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.city" name="city" >
+        <mat-select [(ngModel)]="searchFilters.city" name="city">
           <mat-option value="">City</mat-option>
           <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
         </mat-select>
@@ -57,50 +52,47 @@
 
     </div>
   </form>
-   <div class="row p-2 mt-1">
+  <div class="row p-2 mt-1">
     <!-- Loading Spinner -->
     <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
       <mat-spinner diameter="50"></mat-spinner>
     </div>
-  
+
     <!-- Police Station Cards -->
     <ng-container *ngIf="!loading">
       <div class="col-sm-6 col-lg-4 d-flex align-items-stretch" *ngFor="let police of total_policestation">
         <mat-card class="cardWithShadow overflow-hidden w-100">
-          
+
           <!-- Image Section -->
           <div class="position-relative">
-            <img
-              *ngIf="police.station_photo; else placeholder"
-              [src]="environment.ImgUrlss + police.station_photo"
-              class="w-100 object-fit-cover p-1"
-              style="height: 200px; border-radius: 8px;"
-              alt="{{ police.name }}"
-            />
-            <ng-template #placeholder>
+          <img [src]="environment.ImgUrlss + police.station_photo"
+                class="w-100 object-fit-cover p-1"
+                style="height: 200px; border-radius: 8px;"
+                alt="{{ police.name }}"
+                (error)="onImageError($event)" />
+
+           <ng-template #placeholder>
               <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
                 <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
               </div>
             </ng-template>
           </div>
-  
+
           <!-- Card Content -->
           <mat-card-content class="p-3">
-  
+
             <!-- Name and Status -->
             <div class="d-flex justify-content-between align-items-start ">
-              <h6 class="fw-bold mb-0" style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
+              <h6 class="fw-bold mb-0"
+                style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
                 {{ police.name }}
               </h6>
-              <span class="badge px-2 py-1"
-                    [ngClass]="{
-                      'bg-success text-white': police.activ_Status === 'Active',
-                      'bg-danger text-white': police.activ_Status !== 'Active'
-                    }">
+              <span class="badge px-2 py-1 bg-warning text-white">
                 {{ police.activ_Status }}
               </span>
+
             </div>
-  
+
             <!-- Address and Contact -->
             <div class="d-flex justify-content-between text-muted f-s-14 mb-5">
               <div class="d-flex align-items-center">
@@ -112,18 +104,18 @@
                 {{ police.police_contact[0]?.phone_no || 'N/A' }}
               </div>
             </div>
-  
+
             <!-- Button -->
             <div class="d-flex justify-content-center mt-3">
               <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMorepolicestationdata(police)">
                 More Info
               </button>
             </div>
-  
+
           </mat-card-content>
         </mat-card>
       </div>
-  
+
       <!-- Empty State -->
       <div *ngIf="total_policestation?.length === 0" class="col-12 text-center py-5">
         <mat-icon class="text-muted" style="font-size: 48px;">location_off</mat-icon>
@@ -134,30 +126,10 @@
   <!-- Pagination -->
   <div class="row mt-3">
     <div class="col-12 d-flex justify-content-center">
-      <mat-paginator *ngIf="!loading && totalItems > 0"
-        [length]="totalItems"
-        [pageSize]="itemsPerPage"
-        [pageIndex]="currentPage - 1"
-        [hidePageSize]="true"
-        (page)="onPageChange($event)"
-        aria-label="Select page">
+      <mat-paginator *ngIf="!loading && totalItems > 0" [length]="totalItems" [pageSize]="itemsPerPage"
+        [pageIndex]="currentPage - 1" [hidePageSize]="true" (page)="onPageChange($event)" aria-label="Select page">
       </mat-paginator>
     </div>
   </div>
-  
+
 </div>
-
-
-
-  
-
-
-
-
-  
-  
-
-
-
- 
-

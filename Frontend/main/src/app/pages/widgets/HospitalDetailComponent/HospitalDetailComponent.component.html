@@ -19,9 +19,11 @@
     <div class="photo-info-section">
       <mat-card class="photo-card mat-elevation-z4">
         <img 
-          [src]="hospital?.hospital_photo ? (environment.ImgUrlss + hospital?.hospital_photo) : 'assets/images/pngwing.com.png'" 
-          alt="Hospital Photo" 
-          class="hospital-photo" />
+  [src]="hospital?.hospital_photo ? (environment.ImgUrlss + hospital.hospital_photo) : '/assets/old/images/hospital_default.png'" 
+  alt="Hospital Photo" 
+  class="hospital-photo" 
+   (error)="onImageError($event)"/>
+
         <mat-card-content class="photo-overlay">
           <div class="quick-info">
             <div class="info-item">

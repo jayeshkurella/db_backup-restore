@@ -14,21 +14,22 @@
         <div class="row g-3">
           <div class="col-md-2">
             <img
-              [src]="environment.ImgUrlss + person.photo_photo"
-              alt="Person Photo"
-              class="img-fluid rounded shadow-sm"
-              style="height: auto; width: 100%; object-fit: cover;"
-            />
+          [src]="environment.ImgUrlss + person.photo_photo"
+          alt="Person Photo"
+          class="img-fluid rounded shadow-sm"
+          style="height: auto; width: 100%; object-fit: cover;"
+          (error)="onImgError($event, person.type, person.gender)"
+        />
           </div>
-          <div class="col-md-10">
+        <div class="col-md-10">
             <div class="row g-3">
               <div class="col-sm-6 col-md-4">
                 <p class="case-detail-label mb-1">Full Name</p>
-                <p class="case-detail-value mb-0">{{ person.full_name || 'N/A' |safeTitlecase}}</p>
+                <p class="case-detail-value mb-0">{{ person.full_name  |safeTitlecase}}</p>
               </div>
               <div class="col-sm-6 col-md-4">
                 <p class="case-detail-label mb-1">Gender</p>
-                <p class="case-detail-value mb-0">{{ person.gender || 'N/A' | safeTitlecase }}</p>
+                <p class="case-detail-value mb-0">{{ person.gender | safeTitlecase }}</p>
               </div>
               <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
                 <p class="case-detail-label mb-1">Age</p>
@@ -40,11 +41,11 @@
               </div>
               <div class="col-sm-6 col-md-4">
                 <p class="case-detail-label mb-1">Blood Group</p>
-                <p class="case-detail-value mb-0">{{ person.blood_group || 'N/A' }}</p>
+                <p class="case-detail-value mb-0">{{ person.blood_group }}</p>
               </div>
               <div class="col-sm-6 col-md-4">
                 <p class="case-detail-label mb-1">Case Type</p>
-                <p class="case-detail-value mb-0">{{ person.type || 'N/A' }}</p>
+                <p class="case-detail-value mb-0">{{ person.type  }}</p>
               </div>
               <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Unidentified Person'">
                 <p class="case-detail-label mb-1">Condition</p>
@@ -73,19 +74,19 @@
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Complexion</p>
-            <p class="case-detail-value mb-0">{{ person.complexion || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.complexion  | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Hair Color</p>
-            <p class="case-detail-value mb-0">{{ person.hair_color || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.hair_color  | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Hair Type</p>
-            <p class="case-detail-value mb-0">{{ person.hair_type || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.hair_type | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Eye Color</p>
-            <p class="case-detail-value mb-0">{{ person.eye_color || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.eye_color  | safeTitlecase}}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Birth Mark</p>
@@ -186,11 +187,11 @@
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Caste</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.caste || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.caste | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Sub Caste</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.subcaste || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.subcaste | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Religion</p>
@@ -198,7 +199,7 @@
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Marital Status</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.marital_status || 'N/A' | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.marital_status  | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Mother Tongue</p>
@@ -228,7 +229,8 @@
       </mat-card>
 
       <!-- Missing Details -->
-      <mat-card class="mb-4 p-3">
+      
+      <mat-card *ngIf="person.type === 'Missing Person'" class="mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Missing Details</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">

@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from django.db.models import Q
 from uuid import UUID
@@ -47,6 +48,7 @@ class BasePersonListView(generics.ListAPIView):
 
 
 class StatusPersonView(BasePersonListView):
+
     """Base view for status-specific endpoints with count"""
     status = None  # To be overridden by subclasses
 
@@ -73,26 +75,32 @@ class StatusPersonView(BasePersonListView):
 
 
 class PendingPersonsView(StatusPersonView):
+    permission_classes = [IsAdminUser]
     status = 'pending'
 
 
 class ApprovedPersonsView(StatusPersonView):
+    permission_classes = [IsAdminUser]
     status = 'approved'
 
 
 class RejectedPersonsView(StatusPersonView):
+    permission_classes = [IsAdminUser]
     status = 'rejected'
 
 
 class OnHoldPersonsView(StatusPersonView):
+    permission_classes = [IsAdminUser]
     status = 'on_hold'
 
 
 class SuspendedPersonsView(StatusPersonView):
+    permission_classes = [IsAdminUser]
     status = 'suspended'
 
 
 class StatusCountView(generics.GenericAPIView):
+    permission_classes = [IsAdminUser]
     def get(self, request):
         base_qs = BasePersonListView().get_queryset()
         return Response({

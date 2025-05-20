@@ -29,6 +29,13 @@ export class PoliceStationDetailsComponent implements OnInit {
     }
   }
 
+  defaultHospitalImage = 'assets/old/images/polices_default.jpeg'; 
+  
+onImageError(event: Event) {
+  const target = event.target as HTMLImageElement;
+  target.src = this.defaultHospitalImage;
+}
+
   ngAfterViewInit(): void {
     if (this.policestation?.address_details?.location) {
       const coords = this.extractLatLng(this.policestation.address_details.location);

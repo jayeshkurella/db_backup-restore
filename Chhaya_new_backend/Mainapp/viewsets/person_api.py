@@ -156,7 +156,7 @@ class PersonViewSet(viewsets.ViewSet):
                     ]
                 }
                 # person = Person.objects.create(**person_data, hospital=hospital)
-                person = Person(**person_data, hospital=hospital)
+                person = Person(**person_data, hospital=hospital,created_by=request.user)
                 logger.debug("Person Created: %s", person.id)
 
                 # Extract zero index address and store it directly in the person model

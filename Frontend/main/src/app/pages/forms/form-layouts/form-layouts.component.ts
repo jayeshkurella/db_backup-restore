@@ -4,7 +4,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, AbstractControl, ValidatorFn } from '@angular/forms';
 
 import * as L from 'leaflet';
@@ -51,6 +51,7 @@ import { MpconsentComponent } from './mpconsent/mpconsent.component';
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
   providers: [provideNativeDateAdapter(), DatePipe],
+  encapsulation: ViewEncapsulation.None
 })
 export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
 

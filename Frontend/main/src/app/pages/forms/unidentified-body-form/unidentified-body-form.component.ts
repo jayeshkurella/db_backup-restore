@@ -248,6 +248,7 @@ preventSpecialCharacters(event: KeyboardEvent) {
         eye_color: [''],
         condition: [''],
         Body_Condition: [''],    
+        death_type: [''],    
         bodies_condition: [[]],      
         hospital: [null],
         document_ids: [''],

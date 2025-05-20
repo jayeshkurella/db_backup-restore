@@ -18,8 +18,8 @@
       <div class="photo-info-section">
         <div class="station-photo-container">
           <img 
-            [src]="policestation?.station_photo ? (environment.ImgUrlss + policestation?.station_photo) : 'assets/images/police-default.png'" 
-            alt="Police Station Photo" 
+            [src]="policestation?.station_photo ? (environment.ImgUrlss + policestation?.station_photo) : 'assets/old/images/polices_default.jpeg'" 
+            (error)="onImageError($event)" 
             class="station-photo mat-elevation-z8" />
           <div class="photo-overlay">
             <div class="quick-info">

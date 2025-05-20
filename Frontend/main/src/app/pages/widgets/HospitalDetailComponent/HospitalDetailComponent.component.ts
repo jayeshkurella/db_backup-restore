@@ -39,6 +39,12 @@ export class HospitalDetailComponentComponent implements OnInit {
     }
   }
 
+  defaultHospitalImage = 'assets/old/images/hospital_default.png'; 
+  onImageError(event: any) {
+  event.target.src = this.defaultHospitalImage;
+}
+
+
   ngAfterViewInit(): void {
     if (this.hospital?.address_details?.location) {
       const coords = this.extractLatLng(this.hospital.address_details.location);

@@ -2,22 +2,14 @@
   <!-- --------------------------------------------------------------- -->
   <!-- Desktop Menu -->
   @if(showToggle) {
-  <button
-    mat-icon-button
-    (click)="toggleCollapsed.emit()"
-    class="d-flex justify-content-center"
-  >
+  <button mat-icon-button (click)="toggleCollapsed.emit()" class="d-flex justify-content-center">
     <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
   </button>
   }
 
   <!-- Mobile Menu -->
   @if(!showToggle) {
-  <button
-    mat-icon-button
-    (click)="toggleMobileNav.emit()"
-    class="d-flex justify-content-center"
-  >
+  <button mat-icon-button (click)="toggleMobileNav.emit()" class="d-flex justify-content-center">
     <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
   </button>
   }
@@ -123,27 +115,22 @@
   >
     <i-tabler name="grid-dots" class="icon-20 d-flex"></i-tabler>
   </button> -->
-  <div class="version-container m-r-8" [ngClass]="{ 'dark-text': options.theme === 'dark', 'light-text': options.theme === 'light' }">
-    <span class="version-text">v1.2.2</span>
+  <div class="version-container m-r-8"
+    [ngClass]="{ 'dark-text': options.theme === 'dark', 'light-text': options.theme === 'light' }">
+    <span class="version-text">v1.2.3</span>
   </div>
-  
+
   <!-- --------------------------------------------------------------- -->
   <!-- langugage Dropdown -->
   <!-- --------------------------------------------------------------- -->
   <button [matMenuTriggerFor]="flags" mat-icon-button class="m-r-5">
-    <img
-      [src]="selectedLanguage.icon"
-      class="rounded-circle object-cover icon-20"
-    />
+    <img [src]="selectedLanguage.icon" class="rounded-circle object-cover icon-20" />
   </button>
   <mat-menu #flags="matMenu" class="cardWithShadow">
     @for(lang of languages; track lang.icon) {
     <button mat-menu-item (click)="changeLanguage(lang)">
       <div class="d-flex align-items-center">
-        <img
-          [src]="lang.icon"
-          class="rounded-circle object-cover m-r-8 icon-20"
-        />
+        <img [src]="lang.icon" class="rounded-circle object-cover m-r-8 icon-20" />
         <span class=" f-s-14">{{ lang.language }}</span>
       </div>
     </button>
@@ -151,13 +138,13 @@
   </mat-menu>
 
   @if(options.theme=='light'){
-    <button mat-icon-button aria-label="lightdark" class="d-flex justify-content-center" (click)="setlightDark('dark')" >
-      <i-tabler class="d-flex icon-22" [name]="'moon'"></i-tabler>
-    </button>
-    }@else{
-    <button mat-icon-button aria-label="lightdark" class="d-flex justify-content-center" (click)="setlightDark('light')">
-      <i-tabler class="d-flex icon-22" [name]="'sun'"></i-tabler>
-    </button>
+  <button mat-icon-button aria-label="lightdark" class="d-flex justify-content-center" (click)="setlightDark('dark')">
+    <i-tabler class="d-flex icon-22" [name]="'moon'"></i-tabler>
+  </button>
+  }@else{
+  <button mat-icon-button aria-label="lightdark" class="d-flex justify-content-center" (click)="setlightDark('light')">
+    <i-tabler class="d-flex icon-22" [name]="'sun'"></i-tabler>
+  </button>
   }
 
   <!-- --------------------------------------------------------------- -->
@@ -210,49 +197,84 @@
   <!-- profile Dropdown -->
   <!-- --------------------------------------------------------------- -->
   <button mat-icon-button [matMenuTriggerFor]="profilemenu" aria-label="Profile" class="m-l-8">
-    <img
-    [src]="profilePic"
-    class="rounded-circle object-cover icon-35 profile-dd"
-    width="35"
-  />
-  
+    <img [src]="profilePic" (error)="onImageError($event)" class="rounded-circle object-cover icon-35 profile-dd"
+      width="35" height="35" alt="Profile Picture" />
   </button>
-  
+
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
+    <!-- User Profile Block -->
+    <div class="p-x-32 p-y-16" *ngIf="user">
+      <h6 class="f-s-16 f-w-600 m-0">User Profile</h6>
+
+      <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
+        <img [src]="user?.profile_image_upload || 'assets/images/default-avatar.png'" (error)="onImageError($event)"
+          class="rounded-circle" width="80" height="80" alt="User" alt="User" />
+        <div class="m-l-16">
+          <h6 class="f-s-14 f-w-600 m-0">
+            {{ user.first_name | titlecase }} {{ user.last_name | titlecase }}
+          </h6>
+          <span class="f-s-14 d-block m-b-4">
+            {{ user.user_type | titlecase }}
+          </span>
+          <span class="d-flex align-items-center">
+            <i-tabler name="mail" class="icon-15 m-r-4 mb-2"></i-tabler>
+            {{ user.email_id }}
+          </span>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center w-100 p-x-32 p-y-16  rounded" *ngIf="isLoggedIn">
+      <!-- Icon on the left -->
+      <div class="me-3">
+        <button mat-mini-fab class="text-primary bg-white shadow-none rounded" [routerLink]="['/authentication/edit-profile']" >
+          <img src="assets/images/svgs/icon-account.svg" width="20" />
+        </button>
+      </div>
+      <div>
+        <div class="d-flex align-items-center">
+          <span class="fw-bold me-2 cursonr" [routerLink]="['/authentication/edit-profile']">My Profile</span>
+        </div>
+        <div class="d-flex align-items-center mt-1">
+          <span class="text">Profile Settings</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center w-100 p-x-32 p-y-16  rounded" *ngIf="isLoggedIn">
+      <!-- Icon on the left -->
+      <div class="me-3">
+        <button mat-mini-fab class="text-primary bg-white shadow-none rounded" [routerLink]="['/authentication/change-password']" >
+          <img src="assets/images/svgs/icon-account.svg" width="20" />
+        </button>
+      </div>
+      <div>
+        <div class="d-flex align-items-center">
+          <span class="fw-bold me-2 cursonr" [routerLink]="['/authentication/change-password']">Change Password</span>
+        </div>
+        <div class="d-flex align-items-center mt-1">
+          <span class="text">Password Settings</span>
+        </div>
+      </div>
+    </div>
+    <!-- Action Buttons -->
     <div class="p-y-12 p-x-32 p-2 m-2">
-  <!-- Login Button -->
-  <a *ngIf="!isLoggedIn" [routerLink]="['/authentication/login']" 
-     mat-stroked-button color="primary" 
-     class="w-100 m-b-8">
-    Log In
+      <!-- Login Button -->
+      <a *ngIf="!isLoggedIn" [routerLink]="['/authentication/login']" mat-stroked-button color="primary"
+        class="w-100 m-b-8">
+        Log In
+      </a>
 
-  </a>
+      <!-- Logout Button -->
+      <button *ngIf="isLoggedIn" mat-stroked-button color="warn" class="w-100" (click)="logout()">
+        Log Out
+      </button>
+    </div>
 
-  <!-- Edit Profile -->
-    <button *ngIf="isLoggedIn" mat-stroked-button color="primary" class="w-100 m-b-8"
-            [routerLink]="['/authentication/edit-profile']">
-      Profile
-    </button>
-  
-  <!-- Change Password Button -->
-  <button *ngIf="isLoggedIn" mat-stroked-button color="accent" 
-          class="w-100 m-b-8" 
-          [routerLink]="['/authentication/change-password']">
-    Change Password
-  </button>
 
-  <!-- <button *ngIf="isLoggedIn" mat-stroked-button color="warn" class="w-100 m-b-8"
-            (click)="confirmDeleteProfile()">
-      Delete Account
-    </button> -->
-  
-  <!-- Logout Button -->
-  <button *ngIf="isLoggedIn" mat-stroked-button color="warn" 
-          class="w-100" 
-          (click)="logout()">
-    Log Out
-  </button>
-</div>
+
+
   </mat-menu>
-  
+
+
 </mat-toolbar>

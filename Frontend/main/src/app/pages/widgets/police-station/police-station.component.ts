@@ -91,7 +91,12 @@ export class PoliceStationComponent implements OnInit {
     this.router.navigate(['/widgets/add-police-station']);
   }
   
-
+  defaultHospitalImage = 'assets/old/images/polices_default.jpeg'; 
+  
+onImageError(event: Event) {
+  const target = event.target as HTMLImageElement;
+  target.src = this.defaultHospitalImage;
+}
   
 
   loading: boolean = false;

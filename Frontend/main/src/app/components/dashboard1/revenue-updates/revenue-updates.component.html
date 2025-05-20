@@ -159,16 +159,18 @@
 
             <!-- Photo Column -->
             <ng-container matColumnDef="photo">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Photo</th>
-              <td mat-cell *matCellDef="let element">
-                <img [src]="getImageUrl(element.properties.photo_photo)" 
-                     alt="Person Photo" 
-                     class="rounded" 
-                     width="40" 
-                     height="40"
-                     style="object-fit: cover;">
-              </td>
-            </ng-container>
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Photo</th>
+            <td mat-cell *matCellDef="let element">
+              <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
+                  alt="Person Photo" 
+                  class="rounded hover-zoom"
+                  width="20" 
+                  height="20"
+                  style="object-fit: cover;"
+                  (error)="onImageError($event, element.properties.type)">
+            </td>
+          </ng-container>
+
 
             <!-- Full Name Column -->
             <ng-container matColumnDef="fullName">
@@ -187,14 +189,21 @@
             </ng-container>
 
             <!-- Gender Column -->
+            
             <ng-container matColumnDef="gender">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Gender</th>
-              <td mat-cell *matCellDef="let element">
-                <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
-                <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">
-                <img *ngIf="element.properties.gender !== 'male' && element.properties.gender !== 'female'" src="assets/old/images/other.png" alt="Other" width="24" height="24">
-              </td>
-            </ng-container>
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Gender</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon 
+                [ngClass]="{
+                  'male-icon': element.properties.gender === 'male',
+                  'female-icon': element.properties.gender === 'female',
+                  'other-icon': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                }">
+                {{ getGenderIcon(element.properties.gender) }}
+              </mat-icon>
+            </td>
+          </ng-container>
+
 
             <!-- City Column -->
             <ng-container matColumnDef="city">
@@ -249,21 +258,31 @@
                 <td mat-cell *matCellDef="let element; let i = index">
                   <ng-container [ngSwitch]="column">
                     <span *ngSwitchCase="'srNo'">{{ i + 1 }}</span>
-                    <span *ngSwitchCase="'photo'">
-                      <img [src]="getImageUrl(element.properties.photo_photo)" 
-                           alt="Person Photo" 
-                           class="rounded" 
-                           width="40" 
-                           height="40"
-                           style="object-fit: cover;">
-                    </span>
+                    <span *ngSwitchCase="'photo'" class="image-container">
+                    <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
+                        alt="Person Photo" 
+                        class="rounded hover-zoom"
+                        width="40" 
+                        height="40"
+                        style="object-fit: cover;"
+                        (error)="onImageError($event, element.properties.type)">
+                  </span>
                     <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
                     <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'gender'">
+                    <!-- <span *ngSwitchCase="'gender'">
                       <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
                       <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">
                       <img *ngIf="element.properties.gender !== 'male' && element.properties.gender !== 'female'" src="assets/old/images/other.png" alt="Other" width="24" height="24">
-                    </span>
+                    </span> -->
+                    <span *ngSwitchCase="'gender'">
+                    <mat-icon 
+                      [ngClass]="{
+                        'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
+                        'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                      }">
+                      {{ getGenderIcon(element.properties.gender) }}
+                    </mat-icon>
+                  </span>
                     <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
                     <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
                     <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
@@ -296,21 +315,32 @@
                 <td mat-cell *matCellDef="let element; let i = index">
                   <ng-container [ngSwitch]="column">
                     <span *ngSwitchCase="'srNo'">{{ i + 1 }}</span>
-                    <span *ngSwitchCase="'photo'">
-                      <img [src]="getImageUrl(element.properties.photo_photo)" 
-                           alt="Person Photo" 
-                           class="rounded" 
-                           width="40" 
-                           height="40"
-                           style="object-fit: cover;">
-                    </span>
-                    <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
+                    <span *ngSwitchCase="'photo'" class="image-container">
+                    <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
+                        alt="Person Photo" 
+                        class="rounded hover-zoom"
+                        width="40" 
+                        height="40"
+                        style="object-fit: cover;"
+                        (error)="onImageError($event, element.properties.type)">
+                  </span>
+                          <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
                     <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'gender'">
+                    <!-- <span *ngSwitchCase="'gender'">
                       <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
                       <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">
                       <img *ngIf="element.properties.gender !== 'male' && element.properties.gender !== 'female'" src="assets/old/images/other.png" alt="Other" width="24" height="24">
-                    </span>
+                    </span> -->
+                    <span *ngSwitchCase="'gender'">
+                    <mat-icon 
+                      [ngClass]="{
+                        'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
+                        'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                      }">
+                      {{ getGenderIcon(element.properties.gender) }}
+                    </mat-icon>
+                  </span>
+
                     <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
                     <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
                     <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>

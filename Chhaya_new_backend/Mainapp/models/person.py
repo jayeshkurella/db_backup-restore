@@ -116,6 +116,27 @@ class Person(models.Model):
         OVERWEIGHT = 'overweight', 'Overweight'
         OBESE = 'obese', 'Obese'
 
+    DEATH_TYPE_CHOICES = [
+        ('natural', 'Natural Causes'),
+        ('accident', 'Accident'),
+        ('homicide', 'Homicide'),
+        ('suicide', 'Suicide'),
+        ('unknown', 'Unknown'),
+        ('other', 'Other'),
+        ('disease', 'Disease'),
+        ('poisoning', 'Poisoning'),
+        ('drowning', 'Drowning'),
+        ('burn', 'Burn'),
+        ('starvation', 'Starvation'),
+        ('hypothermia', 'Hypothermia'),
+        ('heatstroke', 'Heatstroke'),
+        ('medical_error', 'Medical Error'),
+        ('war', 'War'),
+        ('execution', 'Execution'),
+        ('complication', 'Complication'),
+        ('drug_overdose', 'Drug Overdose'),
+        ('asphyxiation', 'Asphyxiation'),
+    ]
     class AddressTypeChoices(models.TextChoices):
         PERMANENT = 'permanent', 'PERMANENT'  # Long-term residence
         CURRENT = 'current', 'CURRENT'  # Current address
@@ -234,7 +255,13 @@ class Person(models.Model):
     _is_deleted = models.BooleanField(default=False,db_index=True)
     _is_confirmed = models.BooleanField(default=False,db_index=True)
     photo_photo = models.ImageField(blank=True, null=True,upload_to='All_Photos')
-
+    death_type = models.CharField(
+        max_length=20,
+        choices=DEATH_TYPE_CHOICES,
+        blank=True,
+        null=True,
+        default='unknown'
+    )
     date_reported = models.DateField(default=date.today)
     case_status = models.CharField(
         max_length=10,

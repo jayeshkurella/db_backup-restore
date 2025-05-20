@@ -72,6 +72,11 @@ export class HospitalsComponent implements OnInit{
     state: ''
   };
 
+  defaultHospitalImage = 'assets/old/images/hospital_default.png'; 
+  onImageError(event: any) {
+  event.target.src = this.defaultHospitalImage;
+}
+
   ngOnInit(): void {
     const userType = localStorage.getItem('user_type');
     this.isAdmin = userType === 'admin';
@@ -79,8 +84,6 @@ export class HospitalsComponent implements OnInit{
     this.isLoggedIn = !!token;
     this.fetchHospitalData()
     this.getStates();
-
-  
   }
 
   addhospital(): void {

@@ -21,5 +21,7 @@
   .dark-text .version-text {
     color: rgba(255, 255, 255, 0.7);
   }
-  
-  
+
+  .cursonr{
+    cursor: pointer;
+  }

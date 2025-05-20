@@ -50,6 +50,20 @@ isLoading = false;
     this.router.navigate(['/dashboards/dashboard1']); // Navigate to the main component or home route
   }
 
+ onImgError(event: Event, type?: string, gender?: string) {
+  const imgElement = event.target as HTMLImageElement;
+
+  if (type?.toLowerCase() === 'Unidentified Body') {
+    imgElement.src = 'assets/old/images/body_default.png'; // always use default body image for body type
+  } else if (gender?.toLowerCase() === 'male') {
+    imgElement.src = 'assets/old/images/final_male.png';   // male default
+  } else if (gender?.toLowerCase() === 'female') {
+    imgElement.src = 'assets/old/images/final_female.png'; // female default
+  } 
+}
+
+
+
 
 
 }
