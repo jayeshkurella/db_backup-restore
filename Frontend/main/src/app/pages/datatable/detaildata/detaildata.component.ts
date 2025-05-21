@@ -53,7 +53,7 @@ isLoading = false;
 
 
  goBack(): void {
-    this.router.navigate(['/datatable/missing-person']); // Navigate to the main component or home route
+    this.router.navigate(['/search/missing-person']); // Navigate to the main component or home route
   }
 
 }

@@ -14,7 +14,6 @@ class BasePersonListView(generics.ListAPIView):
     serializer_class = ApprovePersonSerializer
     pagination_class = StatusPagination
 
-
     def get_queryset(self):
         queryset = Person.objects.all()
 
@@ -26,7 +25,11 @@ class BasePersonListView(generics.ListAPIView):
         police_station = self.request.query_params.get('police_station')
         case_id = self.request.query_params.get('case_id')
 
-        # Build filters
+        # If case_id is provided, ignore all other filters and return exact match
+        if case_id:
+            return queryset.filter(case_id__iexact=case_id)
+
+        # Otherwise, apply normal filters
         filters = Q()
         if state:
             filters &= Q(state__iexact=state)
@@ -36,8 +39,6 @@ class BasePersonListView(generics.ListAPIView):
             filters &= Q(city__iexact=city)
         if village:
             filters &= Q(village__iexact=village)
-        if case_id:
-            filters &= Q(case_id__iexact=case_id)
         if police_station:
             try:
                 filters &= Q(firs__police_station__id=UUID(police_station))
@@ -46,9 +47,13 @@ class BasePersonListView(generics.ListAPIView):
 
         return queryset.filter(filters)
 
+    def paginate_queryset(self, queryset):
+        # Disable pagination if case_id is present
+        if self.request.query_params.get('case_id'):
+            return None
+        return super().paginate_queryset(queryset)
 
 class StatusPersonView(BasePersonListView):
-
     """Base view for status-specific endpoints with count"""
     status = None  # To be overridden by subclasses
 
@@ -59,20 +64,16 @@ class StatusPersonView(BasePersonListView):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response({
+        # If case_id is present, return direct results without pagination
+        if request.query_params.get('case_id'):
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({
                 'count': queryset.count(),
                 'results': serializer.data
             })
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            'count': queryset.count(),
-            'results': serializer.data
-        })
-
+        # Otherwise, apply pagination
+        return super().list(request, *args, **kwargs)
 
 class PendingPersonsView(StatusPersonView):
     permission_classes = [IsAdminUser]

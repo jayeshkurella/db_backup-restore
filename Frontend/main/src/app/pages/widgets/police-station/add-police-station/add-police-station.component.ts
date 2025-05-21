@@ -193,7 +193,7 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
         this.savedContacts = []; // Reset saved contacts
         this.policeStationForm.reset();
         this.initializeForm();
-        this.router.navigate(['/widgets/police-station']);
+        this.router.navigate(['/resources/police-station']);
       },
       error: (err) => {
         console.error(err);
@@ -282,6 +282,6 @@ export class AddPoliceStationComponent implements OnInit,AfterViewInit  {
     );
 }
 goBack(): void {
-      this.router.navigate(['/widgets/police-station']); // Navigate to the main component or home route
+      this.router.navigate(['/resources/police-station']); // Navigate to the main component or home route
     }
 }

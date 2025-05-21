@@ -45,7 +45,7 @@ export class ChangelogsComponent {
     this.logService.addLog(log).subscribe({
       next: () => {
         this.form.reset({ date: new Date().toISOString().substring(0, 10) });
-        this.router.navigate(['datatable/change-log']);
+        this.router.navigate(['search/change-log']);
       },
       error: (error) => {
         console.error('Error saving log:', error);

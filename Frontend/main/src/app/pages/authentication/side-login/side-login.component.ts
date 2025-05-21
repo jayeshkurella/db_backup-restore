@@ -37,6 +37,8 @@ declare var google: any;
 export class AppSideLoginComponent implements AfterViewInit {
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  savedEmails: string[] = [];
+filteredEmails: string[] = [];
   private isUserLoggedIn(): boolean {
     return !!localStorage.getItem('authToken');
   }
@@ -61,7 +63,25 @@ export class AppSideLoginComponent implements AfterViewInit {
     this.loadGoogleAuthScript();
   }
 
+  loadSavedEmails(): void {
+  const emails = localStorage.getItem('savedEmails');
+  this.savedEmails = emails ? JSON.parse(emails) : [];
+  this.filteredEmails = this.savedEmails;
+}
 
+filterEmails(): void {
+  const input = this.loginForm.get('email_id')?.value?.toLowerCase() || '';
+  this.filteredEmails = this.savedEmails.filter(email =>
+    email.toLowerCase().includes(input)
+  );
+}
+
+saveEmailToLocalStorage(email: string): void {
+  const emails = new Set(this.savedEmails);
+  emails.add(email);
+  const emailArray = Array.from(emails);
+  localStorage.setItem('savedEmails', JSON.stringify(emailArray));
+}
 
   get f() {
     return this.loginForm.controls;
@@ -82,13 +102,12 @@ export class AppSideLoginComponent implements AfterViewInit {
         console.log('Login Successful:', response);
         this.authService.setUser(response.user);
         localStorage.setItem('user', JSON.stringify(response.user));
+        this.saveEmailToLocalStorage(this.loginForm.value.email_id);
         this.toastr.success('Login successful! Welcome back.', 'Success');
-        // Redirect to intended route (if any), else default
-        const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/forms/Missing-person-form';
+        const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
         localStorage.removeItem('redirectAfterLogin');
         this.router.navigate([redirectUrl]);
         this.loginForm.reset();
-
       },
       (error) => {
         console.error('Login Failed:', error);
@@ -144,68 +163,124 @@ export class AppSideLoginComponent implements AfterViewInit {
     script.onload = () => this.renderGoogleButton();
     document.body.appendChild(script);
   }
-  private renderGoogleButton(): void {
-    if (typeof google !== 'undefined') {
-      google.accounts.id.initialize({
-        client_id: '175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com',
-        callback: this.handleLogin.bind(this),
-        prompt: 'select_account',
-        auto_select: false
-      });
-      google.accounts.id.renderButton(document.getElementById('google-login'), {
-        theme: 'red',
-        size: 'large',
-        text: 'continue_with',
-        locale: 'en',
-        width: '250',
-      });
-      google.accounts.id.prompt();
-    } else {
-      console.error("Google API script failed to load.");
-    }
+private renderGoogleButton(): void {
+  if (typeof google !== 'undefined') {
+    // Disable auto-selection of previously signed-in accounts
+    google.accounts.id.disableAutoSelect(); // 👈 Add this line
+
+    google.accounts.id.initialize({
+      client_id: '175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com',
+      callback: this.handleLogin.bind(this),
+      prompt: 'select_account',
+      auto_select: false
+    });
+
+    google.accounts.id.renderButton(document.getElementById('google-login'), {
+      theme: 'outline',
+      size: 'large',
+      text: 'standard',
+      locale: 'en',
+      width: 250,
+    });
+
+    google.accounts.id.prompt(); // Optional, depending on if you want the popup immediately
+  } else {
+    console.error("Google API script failed to load.");
   }
+}
+
   private decodetoken(token: String) {
     return JSON.parse(atob(token.split('.')[1]));
   }
+  // handleLogin(response: any) {
+  //   if (response) {
+  //     console.log(response);
+  //     const token = response.credential;
+  //     sessionStorage.setItem('googleToken', token);
+
+  //     this.authService.loginWithGoogle(token).subscribe(
+  //       (response: any) => {
+  //         // Check if the response contains an error about account approval
+  //         if (response.error && response.error.includes('not approved')) {
+  //           // Show error message to user
+  //           this.toastr.error(response.error);
+  //           return;
+  //         }
+  //         this.authService.setUser(response.user);
+  //         localStorage.setItem('user', JSON.stringify(response.user));
+  //         // Save token and user data
+  //         localStorage.setItem('profilePic', response.user.picture);
+  //         localStorage.setItem('authToken', response.token);
+  //         localStorage.setItem('user_type', response.user.user_type);
+  //         localStorage.setItem('user_id', response.user.id);
+  //         // 🔁 Update login status
+  //         this.authService.isLoggedInSubject.next(true);
+
+  //         // Navigate to form
+  //         this.router.navigate(['/']);
+  //       },
+  //       (error) => {
+  //         console.error('Login failed:', error);
+  //         // Show error message to user
+  //         if (error.error && error.error.error) {
+  //           this.toastr.error(error.error.error);
+  //         } else {
+  //           this.toastr.error('Login failed. Please try again.');
+  //         }
+  //       }
+  //     );
+  //   }
+  // }
+
   handleLogin(response: any) {
-    if (response) {
-      console.log(response);
-      const token = response.credential;
-      sessionStorage.setItem('googleToken', token);
+  if (response) {
+    const token = response.credential;
+    sessionStorage.setItem('googleToken', token);
 
-      this.authService.loginWithGoogle(token).subscribe(
-        (response: any) => {
-          // Check if the response contains an error about account approval
-          if (response.error && response.error.includes('not approved')) {
-            // Show error message to user
-            this.toastr.error(response.error);
-            return;
-          }
-          this.authService.setUser(response.user);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          // Save token and user data
-          localStorage.setItem('profilePic', response.user.picture);
-          localStorage.setItem('authToken', response.token);
-          localStorage.setItem('user_type', response.user.user_type);
-          localStorage.setItem('user_id', response.user.id);
-          // 🔁 Update login status
-          this.authService.isLoggedInSubject.next(true);
+    const decoded: any = this.decodetoken(token);
+    const email = decoded?.email;
 
-          // Navigate to form
-          this.router.navigate(['/forms/Missing-person-form']);
-        },
-        (error) => {
-          console.error('Login failed:', error);
-          // Show error message to user
-          if (error.error && error.error.error) {
-            this.toastr.error(error.error.error);
-          } else {
-            this.toastr.error('Login failed. Please try again.');
-          }
+    this.authService.loginWithGoogle(token).subscribe(
+      (response: any) => {
+        if (response.error && response.error.includes('not approved')) {
+          this.toastr.error(response.error);
+          return;
         }
-      );
-    }
+
+        this.authService.setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('profilePic', response.user.picture);
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('user_type', response.user.user_type);
+        localStorage.setItem('user_id', response.user.id);
+        this.authService.isLoggedInSubject.next(true);
+
+        // ✅ Clean up Google login UI
+        const googleButton = document.getElementById('google-login');
+        if (googleButton) googleButton.innerHTML = '';
+
+        // ✅ Revoke the Google session to prevent auto-selection next time
+        if (typeof google !== 'undefined' && email) {
+          google.accounts.id.revoke(email, () => {
+            console.log(`Google session revoked for ${email}`);
+          });
+        }
+
+        // ✅ Navigate to main app
+        this.router.navigate(['/']);
+      },
+      (error) => {
+        console.error('Login failed:', error);
+        if (error.error?.error) {
+          this.toastr.error(error.error.error);
+        } else {
+          this.toastr.error('Login failed. Please try again.');
+        }
+      }
+    );
   }
+}
+
 
 
 

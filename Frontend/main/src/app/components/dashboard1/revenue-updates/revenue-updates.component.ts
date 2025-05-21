@@ -442,11 +442,13 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
   private initMap(): void {
     const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
+      attribution: '&copy; OpenStreetMap contributors',
+      noWrap: true
     });
 
     const satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 19,
+      noWrap: true
     });
 
     const baseMaps = {
@@ -457,9 +459,12 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
     this.map = L.map('map', {
       center: [20.5937, 78.9629],
       zoom: 6,
-      layers: [baseMap]
+      layers: [baseMap],
+      worldCopyJump: false,
+      maxBounds: [[-100, -180], [85, 180]],
+      maxBoundsViscosity: 0.8
     });
-
+      
     this.stateLayerName = L.tileLayer.wms(environment.geo_url, {
       layers: this.stateLayer,
       format: 'image/png',
@@ -942,22 +947,26 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
         // const initialPoints = data.features.slice(0, 100);
         // this.addMarkersToMap(initialPoints, customIcon);
 
-        const initialPoints = data.features.slice(0, 100);
+        const initialPoints = data.features.slice(0, 20);
         this.addMarkersToMap(initialPoints, maleIcon, femaleIcon);
 
 
         // Load remaining points asynchronously
-        const remainingPoints = data.features.slice(100);
+        const remainingPoints = data.features.slice(20);
         if (remainingPoints.length > 0) {
           setTimeout(() => {
             this.addMarkersToMap(remainingPoints, maleIcon, femaleIcon);
-          }, 1000); // Delay to ensure initial points are rendered first
+          }, 2000); 
         }
 
       })
       .catch(error => {
         console.error("Error fetching GeoJSON:", error);
-        alert("An error occurred while fetching data. Please try again.");
+        this.snackBar.open('Error fetching data. Please try again.', 'Close', {
+            duration: 1000,
+            verticalPosition: 'top',
+            horizontalPosition: 'right'
+          });
       });
 
     let state: L.Layer = L.tileLayer.wms(this.geo_url, {

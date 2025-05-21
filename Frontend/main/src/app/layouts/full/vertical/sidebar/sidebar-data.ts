@@ -45,26 +45,26 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Search',
     iconName: 'search',
-    route: '/datatable',
+    route: '/search',
     children: [
       {
         displayName: 'By Case ID',
         // iconName: 'user',
-        route: '/datatable/search-by-id',
+        route: '/search/search-by-id',
       },{
         displayName: 'Missing Person',
         // iconName: 'user',
-        route: '/datatable/missing-person',
+        route: '/search/missing-person',
       },
       {
         displayName: 'Unidentified Person',
         // iconName: 'user',
-        route: '/datatable/unidentified-person',
+        route: '/search/unidentified-person',
       },
       {
         displayName: 'Unidentified Bodies',
         // iconName: 'user',
-        route: '/datatable/unidentified-bodies',
+        route: '/search/unidentified-bodies',
       },
     ],
   },
@@ -74,12 +74,12 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Police-Station',
     iconName: 'shield',
-    route: 'widgets/police-station',
+    route: 'resources/police-station',
   },
   {
     displayName: 'Hospitals',
     iconName: 'hospital',
-    route: 'widgets/hospitals',
+    route: 'resources/hospitals',
   },
   //  {
   //   displayName: 'Resources',
@@ -104,13 +104,13 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Approve Cases',
     iconName: 'check',
-    route: '/datatable/admin-access',
+    route: '/search/admin-access',
     condition: 'admin', 
   },
   {
     displayName: 'Approve User',
     iconName: 'check',
-    route: '/datatable/User-access',
+    route: '/search/User-access',
     condition: 'admin', 
   },
  {
@@ -119,7 +119,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Change Log',
     iconName: 'check',
-    route: '/datatable/change-log',
+    route: '/search/change-log',
   },
   // {
   //   navCap: 'Policy',

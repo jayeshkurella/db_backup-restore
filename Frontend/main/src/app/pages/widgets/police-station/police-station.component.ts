@@ -88,7 +88,7 @@ export class PoliceStationComponent implements OnInit {
 
 
   navigateToAddStation(): void {
-    this.router.navigate(['/widgets/add-police-station']);
+    this.router.navigate(['/resources/add-police-station']);
   }
   
   defaultHospitalImage = 'assets/old/images/polices_default.jpeg'; 
@@ -157,7 +157,7 @@ onImageError(event: Event) {
 
   seeMorepolicestationdata(policestation: any) {
     console.log('policesstation', policestation),
-    this.router.navigate(['/widgets/police-station-detail/', policestation.id], {
+    this.router.navigate(['/resources/police-station-detail/', policestation.id], {
       state: { policestation  } 
     });
   }

@@ -55,7 +55,7 @@ export class UnidentifiedBodiesDialogComponent {
   
   
    goBack(): void {
-      this.router.navigate(['/datatable/unidentified-bodies']); // Navigate to the main component or home route
+      this.router.navigate(['/search/unidentified-bodies']); // Navigate to the main component or home route
     }
   
 

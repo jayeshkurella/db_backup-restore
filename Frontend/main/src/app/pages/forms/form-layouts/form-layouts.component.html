@@ -53,7 +53,8 @@
 
           <mat-form-field appearance="outline" class="col-12 col-md-4 col-lg-2">
             <mat-label>Time of Birth</mat-label>
-            <input matInput type="time" formControlName="birthtime" />
+            <input matInput [ngxMatTimepicker]="birthTimePicker" formControlName="birthtime" readonly  />
+            <ngx-mat-timepicker #birthTimePicker [format]="12"></ngx-mat-timepicker>
           </mat-form-field>
 
           <!-- Age -->
@@ -871,7 +872,7 @@
     </div>
 
     <mat-card class="card p-4 m-2 mb-3">
-      <div formArrayName="last_known_details">
+      <div formGroupName="last_known_details">
         <div *ngFor="let info of lastKnownDetails.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
           <!-- File Uploads -->
           <div class="col-md-6 d-flex flex-column">
@@ -898,8 +899,10 @@
           <!-- Missing Time -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Missing Time</mat-label>
-              <input matInput type="time" formControlName="missing_time" />
+               <mat-label>Missing Time</mat-label>
+            <input matInput [ngxMatTimepicker]="birthTimePicker" formControlName="missing_time" readonly  />
+            <ngx-mat-timepicker #birthTimePicker [format]="12"></ngx-mat-timepicker>
+              
             </mat-form-field>
           </div>
 
@@ -914,12 +917,13 @@
           </div>
 
           <!-- Missing Location Details -->
+          <!-- Missing Location Details -->
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Missing Location Details</mat-label>
               <textarea matInput formControlName="missing_location_details"></textarea>
               <mat-error
-                *ngIf="personForm.get('last_known_details.missing_location_details')?.hasError('maxlength') && personForm.get('last_known_details.missing_location_details')?.touched">
+                *ngIf="personForm.get('missing_location_details')?.hasError('maxlength') && personForm.get('missing_location_details')?.touched">
                 Maximum 200 characters allowed.
               </mat-error>
             </mat-form-field>
@@ -931,11 +935,12 @@
               <mat-label>Person Last Seen Details</mat-label>
               <textarea matInput formControlName="last_seen_location"></textarea>
               <mat-error
-                *ngIf="personForm.get('last_known_details.last_seen_location')?.hasError('maxlength') && personForm.get('last_known_details.last_seen_location')?.touched">
+                *ngIf="personForm.get('last_seen_location')?.hasError('maxlength') && personForm.get('last_seen_location')?.touched">
                 Maximum 200 characters allowed.
               </mat-error>
             </mat-form-field>
           </div>
+
 
         </div>
       </div>
@@ -1027,7 +1032,8 @@
     <mat-card class="card p-4 mb-1">
       <div formArrayName="consent">
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-          <div class="col-md-12 consent-link d-flex align-items-center p-4 " style="gap: 10px; padding: 10px 0;margin-left: 15px;">
+          <div class="col-md-12 consent-link d-flex align-items-center p-4 "
+            style="gap: 10px; padding: 10px 0;margin-left: 15px;">
             <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
               style="width: 18px; height: 18px; cursor: pointer;" />
             <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: #333;">

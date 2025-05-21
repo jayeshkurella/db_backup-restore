@@ -283,7 +283,7 @@ ageRanges = [
 
 
   viewDetails(person: Person): void {
-        this.router.navigate(['/datatable/unidentified-person/person-view', person.id]);
+        this.router.navigate(['/search/unidentified-person/person-view', person.id]);
     }
   
   

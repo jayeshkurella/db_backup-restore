@@ -178,7 +178,7 @@ selectedFileName: any;
     this.hospitalService.addHospital(formData).subscribe({
       next: () => {
         alert('Hospital added successfully.');
-        this.router.navigate(['/widgets/hospitals']);
+        this.router.navigate(['/resources/hospitals']);
       },
       error: () => {
         alert('Error adding hospital.');
@@ -241,6 +241,6 @@ selectedFileName: any;
     );
 }
  goBack(): void {
-      this.router.navigate(['/widgets/hospitals']); // Navigate to the main component or home route
+      this.router.navigate(['/resources/hospitals']); // Navigate to the main component or home route
     }
 }

@@ -61,7 +61,7 @@ export class VolunteersComponent implements OnInit {
     }
     console.log(volunteer)
 
-    this.router.navigate(['widgets/volunteersdata/', volunteer.id]); 
+    this.router.navigate(['resources/volunteersdata/', volunteer.id]); 
   }
 
   

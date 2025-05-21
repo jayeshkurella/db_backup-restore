@@ -31,16 +31,17 @@ export class BrandingComponent {
   options = this.settings.getOptions();
   constructor(private settings: CoreService, private router : Router,private location: Location) {}
 
-resetPage(event: Event) {
-    event.preventDefault(); 
+  resetPage(event: Event) {
+    event.preventDefault();
     const currentUrl = this.location.path();
 
-    if (currentUrl === '/dashboards/dashboard1') {
+    if (currentUrl === '/') {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/dashboards/dashboard1']);
+        this.router.navigate(['/']);
       });
     } else {
-      this.router.navigate(['/dashboards/dashboard1']);
+      this.router.navigate(['/']);
     }
   }
+
 }

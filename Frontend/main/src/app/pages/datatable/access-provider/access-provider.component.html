@@ -7,9 +7,8 @@
         </ol>
       </nav>
       
-      <div class="col-lg-2 col-md-2">
+      <!-- <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <!-- <mat-label>Case ID</mat-label> -->
           <input matInput [(ngModel)]="filters.caseId" placeholder="Enter Case ID" />
         </mat-form-field>
       </div>
@@ -28,7 +27,7 @@
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-select [(ngModel)]="filters.district" (selectionChange)="onDistrictChange()">
-            <mat-option value="">District</mat-option>
+            <mat-option value="">All Districts</mat-option>
             <mat-option *ngFor="let district of alldistricts" [value]="district">
               {{ district }}
             </mat-option>
@@ -70,19 +69,98 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
-      
+      </div> -->
+
+<div class="row">
+  <!-- First row - Case ID and Police Station -->
+  <div class="col-lg-5 col-md-5">
+  <mat-form-field appearance="outline" class="w-100 hide-hint">
+    <input matInput [(ngModel)]="filters.case_id" placeholder="Enter Case ID" />
+  </mat-form-field>
+</div>
+  
+  <div class="col-lg-5 col-md-5">
+    <mat-form-field appearance="outline" class="w-100 hide-hint">
+      <mat-select [(ngModel)]="filters.police_station" name="policeStation">
+        <mat-option value="">Police Station</mat-option>
+        <mat-option *ngFor="let station of policeStationList" [value]="station.id">
+          {{ station.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-lg-2 col-md-2 d-flex align-items-center">
+    <!-- <button mat-flat-button color="primary" class="search-btn btn-btn-outline w-100" 
+            (click)="filterDataByFilters()" [disabled]="!isSearchEnabled()">
+      Search
+    </button> -->
+      <button mat-flat-button color="primary" class="search-btn btn-btn-outline w-100" 
+        (click)="filterDataByFilters()" 
+        [disabled]="!isSearchEnabled() || isFilterLoading">
+        <span *ngIf="!isFilterLoading">Search</span>
+        <span *ngIf="isFilterLoading">Searching...</span>
+      </button>
+  </div>
+
+</div>
+
+<div class="row mt-2">
+  <!-- Second row - State, District, City, Village -->
+  <div class="col-lg-3 col-md-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint">
+      <mat-select [(ngModel)]="filters.state" (selectionChange)="onStateChange()">
+        <mat-option value="">All States</mat-option>
+        <mat-option *ngFor="let state of allstates" [value]="state">
+          {{ state }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-lg-3 col-md-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint">
+      <mat-select [(ngModel)]="filters.district" (selectionChange)="onDistrictChange()" [disabled]="!filters.state">
+        <mat-option value="">All Districts</mat-option>
+        <mat-option *ngFor="let district of alldistricts" [value]="district">
+          {{ district }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-lg-3 col-md-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint">
+      <mat-select [(ngModel)]="filters.city" (selectionChange)="onCityChange()" [disabled]="!filters.district">
+        <mat-option value="">All Cities</mat-option>
+        <mat-option *ngFor="let city of allcities" [value]="city">
+          {{ city }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-lg-3 col-md-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint">
+      <mat-select [(ngModel)]="filters.village" [disabled]="!filters.city">
+        <mat-option value="">All Villages</mat-option>
+        <mat-option *ngFor="let village of allvillages" [value]="village">
+          {{ village }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
 
     </div>
-    
 
     <mat-card-content>
       
       <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-        <mat-tab label="Pending ({{pendingCount}})"></mat-tab>
-        <mat-tab label="Hold ({{holdCount}})"></mat-tab>
-        <mat-tab label="Suspended ({{suspendedCount}})"></mat-tab>
-        <mat-tab label="Approved ({{approvedCount}})"></mat-tab>
+        <mat-tab label="Pending Cases ({{pendingCount}})"></mat-tab>
+        <mat-tab label="Hold Cases({{holdCount}})"></mat-tab>
+        <mat-tab label="Suspended Cases({{suspendedCount}})"></mat-tab>
+        <mat-tab label="Approved Cases({{approvedCount}})"></mat-tab>
       </mat-tab-group>
 
       <div class="select-all-container">
@@ -93,7 +171,7 @@
                 [checked]="selectAllPending"
                 [indeterminate]="isIndeterminatePending()"
                 (change)="toggleSelectAllPending($event.checked)">
-                Select All Pending ({{pendingCount}})
+                Select All Pending Cases({{pendingCount}})
               </mat-checkbox>
 
               <mat-checkbox color="primary" 
@@ -101,7 +179,7 @@
                 [checked]="selectAllHold"
                 [indeterminate]="isIndeterminateHold()"
                 (change)="toggleSelectAllHold($event.checked)">
-                Select All Hold ({{holdCount}})
+                Select All Hold Cases({{holdCount}})
               </mat-checkbox>
         
               <mat-checkbox color="primary" 
@@ -109,7 +187,7 @@
                 [checked]="selectAllSuspended"
                 [indeterminate]="isIndeterminateSuspended()"
                 (change)="toggleSelectAllSuspended($event.checked)">
-                Select All Suspended ({{suspendedCount}})
+                Select All Suspended Cases({{suspendedCount}})
               </mat-checkbox>
 
               <mat-checkbox color="primary" 
@@ -117,7 +195,7 @@
                   [checked]="selectAllApproved"
                   [indeterminate]="isIndeterminateApproved()"
                   (change)="toggleSelectAllApproved($event.checked)">
-                  Select All Approved ({{approvedCount}})
+                  Select All Approved Cases({{approvedCount}})
               </mat-checkbox>
             </div>
         
@@ -299,6 +377,41 @@
               selectedTabIndex === 2 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason','actions'] : 
               ['select', 'name', 'village', 'city', 'state', 'status', 'actions']"></tr>
       </table>
+      <!-- <mat-paginator [length]="pagination.length"
+               [pageIndex]="pagination.pageIndex"
+               [pageSize]="pagination.pageSize"
+               [pageSizeOptions]="pagination.pageSizeOptions"
+               (page)="onPageChange($event)">
+</mat-paginator> -->
+<!-- <mat-paginator [length]="pagination.length" 
+               [pageIndex]="pagination.pageIndex"
+               [pageSize]="pagination.pageSize"
+               [pageSizeOptions]="pagination.pageSizeOptions"
+               (page)="onPageChange($event)">
+</mat-paginator> -->
+<div class="custom-paginator">
+  <span class="page-info">
+    {{ getDisplayedRange() }}
+  </span>
+  
+  <button mat-icon-button (click)="firstPage()" [disabled]="isFirstPage() || isLoading || pagination.length === 0">
+    <mat-icon>first_page</mat-icon>
+  </button>
+  
+  <button mat-icon-button (click)="previousPage()" [disabled]="isFirstPage() || isLoading || pagination.length === 0">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  
+  <button mat-icon-button (click)="nextPage()" [disabled]="isLastPage() || isLoading || pagination.length === 0">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+  
+  <button mat-icon-button (click)="lastPage()" [disabled]="isLastPage() || isLoading || pagination.length === 0">
+    <mat-icon>last_page</mat-icon>
+  </button>
+  
+  <mat-spinner diameter="20" *ngIf="isLoading" class="ml-2"></mat-spinner>
+</div>
     </mat-card-content>
   </mat-card>
 </div>

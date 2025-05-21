@@ -74,7 +74,7 @@ export class MatwithupComponent implements OnInit {
     this.uuid = this.matchData?.missing_person?.id || '';
   }
   goBack(): void {
-    this.router.navigate(['datatable/missing-person']);
+    this.router.navigate(['search/missing-person']);
   }
 
 

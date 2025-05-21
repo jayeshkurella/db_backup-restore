@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { environment } from 'src/envirnment/envirnment';
 import { catchError, map, tap } from 'rxjs/operators';
+import { Person, PaginatedResponse } from './access-provider.component';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class CasesApprovalService {
 
   constructor(private http: HttpClient) {}
 
-getPendingData(filters?: any, p0?: { city: string; state: string; district: string; village: string; caseId: string; police_station: string;} | undefined): Observable<any> {
+getPendingPersons(filters?: any): Observable<PaginatedResponse<Person>> {
   const authToken = localStorage.getItem('authToken');
   if (!authToken) {
     return throwError(() => new Error('Unauthorized: No token found'));
@@ -20,29 +21,158 @@ getPendingData(filters?: any, p0?: { city: string; state: string; district: stri
   
   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
   
-  let params = {};
+  let params = new HttpParams();
   if (filters) {
-    params = {
-      city: filters.city || '',
-      state: filters.state || '',
-      district: filters.district || '',
-      village: filters.village || '',
-      case_id: filters.caseId || '',
-      police_station: filters.police_station || ''
-    };
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
   }
 
-  return this.http.get(`${this.apiUrl}/api/persons/pending_or_rejected/`, { 
-    headers, 
-    params 
-  }).pipe(
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/pending/`, 
+    { headers, params }
+  ).pipe(
     catchError(error => {
       console.error('Error fetching pending data:', error);
-      return throwError(() => error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+        page_size: filters?.page_size || 10
+      });
+    })
+  );
+}
+// In your CasesApprovalService
+
+getHoldPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
+  }
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
+  }
+
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/on_hold/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching hold data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+        page_size: filters?.page_size || 10
+      });
     })
   );
 }
 
+getSuspendedPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
+  }
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
+  }
+
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/suspended/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching suspended data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+        page_size: filters?.page_size || 10
+      });
+    })
+  );
+}
+
+getApprovedPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
+  }
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
+  }
+
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/approved/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching approved data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+        page_size: filters?.page_size || 10
+      });
+    })
+  );
+}
 
   updatePersonStatus(id: string, status: string, reason?: string): Observable<any> {
     const authToken = localStorage.getItem('authToken');
@@ -87,5 +217,6 @@ getPendingData(filters?: any, p0?: { city: string; state: string; district: stri
       );
     }
   }
-  
+
+ 
 }

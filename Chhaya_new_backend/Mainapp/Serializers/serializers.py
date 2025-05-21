@@ -97,7 +97,7 @@ class PoliceStationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PersonSerializer(serializers.ModelSerializer):
-
+    birthtime = serializers.TimeField(input_formats=['%I:%M %p', '%H:%M'])
     bodies_condition = serializers.ListField(
         child=serializers.ChoiceField(choices=Person.BodyconditionChoices.choices),
         required=False

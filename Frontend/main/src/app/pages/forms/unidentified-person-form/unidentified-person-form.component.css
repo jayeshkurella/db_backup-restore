@@ -60,3 +60,7 @@
 .consent-link{
   cursor: pointer;
 }
+
+mat-error {
+  color: red !important;
+}

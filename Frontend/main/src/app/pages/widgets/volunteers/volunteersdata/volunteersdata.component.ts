@@ -122,6 +122,6 @@ export class VolunteersdataComponent implements AfterViewInit {
     }
   }
   goBack() {
-    this.router.navigate(['/widgets/volunteers']);
+    this.router.navigate(['/resources/volunteers']);
   }
 }

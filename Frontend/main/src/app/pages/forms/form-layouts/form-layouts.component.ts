@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, AbstractControl, ValidatorFn } from '@angular/forms';
-
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 import {
@@ -46,7 +46,7 @@ import { MpconsentComponent } from './mpconsent/mpconsent.component';
     ReactiveFormsModule,
     CommonModule,
     MatIconModule,
-    NgxMaterialTimepickerModule,
+    NgxMatTimepickerModule
   ],
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
@@ -115,12 +115,12 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     });
   }
 
-   onConsentChange(event: Event) {
-      const checked = (event.target as HTMLInputElement).checked;
-      if (checked) {
-        this.openConsentDialog();
-      }
+  onConsentChange(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.openConsentDialog();
     }
+  }
 
 
   ngOnInit(): void {
@@ -433,7 +433,7 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
       user: [this.storedPersonId],
       pincode: ['', [Validators.minLength(6), Validators.maxLength(15), this.numericOnlyValidator()]],
       country: [''],
-      landmark_details: ['', [Validators.maxLength(50), this.landmarkValidator()]],
+      landmark_details: ['', [Validators.maxLength(150), this.landmarkValidator()]],
       location: this.fb.group({
         latitude: ['', [Validators.required, this.coordinateValidator()]],
         longitude: ['', [Validators.required, this.coordinateValidator()]],
@@ -487,8 +487,8 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
         religion: [''],
         mother_tongue: [''],
         other_known_languages: [''],
-        id_type: [''], 
-        id_no: [''], 
+        id_type: [''],
+        id_no: [''],
         education_details: [''],
         occupation_details: [''],
 
@@ -503,14 +503,14 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   addLastKnownDetails() {
     this.lastKnownDetails.push(
       this.fb.group({
-        person_photo: [null], // URL or Base64 encoded image
-        reference_photo: [null], // URL or Base64 encoded image
-        missing_time: [null], // Date-Time Picker
-        missing_date: [''], // Date Picker
-         missing_location_details: ['', Validators.maxLength(200)],
+        person_photo: [null],
+        reference_photo: [null],
+        missing_time: [null],
+        missing_date: [''],
+        missing_location_details: ['', Validators.maxLength(200)],
         last_seen_location: ['', Validators.maxLength(200)],
-        address: [null], // Should be linked with Address entity
-        person: [''], // Should be linked with Person entity
+        address: [null],
+        person: [''],
         created_by: [this.storedPersonId],
         updated_by: [this.storedPersonId],
       })
@@ -520,14 +520,14 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   addFIR() {
     this.firs.push(
       this.fb.group({
-        fir_number: [''], // Unique FIR number
-        case_status: [''], // Case status
-        investigation_officer_name: [''], // Officer's name
-        investigation_officer_contact: [null], // ForeignKey to Contact
-        investigation_officer_contacts: [''], // ForeignKey to Contact
-        police_station: [null], // ForeignKey to PoliceStation
-        document: [null], // ForeignKey to Document
-        person: [''], // ForeignKey to Person
+        fir_number: [''],
+        case_status: [''],
+        investigation_officer_name: [''],
+        investigation_officer_contact: [null],
+        investigation_officer_contacts: [''],
+        police_station: [null],
+        document: [null],
+        person: [''],
 
         created_by: [this.storedPersonId],
         updated_by: [this.storedPersonId],
@@ -674,10 +674,9 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     // Validate the personForm before proceeding
     if (this.personForm.invalid) {
       this.toastr.error('Please fill out all required fields', 'Error');
-      return; // Prevent submitting if the form is invalid
+      return;
     }
 
-    // Clear the addresses and contacts array if you're about to add new ones
     this.addresses.clear();
     this.contacts.clear();
 
@@ -695,17 +694,24 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
     const birthTime = this.formatTime(this.personForm.get('birthtime')?.value);
 
+
     const lastKnownDetails = this.personForm.get('last_known_details')?.value;
     if (lastKnownDetails && lastKnownDetails.length > 0) {
       lastKnownDetails.forEach((detail: any) => {
+        // ✅ Safely handle missing_date
         if (detail.missing_date) {
           detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
+        } else {
+          detail.missing_date = null; // ✅ Important fix
         }
+
+        // ✅ Format missing_time if present
         if (detail.missing_time) {
           detail.missing_time = this.formatTime(detail.missing_time);
         }
       });
     }
+
 
     // Create a clean JSON object
     const payload = {
@@ -743,77 +749,27 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   }
 
 
-  // onSubmit() {
-
-  //   const addressFormValue = this.personForm.get('addressForm')?.value;
-  //   if (addressFormValue && Object.keys(addressFormValue).length > 0) {
-  //     this.addresses.push(this.fb.group(addressFormValue)); 
-  //   }
-
-  //   const contactFormValue = this.personForm.get('contactForm')?.value;
-  //   if (contactFormValue && Object.keys(contactFormValue).length > 0) {
-  //     this.contacts.push(this.fb.group(contactFormValue)); 
-  //   }
-
-  //   const birthDate = this.personForm.get('birth_date')?.value;
-  //   const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd'); 
-
-  //   let finalBirthDate = formattedBirthDate;
-  //   if (birthDate instanceof Date) {
-  //     finalBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');  
-  //   }
-
-  //   // Format birthtime (if any)
-  //   const birthTime = this.personForm.get('birthtime')?.value;
-  //   const formattedBirthTime = this.formatTime(birthTime);
-
-  //   const lastKnownDetails = this.personForm.get('last_known_details')?.value;
-  //   if (lastKnownDetails && lastKnownDetails.length > 0) {
-  //     lastKnownDetails.forEach((detail: { missing_date: string | number | Date | null; missing_time: string | null; }) => {
-  //       if (detail.missing_date) {
-  //         detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
-  //       }
-  //         if (detail.missing_time) {
-  //         detail.missing_time = this.formatTime(detail.missing_time); 
-  //       }
-  //     });
-  //   }
-  //   const payload = {
-  //     ...this.personForm.value,
-  //     birth_date: finalBirthDate, 
-  //     birthtime: formattedBirthTime,  
-  //     addresses: this.addresses.value, 
-  //     contacts: this.contacts.value,  
-  //   };
 
 
-  //   delete payload.addressForm;
-  //   delete payload.contactForm;
+  formatTime(time: string): string | null {
+    if (!time) return null;
 
-  //   // Log the payload for debugging purposes
-  //   console.log("Payload Sent to Backend:", payload);
+    const [timePart, modifier] = time.trim().split(' ');
 
-  //   this.formapi.postMissingPerson(payload).subscribe({
-  //     next: (response) => {
-  //       console.log('Person added successfully!', response);
-  //       alert("Person added successfully");
-  //         this.personForm.reset();
-  //       this.addresses.clear(); 
-  //       this.contacts.clear();  
-  //       this.selectedFiles = {}; 
-  //     },
-  //     error: (error) => {
-  //       console.error('Error adding person:', error);
-  //       alert('An error occurred while adding the person. Please try again.');
-  //     },
-  //   });
-  // }
+    if (!timePart || !modifier) return null;
 
+    let [hours, minutes] = timePart.split(':');
+    let hrs = parseInt(hours, 10);
 
+    if (modifier.toUpperCase() === 'PM' && hrs !== 12) {
+      hrs += 12;
+    }
+    if (modifier.toUpperCase() === 'AM' && hrs === 12) {
+      hrs = 0;
+    }
 
-  formatTime(time: string): string {
-    const formattedTime = time ? time.replace(/[“”]/g, '"') : '';
-    return formattedTime;
+    return `${hrs.toString().padStart(2, '0')}:${minutes}`;
   }
+
 
 }

@@ -74,7 +74,7 @@ export class SearchbyIDComponent {
   }
 
   // goBack(): void {
-  //   this.router.navigate(['datatable/missing-person']);
+  //   this.router.navigate(['search/missing-person']);
   // }
 
 }

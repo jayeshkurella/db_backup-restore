@@ -378,16 +378,21 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Street</mat-label>
-                <input matInput type="text" formControlName="street" maxlength="15" (blur)="addressForm.get('street')"
-                  (keypress)="preventSpecialCharacters($event)">
 
-                <mat-error *ngIf="addressForm.get('street')?.hasError('maxlength')">
-                  Maximum 15 characters or numbers allowed
-                </mat-error>
 
+
+                <input matInput formControlName="street" />
                 <mat-error
-                  *ngIf="addressForm.get('street')?.hasError('specialChars') && addressForm.get('street')?.touched">
-                  Special characters are not allowed
+                  *ngIf="addressForm.get('street')?.touched && addressForm.get('street')?.hasError('required')">
+                  Street is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="addressForm.get('street')?.touched && addressForm.get('street')?.hasError('maxlength')">
+                  Maximum 30 characters allowed.
+                </mat-error>
+                <mat-error
+                  *ngIf="addressForm.get('street')?.touched && addressForm.get('street')?.hasError('invalidCharacters')">
+                  Only letters, numbers, spaces, commas, and hyphens are allowed.
                 </mat-error>
               </mat-form-field>
             </div>
@@ -398,11 +403,12 @@
                   <mat-label>Landmark Details</mat-label>
                   <textarea matInput formControlName="landmark_details" rows="1"></textarea>
                   <mat-error
-                    *ngIf="addressForm.get('addressForm.landmark_details')?.touched && addressForm.get('addressForm.landmark_details')?.hasError('maxlength')">
+                    *ngIf="addressForm.get('landmark_details')?.touched && addressForm.get('landmark_details')?.hasError('maxlength')">
                     Maximum 150 characters allowed.
                   </mat-error>
+
                   <mat-error
-                    *ngIf="addressForm.get('addressForm.landmark_details')?.touched && addressForm.get('addressForm.landmark_details')?.hasError('invalidLandmark')">
+                    *ngIf="addressForm.get('landmark_details')?.touched && addressForm.get('landmark_details')?.hasError('invalidLandmark')">
                     Only letters, numbers, spaces, and , . - # are allowed.
                   </mat-error>
                 </mat-form-field>
@@ -511,18 +517,21 @@
               <mat-form-field appearance="outline" class="flex-grow-1 me-2">
                 <mat-label>Latitude</mat-label>
                 <input matInput type="text" formControlName="latitude" />
-                <mat-error
-                  *ngIf="addressForm.get('addressForm.location.latitude')?.touched && addressForm.get('addressForm.location.latitude')?.hasError('invalidCoordinate')">
-                  Enter a valid number (e.g., 12.3456).
+                <mat-error *ngIf="
+                    addressForm.get('location.latitude')?.touched &&
+                    addressForm.get('location.latitude')?.hasError('invalidCoordinate')
+                  ">
+                  Enter a valid number.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="flex-grow-1">
                 <mat-label>Longitude</mat-label>
                 <input matInput type="text" formControlName="longitude" />
-                <mat-error
-                  *ngIf="addressForm.get('addressForm.location.longitude')?.touched && addressForm.get('addressForm.location.longitude')?.hasError('invalidCoordinate')">
-                  Enter a valid number (e.g., 77.1234).
+                <mat-error *ngIf="
+                    addressForm.get('location.longitude')?.touched &&
+                    addressForm.get('location.longitude')?.hasError('invalidCoordinate')">
+                  Enter a valid number.
                 </mat-error>
               </mat-form-field>
 
@@ -602,9 +611,6 @@
               <mat-label>Name</mat-label>
               <input matInput type="text" formControlName="person_name" maxlength="30"
                 (keypress)="allowOnlyLetters($event,'person_name','contactForm')" />
-              <mat-hint align="end" *ngIf="contactForm.get('person_name')?.value">
-                {{ contactForm.get('person_name')?.value.length }}
-              </mat-hint>
 
               <mat-error *ngIf="contactForm.get('person_name')?.invalid && contactForm.get('person_name')?.touched">
 

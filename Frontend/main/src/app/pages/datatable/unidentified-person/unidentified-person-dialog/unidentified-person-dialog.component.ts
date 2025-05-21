@@ -56,7 +56,7 @@ export class UnidentifiedPersonDialogComponent {
   
   
    goBack(): void {
-      this.router.navigate(['/datatable/unidentified-person']); // Navigate to the main component or home route
+      this.router.navigate(['/search/unidentified-person']); // Navigate to the main component or home route
     }
   
 

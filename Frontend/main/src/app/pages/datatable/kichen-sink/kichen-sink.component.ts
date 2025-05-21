@@ -533,7 +533,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
       const resultData = response.body;
       console.log('Matched with UP:', resultData);
 
-      this.router.navigate(['/datatable/match-up-result'], {
+      this.router.navigate(['/search/match-up-result'], {
         state: { data: resultData }
       });
     },
@@ -561,7 +561,7 @@ hasFiltersApplied(): boolean {
 }
 
 viewDetails(person: Person): void {
-      this.router.navigate(['/datatable/missing-person/person-view', person.id]);
+      this.router.navigate(['/search/missing-person/person-view', person.id]);
   }
 
   

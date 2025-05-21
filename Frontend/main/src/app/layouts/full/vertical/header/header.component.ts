@@ -146,6 +146,7 @@ export class HeaderComponent implements OnInit  {
 }
 
   logout() {
+    
      this.authService.setUser(null);
     localStorage.removeItem('user');
     this.authService.setProfilePic('');  // Clear the picture

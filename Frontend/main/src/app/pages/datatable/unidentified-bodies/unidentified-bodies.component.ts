@@ -287,7 +287,7 @@ ngAfterViewInit(): void {
 
 
   /** Open MatDialog */viewDetails(person: Person): void {
-          this.router.navigate(['/datatable/unidentified-bodies/person-view', person.id]);
+          this.router.navigate(['/search/unidentified-bodies/person-view', person.id]);
       }
   
   

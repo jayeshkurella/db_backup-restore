@@ -1,31 +1,3 @@
-/* Add this CSS to your stylesheet */
-#google-login {
-  padding: 8px 16px;
-  border-radius: 4px;
-  background: white;
-  color: rgba(0, 0, 0, 0.87);
-  font-size: 14px;
-  font-weight: 500;
-  width: 100%;
-  border: 1px solid #dadce0;
-  transition: background-color 0.2s, box-shadow 0.2s;
-}
-
-#google-login:hover {
-  background-color: #f8f9fa;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 
-              0 1px 3px 1px rgba(60,64,67,0.15);
-}
-
-#google-login img {
-  width: 18px; /* Slightly larger icon */
-  height: 18px;
-}
-
-.m-r-10 {
-  margin-right: 5px; /* Slightly more spacing */
-}
-
 
 /* If you prefer bold simplicity */
 .chhaya-heading {
@@ -40,4 +12,17 @@
 .chhaya-brand {
   color: #F58200;
   font-weight: 800;
+}
+
+::ng-deep .mat-autocomplete-panel {
+  border: 1px solid #c4c4c4;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 4px 0;
+  background-color: #fff;
+}
+
+.googles{
+ border-radius: 1000px !important;
+  text-align: center;
 }

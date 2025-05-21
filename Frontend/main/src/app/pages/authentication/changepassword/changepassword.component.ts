@@ -100,6 +100,6 @@ export class ChangepasswordComponent {
   }
 
   goToDashboard(): void {
-    this.router.navigate(['/dashboards/dashboard1']);
+    this.router.navigate(['/']);
   }
 }

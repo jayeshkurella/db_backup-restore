@@ -149,101 +149,60 @@
     <mat-tab-group>
       <!-- Missing Persons Tab -->
       <mat-tab label="Missing Persons">
-        <div class="table-responsive mt-1">
-          <table mat-table [dataSource]="filteredMissingPersonssss" class="w-100">
-            <!-- Sr No. Column -->
-            <ng-container matColumnDef="srNo">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Sr No.</th>
-              <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+  <div class="table-responsive mt-1">
+    <table mat-table [dataSource]="filteredMissingPersonssss" class="w-100">
+      <ng-container *ngFor="let column of displayedColumns">
+        <ng-container [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+            {{ column | titlecase }}
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <ng-container [ngSwitch]="column">
+              <span *ngSwitchCase="'srNo'">{{ i + 1 }}</span>
+
+              <span *ngSwitchCase="'photo'" class="image-container">
+                <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
+                     alt="Person Photo" 
+                     class="rounded hover-zoom"
+                     width="40" 
+                     height="40"
+                     style="object-fit: cover;"
+                     (error)="onImageError($event, element.properties.type)">
+              </span>
+
+              <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
+              <span *ngSwitchCase="'age'">{{ element.properties.age || 'Not specified' }}</span>
+
+              <span *ngSwitchCase="'gender'">
+                <mat-icon 
+                  [ngClass]="{
+                    'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
+                    'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                  }">
+                  {{ getGenderIcon(element.properties.gender) }}
+                </mat-icon>
+              </span>
+
+              <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
+              <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
+              <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
+
+              <span *ngSwitchCase="'action'">
+                <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
+                  <mat-icon class="f-s-00">visibility</mat-icon>
+                </button>
+              </span>
             </ng-container>
+          </td>
+        </ng-container>
+      </ng-container>
 
-            <!-- Photo Column -->
-            <ng-container matColumnDef="photo">
-            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Photo</th>
-            <td mat-cell *matCellDef="let element">
-              <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
-                  alt="Person Photo" 
-                  class="rounded hover-zoom"
-                  width="20" 
-                  height="20"
-                  style="object-fit: cover;"
-                  (error)="onImageError($event, element.properties.type)">
-            </td>
-          </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</mat-tab>
 
-
-            <!-- Full Name Column -->
-            <ng-container matColumnDef="fullName">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Full Name</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.properties.full_name || 'Unknown' }}
-              </td>
-            </ng-container>
-
-            <!-- Age Column -->
-            <ng-container matColumnDef="age">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Age</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.properties.age || 'Not specified' }}
-              </td>
-            </ng-container>
-
-            <!-- Gender Column -->
-            
-            <ng-container matColumnDef="gender">
-            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Gender</th>
-            <td mat-cell *matCellDef="let element">
-              <mat-icon 
-                [ngClass]="{
-                  'male-icon': element.properties.gender === 'male',
-                  'female-icon': element.properties.gender === 'female',
-                  'other-icon': element.properties.gender !== 'male' && element.properties.gender !== 'female'
-                }">
-                {{ getGenderIcon(element.properties.gender) }}
-              </mat-icon>
-            </td>
-          </ng-container>
-
-
-            <!-- City Column -->
-            <ng-container matColumnDef="city">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">City</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.properties.city || 'Not specified' }}
-              </td>
-            </ng-container>
-
-            <!-- District Column -->
-            <ng-container matColumnDef="district">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">District</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.properties.district || 'Not specified' }}
-              </td>
-            </ng-container>
-
-            <!-- State Column -->
-            <ng-container matColumnDef="state">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">State</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.properties.state || 'Not specified' }}
-              </td>
-            </ng-container>
-
-            <!-- Action Column -->
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Action</th>
-              <td mat-cell *matCellDef="let element">
-               <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
-                <mat-icon class="f-s-00">visibility</mat-icon>
-              </button>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-        </div>
-      </mat-tab>
 
       <!-- Unidentified Persons Tab -->
       <mat-tab label="Unidentified Persons">

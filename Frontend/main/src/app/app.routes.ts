@@ -2,17 +2,20 @@ import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { PersonDetailsComponent } from './components/dashboard1/revenue-updates/person-details/person-details.component';
+import { AppDashboard1Component } from './pages/dashboards/dashboard1/dashboard1.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: FullComponent,
     children: [
-      {
-        path: '',
-        redirectTo: '/dashboards/dashboard1',
-        pathMatch: 'full',
-      },
+       {
+      path: '',
+      component: AppDashboard1Component, 
+    },{
+      path: 'home',
+      component: AppDashboard1Component, // Reuse the same component for /home
+    },
       { 
         path: 'starter',
         loadChildren: () =>
@@ -42,7 +45,7 @@ export const routes: Routes = [
           import('./pages/apps/apps.routes').then((m) => m.AppsRoutes),
       },
       {
-        path: 'widgets',
+        path: 'resources',
         loadChildren: () =>
           import('./pages/widgets/widgets.routes').then((m) => m.WidgetsRoutes),
       },
@@ -52,7 +55,7 @@ export const routes: Routes = [
           import('./pages/tables/tables.routes').then((m) => m.TablesRoutes),
       },
       {
-        path: 'datatable',
+        path: 'search',
         loadChildren: () =>
           import('./pages/datatable/datatable.routes').then(
             (m) => m.datatablesRoutes

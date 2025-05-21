@@ -30,7 +30,7 @@ isLoggedIn = false;
       this.logs = logs;
     });  }
   goToAddLog() {
-    this.router.navigate(['datatable/add-changelog']);
+    this.router.navigate(['search/add-changelog']);
   }
 
   deleteLog(logId: number): void {

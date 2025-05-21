@@ -87,7 +87,7 @@ export class HospitalsComponent implements OnInit{
   }
 
   addhospital(): void {
-    this.router.navigate(['/widgets/add-hospitals']);
+    this.router.navigate(['/resources/add-hospitals']);
   }
   fetchHospitalData(): void {
   this.loading = true;
@@ -166,7 +166,7 @@ export class HospitalsComponent implements OnInit{
   }
 
   seeMoreHospitaldata(hospital: any) {
-    this.router.navigate(['/widgets/hospital', hospital.id], {
+    this.router.navigate(['/resources/hospital', hospital.id], {
       state: { hospital } 
     }); 
   }

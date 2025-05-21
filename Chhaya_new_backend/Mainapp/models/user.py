@@ -58,7 +58,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     class UserTypeChoices(models.TextChoices):
-        REPORTING = "reporting", "Reporting"
+        REPORTING = "reporting_person", "Reporting"
         VOLUNTEER = "volunteer", "Volunteer"
         FAMILY = "family", "Family"
         ADMIN = "admin", "Admin"

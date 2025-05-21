@@ -36,7 +36,7 @@ class IsOfficerUser(BaseUserPermission):
 
 class IsReportingUser(BaseUserPermission):
     """Allows access to Admin and Reporting users."""
-    user_type = 'reporting'
+    user_type = 'reporting_person'
 
 
 class IsVolunteerUser(BaseUserPermission):
@@ -63,7 +63,7 @@ class AllUserAccess(BasePermission):
 
     def __init__(self, *allowed_user_types):
         self.allowed_user_types = allowed_user_types or [
-            "family", "officer", "reporting", "volunteer",
+            "family", "officer", "reporting_person", "volunteer",
             "police_station", "medical_staff"
         ]
 

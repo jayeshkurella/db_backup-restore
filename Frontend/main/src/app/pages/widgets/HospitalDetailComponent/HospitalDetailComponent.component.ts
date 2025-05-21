@@ -35,7 +35,7 @@ export class HospitalDetailComponentComponent implements OnInit {
 
     // If someone lands directly without selection
     if (!this.hospital) {
-      this.router.navigate(['/widgets/hospitals']);
+      this.router.navigate(['/resources/hospitals']);
     }
   }
 
@@ -82,7 +82,7 @@ export class HospitalDetailComponentComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/widgets/hospitals']);
+    this.router.navigate(['/resources/hospitals']);
   }
 
    sanitizeUrl(url: string): string {

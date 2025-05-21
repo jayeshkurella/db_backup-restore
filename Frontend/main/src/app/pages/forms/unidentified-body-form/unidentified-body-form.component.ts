@@ -48,298 +48,298 @@ import { UbconsentComponent } from './ubconsent/ubconsent.component';
     CommonModule,
     NgxMatTimepickerModule,
     MatIconModule
-    
+
   ],
   templateUrl: './unidentified-body-form.component.html',
   styleUrl: './unidentified-body-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideNativeDateAdapter(),DatePipe],
+  providers: [provideNativeDateAdapter(), DatePipe],
 })
-export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit{ 
+export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
   @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
-    map!: L.Map;
-    marker!: L.Marker | null;
-    geocoder: any;
-    latitude: number | null = null;
-    longitude: number | null = null;
-    markerLayer: any;
-    showLoader = false;
-    loading = false;
-    progress = 0;
-    selectedImage: string | ArrayBuffer | null | undefined;
-    uploadedFiles: any;
-    imagePreview: string | ArrayBuffer | null = null;
-    selectedFiles: { [key: string]: any[] } = {};
-    hospitals: any[] = [];
-    policeStations: any[] = [];
-    states = [
-      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-      "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
-      "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
-      "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
-      "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-      "Uttar Pradesh", "Uttarakhand", "West Bengal"
-    ];
-    countries = [
-      "India", "United States of America", "China", "Japan",
-      "Germany", "United Kingdom", "France", "Brazil", "Australia", "Canada"
-    ];
-    unidentifiedBodyForm!: FormGroup;
-    // createAddressFormGroup!:FormFroup;
-    storedPersonId: string | null = null;
-  
-    selectedFileName: string = '';
+  map!: L.Map;
+  marker!: L.Marker | null;
+  geocoder: any;
+  latitude: number | null = null;
+  longitude: number | null = null;
+  markerLayer: any;
+  showLoader = false;
+  loading = false;
+  progress = 0;
+  selectedImage: string | ArrayBuffer | null | undefined;
+  uploadedFiles: any;
+  imagePreview: string | ArrayBuffer | null = null;
+  selectedFiles: { [key: string]: any[] } = {};
+  hospitals: any[] = [];
+  policeStations: any[] = [];
+  states = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+    "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
+    "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
+    "Uttar Pradesh", "Uttarakhand", "West Bengal"
+  ];
+  countries = [
+    "India", "United States of America", "China", "Japan",
+    "Germany", "United Kingdom", "France", "Brazil", "Australia", "Canada"
+  ];
+  unidentifiedBodyForm!: FormGroup;
+  // createAddressFormGroup!:FormFroup;
+  storedPersonId: string | null = null;
 
-       constructor(
-      private fb: FormBuilder,
-      private formApi: FormApiService,
-      private datePipe: DatePipe,
-      private toastr: ToastrService,
-      private dialog: MatDialog,
-    ) {}
-  
-  
-    ngOnInit(): void {
-      this.getToken();
-      this.initializeForm();
-      this.loadPoliceStations();
-      this.loadHospitals();
-    }
-  
-    ngAfterViewInit(): void {
-      setTimeout(() => {
-        this.initMap();
-      }, 0);
-    }
-  
-    getToken() {
-      this.storedPersonId = localStorage.getItem('user_id');
-      console.log(this.storedPersonId, "id");
-    }
+  selectedFileName: string = '';
 
-allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedBodyForm' | 'firsForm'): boolean {
-  const charCode = event.key.charCodeAt(0);
-  const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
+  constructor(
+    private fb: FormBuilder,
+    private formApi: FormApiService,
+    private datePipe: DatePipe,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) { }
 
-  const isValidChar =
-    (charCode >= 65 && charCode <= 90) ||  // A-Z
-    (charCode >= 97 && charCode <= 122) || // a-z
-    charCode === 32 ||                      // space
-    allowedKeys.includes(event.keyCode);   // navigation keys
 
-  let form;
-  switch (formGroup) {
-    case 'contactForm':
-      form = this.contactForm;
-      break;
-    case 'unidentifiedBodyForm':
-      form = this.unidentifiedBodyForm;
-      break;
-    case 'firsForm':
-      form = this.firsForm;
-      break;
+  ngOnInit(): void {
+    this.getToken();
+    this.initializeForm();
+    this.loadPoliceStations();
+    this.loadHospitals();
   }
 
-  const control = form.get(controlName);
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.initMap();
+    }, 0);
+  }
 
-  if (!isValidChar) {
-    control?.setErrors({ invalidChars: true });
-    event.preventDefault();
-    return false;
-  } else {
-    // Clear error if valid
-    const currentErrors = control?.errors;
-    if (currentErrors?.['invalidChars']) {
-      delete currentErrors['invalidChars'];
-      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+  getToken() {
+    this.storedPersonId = localStorage.getItem('user_id');
+    console.log(this.storedPersonId, "id");
+  }
+
+  allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedBodyForm' | 'firsForm'): boolean {
+    const charCode = event.key.charCodeAt(0);
+    const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
+
+    const isValidChar =
+      (charCode >= 65 && charCode <= 90) ||  // A-Z
+      (charCode >= 97 && charCode <= 122) || // a-z
+      charCode === 32 ||                      // space
+      allowedKeys.includes(event.keyCode);   // navigation keys
+
+    let form;
+    switch (formGroup) {
+      case 'contactForm':
+        form = this.contactForm;
+        break;
+      case 'unidentifiedBodyForm':
+        form = this.unidentifiedBodyForm;
+        break;
+      case 'firsForm':
+        form = this.firsForm;
+        break;
+    }
+
+    const control = form.get(controlName);
+
+    if (!isValidChar) {
+      control?.setErrors({ invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      // Clear error if valid
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): boolean {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+    if (allowedKeys.includes(event.key)) {
+      return true;
+    }
+
+    const isNumber = /^[0-9]$/.test(event.key);
+    const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
+
+    const control =
+      inputName === 'weight' ? this.unidentifiedBodyForm.get('weight') :
+        inputName === 'pincode' ? this.addressForm.get('pincode') :
+          inputName === 'phone_no' ? this.contactForm.get('phone_no') :
+            inputName === 'investigation_officer_contacts' ? this.firsForm?.get('investigation_officer_contacts') : // Add this line
+              null;
+
+    if (!isNumber) {
+      control?.setErrors({ ...control.errors, invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
+  }
+
+  // Restricts age to max 200 even while typing
+  restrictMaxAge(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.valueAsNumber;
+
+    if (value > 200) {
+      input.value = '200'; // Force-set to max 200
+      this.unidentifiedBodyForm.get('weight')?.setValue(200); // Update form control
+      this.unidentifiedBodyForm.get('weight')?.setErrors({ max: true }); // Show error
+    }
+  }
+  // Unified method for both village and city
+  allowTextInput(event: KeyboardEvent, controlName: string): boolean {
+    const charCode = event.key.charCodeAt(0);
+    const allowedKeys = [8, 9, 13, 37, 38, 39, 40];
+    const isValidChar =
+      (charCode >= 65 && charCode <= 90) ||
+      (charCode >= 97 && charCode <= 122) ||
+      charCode === 32 ||
+      charCode === 45 ||
+      allowedKeys.includes(charCode);
+
+    if (!isValidChar) {
+      this.addressForm.get(controlName)?.setErrors({ invalidChars: true });
+      event.preventDefault();
+      return false;
     }
     return true;
   }
-}
+  preventSpecialCharacters(event: KeyboardEvent) {
+    const allowedChars = /[a-zA-Z0-9 ]/;  // Allows letters, numbers, and spaces
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+  initializeForm() {
+    this.unidentifiedBodyForm = this.fb.group({
 
-allowOnlyNumbers(event: KeyboardEvent): boolean {
-  const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+      full_name: ['', [Validators.maxLength(30)]],
+      birth_date: [null],
+      age_range: [''],
+      weight: ['', [Validators.min(1), Validators.max(200)]],
 
-  if (allowedKeys.includes(event.key)) {
-    return true;
+      gender: ['', Validators.required],
+
+      height: ['', [Validators.pattern(/^[0-9]*$/), Validators.max(250)]],
+
+      birth_mark: ['', [Validators.maxLength(250), Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      distinctive_mark: ['', [Validators.maxLength(250), Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      type: ['Unidentified Body'],
+      birthtime: [null],
+      birthplace: [''],
+      height_range: [''],
+      blood_group: [''],
+      complexion: [''],
+      hair_color: [''],
+      hair_type: [''],
+      eye_color: [''],
+      condition: [''],
+      Body_Condition: [''],
+      death_type: [''],
+      bodies_condition: [[]],
+      hospital: [null],
+      document_ids: [''],
+      created_at: [null],
+      updated_at: [null],
+      created_by: [''],
+      updated_by: [''],
+      photo_photo: [''],
+      _is_deleted: [false],
+      addresses: this.fb.array([]),
+      contacts: this.fb.array([]),
+      additional_info: this.fb.array([]),
+      last_known_details: this.fb.array([]),
+      firs: this.fb.array([]),
+      consent: this.fb.array([]),
+      addressForm: this.createAddressFormGroup(),
+      contactForm: this.createContactFormGroup()
+    });
+
+    this.addAdditionalInfo();
+    this.addLastKnownDetails();
+    this.addFIR();
+    this.addConsent();
   }
 
-  const isNumber = /^[0-9]$/.test(event.key);
-  const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
-
-  const control =
-    inputName === 'weight' ? this.unidentifiedBodyForm.get('weight') :
-    inputName === 'pincode' ? this.addressForm.get('pincode') :
-    inputName === 'phone_no' ? this.contactForm.get('phone_no') :
-    inputName === 'investigation_officer_contacts' ? this.firsForm?.get('investigation_officer_contacts') : // Add this line
-    null;
-
-  if (!isNumber) {
-    control?.setErrors({ ...control.errors, invalidChars: true });
-    event.preventDefault();
-    return false;
-  } else {
-    const currentErrors = control?.errors;
-    if (currentErrors?.['invalidChars']) {
-      delete currentErrors['invalidChars'];
-      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
-    }
-    return true;
+  // Getters for FormArrays
+  get addresses(): FormArray {
+    return this.unidentifiedBodyForm.get('addresses') as FormArray;
   }
-}
 
-// Restricts age to max 200 even while typing
-restrictMaxAge(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  let value = input.valueAsNumber;
-
-  if (value > 200) {
-    input.value = '200'; // Force-set to max 200
-    this.unidentifiedBodyForm.get('weight')?.setValue(200); // Update form control
-    this.unidentifiedBodyForm.get('weight')?.setErrors({ max: true }); // Show error
+  get contacts(): FormArray {
+    return this.unidentifiedBodyForm.get('contacts') as FormArray;
   }
-}
-// Unified method for both village and city
-allowTextInput(event: KeyboardEvent, controlName: string): boolean {
-  const charCode = event.key.charCodeAt(0);
-  const allowedKeys = [8, 9, 13, 37, 38, 39, 40];
-  const isValidChar = 
-    (charCode >= 65 && charCode <= 90) ||
-    (charCode >= 97 && charCode <= 122) ||
-    charCode === 32 ||
-    charCode === 45 ||
-    allowedKeys.includes(charCode);
-
-  if (!isValidChar) {
-    this.addressForm.get(controlName)?.setErrors({ invalidChars: true });
-    event.preventDefault();
-    return false;
+  get addressForm(): FormGroup {
+    return this.unidentifiedBodyForm.get('addressForm') as FormGroup;
   }
-  return true;
-}
-preventSpecialCharacters(event: KeyboardEvent) {
-  const allowedChars = /[a-zA-Z0-9 ]/;  // Allows letters, numbers, and spaces
-  if (!allowedChars.test(event.key)) {
-    event.preventDefault();
+
+  get contactForm(): FormGroup {
+    return this.unidentifiedBodyForm.get('contactForm') as FormGroup;
   }
-}
-    initializeForm() {
-      this.unidentifiedBodyForm = this.fb.group({
 
-          full_name: ['', [  Validators.maxLength(30) ]],
-    birth_date: [null],
-    age_range: [''],
-  weight: ['', [Validators.min(1),  Validators.max(200)]],
+  get additionalInfo(): FormArray {
+    return this.unidentifiedBodyForm.get('additional_info') as FormArray;
+  }
 
-     gender: ['', Validators.required],
+  get lastKnownDetails(): FormArray {
+    return this.unidentifiedBodyForm.get('last_known_details') as FormArray;
+  }
+  get firsForm(): FormGroup {
+    return this.unidentifiedBodyForm.get('firs') as FormGroup;
+  }
 
-     height: ['', [Validators.pattern(/^[0-9]*$/), Validators.max(250)]],
+  get firs(): FormArray {
+    return this.unidentifiedBodyForm.get('firs') as FormArray;
+  }
 
-     birth_mark: ['', [Validators.maxLength(250),Validators.pattern(/^[a-zA-Z\s]*$/) ]],
-  distinctive_mark: ['', [Validators.maxLength(250),Validators.pattern(/^[a-zA-Z\s]*$/)]],
-        type: ['Unidentified Body'],
-        birthtime: [null],
-        birthplace: [''],
-        height_range:[''],
-        blood_group: [''],
-        complexion: [''],
-        hair_color: [''],
-        hair_type: [''],
-        eye_color: [''],
-        condition: [''],
-        Body_Condition: [''],    
-        death_type: [''],    
-        bodies_condition: [[]],      
-        hospital: [null],
-        document_ids: [''],
-        created_at: [null],
-        updated_at: [null],
-        created_by: [''],
-        updated_by: [''],
-        photo_photo:[''],
-        _is_deleted: [false],
-        addresses: this.fb.array([]),
-        contacts: this.fb.array([]),
-        additional_info: this.fb.array([]),
-        last_known_details: this.fb.array([]),
-        firs: this.fb.array([]),
-        consent: this.fb.array([]),
-        addressForm: this.createAddressFormGroup(),
-        contactForm: this.createContactFormGroup()
-      });
-  
-      this.addAdditionalInfo();
-      this.addLastKnownDetails();
-      this.addFIR();
-      this.addConsent();
-    }
+  get consent(): FormArray {
+    return this.unidentifiedBodyForm.get('consent') as FormArray;
+  }
+  createAddressFormGroup(): FormGroup {
+    return this.fb.group({
 
-    // Getters for FormArrays
-    get addresses(): FormArray {
-      return this.unidentifiedBodyForm.get('addresses') as FormArray;
-    }
-  
-    get contacts(): FormArray {
-      return this.unidentifiedBodyForm.get('contacts') as FormArray;
-    }
-    get addressForm(): FormGroup {
-      return this.unidentifiedBodyForm.get('addressForm') as FormGroup;
-    }
+      district: [''],
+      state: [''],
+      country: [''],
 
-    get contactForm(): FormGroup {
-      return this.unidentifiedBodyForm.get('contactForm') as FormGroup;
-    }
-  
-    get additionalInfo(): FormArray {
-      return this.unidentifiedBodyForm.get('additional_info') as FormArray;
-    }
-  
-    get lastKnownDetails(): FormArray {
-      return this.unidentifiedBodyForm.get('last_known_details') as FormArray;
-    }
-    get firsForm(): FormGroup {
-      return this.unidentifiedBodyForm.get('firs') as FormGroup;
-    }
-  
-    get firs(): FormArray {
-      return this.unidentifiedBodyForm.get('firs') as FormArray;
-    }
-  
-    get consent(): FormArray {
-      return this.unidentifiedBodyForm.get('consent') as FormArray;
-    }
-    createAddressFormGroup(): FormGroup {
-      return this.fb.group({
+      pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
+      landmark_details: ['', [Validators.maxLength(150), this.landmarkValidator()]],
+      street: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9\s]*$/)]],
+      village: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s-]*$/)]],
 
-    district: [''],
-    state: [''],
-    country: [''],
+      city: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s]*$/)]],
 
-    pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
-    landmark_details: ['',[Validators.maxLength(50), this.landmarkValidator() ]],
-    street: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z0-9\s]*$/) ]],
-    village: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z\s-]*$/) ]],
-
-    city: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z\s]*$/) ]],
-
-        address_type: [''],
-        // street: [''],
-        appartment_no: [''],
-        appartment_name: [''],
-        // location: this.fb.group({
-        //   latitude: [''],
-        //   longitude: [''],
-        // }),
-        location: this.fb.group({
+      address_type: [''],
+      // street: [''],
+      appartment_no: [''],
+      appartment_name: [''],
+      // location: this.fb.group({
+      //   latitude: [''],
+      //   longitude: [''],
+      // }),
+      location: this.fb.group({
         latitude: ['', [Validators.required, this.coordinateValidator()]],
         longitude: ['', [Validators.required, this.coordinateValidator()]],
       }),
-        // user: [''],
-        // created_by: [''],
-        // updated_by: [''],
-      });
-    }
-    coordinateValidator(): ValidatorFn {
+      // user: [''],
+      // created_by: [''],
+      // updated_by: [''],
+    });
+  }
+  coordinateValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
       if (!value) return null;
@@ -348,421 +348,421 @@ preventSpecialCharacters(event: KeyboardEvent) {
       return pattern.test(value) ? null : { invalidCoordinate: true };
     };
   }
-    
-landmarkValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    const value = control.value;
-    if (!value) return null;
 
-    // Allow letters, numbers, spaces, and ,.-#
-    const pattern = /^[a-zA-Z0-9\s,.\-#]+$/;
-    return pattern.test(value) ? null : { invalidLandmark: true };
-  };
-}
+  landmarkValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
 
-    // Correct method to create Contact FormGroup
-    createContactFormGroup(): FormGroup {
-      return this.fb.group({
-          type: ['referral'],
-          person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
-    phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
-    // email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
-     email_id: [
-    null,
-    Validators.compose([
-      Validators.maxLength(50),
-      Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-    ])
-  ],
-    additional_details: ['', Validators.maxLength(200)],
-        hospital: [null],
-        police_station: [null],
-        person: [''],
-        created_at: [null],
-        updated_at: [null],
-        // created_by: [''],
-        // updated_by: [''],
-      });
-    }
+      // Allow letters, numbers, spaces, and ,.-#
+      const pattern = /^[a-zA-Z0-9\s,.\-#]+$/;
+      return pattern.test(value) ? null : { invalidLandmark: true };
+    };
+  }
 
-addAddress() {
-  const addressForm = this.unidentifiedBodyForm.get('addressForm');
+  // Correct method to create Contact FormGroup
+  createContactFormGroup(): FormGroup {
+    return this.fb.group({
+      type: ['referral'],
+      person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
+      phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
+      // email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+      email_id: [
+        null,
+        Validators.compose([
+          Validators.maxLength(50),
+          Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        ])
+      ],
+      additional_details: ['', Validators.maxLength(200)],
+      hospital: [null],
+      police_station: [null],
+      person: [''],
+      created_at: [null],
+      updated_at: [null],
+      // created_by: [''],
+      // updated_by: [''],
+    });
+  }
 
-  if (addressForm) {
-    // Mark all fields as touched to trigger validation errors
-    addressForm.markAllAsTouched();
+  addAddress() {
+    const addressForm = this.unidentifiedBodyForm.get('addressForm');
 
-    if (addressForm.valid) {
-      // Add the current address to the list
-      this.addresses.push(this.fb.group(addressForm.value));
+    if (addressForm) {
+      // Mark all fields as touched to trigger validation errors
+      addressForm.markAllAsTouched();
 
-      // Optional: console log for debugging
-      console.log('Addresses:', this.addresses.value);
+      if (addressForm.valid) {
+        // Add the current address to the list
+        this.addresses.push(this.fb.group(addressForm.value));
 
-      // Reset the form and optionally set default values
-      addressForm.reset();
-      addressForm.get('address_type')?.setValue('');
-      addressForm.get('state')?.setValue('');
-      addressForm.get('country')?.setValue('');
+        // Optional: console log for debugging
+        console.log('Addresses:', this.addresses.value);
 
-      // Mark the main form as dirty since a new address is added
-      this.unidentifiedBodyForm.markAsDirty();
-    } else {
-      alert('Please fill in all required address fields before adding another address.');
+        // Reset the form and optionally set default values
+        addressForm.reset();
+        addressForm.get('address_type')?.setValue('');
+        addressForm.get('state')?.setValue('');
+        addressForm.get('country')?.setValue('');
+
+        // Mark the main form as dirty since a new address is added
+        this.unidentifiedBodyForm.markAsDirty();
+      } else {
+        alert('Please fill in all required address fields before adding another address.');
+      }
     }
   }
-}
-addContact() {
-  const contactForm = this.unidentifiedBodyForm.get('contactForm');
+  addContact() {
+    const contactForm = this.unidentifiedBodyForm.get('contactForm');
 
-  if (contactForm) {
+    if (contactForm) {
 
-    contactForm.markAllAsTouched();
+      contactForm.markAllAsTouched();
 
-    if (contactForm.valid) {
+      if (contactForm.valid) {
 
-      this.contacts.push(this.fb.group(contactForm.value));
+        this.contacts.push(this.fb.group(contactForm.value));
 
-      console.log('Contacts:', this.contacts.value);
+        console.log('Contacts:', this.contacts.value);
 
-      contactForm.reset();
-      contactForm.get('type')?.setValue('');
-      contactForm.get('social_media_availability')?.setValue('');
-      contactForm.get('is_primary')?.setValue('');
+        contactForm.reset();
+        contactForm.get('type')?.setValue('');
+        contactForm.get('social_media_availability')?.setValue('');
+        contactForm.get('is_primary')?.setValue('');
 
-      this.unidentifiedBodyForm.markAsDirty();
-    } else {
-      alert('Please fill in all required contact fields before adding another contact.');
+        this.unidentifiedBodyForm.markAsDirty();
+      } else {
+        alert('Please fill in all required contact fields before adding another contact.');
+      }
     }
   }
-}
 
-    
-    // Add additional info
-    addAdditionalInfo() {
-      this.additionalInfo.push(this.fb.group({
-        person: [''],
-        created_at: [null],
-        updated_at: [null],
-        // created_by: [''],
-        // updated_by: [''],
+
+  // Add additional info
+  addAdditionalInfo() {
+    this.additionalInfo.push(this.fb.group({
+      person: [''],
+      created_at: [null],
+      updated_at: [null],
+      // created_by: [''],
+      // updated_by: [''],
       caste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    subcaste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-    marital_status: [''],
-    religion: [''],
-    mother_tongue: [''],
-    other_known_languages: ['', this.languageValidator],
-    id_type: [''],
-    // id_no: ['', Validators.pattern(/^[a-zA-Z0-9]+$/)],
-    id_no: ['', [Validators.pattern(/^[a-zA-Z0-9]+$/),Validators.maxLength(15)]],
-    education_details: [''],
-occupation_details: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z0-9 ]*$/) ]]      
-}));
+      subcaste: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+      marital_status: [''],
+      religion: [''],
+      mother_tongue: [''],
+      other_known_languages: ['', this.languageValidator],
+      id_type: [''],
+      // id_no: ['', Validators.pattern(/^[a-zA-Z0-9]+$/)],
+      id_no: ['', [Validators.pattern(/^[a-zA-Z0-9]+$/), Validators.maxLength(15)]],
+      education_details: [''],
+      occupation_details: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9 ]*$/)]]
+    }));
+  }
+
+  languageValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+
+    const languages = control.value.split(',').map((lang: string) => lang.trim());
+
+    if (languages.length > 5) {
+      return { tooManyLanguages: true };
     }
 
-languageValidator(control: AbstractControl): ValidationErrors | null {
-  if (!control.value) return null;
-  
-  const languages = control.value.split(',').map((lang: string) => lang.trim());
-  
-  if (languages.length > 5) {
-    return { tooManyLanguages: true };
-  }
-  
-  const invalidChars = languages.some((lang: string) => !/^[a-zA-Z\s]+$/.test(lang));
-  if (invalidChars) {
-    return { invalidLanguageChars: true };
-  }
-  
-  return null;
-}
-
-    // Add last known details
-    addLastKnownDetails() {
-      this.lastKnownDetails.push(this.fb.group({
-        person_photo: [null],
-        reference_photo: [null],
-        missing_time: [''],
-        missing_date: [''],
-        last_seen_location: [''],
-        missing_location_details: [''],
-        address: [null],
-        person: [''],
-        created_at: [null],
-        updated_at: [null],
-        // created_by: [''],
-        // updated_by: [''],
-      }));
+    const invalidChars = languages.some((lang: string) => !/^[a-zA-Z\s]+$/.test(lang));
+    if (invalidChars) {
+      return { invalidLanguageChars: true };
     }
-    
-    // Add FIR
-    addFIR() {
-      this.firs.push(this.fb.group({
-    fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9]{1,20}$/)]],
-        case_status: [''],
-        investigation_officer_contact: [null],
-            // investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)],[  Validators.maxLength(30) ]],
-    investigation_officer_name: ['',[Validators.maxLength(30)]],
-    investigation_officer_contacts: ['',[Validators.pattern(/^[0-9]{1,10}$/)]],
+
+    return null;
+  }
+
+  // Add last known details
+  addLastKnownDetails() {
+    this.lastKnownDetails.push(this.fb.group({
+      person_photo: [null],
+      reference_photo: [null],
+      missing_time: [''],
+      missing_date: [''],
+      last_seen_location: [''],
+      missing_location_details: [''],
+      address: [null],
+      person: [''],
+      created_at: [null],
+      updated_at: [null],
+      // created_by: [''],
+      // updated_by: [''],
+    }));
+  }
+
+  // Add FIR
+  addFIR() {
+    this.firs.push(this.fb.group({
+      fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9]{1,20}$/)]],
+      case_status: [''],
+      investigation_officer_contact: [null],
+      // investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)],[  Validators.maxLength(30) ]],
+      investigation_officer_name: ['', [Validators.maxLength(30)]],
+      investigation_officer_contacts: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
       police_station: ['',],
-        document: [null],
-        fir_photo:[null],
-        person: [''],
-        created_at: [null],
-        updated_at: [null],
-        // created_by: [''],
-        // updated_by: [''],
-      }));
+      document: [null],
+      fir_photo: [null],
+      person: [''],
+      created_at: [null],
+      updated_at: [null],
+      // created_by: [''],
+      // updated_by: [''],
+    }));
+  }
+
+
+  loadPoliceStations() {
+    this.formApi.getPoliceStationList().subscribe({
+      next: (data: any) => {
+        this.policeStations = data;
+        console.log("Police Stations Loaded:", this.policeStations);
+      },
+      error: (err: any) => {
+        console.error("Error loading police stations", err);
+      }
+    });
+  }
+
+  loadHospitals() {
+    this.formApi.getHospitalList().subscribe({
+      next: (data: any) => {
+        this.hospitals = data;
+        console.log("Hospitals Loaded:", this.hospitals);
+      },
+      error: (err: any) => {
+        console.error("Error loading hospitals", err);
+      }
+    });
+  }
+
+
+  // Add Consent
+  addConsent() {
+    this.consent.push(this.fb.group({
+      data: [''],
+      document: [null],
+      person: [''],
+      is_consent: [false, Validators.required],
+      created_at: [null],
+      updated_at: [null],
+      // created_by: [''],
+      // updated_by: [''],
+    }));
+  }
+
+
+  // Remove functions
+  removeAddress(index: number) {
+    this.addresses.removeAt(index);
+  }
+  removeContact(index: number) {
+    this.contacts.removeAt(index);
+  }
+  removeAdditionalInfo(index: number) {
+    this.additionalInfo.removeAt(index);
+  }
+  removeLastKnownDetails(index: number) {
+    this.lastKnownDetails.removeAt(index);
+  }
+  removeFIR(index: number) {
+    this.firs.removeAt(index);
+  }
+  removeConsent(index: number) {
+    this.consent.removeAt(index);
+  }
+  initMap(): void {
+    this.map = L.map('mapHome').setView([22.9734, 78.6569], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(this.map);
+
+    this.map.on('click', (event: L.LeafletMouseEvent) => {
+      this.setMapLocation(event.latlng.lat, event.latlng.lng);
+    });
+  }
+
+  setMapLocation(lat: number, lng: number): void {
+    this.latitude = parseFloat(lat.toFixed(6));
+    this.longitude = parseFloat(lng.toFixed(6));
+
+    this.unidentifiedBodyForm.get('addressForm.location')?.patchValue({
+      latitude: this.latitude,
+      longitude: this.longitude,
+    });
+
+    const customIcon = L.icon({
+      iconUrl: 'assets/leaflet/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'assets/leaflet/images/marker-shadow.png',
+      shadowSize: [41, 41],
+    });
+
+    // If map is initialized, remove the existing marker
+    if (this.marker) {
+      this.map!.removeLayer(this.marker); // Using `!` to assert map is not null
     }
 
+    this.marker = L.marker([this.latitude, this.longitude], {
+      draggable: true,
+      icon: customIcon,
+    }).addTo(this.map!); // Using `!` to assert map is not null
 
-    loadPoliceStations() {
-      this.formApi.getPoliceStationList().subscribe({
-        next: (data:any) => {
-          this.policeStations = data;
-          console.log("Police Stations Loaded:", this.policeStations);
-        },
-        error: (err:any) => {
-          console.error("Error loading police stations", err);
+    this.marker.on('dragend', () => {
+      const newLatLng = this.marker!.getLatLng(); // Using `!` to assert marker is not null
+      this.setMapLocation(newLatLng.lat, newLatLng.lng);
+    });
+
+    this.map!.setView([this.latitude, this.longitude], 10); // Using `!` to assert map is not null
+  }
+
+
+  getCurrentLocation(): void {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by this browser.');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setMapLocation(position.coords.latitude, position.coords.longitude);
+      },
+      (error) => {
+        console.error('Error fetching location:', error);
+        alert('Unable to fetch location. Ensure location services are enabled.');
+      }
+    );
+  }
+
+
+
+
+  onFileSelect(event: any, section: string, index: number, field: string) {
+    const file = event.target.files[0];
+    if (file) {
+      if (!this.selectedFiles[section]) {
+        this.selectedFiles[section] = [];
+      }
+      if (!this.selectedFiles[section][index]) {
+        this.selectedFiles[section][index] = {};
+      }
+      this.selectedFiles[section][index][field] = file;
+      this.getFormArray(section).at(index).get(field)?.setValue(file.name);
+    }
+  }
+
+  removeFile(section: string, index: number, field: string) {
+    this.getFormArray(section).at(index).get(field)?.setValue(null);
+  }
+
+  private getFormArray(section: string): FormArray {
+    return this.unidentifiedBodyForm.get(section) as FormArray;
+  }
+
+  selectedFile: string | null = null;
+
+  onFileSelect_person_photo(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
+
+  onSubmit() {
+    const formData = new FormData();
+
+    const addressFormValue = this.unidentifiedBodyForm.get('addressForm')?.value;
+    if (addressFormValue && Object.keys(addressFormValue).length > 0) {
+      this.addresses.push(this.fb.group(addressFormValue));
+    }
+
+    const contactFormValue = this.unidentifiedBodyForm.get('contactForm')?.value;
+    if (contactFormValue && Object.keys(contactFormValue).length > 0) {
+      this.contacts.push(this.fb.group(contactFormValue));
+    }
+
+    const birthDate = this.unidentifiedBodyForm.get('birth_date')?.value;
+    const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
+    const birthTime = this.formatTime(this.unidentifiedBodyForm.get('birthtime')?.value);
+
+    const lastKnownDetails = this.unidentifiedBodyForm.get('last_known_details')?.value;
+    if (lastKnownDetails && lastKnownDetails.length > 0) {
+      lastKnownDetails.forEach((detail: any) => {
+        if (detail.missing_date) {
+          detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
+        }
+        if (detail.missing_time) {
+          detail.missing_time = this.formatTime(detail.missing_time);
         }
       });
     }
-  
-    loadHospitals() {
-      this.formApi.getHospitalList().subscribe({
-        next: (data:any) => {
-          this.hospitals = data;
-          console.log("Hospitals Loaded:", this.hospitals);
-        },
-        error: (err:any ) => {
-          console.error("Error loading hospitals", err);
-        }
-      });
-    }
-    
-  
-    // Add Consent
-    addConsent() {
-      this.consent.push(this.fb.group({
-        data: [''],
-        document: [null],
-        person: [''],
-        is_consent: [false, Validators.required],
-        created_at: [null],
-        updated_at: [null],
-        // created_by: [''],
-        // updated_by: [''],
-      }));
+
+    // Create a clean JSON object
+    const payload = {
+      ...this.unidentifiedBodyForm.value,
+      birth_date: formattedBirthDate,
+      birthtime: birthTime,
+      addresses: this.addresses.value,
+      contacts: this.contacts.value,
+    };
+
+    delete payload.addressForm;
+    delete payload.contactForm;
+
+    // Append JSON data as a Blob (important!)
+    formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+
+    // Append image file if available
+    if (this.selectedFile) {
+      formData.append('photo_photo', this.selectedFile); // field name must match Django field
     }
 
-    
-    // Remove functions
-    removeAddress(index: number) {
-      this.addresses.removeAt(index);
-    }
-    removeContact(index: number) {
-      this.contacts.removeAt(index);
-    }
-    removeAdditionalInfo(index: number) {
-      this.additionalInfo.removeAt(index);
-    }
-    removeLastKnownDetails(index: number) {
-      this.lastKnownDetails.removeAt(index);
-    }
-    removeFIR(index: number) {
-      this.firs.removeAt(index);
-    }
-    removeConsent(index: number) {
-      this.consent.removeAt(index);
-    }
-    initMap(): void {
-      this.map = L.map('mapHome').setView([22.9734, 78.6569], 5);
-  
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-      }).addTo(this.map);
-  
-      this.map.on('click', (event: L.LeafletMouseEvent) => {
-        this.setMapLocation(event.latlng.lat, event.latlng.lng);
-      });
-    }
-  
-    setMapLocation(lat: number, lng: number): void {
-      this.latitude = parseFloat(lat.toFixed(6));
-      this.longitude = parseFloat(lng.toFixed(6));
-    
-      this.unidentifiedBodyForm.get('addressForm.location')?.patchValue({
-        latitude: this.latitude,
-        longitude: this.longitude,
-      });
-    
-      const customIcon = L.icon({
-        iconUrl: 'assets/leaflet/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowUrl: 'assets/leaflet/images/marker-shadow.png',
-        shadowSize: [41, 41],
-      });
-    
-      // If map is initialized, remove the existing marker
-      if (this.marker) {
-        this.map!.removeLayer(this.marker); // Using `!` to assert map is not null
+    this.formApi.postMissingPerson(formData).subscribe({
+      next: (response) => {
+        this.toastr.success('Unidentified Body data added successfully', 'Success');
+        this.unidentifiedBodyForm.reset();
+        this.addresses.clear();
+        this.contacts.clear();
+        this.selectedFile = null;
+      },
+      error: (error) => {
+        this.toastr.error('Oops!', 'Something went wrong.');
       }
-    
-      this.marker = L.marker([this.latitude, this.longitude], {
-        draggable: true,
-        icon: customIcon,
-      }).addTo(this.map!); // Using `!` to assert map is not null
-    
-      this.marker.on('dragend', () => {
-        const newLatLng = this.marker!.getLatLng(); // Using `!` to assert marker is not null
-        this.setMapLocation(newLatLng.lat, newLatLng.lng);
-      });
-    
-      this.map!.setView([this.latitude, this.longitude], 10); // Using `!` to assert map is not null
-    }
-    
-  
-    getCurrentLocation(): void {
-      if (!navigator.geolocation) {
-        alert('Geolocation is not supported by this browser.');
-        return;
-      }
-  
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.setMapLocation(position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.error('Error fetching location:', error);
-          alert('Unable to fetch location. Ensure location services are enabled.');
-        }
-      );
-    }
-  
-   
-  
-    
-    onFileSelect(event: any, section: string, index: number, field: string) {
-      const file = event.target.files[0];
-      if (file) {
-          if (!this.selectedFiles[section]) {
-              this.selectedFiles[section] = [];
-          }
-          if (!this.selectedFiles[section][index]) {
-              this.selectedFiles[section][index] = {};
-          }
-          this.selectedFiles[section][index][field] = file;
-          this.getFormArray(section).at(index).get(field)?.setValue(file.name);
-      }
-    }
-  
-    removeFile(section: string, index: number, field: string) {
-      this.getFormArray(section).at(index).get(field)?.setValue(null);
-    }
-  
-    private getFormArray(section: string): FormArray {
-      return this.unidentifiedBodyForm.get(section) as FormArray;
-    }
-  
-    selectedFile: string | null = null;
+    });
+  }
 
-    onFileSelect_person_photo(event: any): void {
-      const file = event.target.files[0];
-      if (file) {
-        this.selectedFile = file;
-      }
-    }
-    
-  
-    onSubmit() {
-      const formData = new FormData();
-    
-      const addressFormValue = this.unidentifiedBodyForm.get('addressForm')?.value;
-      if (addressFormValue && Object.keys(addressFormValue).length > 0) {
-        this.addresses.push(this.fb.group(addressFormValue));
-      }
-    
-      const contactFormValue = this.unidentifiedBodyForm.get('contactForm')?.value;
-      if (contactFormValue && Object.keys(contactFormValue).length > 0) {
-        this.contacts.push(this.fb.group(contactFormValue));
-      }
-    
-      const birthDate = this.unidentifiedBodyForm.get('birth_date')?.value;
-      const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
-      const birthTime = this.formatTime(this.unidentifiedBodyForm.get('birthtime')?.value);
-    
-      const lastKnownDetails = this.unidentifiedBodyForm.get('last_known_details')?.value;
-      if (lastKnownDetails && lastKnownDetails.length > 0) {
-        lastKnownDetails.forEach((detail: any) => {
-          if (detail.missing_date) {
-            detail.missing_date = this.datePipe.transform(detail.missing_date, 'yyyy-MM-dd');
-          }
-          if (detail.missing_time) {
-            detail.missing_time = this.formatTime(detail.missing_time);
-          }
-        });
-      }
-    
-      // Create a clean JSON object
-      const payload = {
-        ...this.unidentifiedBodyForm.value,
-        birth_date: formattedBirthDate,
-        birthtime: birthTime,
-        addresses: this.addresses.value,
-        contacts: this.contacts.value,
-      };
-    
-      delete payload.addressForm;
-      delete payload.contactForm;
-    
-      // Append JSON data as a Blob (important!)
-      formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-    
-      // Append image file if available
-      if (this.selectedFile) {
-        formData.append('photo_photo', this.selectedFile); // field name must match Django field
-      }
-    
-      this.formApi.postMissingPerson(formData).subscribe({
-        next: (response) => {
-          this.toastr.success('Body Data added  successfully', 'Success');
-          this.unidentifiedBodyForm.reset();
-          this.addresses.clear();
-          this.contacts.clear();
-          this.selectedFile = null;
-        },
-        error: (error) => {
-          this.toastr.error('Oops!', 'Something went wrong.');
-        }
-      });
-    }
-    
-    formatTime(time: string): string {
-      return time ? time.replace(/[“”]/g, '"') : '';
-    }
+  formatTime(time: string): string {
+    return time ? time.replace(/[“”]/g, '"') : '';
+  }
 
 
-   openConsentDialog() {
-      const dialogRef = this.dialog.open(UbconsentComponent, {
-        width: '80vw',  
-        maxWidth: '90vw' ,
-        height: '80vh',
-        maxHeight: '90vh',
-        autoFocus: false
-      });
-    
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.consent.controls[0].get('is_consent')?.setValue(true);
-        }
-      });
-    }
-    onConsentChange(event: Event) {
-      const checked = (event.target as HTMLInputElement).checked;
-      if (checked) {
-        this.openConsentDialog();
+  openConsentDialog() {
+    const dialogRef = this.dialog.open(UbconsentComponent, {
+      width: '80vw',
+      maxWidth: '90vw',
+      height: '80vh',
+      maxHeight: '90vh',
+      autoFocus: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.consent.controls[0].get('is_consent')?.setValue(true);
       }
+    });
+  }
+  onConsentChange(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.openConsentDialog();
     }
+  }
 }

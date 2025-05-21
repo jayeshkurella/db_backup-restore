@@ -47,7 +47,7 @@ isLoading = false;
  }
 
  goBack(): void {
-    this.router.navigate(['/dashboards/dashboard1']); // Navigate to the main component or home route
+    this.router.navigate(['/']); // Navigate to the main component or home route
   }
 
  onImgError(event: Event, type?: string, gender?: string) {

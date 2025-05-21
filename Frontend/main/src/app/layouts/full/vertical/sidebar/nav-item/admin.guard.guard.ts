@@ -23,7 +23,7 @@ export class AdminGuard implements CanActivate {
     this.showAccessDeniedWarning();
     
     // Redirect to home or access-denied page
-    this.router.navigate(['/dashboards/dashboard1']);
+    this.router.navigate(['/']);
     return false;
   }
 

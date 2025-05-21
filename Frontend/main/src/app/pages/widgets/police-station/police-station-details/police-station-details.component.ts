@@ -25,7 +25,7 @@ export class PoliceStationDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.policestation = history.state.policestation;
     if (!this.policestation) {
-      this.router.navigate(['/widgets/police-station']);
+      this.router.navigate(['/resources/police-station']);
     }
   }
 
@@ -71,7 +71,7 @@ onImageError(event: Event) {
   }
 
   goBack(): void {
-    this.router.navigate(['/widgets/police-station']);
+    this.router.navigate(['/resources/police-station']);
   }
   sanitizeUrl(url: string): string {
   const trimmedUrl = url.trim();

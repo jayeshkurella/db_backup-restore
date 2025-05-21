@@ -4,118 +4,86 @@
       <div class="p-24 h-100">
         <app-branding></app-branding>
 
-        <div
-          class="align-items-center justify-content-center img-height d-none d-lg-flex"
-        >
-          <img
-            src="assets/images/backgrounds/login-bg.svg"
-            alt="login"
-            style="max-width: 500px"
-          />
+        <div class="align-items-center justify-content-center img-height d-none d-lg-flex">
+          <img src="assets/images/backgrounds/login-bg.svg" alt="login" style="max-width: 500px" />
         </div>
       </div>
     </div>
     <div class="col-lg-5 col-xl-4 p-0">
-      <div
-        class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100"
-      >
+      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form">
             <h2 class="chhaya-heading">
               Welcome to <span class="chhaya-brand">Chhaya Foundation</span>
             </h2>
-           <div class="row m-t-24 justify-content-center">
-          <div class="col-12 col-sm-8 col-md-6">
-            <button mat-stroked-button class="w-100">
-              <div class="d-flex align-items-center" id="google-login">
-                <img
-                  src="assets/images/svgs/google-icon.svg"
-                  alt="google"
-                  width="16"
-                  class="m-r-10"
-                />
-                Sign in with Google
-              </div>
-            </button>
-          </div>
-        </div>
+          
+             
+               
+                  <div class="googles  d-flex justify-content-center m-t-24" id="google-login">
+                    <img src="assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-10" />
+                    Sign in with Google
+                  </div>
+                
+             
+         
 
-           
-            
+
+
 
             <div class="or-border m-t-30">or log in with</div>
 
             <form class="m-t-30" [formGroup]="loginForm" (ngSubmit)="submit()">
-              <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
-                >Email</mat-label
-              >
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="primary"
-              >
-                <input matInput formControlName="email_id" />
+              <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email</mat-label>
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input type="email" matInput formControlName="email_id" [matAutocomplete]="auto"
+                  (focus)="loadSavedEmails()" (input)="filterEmails()" />
+                <mat-autocomplete #auto="matAutocomplete"  class="borders">
+                  <mat-option *ngFor="let email of filteredEmails" [value]="email">
+                    {{ email }}
+                  </mat-option>
+                </mat-autocomplete>
+
                 @if(f['email_id'].touched && f['email_id'].invalid) {
                 <mat-hint class="m-b-16 error-msg">
-                  @if(f['email_id'].errors && f['email_id'].errors['required']) {
+                  @if(f['email_id'].errors?.['required']) {
                   <div class="text-error">Email is required.</div>
-                  } @if(f['email_id'].errors && f['email_id'].errors['minlength']) {
-                  <div class="text-error">Enter Valid Email.</div>
+                  } @if(f['email_id'].errors?.['email']) {
+                  <div class="text-error">Enter a valid email.</div>
                   }
                 </mat-hint>
                 }
               </mat-form-field>
 
+
               <!-- password -->
               <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
               <mat-form-field appearance="outline" class="w-100" color="primary">
-                <input
-                  matInput
-                  [type]="hidePassword ? 'password' : 'text'"
-                  formControlName="password"
-                />
-                <button
-                  type="button"
-                  mat-icon-button
-                  (click)="hidePassword = !hidePassword"
-                  aria-label="Toggle password visibility"
-                  matSuffix
-                >
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+                <button type="button" mat-icon-button (click)="hidePassword = !hidePassword"
+                  aria-label="Toggle password visibility" matSuffix>
                   <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </button>
                 <mat-hint class="m-b-16 error-msg" *ngIf="f['password'].touched && f['password'].invalid">
                   <div *ngIf="f['password'].errors?.['required']" class="text-error">Password is required.</div>
                 </mat-hint>
               </mat-form-field>
-              
+
 
 
               <div class="d-flex align-items-center m-b-12">
-                
-                <a
-                  [routerLink]="['/authentication/side-forgot-pwd/']"
-                  class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14"
-                  >Forgot Password ?</a
-                >
+
+                <a [routerLink]="['/authentication/side-forgot-pwd/']"
+                  class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14">Forgot Password ?</a>
               </div>
-              <button
-                mat-flat-button
-                color="primary"
-                class="w-100"
-                [disabled]="!loginForm.valid"
-              >
+              <button mat-flat-button color="primary" class="w-100" [disabled]="!loginForm.valid">
                 Sign In
               </button>
               <!-- input -->
             </form>
-            <span class="d-block f-w-500 d-block m-t-24"
-              >New to Here?
-              <a
-                [routerLink]="['/authentication/side-register']"
-                class="text-decoration-none text-primary f-w-500 f-s-14"
-              >
-                Create an account</a
-              >
+            <span class="d-block f-w-500 d-block m-t-24">New to Here?
+              <a [routerLink]="['/authentication/side-register']"
+                class="text-decoration-none text-primary f-w-500 f-s-14">
+                Create an account</a>
             </span>
           </div>
         </div>
