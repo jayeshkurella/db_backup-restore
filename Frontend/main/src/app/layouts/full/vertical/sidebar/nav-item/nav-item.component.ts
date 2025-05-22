@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
     selector: 'app-nav-item',
     imports: [TranslateModule, TablerIconsModule, MaterialModule, CommonModule],
     templateUrl: './nav-item.component.html',
-    styleUrls: [],
+    styleUrls: ['./nav-item.component.scss'],
     animations: [
         trigger('indicatorRotate', [
             state('collapsed', style({ transform: 'rotate(0deg)' })),

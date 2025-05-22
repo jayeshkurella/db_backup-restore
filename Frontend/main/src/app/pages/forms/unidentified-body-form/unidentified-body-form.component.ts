@@ -118,14 +118,9 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
   }
 
   allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedBodyForm' | 'firsForm'): boolean {
-    const charCode = event.key.charCodeAt(0);
-    const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
-
-    const isValidChar =
-      (charCode >= 65 && charCode <= 90) ||  // A-Z
-      (charCode >= 97 && charCode <= 122) || // a-z
-      charCode === 32 ||                      // space
-      allowedKeys.includes(event.keyCode);   // navigation keys
+    const key = event.key;
+    const allowedPattern = /^[a-zA-Z.\s]$/;
+    const navigationKeys = ['Backspace', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
 
     let form;
     switch (formGroup) {
@@ -142,12 +137,11 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
 
     const control = form.get(controlName);
 
-    if (!isValidChar) {
-      control?.setErrors({ invalidChars: true });
+    if (!allowedPattern.test(key) && !navigationKeys.includes(key)) {
+      control?.setErrors({ ...control?.errors, invalidChars: true });
       event.preventDefault();
       return false;
     } else {
-      // Clear error if valid
       const currentErrors = control?.errors;
       if (currentErrors?.['invalidChars']) {
         delete currentErrors['invalidChars'];
@@ -156,6 +150,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       return true;
     }
   }
+
 
   allowOnlyNumbers(event: KeyboardEvent): boolean {
     const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
@@ -223,6 +218,39 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       event.preventDefault();
     }
   }
+  textOnlyValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value?.trim();
+      if (!value) return null; // empty is allowed
+
+      // Allow letters, numbers, spaces, commas, and hyphens
+      const valid = /^[A-Za-z0-9 ,\-]+$/.test(value);
+      return valid ? null : { invalidCharacters: true };
+    };
+  }
+
+  allowOnlyNumbersAndHyphen(event: KeyboardEvent): boolean {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '-'];
+    if (allowedKeys.includes(event.key)) return true;
+
+    const isValid = /^[0-9\-]$/.test(event.key);
+    const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
+    const control = inputName === 'phone_no' ? this.contactForm.get('phone_no') : null;
+
+    if (!isValid) {
+      control?.setErrors({ ...control.errors, invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
+  }
+
   initializeForm() {
     this.unidentifiedBodyForm = this.fb.group({
 
@@ -316,8 +344,8 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       country: [''],
 
       pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
-      landmark_details: ['', [Validators.maxLength(150), this.landmarkValidator()]],
-      street: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9\s]*$/)]],
+      landmark_details: ['', [Validators.maxLength(50), this.landmarkValidator()]],
+      street: ['', [Validators.maxLength(30), this.textOnlyValidator()]],
       village: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s-]*$/)]],
 
       city: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s]*$/)]],
@@ -354,18 +382,30 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       const value = control.value;
       if (!value) return null;
 
-      // Allow letters, numbers, spaces, and ,.-#
-      const pattern = /^[a-zA-Z0-9\s,.\-#]+$/;
+      // Allow letters, numbers, spaces, and , . - # :
+      const pattern = /^[a-zA-Z0-9\s,.\-#:]+$/;
       return pattern.test(value) ? null : { invalidLandmark: true };
     };
   }
+
 
   // Correct method to create Contact FormGroup
   createContactFormGroup(): FormGroup {
     return this.fb.group({
       type: ['referral'],
-      person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
-      phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
+      // person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
+      person_name: new FormControl('', [
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.pattern(/^([A-Z][a-z]+(\s)?|([A-Z]\.?\s)?)+$/)
+      ]),
+      // phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
+      phone_no: [
+        '',
+        [
+          Validators.pattern(/^(?:[789]\d{9}|0\d{2,4}-?\d{6,8})$/)
+        ]
+      ],
       // email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
       email_id: [
         null,
@@ -498,12 +538,23 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
   // Add FIR
   addFIR() {
     this.firs.push(this.fb.group({
-      fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9]{1,20}$/)]],
+      fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9/]{1,20}$/)]],
       case_status: [''],
       investigation_officer_contact: [null],
       // investigation_officer_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)],[  Validators.maxLength(30) ]],
-      investigation_officer_name: ['', [Validators.maxLength(30)]],
-      investigation_officer_contacts: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
+      // investigation_officer_name: ['',[Validators.maxLength(30)]],
+      investigation_officer_name: new FormControl('', [
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.pattern(/^([A-Z][a-z]+(\s)?|([A-Z]\.?\s)?)+$/)
+      ]),
+      // investigation_officer_contacts: ['',[Validators.pattern(/^[0-9]{1,10}$/)]],
+      investigation_officer_contacts: [
+        '',
+        [
+          Validators.pattern(/^(?:[789]\d{9}|0\d{2,4}-?\d{6,8})$/)
+        ]
+      ],
       police_station: ['',],
       document: [null],
       fir_photo: [null],

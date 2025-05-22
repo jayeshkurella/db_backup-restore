@@ -40,7 +40,7 @@ export interface Person {
   case_status?: string;
   selected?: boolean;
   status_reason?: string | null;
-  reason?: string;   
+  reason?: string;
   // count?:number;
 }
 export interface PaginatedResponse<T> {
@@ -95,7 +95,7 @@ enum PersonStatus {
   styleUrl: './access-provider.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccessProviderComponent implements OnInit { 
+export class AccessProviderComponent implements OnInit {
   displayedColumns: string[] = ['name', 'village', 'city', 'state', 'status'];
   displayedColumnsWithSelect = ['select', ...this.displayedColumns];
   displayedColumnsWithReason = [...this.displayedColumnsWithSelect, 'reason'];
@@ -105,7 +105,7 @@ export class AccessProviderComponent implements OnInit {
   holdPersons: Person[] = [];
   suspendedPersons: Person[] = [];
   approvedPersons: Person[] = [];
-  
+
   isLoading: boolean = true;
   isProcessing: boolean = false;
   isFilterLoading: boolean = false;
@@ -113,33 +113,33 @@ export class AccessProviderComponent implements OnInit {
   holdCount: number = 0;
   suspendedCount: number = 0;
   approvedCount: number = 0;
-  
-  selectedTabIndex = 0; 
+
+  selectedTabIndex = 0;
   selectAllPending: boolean = false;
   selectAllHold: boolean = false;
   selectAllSuspended: boolean = false;
   selectAllApproved: boolean = false;
   allstates: any;
-  filtersApplied: boolean = false; 
+  filtersApplied: boolean = false;
   allcities: any;
   alldistricts: any;
   allvillages: any;
   policeStationList: any[] = [];
 
   pagination = {
-  pageIndex: 0,
-  pageSize: 10,
-  pageSizeOptions: [5, 10, 25, 100],
-  length: 0,
-  showFirstLastButtons: true // Add this for << and >> buttons
-};
+    pageIndex: 0,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 25, 100],
+    length: 0,
+    showFirstLastButtons: true 
+  };
   filters: CaseFilters = {
     city: '',
     state: '',
     district: '',
     village: '',
     case_id: '',
-    police_station: ''  
+    police_station: ''
   };
 
   constructor(
@@ -149,13 +149,13 @@ export class AccessProviderComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private missingPersonService: MissingPersonApiService,
     private formapi: FormApiService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
     this.getStates();
     this.fetchPoliceStationList();
-    
+
   }
 
   getStates() {
@@ -164,44 +164,44 @@ export class AccessProviderComponent implements OnInit {
     });
   }
 
-onStateChange() {
-  this.filters.district = '';
-  this.filters.city = '';
-  this.filters.village = '';
-  this.alldistricts = [];
-  this.allcities = [];
-  this.allvillages = [];
+  onStateChange() {
+    this.filters.district = '';
+    this.filters.city = '';
+    this.filters.village = '';
+    this.alldistricts = [];
+    this.allcities = [];
+    this.allvillages = [];
 
-  if (this.filters.state) {
-    this.missingPersonService.getDistricts(this.filters.state).subscribe(districts => {
-      this.alldistricts = districts;
-    });
+    if (this.filters.state) {
+      this.missingPersonService.getDistricts(this.filters.state).subscribe(districts => {
+        this.alldistricts = districts;
+      });
+    }
   }
-}
 
-onDistrictChange() {
-  this.filters.city = '';
-  this.filters.village = '';
-  this.allcities = [];
-  this.allvillages = [];
+  onDistrictChange() {
+    this.filters.city = '';
+    this.filters.village = '';
+    this.allcities = [];
+    this.allvillages = [];
 
-  if (this.filters.district) {
-    this.missingPersonService.getCities(this.filters.district).subscribe(cities => {
-      this.allcities = cities;
-    });
+    if (this.filters.district) {
+      this.missingPersonService.getCities(this.filters.district).subscribe(cities => {
+        this.allcities = cities;
+      });
+    }
   }
-}
 
-onCityChange() {
-  this.filters.village = '';
-  this.allvillages = [];
+  onCityChange() {
+    this.filters.village = '';
+    this.allvillages = [];
 
-  if (this.filters.city) {
-    this.missingPersonService.getVillages(this.filters.city).subscribe(villages => {
-      this.allvillages = villages;
-    });
+    if (this.filters.city) {
+      this.missingPersonService.getVillages(this.filters.city).subscribe(villages => {
+        this.allvillages = villages;
+      });
+    }
   }
-}
 
   fetchPoliceStationList() {
     this.formapi.getPoliceStationNames().subscribe({
@@ -214,258 +214,258 @@ onCityChange() {
   }
 
   isSearchEnabled(): boolean {
-  // If case ID has value (and is not just whitespace)
-  if (this.filters.case_id && this.filters.case_id.trim() !== '') {
-    return true;
-  }
-  
-  // If police station is selected
-  if (this.filters.police_station && this.filters.police_station !== '') {
-    return true;
-  }
-  
-  if (this.filters.state || this.filters.district || this.filters.city || this.filters.village) {
-
-    if (this.filters.state) {
-    
-      if (this.filters.district) {
-        if (this.filters.city) {
-
-          return true;
-        }
-        return false;
-      }
+    // If case ID has value (and is not just whitespace)
+    if (this.filters.case_id && this.filters.case_id.trim() !== '') {
       return true;
     }
+
+    // If police station is selected
+    if (this.filters.police_station && this.filters.police_station !== '') {
+      return true;
+    }
+
+    if (this.filters.state || this.filters.district || this.filters.city || this.filters.village) {
+
+      if (this.filters.state) {
+
+        if (this.filters.district) {
+          if (this.filters.city) {
+
+            return true;
+          }
+          return false;
+        }
+        return true;
+      }
+      return false;
+    }
+
     return false;
   }
-  
-  return false;
-}
 
-filterDataByFilters(): void {
-  this.pagination.pageIndex = 0; // Reset to first page when filters change
-  this.loadData();
-}
-
-
-// isFirstPage(): boolean {
-//   return this.pagination.pageIndex === 0;
-// }
-
-// loadData(): void {
-//   this.isLoading = true;
-//   this.resetSelectAllStates();
-//   this.cdr.markForCheck();
-
-//   const cleanFilters = this.getCleanFilters();
-//   const paginationParams = {
-//     page: this.pagination.pageIndex + 1,  // API pages are 1-based
-//     page_size: this.pagination.pageSize
-//   };
-  
-//   forkJoin([
-//     this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
-//     this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
-//     this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
-//     this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
-//   ]).pipe(
-//     finalize(() => {
-//       this.isLoading = false;
-//       this.cdr.markForCheck();
-//     })
-//   ).subscribe({
-//     next: ([pendingResponse, holdResponse, suspendedResponse, approvedResponse]) => {
-//       this.processResponseData({
-//         pending_data: pendingResponse,
-//         on_hold_data: holdResponse,
-//         suspended_data: suspendedResponse,
-//         approved_data: approvedResponse
-//       });
-      
-//       // Update pagination length based on current tab
-//       this.updatePaginationLength();
-//     },
-//     error: (error) => {
-//       console.error('Error fetching data:', error);
-//       this.resetData();
-//       this.snackBar.open('Failed to load data', 'Close', { duration: 1000 });
-//     }
-//   });
-// }
-loadData(): void {
-  this.isLoading = true;
-  this.resetSelectAllStates();
-  this.cdr.markForCheck();
-
-  const cleanFilters = this.getCleanFilters();
-  const paginationParams = {
-    page: this.pagination.pageIndex + 1,  // API pages are 1-based
-    page_size: this.pagination.pageSize
-  };
-  
-  forkJoin([
-    this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
-    this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
-    this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
-    this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
-  ]).pipe(
-    finalize(() => {
-      this.isLoading = false;
-      this.cdr.markForCheck();
-    })
-  ).subscribe({
-    next: ([pendingResponse, holdResponse, suspendedResponse, approvedResponse]) => {
-      this.processResponseData({
-        pending_data: pendingResponse,
-        on_hold_data: holdResponse,
-        suspended_data: suspendedResponse,
-        approved_data: approvedResponse
-      });
-      
-      // Update pagination length based on current tab
-      this.updatePaginationLength();
-    },
-    error: (error) => {
-      console.error('Error fetching data:', error);
-      this.resetData();
-      this.snackBar.open('Failed to load data', 'Close', { duration: 1000 });
-    }
-  });
-}
-
-private updatePaginationLength(): void {
-  switch(this.selectedTabIndex) {
-    case 0:
-      this.pagination.length = this.pendingCount;
-      break;
-    case 1:
-      this.pagination.length = this.holdCount;
-      break;
-    case 2:
-      this.pagination.length = this.suspendedCount;
-      break;
-    case 3:
-      this.pagination.length = this.approvedCount;
-      break;
-  }
-  this.cdr.markForCheck();
-}
-
-getDisplayedRange(): string {
-  if (this.pagination.length === 0) {
-    return '0 of 0';
-  }
-  
-  const start = (this.pagination.pageIndex * this.pagination.pageSize) + 1;
-  const end = Math.min((this.pagination.pageIndex + 1) * this.pagination.pageSize, this.pagination.length);
-  return `${start}-${end} of ${this.pagination.length}`;
-}
-
-onTabChange(event: MatTabChangeEvent) {
-  this.selectedTabIndex = event.index;
-  this.pagination.pageIndex = 0; 
-  
-  this.updatePaginationLength();
-  this.cdr.markForCheck();
-}
-firstPage(): void {
-  if (!this.isFirstPage()) {
-    this.pagination.pageIndex = 0;
+  filterDataByFilters(): void {
+    this.pagination.pageIndex = 0; // Reset to first page when filters change
     this.loadData();
   }
-}
-
-previousPage(): void {
-  if (!this.isFirstPage()) {
-    this.pagination.pageIndex--;
-    this.loadData();
-  }
-}
-
-nextPage(): void {
-  if (!this.isLastPage()) {
-    this.pagination.pageIndex++;
-    this.loadData();
-  }
-}
-
-lastPage(): void {
-  if (!this.isLastPage()) {
-    const totalPages = Math.ceil(this.pagination.length / this.pagination.pageSize);
-    this.pagination.pageIndex = totalPages - 1;
-    this.loadData();
-  }
-}
-
-isFirstPage(): boolean {
-  return this.pagination.pageIndex === 0;
-}
-
-isLastPage(): boolean {
-  if (this.pagination.length === 0) return true;
-  const totalPages = Math.ceil(this.pagination.length / this.pagination.pageSize);
-  return this.pagination.pageIndex >= totalPages - 1;
-}
 
 
-applyFilters(): void {
-  this.isLoading = true;
-  this.isFilterLoading = true;
-  this.cdr.markForCheck();
-  this.filtersApplied = this.hasActiveFilters();
+  // isFirstPage(): boolean {
+  //   return this.pagination.pageIndex === 0;
+  // }
 
-  const currentFilters = {...this.filters};
-  const cleanFilters = this.getCleanFilters();
-  const paginationParams = {
-    page: this.pagination.pageIndex + 1,
-    page_size: this.pagination.pageSize
-  };
+  // loadData(): void {
+  //   this.isLoading = true;
+  //   this.resetSelectAllStates();
+  //   this.cdr.markForCheck();
 
-  forkJoin([
-    this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
-    this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
-    this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
-    this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
-  ]).pipe(
-    finalize(() => {
-      this.isLoading = false;
-      this.isFilterLoading = false;
-      this.cdr.markForCheck();
-    })
-  ).subscribe({
-    next: ([pendingData, holdData, suspendedData, approvedData]) => {
-      if (this.areFiltersSame(currentFilters)) {
+  //   const cleanFilters = this.getCleanFilters();
+  //   const paginationParams = {
+  //     page: this.pagination.pageIndex + 1,  // API pages are 1-based
+  //     page_size: this.pagination.pageSize
+  //   };
+
+  //   forkJoin([
+  //     this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
+  //     this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
+  //     this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
+  //     this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
+  //   ]).pipe(
+  //     finalize(() => {
+  //       this.isLoading = false;
+  //       this.cdr.markForCheck();
+  //     })
+  //   ).subscribe({
+  //     next: ([pendingResponse, holdResponse, suspendedResponse, approvedResponse]) => {
+  //       this.processResponseData({
+  //         pending_data: pendingResponse,
+  //         on_hold_data: holdResponse,
+  //         suspended_data: suspendedResponse,
+  //         approved_data: approvedResponse
+  //       });
+
+  //       // Update pagination length based on current tab
+  //       this.updatePaginationLength();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching data:', error);
+  //       this.resetData();
+  //       this.snackBar.open('Failed to load data', 'Close', { duration: 1000 });
+  //     }
+  //   });
+  // }
+  loadData(): void {
+    this.isLoading = true;
+    this.resetSelectAllStates();
+    this.cdr.markForCheck();
+
+    const cleanFilters = this.getCleanFilters();
+    const paginationParams = {
+      page: this.pagination.pageIndex + 1,  // API pages are 1-based
+      page_size: this.pagination.pageSize
+    };
+
+    forkJoin([
+      this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
+    ]).pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
+      next: ([pendingResponse, holdResponse, suspendedResponse, approvedResponse]) => {
         this.processResponseData({
-          pending_data: pendingData,
-          on_hold_data: holdData,
-          suspended_data: suspendedData,
-          approved_data: approvedData
+          pending_data: pendingResponse,
+          on_hold_data: holdResponse,
+          suspended_data: suspendedResponse,
+          approved_data: approvedResponse
         });
-        
+
         // Update pagination length based on current tab
-        switch(this.selectedTabIndex) {
-          case 0:
-            this.pagination.length = pendingData.count || 0;
-            break;
-          case 1:
-            this.pagination.length = holdData.count || 0;
-            break;
-          case 2:
-            this.pagination.length = suspendedData.count || 0;
-            break;
-          case 3:
-            this.pagination.length = approvedData.count || 0;
-            break;
-        }
+        this.updatePaginationLength();
+      },
+      error: (error) => {
+        console.error('Error fetching data:', error);
+        this.resetData();
+        this.snackBar.open('Failed to load data', 'Close', { duration: 1000 });
       }
-    },
-    error: (error) => {
-      console.error('Filter error:', error);
-      this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
+    });
+  }
+
+  private updatePaginationLength(): void {
+    switch (this.selectedTabIndex) {
+      case 0:
+        this.pagination.length = this.pendingCount;
+        break;
+      case 1:
+        this.pagination.length = this.holdCount;
+        break;
+      case 2:
+        this.pagination.length = this.suspendedCount;
+        break;
+      case 3:
+        this.pagination.length = this.approvedCount;
+        break;
     }
-  });
-}
+    this.cdr.markForCheck();
+  }
+
+  getDisplayedRange(): string {
+    if (this.pagination.length === 0) {
+      return '0 of 0';
+    }
+
+    const start = (this.pagination.pageIndex * this.pagination.pageSize) + 1;
+    const end = Math.min((this.pagination.pageIndex + 1) * this.pagination.pageSize, this.pagination.length);
+    return `${start}-${end} of ${this.pagination.length}`;
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    this.selectedTabIndex = event.index;
+    this.pagination.pageIndex = 0;
+
+    this.updatePaginationLength();
+    this.cdr.markForCheck();
+  }
+  firstPage(): void {
+    if (!this.isFirstPage()) {
+      this.pagination.pageIndex = 0;
+      this.loadData();
+    }
+  }
+
+  previousPage(): void {
+    if (!this.isFirstPage()) {
+      this.pagination.pageIndex--;
+      this.loadData();
+    }
+  }
+
+  nextPage(): void {
+    if (!this.isLastPage()) {
+      this.pagination.pageIndex++;
+      this.loadData();
+    }
+  }
+
+  lastPage(): void {
+    if (!this.isLastPage()) {
+      const totalPages = Math.ceil(this.pagination.length / this.pagination.pageSize);
+      this.pagination.pageIndex = totalPages - 1;
+      this.loadData();
+    }
+  }
+
+  isFirstPage(): boolean {
+    return this.pagination.pageIndex === 0;
+  }
+
+  isLastPage(): boolean {
+    if (this.pagination.length === 0) return true;
+    const totalPages = Math.ceil(this.pagination.length / this.pagination.pageSize);
+    return this.pagination.pageIndex >= totalPages - 1;
+  }
+
+
+  applyFilters(): void {
+    this.isLoading = true;
+    this.isFilterLoading = true;
+    this.cdr.markForCheck();
+    this.filtersApplied = this.hasActiveFilters();
+
+    const currentFilters = { ...this.filters };
+    const cleanFilters = this.getCleanFilters();
+    const paginationParams = {
+      page: this.pagination.pageIndex + 1,
+      page_size: this.pagination.pageSize
+    };
+
+    forkJoin([
+      this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
+    ]).pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.isFilterLoading = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
+      next: ([pendingData, holdData, suspendedData, approvedData]) => {
+        if (this.areFiltersSame(currentFilters)) {
+          this.processResponseData({
+            pending_data: pendingData,
+            on_hold_data: holdData,
+            suspended_data: suspendedData,
+            approved_data: approvedData
+          });
+
+          // Update pagination length based on current tab
+          switch (this.selectedTabIndex) {
+            case 0:
+              this.pagination.length = pendingData.count || 0;
+              break;
+            case 1:
+              this.pagination.length = holdData.count || 0;
+              break;
+            case 2:
+              this.pagination.length = suspendedData.count || 0;
+              break;
+            case 3:
+              this.pagination.length = approvedData.count || 0;
+              break;
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Filter error:', error);
+        this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
+      }
+    });
+  }
 
 
   private hasActiveFilters(): boolean {
@@ -473,89 +473,89 @@ applyFilters(): void {
   }
 
   private areFiltersSame(compareFilters: CaseFilters): boolean {
-    return Object.keys(this.filters).every(key => 
+    return Object.keys(this.filters).every(key =>
       this.filters[key as keyof CaseFilters] === compareFilters[key as keyof CaseFilters]
     );
   }
 
   resetFilters(): void {
-  this.filters = {
-    city: '',
-    state: '',
-    district: '',
-    village: '',
-    case_id: '',
-    police_station: '' 
-  };
-  this.pagination.pageIndex = 0;  // Reset to first page
-  this.loadData();
-  this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
-}
+    this.filters = {
+      city: '',
+      state: '',
+      district: '',
+      village: '',
+      case_id: '',
+      police_station: ''
+    };
+    this.pagination.pageIndex = 0;  
+    this.loadData();
+    this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
+  }
 
-private getCleanFilters(): any {
-  const cleanFilters: any = {};
-  
-  if (this.filters.city) cleanFilters.city = this.filters.city;
-  if (this.filters.state) cleanFilters.state = this.filters.state;
-  if (this.filters.district) cleanFilters.district = this.filters.district;
-  if (this.filters.village) cleanFilters.village = this.filters.village;
-  if (this.filters.case_id) cleanFilters.case_id = this.filters.case_id;
-  if (this.filters.police_station) cleanFilters.police_station = this.filters.police_station;
+  private getCleanFilters(): any {
+    const cleanFilters: any = {};
 
-  return cleanFilters;
-}
+    if (this.filters.city) cleanFilters.city = this.filters.city;
+    if (this.filters.state) cleanFilters.state = this.filters.state;
+    if (this.filters.district) cleanFilters.district = this.filters.district;
+    if (this.filters.village) cleanFilters.village = this.filters.village;
+    if (this.filters.case_id) cleanFilters.case_id = this.filters.case_id;
+    if (this.filters.police_station) cleanFilters.police_station = this.filters.police_station;
 
-private processResponseData(response: {
-  pending_data: PaginatedResponse<Person>,
-  on_hold_data: PaginatedResponse<Person>,
-  suspended_data: PaginatedResponse<Person>,
-  approved_data: PaginatedResponse<Person>
-}): void {
-  this.pendingPersons = this.processPersonArray(response.pending_data.results || [], 'pending');
-  this.pendingCount = response.pending_data.count || 0;
-  
-  this.holdPersons = this.processPersonArray(response.on_hold_data.results || [], 'on_hold');
-  this.holdCount = response.on_hold_data.count || 0;
-  
-  this.suspendedPersons = this.processPersonArray(response.suspended_data.results || [], 'suspended');
-  this.suspendedCount = response.suspended_data.count || 0;
-  
-  this.approvedPersons = this.processPersonArray(response.approved_data.results || [], 'approved');
-  this.approvedCount = response.approved_data.count || 0;
-  
-  // Update pagination length based on current tab
-  this.updatePaginationLength();
-  
-  this.cdr.markForCheck();
-}
-onPageChange(event: PageEvent): void {
-  this.pagination.pageIndex = event.pageIndex;
-  this.pagination.pageSize = event.pageSize;
-  this.loadData();
-}
+    return cleanFilters;
+  }
+
+  private processResponseData(response: {
+    pending_data: PaginatedResponse<Person>,
+    on_hold_data: PaginatedResponse<Person>,
+    suspended_data: PaginatedResponse<Person>,
+    approved_data: PaginatedResponse<Person>
+  }): void {
+    this.pendingPersons = this.processPersonArray(response.pending_data.results || [], 'pending');
+    this.pendingCount = response.pending_data.count || 0;
+
+    this.holdPersons = this.processPersonArray(response.on_hold_data.results || [], 'on_hold');
+    this.holdCount = response.on_hold_data.count || 0;
+
+    this.suspendedPersons = this.processPersonArray(response.suspended_data.results || [], 'suspended');
+    this.suspendedCount = response.suspended_data.count || 0;
+
+    this.approvedPersons = this.processPersonArray(response.approved_data.results || [], 'approved');
+    this.approvedCount = response.approved_data.count || 0;
+
+    // Update pagination length based on current tab
+    this.updatePaginationLength();
+
+    this.cdr.markForCheck();
+  }
+  onPageChange(event: PageEvent): void {
+    this.pagination.pageIndex = event.pageIndex;
+    this.pagination.pageSize = event.pageSize;
+    this.loadData();
+  }
 
   private processPersonArray(data: any, status: string): Person[] {
-  if (!data) return [];
-  
-  // Handle both array and paginated response
-  const items = Array.isArray(data) ? data : (data.results || []);
-  
-  return items.map((person: any) => ({
-    id: person.id,
-    full_name: person.full_name || '',
-    village: person.village || '',
-    city: person.city || '',
-    state: person.state || '',
-    gender: person.gender || '',
-    age: person.age || 0,
-    type: person.type || '',
-    person_approve_status: person.person_approve_status || status,
-    case_status: person.case_status || status,
-    status_reason: person.status_reason || null,
-    reason: person.reason || '',
-    selected: false
-  }));
-}
+    if (!data) return [];
+
+    // Handle both array and paginated response
+    const items = Array.isArray(data) ? data : (data.results || []);
+
+    return items.map((person: any) => ({
+      id: person.id,
+      full_name: person.full_name || '',
+      village: person.village || '',
+      city: person.city || '',
+      state: person.state || '',
+      gender: person.gender || '',
+      age: person.age || 0,
+      type: person.type || '',
+      person_approve_status: person.person_approve_status || status,
+      case_status: person.case_status || status,
+      status_reason: person.status_reason || null,
+      reason: person.reason || '',
+      selected: false
+    }));
+  }
 
   private resetData(): void {
     this.pendingPersons = [];
@@ -572,7 +572,7 @@ onPageChange(event: PageEvent): void {
   private showStatusChangeMessage(person: Person, oldStatus: string, newStatus: string): void {
     this.snackBar.open(
       `${person.full_name}'s status changed from ${this.formatStatus(oldStatus)} to ${this.formatStatus(newStatus)}`,
-      'Close', 
+      'Close',
       { duration: 1000 }
     );
   }
@@ -580,12 +580,12 @@ onPageChange(event: PageEvent): void {
   private formatStatus(status: string): string {
     return status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   }
-  
+
   approvePerson(person: Person): void {
     const oldStatus = person.person_approve_status;
     this.isProcessing = true;
     this.cdr.markForCheck();
-    
+
     this.pendingService.updatePersonStatus(person.id, 'approved').pipe(
       finalize(() => {
         this.isProcessing = false;
@@ -608,13 +608,13 @@ onPageChange(event: PageEvent): void {
       width: '500px',
       data: { personName: person.full_name }
     });
-  
+
     dialogRef.afterClosed().subscribe(reason => {
       if (reason) {
         const oldStatus = person.person_approve_status;
         this.isProcessing = true;
         this.cdr.markForCheck();
-        
+
         this.pendingService.updatePersonStatus(person.id, 'suspended', reason).pipe(
           finalize(() => {
             this.isProcessing = false;
@@ -638,7 +638,7 @@ onPageChange(event: PageEvent): void {
     const oldStatus = person.person_approve_status;
     this.isProcessing = true;
     this.cdr.markForCheck();
-    
+
     this.pendingService.updatePersonStatus(person.id, 'pending').pipe(
       finalize(() => {
         this.isProcessing = false;
@@ -661,13 +661,13 @@ onPageChange(event: PageEvent): void {
       width: '500px',
       data: { personName: person.full_name }
     });
-  
+
     dialogRef.afterClosed().subscribe(reason => {
       if (reason) {
         const oldStatus = person.person_approve_status;
         this.isProcessing = true;
         this.cdr.markForCheck();
-        
+
         this.pendingService.updatePersonStatus(person.id, 'on_hold', reason).pipe(
           finalize(() => {
             this.isProcessing = false;
@@ -689,36 +689,36 @@ onPageChange(event: PageEvent): void {
 
   holdSelected(): void {
     let selectedPersons: Person[] = [];
-    
+
     switch (this.selectedTabIndex) {
-      case 0: 
+      case 0:
         selectedPersons = this.pendingPersons.filter(p => p.selected);
         break;
-      case 3: 
+      case 3:
         selectedPersons = this.approvedPersons.filter(p => p.selected);
         break;
       default:
-        return; 
+        return;
     }
-  
+
     if (selectedPersons.length === 0) {
       this.snackBar.open('No persons selected', 'Close', { duration: 1000 });
       return;
     }
-  
+
     const dialogRef = this.dialog.open(HoldReasonDialogComponent, {
       width: '500px',
-      data: { 
+      data: {
         multiple: true,
-        count: selectedPersons.length 
+        count: selectedPersons.length
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(reason => {
       if (reason) {
         this.isProcessing = true;
         this.cdr.markForCheck();
-        
+
         const holdRequests = selectedPersons.map(person => {
           const oldStatus = person.person_approve_status;
           return this.pendingService.updatePersonStatus(person.id, 'on_hold', reason).pipe(
@@ -729,7 +729,7 @@ onPageChange(event: PageEvent): void {
             })
           );
         });
-  
+
         forkJoin(holdRequests).pipe(
           finalize(() => {
             this.isProcessing = false;
@@ -741,7 +741,7 @@ onPageChange(event: PageEvent): void {
             this.loadData();
             this.snackBar.open(
               `Successfully put ${successCount} of ${selectedPersons.length} person(s) on hold`,
-              'Close', 
+              'Close',
               { duration: 5000 }
             );
           },
@@ -754,7 +754,7 @@ onPageChange(event: PageEvent): void {
   }
 
   getCurrentDataSource() {
-    switch(this.selectedTabIndex) {
+    switch (this.selectedTabIndex) {
       case 0: return this.pendingPersons;
       case 1: return this.holdPersons;
       case 2: return this.suspendedPersons;
@@ -793,21 +793,21 @@ onPageChange(event: PageEvent): void {
   }
 
   updateSelectAllState(): void {
-    switch(this.selectedTabIndex) {
-      case 0: 
-        this.selectAllPending = this.pendingPersons.length > 0 && 
+    switch (this.selectedTabIndex) {
+      case 0:
+        this.selectAllPending = this.pendingPersons.length > 0 &&
           this.pendingPersons.every(p => p.selected);
         break;
       case 1:
-        this.selectAllHold = this.holdPersons.length > 0 && 
+        this.selectAllHold = this.holdPersons.length > 0 &&
           this.holdPersons.every(p => p.selected);
         break;
       case 2:
-        this.selectAllSuspended = this.suspendedPersons.length > 0 && 
+        this.selectAllSuspended = this.suspendedPersons.length > 0 &&
           this.suspendedPersons.every(p => p.selected);
         break;
       case 3:
-        this.selectAllApproved = this.approvedPersons.length > 0 && 
+        this.selectAllApproved = this.approvedPersons.length > 0 &&
           this.approvedPersons.every(p => p.selected);
         break;
     }
@@ -830,7 +830,7 @@ onPageChange(event: PageEvent): void {
   }
 
   hasSelectedItems(): boolean {
-    switch(this.selectedTabIndex) {
+    switch (this.selectedTabIndex) {
       case 0: return this.pendingPersons.some(p => p.selected);
       case 1: return this.holdPersons.some(p => p.selected);
       case 2: return this.suspendedPersons.some(p => p.selected);
@@ -840,7 +840,7 @@ onPageChange(event: PageEvent): void {
   }
 
   selectedCount(): number {
-    switch(this.selectedTabIndex) {
+    switch (this.selectedTabIndex) {
       case 0: return this.pendingPersons.filter(p => p.selected).length;
       case 1: return this.holdPersons.filter(p => p.selected).length;
       case 2: return this.suspendedPersons.filter(p => p.selected).length;
@@ -851,12 +851,12 @@ onPageChange(event: PageEvent): void {
 
   approveSelected(): void {
     let selectedPersons: Person[] = [];
-  
+
     switch (this.selectedTabIndex) {
       case 0:
         selectedPersons = this.pendingPersons.filter(p => p.selected);
         break;
-      case 1: 
+      case 1:
         selectedPersons = this.holdPersons.filter(p => p.selected);
         break;
       case 2:
@@ -868,13 +868,13 @@ onPageChange(event: PageEvent): void {
       default:
         selectedPersons = [];
     }
-  
+
     if (selectedPersons.length === 0) return;
-  
+
     this.isProcessing = true;
     this.cdr.markForCheck();
     this.snackBar.open(`Processing ${selectedPersons.length} items...`, '', { duration: 1000 });
-    
+
     const approveRequests = selectedPersons.map(person => {
       const oldStatus = person.person_approve_status;
       return this.pendingService.updatePersonStatus(person.id, 'approved').pipe(
@@ -886,7 +886,7 @@ onPageChange(event: PageEvent): void {
         })
       );
     });
-  
+
     forkJoin(approveRequests).pipe(
       finalize(() => {
         this.isProcessing = false;
@@ -904,15 +904,15 @@ onPageChange(event: PageEvent): void {
       }
     });
   }
-  
+
   suspendSelected(): void {
     let selectedPersons: Person[] = [];
-    
-    switch(this.selectedTabIndex) {
-      case 0: 
+
+    switch (this.selectedTabIndex) {
+      case 0:
         selectedPersons = this.pendingPersons.filter(p => p.selected);
         break;
-      case 1: 
+      case 1:
         selectedPersons = this.holdPersons.filter(p => p.selected);
         break;
       case 3:
@@ -920,22 +920,22 @@ onPageChange(event: PageEvent): void {
         break;
       default: return;
     }
-  
+
     if (selectedPersons.length === 0) return;
-  
+
     const dialogRef = this.dialog.open(SuspendReasonDialogComponent, {
       width: '500px',
-      data: { 
+      data: {
         multiple: true,
-        count: selectedPersons.length 
+        count: selectedPersons.length
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(reason => {
       if (reason) {
         this.isProcessing = true;
         this.cdr.markForCheck();
-        
+
         const suspendRequests = selectedPersons.map(person => {
           const oldStatus = person.person_approve_status;
           return this.pendingService.updatePersonStatus(person.id, 'suspended', reason).pipe(
@@ -947,7 +947,7 @@ onPageChange(event: PageEvent): void {
             })
           );
         });
-      
+
         forkJoin(suspendRequests).pipe(
           finalize(() => {
             this.isProcessing = false;
@@ -967,7 +967,7 @@ onPageChange(event: PageEvent): void {
       }
     });
   }
-  
+
   setPendingSelected(): void {
     if (this.selectedTabIndex !== 3) return;
 
@@ -976,7 +976,7 @@ onPageChange(event: PageEvent): void {
 
     this.isProcessing = true;
     this.cdr.markForCheck();
-    
+
     const pendingRequests = selectedPersons.map(person => {
       const oldStatus = person.person_approve_status;
       return this.pendingService.updatePersonStatus(person.id, 'pending').pipe(

@@ -14,7 +14,7 @@ import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-changepassword',
-  imports: [ReactiveFormsModule,CommonModule,MatFormField,MatLabel,MatError,MatInputModule,MatSpinner,MatIcon,MatProgressBar,MatCard,MatCardHeader,MatCardTitle,MatCardSubtitle,MatCardContent,MatCardActions,RouterModule,MatButton],
+  imports: [ReactiveFormsModule,CommonModule,MatFormField,MatError,MatInputModule,MatSpinner,MatIcon,MatProgressBar,MatCard,MatCardHeader,MatCardTitle,MatCardSubtitle,MatCardContent,MatCardActions,RouterModule,MatButton],
   templateUrl: './changepassword.component.html',
   styleUrl: './changepassword.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

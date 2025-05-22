@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, ValidationErrors, AbstractControl, FormBuilder } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -8,11 +8,12 @@ import { CommonModule } from '@angular/common';  // Import CommonModule
 import { RegisterApiService } from './register-api.service';
 
 @Component({
-    selector: 'app-side-register',
-    imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, BrandingComponent,CommonModule],
-    templateUrl: './side-register.component.html'
+  selector: 'app-side-register',
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, BrandingComponent, CommonModule],
+  templateUrl: './side-register.component.html',
+  styleUrls: ['./side-register.component.scss']
 })
-export class AppSideRegisterComponent {
+export class AppSideRegisterComponent implements OnInit {
 
 
   options = this.settings.getOptions();
@@ -26,7 +27,7 @@ export class AppSideRegisterComponent {
   hideConfirmPassword: boolean = true;
   // Define user type options based on your Django model
   userTypes = [
-    { value: 'reporting', label: 'Reporting Person' },
+    { value: 'reporting_person', label: 'Reporting Person' },
     { value: 'volunteer', label: 'Volunteer' },
     { value: 'family', label: 'Family' },
     { value: 'police_station', label: 'Police Station' },
@@ -57,7 +58,21 @@ export class AppSideRegisterComponent {
       { value: 'receptionist', label: 'Receptionist' }
     ]
   };
-  constructor(private settings: CoreService, private router: Router,private fb: FormBuilder,private authService: RegisterApiService,) { 
+
+  ngOnInit(): void {
+    const savedData = localStorage.getItem('tempRegisterForm');
+    if (savedData) {
+      this.registerForm.patchValue(JSON.parse(savedData));
+      localStorage.removeItem('tempRegisterForm');
+    }
+
+    if (localStorage.getItem('userAgreedToPrivacy') === 'true') {
+      this.registerForm.patchValue({ is_consent: true });
+      localStorage.removeItem('userAgreedToPrivacy');
+    }
+  }
+
+  constructor(private settings: CoreService, private router: Router, private fb: FormBuilder, private authService: RegisterApiService,) {
     this.registerForm = this.fb.group(
       {
         first_name: [
@@ -82,8 +97,12 @@ export class AppSideRegisterComponent {
         email_id: [
           '',
           {
-            validators: [Validators.required, Validators.email],
-            updateOn: 'blur' // Validates when the user leaves the field
+            validators: [
+              Validators.required,
+              Validators.email,
+              Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) // More strict pattern
+            ],
+            updateOn: 'blur'
           }
         ],
         phone_no: [
@@ -111,7 +130,7 @@ export class AppSideRegisterComponent {
       },
       { validators: this.passwordMatchValidator } // Custom validator for password match
     );
-  
+
     // Watch user_type to apply dynamic validation for sub_user_type
     this.registerForm.get('user_type')?.valueChanges.subscribe(userType => {
       const subUserTypeControl = this.registerForm.get('sub_user_type');
@@ -127,13 +146,13 @@ export class AppSideRegisterComponent {
   passwordMatchValidator(formGroup: AbstractControl): ValidationErrors | null {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('password2')?.value;
-  
+
     return password && confirmPassword && password !== confirmPassword
       ? { passwordMismatch: true }  // ✅ Ensure it's a key-value pair
       : null;
   }
-  
-  
+
+
 
   get f() {
     return this.registerForm.controls;
@@ -151,45 +170,57 @@ export class AppSideRegisterComponent {
     console.log('Form Submitted', this.registerForm.value);
 
     if (this.registerForm.invalid) {
-        alert('Please fill all the required fields correctly before submitting.');
-        console.log('Form Errors:', this.registerForm.errors);
-        return;
+      alert('Please fill all the required fields correctly before submitting.');
+      console.log('Form Errors:', this.registerForm.errors);
+      return;
     }
 
     this.authService.register(this.registerForm.value).subscribe(
-        (response) => {
-            console.log('Registration successful', response);
-            alert(response.message);
-            this.errorMessage = '';   
-            this.router.navigate(['/authentication/login']);
+      (response) => {
+        console.log('Registration successful', response);
+        alert(response.message);
+        this.errorMessage = '';
+        this.router.navigate(['/authentication/login']);
 
-          },
-          (error) => {
-              console.log('Registration failed', error);
-              
-              if (error.error?.error) {
-                  this.errorMessage = error.error.error;
-  
-                  // Alert for duplicate email
-                  if (this.errorMessage.includes('Email already registered')) {
-                      alert('This email is already registered. Please use a different email.');
-                  } 
-                  if (this.errorMessage.includes('Passwords do not match')) {
-                    alert('Passwords do not match. Please enter the same password in both fields.');
-                } 
-                  // Alert for duplicate phone number
-                  else if (this.errorMessage.includes('Phone number already used')) {
-                      alert('This phone number is already in use. Please enter a different phone number.');
-                  } 
-                  // Other errors
-                  else {
-                      alert(this.errorMessage);
-                  }
-              } else {
-                  this.errorMessage = 'Registration failed. Please try again.';
-                  alert(this.errorMessage);
-              }
+      },
+      (error) => {
+        console.log('Registration failed', error);
+
+        if (error.error?.error) {
+          this.errorMessage = error.error.error;
+
+          // Alert for duplicate email
+          if (this.errorMessage.includes('Email already registered')) {
+            alert('This email is already registered. Please use a different email.');
           }
-      );
+          if (this.errorMessage.includes('Passwords do not match')) {
+            alert('Passwords do not match. Please enter the same password in both fields.');
+          }
+          // Alert for duplicate phone number
+          else if (this.errorMessage.includes('Phone number already used')) {
+            alert('This phone number is already in use. Please enter a different phone number.');
+          }
+          // Other errors
+          else {
+            alert(this.errorMessage);
+          }
+        } else {
+          this.errorMessage = 'Registration failed. Please try again.';
+          alert(this.errorMessage);
+        }
+      }
+    );
+  }
+
+  goToPrivacyPolicy() {
+    const formData = this.registerForm.value;
+    localStorage.setItem('tempRegisterForm', JSON.stringify(formData));
+    this.router.navigate(['/authentication/privacy-policy']);
+  }
+  onConsentClick(event: any) {
+    const formData = this.registerForm.value;
+    localStorage.setItem('tempRegisterForm', JSON.stringify(formData));
+    localStorage.setItem('returningFromConsent', 'true');
+     this.router.navigate(['/authentication/privacy-policy']);
   }
 }

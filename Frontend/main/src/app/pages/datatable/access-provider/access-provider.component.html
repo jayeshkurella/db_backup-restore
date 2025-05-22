@@ -6,156 +6,94 @@
           <li class="breadcrumb-item active" aria-current="page">Filter Case</li>
         </ol>
       </nav>
-      
-      <!-- <div class="col-lg-2 col-md-2">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input matInput [(ngModel)]="filters.caseId" placeholder="Enter Case ID" />
-        </mat-form-field>
-      </div>
-      
-      <div class="col-lg-2 col-md-2">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-select [(ngModel)]="filters.state" (selectionChange)="onStateChange()">
-            <mat-option value="">All States</mat-option>
-            <mat-option *ngFor="let state of allstates" [value]="state">
-              {{ state }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    
-      <div class="col-lg-2 col-md-2">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-select [(ngModel)]="filters.district" (selectionChange)="onDistrictChange()">
-            <mat-option value="">All Districts</mat-option>
-            <mat-option *ngFor="let district of alldistricts" [value]="district">
-              {{ district }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    
-      <div class="col-lg-2 col-md-2">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-select [(ngModel)]="filters.city" (selectionChange)="onCityChange()">
-            <mat-option value="">City</mat-option>
-            <mat-option *ngFor="let city of allcities" [value]="city">
-              {{ city }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    
-      <div class="col-lg-2 col-md-2">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-select [(ngModel)]="filters.village">
-            <mat-option value="">Village</mat-option>
-            <mat-option *ngFor="let village of allvillages" [value]="village">
-              {{ village }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    
-      <div class="col-lg-2 col-md-2">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-select
-            [(ngModel)]="filters.police_station"
-            (selectionChange)="onPoliceStationChange()"
-            name="policeStation">
-            <mat-option value="">Police Station</mat-option>
-            <mat-option *ngFor="let station of policeStationList" [value]="station.id">
-              {{ station.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div> -->
 
-<div class="row">
-  <!-- First row - Case ID and Police Station -->
-  <div class="col-lg-5 col-md-5">
-  <mat-form-field appearance="outline" class="w-100 hide-hint">
-    <input matInput [(ngModel)]="filters.case_id" placeholder="Enter Case ID" />
-  </mat-form-field>
-</div>
-  
-  <div class="col-lg-5 col-md-5">
-    <mat-form-field appearance="outline" class="w-100 hide-hint">
-      <mat-select [(ngModel)]="filters.police_station" name="policeStation">
-        <mat-option value="">Police Station</mat-option>
-        <mat-option *ngFor="let station of policeStationList" [value]="station.id">
-          {{ station.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
 
-  <div class="col-lg-2 col-md-2 d-flex align-items-center">
-    <!-- <button mat-flat-button color="primary" class="search-btn btn-btn-outline w-100" 
+
+      <div class="row">
+        <!-- First row - Case ID and Police Station -->
+        <div class="col-lg-5 col-md-5">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <input matInput [(ngModel)]="filters.case_id" placeholder="Enter Case ID" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-5 col-md-5">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-select [(ngModel)]="filters.police_station" name="policeStation">
+              <mat-option value="">Police Station</mat-option>
+              <mat-option *ngFor="let station of policeStationList" [value]="station.id">
+                {{ station.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-2 col-md-2 d-flex align-items-center">
+          <!-- <button mat-flat-button color="primary" class="search-btn btn-btn-outline w-100" 
             (click)="filterDataByFilters()" [disabled]="!isSearchEnabled()">
       Search
     </button> -->
-      <button mat-flat-button color="primary" class="search-btn btn-btn-outline w-100" 
-        (click)="filterDataByFilters()" 
-        [disabled]="!isSearchEnabled() || isFilterLoading">
-        <span *ngIf="!isFilterLoading">Search</span>
-        <span *ngIf="isFilterLoading">Searching...</span>
-      </button>
-  </div>
+          <button mat-flat-button color="primary" class="search-btn btn-btn-outline w-100"
+            (click)="filterDataByFilters()" [disabled]="!isSearchEnabled() || isFilterLoading">
+            <span *ngIf="!isFilterLoading">Search</span>
+            <span *ngIf="isFilterLoading">Searching...</span>
+          </button>
+        </div>
 
-</div>
+      </div>
 
-<div class="row mt-2">
-  <!-- Second row - State, District, City, Village -->
-  <div class="col-lg-3 col-md-3">
-    <mat-form-field appearance="outline" class="w-100 hide-hint">
-      <mat-select [(ngModel)]="filters.state" (selectionChange)="onStateChange()">
-        <mat-option value="">All States</mat-option>
-        <mat-option *ngFor="let state of allstates" [value]="state">
-          {{ state }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+      <div class="row mt-2">
+        <!-- Second row - State, District, City, Village -->
+        <div class="col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-select [(ngModel)]="filters.state" (selectionChange)="onStateChange()">
+              <mat-option value="">All States</mat-option>
+              <mat-option *ngFor="let state of allstates" [value]="state">
+                {{ state }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-  <div class="col-lg-3 col-md-3">
-    <mat-form-field appearance="outline" class="w-100 hide-hint">
-      <mat-select [(ngModel)]="filters.district" (selectionChange)="onDistrictChange()" [disabled]="!filters.state">
-        <mat-option value="">All Districts</mat-option>
-        <mat-option *ngFor="let district of alldistricts" [value]="district">
-          {{ district }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        <div class="col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-select [(ngModel)]="filters.district" (selectionChange)="onDistrictChange()"
+              [disabled]="!filters.state">
+              <mat-option value="">All Districts</mat-option>
+              <mat-option *ngFor="let district of alldistricts" [value]="district">
+                {{ district }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-  <div class="col-lg-3 col-md-3">
-    <mat-form-field appearance="outline" class="w-100 hide-hint">
-      <mat-select [(ngModel)]="filters.city" (selectionChange)="onCityChange()" [disabled]="!filters.district">
-        <mat-option value="">All Cities</mat-option>
-        <mat-option *ngFor="let city of allcities" [value]="city">
-          {{ city }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        <div class="col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-select [(ngModel)]="filters.city" (selectionChange)="onCityChange()" [disabled]="!filters.district">
+              <mat-option value="">All Cities</mat-option>
+              <mat-option *ngFor="let city of allcities" [value]="city">
+                {{ city }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-  <div class="col-lg-3 col-md-3">
-    <mat-form-field appearance="outline" class="w-100 hide-hint">
-      <mat-select [(ngModel)]="filters.village" [disabled]="!filters.city">
-        <mat-option value="">All Villages</mat-option>
-        <mat-option *ngFor="let village of allvillages" [value]="village">
-          {{ village }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</div>
+        <div class="col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-select [(ngModel)]="filters.village" [disabled]="!filters.city">
+              <mat-option value="">All Villages</mat-option>
+              <mat-option *ngFor="let village of allvillages" [value]="village">
+                {{ village }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
 
     </div>
 
     <mat-card-content>
-      
+
       <mat-tab-group [(selectedIndex)]="selectedTabIndex">
         <mat-tab label="Pending Cases ({{pendingCount}})"></mat-tab>
         <mat-tab label="Hold Cases({{holdCount}})"></mat-tab>
@@ -164,99 +102,71 @@
       </mat-tab-group>
 
       <div class="select-all-container">
-          <div class="select-action-wrapper">
-            <div class="select-box">
-              <mat-checkbox color="primary" 
-                *ngIf="selectedTabIndex === 0"
-                [checked]="selectAllPending"
-                [indeterminate]="isIndeterminatePending()"
-                (change)="toggleSelectAllPending($event.checked)">
-                Select All Pending Cases({{pendingCount}})
-              </mat-checkbox>
+        <div class="select-action-wrapper">
+          <div class="select-box">
+            <mat-checkbox color="primary" *ngIf="selectedTabIndex === 0" [checked]="selectAllPending"
+              [indeterminate]="isIndeterminatePending()" (change)="toggleSelectAllPending($event.checked)">
+              Select All Pending Cases({{pendingCount}})
+            </mat-checkbox>
 
-              <mat-checkbox color="primary" 
-                *ngIf="selectedTabIndex === 1"
-                [checked]="selectAllHold"
-                [indeterminate]="isIndeterminateHold()"
-                (change)="toggleSelectAllHold($event.checked)">
-                Select All Hold Cases({{holdCount}})
-              </mat-checkbox>
-        
-              <mat-checkbox color="primary" 
-                *ngIf="selectedTabIndex === 2"
-                [checked]="selectAllSuspended"
-                [indeterminate]="isIndeterminateSuspended()"
-                (change)="toggleSelectAllSuspended($event.checked)">
-                Select All Suspended Cases({{suspendedCount}})
-              </mat-checkbox>
+            <mat-checkbox color="primary" *ngIf="selectedTabIndex === 1" [checked]="selectAllHold"
+              [indeterminate]="isIndeterminateHold()" (change)="toggleSelectAllHold($event.checked)">
+              Select All Hold Cases({{holdCount}})
+            </mat-checkbox>
 
-              <mat-checkbox color="primary" 
-                  *ngIf="selectedTabIndex === 3"
-                  [checked]="selectAllApproved"
-                  [indeterminate]="isIndeterminateApproved()"
-                  (change)="toggleSelectAllApproved($event.checked)">
-                  Select All Approved Cases({{approvedCount}})
-              </mat-checkbox>
-            </div>
-        
-            <div class="action-buttons">
-              <ng-container *ngIf="selectedTabIndex === 0">
-                <button mat-stroked-button color="primary" 
-                        (click)="approveSelected()"
-                        [disabled]="!hasSelectedItems()">
-                  Approve Selected ({{selectedCount()}})
-                </button>
-                <button mat-stroked-button color="warn" 
-                        (click)="suspendSelected()"
-                        [disabled]="!hasSelectedItems()"
-                        class="reject-button">
-                  Suspend Selected ({{selectedCount()}})
-                </button>
-                <button mat-stroked-button 
-                        (click)="holdSelected()"
-                        [disabled]="!hasSelectedItems()">
-                  Hold Selected ({{selectedCount()}})
-                </button>
-              </ng-container>
+            <mat-checkbox color="primary" *ngIf="selectedTabIndex === 2" [checked]="selectAllSuspended"
+              [indeterminate]="isIndeterminateSuspended()" (change)="toggleSelectAllSuspended($event.checked)">
+              Select All Suspended Cases({{suspendedCount}})
+            </mat-checkbox>
 
-              <ng-container *ngIf="selectedTabIndex === 1">
-                <button mat-stroked-button color="primary" 
-                        (click)="approveSelected()"
-                        [disabled]="!hasSelectedItems()">
-                  Approve Selected ({{selectedCount()}})
-                </button>
-                <button mat-stroked-button color="warn" 
-                        (click)="suspendSelected()"
-                        [disabled]="!hasSelectedItems()"
-                        class="reject-button">
-                  Suspend Selected ({{selectedCount()}})
-                </button>
-              </ng-container>
-          
-              <ng-container *ngIf="selectedTabIndex === 2">
-                <button mat-stroked-button color="primary" 
-                        (click)="approveSelected()"
-                        [disabled]="!hasSelectedItems()">
-                  Approve Selected ({{selectedCount()}})
-                </button>
-              </ng-container>
-        
-              <ng-container *ngIf="selectedTabIndex === 3">
-                <button mat-stroked-button color="warn" 
-                        (click)="suspendSelected()"
-                        [disabled]="!hasSelectedItems()"
-                        class="reject-button">
-                  Suspend Selected ({{selectedCount()}})
-                </button>
-                <button mat-stroked-button 
-                        (click)="holdSelected()"
-                        [disabled]="!hasSelectedItems()">
-                  Hold Selected ({{selectedCount()}})
-                </button>
-              </ng-container>
-            </div>
+            <mat-checkbox color="primary" *ngIf="selectedTabIndex === 3" [checked]="selectAllApproved"
+              [indeterminate]="isIndeterminateApproved()" (change)="toggleSelectAllApproved($event.checked)">
+              Select All Approved Cases({{approvedCount}})
+            </mat-checkbox>
+          </div>
+
+          <div class="action-buttons">
+            <ng-container *ngIf="selectedTabIndex === 0">
+              <button mat-stroked-button color="primary" (click)="approveSelected()" [disabled]="!hasSelectedItems()">
+                Approve Selected ({{selectedCount()}})
+              </button>
+              <button mat-stroked-button color="warn" (click)="suspendSelected()" [disabled]="!hasSelectedItems()"
+                class="reject-button">
+                Suspend Selected ({{selectedCount()}})
+              </button>
+              <button mat-stroked-button (click)="holdSelected()" [disabled]="!hasSelectedItems()">
+                Hold Selected ({{selectedCount()}})
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 1">
+              <button mat-stroked-button color="primary" (click)="approveSelected()" [disabled]="!hasSelectedItems()">
+                Approve Selected ({{selectedCount()}})
+              </button>
+              <button mat-stroked-button color="warn" (click)="suspendSelected()" [disabled]="!hasSelectedItems()"
+                class="reject-button">
+                Suspend Selected ({{selectedCount()}})
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 2">
+              <button mat-stroked-button color="primary" (click)="approveSelected()" [disabled]="!hasSelectedItems()">
+                Approve Selected ({{selectedCount()}})
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 3">
+              <button mat-stroked-button color="warn" (click)="suspendSelected()" [disabled]="!hasSelectedItems()"
+                class="reject-button">
+                Suspend Selected ({{selectedCount()}})
+              </button>
+              <button mat-stroked-button (click)="holdSelected()" [disabled]="!hasSelectedItems()">
+                Hold Selected ({{selectedCount()}})
+              </button>
+            </ng-container>
           </div>
         </div>
+      </div>
 
       <div *ngIf="isLoading" class="loading-spinner">
         <mat-spinner diameter="50"></mat-spinner>
@@ -264,154 +174,148 @@
 
       <table *ngIf="!isLoading" mat-table [dataSource]="getCurrentDataSource()" class="mat-elevation-z1">
 
-          <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef>
-              </th>
-              <td mat-cell *matCellDef="let person">
-                <mat-checkbox color="primary" 
-                             [(ngModel)]="person.selected"
-                             (click)="$event.stopPropagation()"
-                             (change)="updateSelectAllState()">
-                </mat-checkbox>
-              </td>
-          </ng-container>
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let person">
+            <mat-checkbox color="primary" [(ngModel)]="person.selected" (click)="$event.stopPropagation()"
+              (change)="updateSelectAllState()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>NAME</th>
-              <td mat-cell *matCellDef="let person">
-              <div class="name-cell">
-                  <div class="name">{{person.full_name}}</div>
-                  <div class="details" *ngIf="person.type">
-                      <span *ngIf="person.type">{{person.type}}</span>
-                  </div>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>NAME</th>
+          <td mat-cell *matCellDef="let person">
+            <div class="name-cell">
+              <div class="name">{{person.full_name}}</div>
+              <div class="details" *ngIf="person.type">
+                <span *ngIf="person.type">{{person.type}}</span>
               </div>
-              </td>
-          </ng-container>
+            </div>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="village">
-              <th mat-header-cell *matHeaderCellDef>VILLAGE</th>
-              <td mat-cell *matCellDef="let person">{{person.village}}</td>
-          </ng-container>
+        <ng-container matColumnDef="village">
+          <th mat-header-cell *matHeaderCellDef>VILLAGE</th>
+          <td mat-cell *matCellDef="let person">{{person.village}}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="city">
-              <th mat-header-cell *matHeaderCellDef>CITY</th>
-              <td mat-cell *matCellDef="let person">{{person.city}}</td>
-          </ng-container>
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef>CITY</th>
+          <td mat-cell *matCellDef="let person">{{person.city}}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="state">
-              <th mat-header-cell *matHeaderCellDef>STATE</th>
-              <td mat-cell *matCellDef="let person">{{person.state}}</td>
-          </ng-container>
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef>STATE</th>
+          <td mat-cell *matCellDef="let person">{{person.state}}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>STATUS</th>
-              <td mat-cell *matCellDef="let person">
-              <span class="status-badge" [class.pending]="person.person_approve_status === 'pending'"
-                                   [class.hold]="person.person_approve_status === 'on_hold'"
-                                   [class.approved]="person.person_approve_status === 'approved'"
-                                   [class.suspended]="person.person_approve_status === 'suspended'">
-                  {{person.person_approve_status | titlecase}}
-              </span>
-              </td>
-          </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>STATUS</th>
+          <td mat-cell *matCellDef="let person">
+            <span class="status-badge" [class.pending]="person.person_approve_status === 'pending'"
+              [class.hold]="person.person_approve_status === 'on_hold'"
+              [class.approved]="person.person_approve_status === 'approved'"
+              [class.suspended]="person.person_approve_status === 'suspended'">
+              {{person.person_approve_status | titlecase}}
+            </span>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="reason">
-              <th mat-header-cell *matHeaderCellDef>REASON</th>
-              <td mat-cell *matCellDef="let person">
-                  <span *ngIf="person.status_reason">{{person.status_reason}}</span>
-                  <span *ngIf="!person.status_reason">-</span>
-              </td>
-          </ng-container>
+        <ng-container matColumnDef="reason">
+          <th mat-header-cell *matHeaderCellDef>REASON</th>
+          <td mat-cell *matCellDef="let person">
+            <span *ngIf="person.status_reason">{{person.status_reason}}</span>
+            <span *ngIf="!person.status_reason">-</span>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
-            <td mat-cell *matCellDef="let person">
-              <ng-container *ngIf="selectedTabIndex === 0">
-                <button mat-icon-button color="primary" (click)="approvePerson(person)" *ngIf="person.person_approve_status === 'pending'" matTooltip="Approve Person">
-                  <mat-icon>check</mat-icon>
-                </button>
-                <button mat-icon-button color="warn" (click)="suspendPerson(person)" *ngIf="person.person_approve_status === 'pending'" matTooltip="Reject Person">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <button mat-icon-button (click)="holdPerson(person)" *ngIf="person.person_approve_status === 'pending'" matTooltip="Put On Hold">
-                  <mat-icon>pause</mat-icon>
-                </button>
-                <span *ngIf="person.person_approve_status !== 'pending'">-</span>
-              </ng-container>
-          
-              <ng-container *ngIf="selectedTabIndex === 1">
-                <button mat-icon-button color="primary" (click)="approvePerson(person)" *ngIf="person.person_approve_status === 'on_hold'" matTooltip="Approve Person">
-                  <mat-icon>check</mat-icon>
-                </button>
-                <button mat-icon-button color="warn" (click)="suspendPerson(person)" *ngIf="person.person_approve_status === 'on_hold'" matTooltip="Reject Person">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <span *ngIf="person.person_approve_status !== 'on_hold'">-</span>
-              </ng-container>
-          
-              <ng-container *ngIf="selectedTabIndex === 2">
-                <button mat-icon-button color="primary" (click)="approvePerson(person)" matTooltip="Approve Person">
-                  <mat-icon>check</mat-icon>
-                </button>
-                <span *ngIf="person.person_approve_status !== 'suspended'">-</span>
-              </ng-container>
-          
-              <ng-container *ngIf="selectedTabIndex === 3">
-                <button mat-icon-button color="warn" (click)="suspendPerson(person)" matTooltip="Suspend Person">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <button mat-icon-button (click)="holdPerson(person)" matTooltip="Put On Hold">
-                  <mat-icon>pause</mat-icon>
-                </button>
-                <span *ngIf="person.person_approve_status !== 'approved'">-</span>
-              </ng-container>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+          <td mat-cell *matCellDef="let person">
+            <ng-container *ngIf="selectedTabIndex === 0">
+              <button mat-icon-button color="primary" (click)="approvePerson(person)"
+                *ngIf="person.person_approve_status === 'pending'" matTooltip="Approve Person">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="suspendPerson(person)"
+                *ngIf="person.person_approve_status === 'pending'" matTooltip="Reject Person">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-icon-button (click)="holdPerson(person)" *ngIf="person.person_approve_status === 'pending'"
+                matTooltip="Put On Hold">
+                <mat-icon>pause</mat-icon>
+              </button>
+              <span *ngIf="person.person_approve_status !== 'pending'">-</span>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="
+            <ng-container *ngIf="selectedTabIndex === 1">
+              <button mat-icon-button color="primary" (click)="approvePerson(person)"
+                *ngIf="person.person_approve_status === 'on_hold'" matTooltip="Approve Person">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="suspendPerson(person)"
+                *ngIf="person.person_approve_status === 'on_hold'" matTooltip="Reject Person">
+                <mat-icon>close</mat-icon>
+              </button>
+              <span *ngIf="person.person_approve_status !== 'on_hold'">-</span>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 2">
+              <button mat-icon-button color="primary" (click)="approvePerson(person)" matTooltip="Approve Person">
+                <mat-icon>check</mat-icon>
+              </button>
+              <span *ngIf="person.person_approve_status !== 'suspended'">-</span>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 3">
+              <button mat-icon-button color="warn" (click)="suspendPerson(person)" matTooltip="Suspend Person">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-icon-button (click)="holdPerson(person)" matTooltip="Put On Hold">
+                <mat-icon>pause</mat-icon>
+              </button>
+              <span *ngIf="person.person_approve_status !== 'approved'">-</span>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="
               selectedTabIndex === 1 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason', 'actions'] : 
               selectedTabIndex === 2 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason','actions'] : 
               ['select', 'name', 'village', 'city', 'state', 'status', 'actions']"></tr>
-          <tr mat-row *matRowDef="let row; columns: 
+        <tr mat-row *matRowDef="let row; columns: 
               selectedTabIndex === 1 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason', 'actions'] : 
               selectedTabIndex === 2 ? ['select', 'name', 'village', 'city', 'state', 'status', 'reason','actions'] : 
               ['select', 'name', 'village', 'city', 'state', 'status', 'actions']"></tr>
       </table>
-      <!-- <mat-paginator [length]="pagination.length"
-               [pageIndex]="pagination.pageIndex"
-               [pageSize]="pagination.pageSize"
-               [pageSizeOptions]="pagination.pageSizeOptions"
-               (page)="onPageChange($event)">
-</mat-paginator> -->
-<!-- <mat-paginator [length]="pagination.length" 
-               [pageIndex]="pagination.pageIndex"
-               [pageSize]="pagination.pageSize"
-               [pageSizeOptions]="pagination.pageSizeOptions"
-               (page)="onPageChange($event)">
-</mat-paginator> -->
-<div class="custom-paginator">
-  <span class="page-info">
-    {{ getDisplayedRange() }}
-  </span>
-  
-  <button mat-icon-button (click)="firstPage()" [disabled]="isFirstPage() || isLoading || pagination.length === 0">
-    <mat-icon>first_page</mat-icon>
-  </button>
-  
-  <button mat-icon-button (click)="previousPage()" [disabled]="isFirstPage() || isLoading || pagination.length === 0">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  
-  <button mat-icon-button (click)="nextPage()" [disabled]="isLastPage() || isLoading || pagination.length === 0">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-  
-  <button mat-icon-button (click)="lastPage()" [disabled]="isLastPage() || isLoading || pagination.length === 0">
-    <mat-icon>last_page</mat-icon>
-  </button>
-  
-  <mat-spinner diameter="20" *ngIf="isLoading" class="ml-2"></mat-spinner>
-</div>
+
+      <div class="custom-paginator">
+        <span class="page-info">
+          {{ getDisplayedRange() }}
+        </span>
+
+        <button mat-icon-button (click)="firstPage()"
+          [disabled]="isFirstPage() || isLoading || pagination.length === 0">
+          <mat-icon>first_page</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="previousPage()"
+          [disabled]="isFirstPage() || isLoading || pagination.length === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="nextPage()" [disabled]="isLastPage() || isLoading || pagination.length === 0">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="lastPage()" [disabled]="isLastPage() || isLoading || pagination.length === 0">
+          <mat-icon>last_page</mat-icon>
+        </button>
+
+        <mat-spinner diameter="20" *ngIf="isLoading" class="ml-2"></mat-spinner>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

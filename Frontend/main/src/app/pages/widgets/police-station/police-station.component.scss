@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 8px;
+  // padding: 0 8px;
 }
 
 .page-title {
@@ -29,6 +29,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: -8px;
+  margin-right: -1px;
 }
 
+.backgroud{
+  background: #FCFCFC;
+
+}
+
+.field-color{
+  background-color: rgb(255, 255, 255) !important;
+}

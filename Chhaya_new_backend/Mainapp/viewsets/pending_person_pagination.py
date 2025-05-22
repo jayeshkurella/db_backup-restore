@@ -14,5 +14,7 @@ class StatusPagination(PageNumberPagination):
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'page_size': self.get_page_size(self.request),
-            'results': data
+            'results': data,
+            'first_page': self.request.build_absolute_uri('?page=1'),
+            'last_page': self.request.build_absolute_uri(f'?page={self.page.paginator.num_pages}')
         })

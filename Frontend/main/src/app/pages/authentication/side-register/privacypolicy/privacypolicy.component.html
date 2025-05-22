@@ -2,7 +2,7 @@
   <!-- Header Section -->
   <div class="document-header">
     <div class="header-content">
-      <mat-icon class="header-icon">gavel</mat-icon>
+      <!-- <mat-icon class="header-icon">gavel</mat-icon> -->
       <h1>Legal Documents</h1>
       <p class="effective-date">Effective: May 15, 2025 | Last Updated: May 15, 2025</p>
     </div>
@@ -110,4 +110,11 @@
       <p><mat-icon>location_on</mat-icon> Chhaya Foundation, Pune, Maharashtra, India</p>
     </div>
   </div>
+</div>
+
+<div class="container mt-5 justify-content-center">
+  
+  <p>All legal and privacy terms go here. Please read them carefully before agreeing.</p>
+  <button class="btn btn-success mt-3" (click)="agreeAndReturn()">I Agree</button>
+  <button class="btn btn-success mt-3" (click)="disagreeAndReturn()">Back</button>
 </div>

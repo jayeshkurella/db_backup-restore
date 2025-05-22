@@ -167,8 +167,15 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
   unidentifiedBodyMatchedWithMissingMale: number = 0;
   unidentifiedBodyMatchedWithMissingFemale: number = 0;
   months: any;
-  displayedColumns: string[] = ['srNo', 'photo', 'fullName', 'age', 'gender', 'city', 'district', 'state', 'action'];
+  displayedColumns: string[] = ['sr No', 'photo', 'fullName', 'age', 'gender', 'city', 'district', 'state', 'action'];
 
+tabs = [
+  { label: 'Missing Persons' },
+  { label: 'Unidentified Persons' },
+  { label: 'Unidentified Bodies' }
+];
+
+selectedTabIndex = 0;
 
   constructor(
     private router: Router,

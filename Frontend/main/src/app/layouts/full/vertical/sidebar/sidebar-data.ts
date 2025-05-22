@@ -2,16 +2,7 @@ import { authGuard } from 'src/app/pages/authentication/side-login/auth.guard';
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
-  // {
-  //   displayName: 'Home',
-  //   iconName: 'aperture',
-  //   route: '/dashboards/dashboard1',
-  // },
-  // {
-  //   displayName: 'Internal',
-  //   iconName: 'home',
-  //   route: '/dashboards/dashboard2',
-  // },
+ 
   {
     navCap: 'Person',
   },

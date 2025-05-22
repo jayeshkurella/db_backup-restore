@@ -64,4 +64,11 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Optional: adds depth */
 }
 
+.custom-tab-group{
+  color: red !important;
+}
+.custom-tab-group .mat-tab-header {
+  justify-content: flex-start !important;
+  color:red !important;
+}
 

@@ -1,4 +1,4 @@
-<div class="page-container mat-elevation-z2">
+<div class="page-container mat-elevation-z2 backgroud">
   <div class="header-container">
     <h2 class="page-title">Police Station</h2>
     <div>
@@ -13,24 +13,23 @@
     <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mt-3 mb-2">
 
       <!-- Name -->
-      <mat-form-field appearance="outline" class="with-icon flex-grow-1">
-        <!-- <mat-label>Name</mat-label> -->
-        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name">
+      <mat-form-field appearance="outline" class="with-icon flex-grow-1 ">
+        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name" class="field-color">
       </mat-form-field>
 
       <!-- State -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>State</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()">
+        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()" class="field-color">
           <mat-option value="">All States</mat-option>
           <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <!-- District -->
-      <mat-form-field appearance="outline" class="w-auto min-width-200">
+      <mat-form-field appearance="outline" class="w-auto min-width-200" >
         <!-- <mat-label>District</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()">
+        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()"class="field-color">
           <mat-option value="">All Districts</mat-option>
           <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
         </mat-select>
@@ -39,7 +38,7 @@
       <!-- City -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>City</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.city" name="city">
+        <mat-select [(ngModel)]="searchFilters.city" name="city" class="field-color">
           <mat-option value="">City</mat-option>
           <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
         </mat-select>
@@ -66,8 +65,8 @@
           <!-- Image Section -->
           <div class="position-relative">
           <img [src]="environment.ImgUrlss + police.station_photo"
-                class="w-100 object-fit-cover p-1"
-                style="height: 200px; border-radius: 8px;"
+                class="w-100 object-fit-cover "
+                style="height: 200px;"
                 alt="{{ police.name }}"
                 (error)="onImageError($event)" />
 
@@ -106,7 +105,7 @@
             </div>
 
             <!-- Button -->
-            <div class="d-flex justify-content-center mt-3">
+            <div class="d-flex justify-content-center">
               <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMorepolicestationdata(police)">
                 More Info
               </button>

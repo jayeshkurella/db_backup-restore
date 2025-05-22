@@ -1,134 +1,122 @@
-<mat-card class="cardWithShadow">
+<mat-card >
   <mat-card-content>
     <div class="containerx h-100">
       <!-- Filters Section -->
       <div class="filter-container">
-  <!-- First Row -->
-  <div class="filter-row">
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedState" placeholder="Maharashtra" (selectionChange)="onStateChange($event.value)">
-        <mat-option value="">All States</mat-option>
-        <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+        <!-- First Row -->
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="orange-outline">
+            <mat-select [(ngModel)]="selectedState" placeholder="Maharashtra"
+              (selectionChange)="onStateChange($event.value)">
+              <mat-option value="">All States</mat-option>
+              <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedDistrict" placeholder="District" (selectionChange)="onDistrictChange($event.value)">
-        <mat-option value="">All Districts</mat-option>
-        <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedDistrict" placeholder="District"
+              (selectionChange)="onDistrictChange($event.value)">
+              <mat-option value="">All Districts</mat-option>
+              <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedCity" placeholder="City" (selectionChange)="onCityChange($event.value)">
-        <mat-option value="">All Cities</mat-option>
-        <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedCity" placeholder="City" (selectionChange)="onCityChange($event.value)">
+              <mat-option value="">All Cities</mat-option>
+              <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedVillage" placeholder="Village">
-        <mat-option value="">All Villages</mat-option>
-        <mat-option *ngFor="let village of allVillages" [value]="village">{{ village }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedVillage" placeholder="Village">
+              <mat-option value="">All Villages</mat-option>
+              <mat-option *ngFor="let village of allVillages" [value]="village">{{ village }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedcase" placeholder="Case Status">
-        <mat-option value="">All Cases</mat-option>
-        <mat-option value="resolved">Resolved</mat-option>
-        <mat-option value="pending">Pending</mat-option>
-      </mat-select>
-    </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedcase" placeholder="Case Status">
+              <mat-option value="">All Cases</mat-option>
+              <mat-option value="resolved">Resolved</mat-option>
+              <mat-option value="pending">Pending</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    
-  </div>
 
-  <!-- Second Row -->
-  <div class="filter-row">
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedgender" placeholder="Gender">
-        <mat-option value="">All Genders</mat-option>
-        <mat-option value="male">Male</mat-option>
-        <mat-option value="female">Female</mat-option>
-      </mat-select>
-    </mat-form-field>
+        </div>
 
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="selectedHeightRange" placeholder="Height">
-        <mat-option value="">All Heights</mat-option>
-        <mat-option value="<150">Less than 150 cm</mat-option>
-        <mat-option value="150-160">150 - 160 cm</mat-option>
-        <mat-option value="161-170">161 - 170 cm</mat-option>
-        <mat-option value="171-180">171 - 180 cm</mat-option>
-        <mat-option value="181-190">181 - 190 cm</mat-option>
-        <mat-option value=">190">More than 190 cm</mat-option>
-      </mat-select>
-    </mat-form-field>
+        <!-- Second Row -->
+        <div class="filter-row">
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedgender" placeholder="Gender">
+              <mat-option value="">All Genders</mat-option>
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-  <mat-select [(ngModel)]="selectedAgeRange" placeholder="Age">
-    <mat-option value="">All Ages</mat-option>
-    <mat-option value="0-5">0 - 5</mat-option>
-    <mat-option value="6-12">6 - 12</mat-option>
-    <mat-option value="13-17">13 - 17</mat-option>
-    <mat-option value="18-24">18 - 24</mat-option>
-    <mat-option value="25-34">25 - 34</mat-option>
-    <mat-option value="35-44">35 - 44</mat-option>
-    <mat-option value="45-54">45 - 54</mat-option>
-    <mat-option value="55-64">55 - 64</mat-option>
-    <mat-option value="65-74">65 - 74</mat-option>
-    <mat-option value="75-84">75 - 84</mat-option>
-    <mat-option value="85-100">85+</mat-option>
-  </mat-select>
-</mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedHeightRange" placeholder="Height">
+              <mat-option value="">All Heights</mat-option>
+              <mat-option value="<150">Less than 150 cm</mat-option>
+              <mat-option value="150-160">150 - 160 cm</mat-option>
+              <mat-option value="161-170">161 - 170 cm</mat-option>
+              <mat-option value="171-180">171 - 180 cm</mat-option>
+              <mat-option value="181-190">181 - 190 cm</mat-option>
+              <mat-option value=">190">More than 190 cm</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-  <input
-    matInput
-    [matDatepicker]="startPicker"
-    [(ngModel)]="selectedStartDate"
-    (dateChange)="onStartDateChange($event.value)"
-    [max]="maxSelectableDate"
-    placeholder="Select start date"
-  />
-  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-  <mat-datepicker #startPicker></mat-datepicker>
-</mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="selectedAgeRange" placeholder="Age">
+              <mat-option value="">All Ages</mat-option>
+              <mat-option value="0-5">0 - 5</mat-option>
+              <mat-option value="6-12">6 - 12</mat-option>
+              <mat-option value="13-17">13 - 17</mat-option>
+              <mat-option value="18-24">18 - 24</mat-option>
+              <mat-option value="25-34">25 - 34</mat-option>
+              <mat-option value="35-44">35 - 44</mat-option>
+              <mat-option value="45-54">45 - 54</mat-option>
+              <mat-option value="55-64">55 - 64</mat-option>
+              <mat-option value="65-74">65 - 74</mat-option>
+              <mat-option value="75-84">75 - 84</mat-option>
+              <mat-option value="85-100">85+</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <input
-    matInput
-    [matDatepicker]="endPicker"
-    [(ngModel)]="selectedEndDate"
-    (dateChange)="onEndDateChange($event.value)"
-    [min]="selectedStartDate"
-    [max]="maxEndDate || maxSelectableDate"
-    placeholder="Select end date"
-  />
-  <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-  <mat-datepicker #endPicker></mat-datepicker>
-</mat-form-field>
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="selectedStartDate"
+              (dateChange)="onStartDateChange($event.value)" [max]="maxSelectableDate"
+              placeholder="Select start date" />
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
 
- <button mat-flat-button color="primary" class="search-btn btn-btn-outline" (click)="filterDataByFilters()">
-      Search
-    </button>
-  </div>
-</div>
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="selectedEndDate"
+              (dateChange)="onEndDateChange($event.value)" [min]="selectedStartDate"
+              [max]="maxEndDate || maxSelectableDate" placeholder="Select end date" />
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <button mat-button class="search-btn dark-orange" (click)="filterDataByFilters()">
+            Search
+          </button>
+        </div>
+      </div>
 
       <!-- Map Section -->
       <div class="row">
         <div class="col">
           <div class="p-1 ">
-            <div
-              id="map"
-              style="
+            <div id="map" style="
                 height: 400px;
                 border: 1px solid #000000;
                 border-radius: 5px;
                 z-index: 0;
-              "
-            ></div>
+              "></div>
           </div>
         </div>
       </div>
@@ -144,184 +132,133 @@
       <mat-card-title>Filtered Persons</mat-card-title>
     </div>
   </mat-card-header>
+
   <mat-card-content>
-    <!-- Tab navigation -->
-    <mat-tab-group>
-      <!-- Missing Persons Tab -->
-      <mat-tab label="Missing Persons">
-  <div class="table-responsive mt-1">
-    <table mat-table [dataSource]="filteredMissingPersonssss" class="w-100">
-      <ng-container *ngFor="let column of displayedColumns">
-        <ng-container [matColumnDef]="column">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-            {{ column | titlecase }}
-          </th>
-          <td mat-cell *matCellDef="let element; let i = index">
-            <ng-container [ngSwitch]="column">
-              <span *ngSwitchCase="'srNo'">{{ i + 1 }}</span>
-
-              <span *ngSwitchCase="'photo'" class="image-container">
-                <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
-                     alt="Person Photo" 
-                     class="rounded hover-zoom"
-                     width="40" 
-                     height="40"
-                     style="object-fit: cover;"
-                     (error)="onImageError($event, element.properties.type)">
-              </span>
-
-              <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
-              <span *ngSwitchCase="'age'">{{ element.properties.age || 'Not specified' }}</span>
-
-              <span *ngSwitchCase="'gender'">
-                <mat-icon 
-                  [ngClass]="{
-                    'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
-                    'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
-                  }">
-                  {{ getGenderIcon(element.properties.gender) }}
-                </mat-icon>
-              </span>
-
-              <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
-              <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
-              <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
-
-              <span *ngSwitchCase="'action'">
-                <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
-                  <mat-icon class="f-s-00">visibility</mat-icon>
-                </button>
-              </span>
-            </ng-container>
-          </td>
-        </ng-container>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </div>
-</mat-tab>
-
-
-      <!-- Unidentified Persons Tab -->
-      <mat-tab label="Unidentified Persons">
-        <div class="table-responsive mt-1">
-          <table mat-table [dataSource]="filteredUnidentifiedPersonssss" class="w-100">
-            <!-- Same column definitions as above -->
-            <ng-container *ngFor="let column of displayedColumns">
-              <ng-container [matColumnDef]="column">
-                <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-                  {{ column | titlecase }}
-                </th>
-                <td mat-cell *matCellDef="let element; let i = index">
-                  <ng-container [ngSwitch]="column">
-                    <span *ngSwitchCase="'srNo'">{{ i + 1 }}</span>
-                    <span *ngSwitchCase="'photo'" class="image-container">
-                    <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
-                        alt="Person Photo" 
-                        class="rounded hover-zoom"
-                        width="40" 
-                        height="40"
-                        style="object-fit: cover;"
-                        (error)="onImageError($event, element.properties.type)">
-                  </span>
-                    <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
-                    <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
-                    <!-- <span *ngSwitchCase="'gender'">
-                      <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
-                      <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">
-                      <img *ngIf="element.properties.gender !== 'male' && element.properties.gender !== 'female'" src="assets/old/images/other.png" alt="Other" width="24" height="24">
-                    </span> -->
-                    <span *ngSwitchCase="'gender'">
-                    <mat-icon 
-                      [ngClass]="{
-                        'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
-                        'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
-                      }">
-                      {{ getGenderIcon(element.properties.gender) }}
-                    </mat-icon>
-                  </span>
-                    <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'action'">
-                      <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
-                <mat-icon class="f-s-00">visibility</mat-icon>
-              </button>
-                    </span>
-                  </ng-container>
-                </td>
-              </ng-container>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-        </div>
-      </mat-tab>
-
-      <!-- Unidentified Bodies Tab -->
-      <mat-tab label="Unidentified Bodies">
-        <div class="table-responsive mt-1">
-          <table mat-table [dataSource]="filteredunidentifiedboidessss" class="w-100">
-            <!-- Same column definitions as above -->
-            <ng-container *ngFor="let column of displayedColumns">
-              <ng-container [matColumnDef]="column">
-                <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-                  {{ column | titlecase }}
-                </th>
-                <td mat-cell *matCellDef="let element; let i = index">
-                  <ng-container [ngSwitch]="column">
-                    <span *ngSwitchCase="'srNo'">{{ i + 1 }}</span>
-                    <span *ngSwitchCase="'photo'" class="image-container">
-                    <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" 
-                        alt="Person Photo" 
-                        class="rounded hover-zoom"
-                        width="40" 
-                        height="40"
-                        style="object-fit: cover;"
-                        (error)="onImageError($event, element.properties.type)">
-                  </span>
-                          <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
-                    <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
-                    <!-- <span *ngSwitchCase="'gender'">
-                      <img *ngIf="element.properties.gender === 'male'" src="assets/old/images/male.png" alt="Male" width="40" height="40">
-                      <img *ngIf="element.properties.gender === 'female'" src="assets/old/images/female.png" alt="Female" width="40" height="40">
-                      <img *ngIf="element.properties.gender !== 'male' && element.properties.gender !== 'female'" src="assets/old/images/other.png" alt="Other" width="24" height="24">
-                    </span> -->
-                    <span *ngSwitchCase="'gender'">
-                    <mat-icon 
-                      [ngClass]="{
-                        'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
-                        'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
-                      }">
-                      {{ getGenderIcon(element.properties.gender) }}
-                    </mat-icon>
-                  </span>
-
-                    <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
-                    <span *ngSwitchCase="'action'">
-                    <button mat-icon-button matTooltip="View Details" color="primary" (click)="viewDetails(element)">
-                <mat-icon class="f-s-00">visibility</mat-icon>
-              </button>
-                  </span>
-                  </ng-container>
-                </td>
-              </ng-container>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-        </div>
-      </mat-tab>
+    <!-- Tab Headers Only -->
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" mat-align-tabs="start" class="custom-tab-group">
+      <mat-tab label="Missing Persons"></mat-tab>
+      <mat-tab label="Unidentified Persons"></mat-tab>
+      <mat-tab label="Unidentified Bodies"></mat-tab>
     </mat-tab-group>
+
+    <!-- Missing Persons Table -->
+    <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 0">
+      <table mat-table [dataSource]="filteredMissingPersonssss" class="w-100">
+        <ng-container *ngFor="let column of displayedColumns">
+          <ng-container [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">{{ column | titlecase }}</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <ng-container [ngSwitch]="column">
+                <span *ngSwitchCase="'sr No'">{{ i + 1 }}</span>
+                <span *ngSwitchCase="'photo'" class="image-container">
+                  <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" alt="Person Photo"
+                    class="rounded hover-zoom" width="40" height="40" style="object-fit: cover"
+                    (error)="onImageError($event, element.properties.type)" />
+                </span>
+                <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
+                <span *ngSwitchCase="'age'">{{ element.properties.age || 'Not specified' }}</span>
+                <span *ngSwitchCase="'gender'">
+                  <mat-icon [ngClass]="{
+                      'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
+                      'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                    }">{{ getGenderIcon(element.properties.gender) }}</mat-icon>
+                </span>
+                <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
+                <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
+                <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
+                <span *ngSwitchCase="'action'">
+                  <a matTooltip="View Details"  (click)="viewDetails(element)">
+                    <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+                  </a>
+                </span>
+              </ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <!-- Unidentified Persons Table -->
+    <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 1">
+      <table mat-table [dataSource]="filteredUnidentifiedPersonssss" class="w-100">
+        <ng-container *ngFor="let column of displayedColumns">
+          <ng-container [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">{{ column | titlecase }}</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <ng-container [ngSwitch]="column">
+                <span *ngSwitchCase="'sr No'">{{ i + 1 }}</span>
+                <span *ngSwitchCase="'photo'" class="image-container">
+                  <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" alt="Person Photo"
+                    class="rounded hover-zoom" width="40" height="40" style="object-fit: cover"
+                    (error)="onImageError($event, element.properties.type)" />
+                </span>
+                <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
+                <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
+                <span *ngSwitchCase="'gender'">
+                  <mat-icon [ngClass]="{
+                      'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
+                      'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                    }">{{ getGenderIcon(element.properties.gender) }}</mat-icon>
+                </span>
+                <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
+                <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
+                <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
+                <span *ngSwitchCase="'action'">
+                  <a matTooltip="View Details"  (click)="viewDetails(element)">
+                    <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+                  </a>
+                </span>
+              </ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <!-- Unidentified Bodies Table -->
+    <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 2">
+      <table mat-table [dataSource]="filteredunidentifiedboidessss" class="w-100">
+        <ng-container *ngFor="let column of displayedColumns">
+          <ng-container [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">{{ column | titlecase }}</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <ng-container [ngSwitch]="column">
+                <span *ngSwitchCase="'sr No'">{{ i + 1 }}</span>
+                <span *ngSwitchCase="'photo'" class="image-container">
+                  <img [src]="getImageUrl(element.properties.photo_photo, element.properties.type)" alt="Person Photo"
+                    class="rounded hover-zoom" width="40" height="40" style="object-fit: cover"
+                    (error)="onImageError($event, element.properties.type)" />
+                </span>
+                <span *ngSwitchCase="'fullName'">{{ element.properties.full_name || 'Unknown' }}</span>
+                <span *ngSwitchCase="'age'">{{ element.properties.age_range || 'Not specified' }}</span>
+                <span *ngSwitchCase="'gender'">
+                  <mat-icon [ngClass]="{
+                      'gender-icon-lg': element.properties.gender === 'male' || element.properties.gender === 'female',
+                      'gender-icon-sm': element.properties.gender !== 'male' && element.properties.gender !== 'female'
+                    }">{{ getGenderIcon(element.properties.gender) }}</mat-icon>
+                </span>
+                <span *ngSwitchCase="'city'">{{ element.properties.city || 'Not specified' }}</span>
+                <span *ngSwitchCase="'district'">{{ element.properties.district || 'Not specified' }}</span>
+                <span *ngSwitchCase="'state'">{{ element.properties.state || 'Not specified' }}</span>
+                <span *ngSwitchCase="'action'">
+                  <a matTooltip="View Details" (click)="viewDetails(element)">
+                    <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+                  </a>
+                </span>
+              </ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
   </mat-card-content>
 </mat-card>
-
-
-
-  

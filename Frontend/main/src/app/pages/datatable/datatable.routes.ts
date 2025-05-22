@@ -14,23 +14,22 @@ import { SearchbyIDComponent } from './searchby-id/searchby-id.component';
 import { DetaildataComponent } from './detaildata/detaildata.component';
 import { UnidentifiedPersonDialogComponent } from './unidentified-person/unidentified-person-dialog/unidentified-person-dialog.component';
 import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies/unidentified-bodies-dialog/unidentified-bodies-dialog.component';
-import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 export const datatablesRoutes: Routes = [
   {
     path: 'change-log',
     component: ChangelogviewComponent,
-   
+
   },
   {
     path: 'add-changelog',
     component: ChangelogsComponent,
-   
+
   },
-   {
-      path: 'search-by-id',
-      component: SearchbyIDComponent,
-    },
+  {
+    path: 'search-by-id',
+    component: SearchbyIDComponent,
+  },
   {
     path: '',
     canActivate: [authGuard],
@@ -38,10 +37,11 @@ export const datatablesRoutes: Routes = [
       {
         path: 'missing-person',
         component: AppKichenSinkComponent,
-        
+
       },
-      { path: 'match-up-result', 
-        component: MatwithupComponent 
+      {
+        path: 'match-up-result',
+        component: MatwithupComponent
       },
       {
         path: 'unidentified-person',
@@ -54,12 +54,12 @@ export const datatablesRoutes: Routes = [
       {
         path: 'admin-access',
         component: AccessProviderComponent,
-        canActivate: [AdminGuard], 
+        canActivate: [AdminGuard],
       },
       {
         path: 'User-access',
         component: UserAccessComponent,
-        canActivate: [AdminGuard], 
+        canActivate: [AdminGuard],
       },
       {
         path: 'missing-person/person-view/:id',
@@ -73,10 +73,7 @@ export const datatablesRoutes: Routes = [
         path: 'unidentified-bodies/person-view/:id',
         component: UnidentifiedBodiesDialogComponent,
       },
-      {
-        path: 'privacy-policy',
-        component: PrivacypolicyComponent,
-      }
+
 
     ],
   },

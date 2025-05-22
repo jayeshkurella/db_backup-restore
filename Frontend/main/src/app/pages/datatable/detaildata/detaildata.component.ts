@@ -13,7 +13,7 @@ import { MatSpinner } from '@angular/material/progress-spinner';
 import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 @Component({
   selector: 'app-detaildata',
-   imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatListItem,MatList,MatIcon,MatCard,MatButton,MatDivider,MatSpinner,SafeTitlecasePipe,MatCardTitle],
+   imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatIcon,MatCard,MatButton,MatSpinner,SafeTitlecasePipe,MatCardTitle],
   templateUrl: './detaildata.component.html',
   styleUrl: './detaildata.component.scss'
 })
