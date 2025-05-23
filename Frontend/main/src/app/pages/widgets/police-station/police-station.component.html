@@ -1,35 +1,48 @@
-<div class="page-container mat-elevation-z2 backgroud">
-  <div class="header-container">
-    <h2 class="page-title">Police Station</h2>
-    <div>
+<div class="page-container mat-elevation-z2 ">
+  <div class="header-container d-flex justify-content-between align-items-center mb-3">
+    <!-- Left side: Title + Add Button -->
+    <div class="d-flex align-items-center gap-2">
+      <h2 class="page-title m-0">Police Station</h2>
       <button *ngIf="isLoggedIn && isAdmin" mat-flat-button color="primary" (click)="navigateToAddStation()"
         class="action-btn">
-        <mat-icon class="add-icon">add</mat-icon><span style="margin-right: 15px;">Add</span>
+        <mat-icon class="add-icon">add</mat-icon>
+        <span style="margin-right: 15px;">Add</span>
+      </button>
+    </div>
+
+    <!-- Right side: Reset Button -->
+    <div>
+      <button mat-flat-button color="primary" (click)="resetFilters()" class="action-btn">
+        <mat-icon>refresh</mat-icon>&nbsp;Reset
       </button>
     </div>
   </div>
+
   <form (ngSubmit)="onSearch()" novalidate>
 
     <div class="d-flex flex-wrap align-items-end gap-3 w-100 border-bottom pb-3 mt-3 mb-2">
 
       <!-- Name -->
       <mat-form-field appearance="outline" class="with-icon flex-grow-1 ">
-        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name" class="field-color">
+        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name"
+          class="field-color">
       </mat-form-field>
 
       <!-- State -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>State</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()" class="field-color">
+        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()"
+          class="field-color">
           <mat-option value="">All States</mat-option>
           <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <!-- District -->
-      <mat-form-field appearance="outline" class="w-auto min-width-200" >
+      <mat-form-field appearance="outline" class="w-auto min-width-200">
         <!-- <mat-label>District</mat-label> -->
-        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()"class="field-color">
+        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()"
+          class="field-color">
           <mat-option value="">All Districts</mat-option>
           <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
         </mat-select>
@@ -51,6 +64,7 @@
 
     </div>
   </form>
+
   <div class="row p-2 mt-1">
     <!-- Loading Spinner -->
     <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
@@ -59,18 +73,15 @@
 
     <!-- Police Station Cards -->
     <ng-container *ngIf="!loading">
-      <div class="col-sm-6 col-lg-4 d-flex align-items-stretch" *ngFor="let police of total_policestation">
+      <div class="col-sm-6 col-lg-3 d-flex align-items-stretch" *ngFor="let police of total_policestation">
         <mat-card class="cardWithShadow overflow-hidden w-100">
 
           <!-- Image Section -->
           <div class="position-relative">
-          <img [src]="environment.ImgUrlss + police.station_photo"
-                class="w-100 object-fit-cover "
-                style="height: 200px;"
-                alt="{{ police.name }}"
-                (error)="onImageError($event)" />
+            <img [src]="environment.ImgUrlss + police.station_photo" class="w-100 object-fit-cover "
+              style="height: 200px;" alt="{{ police.name }}" (error)="onImageError($event)" />
 
-           <ng-template #placeholder>
+            <ng-template #placeholder>
               <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
                 <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
               </div>
@@ -93,19 +104,20 @@
             </div>
 
             <!-- Address and Contact -->
-            <div class="d-flex justify-content-between text-muted f-s-14 mb-5">
-              <div class="d-flex align-items-center">
-                <i class="bi bi-geo-alt me-1"></i>
-                {{ police.address_details.city }}, {{ police.address_details.state }}
+            <div class="d-flex flex-column text-muted f-s-14 mt-3 mb-3">
+              <div class="d-flex align-items-center mb-1">
+                <i class="bi bi-geo-alt me-2"></i>
+                <span>{{ police.address_details.city }}, {{ police.address_details.state }}</span>
               </div>
               <div class="d-flex align-items-center">
-                <i class="bi bi-telephone me-1"></i>
-                {{ police.police_contact[0]?.phone_no || 'N/A' }}
+                <i class="bi bi-telephone me-2"></i>
+                <span>{{ police.police_contact[0]?.phone_no || 'N/A' }}</span>
               </div>
             </div>
 
+
             <!-- Button -->
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center mt-5">
               <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMorepolicestationdata(police)">
                 More Info
               </button>

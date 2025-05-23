@@ -22,11 +22,17 @@ export class UbconsentComponent {
   checked = false;
 
   constructor(
-    private dialogRef: MatDialogRef<UbconsentComponent>,
+    public dialogRef: MatDialogRef<UbconsentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  closeDialog() {
-    this.dialogRef.close(this.checked);
+  acceptAndContinue() {
+    if (this.checked) {
+      this.dialogRef.close(true); 
+    }
   }
+  closeDialog() {
+    this.dialogRef.close(false); 
+  }
+
 }

@@ -55,7 +55,7 @@ export class HospitalsComponent implements OnInit{
   environment = environment;
   allhospitals:any = []
   totalHospitalItems = 0;
-  itemsPerPage = 6;
+  itemsPerPage = 4;
   currentPage = 1;
   allstates: string[] = [];
   alldistricts: string[] = [];
@@ -106,7 +106,15 @@ export class HospitalsComponent implements OnInit{
     }
   );
 }
-
+resetFilters(): void {
+  this.searchFilters = {
+    name: '',
+    state: '',
+    district: '',
+    city: ''
+  };
+  
+}
   
  onsearch(page: number = 1): void {
   this.loading = true;

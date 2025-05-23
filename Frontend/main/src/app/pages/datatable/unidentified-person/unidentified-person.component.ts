@@ -26,6 +26,7 @@ import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UnidentifiedPersonDialogComponent } from './unidentified-person-dialog/unidentified-person-dialog.component';
 import { Router } from '@angular/router';
+import { SafeTitlecasePipe } from "../../../components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe";
 export interface Person {
   id: number;
   full_name: string;
@@ -36,14 +37,14 @@ export interface Person {
 }
 @Component({
   selector: 'app-unidentified-person',
-  imports: [ MaterialModule,
-          TablerIconsModule,
-          MatNativeDateModule,
-          NgScrollbarModule,
-          CommonModule,
-          FormsModule,
-          HttpClientModule ,
-          MatProgressSpinnerModule],
+  imports: [MaterialModule,
+    TablerIconsModule,
+    MatNativeDateModule,
+    NgScrollbarModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    MatProgressSpinnerModule, SafeTitlecasePipe],
   templateUrl:'./unidentified-person.component.html',
   styleUrls: ['./unidentified-person.component.css'], // ✅ Correct
   standalone: true,

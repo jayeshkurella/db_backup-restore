@@ -144,28 +144,36 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     this.today = new Date().toISOString().split('T')[0];
   }
 
-  openConsentDialog() {
-    const dialogRef = this.dialog.open(MpconsentComponent, {
-      width: '80vw',
-      maxWidth: '90vw',
-      height: '80vh',
-      maxHeight: '90vh',
-      autoFocus: false,
-    });
+  openConsentDialog(): Promise<boolean> {
+  const dialogRef = this.dialog.open(MpconsentComponent, {
+    width: '80vw',
+    maxWidth: '90vw',
+    height: '80vh',
+    maxHeight: '90vh',
+    autoFocus: false,
+  });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.consent.controls[0].get('is_consent')?.setValue(true);
-      }
-    });
+  return dialogRef.afterClosed().toPromise().then(result => result === true);
+}
+
+
+ onConsentChange(event: Event) {
+  const checkbox = event.target as HTMLInputElement;
+
+  if (!checkbox.checked) {
+    this.consent.controls[0].get('is_consent')?.setValue(false);
+    return;
   }
 
-  onConsentChange(event: Event) {
-    const checked = (event.target as HTMLInputElement).checked;
-    if (checked) {
-      this.openConsentDialog();
-    }
-  }
+  checkbox.checked = false;
+
+  this.openConsentDialog().then((consentGiven: boolean) => {
+    this.consent.controls[0].get('is_consent')?.setValue(consentGiven);
+    checkbox.checked = consentGiven;
+  });
+}
+
+
 
   ngOnInit(): void {
     // this.gettoken()

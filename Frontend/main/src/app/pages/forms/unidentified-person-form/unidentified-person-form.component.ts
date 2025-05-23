@@ -22,7 +22,7 @@ import {
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { ChangeDetectorRef } from '@angular/core';
 
 import { merge } from 'rxjs';
 import { FormApiService } from './forms-api-up.service';
@@ -37,23 +37,23 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-unidentified-person-form',
   imports: [
-      MaterialModule,
-      TablerIconsModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatRadioModule,
-      MatCheckboxModule,
-      MatDatepickerModule,
-      FormsModule,
-      ReactiveFormsModule,
-      CommonModule,
-      NgxMatTimepickerModule,
-      MatIconModule
-    ],
+    MaterialModule,
+    TablerIconsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    NgxMatTimepickerModule,
+    MatIconModule
+  ],
   templateUrl: './unidentified-person-form.component.html',
   styleUrl: './unidentified-person-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideNativeDateAdapter(),DatePipe],
+  providers: [provideNativeDateAdapter(), DatePipe],
 
 })
 
@@ -95,7 +95,8 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe,
     private toastr: ToastrService,
     private dialog: MatDialog,
-  ) {}
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.getToken();
@@ -114,202 +115,202 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     this.storedPersonId = localStorage.getItem('user_id');
     console.log(this.storedPersonId, "id");
   }
-// allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedPersonForm' | 'firsForm'): boolean {
-//   const charCode = event.key.charCodeAt(0);
-//   const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
+  // allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedPersonForm' | 'firsForm'): boolean {
+  //   const charCode = event.key.charCodeAt(0);
+  //   const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
 
-//   const isValidChar =
-//     (charCode >= 65 && charCode <= 90) ||  // A-Z
-//     (charCode >= 97 && charCode <= 122) || // a-z
-//     charCode === 32 ||                      // space
-//     allowedKeys.includes(event.keyCode);   // navigation keys
+  //   const isValidChar =
+  //     (charCode >= 65 && charCode <= 90) ||  // A-Z
+  //     (charCode >= 97 && charCode <= 122) || // a-z
+  //     charCode === 32 ||                      // space
+  //     allowedKeys.includes(event.keyCode);   // navigation keys
 
-//   let form;
-//   switch (formGroup) {
-//     case 'contactForm':
-//       form = this.contactForm;
-//       break;
-//     case 'unidentifiedPersonForm':
-//       form = this.unidentifiedPersonForm;
-//       break;
-//     case 'firsForm':
-//       form = this.firsForm;
-//       break;
-//   }
+  //   let form;
+  //   switch (formGroup) {
+  //     case 'contactForm':
+  //       form = this.contactForm;
+  //       break;
+  //     case 'unidentifiedPersonForm':
+  //       form = this.unidentifiedPersonForm;
+  //       break;
+  //     case 'firsForm':
+  //       form = this.firsForm;
+  //       break;
+  //   }
 
-//   const control = form.get(controlName);
+  //   const control = form.get(controlName);
 
-//   if (!isValidChar) {
-//     control?.setErrors({ invalidChars: true });
-//     event.preventDefault();
-//     return false;
-//   } else {
-//     // Clear error if valid
-//     const currentErrors = control?.errors;
-//     if (currentErrors?.['invalidChars']) {
-//       delete currentErrors['invalidChars'];
-//       control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
-//     }
-//     return true;
-//   }
-// }
-allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedPersonForm' | 'firsForm'): boolean {
-  const key = event.key;
-  const allowedPattern = /^[a-zA-Z.\s]$/;
-  const navigationKeys = ['Backspace', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+  //   if (!isValidChar) {
+  //     control?.setErrors({ invalidChars: true });
+  //     event.preventDefault();
+  //     return false;
+  //   } else {
+  //     // Clear error if valid
+  //     const currentErrors = control?.errors;
+  //     if (currentErrors?.['invalidChars']) {
+  //       delete currentErrors['invalidChars'];
+  //       control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+  //     }
+  //     return true;
+  //   }
+  // }
+  allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedPersonForm' | 'firsForm'): boolean {
+    const key = event.key;
+    const allowedPattern = /^[a-zA-Z.\s]$/;
+    const navigationKeys = ['Backspace', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
 
-  let form;
-  switch (formGroup) {
-    case 'contactForm':
-      form = this.contactForm;
-      break;
-    case 'unidentifiedPersonForm':
-      form = this.unidentifiedPersonForm;
-      break;
-    case 'firsForm':
-      form = this.firsForm;
-      break;
+    let form;
+    switch (formGroup) {
+      case 'contactForm':
+        form = this.contactForm;
+        break;
+      case 'unidentifiedPersonForm':
+        form = this.unidentifiedPersonForm;
+        break;
+      case 'firsForm':
+        form = this.firsForm;
+        break;
+    }
+
+    const control = form.get(controlName);
+
+    if (!allowedPattern.test(key) && !navigationKeys.includes(key)) {
+      control?.setErrors({ ...control?.errors, invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
   }
 
-  const control = form.get(controlName);
 
-  if (!allowedPattern.test(key) && !navigationKeys.includes(key)) {
-    control?.setErrors({ ...control?.errors, invalidChars: true });
-    event.preventDefault();
-    return false;
-  } else {
-    const currentErrors = control?.errors;
-    if (currentErrors?.['invalidChars']) {
-      delete currentErrors['invalidChars'];
-      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+  allowOnlyNumbersAndHyphen(event: KeyboardEvent): boolean {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '-'];
+    if (allowedKeys.includes(event.key)) return true;
+
+    const isValid = /^[0-9\-]$/.test(event.key);
+    const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
+    const control = inputName === 'phone_no' ? this.contactForm.get('phone_no') : null;
+
+    if (!isValid) {
+      control?.setErrors({ ...control.errors, invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): boolean {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+    if (allowedKeys.includes(event.key)) {
+      return true;
+    }
+
+    const isNumber = /^[0-9]$/.test(event.key);
+    const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
+
+    const control =
+      inputName === 'weight' ? this.unidentifiedPersonForm.get('weight') :
+        inputName === 'pincode' ? this.addressForm.get('pincode') :
+          inputName === 'phone_no' ? this.contactForm.get('phone_no') :
+            inputName === 'investigation_officer_contacts' ? this.firsForm?.get('investigation_officer_contacts') : // Add this line
+              null;
+
+    if (!isNumber) {
+      control?.setErrors({ ...control.errors, invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
+  }
+
+  // Restricts age to max 200 even while typing
+  restrictMaxAge(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.valueAsNumber;
+
+    if (value > 200) {
+      input.value = '200'; // Force-set to max 200
+      this.unidentifiedPersonForm.get('weight')?.setValue(200); // Update form control
+      this.unidentifiedPersonForm.get('weight')?.setErrors({ max: true }); // Show error
+    }
+  }
+  // Unified method for both village and city
+  allowTextInput(event: KeyboardEvent, controlName: string): boolean {
+    const charCode = event.key.charCodeAt(0);
+    const allowedKeys = [8, 9, 13, 37, 38, 39, 40];
+    const isValidChar =
+      (charCode >= 65 && charCode <= 90) ||
+      (charCode >= 97 && charCode <= 122) ||
+      charCode === 32 ||
+      charCode === 45 ||
+      allowedKeys.includes(charCode);
+
+    if (!isValidChar) {
+      this.addressForm.get(controlName)?.setErrors({ invalidChars: true });
+      event.preventDefault();
+      return false;
     }
     return true;
   }
-}
-
-
-allowOnlyNumbersAndHyphen(event: KeyboardEvent): boolean {
-  const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '-'];
-  if (allowedKeys.includes(event.key)) return true;
-
-  const isValid = /^[0-9\-]$/.test(event.key);
-  const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
-  const control = inputName === 'phone_no' ? this.contactForm.get('phone_no') : null;
-
-  if (!isValid) {
-    control?.setErrors({ ...control.errors, invalidChars: true });
-    event.preventDefault();
-    return false;
-  } else {
-    const currentErrors = control?.errors;
-    if (currentErrors?.['invalidChars']) {
-      delete currentErrors['invalidChars'];
-      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+  preventSpecialCharacters(event: KeyboardEvent) {
+    const allowedChars = /[a-zA-Z0-9 ]/;  // Allows letters, numbers, and spaces
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
     }
-    return true;
   }
-}
+  textOnlyValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value?.trim();
+      if (!value) return null; // empty is allowed
 
-allowOnlyNumbers(event: KeyboardEvent): boolean {
-  const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
-
-  if (allowedKeys.includes(event.key)) {
-    return true;
+      // Allow letters, numbers, spaces, commas, and hyphens
+      const valid = /^[A-Za-z0-9 ,\-]+$/.test(value);
+      return valid ? null : { invalidCharacters: true };
+    };
   }
 
-  const isNumber = /^[0-9]$/.test(event.key);
-  const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
 
-  const control =
-    inputName === 'weight' ? this.unidentifiedPersonForm.get('weight') :
-    inputName === 'pincode' ? this.addressForm.get('pincode') :
-    inputName === 'phone_no' ? this.contactForm.get('phone_no') :
-    inputName === 'investigation_officer_contacts' ? this.firsForm?.get('investigation_officer_contacts') : // Add this line
-    null;
-
-  if (!isNumber) {
-    control?.setErrors({ ...control.errors, invalidChars: true });
-    event.preventDefault();
-    return false;
-  } else {
-    const currentErrors = control?.errors;
-    if (currentErrors?.['invalidChars']) {
-      delete currentErrors['invalidChars'];
-      control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
-    }
-    return true;
-  }
-}
-
-// Restricts age to max 200 even while typing
-restrictMaxAge(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  let value = input.valueAsNumber;
-
-  if (value > 200) {
-    input.value = '200'; // Force-set to max 200
-    this.unidentifiedPersonForm.get('weight')?.setValue(200); // Update form control
-    this.unidentifiedPersonForm.get('weight')?.setErrors({ max: true }); // Show error
-  }
-}
-// Unified method for both village and city
-allowTextInput(event: KeyboardEvent, controlName: string): boolean {
-  const charCode = event.key.charCodeAt(0);
-  const allowedKeys = [8, 9, 13, 37, 38, 39, 40];
-  const isValidChar = 
-    (charCode >= 65 && charCode <= 90) ||
-    (charCode >= 97 && charCode <= 122) ||
-    charCode === 32 ||
-    charCode === 45 ||
-    allowedKeys.includes(charCode);
-
-  if (!isValidChar) {
-    this.addressForm.get(controlName)?.setErrors({ invalidChars: true });
-    event.preventDefault();
-    return false;
-  }
-  return true;
-}
-preventSpecialCharacters(event: KeyboardEvent) {
-  const allowedChars = /[a-zA-Z0-9 ]/;  // Allows letters, numbers, and spaces
-  if (!allowedChars.test(event.key)) {
-    event.preventDefault();
-  }
-}
-textOnlyValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    const value = control.value?.trim();
-    if (!value) return null; // empty is allowed
-
-    // Allow letters, numbers, spaces, commas, and hyphens
-    const valid = /^[A-Za-z0-9 ,\-]+$/.test(value);
-    return valid ? null : { invalidCharacters: true };
-  };
-}
-
-  
   initializeForm() {
     this.unidentifiedPersonForm = this.fb.group({
 
-                full_name: ['', [  Validators.maxLength(30) ]],
-          birth_date: [null],
-          age_range: [''],
-        weight: ['', [Validators.min(1),  Validators.max(200)]],
-      
-           gender: ['', Validators.required],
-      
-           height: ['', [Validators.pattern(/^[0-9]*$/), Validators.max(250)]],
-      
-           birth_mark: ['', [Validators.maxLength(250),Validators.pattern(/^[a-zA-Z\s]*$/) ]],
-        distinctive_mark: ['', [Validators.maxLength(250),Validators.pattern(/^[a-zA-Z\s]*$/)]],
-          //   full_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-          // birth_date: [null],
+      full_name: ['', [Validators.maxLength(30)]],
+      birth_date: [null],
+      age_range: [''],
+      weight: ['', [Validators.min(1), Validators.max(200)]],
 
-          // gender: ['', Validators.required],
-          // height: ['', [Validators.max(250), Validators.pattern(/^[0-9]+$/)]],
-          // weight: ['', [Validators.max(200), Validators.pattern(/^[0-9]+$/)]],
-          //   birth_mark: ['', Validators.maxLength(250)],
-          // distinctive_mark: ['', Validators.maxLength(250)],
+      gender: ['', Validators.required],
+
+      height: ['', [Validators.pattern(/^[0-9]*$/), Validators.max(250)]],
+
+      birth_mark: ['', [Validators.maxLength(250), Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      distinctive_mark: ['', [Validators.maxLength(250), Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      //   full_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
+      // birth_date: [null],
+
+      // gender: ['', Validators.required],
+      // height: ['', [Validators.max(250), Validators.pattern(/^[0-9]+$/)]],
+      // weight: ['', [Validators.max(200), Validators.pattern(/^[0-9]+$/)]],
+      //   birth_mark: ['', Validators.maxLength(250)],
+      // distinctive_mark: ['', Validators.maxLength(250)],
       type: ['Unidentified Person'],
 
       age: [null],
@@ -317,7 +318,7 @@ textOnlyValidator(): ValidatorFn {
       // gender: ['Unknown'],
       birthplace: [''],
       // height: [''],
-      height_range:[''],
+      height_range: [''],
       // weight: [''],
       blood_group: [''],
       complexion: [''],
@@ -326,7 +327,7 @@ textOnlyValidator(): ValidatorFn {
       eye_color: [''],
       condition: [''],
       Body_Condition: [''],
-      up_condition: [[]],  
+      up_condition: [[]],
       // birth_mark: [''],
       // distinctive_mark: [''],
       hospital: [null],
@@ -335,7 +336,7 @@ textOnlyValidator(): ValidatorFn {
       updated_at: [null],
       created_by: [''],
       updated_by: [''],
-      photo_photo:[''],
+      photo_photo: [''],
       _is_deleted: [false],
       addresses: this.fb.array([]),
       contacts: this.fb.array([]),
@@ -352,16 +353,16 @@ textOnlyValidator(): ValidatorFn {
     this.addFIR();
     this.addConsent();
   }
-get addressForm(): FormGroup {
-      return this.unidentifiedPersonForm.get('addressForm') as FormGroup;
-    }
+  get addressForm(): FormGroup {
+    return this.unidentifiedPersonForm.get('addressForm') as FormGroup;
+  }
 
-    get contactForm(): FormGroup {
-      return this.unidentifiedPersonForm.get('contactForm') as FormGroup;
-    }
-    get firsForm(): FormGroup {
-      return this.unidentifiedPersonForm.get('firs') as FormGroup;
-    }
+  get contactForm(): FormGroup {
+    return this.unidentifiedPersonForm.get('contactForm') as FormGroup;
+  }
+  get firsForm(): FormGroup {
+    return this.unidentifiedPersonForm.get('firs') as FormGroup;
+  }
   // Getters for FormArrays
   get addresses(): FormArray {
     return this.unidentifiedPersonForm.get('addresses') as FormArray;
@@ -391,9 +392,9 @@ get addressForm(): FormGroup {
       pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
       landmark_details: ['', [Validators.maxLength(50), this.landmarkValidator()]],
       street: ['', [Validators.maxLength(30), this.textOnlyValidator()]],
-      village: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z\s-]*$/) ]],
-  district: [''],
-      city: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z\s]*$/) ]],
+      village: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s-]*$/)]],
+      district: [''],
+      city: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s]*$/)]],
 
       address_type: [''],
 
@@ -411,54 +412,54 @@ get addressForm(): FormGroup {
       // updated_by: [''],
     });
   }
-    coordinateValidator(): ValidatorFn {
-      return (control: AbstractControl): { [key: string]: any } | null => {
-        const value = control.value;
-        if (!value) return null;
-  
-        const pattern = /^-?\d{1,3}(\.\d+)?$/;
-        return pattern.test(value) ? null : { invalidCoordinate: true };
-      };
-    }
-      
+  coordinateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      const pattern = /^-?\d{1,3}(\.\d+)?$/;
+      return pattern.test(value) ? null : { invalidCoordinate: true };
+    };
+  }
+
   landmarkValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    const value = control.value;
-    if (!value) return null;
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) return null;
 
-    // Allow letters, numbers, spaces, and , . - # :
-    const pattern = /^[a-zA-Z0-9\s,.\-#:]+$/;
-    return pattern.test(value) ? null : { invalidLandmark: true };
-  };
-}
+      // Allow letters, numbers, spaces, and , . - # :
+      const pattern = /^[a-zA-Z0-9\s,.\-#:]+$/;
+      return pattern.test(value) ? null : { invalidLandmark: true };
+    };
+  }
 
-  
+
   // Correct method to create Contact FormGroup
   createContactFormGroup(): FormGroup {
     return this.fb.group({
-        // person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
-        person_name: new FormControl('', [
-  Validators.minLength(3),
-  Validators.maxLength(50),
-  Validators.pattern(/^([A-Z][a-z]+(\s)?|([A-Z]\.?\s)?)+$/)
-]),
-    // phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
-    phone_no: [
-    '',
-    [
-      Validators.pattern(/^(?:[789]\d{9}|0\d{2,4}-?\d{6,8})$/)
-    ]
-  ],
-    // email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
-     email_id: [
-    null,
-    Validators.compose([
-      Validators.maxLength(50),
-      Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-    ])
-  ],
-    additional_details: ['', Validators.maxLength(200)],
-      
+      // person_name: ['', [Validators.pattern(/^[a-zA-Z\s]+$/)]],
+      person_name: new FormControl('', [
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.pattern(/^([A-Z][a-z]+(\s)?|([A-Z]\.?\s)?)+$/)
+      ]),
+      // phone_no: ['', [Validators.pattern(/^[0-9]{1,10}$/)]],
+      phone_no: [
+        '',
+        [
+          Validators.pattern(/^(?:[789]\d{9}|0\d{2,4}-?\d{6,8})$/)
+        ]
+      ],
+      // email_id: ['', Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+      email_id: [
+        null,
+        Validators.compose([
+          Validators.maxLength(50),
+          Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        ])
+      ],
+      additional_details: ['', Validators.maxLength(200)],
+
       type: ['referral'],
       // person_name: [''],
       // job_title: [''],
@@ -477,7 +478,7 @@ get addressForm(): FormGroup {
       // updated_by: [''],
     });
   }
-  
+
   // Add address logic
   // addAddress() {
   //   const addressForm = this.unidentifiedPersonForm.get('addressForm');
@@ -493,7 +494,7 @@ get addressForm(): FormGroup {
   //     alert("Please fill in all required fields before adding another address.");
   //   }
   // }
-  
+
   // // Add contact logic
   // addContact() {
   //   const contactForm = this.unidentifiedPersonForm.get('contactForm');
@@ -511,70 +512,70 @@ get addressForm(): FormGroup {
   // }
 
   addAddress() {
-  const addressForm = this.unidentifiedPersonForm.get('addressForm');
+    const addressForm = this.unidentifiedPersonForm.get('addressForm');
 
-  if (addressForm) {
-    // Mark all fields as touched to trigger validation errors
-    addressForm.markAllAsTouched();
+    if (addressForm) {
+      // Mark all fields as touched to trigger validation errors
+      addressForm.markAllAsTouched();
 
-    if (addressForm.valid) {
-      // Add the current address to the list
-      this.addresses.push(this.fb.group(addressForm.value));
+      if (addressForm.valid) {
+        // Add the current address to the list
+        this.addresses.push(this.fb.group(addressForm.value));
 
-      // Optional: console log for debugging
-      console.log('Addresses:', this.addresses.value);
+        // Optional: console log for debugging
+        console.log('Addresses:', this.addresses.value);
 
-      // Reset the form and optionally set default values
-      addressForm.reset();
-      addressForm.get('address_type')?.setValue('');
-      addressForm.get('state')?.setValue('');
-      addressForm.get('country')?.setValue('');
+        // Reset the form and optionally set default values
+        addressForm.reset();
+        addressForm.get('address_type')?.setValue('');
+        addressForm.get('state')?.setValue('');
+        addressForm.get('country')?.setValue('');
 
-      // Mark the main form as dirty since a new address is added
-      this.unidentifiedPersonForm.markAsDirty();
-    } else {
-      alert('Please fill in all required address fields before adding another address.');
+        // Mark the main form as dirty since a new address is added
+        this.unidentifiedPersonForm.markAsDirty();
+      } else {
+        alert('Please fill in all required address fields before adding another address.');
+      }
     }
   }
-}
-addContact() {
-  const contactForm = this.unidentifiedPersonForm.get('contactForm');
+  addContact() {
+    const contactForm = this.unidentifiedPersonForm.get('contactForm');
 
-  if (contactForm) {
+    if (contactForm) {
 
-    contactForm.markAllAsTouched();
+      contactForm.markAllAsTouched();
 
-    if (contactForm.valid) {
+      if (contactForm.valid) {
 
-      this.contacts.push(this.fb.group(contactForm.value));
+        this.contacts.push(this.fb.group(contactForm.value));
 
-      console.log('Contacts:', this.contacts.value);
+        console.log('Contacts:', this.contacts.value);
 
-      contactForm.reset();
-      contactForm.get('type')?.setValue('');
-      contactForm.get('social_media_availability')?.setValue('');
-      contactForm.get('is_primary')?.setValue('');
+        contactForm.reset();
+        contactForm.get('type')?.setValue('');
+        contactForm.get('social_media_availability')?.setValue('');
+        contactForm.get('is_primary')?.setValue('');
 
-      this.unidentifiedPersonForm.markAsDirty();
-    } else {
-      alert('Please fill in all required contact fields before adding another contact.');
+        this.unidentifiedPersonForm.markAsDirty();
+      } else {
+        alert('Please fill in all required contact fields before adding another contact.');
+      }
     }
   }
-}
-  
+
   // Add additional info
   addAdditionalInfo() {
     this.additionalInfo.push(this.fb.group({
-        caste: [''],
-    subcaste: [''],
-    marital_status: [''],
-    religion: [''],
-    mother_tongue: [''],
-    other_known_languages: ['', this.languageValidator],
-    id_type: [''],
-    id_no: ['', [Validators.pattern(/^[a-zA-Z0-9]+$/),Validators.maxLength(15)]],
-    education_details: [''],
-occupation_details: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z0-9 ]*$/) ]] ,     
+      caste: [''],
+      subcaste: [''],
+      marital_status: [''],
+      religion: [''],
+      mother_tongue: [''],
+      other_known_languages: ['', this.languageValidator],
+      id_type: [''],
+      id_no: ['', [Validators.pattern(/^[a-zA-Z0-9]+$/), Validators.maxLength(15)]],
+      education_details: [''],
+      occupation_details: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9 ]*$/)]],
       // caste: [''],
       // subcaste: [''],
       // marital_status: [''],
@@ -586,22 +587,22 @@ occupation_details: ['', [Validators.maxLength(30),Validators.pattern(/^[a-zA-Z0
       // updated_by: [''],
     }));
   }
-languageValidator(control: AbstractControl): ValidationErrors | null {
-  if (!control.value) return null;
-  
-  const languages = control.value.split(',').map((lang: string) => lang.trim());
-  
-  if (languages.length > 5) {
-    return { tooManyLanguages: true };
+  languageValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+
+    const languages = control.value.split(',').map((lang: string) => lang.trim());
+
+    if (languages.length > 5) {
+      return { tooManyLanguages: true };
+    }
+
+    const invalidChars = languages.some((lang: string) => !/^[a-zA-Z\s]+$/.test(lang));
+    if (invalidChars) {
+      return { invalidLanguageChars: true };
+    }
+
+    return null;
   }
-  
-  const invalidChars = languages.some((lang: string) => !/^[a-zA-Z\s]+$/.test(lang));
-  if (invalidChars) {
-    return { invalidLanguageChars: true };
-  }
-  
-  return null;
-}
 
   // Add last known details
   addLastKnownDetails() {
@@ -620,27 +621,27 @@ languageValidator(control: AbstractControl): ValidationErrors | null {
       // updated_by: [''],
     }));
   }
-  
+
   // Add FIR
   addFIR() {
     this.firs.push(this.fb.group({
-    fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9/]{1,20}$/)]],
-        case_status: [''],
-        investigation_officer_contact: [null],
-// investigation_officer_name: ['',[Validators.maxLength(30)]],
-investigation_officer_name: new FormControl('', [
-  Validators.minLength(3),
-  Validators.maxLength(50),
-  Validators.pattern(/^([A-Z][a-z]+(\s)?|([A-Z]\.?\s)?)+$/)
-]),
+      fir_number: ['', [Validators.pattern(/^[a-zA-Z0-9/]{1,20}$/)]],
+      case_status: [''],
+      investigation_officer_contact: [null],
+      // investigation_officer_name: ['',[Validators.maxLength(30)]],
+      investigation_officer_name: new FormControl('', [
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.pattern(/^([A-Z][a-z]+(\s)?|([A-Z]\.?\s)?)+$/)
+      ]),
 
-    // investigation_officer_contacts: ['',[Validators.pattern(/^[0-9]{1,12}$/)]],
+      // investigation_officer_contacts: ['',[Validators.pattern(/^[0-9]{1,12}$/)]],
       investigation_officer_contacts: [
-    '',
-    [
-      Validators.pattern(/^(?:[789]\d{9}|0\d{2,4}-?\d{6,8})$/)
-    ]
-  ],
+        '',
+        [
+          Validators.pattern(/^(?:[789]\d{9}|0\d{2,4}-?\d{6,8})$/)
+        ]
+      ],
       police_station: [''],
       document: [null],
       person: [''],
@@ -674,7 +675,7 @@ investigation_officer_name: new FormControl('', [
       }
     });
   }
-  
+
 
   // Add Consent
   addConsent() {
@@ -689,7 +690,7 @@ investigation_officer_name: new FormControl('', [
       // updated_by: [''],
     }));
   }
-  
+
   // Remove functions
   removeAddress(index: number) {
     this.addresses.removeAt(index);
@@ -725,12 +726,12 @@ investigation_officer_name: new FormControl('', [
   setMapLocation(lat: number, lng: number): void {
     this.latitude = parseFloat(lat.toFixed(6));
     this.longitude = parseFloat(lng.toFixed(6));
-  
+
     this.unidentifiedPersonForm.get('addressForm.location')?.patchValue({
       latitude: this.latitude,
       longitude: this.longitude,
     });
-  
+
     const customIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
       iconSize: [25, 41],
@@ -739,25 +740,25 @@ investigation_officer_name: new FormControl('', [
       shadowUrl: 'assets/leaflet/images/marker-shadow.png',
       shadowSize: [41, 41],
     });
-  
+
     // If map is initialized, remove the existing marker
     if (this.marker) {
       this.map!.removeLayer(this.marker); // Using `!` to assert map is not null
     }
-  
+
     this.marker = L.marker([this.latitude, this.longitude], {
       draggable: true,
       icon: customIcon,
     }).addTo(this.map!); // Using `!` to assert map is not null
-  
+
     this.marker.on('dragend', () => {
       const newLatLng = this.marker!.getLatLng(); // Using `!` to assert marker is not null
       this.setMapLocation(newLatLng.lat, newLatLng.lng);
     });
-  
+
     this.map!.setView([this.latitude, this.longitude], 10); // Using `!` to assert map is not null
   }
-  
+
 
   getCurrentLocation(): void {
     if (!navigator.geolocation) {
@@ -776,20 +777,20 @@ investigation_officer_name: new FormControl('', [
     );
   }
 
-  
 
-  
+
+
   onFileSelect(event: any, section: string, index: number, field: string) {
     const file = event.target.files[0];
     if (file) {
-        if (!this.selectedFiles[section]) {
-            this.selectedFiles[section] = [];
-        }
-        if (!this.selectedFiles[section][index]) {
-            this.selectedFiles[section][index] = {};
-        }
-        this.selectedFiles[section][index][field] = file;
-        this.getFormArray(section).at(index).get(field)?.setValue(file.name);
+      if (!this.selectedFiles[section]) {
+        this.selectedFiles[section] = [];
+      }
+      if (!this.selectedFiles[section][index]) {
+        this.selectedFiles[section][index] = {};
+      }
+      this.selectedFiles[section][index][field] = file;
+      this.getFormArray(section).at(index).get(field)?.setValue(file.name);
     }
   }
 
@@ -812,21 +813,21 @@ investigation_officer_name: new FormControl('', [
 
   onSubmit() {
     const formData = new FormData();
-  
+
     const addressFormValue = this.unidentifiedPersonForm.get('addressForm')?.value;
     if (addressFormValue && Object.keys(addressFormValue).length > 0) {
       this.addresses.push(this.fb.group(addressFormValue));
     }
-  
+
     const contactFormValue = this.unidentifiedPersonForm.get('contactForm')?.value;
     if (contactFormValue && Object.keys(contactFormValue).length > 0) {
       this.contacts.push(this.fb.group(contactFormValue));
     }
-  
+
     const birthDate = this.unidentifiedPersonForm.get('birth_date')?.value;
     const formattedBirthDate = this.datePipe.transform(birthDate, 'yyyy-MM-dd');
     const birthTime = this.formatTime(this.unidentifiedPersonForm.get('birthtime')?.value);
-  
+
     const lastKnownDetails = this.unidentifiedPersonForm.get('last_known_details')?.value;
     if (lastKnownDetails && lastKnownDetails.length > 0) {
       lastKnownDetails.forEach((detail: any) => {
@@ -838,7 +839,7 @@ investigation_officer_name: new FormControl('', [
         }
       });
     }
-  
+
     // Create a clean JSON object
     const payload = {
       ...this.unidentifiedPersonForm.value,
@@ -847,18 +848,18 @@ investigation_officer_name: new FormControl('', [
       addresses: this.addresses.value,
       contacts: this.contacts.value,
     };
-  
+
     delete payload.addressForm;
     delete payload.contactForm;
-  
+
     // Append JSON data as a Blob (important!)
     formData.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-  
+
     // Append image file if available
     if (this.selectedFile) {
       formData.append('photo_photo', this.selectedFile); // field name must match Django field
     }
-  
+
     this.formApi.postMissingPerson(formData).subscribe({
       next: (response) => {
         this.toastr.success('Unidentified Person Data Added successfully', 'Success');
@@ -873,32 +874,38 @@ investigation_officer_name: new FormControl('', [
       }
     });
   }
-  
-  
+
+
   formatTime(time: string): string {
     return time ? time.replace(/[“”]/g, '"') : '';
   }
 
-    onConsentChange(event: Event) {
-      const checked = (event.target as HTMLInputElement).checked;
-      if (checked) {
-        this.openConsentDialog();
-      }
-    }
+   onConsentChange(event: Event) {
+  const checkbox = event.target as HTMLInputElement;
 
-  openConsentDialog() {
-        const dialogRef = this.dialog.open(UpconsentComponent, {
-          width: '80vw',  
-          maxWidth: '90vw' ,
-          height: '80vh',
-          maxHeight: '90vh',
-          autoFocus: false
-        });
-      
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            this.consent.controls[0].get('is_consent')?.setValue(true);
-          }
-        });
-      }
+  if (!checkbox.checked) {
+    this.consent.controls[0].get('is_consent')?.setValue(false);
+    this.cdr.detectChanges();
+    return;
+  }
+
+  checkbox.checked = false;
+
+  this.openConsentDialog().then((consentGiven: boolean) => {
+    this.consent.controls[0].get('is_consent')?.setValue(consentGiven);
+    checkbox.checked = consentGiven;
+    this.cdr.detectChanges();
+  });
+}
+
+  openConsentDialog(): Promise<boolean> {
+    const dialogRef = this.dialog.open(UpconsentComponent, {
+      width: '80vw',
+      maxWidth: '90vw',
+      height: '80vh',
+      maxHeight: '90vh',
+      autoFocus: false
+    });
+    return dialogRef.afterClosed().toPromise().then(result => result === true);
+  }
 }

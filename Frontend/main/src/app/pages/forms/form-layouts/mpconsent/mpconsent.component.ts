@@ -10,22 +10,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 @Component({
   selector: 'app-mpconsent',
-  imports: [MatDialogContent,MatDialogActions,FormsModule,CommonModule,MatCheckbox,
-    MatIcon,MatExpansionModule,MatChipsModule ,MatButtonModule,MatListModule
+  imports: [MatDialogContent, MatDialogActions, FormsModule, CommonModule, MatCheckbox,
+    MatIcon, MatExpansionModule, MatChipsModule, MatButtonModule, MatListModule
   ],
   templateUrl: './mpconsent.component.html',
   styleUrl: './mpconsent.component.scss'
 })
 export class MpconsentComponent {
-   checked = false;
+  checked = false;
 
   constructor(
-    private dialogRef: MatDialogRef<MpconsentComponent>,
+    public dialogRef: MatDialogRef<MpconsentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
+  acceptAndContinue() {
+    if (this.checked) {
+      this.dialogRef.close(true); 
+    }
+  }
   closeDialog() {
-    this.dialogRef.close(this.checked);
+    this.dialogRef.close(false); 
   }
 
 }

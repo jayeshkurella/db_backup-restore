@@ -13,10 +13,21 @@
 
 .header-container {
   display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-container {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  // padding: 0 8px;
 }
+
+.action-btn {
+  margin-left: 8px;
+}
+
 
 .page-title {
   font-size: 20px;
@@ -37,6 +48,3 @@
 
 }
 
-.field-color{
-  background-color: rgb(255, 255, 255) !important;
-}

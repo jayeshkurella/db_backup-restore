@@ -1,13 +1,21 @@
 <div class="page-container mat-elevation-z2">
-  <div class="header-container">
-    <h2 class="page-title">Hospitals</h2>
-    <div>
+  <!-- Header -->
+  <div class="header-container d-flex justify-content-between align-items-center mb-3">
+    <!-- Left: Title + Add button -->
+    <div class="d-flex align-items-center gap-10">
+      <h2 class="page-title m-0">Hospitals</h2>
       <button *ngIf="isLoggedIn && isAdmin" mat-flat-button color="primary" (click)="addhospital()" class="action-btn">
         <mat-icon class="add-icon">add</mat-icon><span style="margin-right: 15px;">Add</span>
       </button>
     </div>
-  </div>
 
+    <!-- Right: Reset Button -->
+    <div>
+      <button mat-flat-button color="warn" (click)="resetFilters()" class="action-btn">
+        <mat-icon>refresh</mat-icon>&nbsp;Reset
+      </button>
+    </div>
+  </div>
 
 
   <form (ngSubmit)="onsearch()" novalidate>
@@ -70,18 +78,15 @@
 
     <!-- Hospital Cards -->
     <ng-container *ngIf="!loading">
-      <div class="col-sm-6 col-lg-4 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
+      <div class="col-sm-6 col-lg-3 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
         <mat-card class="cardWithShadow overflow-hidden w-100">
 
           <!-- Image Section -->
           <div class="position-relative">
             <img
-    [src]="hospital?.hospital_photo ? (environment.ImgUrlss + hospital.hospital_photo) : defaultHospitalImage"
-    class="w-100 object-fit-cover p-1"
-    style="height: 200px; border-radius: 8px;"
-    alt="{{ hospital?.name || 'Hospital Image' }}"
-    (error)="onImageError($event)"
-  />
+              [src]="hospital?.hospital_photo ? (environment.ImgUrlss + hospital.hospital_photo) : defaultHospitalImage"
+              class="w-100 object-fit-cover" style="height: 200px;"
+              alt="{{ hospital?.name || 'Hospital Image' }}" (error)="onImageError($event)" />
             <ng-template #placeholder>
               <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
                 <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
@@ -108,19 +113,23 @@
             </div>
 
             <!-- Address and Contact -->
-            <div class="d-flex justify-content-between text-muted f-s-14 mb-5">
-              <div class="d-flex align-items-center">
-                <i class="bi bi-geo-alt me-1"></i>
-                {{ hospital.address_details.city }}, {{ hospital.address_details.state }}
+            <div class="d-flex flex-column text-muted f-s-14 mt-3 mb-3">
+              <!-- Address -->
+              <div class="d-flex align-items-center mb-1">
+                <i class="bi bi-geo-alt me-2"></i>
+                <span>{{ hospital.address_details.city }}, {{ hospital.address_details.state }}</span>
               </div>
+
+              <!-- Phone Number -->
               <div class="d-flex align-items-center">
-                <i class="bi bi-telephone me-1"></i>
-                {{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}
+                <i class="bi bi-telephone me-2"></i>
+                <span>{{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}</span>
               </div>
             </div>
 
+
             <!-- Button -->
-            <div class="d-flex justify-content-center mt-3">
+            <div class="d-flex justify-content-center mt-5">
               <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMoreHospitaldata(hospital)">
                 More Info
               </button>

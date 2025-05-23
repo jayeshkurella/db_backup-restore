@@ -24,19 +24,19 @@
 }
 .heading-container {
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: start; /* Center horizontally */
   align-items: center;     /* Center vertically */
   height: 60px;       
   text-align: center;      /* Center the text within the heading */
 }
 
 .main-heading {
-  font-size: 18px; /* Larger font size */
-  font-weight: bold; /* Make it bold */
-  color: #005ab4; /* Dark color for contrast */
-  text-transform: uppercase; /* Make the text uppercase for added impact */
-  letter-spacing: 1.5px; /* Slightly increase letter spacing */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  font-size: 18px;
+  font-weight: bold; 
+  color: #f26733;
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 .header-bottom

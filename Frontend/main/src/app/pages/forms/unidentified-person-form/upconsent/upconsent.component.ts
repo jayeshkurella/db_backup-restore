@@ -11,22 +11,27 @@ import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-upconsent',
-  imports: [MatDialogContent,MatDialogActions,FormsModule,CommonModule,MatCheckbox,
-        MatIcon,MatExpansionModule,MatChipsModule ,MatButtonModule,MatListModule
-      ],
+  imports: [MatDialogContent, MatDialogActions, FormsModule, CommonModule, MatCheckbox,
+    MatIcon, MatExpansionModule, MatChipsModule, MatButtonModule, MatListModule
+  ],
   templateUrl: './upconsent.component.html',
   styleUrl: './upconsent.component.scss'
 })
 export class UpconsentComponent {
-   checked = false;
-  
-    constructor(
-      private dialogRef: MatDialogRef<UpconsentComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any
-    ) {}
-  
-    closeDialog() {
-      this.dialogRef.close(this.checked);
+  checked = false;
+
+  constructor(
+    public dialogRef: MatDialogRef<UpconsentComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
+
+  acceptAndContinue() {
+    if (this.checked) {
+      this.dialogRef.close(true);
     }
+  }
+  closeDialog() {
+    this.dialogRef.close(false);
+  }
 
 }

@@ -126,13 +126,27 @@ export class AccessProviderComponent implements OnInit {
   allvillages: any;
   policeStationList: any[] = [];
 
-  pagination = {
-    pageIndex: 0,
-    pageSize: 10,
-    pageSizeOptions: [5, 10, 25, 100],
-    length: 0,
-    showFirstLastButtons: true 
-  };
+    currentPage = 1;
+  itemsPerPage = 10;
+  totalPendingItems = 0;
+  totalHoldItems = 0;
+  totalSuspendedItems = 0;
+  totalApprovedItems = 0;
+
+  // UI state properties
+  // isLoading = false;
+  // isProcessing = false;
+  // isFilterLoading = false;
+  // filtersApplied = false;
+  // selectedTabIndex = 0;
+
+  // Selection properties
+  // selectAllPending = false;
+  // selectAllHold = false;
+  // selectAllSuspended = false;
+  // selectAllApproved = false;
+
+  // Filter properties
   filters: CaseFilters = {
     city: '',
     state: '',
@@ -141,6 +155,30 @@ export class AccessProviderComponent implements OnInit {
     case_id: '',
     police_station: ''
   };
+  // Replace the existing pagination property with these:
+// currentPage = 1;
+// itemsPerPage = 10;
+// totalPendingItems = 0;
+// totalHoldItems = 0;
+// totalSuspendedItems = 0;
+// totalApprovedItems = 0;
+// loading = false; // You can replace isLoading with this if you want
+
+//   pagination = {
+//     pageIndex: 0,
+//     pageSize: 10,
+//     pageSizeOptions: [5, 10, 25, 100],
+//     length: 0,
+//     showFirstLastButtons: true 
+//   };
+//   filters: CaseFilters = {
+//     city: '',
+//     state: '',
+//     district: '',
+//     village: '',
+//     case_id: '',
+//     police_station: ''
+//   };
 
   constructor(
     private pendingService: CasesApprovalService,
@@ -243,72 +281,42 @@ export class AccessProviderComponent implements OnInit {
     return false;
   }
 
+ getTotalItems(): number {
+    switch (this.selectedTabIndex) {
+      case 0: return this.totalPendingItems;
+      case 1: return this.totalHoldItems;
+      case 2: return this.totalSuspendedItems;
+      case 3: return this.totalApprovedItems;
+      default: return 0;
+    }
+  }
+  onPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex + 1; // +1 because API is 1-based
+    this.itemsPerPage = event.pageSize;
+    this.loadData();
+  }
   filterDataByFilters(): void {
-    this.pagination.pageIndex = 0; // Reset to first page when filters change
+
     this.loadData();
   }
 
 
-  // isFirstPage(): boolean {
-  //   return this.pagination.pageIndex === 0;
-  // }
-
-  // loadData(): void {
-  //   this.isLoading = true;
-  //   this.resetSelectAllStates();
-  //   this.cdr.markForCheck();
-
-  //   const cleanFilters = this.getCleanFilters();
-  //   const paginationParams = {
-  //     page: this.pagination.pageIndex + 1,  // API pages are 1-based
-  //     page_size: this.pagination.pageSize
-  //   };
-
-  //   forkJoin([
-  //     this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
-  //     this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
-  //     this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
-  //     this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
-  //   ]).pipe(
-  //     finalize(() => {
-  //       this.isLoading = false;
-  //       this.cdr.markForCheck();
-  //     })
-  //   ).subscribe({
-  //     next: ([pendingResponse, holdResponse, suspendedResponse, approvedResponse]) => {
-  //       this.processResponseData({
-  //         pending_data: pendingResponse,
-  //         on_hold_data: holdResponse,
-  //         suspended_data: suspendedResponse,
-  //         approved_data: approvedResponse
-  //       });
-
-  //       // Update pagination length based on current tab
-  //       this.updatePaginationLength();
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching data:', error);
-  //       this.resetData();
-  //       this.snackBar.open('Failed to load data', 'Close', { duration: 1000 });
-  //     }
-  //   });
-  // }
-  loadData(): void {
+   loadData(): void {
     this.isLoading = true;
     this.resetSelectAllStates();
     this.cdr.markForCheck();
 
     const cleanFilters = this.getCleanFilters();
     const paginationParams = {
-      page: this.pagination.pageIndex + 1,  // API pages are 1-based
-      page_size: this.pagination.pageSize
+      page: this.currentPage,
+      page_size: this.itemsPerPage
     };
 
     forkJoin([
-      this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
-      this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
-      this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
-      this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
+      this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
+      this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
+      this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
+      this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
     ]).pipe(
       finalize(() => {
         this.isLoading = false;
@@ -322,9 +330,6 @@ export class AccessProviderComponent implements OnInit {
           suspended_data: suspendedResponse,
           approved_data: approvedResponse
         });
-
-        // Update pagination length based on current tab
-        this.updatePaginationLength();
       },
       error: (error) => {
         console.error('Error fetching data:', error);
@@ -334,138 +339,48 @@ export class AccessProviderComponent implements OnInit {
     });
   }
 
-  private updatePaginationLength(): void {
-    switch (this.selectedTabIndex) {
-      case 0:
-        this.pagination.length = this.pendingCount;
-        break;
-      case 1:
-        this.pagination.length = this.holdCount;
-        break;
-      case 2:
-        this.pagination.length = this.suspendedCount;
-        break;
-      case 3:
-        this.pagination.length = this.approvedCount;
-        break;
-    }
-    this.cdr.markForCheck();
-  }
-
-  getDisplayedRange(): string {
-    if (this.pagination.length === 0) {
-      return '0 of 0';
-    }
-
-    const start = (this.pagination.pageIndex * this.pagination.pageSize) + 1;
-    const end = Math.min((this.pagination.pageIndex + 1) * this.pagination.pageSize, this.pagination.length);
-    return `${start}-${end} of ${this.pagination.length}`;
-  }
-
-  onTabChange(event: MatTabChangeEvent) {
-    this.selectedTabIndex = event.index;
-    this.pagination.pageIndex = 0;
-
-    this.updatePaginationLength();
-    this.cdr.markForCheck();
-  }
-  firstPage(): void {
-    if (!this.isFirstPage()) {
-      this.pagination.pageIndex = 0;
-      this.loadData();
-    }
-  }
-
-  previousPage(): void {
-    if (!this.isFirstPage()) {
-      this.pagination.pageIndex--;
-      this.loadData();
-    }
-  }
-
-  nextPage(): void {
-    if (!this.isLastPage()) {
-      this.pagination.pageIndex++;
-      this.loadData();
-    }
-  }
-
-  lastPage(): void {
-    if (!this.isLastPage()) {
-      const totalPages = Math.ceil(this.pagination.length / this.pagination.pageSize);
-      this.pagination.pageIndex = totalPages - 1;
-      this.loadData();
-    }
-  }
-
-  isFirstPage(): boolean {
-    return this.pagination.pageIndex === 0;
-  }
-
-  isLastPage(): boolean {
-    if (this.pagination.length === 0) return true;
-    const totalPages = Math.ceil(this.pagination.length / this.pagination.pageSize);
-    return this.pagination.pageIndex >= totalPages - 1;
-  }
-
 
   applyFilters(): void {
-    this.isLoading = true;
-    this.isFilterLoading = true;
-    this.cdr.markForCheck();
-    this.filtersApplied = this.hasActiveFilters();
+  this.isLoading = true;
+  this.isFilterLoading = true;
+  this.cdr.markForCheck();
+  this.filtersApplied = this.hasActiveFilters();
 
-    const currentFilters = { ...this.filters };
-    const cleanFilters = this.getCleanFilters();
-    const paginationParams = {
-      page: this.pagination.pageIndex + 1,
-      page_size: this.pagination.pageSize
-    };
+  const currentFilters = { ...this.filters };
+  const cleanFilters = this.getCleanFilters();
+  const paginationParams = {
+    page: this.currentPage,
+    page_size: this.itemsPerPage
+  };
 
-    forkJoin([
-      this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
-      this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
-      this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
-      this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
-    ]).pipe(
-      finalize(() => {
-        this.isLoading = false;
-        this.isFilterLoading = false;
-        this.cdr.markForCheck();
-      })
-    ).subscribe({
-      next: ([pendingData, holdData, suspendedData, approvedData]) => {
-        if (this.areFiltersSame(currentFilters)) {
-          this.processResponseData({
-            pending_data: pendingData,
-            on_hold_data: holdData,
-            suspended_data: suspendedData,
-            approved_data: approvedData
-          });
-
-          // Update pagination length based on current tab
-          switch (this.selectedTabIndex) {
-            case 0:
-              this.pagination.length = pendingData.count || 0;
-              break;
-            case 1:
-              this.pagination.length = holdData.count || 0;
-              break;
-            case 2:
-              this.pagination.length = suspendedData.count || 0;
-              break;
-            case 3:
-              this.pagination.length = approvedData.count || 0;
-              break;
-          }
-        }
-      },
-      error: (error) => {
-        console.error('Filter error:', error);
-        this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
+  forkJoin([
+    this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
+    this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
+    this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
+    this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
+  ]).pipe(
+    finalize(() => {
+      this.isLoading = false;
+      this.isFilterLoading = false;
+      this.cdr.markForCheck();
+    })
+  ).subscribe({
+    next: ([pendingData, holdData, suspendedData, approvedData]) => {
+      if (this.areFiltersSame(currentFilters)) {
+        this.processResponseData({
+          pending_data: pendingData,
+          on_hold_data: holdData,
+          suspended_data: suspendedData,
+          approved_data: approvedData
+        });
       }
-    });
-  }
+    },
+    error: (error) => {
+      console.error('Filter error:', error);
+      this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
+    }
+  });
+}
 
 
   private hasActiveFilters(): boolean {
@@ -477,20 +392,20 @@ export class AccessProviderComponent implements OnInit {
       this.filters[key as keyof CaseFilters] === compareFilters[key as keyof CaseFilters]
     );
   }
+resetFilters(): void {
+  this.filters = {
+    city: '',
+    state: '',
+    district: '',
+    village: '',
+    case_id: '',
+    police_station: ''
+  };
+  this.currentPage = 1;  // Reset to first page
+  this.loadData();
+  this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
+}
 
-  resetFilters(): void {
-    this.filters = {
-      city: '',
-      state: '',
-      district: '',
-      village: '',
-      case_id: '',
-      police_station: ''
-    };
-    this.pagination.pageIndex = 0;  
-    this.loadData();
-    this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
-  }
 
   private getCleanFilters(): any {
     const cleanFilters: any = {};
@@ -504,8 +419,85 @@ export class AccessProviderComponent implements OnInit {
 
     return cleanFilters;
   }
+  // Add these methods to your component
+// goToPreviousPage(): void {
+//   if (this.currentPage > 1) {
+//     this.currentPage--;
+//     this.loadData();
+//   }
+// }
 
-  private processResponseData(response: {
+// goToNextPage(): void {
+//   if (this.currentPage < this.getLastPageNumber()) {
+//     this.currentPage++;
+//     this.loadData();
+//   }
+// }
+//   // Add these to your component class
+// goToFirstPage(): void {
+//   if (this.currentPage !== 1) {
+//     this.currentPage = 1;
+//     this.loadData();
+//   }
+// }
+
+// goToLastPage(): void {
+//   const lastPage = this.getLastPageNumber();
+//   if (this.currentPage !== lastPage) {
+//     this.currentPage = lastPage;
+//     this.loadData();
+//   }
+// }
+
+// getLastPageNumber(): number {
+//   const totalItems = this.getTotalItems();
+//   return Math.ceil(totalItems / this.itemsPerPage);
+// }
+// Add these to your component class
+getFirstItemNumber(): number {
+  return (this.currentPage - 1) * this.itemsPerPage + 1;
+}
+
+getLastItemNumber(): number {
+  const lastItem = this.currentPage * this.itemsPerPage;
+  return lastItem > this.getTotalItems() ? this.getTotalItems() : lastItem;
+}
+
+// You should already have these from previous implementation:
+goToFirstPage(): void {
+  if (this.currentPage !== 1) {
+    this.currentPage = 1;
+    this.loadData();
+  }
+}
+
+goToPreviousPage(): void {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.loadData();
+  }
+}
+
+goToNextPage(): void {
+  if (this.currentPage < this.getLastPageNumber()) {
+    this.currentPage++;
+    this.loadData();
+  }
+}
+
+goToLastPage(): void {
+  const lastPage = this.getLastPageNumber();
+  if (this.currentPage !== lastPage) {
+    this.currentPage = lastPage;
+    this.loadData();
+  }
+}
+
+getLastPageNumber(): number {
+  return Math.ceil(this.getTotalItems() / this.itemsPerPage);
+}
+
+    private processResponseData(response: {
     pending_data: PaginatedResponse<Person>,
     on_hold_data: PaginatedResponse<Person>,
     suspended_data: PaginatedResponse<Person>,
@@ -513,31 +505,30 @@ export class AccessProviderComponent implements OnInit {
   }): void {
     this.pendingPersons = this.processPersonArray(response.pending_data.results || [], 'pending');
     this.pendingCount = response.pending_data.count || 0;
+    this.totalPendingItems = response.pending_data.count || 0;
 
     this.holdPersons = this.processPersonArray(response.on_hold_data.results || [], 'on_hold');
     this.holdCount = response.on_hold_data.count || 0;
+    this.totalHoldItems = response.on_hold_data.count || 0;
 
     this.suspendedPersons = this.processPersonArray(response.suspended_data.results || [], 'suspended');
     this.suspendedCount = response.suspended_data.count || 0;
+    this.totalSuspendedItems = response.suspended_data.count || 0;
 
     this.approvedPersons = this.processPersonArray(response.approved_data.results || [], 'approved');
     this.approvedCount = response.approved_data.count || 0;
+    this.totalApprovedItems = response.approved_data.count || 0;
 
     // Update pagination length based on current tab
-    this.updatePaginationLength();
+    // this.updatePaginationLength();
 
     this.cdr.markForCheck();
   }
-  onPageChange(event: PageEvent): void {
-    this.pagination.pageIndex = event.pageIndex;
-    this.pagination.pageSize = event.pageSize;
-    this.loadData();
-  }
+
 
   private processPersonArray(data: any, status: string): Person[] {
     if (!data) return [];
 
-    // Handle both array and paginated response
     const items = Array.isArray(data) ? data : (data.results || []);
 
     return items.map((person: any) => ({
@@ -752,6 +743,7 @@ export class AccessProviderComponent implements OnInit {
       }
     });
   }
+
 
   getCurrentDataSource() {
     switch (this.selectedTabIndex) {

@@ -283,6 +283,7 @@
                 <!-- <mat-label>Address Type</mat-label> -->
                 <mat-select formControlName="address_type">
                   <mat-option value="" disabled>Address Type</mat-option>
+                  <mat-option value="last_found">Last Found</mat-option>
                   <mat-option value="permanent">Permanent</mat-option>
                   <mat-option value="current">Current</mat-option>
                   <mat-option value="old">Old</mat-option>
@@ -295,7 +296,6 @@
                   <mat-option value="mailing">Mailing</mat-option>
                   <mat-option value="vacation">Vacation</mat-option>
                   <mat-option value="rental">Rental</mat-option>
-                  <mat-option value="student">Student</mat-option>
                   <mat-option value="family">Family</mat-option>
                   <mat-option value="other">Other</mat-option>
                 </mat-select>
@@ -1103,29 +1103,14 @@
 
     <!-- Consent & Submission -->
     <mat-card class="card p-4  mb-1">
-
-      <!-- <div formArrayName="consent">
-        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-4">
-
-          <div class="col-md-12">
-            <mat-checkbox formControlName="is_consent">
-              I hereby declare that the information provided in this report is true and accurate to the best of my
-              knowledge.
-              I consent to the use of this information for the purpose of locating the missing person.
-            </mat-checkbox>
-          </div>
-
-        </div>
-      </div> -->
-
       <div formArrayName="consent">
         <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
 
           <div class="col-md-12 consent-link d-flex align-items-center p-4 "
             style="gap: 10px; padding: 10px 0;margin-left: 15px;">
-            <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
+            <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)" 
               style="width: 18px; height: 18px; cursor: pointer;" />
-            <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: #333;">
+            <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color:inherit;">
               To proceed, please open the consent document and acknowledge it by checking the box.
             </label>
           </div>

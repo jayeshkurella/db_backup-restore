@@ -6,23 +6,23 @@
         <p class="text-white mt-2">{{ progressMessage }}</p>
       </div>
     </div> -->
-  
+
     <nav aria-label="breadcrumb" class="breadcrumb-container">
       <ol class="breadcrumb mb-2">
         <li class="breadcrumb-item active" aria-current="page">Search Unidentified Body</li>
       </ol>
     </nav>
-    
+
     <!-- First Row (5 Fields) -->
     <div class="row">
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <!-- <mat-label>Full Name</mat-label> -->
-          <input matInput placeholder="Full Name" [(ngModel)]="filters.full_name"  />
+          <input matInput placeholder="Full Name" [(ngModel)]="filters.full_name" />
         </mat-form-field>
       </div>
-      
-  
+
+
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <!-- <mat-label>State</mat-label> -->
@@ -34,8 +34,8 @@
           </mat-select>
         </mat-form-field>
       </div>
-      
-  
+
+
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <!-- <mat-label>District</mat-label> -->
@@ -47,12 +47,12 @@
           </mat-select>
         </mat-form-field>
       </div>
-      
-  
+
+
       <div class="col-lg-2 col-md-2">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <!-- <mat-label>City</mat-label> -->
-          <mat-select [(ngModel)]="filters.city" >
+          <mat-select [(ngModel)]="filters.city">
             <mat-option value="">All Cities</mat-option>
             <mat-option *ngFor="let city of allcities" [value]="city">
               {{ city }}
@@ -60,141 +60,135 @@
           </mat-select>
         </mat-form-field>
       </div>
-      
-  <!-- Start Date Picker -->
-        <div class="col-lg-2 col-md-3">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startPicker" [(ngModel)]="filters.startDate" placeholder="Choose start date">
-            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-            <mat-datepicker #startPicker></mat-datepicker>
-          </mat-form-field>
-        </div>
 
-        <div class="col-lg-2 col-md-3">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>End Date</mat-label>
-            <input matInput 
-                   [matDatepicker]="endPicker" 
-                   [(ngModel)]="filters.endDate" 
-                   [min]="filters.startDate" 
-                   [max]="today" 
-                   placeholder="Choose end date">
-            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-            <mat-datepicker #endPicker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        
+      <!-- Start Date Picker -->
+      <div class="col-lg-2 col-md-3">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="filters.startDate" placeholder="Choose start date">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-2 col-md-3">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="filters.endDate" [min]="filters.startDate"
+            [max]="today" placeholder="Choose end date">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
 
 
 
 
     </div>
-  
+
     <!-- Second Row (5 Fields) -->
     <div class="row mt-3">
       <!-- Caste Dropdown -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-label>Caste</mat-label>
-            <mat-select [(ngModel)]="filters.caste" >
-              <mat-option *ngFor="let caste of casteOptions" [value]="caste.value">
-                {{ caste.label }}
-              </mat-option>              
-            </mat-select>
-          </mat-form-field>
-        </div>
+      <div class="col-lg-2 col-md-2">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <mat-label>Caste</mat-label>
+          <mat-select [(ngModel)]="filters.caste">
+            <mat-option *ngFor="let caste of casteOptions" [value]="caste.value">
+              {{ caste.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-        <!-- Gender Dropdown -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <!-- <mat-label>Gender</mat-label> -->
-            <mat-select [(ngModel)]="filters.gender" >
-              <mat-option value="">Gender</mat-option>
-              <mat-option value="male">Male</mat-option>
-              <mat-option value="female">Female</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+      <!-- Gender Dropdown -->
+      <div class="col-lg-2 col-md-2">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <!-- <mat-label>Gender</mat-label> -->
+          <mat-select [(ngModel)]="filters.gender">
+            <mat-option value="">Gender</mat-option>
+            <mat-option value="male">Male</mat-option>
+            <mat-option value="female">Female</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-        <!-- Age Input -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <!-- <mat-label>Age Range</mat-label> -->
-            <mat-select [(ngModel)]="filters.age_range">
-              <mat-option value="">Age Range</mat-option>
-              <mat-option *ngFor="let range of ageRanges" [value]="range.value">
-                {{ range.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+      <!-- Age Input -->
+      <div class="col-lg-2 col-md-2">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <!-- <mat-label>Age Range</mat-label> -->
+          <mat-select [(ngModel)]="filters.age_range">
+            <mat-option value="">Age Range</mat-option>
+            <mat-option *ngFor="let range of ageRanges" [value]="range.value">
+              {{ range.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-        <!-- Marital Status Dropdown -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <mat-select [(ngModel)]="filters.marital_status">
-              <mat-option value="">Marital Status</mat-option>
-              <mat-option value="single">Single</mat-option>
-              <mat-option value="married">Married</mat-option>
-              <mat-option value="divorced">Divorced</mat-option>
-              <mat-option value="widowed">Widowed</mat-option>
-              <mat-option value="separated">Separated</mat-option>
-              <mat-option value="annulled">Annulled</mat-option>
-              <mat-option value="in_relationship">In a Relationship</mat-option>
-              <mat-option value="engaged">Engaged</mat-option>
-              <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
-              <mat-option value="unknown">Unknown</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        
+      <!-- Marital Status Dropdown -->
+      <div class="col-lg-2 col-md-2">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <mat-select [(ngModel)]="filters.marital_status">
+            <mat-option value="">Marital Status</mat-option>
+            <mat-option value="single">Single</mat-option>
+            <mat-option value="married">Married</mat-option>
+            <mat-option value="divorced">Divorced</mat-option>
+            <mat-option value="widowed">Widowed</mat-option>
+            <mat-option value="separated">Separated</mat-option>
+            <mat-option value="annulled">Annulled</mat-option>
+            <mat-option value="in_relationship">In a Relationship</mat-option>
+            <mat-option value="engaged">Engaged</mat-option>
+            <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
+            <mat-option value="unknown">Unknown</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-        <!-- Blood Group Dropdown -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <!-- <mat-label>Blood Group</mat-label> -->
-            <mat-select [(ngModel)]="filters.blood_group" >
-              <mat-option value="">Blood Group</mat-option>
-              <mat-option value="A+">A+</mat-option>
-              <mat-option value="A-">A-</mat-option>
-              <mat-option value="B+">B+</mat-option>
-              <mat-option value="B-">B-</mat-option>
-              <mat-option value="O+">O+</mat-option>
-              <mat-option value="O-">O-</mat-option>
-              <mat-option value="AB+">AB+</mat-option>
-              <mat-option value="AB-">AB-</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
 
-        <!-- Height Input -->
-        <div class="col-lg-2 col-md-2">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <!-- <mat-label>Height Range</mat-label> -->
-            <mat-select [(ngModel)]="filters.height_range" >
-              <mat-option [value]="''">Height Range</mat-option>
-              <mat-option *ngFor="let option of heightRangeOptions" [value]="option.value">
-                {{ option.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        
+      <!-- Blood Group Dropdown -->
+      <div class="col-lg-2 col-md-2">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <!-- <mat-label>Blood Group</mat-label> -->
+          <mat-select [(ngModel)]="filters.blood_group">
+            <mat-option value="">Blood Group</mat-option>
+            <mat-option value="A+">A+</mat-option>
+            <mat-option value="A-">A-</mat-option>
+            <mat-option value="B+">B+</mat-option>
+            <mat-option value="B-">B-</mat-option>
+            <mat-option value="O+">O+</mat-option>
+            <mat-option value="O-">O-</mat-option>
+            <mat-option value="AB+">AB+</mat-option>
+            <mat-option value="AB-">AB-</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Height Input -->
+      <div class="col-lg-2 col-md-2">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <!-- <mat-label>Height Range</mat-label> -->
+          <mat-select [(ngModel)]="filters.height_range">
+            <mat-option [value]="''">Height Range</mat-option>
+            <mat-option *ngFor="let option of heightRangeOptions" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
 
     </div>
     <div class="row mt-3">
       <div class="col-12 text-center">
-        <button mat-flat-button class="btn btn-outline-primary" 
-        (click)="applyFilters()"
-        [disabled]="!hasFiltersApplied()">
-  <mat-icon>search</mat-icon> Search
-</button>
+        <button mat-flat-button (click)="applyFilters()" [disabled]="!hasFiltersApplied()">
+          <mat-icon>search</mat-icon> Search
+        </button>
       </div>
     </div>
-    
+
   </mat-card-content>
-  
+
 </mat-card>
 <!-- Show message when filters are not applied -->
 <div *ngIf="!filtersApplied" class="text-center text-muted mt-3">
@@ -218,8 +212,9 @@
               No Data Found.
             </div>
 
-            <table *ngIf="dataSourcePending.data.length > 0" mat-table [dataSource]="dataSourcePending" class="w-100">              <ng-container matColumnDef="sr">
-                <th mat-header-cell *matHeaderCellDef>S.No</th>
+            <table *ngIf="dataSourcePending.data.length > 0" mat-table [dataSource]="dataSourcePending" class="w-100">
+              <ng-container matColumnDef="sr">
+                <th mat-header-cell *matHeaderCellDef>Sr.No</th>
                 <td mat-cell *matCellDef="let person; let i = index">
                   {{ i + 1 + (paginatorPending.pageIndex * paginatorPending.pageSize) }}
                 </td>
@@ -228,18 +223,14 @@
               <ng-container matColumnDef="photo">
                 <th mat-header-cell *matHeaderCellDef>Photo</th>
                 <td mat-cell *matCellDef="let person">
-             <img
-          [src]="getPhotoUrl(person)"
-          alt="Person Photo"
-          class="rounded-circle"
-          width="50"
-        />
+                  <img [src]="getPhotoUrl(person)" alt="Person Photo" class="rounded-square" width="40" height="40"
+                    style="object-fit: cover;" />
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="full_name">
                 <th mat-header-cell *matHeaderCellDef>Full Name</th>
-                <td mat-cell *matCellDef="let person">{{ person.full_name }}</td>
+                <td mat-cell *matCellDef="let person">{{ person.full_name | safeTitlecase }}</td>
               </ng-container>
 
               <ng-container matColumnDef="age">
@@ -247,26 +238,20 @@
                 <td mat-cell *matCellDef="let person">{{ person.age_range }}</td>
               </ng-container>
 
+
               <ng-container matColumnDef="gender">
                 <th mat-header-cell *matHeaderCellDef>Gender</th>
                 <td mat-cell *matCellDef="let person">
-                  <img 
-                    *ngIf="person.gender === 'male'; else femaleIcon" 
-                    src="assets/old/images/male.png" 
-                    alt="Male" 
-                    width="30" 
-                    height="30">
+                  <mat-icon *ngIf="person.gender === 'male'; else femaleIcon" color="primary">
+                    male
+                  </mat-icon>
                   <ng-template #femaleIcon>
-                    <img 
-                      src="assets/old/images/female.png" 
-                      alt="Female" 
-                      width="30" 
-                      height="30">
+                    <mat-icon color="accent">female</mat-icon>
                   </ng-template>
                 </td>
               </ng-container>
-              
-              
+
+
 
               <ng-container matColumnDef="date_of_missing">
                 <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
@@ -285,7 +270,9 @@
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
                   <button mat-icon-button color="primary" (click)="viewDetails(person)">
-                    <mat-icon>visibility</mat-icon>
+                    <!-- <mat-icon>visibility</mat-icon> -->
+                    <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+
                   </button>
                 </td>
               </ng-container>
@@ -321,9 +308,10 @@
             <div *ngIf="dataSourceResolved.data.length === 0 && filtersApplied" class="text-center text-danger mt-3">
               No Data Found.
             </div>
-            
 
-            <table *ngIf="dataSourceResolved.data.length > 0" mat-table [dataSource]="dataSourceResolved" class="w-100">              <ng-container matColumnDef="sr">
+
+            <table *ngIf="dataSourceResolved.data.length > 0" mat-table [dataSource]="dataSourceResolved" class="w-100">
+              <ng-container matColumnDef="sr">
                 <th mat-header-cell *matHeaderCellDef>S.No</th>
                 <td mat-cell *matCellDef="let person; let i = index">
                   {{ i + 1 + (paginatorResolved.pageIndex * paginatorResolved.pageSize) }}
@@ -331,21 +319,17 @@
               </ng-container>
 
               <ng-container matColumnDef="photo">
-              <th mat-header-cell *matHeaderCellDef>Photo</th>
-              <td mat-cell *matCellDef="let person">
-                <img
-              [src]="getPhotoUrl(person)"
-              alt="Person Photo"
-              class="rounded-circle"
-              width="80"
-            />
-              </td>
-            </ng-container>
+                <th mat-header-cell *matHeaderCellDef>Photo</th>
+                <td mat-cell *matCellDef="let person">
+                  <img [src]="getPhotoUrl(person)" alt="Person Photo" class="rounded-square" width="40" height="40"
+                    style="object-fit: cover;" />
+                </td>
+              </ng-container>
 
 
               <ng-container matColumnDef="full_name">
                 <th mat-header-cell *matHeaderCellDef>Full Name</th>
-                <td mat-cell *matCellDef="let person">{{ person.full_name }}</td>
+                <td mat-cell *matCellDef="let person">{{ person.full_name | safeTitlecase }}</td>
               </ng-container>
 
               <ng-container matColumnDef="age">
@@ -376,7 +360,9 @@
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
                   <button mat-icon-button color="primary" (click)="viewDetails(person)">
-                    <mat-icon>visibility</mat-icon>
+                    <!-- <mat-icon>visibility</mat-icon> -->
+                    <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+
                   </button>
                 </td>
               </ng-container>

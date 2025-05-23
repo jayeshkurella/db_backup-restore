@@ -3,11 +3,7 @@
     <h3 class="main-heading">UNIDENTIFIED BODY REPORT FORM</h3>
   </div>
 
-  <form
-    [formGroup]="unidentifiedBodyForm"
-    (ngSubmit)="onSubmit()"
-    enctype="multipart/form-data"
-  >
+  <form [formGroup]="unidentifiedBodyForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
     <!-- Personal Info Section -->
     <div class="p-3 bg-light-primary rounded">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
@@ -20,43 +16,31 @@
       <div class="row g-2 p-3">
         <!-- Full Name -->
 
-        <div class="col-12 col-md-6"[ngClass]="{
+        <div class="col-12 col-md-6" [ngClass]="{
                 'mb-3':
                   unidentifiedBodyForm.get('full_name')?.touched &&
                   unidentifiedBodyForm.get('full_name')?.invalid
               }">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Full Name</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="full_name"
-              maxlength="30"
-              (keypress)="
+            <input matInput type="text" formControlName="full_name" maxlength="30" (keypress)="
                 allowOnlyLetters($event, 'full_name', 'unidentifiedBodyForm')
-              "
-            />
-            <mat-error
-              *ngIf="
+              " />
+            <mat-error *ngIf="
                 unidentifiedBodyForm.get('full_name')?.invalid &&
                 unidentifiedBodyForm.get('full_name')?.touched
-              "
-            >
-              <span
-                *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['invalidChars']"
-              >
+              ">
+              <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['invalidChars']">
                 Numbers and special Symbols not allowed
               </span>
-              <span
-                *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['maxlength']"
-              >
+              <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['maxlength']">
                 Maximum 30 characters allowed
               </span>
             </mat-error>
           </mat-form-field>
         </div>
 
-    
+
 
         <!-- Gender -->
         <div class="col-12 col-md-3">
@@ -67,9 +51,7 @@
               <mat-option value="male">Male</mat-option>
               <mat-option value="female">Female</mat-option>
             </mat-select>
-            <mat-error
-              *ngIf="unidentifiedBodyForm.get('gender')?.hasError('required')"
-            >
+            <mat-error *ngIf="unidentifiedBodyForm.get('gender')?.hasError('required')">
               Please select the Gender
             </mat-error>
           </mat-form-field>
@@ -79,15 +61,8 @@
         <div class="col-12 col-md-3">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Date of Birth</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              formControlName="birth_date"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
+            <input matInput [matDatepicker]="picker" formControlName="birth_date" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </div>
@@ -97,8 +72,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Age Range</mat-label>
             <mat-select formControlName="age_range">
-              <mat-option
-                *ngFor="
+              <mat-option *ngFor="
                   let range of [
                     ['0-5', '0 - 5'],
                     ['6-12', '6 - 12'],
@@ -112,9 +86,7 @@
                     ['75-84', '75 - 84'],
                     ['85-100', '85+']
                   ]
-                "
-                [value]="range[0]"
-              >
+                " [value]="range[0]">
                 {{ range[1] }}
               </mat-option>
             </mat-select>
@@ -138,7 +110,7 @@
           </mat-form-field>
         </div>
 
-        
+
         <!-- Weight -->
         <div class="col-12 col-md-3">
           <mat-form-field appearance="outline" class="w-100">
@@ -163,25 +135,14 @@
               }">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Weight</mat-label>
-            <input
-              matInput
-              type="number"
-              formControlName="weight"
-              (keypress)="allowOnlyNumbers($event)"
-              (input)="restrictMaxAge($event)"
-              min="1"
-              max="200"
-            />
-            <mat-error
-              *ngIf="
+            <input matInput type="number" formControlName="weight" (keypress)="allowOnlyNumbers($event)"
+              (input)="restrictMaxAge($event)" min="1" max="200" />
+            <mat-error *ngIf="
                 unidentifiedBodyForm.get('weight')?.invalid &&
                 unidentifiedBodyForm.get('weight')?.touched
-              "
-            >
+              ">
               <!-- Error for non-numeric input -->
-              <span
-                *ngIf="unidentifiedBodyForm.get('weight')?.errors?.['invalidChars']"
-              >
+              <span *ngIf="unidentifiedBodyForm.get('weight')?.errors?.['invalidChars']">
                 Only numbers are allowed
               </span>
               <!-- Error for min/max age -->
@@ -262,32 +223,20 @@
               }">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Birthmark Details</mat-label>
-            <textarea
-              matInput
-              formControlName="birth_mark"
-              rows="3"
-              maxlength="250"
-              (keypress)="
+            <textarea matInput formControlName="birth_mark" rows="3" maxlength="250" (keypress)="
                 allowOnlyLetters($event, 'birth_mark', 'unidentifiedBodyForm')
-              "
-            >
+              ">
  <!-- Apply letter-only restriction -->
             </textarea>
 
-            <mat-error
-              *ngIf="
+            <mat-error *ngIf="
                 unidentifiedBodyForm.get('birth_mark')?.invalid &&
                 unidentifiedBodyForm.get('birth_mark')?.touched
-              "
-            >
-              <span
-                *ngIf="unidentifiedBodyForm.get('birth_mark')?.errors?.['invalidChars']"
-              >
+              ">
+              <span *ngIf="unidentifiedBodyForm.get('birth_mark')?.errors?.['invalidChars']">
                 Only letters (A-Z) and spaces are allowed
               </span>
-              <span
-                *ngIf="unidentifiedBodyForm.get('birth_mark')?.errors?.['maxlength']"
-              >
+              <span *ngIf="unidentifiedBodyForm.get('birth_mark')?.errors?.['maxlength']">
                 Maximum 250 characters allowed
               </span>
             </mat-error>
@@ -302,35 +251,23 @@
               }">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Distinctive Marks</mat-label>
-            <textarea
-              matInput
-              formControlName="distinctive_mark"
-              rows="3"
-              maxlength="250"
-              (keypress)="
+            <textarea matInput formControlName="distinctive_mark" rows="3" maxlength="250" (keypress)="
                 allowOnlyLetters(
                   $event,
                   'distinctive_mark',
                   'unidentifiedBodyForm'
                 )
-              "
-            >
+              ">
  <!-- Apply letter-only restriction -->
             </textarea>
-            <mat-error
-              *ngIf="
+            <mat-error *ngIf="
                 unidentifiedBodyForm.get('distinctive_mark')?.invalid &&
                 unidentifiedBodyForm.get('distinctive_mark')?.touched
-              "
-            >
-              <span
-                *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.errors?.['invalidChars']"
-              >
+              ">
+              <span *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.errors?.['invalidChars']">
                 Only letters (A-Z) and spaces are allowed
               </span>
-              <span
-                *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.errors?.['maxlength']"
-              >
+              <span *ngIf="unidentifiedBodyForm.get('distinctive_mark')?.errors?.['maxlength']">
                 Maximum 250 characters allowed
               </span>
             </mat-error>
@@ -342,10 +279,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Select Hospitals</mat-label>
             <mat-select formControlName="hospital">
-              <mat-option
-                *ngFor="let hospital of hospitals"
-                [value]="hospital.id"
-              >
+              <mat-option *ngFor="let hospital of hospitals" [value]="hospital.id">
                 {{ hospital.name }}
               </mat-option>
             </mat-select>
@@ -401,40 +335,21 @@
 
         <!-- Body Photo Upload -->
         <div class="col-md-3" style="margin-bottom: 20px">
-          <button
-            mat-stroked-button
-            color="primary"
-            class="w-100"
-            type="button"
-            (click)="personPhotoInput.click()"
-          >
-            <mat-icon>cloud_upload</mat-icon>Person Photo
+          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+            <mat-icon>cloud_upload</mat-icon>Body Photo
           </button>
-          <input
-            #personPhotoInput
-            type="file"
-            accept="image/*"
-            hidden
-            (change)="onFileSelect_person_photo($event)"
-          />
+          <input #personPhotoInput type="file" accept="image/*" hidden (change)="onFileSelect_person_photo($event)" />
         </div>
       </div>
     </mat-card>
 
     <!-- Address Section -->
-    <div
-      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center"
-    >
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Address
       </h5>
-      <button
-        mat-flat-button
-        color="primary"
-        type="button"
-        (click)="addAddress()"
-      >
+      <button mat-flat-button color="primary" type="button" (click)="addAddress()">
         Add Another Address
       </button>
     </div>
@@ -448,6 +363,7 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-select formControlName="address_type">
                   <mat-option value="" disabled>Address Type</mat-option>
+                  <mat-option value="body_found">Body Found</mat-option>
                   <mat-option value="permanent">Permanent</mat-option>
                   <mat-option value="current">Current</mat-option>
                   <mat-option value="old">Old</mat-option>
@@ -455,14 +371,11 @@
               </mat-form-field>
             </div>
 
-            <div
-              class="col-md-6"
-              [ngClass]="{
+            <div class="col-md-6" [ngClass]="{
                 'mb-5':
                   addressForm.get('street')?.touched &&
                   addressForm.get('street')?.invalid
-              }"
-            >
+              }">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Street</mat-label>
                 <input matInput formControlName="street" />
@@ -472,30 +385,25 @@
                     addressForm.get('street')?.hasError('required')
                   "
                 > -->
-                  <!-- Street is required. -->
+                <!-- Street is required. -->
                 <!-- </mat-error> -->
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     addressForm.get('street')?.touched &&
                     addressForm.get('street')?.hasError('maxlength')
-                  "
-                >
+                  ">
                   Maximum 30 characters allowed.
                 </mat-error>
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     addressForm.get('street')?.touched &&
                     addressForm.get('street')?.hasError('invalidCharacters')
-                  "
-                >
+                  ">
                   Only letters, numbers, spaces, commas, and hyphens are
                   allowed.
                 </mat-error>
               </mat-form-field>
             </div>
 
-            <div class="col-md-12"
-            [ngClass]="{
+            <div class="col-md-12" [ngClass]="{
                 'mb-3':
                   addressForm.get('landmark_details')?.touched &&
                   addressForm.get('landmark_details')?.invalid
@@ -503,28 +411,20 @@
               <form [formGroup]="addressForm" novalidate>
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Landmark Details</mat-label>
-                  <textarea
-                    matInput
-                    formControlName="landmark_details"
-                    rows="1"
-                  ></textarea>
-                  <mat-error
-                    *ngIf="
+                  <textarea matInput formControlName="landmark_details" rows="1"></textarea>
+                  <mat-error *ngIf="
                       addressForm.get('landmark_details')?.touched &&
                       addressForm.get('landmark_details')?.hasError('maxlength')
-                    "
-                  >
+                    ">
                     Maximum 150 characters allowed.
                   </mat-error>
 
-                  <mat-error
-                    *ngIf="
+                  <mat-error *ngIf="
                       addressForm.get('landmark_details')?.touched &&
                       addressForm
                         .get('landmark_details')
                         ?.hasError('invalidLandmark')
-                    "
-                  >
+                    ">
                     Only letters, numbers, spaces, and , . - # are allowed.
                   </mat-error>
                 </mat-form-field>
@@ -538,56 +438,36 @@
               }">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Village</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="village"
-                  maxlength="30"
-                  (keypress)="allowTextInput($event, 'village')"
-                />
-                <mat-error
-                  *ngIf="
+                <input matInput type="text" formControlName="village" maxlength="30"
+                  (keypress)="allowTextInput($event, 'village')" />
+                <mat-error *ngIf="
                     addressForm.get('village')?.invalid &&
                     addressForm.get('village')?.touched
-                  "
-                >
-                  <span
-                    *ngIf="addressForm.get('village')?.errors?.['invalidChars']"
-                  >
+                  ">
+                  <span *ngIf="addressForm.get('village')?.errors?.['invalidChars']">
                     Only letters allowed
                   </span>
-                  <span
-                    *ngIf="addressForm.get('village')?.errors?.['maxlength']"
-                  >
+                  <span *ngIf="addressForm.get('village')?.errors?.['maxlength']">
                     Maximum 30 characters allowed
                   </span>
                 </mat-error>
               </mat-form-field>
             </div>
 
-            <div class="col-md-6"[ngClass]="{
+            <div class="col-md-6" [ngClass]="{
                 'mb-3':
                   addressForm.get('city')?.touched &&
                   addressForm.get('city')?.invalid
               }">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>City</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="city"
-                  maxlength="30"
-                  (keypress)="allowTextInput($event, 'city')"
-                />
-                <mat-error
-                  *ngIf="
+                <input matInput type="text" formControlName="city" maxlength="30"
+                  (keypress)="allowTextInput($event, 'city')" />
+                <mat-error *ngIf="
                     addressForm.get('city')?.invalid &&
                     addressForm.get('city')?.touched
-                  "
-                >
-                  <span
-                    *ngIf="addressForm.get('city')?.errors?.['invalidChars']"
-                  >
+                  ">
+                  <span *ngIf="addressForm.get('city')?.errors?.['invalidChars']">
                     Only letters allowed
                   </span>
                   <span *ngIf="addressForm.get('city')?.errors?.['maxlength']">
@@ -605,27 +485,16 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>District</mat-label>
                 <!-- <input matInput type="text" formControlName="district" maxlength="30"> -->
-                <input
-                  matInput
-                  type="text"
-                  formControlName="district"
-                  maxlength="30"
-                  (keypress)="allowTextInput($event, 'district')"
-                />
-                <mat-error
-                  *ngIf="
+                <input matInput type="text" formControlName="district" maxlength="30"
+                  (keypress)="allowTextInput($event, 'district')" />
+                <mat-error *ngIf="
                     addressForm.get('district')?.invalid &&
                     addressForm.get('district')?.touched
-                  "
-                >
-                  <span
-                    *ngIf="addressForm.get('district')?.errors?.['invalidChars']"
-                  >
+                  ">
+                  <span *ngIf="addressForm.get('district')?.errors?.['invalidChars']">
                     Only letters allowed
                   </span>
-                  <span
-                    *ngIf="addressForm.get('district')?.errors?.['maxlength']"
-                  >
+                  <span *ngIf="addressForm.get('district')?.errors?.['maxlength']">
                     Maximum 30 characters allowed
                   </span>
                 </mat-error>
@@ -638,7 +507,7 @@
                   <mat-option value="" disabled>State</mat-option>
                   <mat-option *ngFor="let state of states" [value]="state">{{
                     state
-                  }}</mat-option>
+                    }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -650,22 +519,13 @@
               }">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Pincode</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="pincode"
-                  maxlength="15"
-                  (keypress)="allowOnlyNumbers($event)"
-                />
-                <mat-error
-                  *ngIf="
+                <input matInput type="text" formControlName="pincode" maxlength="15"
+                  (keypress)="allowOnlyNumbers($event)" />
+                <mat-error *ngIf="
                     addressForm.get('pincode')?.invalid &&
                     addressForm.get('pincode')?.touched
-                  "
-                >
-                  <span
-                    *ngIf="addressForm.get('pincode')?.errors?.['invalidChars']"
-                  >
+                  ">
+                  <span *ngIf="addressForm.get('pincode')?.errors?.['invalidChars']">
                     Only numbers are allowed.
                   </span>
                   <span *ngIf="addressForm.get('pincode')?.errors?.['pattern']">
@@ -679,11 +539,7 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-select formControlName="country">
                   <mat-option value="" disabled>Country</mat-option>
-                  <mat-option
-                    *ngFor="let country of countries"
-                    [value]="country"
-                    >{{ country }}</mat-option
-                  >
+                  <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -692,13 +548,11 @@
 
         <!-- Right Section: Map & Location -->
         <div class="col-md-6">
-          <div formGroupName="location"
-          [ngClass]="{
+          <div formGroupName="location" [ngClass]="{
                 'mb-3':
                   addressForm.get('location.latitude')?.touched &&
                   addressForm.get('location.latitude')?.invalid
-              }"
-              [ngClass]="{
+              }" [ngClass]="{
                 'mb-3':
                   addressForm.get('location.longitude')?.touched &&
                   addressForm.get('location.longitude')?.invalid
@@ -707,14 +561,12 @@
               <mat-form-field appearance="outline" class="flex-grow-1 me-2">
                 <mat-label>Latitude</mat-label>
                 <input matInput type="text" formControlName="latitude" />
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     addressForm.get('location.latitude')?.touched &&
                     addressForm
                       .get('location.latitude')
                       ?.hasError('invalidCoordinate')
-                  "
-                >
+                  ">
                   Enter a valid number (e.g., 12.3456).
                 </mat-error>
               </mat-form-field>
@@ -722,106 +574,81 @@
               <mat-form-field appearance="outline" class="flex-grow-1">
                 <mat-label>Longitude</mat-label>
                 <input matInput type="text" formControlName="longitude" />
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     addressForm.get('location.longitude')?.touched &&
                     addressForm
                       .get('location.longitude')
                       ?.hasError('invalidCoordinate')
-                  "
-                >
+                  ">
                   Enter a valid number (e.g., 77.1234).
                 </mat-error>
               </mat-form-field>
 
-              <button
-                type="button"
-                mat-icon-button
-                (click)="getCurrentLocation()"
-                matTooltip="Fetch your current location"
-              >
+              <button type="button" mat-icon-button (click)="getCurrentLocation()"
+                matTooltip="Fetch your current location">
                 <mat-icon>my_location</mat-icon>
               </button>
             </div>
-            <div
-              id="mapHome"
-              style="
+            <div id="mapHome" style="
                 height: 250px;
                 border: 1px solid black;
                 border-radius: 5px;
                 z-index: 1;
-              "
-            ></div>
+              "></div>
           </div>
         </div>
       </div>
 
       <!-- Display Added Addresses -->
-      <div
-        *ngFor="let address of addresses.controls; let i = index"
-        class="d-flex align-items-center justify-content-between border-bottom py-2"
-      >
+      <div *ngFor="let address of addresses.controls; let i = index"
+        class="d-flex align-items-center justify-content-between border-bottom py-2">
         <div class="flex-grow-1">
           <span class="address-title d-flex align-items-center">
             <mat-icon color="primary" class="me-2">place</mat-icon>
-            <strong
-              >{{ address.get("address_type")?.value || "No type" }}:</strong
-            >
+            <strong>{{ address.get("address_type")?.value || "No type" }}:</strong>
           </span>
           <span class="address-text text-muted">
             {{
-              (address.get("street")?.value
-                ? address.get("street")?.value + ", "
-                : "") +
-                (address.get("appartment_no")?.value
-                  ? "Apt " + address.get("appartment_no")?.value + ", "
-                  : "") +
-                (address.get("village")?.value
-                  ? address.get("village")?.value + ", "
-                  : "") +
-                (address.get("city")?.value
-                  ? address.get("city")?.value + ", "
-                  : "") +
-                (address.get("district")?.value
-                  ? address.get("district")?.value + ", "
-                  : "") +
-                (address.get("state")?.value
-                  ? address.get("state")?.value + " - "
-                  : "") +
-                (address.get("pincode")?.value
-                  ? address.get("pincode")?.value
-                  : "") +
-                (address.get("country")?.value
-                  ? ", " + address.get("country")?.value
-                  : "")
+            (address.get("street")?.value
+            ? address.get("street")?.value + ", "
+            : "") +
+            (address.get("appartment_no")?.value
+            ? "Apt " + address.get("appartment_no")?.value + ", "
+            : "") +
+            (address.get("village")?.value
+            ? address.get("village")?.value + ", "
+            : "") +
+            (address.get("city")?.value
+            ? address.get("city")?.value + ", "
+            : "") +
+            (address.get("district")?.value
+            ? address.get("district")?.value + ", "
+            : "") +
+            (address.get("state")?.value
+            ? address.get("state")?.value + " - "
+            : "") +
+            (address.get("pincode")?.value
+            ? address.get("pincode")?.value
+            : "") +
+            (address.get("country")?.value
+            ? ", " + address.get("country")?.value
+            : "")
             }}
           </span>
         </div>
-        <button
-          mat-icon-button
-          color="warn"
-          type="button"
-          (click)="removeAddress(i)"
-        >
+        <button mat-icon-button color="warn" type="button" (click)="removeAddress(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
     </mat-card>
 
     <!-- Contact Section -->
-    <div
-      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center"
-    >
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Contact
       </h5>
-      <button
-        mat-flat-button
-        color="primary"
-        type="button"
-        (click)="addContact()"
-      >
+      <button mat-flat-button color="primary" type="button" (click)="addContact()">
         Add Another Contact
       </button>
     </div>
@@ -834,6 +661,7 @@
           <div class="col-md-3">
             <mat-form-field appearance="outline" class="w-100">
               <mat-select formControlName="type">
+
                 <mat-option value="personal">Personal</mat-option>
                 <mat-option value="office">Office</mat-option>
                 <mat-option value="home">Home</mat-option>
@@ -859,45 +687,29 @@
               }">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Name</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="person_name"
-                maxlength="50"
-                (keypress)="
+              <input matInput type="text" formControlName="person_name" maxlength="50" (keypress)="
                   allowOnlyLetters(
                     $event,
                     'person_name',
                     'contactForm'
                   )
-                "
-              />
+                " />
 
-              <mat-error
-                *ngIf="
+              <mat-error *ngIf="
                   contactForm.get('person_name')?.touched &&
                   contactForm.get('person_name')?.invalid
-                "
-              >
-                <span
-                  *ngIf="contactForm.get('person_name')?.errors?.['minlength']"
-                >
+                ">
+                <span *ngIf="contactForm.get('person_name')?.errors?.['minlength']">
                   Minimum 3 characters required.
                 </span>
-                <span
-                  *ngIf="contactForm.get('person_name')?.errors?.['maxlength']"
-                >
+                <span *ngIf="contactForm.get('person_name')?.errors?.['maxlength']">
                   Maximum 50 characters allowed.
                 </span>
-                <span
-                  *ngIf="contactForm.get('person_name')?.errors?.['pattern']"
-                >
+                <span *ngIf="contactForm.get('person_name')?.errors?.['pattern']">
                   Must be Pascal Case and contain only letters, spaces, or
                   initials (e.g., R. K. Singh).
                 </span>
-                <span
-                  *ngIf="contactForm.get('person_name')?.errors?.['invalidChars']"
-                >
+                <span *ngIf="contactForm.get('person_name')?.errors?.['invalidChars']">
                   Only letters and spaces are allowed.
                 </span>
               </mat-error>
@@ -913,29 +725,18 @@
               }">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Phone Number</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="phone_no"
-                maxlength="15"
-                (keypress)="allowOnlyNumbersAndHyphen($event)"
-              />
-              <mat-error
-                *ngIf="
+              <input matInput type="text" formControlName="phone_no" maxlength="15"
+                (keypress)="allowOnlyNumbersAndHyphen($event)" />
+              <mat-error *ngIf="
                   contactForm.get('phone_no')
                     ?.touched &&
                 contactForm.get('phone_no')
                     ?.invalid
-                "
-              >
-                <span
-                  *ngIf="contactForm.get('phone_no')?.errors?.['invalidChars']"
-                >
+                ">
+                <span *ngIf="contactForm.get('phone_no')?.errors?.['invalidChars']">
                   Only numbers and hyphen are allowed.
                 </span>
-                <span
-                  *ngIf="contactForm.get('phone_no')?.errors?.['pattern']"
-                >
+                <span *ngIf="contactForm.get('phone_no')?.errors?.['pattern']">
                   Please enter a valid mobile number.
                 </span>
               </mat-error>
@@ -944,57 +745,41 @@
 
           <!-- Email -->
 
-          <div class="col-md-3"  [ngClass]="{
+          <div class="col-md-3" [ngClass]="{
                 'mb-3':
                   contactForm.get('email_id')?.touched &&
                   contactForm.get('email_id')?.invalid
               }">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Email</mat-label>
-              <input
-                matInput
-                type="email"
-                formControlName="email_id"
-                placeholder="Email"
-                maxlength="50"
-              />
+              <input matInput type="email" formControlName="email_id" placeholder="Email" maxlength="50" />
 
-              <mat-error
-                *ngIf="
+              <mat-error *ngIf="
                   contactForm.get('email_id')?.touched &&
                   contactForm.get('email_id')?.invalid
-                "
-              >
+                ">
                 <span *ngIf="contactForm.get('email_id')?.hasError('pattern')">
                   Please enter valid email. It should start with letter.
                 </span>
-                <span
-                  *ngIf="contactForm.get('email_id')?.hasError('maxlength')"
-                >
+                <span *ngIf="contactForm.get('email_id')?.hasError('maxlength')">
                   Email cannot exceed 50 characters.
                 </span>
               </mat-error>
             </mat-form-field>
           </div>
 
-          <div class="col-md-12"  [ngClass]="{
+          <div class="col-md-12" [ngClass]="{
                 'mb-3':
                   contactForm.get('additional_details')?.touched &&
                   contactForm.get('additional_details')?.invalid
               }">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Additional Notes</mat-label>
-              <textarea
-                matInput
-                formControlName="additional_details"
-                maxlength="200"
-              ></textarea>
+              <textarea matInput formControlName="additional_details" maxlength="200"></textarea>
 
-              <mat-error
-                *ngIf="
+              <mat-error *ngIf="
                   contactForm.get('additional_details')?.hasError('maxlength')
-                "
-              >
+                ">
                 Maximum 200 characters allowed
               </mat-error>
             </mat-form-field>
@@ -1020,12 +805,7 @@
             </div>
 
             <!-- Remove Button -->
-            <button
-              mat-icon-button
-              color="warn"
-              type="button"
-              (click)="removeContact(i)"
-            >
+            <button mat-icon-button color="warn" type="button" (click)="removeContact(i)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -1034,10 +814,7 @@
     </mat-card>
 
     <!-- Additional Information Section -->
-    <div
-      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
-      style="min-height: 60px"
-    >
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Additional Information
@@ -1047,11 +824,7 @@
     <!-- Additional Information Card -->
     <mat-card class="p-4 mb-4 mt-2">
       <div formArrayName="additional_info">
-        <div
-          *ngFor="let info of additionalInfo.controls; let i = index"
-          [formGroupName]="i"
-          class="row g-3 p-3"
-        >
+        <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
           <div class="row g-2">
             <!-- Caste -->
             <div class="col-md-3">
@@ -1095,13 +868,9 @@
                   <mat-option value="widowed">Widowed</mat-option>
                   <mat-option value="separated">Separated</mat-option>
                   <mat-option value="annulled">Annulled</mat-option>
-                  <mat-option value="in_relationship"
-                    >In a Relationship</mat-option
-                  >
+                  <mat-option value="in_relationship">In a Relationship</mat-option>
                   <mat-option value="engaged">Engaged</mat-option>
-                  <mat-option value="domestic_partnership"
-                    >Domestic Partnership</mat-option
-                  >
+                  <mat-option value="domestic_partnership">Domestic Partnership</mat-option>
                   <mat-option value="unknown">Unknown</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -1136,11 +905,7 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Other Known Languages</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="other_known_languages"
-                />
+                <input matInput type="text" formControlName="other_known_languages" />
                 <!-- <mat-hint>Enter up to 5 languages separated by commas</mat-hint>
                 <mat-error *ngIf="additionalInfo.controls[i].get('other_known_languages')?.hasError('tooManyLanguages')">
                   Maximum 5 languages allowed
@@ -1158,9 +923,7 @@
                 <mat-select formControlName="id_type">
                   <mat-option value="aadhar_card">Aadhar Card</mat-option>
                   <mat-option value="pan_card">Pan Card</mat-option>
-                  <mat-option value="driving_license"
-                    >Driving License</mat-option
-                  >
+                  <mat-option value="driving_license">Driving License</mat-option>
                   <mat-option value="passport">Passport</mat-option>
                   <mat-option value="voter_id_card">VoterID</mat-option>
                 </mat-select>
@@ -1185,33 +948,23 @@
               }">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Identification Card Number</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="id_no"
-                  maxlength="15"
-                  (blur)="additionalInfo.controls[i].get('id_no')"
-                  (keypress)="preventSpecialCharacters($event)"
-                />
+                <input matInput type="text" formControlName="id_no" maxlength="15"
+                  (blur)="additionalInfo.controls[i].get('id_no')" (keypress)="preventSpecialCharacters($event)" />
 
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     additionalInfo.controls[i]
                       .get('id_no')
                       ?.hasError('maxlength')
-                  "
-                >
+                  ">
                   Maximum 15 characters or allowed
                 </mat-error>
 
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     additionalInfo.controls[i]
                       .get('id_no')
                       ?.hasError('specialChars') &&
                     additionalInfo.controls[i].get('id_no')?.touched
-                  "
-                >
+                  ">
                   Special characters are not allowed
                 </mat-error>
               </mat-form-field>
@@ -1221,11 +974,7 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Educational Details</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="education_details"
-                />
+                <input matInput type="text" formControlName="education_details" />
               </mat-form-field>
             </div>
 
@@ -1238,34 +987,24 @@
               }">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Occupation</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="occupation_details"
-                  (blur)="
+                <input matInput type="text" formControlName="occupation_details" (blur)="
                     additionalInfo.controls[i]
                       .get('occupation_details')
                       ?.markAsTouched()
-                  "
-                  (keypress)="preventSpecialCharacters($event)"
-                />
+                  " (keypress)="preventSpecialCharacters($event)" />
 
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     additionalInfo.controls[i]
                       .get('occupation_details')
                       ?.hasError('maxlength')
-                  "
-                >
+                  ">
                   Maximum 30 characters allowed
                 </mat-error>
-                <mat-error
-                  *ngIf="
+                <mat-error *ngIf="
                     additionalInfo.controls[i]
                       .get('occupation_details')
                       ?.hasError('pattern')
-                  "
-                >
+                  ">
                   Special characters are not allowed
                 </mat-error>
               </mat-form-field>
@@ -1276,10 +1015,7 @@
     </mat-card>
 
     <!-- Legal Info Section -->
-    <div
-      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
-      style="min-height: 60px"
-    >
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Legal Info
@@ -1288,11 +1024,7 @@
 
     <mat-card class="card p-4 mb-4">
       <div formArrayName="firs">
-        <div
-          *ngFor="let info of firs.controls; let i = index"
-          [formGroupName]="i"
-          class="row g-2 p-3"
-        >
+        <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-2 p-3">
           <!-- Case Status -->
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
@@ -1314,15 +1046,8 @@
               }">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>FIR Number</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="fir_number"
-                maxlength="20"
-              />
-              <mat-error
-                *ngIf="firs.controls[i].get('fir_number')?.hasError('pattern')"
-              >
+              <input matInput type="text" formControlName="fir_number" maxlength="20" />
+              <mat-error *ngIf="firs.controls[i].get('fir_number')?.hasError('pattern')">
                 FIR Number must be alphanumeric and up to 20 characters
               </mat-error>
             </mat-form-field>
@@ -1330,32 +1055,18 @@
 
           <!-- Upload FIR Photo -->
           <div class="col-md-4" style="margin-bottom: 20px">
-            <button
-              mat-stroked-button
-              color="primary"
-              class="w-100"
-              type="button"
-              (click)="firInput.click()"
-            >
+            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
               <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
             </button>
-            <input
-              #firInput
-              type="file"
-              accept="image/*,application/pdf"
-              hidden
-              (change)="onFileSelect($event, 'firs', i, 'fir_photo')"
-            />
+            <input #firInput type="file" accept="image/*,application/pdf" hidden
+              (change)="onFileSelect($event, 'firs', i, 'fir_photo')" />
           </div>
 
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Police Station Name & Address</mat-label>
               <mat-select formControlName="police_station">
-                <mat-option
-                  *ngFor="let station of policeStations"
-                  [value]="station.id"
-                >
+                <mat-option *ngFor="let station of policeStations" [value]="station.id">
                   {{ station.name }}
                 </mat-option>
               </mat-select>
@@ -1371,45 +1082,29 @@
 
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Name</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="investigation_officer_name"
-                maxlength="50"
-                (keypress)="
+              <input matInput type="text" formControlName="investigation_officer_name" maxlength="50" (keypress)="
                   allowOnlyLetters(
                     $event,
                     'investigation_officer_name',
                     'firsForm'
                   )
-                "
-              />
+                " />
 
-              <mat-error
-                *ngIf="
+              <mat-error *ngIf="
                   firs.controls[i].get('investigation_officer_name')?.touched &&
                   firs.controls[i].get('investigation_officer_name')?.invalid
-                "
-              >
-                <span
-                  *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['minlength']"
-                >
+                ">
+                <span *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['minlength']">
                   Minimum 3 characters required.
                 </span>
-                <span
-                  *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['maxlength']"
-                >
+                <span *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['maxlength']">
                   Maximum 50 characters allowed.
                 </span>
-                <span
-                  *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['pattern']"
-                >
+                <span *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['pattern']">
                   Must be Pascal Case and contain only letters, spaces, or
                   initials (e.g., R. K. Singh).
                 </span>
-                <span
-                  *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['invalidChars']"
-                >
+                <span *ngIf="firs.controls[i].get('investigation_officer_name')?.errors?.['invalidChars']">
                   Only letters and spaces are allowed.
                 </span>
               </mat-error>
@@ -1425,29 +1120,18 @@
               }">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Investigating Officer's Contact Number</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="investigation_officer_contacts"
-                maxlength="15"
-                (keypress)="allowOnlyNumbersAndHyphen($event)"
-              />
-              <mat-error
-                *ngIf="
+              <input matInput type="text" formControlName="investigation_officer_contacts" maxlength="15"
+                (keypress)="allowOnlyNumbersAndHyphen($event)" />
+              <mat-error *ngIf="
                   firs.controls[i].get('investigation_officer_contacts')
                     ?.touched &&
                   firs.controls[i].get('investigation_officer_contacts')
                     ?.invalid
-                "
-              >
-                <span
-                  *ngIf="firs.controls[i].get('investigation_officer_contacts')?.errors?.['invalidChars']"
-                >
+                ">
+                <span *ngIf="firs.controls[i].get('investigation_officer_contacts')?.errors?.['invalidChars']">
                   Only numbers and hyphen are allowed.
                 </span>
-                <span
-                  *ngIf="firs.controls[i].get('investigation_officer_contacts')?.errors?.['pattern']"
-                >
+                <span *ngIf="firs.controls[i].get('investigation_officer_contacts')?.errors?.['pattern']">
                   Please enter a valid mobile number.
                 </span>
               </mat-error>
@@ -1458,10 +1142,7 @@
     </mat-card>
 
     <!-- Consent Section -->
-    <div
-      class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center"
-      style="min-height: 60px"
-    >
+    <div class="p-3 bg-light-primary rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Consent
@@ -1471,26 +1152,12 @@
     <!-- Consent & Submission -->
     <mat-card class="card p-4 mb-1">
       <div formArrayName="consent">
-        <div
-          *ngFor="let info of consent.controls; let i = index"
-          [formGroupName]="i"
-          class="row g-3 p-3"
-        >
-          <div
-            class="col-md-12 consent-link d-flex align-items-center p-4"
-            style="gap: 10px; padding: 10px 0; margin-left: 15px"
-          >
-            <input
-              type="checkbox"
-              id="consentCheckbox"
-              (change)="onConsentChange($event)"
-              style="width: 18px; height: 18px; cursor: pointer"
-            />
-            <label
-              for="consentCheckbox"
-              class="mb-0"
-              style="cursor: pointer; font-size: 16px; color: #333"
-            >
+        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
+          <div class="col-md-12 consent-link d-flex align-items-center p-4"
+            style="gap: 10px; padding: 10px 0; margin-left: 15px">
+            <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
+              style="width: 18px; height: 18px; cursor: pointer" />
+            <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: #333">
               To proceed, please open the consent document and acknowledge it by
               checking the box.
             </label>
@@ -1499,7 +1166,7 @@
       </div>
     </mat-card>
 
-    
+
 
     <!-- Submit & Cancel Buttons -->
     <div class="d-flex justify-content-between mt-4 space-down">

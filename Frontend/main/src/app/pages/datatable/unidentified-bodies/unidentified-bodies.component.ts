@@ -26,6 +26,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UnidentifiedbodyApiService } from './unidentifiedbody-api.service';
 import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies-dialog/unidentified-bodies-dialog.component';
 import { Router } from '@angular/router';
+import { SafeTitlecasePipe } from "../../../components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe";
 export interface Person {
   id: number;
   full_name: string;
@@ -38,13 +39,13 @@ export interface Person {
 @Component({
   selector: 'app-unidentified-bodies',
   imports: [MaterialModule,
-            TablerIconsModule,
-            MatNativeDateModule,
-            NgScrollbarModule,
-            CommonModule,
-            FormsModule,
-            HttpClientModule ,
-            MatProgressSpinnerModule],
+    TablerIconsModule,
+    MatNativeDateModule,
+    NgScrollbarModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    MatProgressSpinnerModule, SafeTitlecasePipe],
   templateUrl: './unidentified-bodies.component.html',
   styleUrl: './unidentified-bodies.component.scss',
   standalone: true,

@@ -184,7 +184,7 @@
     </div>
     <div class="row mt-3">
       <div class="col-12 text-center">
-        <button mat-flat-button class="btn btn-outline-primary" 
+        <button mat-flat-button 
         (click)="applyFilters()"
         [disabled]="!hasFiltersApplied()">
   <mat-icon>search</mat-icon> Search
@@ -229,13 +229,15 @@
                 <th mat-header-cell *matHeaderCellDef>Photo</th>
                 <td mat-cell *matCellDef="let person">
                   <img [src]="person.photo_photo ? (environment.ImgUrlss + person.photo_photo) : 'assets/old/images/Chhaya.png'"
-                       alt="Person Photo" class="rounded-circle" width="60" />
+                       alt="Person Photo" class="rounded-square" width="40" 
+                     height="40"
+                     style="object-fit: cover;" />
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="full_name">
                 <th mat-header-cell *matHeaderCellDef>Full Name</th>
-                <td mat-cell *matCellDef="let person">{{ person.full_name }}</td>
+                <td mat-cell *matCellDef="let person">{{ person.full_name | safeTitlecase}}</td>
               </ng-container>
 
               <ng-container matColumnDef="age">
@@ -246,24 +248,15 @@
               <ng-container matColumnDef="gender">
                 <th mat-header-cell *matHeaderCellDef>Gender</th>
                 <td mat-cell *matCellDef="let person">
-                  <img 
-                    *ngIf="person.gender === 'male'; else femaleIcon" 
-                    src="assets/old/images/male.png" 
-                    alt="Male" 
-                    width="30" 
-                    height="30">
+                  <mat-icon *ngIf="person.gender === 'male'; else femaleIcon" color="primary">
+                    male
+                  </mat-icon>
                   <ng-template #femaleIcon>
-                    <img 
-                      src="assets/old/images/female.png" 
-                      alt="Female" 
-                      width="30" 
-                      height="30">
+                    <mat-icon color="accent">female</mat-icon>
                   </ng-template>
                 </td>
               </ng-container>
               
-              
-
               <ng-container matColumnDef="date_of_missing">
                 <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
                 <td mat-cell *matCellDef="let person">{{ person.date_reported }}</td>
@@ -281,7 +274,9 @@
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
                   <button mat-icon-button color="primary" (click)="viewDetails(person)">
-                    <mat-icon>visibility</mat-icon>
+                    <!-- <mat-icon>visibility</mat-icon> -->
+                  <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+
                   </button>
                 </td>
               </ng-container>
@@ -329,13 +324,15 @@
                 <th mat-header-cell *matHeaderCellDef>Photo</th>
                 <td mat-cell *matCellDef="let person">
                   <img [src]="person.photo_photo ? (environment.ImgUrlss + person.photo_photo) : 'assets/images/pngwing.com.png'"
-                       alt="Person Photo" class="rounded-circle" width="80" />
+                       alt="Person Photo" class="rounded-square" width="40" 
+                     height="40"
+                     style="object-fit: cover;" />
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="full_name">
                 <th mat-header-cell *matHeaderCellDef>Full Name</th>
-                <td mat-cell *matCellDef="let person">{{ person.full_name }}</td>
+                <td mat-cell *matCellDef="let person">{{ person.full_name | safeTitlecase}}</td>
               </ng-container>
 
               <ng-container matColumnDef="age">
@@ -366,7 +363,9 @@
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let person">
                   <button mat-icon-button color="primary" (click)="viewDetails(person)">
-                    <mat-icon>visibility</mat-icon>
+                    <!-- <mat-icon>visibility</mat-icon> -->
+                    <i-tabler name="eye" class="icon-22 " style="cursor: pointer;"></i-tabler>
+
                   </button>
                 </td>
               </ng-container>

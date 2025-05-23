@@ -10,7 +10,7 @@
     <div *ngIf="person" class="container">
       <!-- Basic Information -->
       <mat-card class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Basic Information</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Basic information</mat-card-title>
         <div class="row g-3">
           <div class="col-md-2">
             <img
@@ -24,8 +24,8 @@
         <div class="col-md-10">
             <div class="row g-3">
               <div class="col-sm-6 col-md-4">
-                <p class="case-detail-label mb-1">Full Name</p>
-                <p class="case-detail-value mb-0">{{ person.full_name  |safeTitlecase}}</p>
+                <p class="case-detail-label mb-1">Full name</p>
+                <p class="case-detail-value mb-0">{{ person.full_name | safeTitlecase }}</p>
               </div>
               <div class="col-sm-6 col-md-4">
                 <p class="case-detail-label mb-1">Gender</p>
@@ -36,23 +36,23 @@
                 <p class="case-detail-value mb-0">{{ person.age }}</p>
               </div>
               <div class="col-sm-6 col-md-4" *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
-                <p class="case-detail-label mb-1">Age Range</p>
+                <p class="case-detail-label mb-1">Age range</p>
                 <p class="case-detail-value mb-0">{{ person.age_range }}</p>
               </div>
               <div class="col-sm-6 col-md-4">
-                <p class="case-detail-label mb-1">Blood Group</p>
+                <p class="case-detail-label mb-1">Blood group</p>
                 <p class="case-detail-value mb-0">{{ person.blood_group }}</p>
               </div>
               <div class="col-sm-6 col-md-4">
-                <p class="case-detail-label mb-1">Case Type</p>
-                <p class="case-detail-value mb-0">{{ person.type  }}</p>
+                <p class="case-detail-label mb-1">Case type</p>
+                <p class="case-detail-value mb-0">{{ person.type }}</p>
               </div>
               <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Unidentified Person'">
                 <p class="case-detail-label mb-1">Condition</p>
                 <p class="case-detail-value mb-0">{{ person.up_condition | safeTitlecase }}</p>
               </div>
               <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Unidentified Body'">
-                <p class="case-detail-label mb-1">Body Condition</p>
+                <p class="case-detail-label mb-1">Body condition</p>
                 <p class="case-detail-value mb-0">{{ person.bodies_condition | safeTitlecase }}</p>
               </div>
             </div>
@@ -62,7 +62,7 @@
 
       <!-- Appearance Information -->
       <mat-card class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Appearance Information</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Appearance information</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Height</p>
@@ -74,26 +74,26 @@
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Complexion</p>
-            <p class="case-detail-value mb-0">{{ person.complexion  | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ person.complexion | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Hair Color</p>
-            <p class="case-detail-value mb-0">{{ person.hair_color  | safeTitlecase }}</p>
+            <p class="case-detail-label mb-1">Hair color</p>
+            <p class="case-detail-value mb-0">{{ person.hair_color | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Hair Type</p>
+            <p class="case-detail-label mb-1">Hair type</p>
             <p class="case-detail-value mb-0">{{ person.hair_type | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Eye Color</p>
-            <p class="case-detail-value mb-0">{{ person.eye_color  | safeTitlecase}}</p>
+            <p class="case-detail-label mb-1">Eye color</p>
+            <p class="case-detail-value mb-0">{{ person.eye_color | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Birth Mark</p>
+            <p class="case-detail-label mb-1">Birth mark</p>
             <p class="case-detail-value mb-0">{{ person.birth_mark || 'None reported' }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Distinctive Mark</p>
+            <p class="case-detail-label mb-1">Distinctive mark</p>
             <p class="case-detail-value mb-0">{{ person.distinctive_mark || 'None reported' }}</p>
           </div>
         </div>
@@ -101,10 +101,10 @@
 
       <!-- Address Information -->
       <mat-card class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Address Information</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Address information</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Address Type</p>
+            <p class="case-detail-label mb-1">Address type</p>
             <p class="case-detail-value mb-0">{{ person.address_type | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
@@ -140,10 +140,10 @@
 
       <!-- Contact Information -->
       <mat-card class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Contact Information</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Contact information</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.type">
-            <p class="case-detail-label mb-1">Contact Type</p>
+            <p class="case-detail-label mb-1">Contact type</p>
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.type | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.phone_no">
@@ -159,15 +159,15 @@
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.company_name | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.person_name">
-            <p class="case-detail-label mb-1">Contact Person</p>
+            <p class="case-detail-label mb-1">Contact person</p>
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.person_name | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.job_title">
-            <p class="case-detail-label mb-1">Job Title</p>
+            <p class="case-detail-label mb-1">Job title</p>
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.job_title | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.social_media_url">
-            <p class="case-detail-label mb-1">Social Media</p>
+            <p class="case-detail-label mb-1">Social media</p>
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.social_media_url }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.website_url">
@@ -175,7 +175,7 @@
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.website_url }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.additional_details">
-            <p class="case-detail-label mb-1">Additional Details</p>
+            <p class="case-detail-label mb-1">Additional details</p>
             <p class="case-detail-value mb-0">{{ person.contacts[0]?.additional_details }}</p>
           </div>
         </div>
@@ -183,31 +183,31 @@
 
       <!-- Personal Details -->
       <mat-card class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Personal Details</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Personal details</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Caste</p>
             <p class="case-detail-value mb-0">{{ person.additional_info[0]?.caste | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Sub Caste</p>
+            <p class="case-detail-label mb-1">Sub caste</p>
             <p class="case-detail-value mb-0">{{ person.additional_info[0]?.subcaste | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Religion</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.religion |safeTitlecase}}</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.religion | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Marital Status</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.marital_status  | safeTitlecase }}</p>
+            <p class="case-detail-label mb-1">Marital status</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.marital_status | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Mother Tongue</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.mother_tongue  | safeTitlecase }}</p>
+            <p class="case-detail-label mb-1">Mother tongue</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.mother_tongue | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Languages Known</p>
-            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.other_known_languages |safeTitlecase }}</p>
+            <p class="case-detail-label mb-1">Languages known</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.other_known_languages | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Education</p>
@@ -218,35 +218,34 @@
             <p class="case-detail-value mb-0">{{ person.additional_info[0]?.occupation_details || 'N/A' }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">ID Type</p>
+            <p class="case-detail-label mb-1">ID type</p>
             <p class="case-detail-value mb-0">{{ person.additional_info[0]?.id_type | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">ID Number</p>
+            <p class="case-detail-label mb-1">ID number</p>
             <p class="case-detail-value mb-0">{{ person.additional_info[0]?.id_no || 'N/A' }}</p>
           </div>
         </div>
       </mat-card>
 
       <!-- Missing Details -->
-      
       <mat-card *ngIf="person.type === 'Missing Person'" class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Missing Details</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Missing details</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Missing Date</p>
+            <p class="case-detail-label mb-1">Missing date</p>
             <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.missing_date || 'N/A' }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Missing Time</p>
+            <p class="case-detail-label mb-1">Missing time</p>
             <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.missing_time || 'N/A' }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Last Seen Details</p>
+            <p class="case-detail-label mb-1">Last seen details</p>
             <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.last_seen_location || 'N/A' }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Missing Location</p>
+            <p class="case-detail-label mb-1">Missing location</p>
             <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.missing_location_details || 'N/A' }}</p>
           </div>
         </div>
@@ -254,26 +253,26 @@
 
       <!-- FIR Details -->
       <mat-card class="mb-4 p-3">
-        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">FIR Details</mat-card-title>
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">FIR details</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Police Station</p>
+            <p class="case-detail-label mb-1">Police station</p>
             <p class="case-detail-value mb-0">{{ person.firs[0]?.police_station | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">FIR Number</p>
+            <p class="case-detail-label mb-1">FIR number</p>
             <p class="case-detail-value mb-0">{{ person.firs[0]?.fir_number || 'N/A' }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Case Status</p>
+            <p class="case-detail-label mb-1">Case status</p>
             <p class="case-detail-value mb-0">{{ person.firs[0]?.case_status | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Investigation Officer</p>
+            <p class="case-detail-label mb-1">Investigation officer</p>
             <p class="case-detail-value mb-0">{{ person.firs[0]?.investigation_officer_name | safeTitlecase }}</p>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
-            <p class="case-detail-label mb-1">Officer Contact</p>
+            <p class="case-detail-label mb-1">Officer contact</p>
             <p class="case-detail-value mb-0">{{ person.firs[0]?.investigation_officer_contacts || 'N/A' }}</p>
           </div>
         </div>

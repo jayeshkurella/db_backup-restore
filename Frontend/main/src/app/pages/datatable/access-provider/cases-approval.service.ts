@@ -11,180 +11,190 @@ import { Person, PaginatedResponse } from './access-provider.component';
 export class CasesApprovalService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getPendingPersons(filters?: any): Observable<PaginatedResponse<Person>> {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      return throwError(() => new Error('Unauthorized: No token found'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-    let params = new HttpParams();
-    if (filters) {
-      Object.keys(filters).forEach(key => {
-        if (filters[key] && key !== 'page' && key !== 'page_size') {
-          params = params.set(key, filters[key]);
-        }
-      });
-      if (filters.page) {
-        params = params.set('page', filters.page.toString());
-      }
-      if (filters.page_size) {
-        params = params.set('page_size', filters.page_size.toString());
-      }
-    }
-
-    return this.http.get<PaginatedResponse<Person>>(
-      `${this.apiUrl}/api/persons_status/pending/`,
-      { headers, params }
-    ).pipe(
-      catchError(error => {
-        console.error('Error fetching pending data:', error);
-        return of({
-          count: 0,
-          results: [],
-          next: null,
-          previous: null,
-          page_size: filters?.page_size || 10
-        });
-      })
-    );
+getPendingPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
   }
-  // In your CasesApprovalService
-
-  getHoldPersons(filters?: any): Observable<PaginatedResponse<Person>> {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      return throwError(() => new Error('Unauthorized: No token found'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-    let params = new HttpParams();
-    if (filters) {
-      Object.keys(filters).forEach(key => {
-        if (filters[key] && key !== 'page' && key !== 'page_size') {
-          params = params.set(key, filters[key]);
-        }
-      });
-      if (filters.page) {
-        params = params.set('page', filters.page.toString());
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
       }
-      if (filters.page_size) {
-        params = params.set('page_size', filters.page_size.toString());
-      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
     }
-
-    return this.http.get<PaginatedResponse<Person>>(
-      `${this.apiUrl}/api/persons_status/on_hold/`,
-      { headers, params }
-    ).pipe(
-      catchError(error => {
-        console.error('Error fetching hold data:', error);
-        return of({
-          count: 0,
-          results: [],
-          next: null,
-          previous: null,
-          page_size: filters?.page_size || 10
-        });
-      })
-    );
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
   }
 
-  getSuspendedPersons(filters?: any): Observable<PaginatedResponse<Person>> {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      return throwError(() => new Error('Unauthorized: No token found'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-    let params = new HttpParams();
-    if (filters) {
-      Object.keys(filters).forEach(key => {
-        if (filters[key] && key !== 'page' && key !== 'page_size') {
-          params = params.set(key, filters[key]);
-        }
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/pending/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching pending data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+  first_page: undefined,  
+  last_page: undefined,   
+        page_size: filters?.page_size || 10
       });
-      if (filters.page) {
-        params = params.set('page', filters.page.toString());
-      }
-      if (filters.page_size) {
-        params = params.set('page_size', filters.page_size.toString());
-      }
-    }
+    })
+  );
+}
 
-    return this.http.get<PaginatedResponse<Person>>(
-      `${this.apiUrl}/api/persons_status/suspended/`,
-      { headers, params }
-    ).pipe(
-      catchError(error => {
-        console.error('Error fetching suspended data:', error);
-        return of({
-          count: 0,
-          results: [],
-          next: null,
-          previous: null,
-          page_size: filters?.page_size || 10
-        });
-      })
-    );
+// In your CasesApprovalService
+
+getHoldPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
+  }
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
   }
 
-  getApprovedPersons(filters?: any): Observable<PaginatedResponse<Person>> {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      return throwError(() => new Error('Unauthorized: No token found'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-    let params = new HttpParams();
-    if (filters) {
-      Object.keys(filters).forEach(key => {
-        if (filters[key] && key !== 'page' && key !== 'page_size') {
-          params = params.set(key, filters[key]);
-        }
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/on_hold/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching hold data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+          first_page: undefined,  
+  last_page: undefined,  
+        page_size: filters?.page_size || 10
       });
-      if (filters.page) {
-        params = params.set('page', filters.page.toString());
-      }
-      if (filters.page_size) {
-        params = params.set('page_size', filters.page_size.toString());
-      }
-    }
+    })
+  );
+}
 
-    return this.http.get<PaginatedResponse<Person>>(
-      `${this.apiUrl}/api/persons_status/approved/`,
-      { headers, params }
-    ).pipe(
-      catchError(error => {
-        console.error('Error fetching approved data:', error);
-        return of({
-          count: 0,
-          results: [],
-          next: null,
-          previous: null,
-          page_size: filters?.page_size || 10
-        });
-      })
-    );
+getSuspendedPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
   }
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
+  }
+
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/suspended/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching suspended data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+          first_page: undefined,  
+  last_page: undefined,  
+        page_size: filters?.page_size || 10
+      });
+    })
+  );
+}
+
+getApprovedPersons(filters?: any): Observable<PaginatedResponse<Person>> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
+  }
+  
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  
+  let params = new HttpParams();
+  if (filters) {
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && key !== 'page' && key !== 'page_size') {
+        params = params.set(key, filters[key]);
+      }
+    });
+    if (filters.page) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.page_size) {
+      params = params.set('page_size', filters.page_size.toString());
+    }
+  }
+
+  return this.http.get<PaginatedResponse<Person>>(
+    `${this.apiUrl}/api/persons_status/approved/`, 
+    { headers, params }
+  ).pipe(
+    catchError(error => {
+      console.error('Error fetching approved data:', error);
+      return of({
+        count: 0, 
+        results: [], 
+        next: null, 
+        previous: null, 
+          first_page: undefined,  
+  last_page: undefined,  
+        page_size: filters?.page_size || 10
+      });
+    })
+  );
+}
+
 
   updatePersonStatus(id: string, status: string, reason?: string): Observable<any> {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       return throwError(() => new Error('Unauthorized: No token found'));
     }
-
+  
     const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
+  
     if (status === 'on_hold') {
       return this.http.post<any>(
-        `${this.apiUrl}/api/persons/${id}/hold_person/`,
+        `${this.apiUrl}/api/persons/${id}/hold_person/`, 
         { reason },
         { headers }
       ).pipe(
@@ -206,7 +216,7 @@ export class CasesApprovalService {
       );
     } else {
       return this.http.patch<any>(
-        `${this.apiUrl}/api/persons/${id}/`,
+        `${this.apiUrl}/api/persons/${id}/`,  
         { person_approve_status: status },
         { headers }
       ).pipe(
@@ -217,6 +227,5 @@ export class CasesApprovalService {
       );
     }
   }
-
 
 }

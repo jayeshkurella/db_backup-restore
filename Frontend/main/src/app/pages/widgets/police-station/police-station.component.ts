@@ -43,11 +43,7 @@ export class PoliceStationComponent implements OnInit {
   map: L.Map | undefined;
   marker: L.Marker | undefined;
   searchQuery: string = '';  
-  // searchName: string = '';
-  // searchCity: string = '';
-  // searchstate: string = '';
-  // searchdistrict: string = '';
-  mapp!: L.Map;
+
   markerr!: L.Marker | null;
   latitude: number | null = null;
   longitude: number | null = null;
@@ -66,7 +62,7 @@ export class PoliceStationComponent implements OnInit {
 
   currentPage: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 6;
+  itemsPerPage: number = 4;
   allstates: string[] = [];
   alldistricts: string[] = [];
   allcities: string[] = [];
@@ -137,7 +133,16 @@ onImageError(event: Event) {
     this.getallPolicestation(this.currentPage);
   }
   
-  
+  resetFilters(): void {
+  this.searchFilters = {
+    name: '',
+    state: '',
+    district: '',
+    city: ''
+  };
+  // this.onSearch(); 
+}
+
   // Pagination event handler
   onPageChange(event: any): void {
     this.currentPage = event.pageIndex + 1;

@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
+import { ChangeDetectorRef } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 import {
@@ -96,6 +97,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe,
     private toastr: ToastrService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) { }
 
 
@@ -795,7 +797,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
   }
 
 
-  openConsentDialog() {
+  openConsentDialog(): Promise<boolean> {
     const dialogRef = this.dialog.open(UbconsentComponent, {
       width: '80vw',
       maxWidth: '90vw',
@@ -804,16 +806,26 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       autoFocus: false
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.consent.controls[0].get('is_consent')?.setValue(true);
-      }
-    });
+    return dialogRef.afterClosed().toPromise().then(result => result === true);
   }
   onConsentChange(event: Event) {
-    const checked = (event.target as HTMLInputElement).checked;
-    if (checked) {
-      this.openConsentDialog();
+    const checkbox = event.target as HTMLInputElement;
+
+    if (!checkbox.checked) {
+      this.consent.controls[0].get('is_consent')?.setValue(false);
+      this.cdr.detectChanges();
+      return;
     }
+
+    checkbox.checked = false;
+
+    this.openConsentDialog().then((consentGiven: boolean) => {
+      this.consent.controls[0].get('is_consent')?.setValue(consentGiven);
+      checkbox.checked = consentGiven;
+      this.cdr.detectChanges();
+    });
   }
 }
+
+
+
