@@ -1,6 +1,6 @@
 <div class="unidentified-person-form-container p-4 bg-white rounded shadow-sm">
   <div class="heading-container">
-    <h3 class="main-heading">UNIDENTIFIED BODY REPORT FORM</h3>
+    <h3 class="main-heading">Unidnetified Body Report Form</h3>
   </div>
 
   <form [formGroup]="unidentifiedBodyForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
@@ -34,7 +34,7 @@
                 Numbers and special Symbols not allowed
               </span>
               <span *ngIf="unidentifiedBodyForm.get('full_name')?.errors?.['maxlength']">
-                Maximum 30 characters allowed
+                Maximum 30 characters are allowed
               </span>
             </mat-error>
           </mat-form-field>
@@ -391,7 +391,7 @@
                     addressForm.get('street')?.touched &&
                     addressForm.get('street')?.hasError('maxlength')
                   ">
-                  Maximum 30 characters allowed.
+                  Maximum 30 characters are allowed.
                 </mat-error>
                 <mat-error *ngIf="
                     addressForm.get('street')?.touched &&
@@ -445,10 +445,10 @@
                     addressForm.get('village')?.touched
                   ">
                   <span *ngIf="addressForm.get('village')?.errors?.['invalidChars']">
-                    Only letters allowed
+                    Only letters are allowed
                   </span>
                   <span *ngIf="addressForm.get('village')?.errors?.['maxlength']">
-                    Maximum 30 characters allowed
+                    Maximum 30 characters are allowed
                   </span>
                 </mat-error>
               </mat-form-field>
@@ -468,10 +468,10 @@
                     addressForm.get('city')?.touched
                   ">
                   <span *ngIf="addressForm.get('city')?.errors?.['invalidChars']">
-                    Only letters allowed
+                    Only letters are allowed
                   </span>
                   <span *ngIf="addressForm.get('city')?.errors?.['maxlength']">
-                    Maximum 30 characters allowed
+                    Maximum 30 characters are allowed
                   </span>
                 </mat-error>
               </mat-form-field>
@@ -492,10 +492,10 @@
                     addressForm.get('district')?.touched
                   ">
                   <span *ngIf="addressForm.get('district')?.errors?.['invalidChars']">
-                    Only letters allowed
+                    Only letters are allowed
                   </span>
                   <span *ngIf="addressForm.get('district')?.errors?.['maxlength']">
-                    Maximum 30 characters allowed
+                    Maximum 30 characters are allowed
                   </span>
                 </mat-error>
               </mat-form-field>
@@ -681,7 +681,7 @@
           <!-- Company Name -->
 
           <div class="col-md-3" [ngClass]="{
-                'mb-3':
+                'mb-5':
                   contactForm.get('person_name')?.touched &&
                   contactForm.get('person_name')?.invalid
               }">
@@ -998,7 +998,7 @@
                       .get('occupation_details')
                       ?.hasError('maxlength')
                   ">
-                  Maximum 30 characters allowed
+                  Maximum 30 characters are allowed
                 </mat-error>
                 <mat-error *ngIf="
                     additionalInfo.controls[i]
@@ -1158,8 +1158,7 @@
             <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
               style="width: 18px; height: 18px; cursor: pointer" />
             <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: #333">
-              To proceed, please open the consent document and acknowledge it by
-              checking the box.
+              Kindly review the consent and check the box to continue.
             </label>
           </div>
         </div>

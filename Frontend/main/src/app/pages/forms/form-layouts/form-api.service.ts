@@ -1,7 +1,13 @@
-import { HttpClient ,HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/envirnment/envirnment';
+
+
+export interface Caste {
+  id: number;
+  name: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +54,61 @@ export class FormApiService {
       map(response => response.body) // Extracting only the body
     );
   }
+  // Get all castes with auth headers, observe full response for headers if needed
+  getCastes(): Observable<Caste[]> {
+    const headers = this.createHeaders();
+    return this.http
+      .get<Caste[]>(`${this.apiUrl}/api/castes_tags/`, { headers, observe: 'response' })
+      .pipe(
+        tap((response) => {
+          console.log('Response Headers:', response.headers);
+        }),
+        map((response) => response.body || [])
+      );
+  }
+
+  // Add new caste with auth headers, observe full response if needed
+  addCaste(name: string): Observable<Caste> {
+    const headers = this.createHeaders();
+    return this.http
+      .post<Caste>(
+        `${this.apiUrl}/api/castes_tags/`,
+        { name },
+        { headers, observe: 'response' }
+      )
+      .pipe(
+        tap((response) => {
+          console.log('Added caste response headers:', response.headers);
+        }),
+        map((response) => response.body as Caste)
+      );
+  }
+
+  deleteCaste(id: number): Observable<void> {
+    const headers = this.createHeaders();
+
+    // Check user_type from localStorage and throw error if not admin
+    const userType = localStorage.getItem('user_type');
+    if (userType !== 'admin') {
+      return throwError(() => new Error('Only admins can delete castes.'));
+    }
+
+    return this.http
+      .delete<void>(`${this.apiUrl}/api/caste_delete/${id}/`, { headers, observe: 'response' })
+      .pipe(
+        tap(response => {
+          console.log('Deleted caste response status:', response.status);
+        }),
+        map(() => {
+          // map response to void since no body expected on delete success
+          return;
+        }),
+        catchError(err => {
+          console.error('Delete caste failed', err);
+          return throwError(() => err);
+        })
+      );
+  }
 
 
   getHospitalNames(): Observable<any> {
@@ -58,7 +119,7 @@ export class FormApiService {
       map(response => response.body)
     );
   }
-  
+
   getPoliceStationNames(): Observable<any> {
     const headers = this.createHeaders();
     return this.http.get(this.apiUrl + "/api/police-station-name-list/", { headers, observe: 'response' }).pipe(
@@ -67,6 +128,6 @@ export class FormApiService {
       map(response => response.body)
     );
   }
-  
-  
+
+
 }

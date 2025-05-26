@@ -66,13 +66,25 @@ export const datatablesRoutes: Routes = [
         component: DetaildataComponent,
       },
       {
+        path: 'view-missing-person',
+        component: DetaildataComponent        // This route is for viewing missing person details with url masked
+      },
+      {
         path: 'unidentified-person/person-view/:id',
         component: UnidentifiedPersonDialogComponent,
+      },
+      {
+        path: 'view-unidentified-person',
+        component: UnidentifiedPersonDialogComponent,       // This route is for viewing missing person details with url masked
       },
       {
         path: 'unidentified-bodies/person-view/:id',
         component: UnidentifiedBodiesDialogComponent,
       },
+      {
+        path: 'view-unidentified-body',
+        component: UnidentifiedBodiesDialogComponent,             // This route is for viewing missing person details with url masked
+      }
 
 
     ],

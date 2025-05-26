@@ -1,19 +1,16 @@
 # views.py
 from django.contrib.gis.geos import Point
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, generics
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 from django.db import transaction
 from rest_framework.pagination import PageNumberPagination
 from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer, ContactSerializer, \
     PoliceStationIdNameSerializer
 from ..models import PoliceStation, Contact
-from ..pagination import CustomPagination
+from Mainapp.all_paginations.pagination import CustomPagination
 from django.core.cache import cache
 from django.db.models import Q
 

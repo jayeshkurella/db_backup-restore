@@ -10,8 +10,8 @@ class Hospital(models.Model):
     INACTIVE = 'Non-Active'
 
     class HospitalTypeChoices(models.TextChoices):
-        GOVERNMENT = 'gvt', 'Government'
-        SEMI_GOVERNMENT = 'semi_gvt', 'Semi-Government'
+        GOVERNMENT = 'govt', 'Government'
+        SEMI_GOVERNMENT = 'semi_govt', 'Semi-Government'
         NON_GOVERNMENT = 'private', 'Private'
 
     STATUS_CHOICES = [

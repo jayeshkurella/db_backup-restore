@@ -31,10 +31,11 @@ import { MaterialModule } from 'src/app/material.module';
 // import * as bootstrap from 'bootstrap';
 import * as L from 'leaflet';
 import { environment } from 'src/envirnment/envirnment';
-import { MissingPersonApiService } from './missing-person-api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
+import { MissingPersonApiService } from './missing-person-api.service';
+// import { ConsoleReporter } from 'jasmine';
 
 export interface Employee {
   id: number;
@@ -158,20 +159,21 @@ const employees = [
 ];
 
 @Component({
-    templateUrl: './kichen-sink.component.html',
-    styleUrls: ['./kichen-sink.component.scss'],
-    imports: [
-        MaterialModule,
-        TablerIconsModule,
-        MatNativeDateModule,
-        NgScrollbarModule,
-        CommonModule,
-        FormsModule,
-        HttpClientModule ,
-        MatProgressSpinnerModule
-    ],
-    providers: [DatePipe]
+  templateUrl: './kichen-sink.component.html',
+  styleUrls: ['./kichen-sink.component.scss'],
+  imports: [
+    MaterialModule,
+    TablerIconsModule,
+    MatNativeDateModule,
+    NgScrollbarModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    MatProgressSpinnerModule
+  ],
+  providers: [DatePipe]
 })
+
 export class AppKichenSinkComponent implements AfterViewInit {
 
   today: Date = new Date();
@@ -179,12 +181,12 @@ export class AppKichenSinkComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i); 
+  years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i);
   castes = ['General', 'OBC', 'SC', 'ST'];
   bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
   environment = environment;
   missingPersons: any[] = [];
-  filteredPersons: any[] = []; 
+  filteredPersons: any[] = [];
   map: L.Map | undefined;
   marker: L.Marker | undefined;
   selectedPerson: any = null;
@@ -194,59 +196,88 @@ export class AppKichenSinkComponent implements AfterViewInit {
   allcities: any;
   alldistricts: any;
   allmarital: any;
-  loading: boolean = false; 
+  loading: boolean = false;
   selectedMatched: any;
-  message: string = '';  
+  message: string = '';
   errorMessage: string = '';
-  uniqueId: string = ''; 
-  matchId: number = 0;  
-  rejectionReason: string = '';  
-  selectedMatchForConfirmation: any;  
+  uniqueId: string = '';
+  matchId: number = 0;
+  rejectionReason: string = '';
+  selectedMatchForConfirmation: any;
   showConfirmModal: boolean = false;
   existing_reports: any[] = [];  // To store existing reports
-  report_data: any[] = []; 
+  report_data: any[] = [];
   selectedReport: any;  // Variable to hold the selected report for details
-  isModalOpen: boolean = false; 
+  isModalOpen: boolean = false;
   isInitialLoad = true;
   filtersApplied: boolean = false;  // Initially false
   progress: number = 0;
   progressColor: string = 'bg-primary'; // Corrected type of progressColor
   progressMessage: string = '';
-  
+
+  paginationLinks: any = {
+    first: null,
+    last: null,
+    next: null,
+    previous: null
+  };
+
+  currentPage: number = 1;
+  itemsPerPage: number = 10; // Default items per page
+  totalItems: number = 0;
+
   displayedColumnsPending: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
   displayedColumnsResolved: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action'];
 
 
-  
-  displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action','match_with'];
+
+  displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
 
   dataSource = new MatTableDataSource(employees);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
-   // ✅ Initialize data sources with empty arrays
-   dataSourcePending = new MatTableDataSource<any>([]);
-   dataSourceResolved = new MatTableDataSource<any>([]);
-   ngAfterViewInit() {
+  // ✅ Initialize data sources with empty arrays
+  dataSourcePending = new MatTableDataSource<any>([]);
+  dataSourceResolved = new MatTableDataSource<any>([]);
+  ngAfterViewInit() {
     this.dataSourcePending.paginator = this.paginatorPending;
     this.dataSourceResolved.paginator = this.paginatorResolved;
   }
 
   @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
   @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
-  constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService,private router:Router) {}
-    filters = {
-      full_name: '',
-      city: '',
-      state: '',
-      startDate: null as string | null,  // Change type to string | null
-      endDate: null as string | null,    // Change type to string | null
-      caste: '',
-      age_range: '',
-      marital_status: '',
-      blood_group: '',
-      height_range: '',
-      district: '',
-      gender: ''
+  constructor(
+    public dialog: MatDialog,
+    public datePipe: DatePipe,
+    private missingPersonService: MissingPersonApiService,
+    private router: Router
+  ) {
+    // Load saved state from sessionStorage if available
+    const savedState = sessionStorage.getItem('missingPersonsSearchState');
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      this.filters = parsedState.filters;
+      this.dataSourcePending.data = parsedState.pendingPersons || [];
+      this.dataSourceResolved.data = parsedState.resolvedPersons || [];
+      this.filtersApplied = parsedState.filtersApplied || false;
+      this.currentPage = parsedState.currentPage || 1;
+      this.totalItems = parsedState.totalItems || 0;
+    }
+  }
+  // constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService,private router:Router) {}
+  filters = {
+    full_name: '',
+    city: '',
+    state: '',
+    startDate: null as string | null,  // Change type to string | null
+    endDate: null as string | null,    // Change type to string | null
+    caste: '',
+    age_range: '',
+    marital_status: '',
+    blood_group: '',
+    height_range: '',
+    district: '',
+    gender: ''
   };
   casteOptions = [
     { value: 'open', label: 'Open / General' },
@@ -259,7 +290,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
     { value: 'sebc', label: 'SEBC' },
     { value: 'other', label: 'Other' },
   ];
-  
+
   heightRangeOptions = [
     { value: '<150', label: 'Less than 150 cm' },
     { value: '150-160', label: '150 - 160 cm' },
@@ -282,24 +313,24 @@ export class AppKichenSinkComponent implements AfterViewInit {
     { value: "75-84", label: "75 - 84" },
     { value: "85-100", label: "85+" }
   ];
-  
+
 
 
   pendingPersons: any[] = [];
   resolvedPersons: any[] = [];
   ngOnInit() {
     this.getStates();
+    if (this.filtersApplied && (this.dataSourcePending.data.length === 0 && this.dataSourceResolved.data.length === 0)) {
+      this.applyFilters();
+    }
   }
+
   getStates() {
     this.missingPersonService.getStates().subscribe(states => {
       this.allstates = states;
     });
   }
-  // ngAfterViewInit(): void {
-  //   this.dataSourcePending.paginator = this.paginatorPending;
-  //   this.dataSourceResolved.paginator = this.paginatorResolved;
-  //   this.dataSource.paginator = this.paginator;
-  // }
+
 
   onStateChange() {
     this.filters.district = '';
@@ -323,62 +354,104 @@ export class AppKichenSinkComponent implements AfterViewInit {
       });
     }
   }
- 
-  
-  
 
+  getTotalItems(): number {
+    // Return the total count from your API response
+    return this.totalItems;
+  }
 
-  
+  getFirstItemNumber(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+  getLastItemNumber(): number {
+    const lastItem = this.currentPage * this.itemsPerPage;
+    return lastItem > this.totalItems ? this.totalItems : lastItem;
+  }
+
+  getLastPageNumber(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  goToFirstPage(): void {
+    if (this.paginationLinks.first && this.currentPage !== 1) {
+      this.currentPage = 1;
+      this.applyFilters();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.paginationLinks.previous && this.currentPage > 1) {
+      this.currentPage--;
+      this.applyFilters();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.paginationLinks.next && this.currentPage < this.getLastPageNumber()) {
+      this.currentPage++;
+      this.applyFilters();
+    }
+  }
+
+  goToLastPage(): void {
+    if (this.paginationLinks.last) {
+      const lastPage = this.getLastPageNumber();
+      if (this.currentPage !== lastPage) {
+        this.currentPage = lastPage;
+        this.applyFilters();
+      }
+    }
+  }
 
   applyFilters(): void {
     this.loading = true;
     this.progressMessage = "🔄 Applying filters...";
-    this.filtersApplied = true; // Ensure this is set when filters are applied
-  
-    // Safely parse and format dates
+    this.filtersApplied = true;
+
     const parsedStartDate = this.parseToDate(this.filters.startDate);
     const parsedEndDate = this.parseToDate(this.filters.endDate);
-  
+
     if (parsedStartDate) {
       this.filters.startDate = this.formatDate(parsedStartDate);
     }
-  
+
     if (parsedEndDate) {
       this.filters.endDate = this.formatDate(parsedEndDate);
     }
-  
-    this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
+
+    this.missingPersonService.getPersonsByFilters(this.filters, this.currentPage).subscribe(
       (response) => {
+        console.log('API Response:', response);
         this.loading = false;
-        const responseData = response?.body || response;
-  
+        const responseData = response?.body?.results || response?.results || [];
+
+        // Update pagination info from API response
+        if (response?.body?.count || response?.count) {
+          this.totalItems = response.body?.count || response.count;
+        }
+
+        if (response?.body?.links || response?.links) {
+          this.paginationLinks = response.body?.links || response.links;
+        }
+
         // Clear previous data
         this.dataSourcePending.data = [];
         this.dataSourceResolved.data = [];
-  
+
         if (responseData?.message) {
           this.progressMessage = responseData.message;
         } else if (Array.isArray(responseData)) {
-          // Filter and set data
           this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
           this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
-  
-          console.log("Pending Persons:", this.dataSourcePending.data);
-          console.log("Resolved Persons:", this.dataSourceResolved.data);
-          // Connect paginators (needed if data changes)
+
+          // Save state to sessionStorage
+          this.saveSearchState();
+
           this.dataSourcePending.paginator = this.paginatorPending;
           this.dataSourceResolved.paginator = this.paginatorResolved;
-  
-          // Reset pagination to first page
-          if (this.paginatorPending) {
-            this.paginatorPending.firstPage();
-          }
-          if (this.paginatorResolved) {
-            this.paginatorResolved.firstPage();
-          }
-  
-          this.progressMessage = responseData.length > 0 
-            ? "✅ Filters applied successfully!" 
+
+          this.progressMessage = responseData.length > 0
+            ? "✅ Filters applied successfully!"
             : "No matching records found";
         } else {
           this.progressMessage = "❌ Unexpected response format from server";
@@ -387,23 +460,63 @@ export class AppKichenSinkComponent implements AfterViewInit {
       (error) => {
         this.loading = false;
         console.error('Error fetching data:', error);
-        this.progressMessage = error.error?.message 
-          ? `❌ ${error.error.message}` 
+        this.progressMessage = error.error?.message
+          ? `❌ ${error.error.message}`
           : "❌ Error applying filters!";
       }
     );
   }
-  
-  
-  
+  resetFilters(): void {
+    this.filters = {
+      full_name: '',
+      city: '',
+      state: '',
+      startDate: null,
+      endDate: null,
+      caste: '',
+      age_range: '',
+      marital_status: '',
+      blood_group: '',
+      height_range: '',
+      district: '',
+      gender: ''
+    };
+
+    this.currentPage = 1; // Reset to first page
+    this.totalItems = 0;
+
+    this.dataSourcePending.data = [];
+    this.dataSourceResolved.data = [];
+    this.filtersApplied = false;
+
+    // Clear saved state
+    sessionStorage.removeItem('missingPersonsSearchState');
+
+    this.progressMessage = "Filters have been reset";
+  }
+
+  // Update your saveSearchState method
+  private saveSearchState(): void {
+    const state = {
+      filters: this.filters,
+      pendingPersons: this.dataSourcePending.data,
+      resolvedPersons: this.dataSourceResolved.data,
+      filtersApplied: this.filtersApplied,
+      currentPage: this.currentPage,
+      totalItems: this.totalItems
+    };
+    sessionStorage.setItem('missingPersonsSearchState', JSON.stringify(state));
+  }
+
+
   // ✅ Helper function
   parseToDate(input: string | null): Date | null {
     if (!input) return null;
-  
+
     const parsed = new Date(input);
     return isNaN(parsed.getTime()) ? null : parsed;
   }
-  
+
   // ✅ Already existing date formatter
   formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -411,18 +524,18 @@ export class AppKichenSinkComponent implements AfterViewInit {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  
+
 
   openDialog(obj: any): void {
     const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
       width: '80vw', // 80% of the viewport width
       maxWidth: '900px', // Limit max width
       data: obj,
-      panelClass: 'custom-dialog-container' 
+      panelClass: 'custom-dialog-container'
     });
 
     // Ensure `selectedPerson` is set before initializing the map
-    this.selectedPerson = obj; 
+    this.selectedPerson = obj;
 
     // Delay to allow the dialog to render before initializing the map
     setTimeout(() => {
@@ -436,9 +549,6 @@ export class AppKichenSinkComponent implements AfterViewInit {
     });
   }
 
-
-
-  
   // tslint:disable-next-line - Disables all
   updateRowData(row_obj: Employee): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
@@ -467,36 +577,35 @@ export class AppKichenSinkComponent implements AfterViewInit {
       this.marker = undefined;
     }
   }
-  
+
   initMap(): void {
     if (!this.selectedPerson) {
       console.error('No selected person available');
       return;
     }
-  
+
     const location = this.parseWKT(this.selectedPerson.location);
-  
+
     if (!location) {
       console.error('No valid coordinates found for the selected person');
       return;
     }
-  
-    // Remove previous instance before creating a new one
+
     if (this.map) {
       this.map.remove();
     }
-  
+
     // Initialize map
     this.map = L.map('map', {
       center: [location.lat, location.lng],
       zoom: 13,
       attributionControl: false,
     });
-  
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
-  
+
     const customIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
       iconSize: [25, 41],
@@ -505,20 +614,20 @@ export class AppKichenSinkComponent implements AfterViewInit {
       shadowUrl: 'assets/leaflet/images/marker-shadow.png',
       shadowSize: [41, 41],
     });
-  
+
     this.marker = L.marker([location.lat, location.lng], { icon: customIcon })
       .addTo(this.map)
       .bindPopup(`<p><strong>Location</strong></p><p>Coordinates: ${location.lat}, ${location.lng}</p>`)
       .openPopup();
-  
+
     this.map.setView([location.lat, location.lng], 13);
     this.map.invalidateSize();
   }
-  
-  
+
+
   parseWKT(wkt: string | null): { lat: number; lng: number } | null {
     if (!wkt) return null;
-  
+
     const match = wkt.match(/POINT\s?\(([-\d.]+)\s+([-\d.]+)\)/);
     if (match) {
       return { lng: parseFloat(match[1]), lat: parseFloat(match[2]) };
@@ -528,136 +637,88 @@ export class AppKichenSinkComponent implements AfterViewInit {
 
 
   onMatchWithUP(uuid: string): void {
-  this.missingPersonService.matchMissingPersonWithUP(uuid).subscribe({
-    next: response => {
-      const resultData = response.body;
-      console.log('Matched with UP:', resultData);
+    this.missingPersonService.matchMissingPersonWithUP(uuid).subscribe({
+      next: response => {
+        const resultData = response.body;
+        console.log('Matched with UP:', resultData);
 
-      this.router.navigate(['/search/match-up-result'], {
-        state: { data: resultData }
-      });
-    },
-    error: err => {
-      console.error('Failed to match with UP:', err);
-    }
-  });
-}
-
-hasFiltersApplied(): boolean {
-  return !(
-    !this.filters.full_name &&
-    !this.filters.state &&
-    !this.filters.district &&
-    !this.filters.city &&
-    !this.filters.startDate &&
-    !this.filters.endDate &&
-    !this.filters.caste &&
-    !this.filters.gender &&
-    !this.filters.age_range &&
-    !this.filters.marital_status &&
-    !this.filters.blood_group &&
-    !this.filters.height_range
-  );
-}
-
-viewDetails(person: Person): void {
-      this.router.navigate(['/search/missing-person/person-view', person.id]);
+        this.router.navigate(['/search/match-up-result'], {
+          state: { data: resultData }
+        });
+      },
+      error: err => {
+        console.error('Failed to match with UP:', err);
+      }
+    });
   }
 
-  
+  hasGeographicFiltersApplied(): boolean {
+    return !!this.filters.state && !!this.filters.district && !!this.filters.city;
+  }
+  hasActiveFilters(): boolean {
+    return Object.values(this.filters).some(value => value !== '');
+  }
+
+  hasFiltersApplied(): boolean {
+    return this.hasGeographicFiltersApplied() ||
+      !!(this.filters.full_name ||
+        this.filters.startDate ||
+        this.filters.endDate ||
+        this.filters.caste ||
+        this.filters.gender ||
+        this.filters.age_range ||
+        this.filters.marital_status ||
+        this.filters.blood_group ||
+        this.filters.height_range);
+  }
+
+
+  viewDetails(person: Person): void {
+    this.saveSearchState();
+    sessionStorage.setItem('viewData', JSON.stringify({ id: person.id }));
+    this.router.navigate(['/search/view-missing-person']);
+  }
 }
 
+
 @Component({
-    selector: 'app-dialog-content',
-    imports: [MatDialogModule, FormsModule, MaterialModule,CommonModule],
-    providers: [DatePipe],
-    templateUrl: 'kichen-sink-dialog-content.html'
+  selector: 'app-dialog-content',
+  imports: [MatDialogModule, FormsModule, MaterialModule, CommonModule],
+  providers: [DatePipe],
+  templateUrl: 'kichen-sink-dialog-content.html'
 })
 export class AppKichenSinkDialogContentComponent {
   action: string;
   local_data: any;
   selectedImage: any = '';
   joiningDate: any = '';
-  environment =environment
+  environment = environment
   constructor(
     public dialogRef: MatDialogRef<AppKichenSinkDialogContentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
-  // constructor(
-  //   public datePipe: DatePipe,
-  //   public dialogRef: MatDialogRef<AppKichenSinkDialogContentComponent>,
-  //   @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee
-  // ) {
-  //   this.local_data = { ...data };
-  //   this.action = this.local_data.action;
-  //   if (this.local_data.DateOfJoining !== undefined) {
-  //     this.joiningDate = this.datePipe.transform(
-  //       new Date(this.local_data.DateOfJoining),
-  //       'yyyy-MM-dd'
-  //     );
-  //   }
-  //   if (this.local_data.imagePath === undefined) {
-  //     this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
-  //   }
-  // }
-  // closeDialog(): void {
-  //   this.dialogRef.close();
-  // }
+
   doAction(): void {
     this.dialogRef.close({ event: this.action, data: this.local_data });
   }
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
   }
-
   selectFile(event: any): void {
     if (!event.target.files[0] || event.target.files[0].length === 0) {
-      // this.msg = 'You must select an image';
       return;
     }
     const mimeType = event.target.files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-      // this.msg = "Only images are supported";
       return;
     }
-    // tslint:disable-next-line - Disables all
+
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
-    // tslint:disable-next-line - Disables all
     reader.onload = (_event) => {
-      // tslint:disable-next-line - Disables all
       this.local_data.imagePath = reader.result;
     };
   }
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-

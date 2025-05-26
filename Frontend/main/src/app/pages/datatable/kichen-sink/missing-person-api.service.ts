@@ -12,7 +12,7 @@ export class MissingPersonApiService {
 
   constructor(private http: HttpClient) { }
 
-  getPersonsByFilters(filters: any): Observable<any> {
+  getPersonsByFilters(filters: any,page: number = 1): Observable<any> {
     const params = new HttpParams({ fromObject: filters });
   
     const authToken = localStorage.getItem('authToken');

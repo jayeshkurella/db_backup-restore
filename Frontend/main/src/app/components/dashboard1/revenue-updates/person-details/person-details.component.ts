@@ -27,26 +27,32 @@ isLoading = false;
   constructor(private route: ActivatedRoute, private http: HttpClient,private router :Router) {}
 
   ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
-  if (id) {
-    this.isLoading = true;
-    this.http.get(`${environment.apiUrl}/api/persons/${id}/`).subscribe({
-      next: data => {
-        console.log('Person Data:', data);
-        this.person = data;
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error('Error loading person data:', err);
-        this.isLoading = false;
-      }
-    });
-  } else {
-    console.error('Missing or invalid ID in route');
+  const stored = sessionStorage.getItem('viewData');
+  const id = stored ? JSON.parse(stored).id : null;
+
+  if (!id) {
+    console.error('Missing ID to load person details');
+    this.router.navigate(['/search-by-id']); // or any fallback page
+    return;
   }
- }
+
+  this.isLoading = true;
+
+  this.http.get<any>(`${environment.apiUrl}/api/persons/${id}/`).subscribe({
+    next: (data) => {
+      this.person = data;
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Error loading person data:', err);
+      this.isLoading = false;
+    }
+  });
+}
+
 
  goBack(): void {
+    sessionStorage.removeItem('viewData'); // ✅ Clear the stored ID
     this.router.navigate(['/']); // Navigate to the main component or home route
   }
 

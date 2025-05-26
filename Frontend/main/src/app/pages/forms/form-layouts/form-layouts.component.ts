@@ -30,10 +30,10 @@ import {
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
 
-import { merge } from 'rxjs';
-import { FormApiService } from './form-api.service';
+import { map, merge, Observable, startWith } from 'rxjs';
+import { Caste, FormApiService } from './form-api.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -42,6 +42,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { MpconsentComponent } from './mpconsent/mpconsent.component';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-form-layouts',
@@ -58,6 +59,7 @@ import { MpconsentComponent } from './mpconsent/mpconsent.component';
     CommonModule,
     MatIconModule,
     NgxMatTimepickerModule,
+    MatOption
   ],
   templateUrl: './form-layouts.component.html',
   styleUrls: ['./form-layouts.component.scss'],
@@ -133,55 +135,155 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   hospitalList: any[] = [];
   policeStationList: any[] = [];
   today: string;
+  casteControl = new FormControl('');
+  castes: { id: number; name: string }[] = [];
+  filteredCastes!: Observable<string[]>;
+  showAddOption: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private formapi: FormApiService,
     private datePipe: DatePipe,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackbar: ToastrService
   ) {
     this.today = new Date().toISOString().split('T')[0];
   }
 
   openConsentDialog(): Promise<boolean> {
-  const dialogRef = this.dialog.open(MpconsentComponent, {
-    width: '80vw',
-    maxWidth: '90vw',
-    height: '80vh',
-    maxHeight: '90vh',
-    autoFocus: false,
-  });
+    const dialogRef = this.dialog.open(MpconsentComponent, {
+      width: '80vw',
+      maxWidth: '90vw',
+      height: '80vh',
+      maxHeight: '90vh',
+      autoFocus: false,
+    });
 
-  return dialogRef.afterClosed().toPromise().then(result => result === true);
-}
-
-
- onConsentChange(event: Event) {
-  const checkbox = event.target as HTMLInputElement;
-
-  if (!checkbox.checked) {
-    this.consent.controls[0].get('is_consent')?.setValue(false);
-    return;
+    return dialogRef.afterClosed().toPromise().then(result => result === true);
   }
 
-  checkbox.checked = false;
 
-  this.openConsentDialog().then((consentGiven: boolean) => {
-    this.consent.controls[0].get('is_consent')?.setValue(consentGiven);
-    checkbox.checked = consentGiven;
-  });
-}
+  onConsentChange(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
 
+    if (!checkbox.checked) {
+      this.consent.controls[0].get('is_consent')?.setValue(false);
+      return;
+    }
+
+    checkbox.checked = false;
+
+    this.openConsentDialog().then((consentGiven: boolean) => {
+      this.consent.controls[0].get('is_consent')?.setValue(consentGiven);
+      checkbox.checked = consentGiven;
+    });
+  }
+
+  isAdminUser: boolean = false;
 
 
   ngOnInit(): void {
-    // this.gettoken()
-    this.getperson();
     this.initializeForm();
+    this.checkUserRole();
+     this.loadCastes();
+    this.getperson();
+    
     this.fetchHospitalList();
     this.fetchPoliceStationList();
+   
+    this.setupFilteredCastes();
   }
+  checkUserRole() {
+    const userType = localStorage.getItem('user_type');
+    this.isAdminUser = userType === 'admin';
+  }
+loadCastes() {
+    this.formapi.getCastes().subscribe({
+      next: (data) => {
+        this.castes = data;
+        this.setupFilteredCastes();
+      },
+      error: (err) => console.error('Error loading castes:', err)
+    });
+  }
+
+  getCasteId(name: string): number | undefined {
+    return this.castes.find(c => c.name === name)?.id;
+  }
+
+  setupFilteredCastes() {
+    if (this.additionalInfo.length === 0) {
+      console.error('Additional info array is empty');
+      return;
+    }
+
+    const casteControl = this.additionalInfo.at(0).get('caste');
+    if (!casteControl) {
+      console.error('Caste control not found in form');
+      return;
+    }
+
+    this.filteredCastes = casteControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const filterValue = (value || '').toLowerCase().trim();
+        const casteNames = this.castes.map(c => c.name);
+        this.showAddOption = !!filterValue && !casteNames.some(c => c.toLowerCase() === filterValue);
+        return casteNames.filter(name => name.toLowerCase().includes(filterValue));
+      })
+    );
+  }
+
+  addCasteIfNotExists(value: string) {
+    this.formapi.addCaste(value).subscribe({
+      next: (res) => {
+        this.castes.push(res);
+        this.additionalInfo.at(0).get('caste')?.setValue(res.name);
+        this.showAddOption = false;
+        this.setupFilteredCastes();
+      },
+      error: (err) => console.error('Error adding caste:', err)
+    });
+  }
+
+  onCasteSelected(event: MatAutocompleteSelectedEvent) {
+    const value = event.option.value?.trim();
+    if (!value) return;
+
+    const exists = this.castes.some(c => c.name.toLowerCase() === value.toLowerCase());
+
+    if (this.showAddOption && !exists) {
+      this.addCasteIfNotExists(value);
+    } else {
+      this.additionalInfo.at(0).get('caste')?.setValue(value);
+    }
+  }
+
+  onCasteInputFocus(): void {
+    const control = this.additionalInfo.at(0).get('caste');
+    if (control && !control.value) {
+      control.setValue('');
+    }
+  }
+
+
+deleteCaste(casteId: number): void {
+  if (confirm('Are you sure you want to delete this caste?')) {
+    this.formapi.deleteCaste(casteId).subscribe({
+      next: () => {
+        this.castes = this.castes.filter(c => c.id !== casteId);
+        this.toastr.success('Caste deleted successfully', 'Close', {
+
+        });
+        this.setupFilteredCastes();
+      },
+      error: () => {
+        alert('Failed to delete caste');
+      }
+    });
+  }
+}
 
   fetchHospitalList() {
     this.formapi.getHospitalNames().subscribe({

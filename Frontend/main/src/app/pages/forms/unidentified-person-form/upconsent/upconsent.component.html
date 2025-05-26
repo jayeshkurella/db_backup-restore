@@ -1,6 +1,6 @@
 <div mat-dialog-title class="consent-dialog-title p-3 d-flex justify-between items-center">
   <div class="flex items-center">
-    <mat-icon class="title-icon mr-2">gavel</mat-icon>
+    <!-- <mat-icon class="title-icon mr-2">gavel</mat-icon> -->
     Legal Consent for Collection, Use, and Public Disclosure of Information
   </div>
   <button mat-icon-button (click)="dialogRef.close()" aria-label="Close" class="close-button">
@@ -10,11 +10,8 @@
 
 <mat-dialog-content class="consent-dialog-content p-3">
   <div class="consent-scope">
-    <div>
-      <mat-chip color="primary" selected>
-        <!-- <mat-icon>warning</mat-icon> -->
-        Applicable to Cases of Unidentified Persons
-      </mat-chip>
+   <div class="label-tag">
+      Applicable to Cases of Unidentified Persons
     </div>
   </div>
 
@@ -133,7 +130,7 @@
 
   <div class="acceptance-section">
     <mat-checkbox color="primary" [(ngModel)]="checked" class="consent-checkbox">
-      I accept all terms of this consent agreement
+      I Accept all terms of this consent agreement
     </mat-checkbox>
 
   </div>

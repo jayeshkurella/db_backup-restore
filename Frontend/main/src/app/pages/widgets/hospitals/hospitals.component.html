@@ -54,8 +54,8 @@
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <mat-select [(ngModel)]="searchtype" name="type">
           <mat-option value="">Type</mat-option>
-          <mat-option value="gvt">Government</mat-option>
-          <mat-option value="semi_gvt">Semi-Government</mat-option>
+          <mat-option value="govt">Government</mat-option>
+          <mat-option value="semi_govt">Semi-Government</mat-option>
           <mat-option value="private">Private</mat-option>
         </mat-select>
       </mat-form-field>
@@ -95,46 +95,65 @@
           </div>
 
           <!-- Card Content -->
-          <mat-card-content class="p-3">
-
+          <mat-card-content class="p-3 d-flex flex-column" style="height: 100%">
             <!-- Name and Type -->
             <div class="d-flex justify-content-between align-items-start">
-              <h6 class="fw-bold mb-0"
-                style="white-space: normal; word-wrap: break-word; width: 100%; text-align: left; min-height: 2.4rem; line-height: 1.2rem;">
+              <h6
+                class="fw-bold mb-0"
+                style="
+                  white-space: normal;
+                  word-wrap: break-word;
+                  width: 100%;
+                  text-align: left;
+                  min-height: 2.4rem;
+                  line-height: 1.2rem;
+                "
+              >
                 {{ hospital.name }}
               </h6>
-              <span class="badge px-2 py-1" [ngClass]="{
-                'bg-warning text-white': ['gvt', 'semi_gvt', 'private'].includes(hospital.type)
-              }">
-                {{ hospital.type | titlecase }}
+              <span
+                class="badge px-2 py-1"
+                [ngClass]="{
+                  'bg-warning text-white': [
+                    'govt',
+                    'semi_govt',
+                    'private'
+                  ].includes(hospital.type)
+                }"
+              >
+                {{ hospital.type | safeTitlecase }}
               </span>
-
-
             </div>
 
             <!-- Address and Contact -->
             <div class="d-flex flex-column text-muted f-s-14 mt-3 mb-3">
-              <!-- Address -->
               <div class="d-flex align-items-center mb-1">
                 <i class="bi bi-geo-alt me-2"></i>
-                <span>{{ hospital.address_details.city }}, {{ hospital.address_details.state }}</span>
+                <span>
+                  {{ hospital.address_details.city }},
+                  {{ hospital.address_details.state | stateAbbreviation }}
+                </span>
               </div>
 
-              <!-- Phone Number -->
               <div class="d-flex align-items-center">
                 <i class="bi bi-telephone me-2"></i>
-                <span>{{ hospital.hospital_contact[0]?.phone_no || 'N/A' }}</span>
+                <span>{{
+                  hospital.hospital_contact[0]?.phone_no || "N/A"
+                }}</span>
               </div>
             </div>
 
-
-            <!-- Button -->
-            <div class="d-flex justify-content-center mt-5">
-              <button mat-stroked-button color="primary" class="w-100 px-4" (click)="seeMoreHospitaldata(hospital)">
+            <!-- Button: Push to Bottom -->
+            <div class="d-flex justify-content-center mt-3">
+              <button
+                mat-stroked-button
+                color="primary"
+                class="w-100 px-4"
+                (click)="seeMoreHospitaldata(hospital)"
+              >
                 More Info
               </button>
             </div>
-
           </mat-card-content>
         </mat-card>
       </div>

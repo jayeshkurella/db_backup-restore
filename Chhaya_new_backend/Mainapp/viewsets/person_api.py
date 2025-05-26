@@ -1,7 +1,5 @@
 import logging
-from datetime import datetime
 from uuid import UUID
-from rest_framework.exceptions import NotFound
 
 from dateutil import parser
 from django.db.models import Q
@@ -15,18 +13,18 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 
+from ..all_paginations.search_case import searchCase_Pagination
 # from .pending_person_pagination import PendingPersonPagination
 from ..models.fir import FIR
-from ..access_permision import IsAdminUser , IsVolunteerUser ,AllUserAccess
-from ..pagination import CustomPagination
-from ..Serializers.serializers import PersonSerializer, ApprovePersonSerializer
-from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, Document, PoliceStation, \
+from ..access_permision import IsAdminUser
+from Mainapp.all_paginations.pagination import CustomPagination
+from ..Serializers.serializers import PersonSerializer
+from ..models import Person, Address, Contact, AdditionalInfo, LastKnownDetails, Consent, PoliceStation, \
     Hospital
 from django.db import transaction
 from drf_yasg import openapi
 from django.contrib.gis.geos import Point
 import json
-from django.utils.timezone import now
 import traceback
 
 logger = logging.getLogger(__name__)
@@ -582,18 +580,11 @@ class PersonViewSet(viewsets.ViewSet):
                         filters['age__lte'] = upper
                     else:
                         filters['age_range'] = age_range
-
-                    print("Age range filter:", lower, upper)
                 except ValueError:
-                    print("Invalid age_range format:", age_range)
-            else:
-                print("Age range filter: not provided or null")
+                    pass
 
             if age and person_type == 'missing-persons':
                 filters['age'] = age
-
-            print("Final filters:", filters)
-            print("Additional info filters:", additional_info_filters)
 
             persons = Person.objects.filter(
                 type=person_type,
@@ -608,6 +599,14 @@ class PersonViewSet(viewsets.ViewSet):
 
             if not persons.exists():
                 return Response({'message': f'No {person_type.lower()} found'}, status=status.HTTP_200_OK)
+
+            # Paginate the queryset (correct indentation - outside the if not exists block)
+            paginator = searchCase_Pagination()
+            page = paginator.paginate_queryset(persons, request)
+
+            if page is not None:
+                serializer = PersonSerializer(page, many=True)
+                return paginator.get_paginated_response(serializer.data)
 
             serializer = PersonSerializer(persons, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)

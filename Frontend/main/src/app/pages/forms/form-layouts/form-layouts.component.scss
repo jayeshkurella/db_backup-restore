@@ -30,14 +30,14 @@
   text-align: center;      /* Center the text within the heading */
 }
 
-.main-heading {
-  font-size: 18px;
-  font-weight: bold; 
-  color: #f26733;
-  text-transform: uppercase; 
-  letter-spacing: 1.5px; 
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
-}
+// .main-heading {
+//   font-size: 18px;
+//   font-weight:600;
+//   color: inherit; 
+//   text-transform: capitalize;
+//   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+//   margin-left: 20px;
+// }
 
 .header-bottom
   {
@@ -73,4 +73,18 @@ mat-error {
 /* Or if you want to remove the left border only when there's an error */
 .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-thick {
   border-left-width: 0 !important;
+}
+
+.option-container{
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+   position: relative;
+}
+
+.icon-color{
+  color: #f58200;
+  
 }

@@ -167,7 +167,7 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
   unidentifiedBodyMatchedWithMissingMale: number = 0;
   unidentifiedBodyMatchedWithMissingFemale: number = 0;
   months: any;
-  displayedColumns: string[] = ['sr No', 'photo', 'fullName', 'age', 'gender', 'city', 'district', 'state', 'action'];
+  displayedColumns: string[] = ['Sr.No', 'photo', 'fullName', 'age', 'gender', 'city', 'district', 'state', 'action'];
 
 tabs = [
   { label: 'Missing Persons' },
@@ -433,11 +433,18 @@ selectedTabIndex = 0;
 
 
 
+  // viewDetails(person: any): void {
+  //   const personId = person.id.split('.')[1];
+  //   console.log(personId)
+  //   this.router.navigate(['/person', personId]);
+  // }
   viewDetails(person: any): void {
-    const personId = person.id.split('.')[1];
-    console.log(personId)
-    this.router.navigate(['/person', personId]);
-  }
+  const uuid = person.id.includes('.') ? person.id.split('.')[1] : person.id;
+  sessionStorage.setItem('viewData', JSON.stringify({ id: uuid }));
+  this.router.navigate(['/person-details']);
+}
+
+
 
 
 

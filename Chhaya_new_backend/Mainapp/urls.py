@@ -2,6 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
+
+from .Additional_info_Tags.caste_tag import CasteListCreateAPIView, CasteDestroyAPIView
 from .authentication.admin_user_management import AdminUserApprovalView
 from .authentication.user_authentication import AuthAPIView
 from .viewsets.casetype_apis import PendingPersonsView, ApprovedPersonsView, RejectedPersonsView, OnHoldPersonsView, \
@@ -41,6 +43,9 @@ urlpatterns = [
     path('api/persons_status/on_hold/', OnHoldPersonsView.as_view(), name='on-hold-persons'),
     path('api/persons_status/suspended/', SuspendedPersonsView.as_view(), name='suspended-persons'),
     path('api/persons_status/status_counts/', StatusCountView.as_view(), name='status-counts'),
+    path('api/castes_tags/', CasteListCreateAPIView.as_view(), name='caste-list-create'),
+    path('api/caste_delete/<int:pk>/', CasteDestroyAPIView.as_view(), name='caste-delete'),
+
 ]
 
 if settings.DEBUG:

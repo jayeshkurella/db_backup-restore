@@ -133,20 +133,6 @@ export class AccessProviderComponent implements OnInit {
   totalSuspendedItems = 0;
   totalApprovedItems = 0;
 
-  // UI state properties
-  // isLoading = false;
-  // isProcessing = false;
-  // isFilterLoading = false;
-  // filtersApplied = false;
-  // selectedTabIndex = 0;
-
-  // Selection properties
-  // selectAllPending = false;
-  // selectAllHold = false;
-  // selectAllSuspended = false;
-  // selectAllApproved = false;
-
-  // Filter properties
   filters: CaseFilters = {
     city: '',
     state: '',
@@ -156,29 +142,6 @@ export class AccessProviderComponent implements OnInit {
     police_station: ''
   };
   // Replace the existing pagination property with these:
-// currentPage = 1;
-// itemsPerPage = 10;
-// totalPendingItems = 0;
-// totalHoldItems = 0;
-// totalSuspendedItems = 0;
-// totalApprovedItems = 0;
-// loading = false; // You can replace isLoading with this if you want
-
-//   pagination = {
-//     pageIndex: 0,
-//     pageSize: 10,
-//     pageSizeOptions: [5, 10, 25, 100],
-//     length: 0,
-//     showFirstLastButtons: true 
-//   };
-//   filters: CaseFilters = {
-//     city: '',
-//     state: '',
-//     district: '',
-//     village: '',
-//     case_id: '',
-//     police_station: ''
-//   };
 
   constructor(
     private pendingService: CasesApprovalService,
@@ -383,9 +346,9 @@ export class AccessProviderComponent implements OnInit {
 }
 
 
-  private hasActiveFilters(): boolean {
-    return Object.values(this.filters).some(value => value !== '');
-  }
+  // private hasActiveFilters(): boolean {
+  //   return Object.values(this.filters).some(value => value !== '');
+  // }
 
   private areFiltersSame(compareFilters: CaseFilters): boolean {
     return Object.keys(this.filters).every(key =>
@@ -406,6 +369,9 @@ resetFilters(): void {
   this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
 }
 
+ hasActiveFilters(): boolean {
+  return Object.values(this.filters).some(value => value !== '');
+}
 
   private getCleanFilters(): any {
     const cleanFilters: any = {};
@@ -419,41 +385,7 @@ resetFilters(): void {
 
     return cleanFilters;
   }
-  // Add these methods to your component
-// goToPreviousPage(): void {
-//   if (this.currentPage > 1) {
-//     this.currentPage--;
-//     this.loadData();
-//   }
-// }
 
-// goToNextPage(): void {
-//   if (this.currentPage < this.getLastPageNumber()) {
-//     this.currentPage++;
-//     this.loadData();
-//   }
-// }
-//   // Add these to your component class
-// goToFirstPage(): void {
-//   if (this.currentPage !== 1) {
-//     this.currentPage = 1;
-//     this.loadData();
-//   }
-// }
-
-// goToLastPage(): void {
-//   const lastPage = this.getLastPageNumber();
-//   if (this.currentPage !== lastPage) {
-//     this.currentPage = lastPage;
-//     this.loadData();
-//   }
-// }
-
-// getLastPageNumber(): number {
-//   const totalItems = this.getTotalItems();
-//   return Math.ceil(totalItems / this.itemsPerPage);
-// }
-// Add these to your component class
 getFirstItemNumber(): number {
   return (this.currentPage - 1) * this.itemsPerPage + 1;
 }

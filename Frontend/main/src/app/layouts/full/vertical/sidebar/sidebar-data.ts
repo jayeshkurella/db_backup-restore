@@ -13,17 +13,17 @@ export const navItems: NavItem[] = [
       children: [
         {
           displayName: 'Missing Person',
-          // iconName: 'user',
+          iconName: 'point',
           route: '/forms/Missing-person-form',
         },
         {
           displayName: 'Unidentified Person',
-          // iconName: 'user',
+          iconName: 'point',
           route: '/forms/Unidentified-person-form',
         },
         {
           displayName: 'Unidentified Body',
-          // iconName: 'user',
+          iconName: 'point',
           route: '/forms/Unidentified-bodies-form',
         },
       ],
@@ -40,27 +40,28 @@ export const navItems: NavItem[] = [
     children: [
       {
         displayName: 'By Case ID',
-        // iconName: 'user',
+        iconName: 'point',
         route: '/search/search-by-id',
       },{
         displayName: 'Missing Person',
-        // iconName: 'user',
+        iconName: 'point',
         route: '/search/missing-person',
       },
       {
         displayName: 'Unidentified Person',
-        // iconName: 'user',
+        iconName: 'point',
         route: '/search/unidentified-person',
       },
       {
         displayName: 'Unidentified Bodies',
-        // iconName: 'user',
+        iconName: 'point',
         route: '/search/unidentified-bodies',
       },
     ],
   },
   {
     navCap: 'Resources',
+    iconName: 'widgets',
   },
   {
     displayName: 'Police-Station',

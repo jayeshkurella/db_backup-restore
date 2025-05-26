@@ -7,52 +7,57 @@ import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/envirnment/envirnment';
 import { MatList, MatListItem } from '@angular/material/list';
-import { MatCard, MatCardTitle} from '@angular/material/card';
+import { MatCard, MatCardTitle } from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 @Component({
   selector: 'app-detaildata',
-   imports: [MatDialogModule ,MatButtonModule ,CommonModule,MatIcon,MatCard,MatButton,MatSpinner,SafeTitlecasePipe,MatCardTitle],
+  imports: [MatDialogModule, MatButtonModule, CommonModule, MatIcon, MatCard, MatButton, MatSpinner, SafeTitlecasePipe, MatCardTitle],
   templateUrl: './detaildata.component.html',
   styleUrl: './detaildata.component.scss'
 })
 export class DetaildataComponent {
+
   environment = environment;
   person: any;
-isLoading = false;
-  constructor(private route: ActivatedRoute, private http: HttpClient,private router :Router) {}
+  isLoading = false;
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
+    const stored = sessionStorage.getItem('viewData');
+    const id = stored ? JSON.parse(stored).id : null;
 
-  if (!id) {
-    console.error('Missing or invalid ID in route');
-    return;
+    if (!id) {
+      console.error('Missing ID to load person details');
+      this.router.navigate(['/search-by-id']); // or any fallback page
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.http.get<any>(`${environment.apiUrl}/api/persons/${id}/`).subscribe({
+      next: (data) => {
+        this.person = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading person data:', err);
+        this.isLoading = false;
+      }
+    });
   }
 
-  this.isLoading = true;
 
-  this.http.get<any>(`${environment.apiUrl}/api/persons/${id}/`).subscribe({
-    next: (data) => {
-      console.log('Person Data:', data);
-      this.person = data;
-      this.isLoading = false;
-    },
-    error: (err) => {
-      console.error('Error loading person data:', err);
-      this.isLoading = false;
-    }
-  });
-}
 
- getImageUrl(imagePath: string): string {
-  return imagePath ? `${environment.apiUrl}${imagePath}` : 'assets/old/images/Chhaya.png';
-}
+  getImageUrl(imagePath: string): string {
+    return imagePath ? `${environment.apiUrl}${imagePath}` : 'assets/old/images/Chhaya.png';
+  }
 
 
 
- goBack(): void {
+  goBack(): void {
+    sessionStorage.removeItem('viewData'); // ✅ Clear the stored ID
     this.router.navigate(['/search/missing-person']); // Navigate to the main component or home route
   }
 

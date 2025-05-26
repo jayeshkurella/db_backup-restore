@@ -5,3 +5,16 @@ html, body { height: 100%; }
 div.leaflet-popup-content{
   width: 400px;
 }
+
+
+
+
+.main-heading {
+  font-size: 18px;
+  font-weight:600;
+  color: inherit; 
+  text-transform: capitalize;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+  margin-left: 20px;
+}
+

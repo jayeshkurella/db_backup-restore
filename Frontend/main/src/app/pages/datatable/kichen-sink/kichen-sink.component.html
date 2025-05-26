@@ -1,7 +1,7 @@
 <mat-card class="cardWithShadow m-1">
   <mat-card-content>
     <nav aria-label="breadcrumb" class="breadcrumb-container">
-      <ol class="breadcrumb mb-2">
+      <ol class="breadcrumb mb-2 main-heading">
         <li class="breadcrumb-item active" aria-current="page">
           Search Missing Person
         </li>
@@ -201,15 +201,27 @@
         </mat-form-field>
       </div>
     </div>
+
     <div class="row mt-3">
-      <div class="col-12 text-center">
+      <div
+        class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-center gap-2"
+      >
         <button
           mat-flat-button
-          
           (click)="applyFilters()"
-          [disabled]="!hasFiltersApplied()"
+          [disabled]="!hasGeographicFiltersApplied() && !hasFiltersApplied()"
+          class="me-md-3"
         >
           <mat-icon>search</mat-icon> Search
+        </button>
+
+        <button
+          mat-flat-button
+          (click)="resetFilters()"
+          [disabled]="!filtersApplied"
+          color="warn"
+        >
+          <mat-icon>refresh</mat-icon> Reset
         </button>
       </div>
     </div>
@@ -231,7 +243,7 @@
   <!-- Pending Tab -->
   <mat-tab label="Pending">
     <ng-template matTabContent>
-      <mat-card class="cardWithShadow">
+      <mat-card class="cardWithShadow mt-1">
         <mat-card-content>
           <div class="table-responsive">
             <div
@@ -276,9 +288,9 @@
                     "
                     alt="Person Photo"
                     class="rounded-square"
-                    width="40" 
-                     height="40"
-                     style="object-fit: cover;"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
                   />
                 </td>
               </ng-container>
@@ -295,11 +307,13 @@
                 <td mat-cell *matCellDef="let person">{{ person.age }}</td>
               </ng-container>
 
-              
               <ng-container matColumnDef="gender">
                 <th mat-header-cell *matHeaderCellDef>Gender</th>
                 <td mat-cell *matCellDef="let person">
-                  <mat-icon *ngIf="person.gender === 'male'; else femaleIcon" color="primary">
+                  <mat-icon
+                    *ngIf="person.gender === 'male'; else femaleIcon"
+                    color="primary"
+                  >
                     male
                   </mat-icon>
                   <ng-template #femaleIcon>
@@ -307,7 +321,6 @@
                   </ng-template>
                 </td>
               </ng-container>
-
 
               <ng-container matColumnDef="date_of_missing">
                 <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
@@ -342,16 +355,17 @@
                   <div class="match-buttons">
                     <button
                       mat-button
-                      class="black-button"
+                      class="bllack-button"
                       (click)="onMatchWithUP(person.id)"
                     >
                       Match with UP
                     </button>
-                    <button mat-button class="black-button">Coming Soon</button>
+                    <button mat-button class="bllack-button">
+                      Coming Soon
+                    </button>
                   </div>
                 </td>
               </ng-container>
-
 
               <tr
                 mat-header-row
@@ -423,9 +437,9 @@
                     "
                     alt="Person Photo"
                     class="rounded-square"
-                    width="40" 
-                     height="40"
-                     style="object-fit: cover;"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
                   />
                 </td>
               </ng-container>
@@ -483,11 +497,77 @@
             </table>
 
             <!-- Material Paginator for Resolved Tab -->
-            <mat-paginator
+            <!-- <mat-paginator
               #paginatorResolved
               [pageSizeOptions]="[5, 10, 20, 30]"
               showFirstLastButtons
-            ></mat-paginator>
+            ></mat-paginator> -->
+
+            <div class="row mt-3">
+              <div
+                class="col-12 d-flex justify-content-center align-items-center"
+              >
+                <div
+                  *ngIf="getTotalItems() > 0"
+                  class="d-flex align-items-center custom-pagination"
+                >
+                  <span class="page-info mr-2">
+                    {{ getFirstItemNumber() }}-{{ getLastItemNumber() }} of
+                    {{ getTotalItems() }}
+                  </span>
+
+                  <div class="d-flex">
+                    <button
+                      mat-icon-button
+                      (click)="goToFirstPage()"
+                      [disabled]="currentPage === 1 || !paginationLinks.first"
+                      matTooltip="First Page"
+                      matTooltipPosition="above"
+                    >
+                      <mat-icon>first_page</mat-icon>
+                    </button>
+
+                    <button
+                      mat-icon-button
+                      (click)="goToPreviousPage()"
+                      [disabled]="
+                        currentPage === 1 || !paginationLinks.previous
+                      "
+                      matTooltip="Previous Page"
+                      matTooltipPosition="above"
+                    >
+                      <mat-icon>chevron_left</mat-icon>
+                    </button>
+
+                    <button
+                      mat-icon-button
+                      (click)="goToNextPage()"
+                      [disabled]="
+                        currentPage === getLastPageNumber() ||
+                        !paginationLinks.next
+                      "
+                      matTooltip="Next Page"
+                      matTooltipPosition="above"
+                    >
+                      <mat-icon>chevron_right</mat-icon>
+                    </button>
+
+                    <button
+                      mat-icon-button
+                      (click)="goToLastPage()"
+                      [disabled]="
+                        currentPage === getLastPageNumber() ||
+                        !paginationLinks.last
+                      "
+                      matTooltip="Last Page"
+                      matTooltipPosition="above"
+                    >
+                      <mat-icon>last_page</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>

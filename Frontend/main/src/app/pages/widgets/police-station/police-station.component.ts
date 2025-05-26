@@ -20,10 +20,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UnidentifiedpersonApiService } from '../../datatable/unidentified-person/unidentifiedperson-api.service';
 import { MatSelectModule } from '@angular/material/select';
+import { StateAbbreviationPipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 
 @Component({
   selector: 'app-police-station',
-  imports: [MatCardModule, MatChipsModule, TablerIconsModule, MatButtonModule, MatFormFieldModule,
+  standalone: true,
+  imports: [MatCardModule, MatChipsModule, TablerIconsModule, MatButtonModule, MatFormFieldModule,StateAbbreviationPipe,
     MatInputModule,
     MatButtonModule,
     MatIconModule,

@@ -1,6 +1,6 @@
 <div class="person-form-container p-4 bg-white rounded shadow-sm">
   <div class="heading-container">
-    <h3 class="main-heading">MISSING PERSON REPORT FORM</h3>
+    <h3 class="main-heading">Missing Person Report Form</h3>
   </div>
 
   <form [formGroup]="personForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
@@ -305,7 +305,7 @@
                 </mat-error>
                 <mat-error
                   *ngIf="addressForm.get('street')?.touched && addressForm.get('street')?.hasError('maxlength')">
-                  Maximum 30 characters allowed.
+                  Maximum 30 characters are allowed.
                 </mat-error>
                 <mat-error
                   *ngIf="addressForm.get('street')?.touched && addressForm.get('street')?.hasError('invalidCharacters')">
@@ -324,7 +324,7 @@
                 <input matInput type="text" formControlName="appartment_name" />
                 <mat-error
                   *ngIf="addressForm.get('appartment_name')?.touched && addressForm.get('appartment_name')?.hasError('maxlength')">
-                  Maximum 30 characters allowed.
+                  Maximum 30 characters are allowed.
                 </mat-error>
                 <mat-error
                   *ngIf="addressForm.get('appartment_name')?.touched && addressForm.get('appartment_name')?.hasError('invalidCharacters')">
@@ -363,7 +363,7 @@
                 <input matInput type="text" formControlName="village" />
                 <mat-error
                   *ngIf="addressForm.get('village')?.touched && addressForm.get('village')?.hasError('maxlength')">
-                  Maximum 30 characters allowed.
+                  Maximum 30 characters are allowed.
                 </mat-error>
                 <mat-error
                   *ngIf="addressForm.get('village')?.touched && addressForm.get('village')?.hasError('invalidCharacters')">
@@ -381,7 +381,7 @@
                 <mat-label>City</mat-label>
                 <input matInput type="text" formControlName="city" />
                 <mat-error *ngIf="addressForm.get('city')?.touched && addressForm.get('city')?.hasError('maxlength')">
-                  Maximum 30 characters allowed.
+                  Maximum 30 characters are allowed.
                 </mat-error>
                 <mat-error
                   *ngIf="addressForm.get('city')?.touched && addressForm.get('city')?.hasError('invalidCharacters')">
@@ -400,7 +400,7 @@
                 <input matInput type="text" formControlName="district" />
                 <mat-error
                   *ngIf="addressForm.get('district')?.touched && addressForm.get('district')?.hasError('maxlength')">
-                  Maximum 30 characters allowed.
+                  Maximum 30 characters are allowed.
                 </mat-error>
                 <mat-error
                   *ngIf="addressForm.get('district')?.touched && addressForm.get('district')?.hasError('invalidCharacters')">
@@ -808,16 +808,28 @@
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Caste</mat-label>
-                <mat-select formControlName="caste">
-                  <mat-option value="open">Open</mat-option>
-                  <mat-option value="sc">SC</mat-option>
-                  <mat-option value="st">ST</mat-option>
-                  <mat-option value="obc">OBC</mat-option>
-                </mat-select>
+                <input matInput formControlName="caste" [matAutocomplete]="auto" (focus)="onCasteInputFocus()"
+                  placeholder="Select or type to add" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCasteSelected($event)">
+                  <mat-option *ngFor="let option of filteredCastes | async" [value]="option">
+                    <div class="option-container">
+                      <span>{{ option }}</span>
+                      <button mat-icon-button class="delete-btn" *ngIf="isAdminUser && getCasteId(option) !== undefined"
+                        (click)="$event.stopPropagation(); deleteCaste(getCasteId(option)!)" color="warn"
+                        aria-label="Delete caste">
+                        <mat-icon class="icon-color">delete</mat-icon>
+                      </button>
+                    </div>
+                  </mat-option>
+
+                  <mat-option *ngIf="showAddOption" [value]="additionalInfo.at(0).get('caste')?.value?.trim()">
+                    ➕ Add "{{ additionalInfo.at(0).get('caste')?.value }}"
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
             </div>
 
-            <!-- Subcaste -->
+
             <div class="col-md-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Subcaste</mat-label>
@@ -983,7 +995,7 @@
                       .get('occupation_details')
                       ?.hasError('maxlength')
                   ">
-                  Maximum 30 characters allowed
+                  Maximum 30 characters are allowed
                 </mat-error>
                 <mat-error *ngIf="
                     additionalInfo.controls[i]
@@ -1013,10 +1025,10 @@
     <mat-card class="card p-4 m-2 mb-3">
       <div formGroupName="last_known_details">
         <div *ngFor="let info of lastKnownDetails.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-          
+
 
           <!-- <div class="col-md-6 d-flex flex-column"> -->
-            <!-- <button mat-stroked-button color="primary" class="w-100" type="button" (click)="fileInput2.click()">
+          <!-- <button mat-stroked-button color="primary" class="w-100" type="button" (click)="fileInput2.click()">
               <mat-icon>cloud_upload</mat-icon> Upload Another Reference Photo
             </button>
             <input #fileInput2 type="file" accept="image/*" (change)="
@@ -1244,7 +1256,7 @@
             <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
               style="width: 18px; height: 18px; cursor: pointer;" />
             <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: inherit;">
-              To proceed, please open the consent document and acknowledge it by checking the box.
+              Kindly review the consent and check the box to continue.
             </label>
           </div>
         </div>

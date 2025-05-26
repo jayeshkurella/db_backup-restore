@@ -3,16 +3,12 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 from django.db import transaction
-from rest_framework.pagination import PageNumberPagination
 
 from ..Serializers.hospital_Serializer import HospitalIdNameSerializer
-from ..Serializers.serializers import AddressSerializer, PoliceStationSerializer, HospitalSerializer, ContactSerializer
-from ..models import PoliceStation, Hospital, Contact
-from ..pagination import CustomPagination
+from ..Serializers.serializers import AddressSerializer, HospitalSerializer, ContactSerializer
+from ..models import Hospital, Contact
+from Mainapp.all_paginations.pagination import CustomPagination
 from django.core.cache import cache
 from rest_framework import generics
 import json

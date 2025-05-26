@@ -8,13 +8,21 @@
 .consent-scope {
   margin-bottom: 20px;
 }
-
+.label-tag {
+  display: inline-block;
+  background-color: inherit; /* Same as Angular Material primary */
+  color: inherit;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
 .consent-intro {
-  background-color: #f5f5f5;
+  background-color: inherit;
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px;
-  border-left: 4px solid #3f51b5;
+  border-left: 4px solid inherit;
 }
 
 .consent-sections {
@@ -23,7 +31,7 @@
 
 .consent-section {
   margin-bottom: 25px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid inherit;
   padding-bottom: 20px;
 }
 
@@ -39,13 +47,13 @@
 
 .section-header mat-icon {
   margin-right: 10px;
-  color: #3f51b5;
+  color: inherit;
 }
 
 .section-header h3 {
   margin: 0;
   font-size: 1.1em;
-  color: #000000;
+  color: inherit;
 }
 
 .section-content {
@@ -67,7 +75,7 @@
 }
 
 .legal-reference {
-  background-color: #f5f8ff;
+  background-color: inherit;
   padding: 10px 15px;
   border-radius: 4px;
   display: flex;
@@ -78,21 +86,21 @@
 
 .legal-reference mat-icon {
   margin-right: 10px;
-  color: #000000;
+  color: inherit;
 }
 
 .final-declaration {
   font-weight: 500;
   margin: 20px 0;
   padding: 15px;
-  background-color: #fff8e1;
+  background-color: inherit;
   border-radius: 4px;
 }
 
 .acceptance-section {
   margin-top: 25px;
   padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid inherit;
 }
 
 .consent-checkbox {
@@ -103,12 +111,12 @@
   display: flex;
   align-items: center;
   font-size: 0.9em;
-  color: #616161;
+  color: inherit;
 }
 
 .legal-warning mat-icon {
   margin-right: 8px;
-  color: #ff9800;
+  color: inherit;
 }
 
 

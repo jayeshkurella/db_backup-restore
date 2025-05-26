@@ -1,13 +1,12 @@
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from django.db.models import Q
 from uuid import UUID
-from rest_framework.filters import OrderingFilter
 
 from Mainapp.Serializers.serializers import ApprovePersonSerializer
 from Mainapp.models import Person
-from Mainapp.viewsets.pending_person_pagination import StatusPagination
+from Mainapp.all_paginations.pending_person_pagination import StatusPagination
 
 
 class BasePersonListView(generics.ListAPIView):

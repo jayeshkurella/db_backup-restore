@@ -75,7 +75,10 @@ export const routes: Routes = [
             (m) => m.UiComponentsRoutes
           ),
       },
-      { path: 'person/:id', component: PersonDetailsComponent },
+      { path: 'person/:id',
+         component: PersonDetailsComponent },
+         { path: 'person-details',
+         component: PersonDetailsComponent },
 
     ],
   },

@@ -78,7 +78,7 @@ class AdditionalInfo(models.Model):
         OTHER = 'other', 'Other'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    caste = models.CharField(max_length=10, choices=CasteChoices.choices,blank=True, null=True)
+    caste = models.CharField(max_length=20,blank=True, null=True)
     subcaste = models.CharField(max_length=50, blank=True, null=True)
     marital_status = models.CharField(max_length=50, choices=MaritalStatusChoices.choices)
     religion = models.CharField(max_length=50, blank=True, null=True,choices=ReligionChoices.choices)

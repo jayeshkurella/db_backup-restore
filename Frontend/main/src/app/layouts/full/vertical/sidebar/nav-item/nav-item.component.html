@@ -1,13 +1,15 @@
-@if(item.navCap){
+@if(item.navCap && isSidebarOpen){
 <div mat-subheader class="nav-caption">
   {{ item.navCap }}
 </div>
-} @if(!item.navCap && !item.external && !item.twoLines) {
+} 
+
+@if(!item.navCap && !item.external && !item.twoLines) {
 <a
   mat-list-item
   (click)="onItemSelected(item)"
   [ngClass]="{
-    'mat-toolbar mat-primary activeMenu': item.route
+    'mat-toolbar mat-primary ': item.route
       ? router.isActive(item.route, true)
       : false,
     expanded: expanded,
@@ -20,21 +22,26 @@
     name="{{ item.iconName }}"
     matListItemIcon
   ></i-tabler>
-<span
-  class="hide-menu"
-  [ngStyle]="{ 'font-weight': (item.displayName.startsWith('Add') || item.displayName.startsWith('Search')) ? '600' : 'normal' }"
->
-  {{ item.displayName | translate }}
-</span>
+  
+  @if(isSidebarOpen) {
+  <span
+    class="hide-menu"
+    [ngStyle]="{ 'font-weight': (item.displayName.startsWith('Add') || item.displayName.startsWith('Search')) ? '600' : 'normal' }"
+  >
+    {{ item.displayName | translate }}
+  </span>
+  }
 
-  @if(item.children && item.children.length) {
+  @if(item.children && item.children.length && isSidebarOpen) {
   <span class="arrow-icon" fxFlex>
     <span fxFlex></span>
     <mat-icon [@indicatorRotate]="expanded ? 'expanded' : 'collapsed'">
       expand_more
     </mat-icon>
   </span>
-  } @if(item.chip) {
+  } 
+  
+  @if(item.chip && isSidebarOpen) {
   <span>
     <span
       class="{{ item.chipClass }} p-x-8 p-y-4 item-chip f-w-500 rounded-pill "
@@ -46,7 +53,6 @@
 }
 
 <!-- external Link -->
-
 @if(!item.navCap && item.external) {
 <mat-list-item
   onClick="window.open('//google.com')"
@@ -58,16 +64,21 @@
     name="{{ item.iconName }}"
     matListItemIcon
   ></i-tabler>
+  @if(isSidebarOpen) {
   <span class="hide-menu">{{ item.displayName | translate }}</span>
+  }
 </mat-list-item>
 }
 
 <!-- children -->
-@if(expanded) { @for(child of item.children; track child) {
-<app-nav-item
-  [item]="child"
-  (click)="onSubItemSelected(child)"
-  [depth]="depth + 1"
->
-</app-nav-item>
-} }
+@if(expanded && isSidebarOpen) { 
+  @for(child of item.children; track child) {
+    <app-nav-item
+      [item]="child"
+      (click)="onSubItemSelected(child)"
+      [depth]="depth + 1"
+      
+    >
+    </app-nav-item>
+  } 
+}

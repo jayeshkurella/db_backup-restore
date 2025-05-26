@@ -21,15 +21,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UnidentifiedpersonApiService } from '../../datatable/unidentified-person/unidentifiedperson-api.service';
+import { SafeTitlecasePipe, StateAbbreviationPipe } from "../../../components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe";
 
 @Component({
   selector: 'app-hospitals',
+  standalone: true,
  imports: [MatCardModule, MatChipsModule, TablerIconsModule, MatButtonModule, MatFormFieldModule,
-     MatInputModule,
-     MatButtonModule,
-     MatIconModule,
-     FormsModule,ReactiveFormsModule ,
-     CommonModule,MatOptionModule,RouterModule,MatDividerModule,MatSelectModule,MatProgressSpinnerModule ,MatPaginatorModule],
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    FormsModule, ReactiveFormsModule,
+    CommonModule, MatOptionModule, RouterModule, MatDividerModule, MatSelectModule, MatProgressSpinnerModule, MatPaginatorModule, SafeTitlecasePipe,StateAbbreviationPipe],
   templateUrl: './hospitals.component.html',
   styleUrl: './hospitals.component.scss'
 })

@@ -28,19 +28,20 @@ mat-error {
 }
 .heading-container {
   display: flex;
-  justify-content: start; /* Center horizontally */
-  align-items: center;     /* Center vertically */
+  justify-content: start; 
+  align-items: center;     
   height: 60px;       
-  text-align: center;      /* Center the text within the heading */
+  text-align: center;     
 }
 
 .main-heading {
-  font-size: 18px; /* Larger font size */
-  font-weight: bold; /* Make it bold */
-  color: #f26733;
-  text-transform: uppercase; /* Make the text uppercase for added impact */
-  letter-spacing: 1.5px; /* Slightly increase letter spacing */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  font-size: 18px;
+  font-weight:600;
+  color: inherit; 
+  /* letter-spacing: 1.5px;  */
+  text-transform: capitalize;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+  margin-left: 20px;
 }
 
 .header-bottom
