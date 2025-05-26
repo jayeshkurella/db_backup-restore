@@ -64,7 +64,7 @@ export class PoliceStationComponent implements OnInit {
 
   currentPage: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 4;
+  itemsPerPage: number = 8;
   allstates: string[] = [];
   alldistricts: string[] = [];
   allcities: string[] = [];

@@ -57,7 +57,7 @@ export class HospitalsComponent implements OnInit{
   environment = environment;
   allhospitals:any = []
   totalHospitalItems = 0;
-  itemsPerPage = 4;
+  itemsPerPage = 8;
   currentPage = 1;
   allstates: string[] = [];
   alldistricts: string[] = [];

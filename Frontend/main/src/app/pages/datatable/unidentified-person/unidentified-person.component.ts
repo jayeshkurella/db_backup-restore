@@ -45,13 +45,13 @@ export interface Person {
     FormsModule,
     HttpClientModule,
     MatProgressSpinnerModule, SafeTitlecasePipe],
-  templateUrl: './unidentified-person.component.html',
+  templateUrl:'./unidentified-person.component.html',
   styleUrls: ['./unidentified-person.component.css'], // ✅ Correct
   standalone: true,
-  providers: [DatePipe],
+  providers: [DatePipe], 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
+export class UnidentifiedPersonComponent implements AfterViewInit , OnInit{
   today: Date = new Date();
 
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
@@ -61,43 +61,53 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<any>([]);
   displayedColumnsPending: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
   displayedColumnsResolved: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action'];
-  displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
+  displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action','match_with'];
   selectedPerson: any = null;
   map: L.Map | undefined;
   marker: L.Marker | undefined;
   environment = environment;
   missingPersons: any[] = [];
-  filteredPersons: any[] = [];
+  filteredPersons: any[] = []; 
   selectedMatch: any = null;
   searchText: any;
   allstates: any;
   allcities: any;
   alldistricts: any;
   allmarital: any;
-  loading: boolean = false;
+  loading: boolean = false; 
   selectedMatched: any;
-  message: string = '';
+  message: string = '';  
   errorMessage: string = '';
-  uniqueId: string = '';
-  matchId: number = 0;
-  rejectionReason: string = '';
-  selectedMatchForConfirmation: any;
+  uniqueId: string = ''; 
+  matchId: number = 0;  
+  rejectionReason: string = '';  
+  selectedMatchForConfirmation: any;  
   showConfirmModal: boolean = false;
   existing_reports: any[] = [];  // To store existing reports
-  report_data: any[] = [];
+  report_data: any[] = []; 
   selectedReport: any;  // Variable to hold the selected report for details
-  isModalOpen: boolean = false;
+  isModalOpen: boolean = false; 
   isInitialLoad = true;
   filtersApplied: boolean = false;  // Initially false
   progress: number = 0;
   progressColor: string = 'bg-primary'; // Corrected type of progressColor
   progressMessage: string = '';
+        paginationLinks: any = {
+  first: null,
+  last: null,
+  next: null,
+  previous: null
+};
 
-  // ✅ Initialize data sources with empty arrays
-  dataSourcePending = new MatTableDataSource<any>([]);
-  dataSourceResolved = new MatTableDataSource<any>([]);
-  @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
-  @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
+    currentPage: number = 1;
+  itemsPerPage: number = 10; // Default items per page
+  totalItems: number = 0;
+  
+   // ✅ Initialize data sources with empty arrays
+    dataSourcePending = new MatTableDataSource<any>([]);
+    dataSourceResolved = new MatTableDataSource<any>([]);
+      @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
+       @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
   months: any;
   years: any;
 
@@ -107,7 +117,19 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
     public datePipe: DatePipe,
     private missingPersonService: UnidentifiedpersonApiService,
     private router: Router,
-  ) { }
+  ) {
+        // Load saved state from sessionStorage if available
+  const savedState = sessionStorage.getItem('unidentifiedBodySearchState');
+  if (savedState) {
+    const parsedState = JSON.parse(savedState);
+    this.filters = parsedState.filters;
+    this.dataSourcePending.data = parsedState.pendingPersons || [];
+    this.dataSourceResolved.data = parsedState.resolvedPersons || [];
+    this.filtersApplied = parsedState.filtersApplied || false;
+            this.currentPage = parsedState.currentPage || 1;
+      this.totalItems = parsedState.totalItems || 0;
+  }
+  }
   filters = {
     full_name: '',
     city: '',
@@ -121,41 +143,41 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
     height_range: '',
     district: '',
     gender: ''
-  };
-  casteOptions = [
-    { value: 'open', label: 'Open / General' },
-    { value: 'obc', label: 'OBC' },
-    { value: 'sc', label: 'SC' },
-    { value: 'st', label: 'ST' },
-    { value: 'nt', label: 'NT' },
-    { value: 'vj', label: 'VJ' },
-    { value: 'sbc', label: 'SBC' },
-    { value: 'sebc', label: 'SEBC' },
-    { value: 'other', label: 'Other' },
-  ];
+};
+casteOptions = [
+  { value: 'open', label: 'Open / General' },
+  { value: 'obc', label: 'OBC' },
+  { value: 'sc', label: 'SC' },
+  { value: 'st', label: 'ST' },
+  { value: 'nt', label: 'NT' },
+  { value: 'vj', label: 'VJ' },
+  { value: 'sbc', label: 'SBC' },
+  { value: 'sebc', label: 'SEBC' },
+  { value: 'other', label: 'Other' },
+];
 
-  heightRangeOptions = [
-    { value: '<150', label: 'Less than 150 cm' },
-    { value: '150-160', label: '150 - 160 cm' },
-    { value: '161-170', label: '161 - 170 cm' },
-    { value: '171-180', label: '171 - 180 cm' },
-    { value: '181-190', label: '181 - 190 cm' },
-    { value: '>190', label: 'More than 190 cm' }
-  ];
+heightRangeOptions = [
+  { value: '<150', label: 'Less than 150 cm' },
+  { value: '150-160', label: '150 - 160 cm' },
+  { value: '161-170', label: '161 - 170 cm' },
+  { value: '171-180', label: '171 - 180 cm' },
+  { value: '181-190', label: '181 - 190 cm' },
+  { value: '>190', label: 'More than 190 cm' }
+];
 
-  ageRanges = [
-    { value: "0-5", label: "0 - 5" },
-    { value: "6-12", label: "6 - 12" },
-    { value: "13-17", label: "13 - 17" },
-    { value: "18-24", label: "18 - 24" },
-    { value: "25-34", label: "25 - 34" },
-    { value: "35-44", label: "35 - 44" },
-    { value: "45-54", label: "45 - 54" },
-    { value: "55-64", label: "55 - 64" },
-    { value: "65-74", label: "65 - 74" },
-    { value: "75-84", label: "75 - 84" },
-    { value: "85-100", label: "85+" }
-  ];
+ageRanges = [
+  { value: "0-5", label: "0 - 5" },
+  { value: "6-12", label: "6 - 12" },
+  { value: "13-17", label: "13 - 17" },
+  { value: "18-24", label: "18 - 24" },
+  { value: "25-34", label: "25 - 34" },
+  { value: "35-44", label: "35 - 44" },
+  { value: "45-54", label: "45 - 54" },
+  { value: "55-64", label: "55 - 64" },
+  { value: "65-74", label: "65 - 74" },
+  { value: "75-84", label: "75 - 84" },
+  { value: "85-100", label: "85+" }
+];
 
   anyFilterSelected(): boolean {
     return Object.values(this.filters).some(value => value !== '');
@@ -199,81 +221,278 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
       });
     }
   }
+//  private saveSearchState(): void {
+//   const state = {
+//     filters: this.filters,
+//     pendingPersons: this.dataSourcePending.data,
+//     resolvedPersons: this.dataSourceResolved.data,
+//     filtersApplied: this.filtersApplied
+//   };
+//   sessionStorage.setItem('unidentifiedBodySearchState', JSON.stringify(state));
+// }
+// resetFilters(): void {
+//   this.filters = {
+//     full_name: '',
+//     city: '',
+//     state: '',
+//     startDate: null,
+//     endDate: null,
+//     caste: '',
+//     age_range: '',
+//     marital_status: '',
+//     blood_group: '',
+//     height_range: '',
+//     district: '',
+//     gender: ''
+//   };
 
-  applyFilters(): void {
-    this.loading = true;
-    this.progressMessage = "🔄 Applying filters...";
-    this.filtersApplied = true; // Ensure this is set when filters are applied
+//   this.dataSourcePending.data = [];
+//   this.dataSourceResolved.data = [];
+//   this.filtersApplied = false;
+  
+//   // Clear saved state
+//   sessionStorage.removeItem('unidentifiedBodySearchState');
+  
+//   // Reset pagination
+//   if (this.paginatorPending) {
+//     this.paginatorPending.firstPage();
+//   }
+//   if (this.paginatorResolved) {
+//     this.paginatorResolved.firstPage();
+//   }
+  
+//   this.progressMessage = "Filters have been reset";
+// }
 
-    // Safely parse and format dates
-    const parsedStartDate = this.parseToDate(this.filters.startDate);
-    const parsedEndDate = this.parseToDate(this.filters.endDate);
+resetFilters(): void {
+  this.filters = {
+    full_name: '',
+    city: '',
+    state: '',
+    startDate: null,
+    endDate: null,
+    caste: '',
+    age_range: '',
+    marital_status: '',
+    blood_group: '',
+    height_range: '',
+    district: '',
+    gender: ''
+  };
+  this.currentPage = 1; // Reset to first page
+    this.totalItems = 0;
+    
+    this.dataSourcePending.data = [];
+    this.dataSourceResolved.data = [];
+    this.filtersApplied = false;
+    
+    // Clear saved state
+    sessionStorage.removeItem('unidentifiedPersonsSearchState');
+    
+    this.progressMessage = "Filters have been reset";
+}
+  private saveSearchState(): void {
+    const state = {
+      filters: this.filters,
+      pendingPersons: this.dataSourcePending.data,
+      resolvedPersons: this.dataSourceResolved.data,
+      filtersApplied: this.filtersApplied,
+      currentPage: this.currentPage,
+      totalItems: this.totalItems
+    };
+    sessionStorage.setItem('unidentifiedPersonsSearchState', JSON.stringify(state));
+  }
+  hasGeographicFiltersApplied(): boolean {
+  return !!this.filters.state && !!this.filters.district && !!this.filters.city;
+}
+   hasActiveFilters(): boolean {
+  return Object.values(this.filters).some(value => value !== '');
+}
+  // applyFilters(): void {
+  //   this.loading = true;
+  //   this.progressMessage = "🔄 Applying filters...";
+  //   this.filtersApplied = true; // Ensure this is set when filters are applied
+  
+  //   // Safely parse and format dates
+  //   const parsedStartDate = this.parseToDate(this.filters.startDate);
+  //   const parsedEndDate = this.parseToDate(this.filters.endDate);
+  
+  //   if (parsedStartDate) {
+  //     this.filters.startDate = this.formatDate(parsedStartDate);
+  //   }
+  
+  //   if (parsedEndDate) {
+  //     this.filters.endDate = this.formatDate(parsedEndDate);
+  //   }
+  
+  //   this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
+  //     (response) => {
+  //       this.loading = false;
+  //       const responseData = response?.body.results || response;
+  
+  //       // Clear previous data
+  //       this.dataSourcePending.data = [];
+  //       this.dataSourceResolved.data = [];
+  
+  //       if (responseData?.message) {
+  //         this.progressMessage = responseData.message;
+  //       } else if (Array.isArray(responseData)) {
+  //         // Filter and set data
+  //         this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
+  //         this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
 
-    if (parsedStartDate) {
-      this.filters.startDate = this.formatDate(parsedStartDate);
-    }
-
-    if (parsedEndDate) {
-      this.filters.endDate = this.formatDate(parsedEndDate);
-    }
-
-    this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-      (response) => {
-        this.loading = false;
-        const responseData = response?.body || response;
-
-        // Clear previous data
-        this.dataSourcePending.data = [];
-        this.dataSourceResolved.data = [];
-
-        if (responseData?.message) {
-          this.progressMessage = responseData.message;
-        } else if (Array.isArray(responseData)) {
-          // Filter and set data
-          this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
-          this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
-
-          console.log("Pending Persons:", this.dataSourcePending.data);
-          console.log("Resolved Persons:", this.dataSourceResolved.data);
-          // Connect paginators (needed if data changes)
-          this.dataSourcePending.paginator = this.paginatorPending;
-          this.dataSourceResolved.paginator = this.paginatorResolved;
-
-          // Reset pagination to first page
-          if (this.paginatorPending) {
-            this.paginatorPending.firstPage();
-          }
-          if (this.paginatorResolved) {
-            this.paginatorResolved.firstPage();
-          }
-
-          this.progressMessage = responseData.length > 0
-            ? "✅ Filters applied successfully!"
-            : "No matching records found";
-        } else {
-          this.progressMessage = "❌ Unexpected response format from server";
-        }
-      },
-      (error) => {
-        this.loading = false;
-        console.error('Error fetching data:', error);
-        this.progressMessage = error.error?.message
-          ? `❌ ${error.error.message}`
-          : "❌ Error applying filters!";
-      }
-    );
+  //         this.saveSearchState();
+  
+  //         console.log("Pending Persons:", this.dataSourcePending.data);
+  //         console.log("Resolved Persons:", this.dataSourceResolved.data);
+  //         // Connect paginators (needed if data changes)
+  //         this.dataSourcePending.paginator = this.paginatorPending;
+  //         this.dataSourceResolved.paginator = this.paginatorResolved;
+  
+  //         // Reset pagination to first page
+  //         if (this.paginatorPending) {
+  //           this.paginatorPending.firstPage();
+  //         }
+  //         if (this.paginatorResolved) {
+  //           this.paginatorResolved.firstPage();
+  //         }
+  
+  //         this.progressMessage = responseData.length > 0 
+  //           ? "✅ Filters applied successfully!" 
+  //           : "No matching records found";
+  //       } else {
+  //         this.progressMessage = "❌ Unexpected response format from server";
+  //       }
+  //     },
+  //     (error) => {
+  //       this.loading = false;
+  //       console.error('Error fetching data:', error);
+  //       this.progressMessage = error.error?.message 
+  //         ? `❌ ${error.error.message}` 
+  //         : "❌ Error applying filters!";
+  //     }
+  //   );
+  // }
+  
+  
+  
+  // ✅ Helper function
+     getTotalItems(): number {
+    // Return the total count from your API response
+    return this.totalItems;
   }
 
+  getFirstItemNumber(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+  getLastItemNumber(): number {
+    const lastItem = this.currentPage * this.itemsPerPage;
+    return lastItem > this.totalItems ? this.totalItems : lastItem;
+  }
 
+  getLastPageNumber(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
 
-  // ✅ Helper function
+ goToFirstPage(): void {
+  if (this.paginationLinks.first && this.currentPage !== 1) {
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+}
+
+goToPreviousPage(): void {
+  if (this.paginationLinks.previous && this.currentPage > 1) {
+    this.currentPage--;
+    this.applyFilters();
+  }
+}
+
+goToNextPage(): void {
+  if (this.paginationLinks.next && this.currentPage < this.getLastPageNumber()) {
+    this.currentPage++;
+    this.applyFilters();
+  }
+}
+
+goToLastPage(): void {
+  if (this.paginationLinks.last) {
+    const lastPage = this.getLastPageNumber();
+    if (this.currentPage !== lastPage) {
+      this.currentPage = lastPage;
+      this.applyFilters();
+    }
+  }
+}
+    applyFilters(): void {
+  this.loading = true;
+  this.progressMessage = "🔄 Applying filters...";
+  this.filtersApplied = true;
+
+  const parsedStartDate = this.parseToDate(this.filters.startDate);
+  const parsedEndDate = this.parseToDate(this.filters.endDate);
+
+  if (parsedStartDate) {
+    this.filters.startDate = this.formatDate(parsedStartDate);
+  }
+
+  if (parsedEndDate) {
+    this.filters.endDate = this.formatDate(parsedEndDate);
+  }
+
+  this.missingPersonService.getPersonsByFilters(this.filters, this.currentPage).subscribe(
+    (response) => {
+      this.loading = false;
+      const responseData = response?.body?.results || response?.results || [];
+      
+      // Update pagination info from API response
+      if (response?.body?.count || response?.count) {
+        this.totalItems = response.body?.count || response.count;
+      }
+      
+      if (response?.body?.links || response?.links) {
+        this.paginationLinks = response.body?.links || response.links;
+      }
+
+      // Clear previous data
+      this.dataSourcePending.data = [];
+      this.dataSourceResolved.data = [];
+
+      if (responseData?.message) {
+        this.progressMessage = responseData.message;
+      } else if (Array.isArray(responseData)) {
+        this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
+        this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
+
+        // Save state to sessionStorage
+        this.saveSearchState();
+
+        this.dataSourcePending.paginator = this.paginatorPending;
+        this.dataSourceResolved.paginator = this.paginatorResolved;
+
+        this.progressMessage = responseData.length > 0 
+          ? "✅ Filters applied successfully!" 
+          : "No matching records found";
+      } else {
+        this.progressMessage = "❌ Unexpected response format from server";
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching data:', error);
+      this.progressMessage = error.error?.message 
+        ? `❌ ${error.error.message}` 
+        : "❌ Error applying filters!";
+    }
+  );
+}
   parseToDate(input: string | null): Date | null {
     if (!input) return null;
-
+  
     const parsed = new Date(input);
     return isNaN(parsed.getTime()) ? null : parsed;
   }
-
+  
   // ✅ Already existing date formatter
   formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -283,18 +502,13 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
   }
 
 
-  // viewDetails(person: Person): void {
-  //       this.router.navigate(['/search/unidentified-person/person-view', person.id]);
-  //   }
-
+  
   viewDetails(person: Person): void {
+    this.saveSearchState();
     sessionStorage.setItem('viewData', JSON.stringify({ id: person.id }));
     this.router.navigate(['/search/view-unidentified-person']);
   }
-
-
-
-
+  
 
   /** Initialize Leaflet map */
   initMap(): void {
@@ -367,21 +581,17 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
     };
   }
 
-  hasFiltersApplied(): boolean {
-    return !(
-      !this.filters.full_name &&
-      !this.filters.state &&
-      !this.filters.district &&
-      !this.filters.city &&
-      !this.filters.startDate &&
-      !this.filters.endDate &&
-      !this.filters.caste &&
-      !this.filters.gender &&
-      !this.filters.age_range &&
-      !this.filters.marital_status &&
-      !this.filters.blood_group &&
-      !this.filters.height_range
-    );
-  }
+hasFiltersApplied(): boolean {
+  return !(
+    !this.filters.full_name &&
+    !this.filters.startDate &&
+    !this.filters.endDate &&
+    !this.filters.caste &&
+    !this.filters.gender &&
+    !this.filters.age_range &&
+    !this.filters.marital_status &&
+    !this.filters.blood_group &&
+    !this.filters.height_range
+  );
 }
-
+}

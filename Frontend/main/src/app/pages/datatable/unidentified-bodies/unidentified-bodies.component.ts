@@ -51,18 +51,18 @@ export interface Person {
   standalone: true,
   providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
+  
 })
-export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
+export class UnidentifiedBodiesComponent  implements AfterViewInit , OnInit {
   today: Date = new Date();
 
 
-  @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
+@ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild('dialogTemplate', { static: true }) dialogTemplate!: TemplateRef<any>;
 
   dataSource = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
+  displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action','match_with'];
   displayedColumnsPending: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
   displayedColumnsResolved: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action'];
 
@@ -72,61 +72,84 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
   marker: L.Marker | undefined;
   environment = environment;
   missingPersons: any[] = [];
-  filteredPersons: any[] = [];
-  selectedMatch: any = null;
-  searchText: any;
-  allstates: any;
-  allcities: any;
-  alldistricts: any;
-  allmarital: any;
-  loading: boolean = false;
-  selectedMatched: any;
-  message: string = '';
-  errorMessage: string = '';
-  uniqueId: string = '';
-  matchId: number = 0;
-  rejectionReason: string = '';
-  selectedMatchForConfirmation: any;
-  showConfirmModal: boolean = false;
-  existing_reports: any[] = [];  // To store existing reports
-  report_data: any[] = [];
-  selectedReport: any;  // Variable to hold the selected report for details
-  isModalOpen: boolean = false;
-  isInitialLoad = true;
-  filtersApplied: boolean = false;  // Initially false
-  progress: number = 0;
-  progressColor: string = 'bg-primary'; // Corrected type of progressColor
-  progressMessage: string = '';
+    filteredPersons: any[] = []; 
+    selectedMatch: any = null;
+    searchText: any;
+    allstates: any;
+    allcities: any;
+    alldistricts: any;
+    allmarital: any;
+    loading: boolean = false; 
+    selectedMatched: any;
+    message: string = '';  
+    errorMessage: string = '';
+    uniqueId: string = ''; 
+    matchId: number = 0;  
+    rejectionReason: string = '';  
+    selectedMatchForConfirmation: any;  
+    showConfirmModal: boolean = false;
+    existing_reports: any[] = [];  // To store existing reports
+    report_data: any[] = []; 
+    selectedReport: any;  // Variable to hold the selected report for details
+    isModalOpen: boolean = false; 
+    isInitialLoad = true;
+    filtersApplied: boolean = false;  // Initially false
+    progress: number = 0;
+    progressColor: string = 'bg-primary'; // Corrected type of progressColor
+    progressMessage: string = '';
+      paginationLinks: any = {
+  first: null,
+  last: null,
+  next: null,
+  previous: null
+};
 
-  // ✅ Initialize data sources with empty arrays
-  dataSourcePending = new MatTableDataSource<any>([]);
-  dataSourceResolved = new MatTableDataSource<any>([]);
-  @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
-  @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
+    currentPage: number = 1;
+  itemsPerPage: number = 10; // Default items per page
+  totalItems: number = 0;
+  
+    
+   // ✅ Initialize data sources with empty arrays
+    dataSourcePending = new MatTableDataSource<any>([]);
+    dataSourceResolved = new MatTableDataSource<any>([]);
+      @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
+       @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
   months: any;
   years: any;
 
   constructor(
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialog: MatDialog,
-    public datePipe: DatePipe,
-    private missingPersonService: UnidentifiedbodyApiService,
-    private router: Router,
-  ) { }
+      @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+      public dialog: MatDialog,
+      public datePipe: DatePipe,
+      private missingPersonService: UnidentifiedbodyApiService,
+      private router: Router,
+    ) {
+      // Load saved state from sessionStorage if available
+  const savedState = sessionStorage.getItem('unidentifiedPersonsSearchState');
+  if (savedState) {
+    const parsedState = JSON.parse(savedState);
+    this.filters = parsedState.filters;
+    this.dataSourcePending.data = parsedState.pendingPersons || [];
+    this.dataSourceResolved.data = parsedState.resolvedPersons || [];
+    this.filtersApplied = parsedState.filtersApplied || false;
+        this.currentPage = parsedState.currentPage || 1;
+      this.totalItems = parsedState.totalItems || 0;
+  }
+    }
 
-  filters = {
-    full_name: '',
-    city: '',
-    state: '',
-    startDate: null as string | null,  // Change type to string | null
-    endDate: null as string | null,    // Change type to string | null
-    caste: '',
-    age_range: '',
-    marital_status: '',
-    blood_group: '',
-    height_range: '',
-    district: '',
-    gender: ''
+    filters = {
+      full_name: '',
+      city: '',
+      state: '',
+      startDate: null as string | null,  // Change type to string | null
+      endDate: null as string | null,    // Change type to string | null
+      caste: '',
+      age_range: '',
+      marital_status: '',
+      blood_group: '',
+      height_range: '',
+      district: '',
+      gender: ''
   };
   casteOptions = [
     { value: 'open', label: 'Open / General' },
@@ -139,7 +162,7 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
     { value: 'sebc', label: 'SEBC' },
     { value: 'other', label: 'Other' },
   ];
-
+  
   heightRangeOptions = [
     { value: '<150', label: 'Less than 150 cm' },
     { value: '150-160', label: '150 - 160 cm' },
@@ -162,18 +185,22 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
     { value: "75-84", label: "75 - 84" },
     { value: "85-100", label: "85+" }
   ];
+  
+    pendingPersons: any[] = [];
+    resolvedPersons: any[] = [];
 
-  pendingPersons: any[] = [];
-  resolvedPersons: any[] = [];
 
-
-  ngAfterViewInit(): void {
+ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSourcePending.paginator = this.paginatorPending;
     this.dataSourceResolved.paginator = this.paginatorResolved;
   }
   ngOnInit() {
     this.getStates();
+        this.getStates();
+      if (this.filtersApplied && (this.dataSourcePending.data.length === 0 && this.dataSourceResolved.data.length === 0)) {
+      this.applyFilters();
+    }
 
   }
   getStates() {
@@ -203,80 +230,251 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
       });
     }
   }
-  applyFilters(): void {
-    this.loading = true;
-    this.progressMessage = "🔄 Applying filters...";
-    this.filtersApplied = true; // Ensure this is set when filters are applied
 
-    // Safely parse and format dates
-    const parsedStartDate = this.parseToDate(this.filters.startDate);
-    const parsedEndDate = this.parseToDate(this.filters.endDate);
-
-    if (parsedStartDate) {
-      this.filters.startDate = this.formatDate(parsedStartDate);
-    }
-
-    if (parsedEndDate) {
-      this.filters.endDate = this.formatDate(parsedEndDate);
-    }
-
-    this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-      (response) => {
-        this.loading = false;
-        const responseData = response?.body || response;
-
-        // Clear previous data
-        this.dataSourcePending.data = [];
-        this.dataSourceResolved.data = [];
-
-        if (responseData?.message) {
-          this.progressMessage = responseData.message;
-        } else if (Array.isArray(responseData)) {
-          // Filter and set data
-          this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
-          this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
-
-          console.log("Pending Persons:", this.dataSourcePending.data);
-          console.log("Resolved Persons:", this.dataSourceResolved.data);
-          // Connect paginators (needed if data changes)
-          this.dataSourcePending.paginator = this.paginatorPending;
-          this.dataSourceResolved.paginator = this.paginatorResolved;
-
-          // Reset pagination to first page
-          if (this.paginatorPending) {
-            this.paginatorPending.firstPage();
-          }
-          if (this.paginatorResolved) {
-            this.paginatorResolved.firstPage();
-          }
-
-          this.progressMessage = responseData.length > 0
-            ? "✅ Filters applied successfully!"
-            : "No matching records found";
-        } else {
-          this.progressMessage = "❌ Unexpected response format from server";
-        }
-      },
-      (error) => {
-        this.loading = false;
-        console.error('Error fetching data:', error);
-        this.progressMessage = error.error?.message
-          ? `❌ ${error.error.message}`
-          : "❌ Error applying filters!";
-      }
-    );
+     getTotalItems(): number {
+    // Return the total count from your API response
+    return this.totalItems;
   }
 
+  getFirstItemNumber(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+  getLastItemNumber(): number {
+    const lastItem = this.currentPage * this.itemsPerPage;
+    return lastItem > this.totalItems ? this.totalItems : lastItem;
+  }
+
+  getLastPageNumber(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+ goToFirstPage(): void {
+  if (this.paginationLinks.first && this.currentPage !== 1) {
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+}
+
+goToPreviousPage(): void {
+  if (this.paginationLinks.previous && this.currentPage > 1) {
+    this.currentPage--;
+    this.applyFilters();
+  }
+}
+
+goToNextPage(): void {
+  if (this.paginationLinks.next && this.currentPage < this.getLastPageNumber()) {
+    this.currentPage++;
+    this.applyFilters();
+  }
+}
+
+goToLastPage(): void {
+  if (this.paginationLinks.last) {
+    const lastPage = this.getLastPageNumber();
+    if (this.currentPage !== lastPage) {
+      this.currentPage = lastPage;
+      this.applyFilters();
+    }
+  }
+}
+//   applyFilters(): void {
+//   this.loading = true;
+//   this.progressMessage = "🔄 Applying filters...";
+//   this.filtersApplied = true;
+
+//   // Safely parse and format dates
+//   const parsedStartDate = this.parseToDate(this.filters.startDate);
+//   const parsedEndDate = this.parseToDate(this.filters.endDate);
+
+//   if (parsedStartDate) {
+//     this.filters.startDate = this.formatDate(parsedStartDate);
+//   }
+
+//   if (parsedEndDate) {
+//     this.filters.endDate = this.formatDate(parsedEndDate);
+//   }
+
+//   this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
+//     (response) => {
+//       this.loading = false;
+//       const responseData = response?.body?.results || response;
+
+//       // Clear previous data
+//       this.dataSourcePending.data = [];
+//       this.dataSourceResolved.data = [];
+
+//       if (responseData?.message) {
+//         this.progressMessage = responseData.message;
+//       } else if (Array.isArray(responseData)) {
+//         // Filter and set data
+//         this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
+//         this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
+
+//         // Save current search state
+//         this.saveSearchState();
+
+//         // Debug logs
+//         console.log("Pending Persons:", this.dataSourcePending.data);
+//         console.log("Resolved Persons:", this.dataSourceResolved.data);
+
+//         // Connect paginators
+//         this.dataSourcePending.paginator = this.paginatorPending;
+//         this.dataSourceResolved.paginator = this.paginatorResolved;
+
+//         // Reset pagination to first page
+//         if (this.paginatorPending) {
+//           this.paginatorPending.firstPage();
+//         }
+//         if (this.paginatorResolved) {
+//           this.paginatorResolved.firstPage();
+//         }
+
+//         // Set progress message
+//         this.progressMessage = responseData.length > 0 
+//           ? "✅ Filters applied successfully!" 
+//           : "No matching records found";
+//       } else {
+//         this.progressMessage = "❌ Unexpected response format from server";
+//       }
+//     },
+//     (error) => {
+//       this.loading = false;
+//       console.error('Error fetching data:', error);
+//       this.progressMessage = error.error?.message 
+//         ? `❌ ${error.error.message}` 
+//         : "❌ Error applying filters!";
+//     }
+//   );
+// }
+applyFilters(): void {
+  this.loading = true;
+  this.progressMessage = "🔄 Applying filters...";
+  this.filtersApplied = true;
+
+  // Safely parse and format dates
+  const parsedStartDate = this.parseToDate(this.filters.startDate);
+  const parsedEndDate = this.parseToDate(this.filters.endDate);
+
+  if (parsedStartDate) {
+    this.filters.startDate = this.formatDate(parsedStartDate);
+  }
+
+  if (parsedEndDate) {
+    this.filters.endDate = this.formatDate(parsedEndDate);
+  }
+
+  // Fetch data from the service
+  this.missingPersonService.getPersonsByFilters(this.filters, this.currentPage).subscribe(
+    (response) => {
+      this.loading = false;
+
+      const responseData = response?.body?.results || response?.results || response || [];
+
+      // Update pagination info if available
+      if (response?.body?.count || response?.count) {
+        this.totalItems = response.body?.count || response.count;
+      }
+
+      if (response?.body?.links || response?.links) {
+        this.paginationLinks = response.body?.links || response.links;
+      }
+
+      // Clear existing table data
+      this.dataSourcePending.data = [];
+      this.dataSourceResolved.data = [];
+
+      // Handle response message
+      if (responseData?.message) {
+        this.progressMessage = responseData.message;
+      } else if (Array.isArray(responseData)) {
+        // Split data by case status
+        this.dataSourcePending.data = responseData.filter(body => body.case_status === 'pending');
+        this.dataSourceResolved.data = responseData.filter(body => body.case_status === 'resolved');
+
+        // Save current filter state
+        this.saveSearchState();
+
+        // Attach paginators
+        this.dataSourcePending.paginator = this.paginatorPending;
+        this.dataSourceResolved.paginator = this.paginatorResolved;
+
+        // Reset paginators to first page
+        if (this.paginatorPending) this.paginatorPending.firstPage();
+        if (this.paginatorResolved) this.paginatorResolved.firstPage();
+
+        this.progressMessage = responseData.length > 0
+          ? "✅ Filters applied successfully!"
+          : "No matching records found";
+      } else {
+        this.progressMessage = "❌ Unexpected response format from server";
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching data:', error);
+      this.progressMessage = error.error?.message 
+        ? `❌ ${error.error.message}` 
+        : "❌ Error applying filters!";
+    }
+  );
+}
 
 
+  hasGeographicFiltersApplied(): boolean {
+  return !!this.filters.state && !!this.filters.district && !!this.filters.city;
+}
+   hasActiveFilters(): boolean {
+  return Object.values(this.filters).some(value => value !== '');
+}
+
+resetFilters(): void {
+  this.filters = {
+    full_name: '',
+    city: '',
+    state: '',
+    startDate: null,
+    endDate: null,
+    caste: '',
+    age_range: '',
+    marital_status: '',
+    blood_group: '',
+    height_range: '',
+    district: '',
+    gender: ''
+  };
+  this.currentPage = 1; // Reset to first page
+    this.totalItems = 0;
+    
+    this.dataSourcePending.data = [];
+    this.dataSourceResolved.data = [];
+    this.filtersApplied = false;
+    
+    // Clear saved state
+    sessionStorage.removeItem('unidentifiedPersonsSearchState');
+    
+    this.progressMessage = "Filters have been reset";
+}
+  private saveSearchState(): void {
+    const state = {
+      filters: this.filters,
+      pendingPersons: this.dataSourcePending.data,
+      resolvedPersons: this.dataSourceResolved.data,
+      filtersApplied: this.filtersApplied,
+      currentPage: this.currentPage,
+      totalItems: this.totalItems
+    };
+    sessionStorage.setItem('unidentifiedPersonsSearchState', JSON.stringify(state));
+  }
+  
   // ✅ Helper function
   parseToDate(input: string | null): Date | null {
     if (!input) return null;
-
+  
     const parsed = new Date(input);
     return isNaN(parsed.getTime()) ? null : parsed;
   }
-
+  
   // ✅ Already existing date formatter
   formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -284,17 +482,16 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+  
 
 
 
   viewDetails(person: Person): void {
+    this.saveSearchState();
     sessionStorage.setItem('viewData', JSON.stringify({ id: person.id }));
     this.router.navigate(['/search/view-unidentified-body']);
   }
-
-
-
-
+  
   /** Initialize Leaflet map */
   initMap(): void {
     if (!this.selectedPerson) {
@@ -370,55 +567,31 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
 
 
 
-  hasFiltersApplied(): boolean {
-    return !(
-      !this.filters.full_name &&
-      !this.filters.state &&
-      !this.filters.district &&
-      !this.filters.city &&
-      !this.filters.startDate &&
-      !this.filters.endDate &&
-      !this.filters.caste &&
-      !this.filters.gender &&
-      !this.filters.age_range &&
-      !this.filters.marital_status &&
-      !this.filters.blood_group &&
-      !this.filters.height_range
-    );
+hasFiltersApplied(): boolean {
+  return !(
+    !this.filters.full_name &&
+    !this.filters.startDate &&
+    !this.filters.endDate &&
+    !this.filters.caste &&
+    !this.filters.gender &&
+    !this.filters.age_range &&
+    !this.filters.marital_status &&
+    !this.filters.blood_group &&
+    !this.filters.height_range
+  );
+
+  
+}
 
 
+getPhotoUrl(person: any): string {
+  const type = person?.type;
+
+  if (type === 'Unidentified Body') {
+    return 'assets/old/images/body_default.jpeg'; // Special default for Unidentified Body
   }
 
-
-
-
-
-
-
-
-
-
-
-
-  getPhotoUrl(person: any): string {
-    const type = person?.type;
-
-    if (type === 'Unidentified Body') {
-      return 'assets/old/images/body_default.jpeg'; // Special default for Unidentified Body
-    }
-
-    return 'assets/old/images/body_default.jpeg'; // One default image for everyone else
-  }
-
-
-
-
-
-
-
-
-
-
-
+  return 'assets/old/images/body_default.jpeg'; // One default image for everyone else
+}
 
 }
