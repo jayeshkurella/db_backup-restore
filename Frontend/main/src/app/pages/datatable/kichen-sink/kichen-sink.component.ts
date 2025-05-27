@@ -215,16 +215,13 @@ export class AppKichenSinkComponent implements AfterViewInit {
   progressColor: string = 'bg-primary'; // Corrected type of progressColor
   progressMessage: string = '';
 
-  paginationLinks: any = {
-    first: null,
-    last: null,
-    next: null,
-    previous: null
-  };
+  
+  
 
   currentPage: number = 1;
-  itemsPerPage: number = 10; // Default items per page
+  itemsPerPage: number = 10;
   totalItems: number = 0;
+  paginationLinks: any = {};
 
   displayedColumnsPending: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
   displayedColumnsResolved: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action'];
@@ -355,53 +352,47 @@ export class AppKichenSinkComponent implements AfterViewInit {
     }
   }
 
-  getTotalItems(): number {
-    // Return the total count from your API response
-    return this.totalItems;
+  onPageSizeChange() {
+    this.currentPage = 1; // Reset to first page when changing page size
+    this.applyFilters();
+  }
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.getLastPageNumber()) {
+      this.currentPage = page;
+      this.applyFilters();
+    }
   }
 
-  getFirstItemNumber(): number {
-    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  goToFirstPage(): void {
+    this.goToPage(1);
   }
-  getLastItemNumber(): number {
-    const lastItem = this.currentPage * this.itemsPerPage;
-    return lastItem > this.totalItems ? this.totalItems : lastItem;
+
+  goToPreviousPage(): void {
+    this.goToPage(this.currentPage - 1);
+  }
+
+  goToNextPage(): void {
+    this.goToPage(this.currentPage + 1);
+  }
+
+  goToLastPage(): void {
+    this.goToPage(this.getLastPageNumber());
   }
 
   getLastPageNumber(): number {
     return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
-  goToFirstPage(): void {
-    if (this.paginationLinks.first && this.currentPage !== 1) {
-      this.currentPage = 1;
-      this.applyFilters();
-    }
+  getFirstItemNumber(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
   }
 
-  goToPreviousPage(): void {
-    if (this.paginationLinks.previous && this.currentPage > 1) {
-      this.currentPage--;
-      this.applyFilters();
-    }
+  getLastItemNumber(): number {
+    const lastItem = this.currentPage * this.itemsPerPage;
+    return lastItem > this.totalItems ? this.totalItems : lastItem;
   }
 
-  goToNextPage(): void {
-    if (this.paginationLinks.next && this.currentPage < this.getLastPageNumber()) {
-      this.currentPage++;
-      this.applyFilters();
-    }
-  }
-
-  goToLastPage(): void {
-    if (this.paginationLinks.last) {
-      const lastPage = this.getLastPageNumber();
-      if (this.currentPage !== lastPage) {
-        this.currentPage = lastPage;
-        this.applyFilters();
-      }
-    }
-  }
+  
 
   applyFilters(): void {
     this.loading = true;
@@ -419,7 +410,13 @@ export class AppKichenSinkComponent implements AfterViewInit {
       this.filters.endDate = this.formatDate(parsedEndDate);
     }
 
-    this.missingPersonService.getPersonsByFilters(this.filters, this.currentPage).subscribe(
+    const requestParams = {
+      ...this.filters,
+      page: this.currentPage,
+      page_size: this.itemsPerPage
+    };
+
+    this.missingPersonService.getPersonsByFilters(requestParams).subscribe(
       (response) => {
         console.log('API Response:', response);
         this.loading = false;
@@ -443,12 +440,6 @@ export class AppKichenSinkComponent implements AfterViewInit {
         } else if (Array.isArray(responseData)) {
           this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
           this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
-
-          // Save state to sessionStorage
-          this.saveSearchState();
-
-          this.dataSourcePending.paginator = this.paginatorPending;
-          this.dataSourceResolved.paginator = this.paginatorResolved;
 
           this.progressMessage = responseData.length > 0
             ? "✅ Filters applied successfully!"

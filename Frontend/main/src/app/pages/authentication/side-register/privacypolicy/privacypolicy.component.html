@@ -1,120 +1,139 @@
-<div class="legal-documents-container">
-  <!-- Header Section -->
-  <div class="document-header">
-    <div class="header-content">
-      <!-- <mat-icon class="header-icon">gavel</mat-icon> -->
-      <h1>Legal Documents</h1>
-      <p class="effective-date">Effective: May 15, 2025 | Last Updated: May 15, 2025</p>
+<div class="container">
+  <!-- Side Navigation Tabs -->
+  <mat-nav-list class="sidenav">
+    <div class="logo-container">
+      <img src="assets/old/images/favicon-32x32.png" alt="Logo" />
+    </div>
+    <mat-list-item (click)="selectedTab = 'privacy'" [class.active]="selectedTab === 'privacy'">
+      <span>Privacy Policy</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'terms'" [class.active]="selectedTab === 'terms'">
+      <span>Terms of Use</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'disclaimer'" [class.active]="selectedTab === 'disclaimer'">
+      <span>Legal Disclaimer</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'Jurisdiction'" [class.active]="selectedTab === 'Jurisdiction'">
+      <span>Jurisdiction and Legal Standing</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'Updates'" [class.active]="selectedTab === 'Updates'">
+      <span>Updates to the Policy</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'Contact'" [class.active]="selectedTab === 'Contact'">
+      <span>Contact for Legal and Compliance Matters</span>
+    </mat-list-item>
+  </mat-nav-list>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h3 class="text-center ">Legal Documents</h3>
+
+    <div *ngIf="selectedTab === 'privacy'" class="tab-content">
+      <h4>Privacy Policy</h4>
+      <p>Chhaya Foundation ("we", "our", or "us") is committed to protecting your privacy in our TraceMapr application.
+      </p>
+
+      <h6>Information We Collect</h6>
+      <ul>
+        <li>Personal Identifiable Information (PII): Name, phone number, email address</li>
+        <li>Sensitive and Biometric Data: Photographs, distinguishing marks, DNA reports</li>
+        <li>Case-Specific Inputs: Last seen details, police report numbers</li>
+        <li>Device & Usage Data: IP addresses, browser details, timestamps</li>
+      </ul>
+
+      <h6>Purpose of Collection</h6>
+      <ul>
+        <li>Assist in lawful tracing and identification</li>
+        <li>Responsible data sharing with consent</li>
+        <li>Aggregated analytics for research</li>
+        <li>Preventive measures through case studies</li>
+      </ul>
+
+      <h5>Data Security</h5>
+      <ul>
+        <li>Data encrypted using AES protocols</li>
+        <li>TLS encrypted network communication</li>
+        <li>Strict role-based access control</li>
+      </ul>
+    </div>
+
+    <div *ngIf="selectedTab === 'terms'" class="tab-content">
+      <h4>Terms of Use</h4>
+      <h5>2.1 Platform Intent & Limitations</h5>
+      <p>TraceMapr is a civic technology platform developed by Chhaya Foundation for public assistance. It provides...
+      </p>
+      <h5>2.2 User Conduct</h5>
+      <ul>
+        <li>Submit accurate, lawful, and non-malicious content.</li>
+        <li>Avoid defamation, impersonation, or obscenity.</li>
+        <li>Refrain from submitting copyrighted materials without permission.</li>
+      </ul>
+      <p>Chhaya Foundation reserves the right to reject or redact submissions and share case details with authorities.
+      </p>
+      <h5>2.3 Limitation of Liability</h5>
+      <ul>
+        <li>Unresolved or misdirected cases.</li>
+        <li>Third-party misuse of data.</li>
+        <li>Submitter errors.</li>
+      </ul>
+    </div>
+
+    <div *ngIf="selectedTab === 'disclaimer'" class="tab-content">
+      <h4>Legal Disclaimer</h4>
+      <h5>3.1 Enhanced Discovery Support and Legal Position</h5>
+      <p>Chhaya Foundation does not guarantee case resolutions, but TraceMapr offers smart-matching tools, alerts, and
+        accessible digital records.</p>
+      <h5>3.2 Public Sharing and Responsible Disclosure</h5>
+      <ul>
+        <li>Indexed by search engines</li>
+        <li>Shared in public/closed groups</li>
+        <li>Referenced anonymously in research</li>
+      </ul>
+      <h5>3.3 Research and Analytics</h5>
+      <ul>
+        <li>Trends in trafficking, homelessness, etc.</li>
+        <li>Government policy support</li>
+      </ul>
+      <p>No identifiable data will be used without explicit consent.</p>
+    </div>
+
+    <div *ngIf="selectedTab === 'Jurisdiction'" class="tab-content">
+      <h5>Jurisdiction and Legal Standing</h5>
+      <p>Chhaya Foundation is registered in Pune, Maharashtra, India. All legal matters will be governed by Indian law.
+      </p>
+      <ul>
+        <li>All legal disputes or complaints shall fall under the jurisdiction of the Courts of Pune, Maharashtra,
+          India.</li>
+        <li>Chhaya Foundation’s name, reputation, and volunteers shall be protected from defamatory or false
+          allegations.</li>
+        <li>Frivolous or malicious submissions will be shared with law enforcement for action under IPC and IT Act.</li>
+      </ul>
+    </div>
+
+
+    <div *ngIf="selectedTab === 'Updates'" class="tab-content">
+      <h5>Updates to the Policy</h5>
+      <br>
+      <p>
+        We may update this policy periodically. Substantial changes will be communicated via app updates, email, or
+        in-app/platform notices.
+        Continued use of the platform after such updates implies your acceptance of the revised policy.
+      </p>
+    </div>
+
+
+    <div *ngIf="selectedTab === 'Contact'" class="tab-content">
+      <h5>Contact for Legal and Compliance Matters</h5>
+      <br>
+      <p>For any legal or compliance inquiries, please contact us at:</p>
+      <p>Email: support&#64;tracemapr.com</p>
+      <p>Phone: 8010318285</p>
+      <p>Address: Chhaya Foundation, Pune, Maharashtra, India</p>
     </div>
   </div>
-
-  <!-- Navigation Tabs -->
-  <mat-tab-group class="legal-tabs">
-    <mat-tab label="Privacy Policy">
-      <div class="tab-content">
-        <!-- Privacy Policy Content -->
-        <div class="document-section">
-          <div class="section-header">
-            <mat-icon>privacy_tip</mat-icon>
-            <h2>Privacy Policy</h2>
-          </div>
-          <p class="section-intro">Chhaya Foundation ("we", "our", or "us") is committed to protecting your privacy in our TraceMapr application.</p>
-          
-          <div class="subsection">
-            <h3><mat-icon>collections</mat-icon> Information We Collect</h3>
-            <ul class="content-list">
-              <li><strong>Personal Identifiable Information (PII):</strong> Name, phone number, email address</li>
-              <li><strong>Sensitive and Biometric Data:</strong> Photographs, distinguishing marks, DNA reports</li>
-              <li><strong>Case-Specific Inputs:</strong> Last seen details, police report numbers</li>
-              <li><strong>Device & Usage Data:</strong> IP addresses, browser details, timestamps</li>
-            </ul>
-          </div>
-
-          <div class="subsection">
-            <h3><mat-icon>assignment</mat-icon> Purpose of Collection</h3>
-            <ul class="content-list">
-              <li>Assist in lawful tracing and identification</li>
-              <li>Responsible data sharing with consent</li>
-              <li>Aggregated analytics for research</li>
-              <li>Preventive measures through case studies</li>
-            </ul>
-          </div>
-
-          <div class="subsection">
-            <h3><mat-icon>security</mat-icon> Data Security</h3>
-            <ul class="content-list">
-              <li>Data encrypted using AES protocols</li>
-              <li>TLS encrypted network communication</li>
-              <li>Strict role-based access control</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Terms of Use">
-      <div class="tab-content">
-        <!-- Terms of Use Content -->
-        <div class="document-section">
-          <div class="section-header">
-            <mat-icon>description</mat-icon>
-            <h2>Terms of Use</h2>
-          </div>
-          
-          <div class="subsection">
-            <h3><mat-icon>warning</mat-icon> Platform Intent & Limitations</h3>
-            <p>TraceMapr is a civic technology platform for public assistance in missing persons cases. We make no representation or guarantee that any submission will result in resolution.</p>
-          </div>
-
-          <div class="subsection">
-            <h3><mat-icon>rule</mat-icon> User Conduct</h3>
-            <ul class="content-list">
-              <li>Submit accurate, lawful content</li>
-              <li>Avoid defamation or impersonation</li>
-              <li>No copyrighted materials without permission</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Legal Disclaimer">
-      <div class="tab-content">
-        <!-- Legal Disclaimer Content -->
-        <div class="document-section">
-          <div class="section-header">
-            <mat-icon>balance</mat-icon>
-            <h2>Legal Disclaimer</h2>
-          </div>
-          
-          <div class="subsection">
-            <h3><mat-icon>not_interested</mat-icon> No Guarantees</h3>
-            <p>Chhaya Foundation does not guarantee that a definitive match will be found or that every submitted case will be resolved.</p>
-          </div>
-
-          <div class="subsection">
-            <h3><mat-icon>public</mat-icon> Public Sharing</h3>
-            <p>Users acknowledge that any media uploaded (with consent) may be indexed by search engines and circulated in relevant groups.</p>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-
-  <!-- Footer -->
-  <div class="document-footer">
-    <div class="contact-info">
-      <h3><mat-icon>contact_support</mat-icon> Contact Information</h3>
-      <p><mat-icon>email</mat-icon> supporttracemapr.com</p>
-      <p><mat-icon>phone</mat-icon> 8010318285</p>
-      <p><mat-icon>location_on</mat-icon> Chhaya Foundation, Pune, Maharashtra, India</p>
-    </div>
-  </div>
-</div>
-
-<div class="container mt-5 justify-content-center">
-  
-  <p>All legal and privacy terms go here. Please read them carefully before agreeing.</p>
-  <button class="btn btn-success mt-3" (click)="agreeAndReturn()">I Agree</button>
-  <button class="btn btn-success mt-3" (click)="disagreeAndReturn()">Back</button>
+  <footer class="footer">
+   <button mat-flat-button color="primary" class="btn-back" (click)="goBack()">
+      <i class="material-icons">arrow_back</i> Back
+    </button>
+  </footer>
 </div>

@@ -78,7 +78,7 @@ class AdditionalInfo(models.Model):
         OTHER = 'other', 'Other'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    caste = models.CharField(max_length=20,blank=True, null=True)
+    caste = models.CharField(max_length=20,choices=CasteChoices,blank=True, null=True)
     subcaste = models.CharField(max_length=50, blank=True, null=True)
     marital_status = models.CharField(max_length=50, choices=MaritalStatusChoices.choices)
     religion = models.CharField(max_length=50, blank=True, null=True,choices=ReligionChoices.choices)
@@ -86,8 +86,8 @@ class AdditionalInfo(models.Model):
     other_known_languages  = models.CharField(max_length=50, blank=True, null=True, help_text="Comma-separated languages")
     id_type = models.CharField(max_length=100, choices=IdTypeChoices.choices,blank=True, null=True)
     id_no = models.CharField(max_length=100,  help_text="Unique identification number",blank=True, null=True)
-    education_details = models.CharField(max_length=50, blank=True, null=True)
-    occupation_details = models.CharField(max_length=50, blank=True, null=True)
+    education_details = models.CharField(max_length=150, blank=True, null=True)
+    occupation_details = models.CharField(max_length=150, blank=True, null=True)
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL,blank=True, null=True)
     person = models.ForeignKey(Person, on_delete=models.SET_NULL,null=True, blank=True,related_name="additional_info",)

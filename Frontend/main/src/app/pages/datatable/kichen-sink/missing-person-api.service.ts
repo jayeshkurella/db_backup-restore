@@ -12,29 +12,36 @@ export class MissingPersonApiService {
 
   constructor(private http: HttpClient) { }
 
-  getPersonsByFilters(filters: any,page: number = 1): Observable<any> {
-    const params = new HttpParams({ fromObject: filters });
-  
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      console.error('No auth token found in localStorage!');
-      return throwError(() => new Error('Unauthorized: No token found'));
-    }
-  
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-  
-    return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, { 
-      params, 
-      headers: headers, 
-      observe: 'response' 
-    }).pipe(
-      tap(response => console.log("Response Headers:", response.headers)),
-      catchError(error => {
-        console.error("Error Response:", error);
-        return throwError(() => error);
-      })
-    );
+  getPersonsByFilters(filters: any): Observable<any> {
+  const { page, page_size, ...filterParams } = filters;
+
+  let params = new HttpParams({ fromObject: filterParams });
+
+  // Add pagination separately
+  if (page) params = params.set('page', page);
+  if (page_size) params = params.set('page_size', page_size);
+
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    console.error('No auth token found in localStorage!');
+    return throwError(() => new Error('Unauthorized: No token found'));
   }
+
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+
+  return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, {
+    params,
+    headers,
+    observe: 'response'
+  }).pipe(
+    tap(response => console.log("Response Headers:", response.headers)),
+    catchError(error => {
+      console.error("Error Response:", error);
+      return throwError(() => error);
+    })
+  );
+}
+
   
   
   

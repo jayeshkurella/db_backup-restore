@@ -1,3 +1,6 @@
+ .search-container {
+    min-height: 80vh;
+  }
 .back-btn {
   margin-right: 25px; 
 }
@@ -98,4 +101,20 @@
 img {
   max-width: 100%;
   height: auto;
+}
+
+.parent-container {
+  display: flex;
+  justify-content: center;  /* centers horizontally */
+  align-items: center;      /* centers vertically */
+  height: 100vh;            /* example height - adjust as needed */
+}
+
+.placeholder-image {
+  width: 70%;
+  height: auto;
+  opacity: 0.5;
+  margin:auto;
+
+  display: block;
 }

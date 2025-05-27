@@ -346,7 +346,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       country: [''],
 
       pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
-      landmark_details: ['', [Validators.maxLength(50), this.landmarkValidator()]],
+      landmark_details: ['', [Validators.maxLength(150), this.landmarkValidator()]],
       street: ['', [Validators.maxLength(30), this.textOnlyValidator()]],
       village: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s-]*$/)]],
 

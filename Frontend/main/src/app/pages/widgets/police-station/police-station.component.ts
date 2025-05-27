@@ -169,11 +169,20 @@ onImageError(event: Event) {
     });
   }
 
-  getStates() {
-    this.missingPersonService.getStates().subscribe(states => {
-      this.allstates = states;
-    });
-  }
+ getStates() {
+  this.missingPersonService.getStates().subscribe(states => {
+    this.allstates = states;
+
+    // Set default state to Maharashtra only if not already selected
+    if (!this.searchFilters.state) {
+      const defaultState = this.allstates.find(state => state.toLowerCase() === 'maharashtra');
+      if (defaultState) {
+        this.searchFilters.state = defaultState;
+        this.onStateChange(); // Trigger district loading for Maharashtra
+      }
+    }
+  });
+}
   onStateChange() {
     this.searchFilters.district = '';
     this.searchFilters.city = '';

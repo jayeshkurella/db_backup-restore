@@ -41,8 +41,10 @@
     </div>
   </div>
 
-  <ng-container *ngIf="caseData">
-    <mat-card-content class="mat-typography container-fluid py-2 mt-3">
+
+  <ng-container class=".parent-container">
+    <img *ngIf="!caseData" src="../../../../assets/old/images/Logo_hd.png" alt="Loading..." class="placeholder-image">
+    <mat-card-content *ngIf="caseData" class="mat-typography container-fluid py-2 mt-3">
       <!-- Basic Information -->
       <mat-card class="mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Basic Information</mat-card-title>
@@ -333,4 +335,6 @@
       </mat-card>
     </mat-card-content>
   </ng-container>
+
+
 </div>

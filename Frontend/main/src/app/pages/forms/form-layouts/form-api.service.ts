@@ -129,5 +129,64 @@ export class FormApiService {
     );
   }
 
+  getEducationalTags(): Observable<any[]> {
+    const headers = this.createHeaders();
+    return this.http
+      .get<any[]>(`${this.apiUrl}/api/educational_tags/`, { headers, observe: 'response' })
+      .pipe(
+        tap((response) => {
+          console.log('Educational Tags Headers:', response.headers);
+        }),
+        map((response) => response.body || [])
+      );
+  }
+
+  addEducationalTag(name: string): Observable<any> {
+    const headers = this.createHeaders();
+    return this.http
+      .post<any>(
+        `${this.apiUrl}/api/educational_tags/`,
+        { name },
+        { headers, observe: 'response' }
+      )
+      .pipe(
+        tap((response) => {
+          console.log('Added Educational Tag Headers:', response.headers);
+        }),
+        map((response) => response.body as any)
+      );
+  }
+
+  getOccupationTags(): Observable<any[]> {
+    const headers = this.createHeaders();
+    return this.http
+      .get<any[]>(`${this.apiUrl}/api/occupation_tags/`, { headers, observe: 'response' })
+      .pipe(
+        tap((response) => {
+          console.log('Occupation Tags Headers:', response.headers);
+        }),
+        map((response) => response.body || [])
+      );
+  }
+
+  addOccupationTag(name: string): Observable<any> {
+    const headers = this.createHeaders();
+    return this.http
+      .post<any>(
+        `${this.apiUrl}/api/occupation_tags/`,
+        { name },
+        { headers, observe: 'response' }
+      )
+      .pipe(
+        tap((response) => {
+          console.log('Added Occupation Tag Headers:', response.headers);
+        }),
+        map((response) => response.body as any)
+      );
+  }
+
+
+
+
 
 }

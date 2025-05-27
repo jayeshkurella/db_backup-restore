@@ -129,24 +129,45 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     'Australia',
     'Canada',
   ];
+  casteOptions = [
+    { value: 'sc', label: 'Scheduled Caste (SC)' },
+    { value: 'st', label: 'Scheduled Tribe (ST)' },
+    { value: 'obc', label: 'Other Backward Class (OBC)' },
+    { value: 'open', label: 'Open / General' },
+    { value: 'nt', label: 'Nomadic Tribes (NT)' },
+    { value: 'sbc', label: 'Special Backward Class (SBC)' },
+    { value: 'vj', label: 'Vimukta Jati (VJ)' },
+    { value: 'sebc', label: 'Socially and Educationally Backward Class (SEBC)' },
+    { value: 'other', label: 'Other' }
+  ];
+
   selectedImage: string | ArrayBuffer | null | undefined;
   uploadedFiles: any;
   selectedFiles: { [key: string]: any[] } = {};
   hospitalList: any[] = [];
   policeStationList: any[] = [];
   today: string;
+
   casteControl = new FormControl('');
   castes: { id: number; name: string }[] = [];
   filteredCastes!: Observable<string[]>;
   showAddOption: boolean = false;
-
+  educations: any[] = [];
+  occupations: any[] = [];
+  filteredEducations!: Observable<string[]>;
+  filteredOccupations!: Observable<string[]>;
+  showAddEducationOption = false;
+  showAddOccupationOption = false;
+  educationInputControl = new FormControl('');
+  educationOptions: string[] = ['SSC', 'HSC', 'BE', 'BSC']; // fetched from API
+  filteredEducationOptions: string[] = [];
+  currentEducationFragment = '';
   constructor(
     private fb: FormBuilder,
     private formapi: FormApiService,
     private datePipe: DatePipe,
     private toastr: ToastrService,
     private dialog: MatDialog,
-    private snackbar: ToastrService
   ) {
     this.today = new Date().toISOString().split('T')[0];
   }
@@ -186,19 +207,24 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initializeForm();
     this.checkUserRole();
-     this.loadCastes();
+    this.loadCastes();
     this.getperson();
-    
+
     this.fetchHospitalList();
     this.fetchPoliceStationList();
-   
+
     this.setupFilteredCastes();
+    this.loadEducations();
+    this.loadOccupations();
+
+    this.setupFilteredEducations();
+    this.setupFilteredOccupations();
   }
   checkUserRole() {
     const userType = localStorage.getItem('user_type');
     this.isAdminUser = userType === 'admin';
   }
-loadCastes() {
+  loadCastes() {
     this.formapi.getCastes().subscribe({
       next: (data) => {
         this.castes = data;
@@ -268,20 +294,169 @@ loadCastes() {
   }
 
 
-deleteCaste(casteId: number): void {
-  if (confirm('Are you sure you want to delete this caste?')) {
-    this.formapi.deleteCaste(casteId).subscribe({
-      next: () => {
-        this.castes = this.castes.filter(c => c.id !== casteId);
-        this.toastr.success('Caste deleted successfully', 'Close', {
+  deleteCaste(casteId: number): void {
+    if (confirm('Are you sure you want to delete this caste?')) {
+      this.formapi.deleteCaste(casteId).subscribe({
+        next: () => {
+          this.castes = this.castes.filter(c => c.id !== casteId);
+          this.toastr.success('Caste deleted successfully', 'Close', {
 
-        });
-        this.setupFilteredCastes();
+          });
+          this.setupFilteredCastes();
+        },
+        error: () => {
+          alert('Failed to delete caste');
+        }
+      });
+    }
+  }
+  loadEducations() {
+    this.formapi.getEducationalTags().subscribe({
+      next: (data) => {
+        this.educations = data;
+        this.setupFilteredEducations();
       },
-      error: () => {
-        alert('Failed to delete caste');
-      }
+      error: (err) => console.error('Error loading educations:', err)
     });
+  }
+
+  loadOccupations() {
+    this.formapi.getOccupationTags().subscribe({
+      next: (data) => {
+        this.occupations = data;
+        this.setupFilteredOccupations();
+      },
+      error: (err) => console.error('Error loading occupations:', err)
+    });
+  }
+  setupFilteredEducations() {
+    const educationControl = this.additionalInfo.at(0).get('education_details');
+    if (!educationControl) return;
+
+    this.filteredEducations = educationControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const filterValue = (value || '').toLowerCase().trim();
+        const names = this.educations.map(e => e.name);
+        this.showAddEducationOption = !!filterValue && !names.some(e => e.toLowerCase() === filterValue);
+        return names.filter(name => name.toLowerCase().includes(filterValue));
+      })
+    );
+  }
+
+  setupFilteredOccupations() {
+    const occupationControl = this.additionalInfo.at(0).get('occupation_details');
+    if (!occupationControl) return;
+
+    this.filteredOccupations = occupationControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const filterValue = (value || '').toLowerCase().trim();
+        const names = this.occupations.map(o => o.name);
+        this.showAddOccupationOption = !!filterValue && !names.some(o => o.toLowerCase() === filterValue);
+        return names.filter(name => name.toLowerCase().includes(filterValue));
+      })
+    );
+  }
+ addEducationIfNotExists(value: string): void {
+  this.formapi.addEducationalTag(value).subscribe({
+    next: (res) => {
+      this.educationOptions.push(res.name);
+
+      const parts = (this.educationInputControl.value ?? '').split(',').map(p => p.trim());
+      parts[parts.length - 1] = res.name;
+
+      this.educationInputControl.setValue(parts.join(', ') + ', ');
+      this.showAddEducationOption = false;
+    },
+    error: (err) => console.error('Error adding education:', err)
+  });
+}
+
+  addOccupationIfNotExists(value: string) {
+    this.formapi.addOccupationTag(value).subscribe({
+      next: (res) => {
+        this.occupations.push(res);
+        this.additionalInfo.at(0).get('occupation_details')?.setValue(res.name);
+        this.showAddOccupationOption = false;
+        this.setupFilteredOccupations();
+      },
+      error: (err) => console.error('Error adding occupation:', err)
+    });
+  }
+  onEducationSelected(event: MatAutocompleteSelectedEvent) {
+    const value = event.option.value?.trim();
+    if (!value) return;
+
+    const exists = this.educations.some(e => e.name.toLowerCase() === value.toLowerCase());
+
+    if (this.showAddEducationOption && !exists) {
+      this.addEducationIfNotExists(value);
+    } else {
+      this.additionalInfo.at(0).get('education_details')?.setValue(value);
+    }
+  }
+
+  onOccupationSelected(event: MatAutocompleteSelectedEvent) {
+    const value = event.option.value?.trim();
+    if (!value) return;
+
+    const exists = this.occupations.some(o => o.name.toLowerCase() === value.toLowerCase());
+
+    if (this.showAddOccupationOption && !exists) {
+      this.addOccupationIfNotExists(value);
+    } else {
+      this.additionalInfo.at(0).get('occupation_details')?.setValue(value);
+    }
+  }
+  onEducationInputFocus(): void {
+    const control = this.additionalInfo.at(0).get('education_details');
+    if (control && !control.value) {
+      control.setValue('');
+    }
+  }
+
+  onOccupationInputFocus(): void {
+    const control = this.additionalInfo.at(0).get('occupation_details');
+    if (control && !control.value) {
+      control.setValue('');
+    }
+  }
+
+  onEducationInputChange(): void {
+    const inputValue = this.educationInputControl?.value ?? '';
+    const parts = inputValue.split(',');
+    const lastFragment = parts[parts.length - 1].trim().toLowerCase();
+
+    this.currentEducationFragment = lastFragment;
+
+    this.filteredEducationOptions = this.educationOptions
+      .filter(option =>
+        option.toLowerCase().startsWith(lastFragment) &&
+        !parts.map(p => p.trim().toLowerCase()).includes(option.toLowerCase())
+      );
+
+    this.showAddEducationOption = !!lastFragment &&
+      !this.educationOptions.map(opt => opt.toLowerCase()).includes(lastFragment);
+  } 
+  onEducationOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    const inputValue: string = this.educationInputControl.value ?? '';
+
+    const parts = inputValue.split(',').map(p => p.trim());
+
+    // Replace the last typed fragment with selected value
+    parts[parts.length - 1] = event.option.value;
+
+    this.educationInputControl.setValue(parts.join(', ') + ', ');
+    this.showAddEducationOption = false;
+  }
+onEducationEnter(event: Event): void {
+  const keyboardEvent = event as KeyboardEvent;
+
+  keyboardEvent.preventDefault();
+
+  if (this.showAddEducationOption && this.currentEducationFragment) {
+    this.addEducationIfNotExists(this.currentEducationFragment);
   }
 }
 

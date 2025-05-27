@@ -60,6 +60,7 @@ interface quicklinks {
         // BrandingComponent
     ],
     templateUrl: './full.component.html',
+    styleUrls: ['./full.component.scss'],
   
     encapsulation: ViewEncapsulation.None
 })

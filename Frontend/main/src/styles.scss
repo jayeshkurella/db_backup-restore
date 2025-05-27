@@ -18,3 +18,20 @@ div.leaflet-popup-content{
   margin-left: 20px;
 }
 
+
+/* Override Toastr warning background to orange */
+.toast-success {
+  background-color: #f15a22 !important; /* bright orange */
+  color: white !important;
+}
+
+
+.bordercolor{
+  border: 2px solid;
+  border-color: #FFD7BE  !important; 
+}
+
+
+.footer{
+  min-height: 82vh !important;
+}

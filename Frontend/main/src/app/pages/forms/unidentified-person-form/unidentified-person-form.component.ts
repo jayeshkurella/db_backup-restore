@@ -115,45 +115,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
     this.storedPersonId = localStorage.getItem('user_id');
     console.log(this.storedPersonId, "id");
   }
-  // allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedPersonForm' | 'firsForm'): boolean {
-  //   const charCode = event.key.charCodeAt(0);
-  //   const allowedKeys = [8, 9, 13, 37, 38, 39, 40]; // Backspace, Tab, Enter, Arrows
-
-  //   const isValidChar =
-  //     (charCode >= 65 && charCode <= 90) ||  // A-Z
-  //     (charCode >= 97 && charCode <= 122) || // a-z
-  //     charCode === 32 ||                      // space
-  //     allowedKeys.includes(event.keyCode);   // navigation keys
-
-  //   let form;
-  //   switch (formGroup) {
-  //     case 'contactForm':
-  //       form = this.contactForm;
-  //       break;
-  //     case 'unidentifiedPersonForm':
-  //       form = this.unidentifiedPersonForm;
-  //       break;
-  //     case 'firsForm':
-  //       form = this.firsForm;
-  //       break;
-  //   }
-
-  //   const control = form.get(controlName);
-
-  //   if (!isValidChar) {
-  //     control?.setErrors({ invalidChars: true });
-  //     event.preventDefault();
-  //     return false;
-  //   } else {
-  //     // Clear error if valid
-  //     const currentErrors = control?.errors;
-  //     if (currentErrors?.['invalidChars']) {
-  //       delete currentErrors['invalidChars'];
-  //       control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
-  //     }
-  //     return true;
-  //   }
-  // }
+ 
   allowOnlyLetters(event: KeyboardEvent, controlName: string, formGroup: 'contactForm' | 'unidentifiedPersonForm' | 'firsForm'): boolean {
     const key = event.key;
     const allowedPattern = /^[a-zA-Z.\s]$/;
@@ -303,14 +265,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
 
       birth_mark: ['', [Validators.maxLength(250), Validators.pattern(/^[a-zA-Z\s]*$/)]],
       distinctive_mark: ['', [Validators.maxLength(250), Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      //   full_name: ['', [Validators.pattern(/^[a-zA-Z\s]{1,30}$/)]],
-      // birth_date: [null],
-
-      // gender: ['', Validators.required],
-      // height: ['', [Validators.max(250), Validators.pattern(/^[0-9]+$/)]],
-      // weight: ['', [Validators.max(200), Validators.pattern(/^[0-9]+$/)]],
-      //   birth_mark: ['', Validators.maxLength(250)],
-      // distinctive_mark: ['', Validators.maxLength(250)],
+      
       type: ['Unidentified Person'],
 
       age: [null],
@@ -390,7 +345,7 @@ export class UnidentifiedPersonFormComponent implements OnInit, AfterViewInit {
   createAddressFormGroup(): FormGroup {
     return this.fb.group({
       pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
-      landmark_details: ['', [Validators.maxLength(50), this.landmarkValidator()]],
+      landmark_details: ['', [Validators.maxLength(150), this.landmarkValidator()]],
       street: ['', [Validators.maxLength(30), this.textOnlyValidator()]],
       village: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z\s-]*$/)]],
       district: [''],
