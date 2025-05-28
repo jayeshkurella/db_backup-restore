@@ -1,9 +1,9 @@
 <div class="changelog-container footer">
   <div class="changelog-header">
-    <h2> Change log</h2>
-   <button *ngIf="isLoggedIn" mat-raised-button color="primary" (click)="goToAddLog()" class="add-log-btn">
-  Add Log
-</button>
+    <h5> Change log</h5>
+    <button *ngIf="isLoggedIn" mat-flat-button color="primary" (click)="goToAddLog()">
+      Add Log
+    </button>
 
   </div>
 
@@ -14,7 +14,7 @@
         <div class="log-timeline-dot"></div>
         <div class="log-timeline-line"></div>
       </div>
-      
+
       <mat-card class="log-card">
         <mat-card-header>
           <mat-card-title>
@@ -24,13 +24,13 @@
 
           </mat-card-title>
         </mat-card-header>
-        
+
 
         <mat-card-content>
           <div *ngIf="log.added.length" class="log-section">
             <div class="log-section-header">
               <mat-icon class="section-icon">add_circle</mat-icon>
-              <h4 >Added Features</h4>
+              <h4>Added Features</h4>
             </div>
             <ul>
               <li *ngFor="let item of log.added">

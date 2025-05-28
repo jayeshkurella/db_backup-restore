@@ -126,8 +126,8 @@ class HospitalViewSet(viewsets.ModelViewSet):
                 hospital_data = request.data.copy()
                 hospital_data["address"] = address.id
                 hospital_data["hospital_photo"] = hospital_photo
-                hospital_data["created_by"] = request.user.id  # ✅ NEW
-                # hospital_data["updated_by"] = request.user.id  # ✅ NEW
+                hospital_data["created_by"] = request.user.id
+                # hospital_data["updated_by"] = request.user.id
 
                 contacts_data = request.data.get("hospital_contact", "[]")
                 if isinstance(contacts_data, str):

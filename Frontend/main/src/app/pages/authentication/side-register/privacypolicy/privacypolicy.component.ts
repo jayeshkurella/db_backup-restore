@@ -7,9 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { PrivacyrouteService } from './privacyroute.service';
+
+
 @Component({
   selector: 'app-privacypolicy',
-  imports: [CommonModule,MatButtonModule,MatListModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, MatButtonModule, MatListModule, MatIconModule, MatDividerModule],
   templateUrl: './privacypolicy.component.html',
   styleUrl: './privacypolicy.component.scss',
   host: {
@@ -18,10 +21,11 @@ import { MatDividerModule } from '@angular/material/divider';
 
 })
 export class PrivacypolicyComponent {
-    selectedTab: string = 'privacy';
+  selectedTab: string = 'privacy';
 
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private previousRouteService:PrivacyrouteService ) { }
+
 
   agreeAndReturn() {
     localStorage.setItem('userAgreedToPrivacy', 'true');
@@ -32,7 +36,16 @@ export class PrivacypolicyComponent {
     this.router.navigate(['/authentication/side-register']);
   }
 
-  goBack(){
-      this.router.navigate(['/']);
+  // goBack(){
+  //     this.router.navigate(['/authentication/side-register']);
+  // }
+  goBack() {
+    const previousUrl = this.previousRouteService.getPreviousUrl();
+    if (previousUrl) {
+      this.router.navigateByUrl(previousUrl);
+    } else {
+      // fallback if no previous route
+      this.router.navigate(['/authentication/side-register']);
+    }
   }
 }

@@ -154,14 +154,18 @@
               </div>
 
               <!-- Consent Checkbox -->
-              <div class="mb-3 d-flex align-items-center">
-                <input type="checkbox" class="form-check-input me-2" [checked]="registerForm.value.is_consent"
-                  (change)="onConsentClick($event)" />
+              <!-- Simplified Consent Checkbox Bound to Form -->
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" formControlName="is_consent"
+                  [ngClass]="{ 'is-invalid': registerForm.controls['is_consent'].invalid && submitted }">
                 <label class="form-check-label">
-                  I agree to the
-                  <span class="text-danger fw-bold">Privacy Policy</span>
+                  I agree to the Privacy Policy.
                 </label>
+                <div class="text-danger" *ngIf="registerForm.controls['is_consent'].invalid && submitted">
+                  You must agree to the privacy policy.
+                </div>
               </div>
+
 
 
               <!-- Submit Button -->

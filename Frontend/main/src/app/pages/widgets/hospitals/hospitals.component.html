@@ -1,56 +1,80 @@
 <div class="page-container mat-elevation-z2 footer">
   <!-- Header -->
-  <div class="header-container d-flex justify-content-between align-items-center mb-3">
-    <!-- Left: Title + Add button -->
-    <div class="d-flex align-items-center gap-10">
-      <h2 class="page-title m-0">Hospitals</h2>
-      <button *ngIf="isLoggedIn && isAdmin" mat-flat-button color="primary" (click)="addhospital()" class="action-btn">
-        <mat-icon class="add-icon">add</mat-icon><span style="margin-right: 15px;">Add</span>
-      </button>
-    </div>
 
-    <!-- Right: Reset Button -->
-    <div>
-      <button mat-flat-button color="warn" (click)="resetFilters()" class="action-btn">
-        <mat-icon>refresh</mat-icon>&nbsp;Reset
-      </button>
-    </div>
+  <div
+    class="header-container d-flex justify-content-between align-items-center mb-3"
+  >
+    <!-- Left: Title -->
+    <h2 class="page-title m-0">Hospitals</h2>
+
+    <!-- Right: Add button -->
+    <button
+      *ngIf="isLoggedIn && isAdmin"
+      mat-flat-button
+      color="primary"
+      (click)="addhospital()"
+      class="action-btn d-flex align-items-center"
+    >
+      <mat-icon class="add-icon">add</mat-icon>
+      <span style="margin-left: 5px">Add</span>
+    </button>
   </div>
 
-
   <form (ngSubmit)="onsearch()" novalidate>
-    <!-- Parent Container -->
-    <div class="w-100 d-flex flex-wrap gap-2 align-items-end border-bottom pb-3 mt-3 mb-2">
-      <!-- Name -->
-      <mat-form-field appearance="outline" class="with-icon">
-        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name">
+    <!-- Filters row -->
+    <div
+      class="filters-row w-100 d-flex align-items-end gap-2 flex-nowrap overflow-auto pb-2 mt-3"
+    >
+      <mat-form-field
+        appearance="outline"
+        class="with-icon flex-grow-1 min-width-200"
+      >
+        <input
+          matInput
+          [(ngModel)]="searchFilters.name"
+          name="searchName"
+          placeholder="Search by Name"
+          class="field-color"
+        />
       </mat-form-field>
 
-      <!-- State -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
-        <mat-select [(ngModel)]="searchFilters.state" name="state" (selectionChange)="onStateChange()">
+        <mat-select
+          [(ngModel)]="searchFilters.state"
+          name="state"
+          (selectionChange)="onStateChange()"
+        >
           <mat-option value="">All States</mat-option>
-          <mat-option *ngFor="let state of allstates" [value]="state">{{ state }}</mat-option>
+          <mat-option *ngFor="let state of allstates" [value]="state">{{
+            state
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <!-- District -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
-        <mat-select [(ngModel)]="searchFilters.district" name="district" (selectionChange)="onDistrictChange()">
+        <mat-select
+          [(ngModel)]="searchFilters.district"
+          name="district"
+          (selectionChange)="onDistrictChange()"
+        >
           <mat-option value="">All Districts</mat-option>
-          <mat-option *ngFor="let district of alldistricts" [value]="district">{{ district }}</mat-option>
+          <mat-option
+            *ngFor="let district of alldistricts"
+            [value]="district"
+            >{{ district }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
 
-      <!-- City -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <mat-select [(ngModel)]="searchFilters.city" name="city">
           <mat-option value="">All Cities</mat-option>
-          <mat-option *ngFor="let city of allcities" [value]="city">{{ city }}</mat-option>
+          <mat-option *ngFor="let city of allcities" [value]="city">{{
+            city
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <!-- Hospital Type -->
       <mat-form-field appearance="outline" class="w-auto min-width-200">
         <mat-select [(ngModel)]="searchtype" name="type">
           <mat-option value="">Type</mat-option>
@@ -59,37 +83,61 @@
           <mat-option value="private">Private</mat-option>
         </mat-select>
       </mat-form-field>
-
-      <!-- Search Button -->
-      <div class="mb-3 " style="margin-left:20px;">
-        <button mat-flat-button color="primary">
-          <mat-icon>search</mat-icon>&nbsp;Search
-        </button>
-      </div>
     </div>
 
+    <!-- Buttons row -->
+    <div class="buttons-row d-flex justify-content-center gap-3 mb-3">
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon>search</mat-icon>Search
+      </button>
+
+      <button
+        mat-flat-button
+        color="warn"
+        type="button"
+        (click)="resetFilters()"
+      >
+        <mat-icon>refresh</mat-icon>&nbsp;Reset
+      </button>
+    </div>
   </form>
 
   <div class="row p-2 mt-1">
     <!-- Loading Spinner -->
-    <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+    <div
+      *ngIf="loading"
+      class="d-flex justify-content-center align-items-center"
+      style="height: 300px"
+    >
       <mat-spinner diameter="50"></mat-spinner>
     </div>
 
     <!-- Hospital Cards -->
     <ng-container *ngIf="!loading">
-      <div class="col-sm-6 col-lg-3 d-flex align-items-stretch" *ngFor="let hospital of allhospitals">
+      <div
+        class="col-sm-6 col-lg-3 d-flex align-items-stretch"
+        *ngFor="let hospital of allhospitals"
+      >
         <mat-card class="cardWithShadow overflow-hidden w-100">
-
           <!-- Image Section -->
           <div class="position-relative">
             <img
-              [src]="hospital?.hospital_photo ? (environment.ImgUrlss + hospital.hospital_photo) : defaultHospitalImage"
-              class="w-100 object-fit-cover" style="height: 200px;"
-              alt="{{ hospital?.name || 'Hospital Image' }}" (error)="onImageError($event)" />
+              [src]="
+                hospital?.hospital_photo
+                  ? environment.ImgUrlss + hospital.hospital_photo
+                  : defaultHospitalImage
+              "
+              class="w-100 object-fit-cover"
+              style="height: 200px"
+              alt="{{ hospital?.name || 'Hospital Image' }}"
+              (error)="onImageError($event)"
+            />
             <ng-template #placeholder>
-              <div class="w-100 d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
-                <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+              <div
+                class="w-100 d-flex align-items-center justify-content-center bg-light"
+                style="height: 200px"
+              >
+                <i class="bi bi-image" style="font-size: 3rem; color: #ccc"></i>
               </div>
             </ng-template>
           </div>
@@ -160,7 +208,9 @@
 
       <!-- Empty State -->
       <div *ngIf="allhospitals?.length === 0" class="col-12 text-center py-5">
-        <mat-icon class="text-muted" style="font-size: 48px;">location_off</mat-icon>
+        <mat-icon class="text-muted" style="font-size: 48px"
+          >location_off</mat-icon
+        >
         <h5 class="text-muted mt-3">No hospitals found</h5>
       </div>
     </ng-container>
@@ -169,9 +219,15 @@
   <!-- Pagination -->
   <div class="row mt-3">
     <div class="col-12 d-flex justify-content-center">
-      <mat-paginator *ngIf="!loading && totalHospitalItems > 0" [length]="totalHospitalItems" [pageSize]="itemsPerPage"
-        [pageIndex]="currentPage - 1" [hidePageSize]="true" (page)="onHospitalPageChange($event)"
-        aria-label="Select page">
+      <mat-paginator
+        *ngIf="!loading && totalHospitalItems > 0"
+        [length]="totalHospitalItems"
+        [pageSize]="itemsPerPage"
+        [pageIndex]="currentPage - 1"
+        [hidePageSize]="true"
+        (page)="onHospitalPageChange($event)"
+        aria-label="Select page"
+      >
       </mat-paginator>
     </div>
   </div>

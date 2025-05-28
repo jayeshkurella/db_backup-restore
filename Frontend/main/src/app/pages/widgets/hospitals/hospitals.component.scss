@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: -3px;
+  margin-right: -8px;
 }
 
 .add-icon{
@@ -127,3 +127,34 @@ mat-form-field{
       width: 100%;
     }
   }
+
+/* Desktop (default) */
+.filters-row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/* On mobile (small screens) */
+@media (max-width: 576px) {
+  .filters-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    overflow-x: visible !important;
+    gap: 0.2rem !important;
+  }
+
+  .filters-row > mat-form-field {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+
+  .buttons-row {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: center !important;
+  }
+
+  .buttons-row > button {
+    width: 100% !important;
+  }
+}

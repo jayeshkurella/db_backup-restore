@@ -141,12 +141,11 @@ export class FormApiService {
       );
   }
 
-  addEducationalTag(name: string): Observable<any> {
+  addEducationalTag(data: { name: string }): Observable<any> {
     const headers = this.createHeaders();
     return this.http
       .post<any>(
-        `${this.apiUrl}/api/educational_tags/`,
-        { name },
+        `${this.apiUrl}/api/educational_tags/`,data, 
         { headers, observe: 'response' }
       )
       .pipe(
@@ -169,21 +168,22 @@ export class FormApiService {
       );
   }
 
-  addOccupationTag(name: string): Observable<any> {
-    const headers = this.createHeaders();
-    return this.http
-      .post<any>(
-        `${this.apiUrl}/api/occupation_tags/`,
-        { name },
-        { headers, observe: 'response' }
-      )
-      .pipe(
-        tap((response) => {
-          console.log('Added Occupation Tag Headers:', response.headers);
-        }),
-        map((response) => response.body as any)
-      );
-  }
+  addOccupationTag(data: { name: string }): Observable<any> {
+  const headers = this.createHeaders();
+  return this.http
+    .post<any>(
+      `${this.apiUrl}/api/occupation_tags/`,
+      data, // ✅ Pass full object
+      { headers, observe: 'response' }
+    )
+    .pipe(
+      tap((response) => {
+        console.log('Added Occupation Tag Headers:', response.headers);
+      }),
+      map((response) => response.body as any)
+    );
+}
+
 
 
 

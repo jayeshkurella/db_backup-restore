@@ -18,6 +18,7 @@ class Person(models.Model):
     GENDER_CHOICES = [
         ('male', 'Male'),
         ('female', 'Female'),
+        ('other', 'Other'),
     ]
 
     AGE_RANGE_CHOICES = [

@@ -60,7 +60,7 @@ export const navItems: NavItem[] = [
     ],
   },
   {
-    navCap: 'Resources',
+    navCap: 'Support',
     iconName: 'widgets',
   },
   {

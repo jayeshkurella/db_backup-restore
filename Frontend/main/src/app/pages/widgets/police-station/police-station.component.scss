@@ -48,3 +48,25 @@
 
 }
 
+/* For the filters container */
+@media (max-width: 576px) {
+  .filters-row {
+    flex-direction: column !important;
+    gap: 0.2rem !important;
+  }
+
+  .filters-row > mat-form-field {
+    width:100% !important;
+    min-width: auto !important;
+  }
+
+  /* Buttons row */
+  .buttons-row {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .buttons-row > button {
+    width: 100% !important;
+  }
+}

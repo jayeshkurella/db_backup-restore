@@ -11,6 +11,7 @@ import {
   ViewChild,
   ElementRef,
   ViewEncapsulation,
+  HostListener,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -153,15 +154,27 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   filteredCastes!: Observable<string[]>;
   showAddOption: boolean = false;
   educations: any[] = [];
-  occupations: any[] = [];
+
   filteredEducations!: Observable<string[]>;
   filteredOccupations!: Observable<string[]>;
   showAddEducationOption = false;
-  showAddOccupationOption = false;
   educationInputControl = new FormControl('');
   educationOptions: string[] = ['SSC', 'HSC', 'BE', 'BSC']; // fetched from API
   filteredEducationOptions: string[] = [];
   currentEducationFragment = '';
+  selectedEducations: string[] = [];
+  currentInput = '';
+
+
+
+  occupations: any[] = [];
+  occupationOptions: string[] = [];
+  selectedOccupations: string[] = [];
+  filteredOccupationOptions: string[] = [];
+  showAddOccupationOption = false;
+  currentOccupationFragment = '';
+  occupationInputControl = new FormControl('');
+
   constructor(
     private fb: FormBuilder,
     private formapi: FormApiService,
@@ -207,128 +220,41 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initializeForm();
     this.checkUserRole();
-    this.loadCastes();
     this.getperson();
 
     this.fetchHospitalList();
     this.fetchPoliceStationList();
 
-    this.setupFilteredCastes();
     this.loadEducations();
     this.loadOccupations();
 
     this.setupFilteredEducations();
-    this.setupFilteredOccupations();
+    // this.setupFilteredOccupations();
   }
   checkUserRole() {
     const userType = localStorage.getItem('user_type');
     this.isAdminUser = userType === 'admin';
   }
-  loadCastes() {
-    this.formapi.getCastes().subscribe({
-      next: (data) => {
-        this.castes = data;
-        this.setupFilteredCastes();
-      },
-      error: (err) => console.error('Error loading castes:', err)
-    });
-  }
 
-  getCasteId(name: string): number | undefined {
-    return this.castes.find(c => c.name === name)?.id;
-  }
-
-  setupFilteredCastes() {
-    if (this.additionalInfo.length === 0) {
-      console.error('Additional info array is empty');
-      return;
-    }
-
-    const casteControl = this.additionalInfo.at(0).get('caste');
-    if (!casteControl) {
-      console.error('Caste control not found in form');
-      return;
-    }
-
-    this.filteredCastes = casteControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const filterValue = (value || '').toLowerCase().trim();
-        const casteNames = this.castes.map(c => c.name);
-        this.showAddOption = !!filterValue && !casteNames.some(c => c.toLowerCase() === filterValue);
-        return casteNames.filter(name => name.toLowerCase().includes(filterValue));
-      })
-    );
-  }
-
-  addCasteIfNotExists(value: string) {
-    this.formapi.addCaste(value).subscribe({
-      next: (res) => {
-        this.castes.push(res);
-        this.additionalInfo.at(0).get('caste')?.setValue(res.name);
-        this.showAddOption = false;
-        this.setupFilteredCastes();
-      },
-      error: (err) => console.error('Error adding caste:', err)
-    });
-  }
-
-  onCasteSelected(event: MatAutocompleteSelectedEvent) {
-    const value = event.option.value?.trim();
-    if (!value) return;
-
-    const exists = this.castes.some(c => c.name.toLowerCase() === value.toLowerCase());
-
-    if (this.showAddOption && !exists) {
-      this.addCasteIfNotExists(value);
-    } else {
-      this.additionalInfo.at(0).get('caste')?.setValue(value);
-    }
-  }
-
-  onCasteInputFocus(): void {
-    const control = this.additionalInfo.at(0).get('caste');
-    if (control && !control.value) {
-      control.setValue('');
-    }
-  }
-
-
-  deleteCaste(casteId: number): void {
-    if (confirm('Are you sure you want to delete this caste?')) {
-      this.formapi.deleteCaste(casteId).subscribe({
-        next: () => {
-          this.castes = this.castes.filter(c => c.id !== casteId);
-          this.toastr.success('Caste deleted successfully', 'Close', {
-
-          });
-          this.setupFilteredCastes();
-        },
-        error: () => {
-          alert('Failed to delete caste');
-        }
-      });
-    }
-  }
-  loadEducations() {
+  loadEducations(): void {
     this.formapi.getEducationalTags().subscribe({
       next: (data) => {
         this.educations = data;
+        this.educationOptions = data.map((edu: any) => edu.name);
+        
+        // Preserve any selected educations that exist in the new list
+        this.selectedEducations = this.selectedEducations.filter(selected => 
+          this.educationOptions.some(opt => opt.toLowerCase() === selected.toLowerCase())
+        );
+        
         this.setupFilteredEducations();
+        this.updateEducationFormControl();
       },
       error: (err) => console.error('Error loading educations:', err)
     });
-  }
+}
 
-  loadOccupations() {
-    this.formapi.getOccupationTags().subscribe({
-      next: (data) => {
-        this.occupations = data;
-        this.setupFilteredOccupations();
-      },
-      error: (err) => console.error('Error loading occupations:', err)
-    });
-  }
+
   setupFilteredEducations() {
     const educationControl = this.additionalInfo.at(0).get('education_details');
     if (!educationControl) return;
@@ -344,46 +270,51 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     );
   }
 
-  setupFilteredOccupations() {
-    const occupationControl = this.additionalInfo.at(0).get('occupation_details');
-    if (!occupationControl) return;
 
-    this.filteredOccupations = occupationControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const filterValue = (value || '').toLowerCase().trim();
-        const names = this.occupations.map(o => o.name);
-        this.showAddOccupationOption = !!filterValue && !names.some(o => o.toLowerCase() === filterValue);
-        return names.filter(name => name.toLowerCase().includes(filterValue));
-      })
-    );
-  }
  addEducationIfNotExists(value: string): void {
-  this.formapi.addEducationalTag(value).subscribe({
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return;
+
+  this.formapi.addEducationalTag({ name: trimmedValue }).subscribe({
     next: (res) => {
-      this.educationOptions.push(res.name);
+      this.loadEducations();
 
-      const parts = (this.educationInputControl.value ?? '').split(',').map(p => p.trim());
-      parts[parts.length - 1] = res.name;
-
-      this.educationInputControl.setValue(parts.join(', ') + ', ');
       this.showAddEducationOption = false;
+      this.currentInput = '';
     },
     error: (err) => console.error('Error adding education:', err)
   });
 }
+updateEducationFormControl() {
+  // Remove duplicates and empty values
+  this.selectedEducations = Array.from(new Set(
+    this.selectedEducations.filter(x => x.trim())
+  ));
 
-  addOccupationIfNotExists(value: string) {
-    this.formapi.addOccupationTag(value).subscribe({
-      next: (res) => {
-        this.occupations.push(res);
-        this.additionalInfo.at(0).get('occupation_details')?.setValue(res.name);
-        this.showAddOccupationOption = false;
-        this.setupFilteredOccupations();
-      },
-      error: (err) => console.error('Error adding occupation:', err)
-    });
+  const valueToSet = this.selectedEducations.join(', ');
+  
+  // Update both controls
+  this.educationInputControl.setValue(valueToSet);
+  
+  const additionalInfo = this.personForm.get('additional_info') as FormArray;
+  if (additionalInfo?.length > 0) {
+    additionalInfo.at(0).get('education_details')?.setValue(valueToSet);
   }
+}
+
+
+  // Clear current fragment when backspacing to comma
+  @HostListener('keydown.backspace', ['$event'])
+  onBackspace(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (input.selectionStart === input.selectionEnd && input.selectionStart === 0 && this.selectedEducations.length > 0) {
+      this.selectedEducations.pop();
+      this.educationInputControl.setValue(this.selectedEducations.join(', ') + (this.selectedEducations.length > 0 ? ', ' : ''));
+      event.preventDefault();
+    }
+  }
+
+
   onEducationSelected(event: MatAutocompleteSelectedEvent) {
     const value = event.option.value?.trim();
     if (!value) return;
@@ -397,18 +328,7 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onOccupationSelected(event: MatAutocompleteSelectedEvent) {
-    const value = event.option.value?.trim();
-    if (!value) return;
 
-    const exists = this.occupations.some(o => o.name.toLowerCase() === value.toLowerCase());
-
-    if (this.showAddOccupationOption && !exists) {
-      this.addOccupationIfNotExists(value);
-    } else {
-      this.additionalInfo.at(0).get('occupation_details')?.setValue(value);
-    }
-  }
   onEducationInputFocus(): void {
     const control = this.additionalInfo.at(0).get('education_details');
     if (control && !control.value) {
@@ -416,49 +336,160 @@ export class AppFormLayoutsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onOccupationInputFocus(): void {
-    const control = this.additionalInfo.at(0).get('occupation_details');
-    if (control && !control.value) {
-      control.setValue('');
-    }
-  }
+
 
   onEducationInputChange(): void {
     const inputValue = this.educationInputControl?.value ?? '';
     const parts = inputValue.split(',');
     const lastFragment = parts[parts.length - 1].trim().toLowerCase();
-
-    this.currentEducationFragment = lastFragment;
+    this.currentInput = lastFragment;
 
     this.filteredEducationOptions = this.educationOptions
       .filter(option =>
-        option.toLowerCase().startsWith(lastFragment) &&
-        !parts.map(p => p.trim().toLowerCase()).includes(option.toLowerCase())
+        option.toLowerCase().includes(lastFragment) &&
+        !this.selectedEducations.map(e => e.toLowerCase()).includes(option.toLowerCase())
       );
 
     this.showAddEducationOption = !!lastFragment &&
       !this.educationOptions.map(opt => opt.toLowerCase()).includes(lastFragment);
-  } 
+  }
+
   onEducationOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    const inputValue: string = this.educationInputControl.value ?? '';
+    const selectedValue = event.option.value?.trim();
+    if (!selectedValue) return;
 
-    const parts = inputValue.split(',').map(p => p.trim());
+    this.selectedEducations.push(selectedValue);
 
-    // Replace the last typed fragment with selected value
-    parts[parts.length - 1] = event.option.value;
+    // Update both the input control and form control
+    this.educationInputControl.setValue(this.selectedEducations.join(', ') + ', ');
 
-    this.educationInputControl.setValue(parts.join(', ') + ', ');
+    // Update the form control in additional_info
+    const additionalInfo = this.personForm.get('additional_info') as FormArray;
+    if (additionalInfo && additionalInfo.length > 0) {
+      additionalInfo.at(0).get('education_details')?.setValue(this.selectedEducations.join(', '));
+    }
+
+    this.currentInput = '';
     this.showAddEducationOption = false;
   }
-onEducationEnter(event: Event): void {
-  const keyboardEvent = event as KeyboardEvent;
 
-  keyboardEvent.preventDefault();
+  onEducationEnter(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    keyboardEvent.preventDefault();
 
-  if (this.showAddEducationOption && this.currentEducationFragment) {
-    this.addEducationIfNotExists(this.currentEducationFragment);
+    if (this.showAddEducationOption && this.currentInput) {
+      this.addEducationIfNotExists(this.currentInput);
+    }
+  }
+
+  // Load occupations from API
+ loadOccupations() {
+  this.formapi.getOccupationTags().subscribe({
+    next: (data) => {
+      this.occupationOptions = data.map(o => o.name);
+      
+      // Preserve selected occupations that exist in the new list
+      this.selectedOccupations = this.selectedOccupations.filter(selected => 
+        this.occupationOptions.some(opt => opt.toLowerCase() === selected.toLowerCase())
+      );
+      
+      this.updateOccupationFormControls();
+    },
+    error: (err) => console.error('Error loading occupations:', err)
+  });
+}
+
+  // Handle input changes
+  onOccupationInputChange(): void {
+    const inputValue = this.occupationInputControl?.value ?? '';
+    const parts = inputValue.split(',');
+    const lastFragment = parts[parts.length - 1].trim().toLowerCase();
+    this.currentOccupationFragment = lastFragment;
+
+    this.filteredOccupationOptions = this.occupationOptions
+      .filter(option =>
+        option.toLowerCase().includes(lastFragment) &&
+        !this.selectedOccupations.map(p => p.toLowerCase()).includes(option.toLowerCase())
+      );
+
+    this.showAddOccupationOption = !!lastFragment &&
+      !this.occupationOptions.map(opt => opt.toLowerCase()).includes(lastFragment);
+  }
+
+
+  // Handle option selection
+  onOccupationOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    const selectedValue = event.option.value?.trim();
+    if (!selectedValue) return;
+
+    this.selectedOccupations.push(selectedValue);
+    this.updateOccupationFormControls();
+    this.currentOccupationFragment = '';
+    this.showAddOccupationOption = false;
+  }
+
+
+  // Handle Enter key
+  onOccupationEnter(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    keyboardEvent.preventDefault();
+
+    if (this.showAddOccupationOption && this.currentOccupationFragment) {
+      this.addOccupationIfNotExists(this.currentOccupationFragment);
+    }
+  }
+
+
+  // Add new occupation
+addOccupationIfNotExists(value: string): void {
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return;
+
+  this.formapi.addOccupationTag({ name: trimmedValue }).subscribe({
+    next: (res) => {
+      this.loadOccupations(); // Let loadOccupations handle the update
+      this.showAddOccupationOption = false;
+      this.currentOccupationFragment = '';
+    },
+    error: (err) => console.error('Error adding occupation:', err)
+  });
+}
+
+
+  // Handle backspace to remove last selection
+  @HostListener('keydown.backspace', ['$event'])
+  onOccupationBackspace(event: KeyboardEvent): void {
+    const input = event.target as HTMLInputElement;
+    if (input.selectionStart === input.selectionEnd &&
+      input.selectionStart === 0 &&
+      this.selectedOccupations.length > 0) {
+      this.selectedOccupations.pop();
+      this.updateOccupationFormControls();
+      event.preventDefault();
+    }
+  }
+ updateOccupationFormControls(): void {
+  // Remove duplicates and empty values
+  this.selectedOccupations = Array.from(new Set(
+    this.selectedOccupations.filter(x => x.trim())
+  ));
+
+  const valueToSet = this.selectedOccupations.join(', ');
+  
+  // Update both controls
+  this.occupationInputControl.setValue(valueToSet + (valueToSet ? ', ' : ''));
+  
+  const additionalInfo = this.personForm.get('additional_info') as FormArray;
+  if (additionalInfo?.length > 0) {
+    additionalInfo.at(0).get('occupation_details')?.setValue(valueToSet);
   }
 }
+  handleAddOccupationClick(event: any, value: string): void {
+    if (event.isUserInput) {
+      this.addOccupationIfNotExists(value);
+    }
+  }
+
 
   fetchHospitalList() {
     this.formapi.getHospitalNames().subscribe({
@@ -674,6 +705,37 @@ onEducationEnter(event: Event): void {
     }
   }
 
+  allowOnlyNumbers(event: KeyboardEvent): boolean {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+    if (allowedKeys.includes(event.key)) {
+      return true;
+    }
+
+    const isNumber = /^[0-9]$/.test(event.key);
+    const inputName = (event.target as HTMLInputElement).getAttribute('formControlName');
+
+    const control =
+      inputName === 'weight' ? this.personForm.get('weight') :
+        inputName === 'pincode' ? this.addressForm.get('pincode') :
+          inputName === 'phone_no' ? this.contactForm.get('phone_no') :
+            inputName === 'investigation_officer_contacts' ? this.firsForm?.get('investigation_officer_contacts') : // Add this line
+              null;
+
+    if (!isNumber) {
+      control?.setErrors({ ...control.errors, invalidChars: true });
+      event.preventDefault();
+      return false;
+    } else {
+      const currentErrors = control?.errors;
+      if (currentErrors?.['invalidChars']) {
+        delete currentErrors['invalidChars'];
+        control?.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      }
+      return true;
+    }
+  }
+
   initializeForm() {
     this.personForm = this.fb.group({
       type: ['Missing Person'],
@@ -755,6 +817,8 @@ onEducationEnter(event: Event): void {
     this.addLastKnownDetails();
     this.addFIR();
     this.addConsent();
+    this.selectedEducations = [];
+    this.selectedOccupations = []
   }
 
   calculateAge(birthDate: Date): number {
@@ -879,14 +943,7 @@ onEducationEnter(event: Event): void {
       ],
       state: [''],
       user: [this.storedPersonId],
-      pincode: [
-        '',
-        [
-          Validators.minLength(6),
-          Validators.maxLength(15),
-          this.numericOnlyValidator(),
-        ],
-      ],
+      pincode: ['', [Validators.pattern(/^[0-9]{1,15}$/)]],
       country: [''],
       landmark_details: [
         '',
@@ -974,8 +1031,8 @@ onEducationEnter(event: Event): void {
         id_no: ['', [Validators.pattern(/^[a-zA-Z0-9]+$/), Validators.maxLength(15)]],
 
         education_details: [''],
-        // occupation_details: [''],
-        occupation_details: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9 ]*$/)]],
+        occupation_details: [''],
+        // occupation_details: ['', [Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9 ]*$/)]],
 
 
         user: [this.storedPersonId],

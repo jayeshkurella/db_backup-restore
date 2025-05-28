@@ -5,14 +5,15 @@
 
   <form [formGroup]="unidentifiedBodyForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
     <!-- Personal Info Section -->
-    <div class="p-3 bordercolor rounded">
+    <!-- <div class="p-3 bordercolor rounded">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Personal Info
       </h5>
-    </div>
+    </div> -->
 
-    <mat-card class="p-4 m-1 mb-4">
+    <mat-card class="p-4 m-1 mb-4 styled-card">
+      <span class="card-legend">Personal Info</span>
       <div class="row g-2 p-3">
         <!-- Full Name -->
 
@@ -50,6 +51,7 @@
               <mat-option value="">Select Gender</mat-option>
               <mat-option value="male">Male</mat-option>
               <mat-option value="female">Female</mat-option>
+              <mat-option value="other">Other</mat-option>
             </mat-select>
             <mat-error *ngIf="unidentifiedBodyForm.get('gender')?.hasError('required')">
               Please select the Gender
@@ -344,11 +346,11 @@
     </mat-card>
 
     <!-- Address Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center">
-      <!-- <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Address
-      </h5> -->
+      </h5>
       <button mat-flat-button color="primary" type="button" (click)="addAddress()">
         Add Address
       </button>
@@ -560,7 +562,7 @@
             <div class="d-flex gap-2">
               <mat-form-field appearance="outline" class="flex-grow-1 me-2">
                 <mat-label>Latitude</mat-label>
-                <input matInput type="text" formControlName="latitude" />
+                <input matInput type="text" formControlName="latitude" readonly />
                 <mat-error *ngIf="
                     addressForm.get('location.latitude')?.touched &&
                     addressForm
@@ -573,7 +575,7 @@
 
               <mat-form-field appearance="outline" class="flex-grow-1">
                 <mat-label>Longitude</mat-label>
-                <input matInput type="text" formControlName="longitude" />
+                <input matInput type="text" formControlName="longitude" readonly />
                 <mat-error *ngIf="
                     addressForm.get('location.longitude')?.touched &&
                     addressForm
@@ -644,10 +646,10 @@
 
     <!-- Contact Section -->
     <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
-      <!-- <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
+      <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Contact
-      </h5> -->
+      </h5>
       <button mat-flat-button color="primary" type="button" (click)="addContact()">
         Add Contact
       </button>
@@ -814,15 +816,16 @@
     </mat-card>
 
     <!-- Additional Information Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Additional Information
       </h5>
-    </div>
+    </div> -->
 
     <!-- Additional Information Card -->
-    <mat-card class="p-4 mb-4 mt-2">
+    <mat-card class="p-4 mb-4 mt-2 styled-card">
+      <span class="card-legend">Additional Information</span>
       <div formArrayName="additional_info">
         <div *ngFor="let info of additionalInfo.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
           <div class="row g-2">
@@ -1015,14 +1018,15 @@
     </mat-card>
 
     <!-- Legal Info Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Legal Info
       </h5>
-    </div>
+    </div> -->
 
-    <mat-card class="card p-4 mb-4">
+    <mat-card class="card p-4 mb-4 styled-card">
+      <span class="card-legend"> Legal Info</span>
       <div formArrayName="firs">
         <div *ngFor="let info of firs.controls; let i = index" [formGroupName]="i" class="row g-2 p-3">
           <!-- Case Status -->
@@ -1142,19 +1146,19 @@
     </mat-card>
 
     <!-- Consent Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex align-items-center" style="min-height: 60px">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Consent
       </h5>
-    </div>
+    </div> -->
 
     <!-- Consent & Submission -->
-    <mat-card class="card p-4 mb-1">
+    <div class="p-1 mb-1">
+      <!-- <span class="card-legend">Consent</span>          -->
       <div formArrayName="consent">
-        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 p-3">
-          <div class="col-md-12 consent-link d-flex align-items-center p-4"
-            style="gap: 10px; padding: 10px 0; margin-left: 15px">
+        <div *ngFor="let info of consent.controls; let i = index" [formGroupName]="i" class="row g-3 ">
+          <div class="col-md-12 consent-link d-flex align-items-center p-4" style="gap: 10px; padding: 10px 0; ">
             <input type="checkbox" id="consentCheckbox" (change)="onConsentChange($event)"
               style="width: 18px; height: 18px; cursor: pointer" />
             <label for="consentCheckbox" class="mb-0" style="cursor: pointer; font-size: 16px; color: #333">
@@ -1163,13 +1167,13 @@
           </div>
         </div>
       </div>
-    </mat-card>
+    </div>
 
 
 
     <!-- Submit & Cancel Buttons -->
     <div class="d-flex justify-content-between mt-4 space-down">
-      <button mat-flat-button color="primary">Cancel</button>
+      <button mat-flat-button color="primary" type="button">Cancel</button>
 
       <span [matTooltip]="'Please accept the consent  before submitting.'"
         [matTooltipDisabled]="consent.controls[0].get('is_consent')?.value" matTooltipPosition="above">

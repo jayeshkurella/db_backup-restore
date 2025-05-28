@@ -4,7 +4,7 @@
 
 
 .changelog-container {
-  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
 }
@@ -25,7 +25,7 @@
 }
 
 .add-log-btn {
-  background: #2196F3;
+  background: inherit;
   color: inherit;
   border: none;
   padding: 8px 6px;
@@ -56,7 +56,7 @@
 }
 
 .log-version-badge {
-  background-color: #2196F3;
+  background-color: inherit;
   color: inherit;
   padding: 3px 8px;
   border-radius: 12px;
@@ -69,9 +69,9 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background-color: #2196F3;
-  border: 3px solid white;
-  box-shadow: 0 0 0 2px #2196F3;
+  background-color: inherit;
+  border: 3px solid inherit;
+  box-shadow: 0 0 0 2px inherit;
   z-index: 1;
 }
 
@@ -80,7 +80,7 @@
   top: 24px;
   bottom: -30px;
   width: 2px;
-  background-color: #e0e0e0;
+  background-color: inherit;
 }
 
 .log-item:last-child .log-timeline-line {

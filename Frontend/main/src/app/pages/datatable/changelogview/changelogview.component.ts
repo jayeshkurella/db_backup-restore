@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { LoginApiService } from '../../authentication/side-login/login-api.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-changelogview',
-  imports: [CommonModule,ReactiveFormsModule,MatCard,MatCardHeader,MatCardContent,MatCardTitle,MatIcon],
+  imports: [CommonModule,ReactiveFormsModule,MatCard,MatCardHeader,MatCardContent,MatCardTitle,MatIcon,MatButton],
   templateUrl: './changelogview.component.html',
   styleUrl: './changelogview.component.scss'
 })

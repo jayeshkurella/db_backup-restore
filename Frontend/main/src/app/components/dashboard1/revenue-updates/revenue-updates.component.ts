@@ -241,33 +241,6 @@ selectedTabIndex = 0;
   maxEndDate: Date | null = null;
   maxSelectableDate: Date | null = null;
 
-  // onStartDateChange(startDate: Date) {
-  //   if (startDate) {
-  //     this.selectedStartDate = new Date(startDate);
-
-  //     this.maxEndDate = new Date(startDate);
-  //     this.maxEndDate.setDate(this.maxEndDate.getDate() + 30);
-
-  //     // Reset end date if beyond new max
-  //     if (this.selectedEndDate && this.selectedEndDate > this.maxEndDate) {
-  //       this.selectedEndDate = null;
-  //     }
-
-  //     // Auto-apply filters only if both dates are set
-  //     if (this.selectedEndDate) {
-  //     }
-  //   }
-  // }
-
-  // onEndDateChange(endDate: Date) {
-  //   if (endDate) {
-  //     this.selectedEndDate = new Date(endDate);
-
-  //     // Auto-apply filters if both dates are set
-  //     if (this.selectedStartDate) {
-  //     }
-  //   }
-  // }
 
   onStartDateChange(startDate: Date) {
     if (startDate) {
