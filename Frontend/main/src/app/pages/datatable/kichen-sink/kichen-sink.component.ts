@@ -170,7 +170,7 @@ const employees = [
     FormsModule,
     HttpClientModule,
     MatProgressSpinnerModule
-  ],
+],
   providers: [DatePipe]
 })
 
@@ -646,15 +646,19 @@ export class AppKichenSinkComponent implements AfterViewInit {
   hasGeographicFiltersApplied(): boolean {
     return !!this.filters.state && !!this.filters.district && !!this.filters.city;
   }
+
+  hasdatefilterApplied():boolean{
+  return !!this.filters.startDate && !!this.filters.endDate;
+
+  }
   hasActiveFilters(): boolean {
     return Object.values(this.filters).some(value => value !== '');
   }
 
   hasFiltersApplied(): boolean {
-    return this.hasGeographicFiltersApplied() ||
+    return this.hasGeographicFiltersApplied() || this.hasdatefilterApplied() ||
       !!(this.filters.full_name ||
-        this.filters.startDate ||
-        this.filters.endDate ||
+       
         this.filters.caste ||
         this.filters.gender ||
         this.filters.age_range ||

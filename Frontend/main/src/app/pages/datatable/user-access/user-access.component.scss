@@ -1,15 +1,23 @@
+.breadcrumb-item {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--mat-text-color);
+  }
+
+
+
 .select-all-container {
     margin-bottom: 20px;
   
     .select-action-wrapper {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: center;  
       flex-wrap: wrap;
     }
   
     .select-box {
-      flex: 1;
+      // flex: 1;
       min-width: 250px;
     }
   
@@ -32,12 +40,12 @@
   }
   
   .reject-button {
-    color: #f44336;
-    border-color: #f44336;
+    color: inherit;
+    border-color: inherit;
     
     &[disabled] {
-      color: #979595;
-      border-color: #ffcdd2;
+      color: inherit;
+      border-color: inherit;
     }
   }
   
@@ -71,7 +79,7 @@
     }
     .details {
       font-size: 0.8em;
-      color: #666;
+      color: inherit;
       display: flex;
       gap: 10px;
       margin-top: 4px;
@@ -88,8 +96,8 @@
     &.approved,
     &.rejected {
 
-      background-color: #FFF3E0;
-      color: #E65100;
+      background-color: inherit;
+      color: inherit;
     }
   }
   
@@ -120,10 +128,56 @@
   }
   
   .reject-button {
-    background-color: #f44336;
-    color: white;
+    background-color: inherit;
+    color: inherit;
     
     &[disabled] {
-      background-color: #ffcdd2;
+      background-color: inherit;
     }
   }
+
+  .footer {
+  margin-top: auto;
+  padding: 20px 0;
+  text-align: center;
+  color: inherit;
+  font-size: 0.9em;
+  border-top: 1px solid inherit;
+}
+.approval-container {
+  min-height: calc(100vh - 120px); /* Adjust this value based on your header/footer height */
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* For empty state */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: inherit;
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: inherit;
+}

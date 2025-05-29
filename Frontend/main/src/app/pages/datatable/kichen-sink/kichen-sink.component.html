@@ -169,7 +169,7 @@
       <div class="row mt-3">
         <div class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-center gap-2">
           <button mat-flat-button (click)="applyFilters()"
-            [disabled]="!hasGeographicFiltersApplied() && !hasFiltersApplied()" class="me-md-3">
+            [disabled]="!hasGeographicFiltersApplied() && !hasdatefilterApplied() && !hasFiltersApplied()" class="me-md-3">
             <mat-icon>search</mat-icon> Search
           </button>
 
@@ -193,7 +193,7 @@
     <!-- Pending Tab -->
     <mat-tab label="Pending">
       <ng-template matTabContent>
-        <mat-card class="cardWithShadow mt-1">
+        <mat-card class="cardWithShadow">
           <mat-card-content>
             <div class="table-responsive">
               <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px">
@@ -283,46 +283,8 @@
               </table>
 
               <!-- Backend Pagination Controls -->
-              <div *ngIf="dataSourcePending.data.length > 0" class="pagination-controls mt-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="mr-2">Items per page:</span>
-                    <select [(ngModel)]="itemsPerPage" (change)="onPageSizeChange()" class="form-control-sm">
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                      <option value="25">25</option>
-                      <option value="30">30</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <span class="mr-2">
-                      Showing {{getFirstItemNumber()}} to {{getLastItemNumber()}} of {{totalItems}} entries
-                    </span>
-                  </div>
-
-                  <div>
-                    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"
-                      class="btn btn-sm btn-outline-primary mr-1">
-                      First
-                    </button>
-                    <button (click)="goToPreviousPage()" [disabled]="currentPage === 1"
-                      class="btn btn-sm btn-outline-primary mr-1">
-                      Previous
-                    </button>
-                    <span class="mx-2">Page {{currentPage}} of {{getLastPageNumber()}}</span>
-                    <button (click)="goToNextPage()" [disabled]="currentPage === getLastPageNumber()"
-                      class="btn btn-sm btn-outline-primary mr-1">
-                      Next
-                    </button>
-                    <button (click)="goToLastPage()" [disabled]="currentPage === getLastPageNumber()"
-                      class="btn btn-sm btn-outline-primary">
-                      Last
-                    </button>
-                  </div>
-                </div>
-              </div>
+             <mat-paginator #paginatorPending [pageSizeOptions]="[5, 10, 20, 25, 30]"
+                showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-card>
@@ -405,6 +367,9 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsResolved"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsResolved"></tr>
               </table>
+               <!-- Backend Pagination Controls -->
+             <mat-paginator #paginatorPending [pageSizeOptions]="[5, 10, 20, 25, 30]"
+                showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-card>

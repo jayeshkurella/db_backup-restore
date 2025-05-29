@@ -542,7 +542,7 @@ class PersonViewSet(viewsets.ViewSet):
             age = request.query_params.get('age')
 
             for key, value in request.query_params.items():
-                if not value or key in ['startDate', 'endDate', 'age_range', 'age']:
+                if not value or key in ['startDate', 'endDate', 'age_range', 'age', 'page', 'page_size']:
                     continue
 
                 # Fields from related model 'additional_info'

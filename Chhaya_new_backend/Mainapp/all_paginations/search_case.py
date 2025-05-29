@@ -15,6 +15,11 @@ class searchCase_Pagination(PageNumberPagination):
                 'first': self.request.build_absolute_uri('?page=1'),
                 'last': self.request.build_absolute_uri(f'?page={self.page.paginator.num_pages}'),
             },
-            'count': self.page.paginator.count,
+            'meta': {
+                'current_page': self.page.number,
+                'total_pages': self.page.paginator.num_pages,
+                'page_size': self.get_page_size(self.request),
+                'count': self.page.paginator.count,
+            },
             'results': data
         })

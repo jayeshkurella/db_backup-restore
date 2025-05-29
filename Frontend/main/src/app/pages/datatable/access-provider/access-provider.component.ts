@@ -119,7 +119,8 @@ export class AccessProviderComponent implements OnInit {
   selectAllHold: boolean = false;
   selectAllSuspended: boolean = false;
   selectAllApproved: boolean = false;
-  allstates: any;
+  // allstates: any;
+  allstates: string[] = [];
   filtersApplied: boolean = false;
   allcities: any;
   alldistricts: any;
@@ -135,7 +136,7 @@ export class AccessProviderComponent implements OnInit {
 
   filters: CaseFilters = {
     city: '',
-    state: '',
+    state: 'Maharashtra',
     district: '',
     village: '',
     case_id: '',
@@ -155,16 +156,27 @@ export class AccessProviderComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.getStates();
+      this.onStateChange(); 
     this.fetchPoliceStationList();
 
   }
 
-  getStates() {
-    this.missingPersonService.getStates().subscribe(states => {
-      this.allstates = states;
-    });
-  }
+  // getStates() {
+  //   this.missingPersonService.getStates().subscribe(states => {
+  //     this.allstates = states;
+  //   });
+  // }
 
+  getStates() {
+  this.missingPersonService.getStates().subscribe(states => {
+    this.allstates = states;
+
+    // Ensure 'Maharashtra' is in the list before setting
+    if (this.allstates.includes('Maharashtra')) {
+      this.filters.state = 'Maharashtra';
+    }
+  });
+}
   onStateChange() {
     this.filters.district = '';
     this.filters.city = '';

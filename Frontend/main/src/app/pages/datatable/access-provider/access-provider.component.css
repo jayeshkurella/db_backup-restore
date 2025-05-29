@@ -7,10 +7,9 @@
     align-items: center;
     flex-wrap: wrap;
   }
-  .activee{
+  .activee {
     font-weight: 600 !important;
     color: inherit !important;
-
   }
 
   .select-box {
@@ -35,14 +34,18 @@
     }
   }
 }
-
+.breadcrumb-item {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--mat-text-color);
+  }
 .reject-button {
   color: inherit;
   border-color: inherit;
 
   &[disabled] {
-    color: #979595;
-    border-color: #ffcdd2;
+    color: inherit;
+    border-color: inherit;
   }
 }
 
@@ -93,8 +96,8 @@
   &.suspended,
   &.hold,
   &.approved {
-    background-color: #fff3e0;
-    color: #e65100;
+    background-color: inherit;
+    color: inherit;
   }
 }
 .dark-mode th {
@@ -113,15 +116,15 @@
 }
 
 .reject-button {
-  background-color: #f44336;
-  color: white;
+  background-color: inherit;
+  color: inherit;
 
   &[disabled] {
-    background-color: #ffcdd2;
+    background-color: inherit;
   }
   .mat-tooltip {
     font-size: 13px;
-    background-color: #424242;
+    background-color: inherit;
   }
 }
 
@@ -154,7 +157,7 @@ table {
 
   .page-info {
     font-size: 14px;
-    color: #666;
+    color: inherit;
   }
 
   button {

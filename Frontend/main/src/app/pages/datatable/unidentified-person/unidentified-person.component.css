@@ -21,10 +21,10 @@
   color: var(--mat-text-color) !important;
 }
 .breadcrumb-item {
-  font-weight: 600;
+    font-weight: 600;
+    font-size: 18px;
     color: var(--mat-text-color);
   }
-
   @media (max-width: 768px) {
   .row > div {
     margin-bottom: 12px; /* vertical gap between form fields */

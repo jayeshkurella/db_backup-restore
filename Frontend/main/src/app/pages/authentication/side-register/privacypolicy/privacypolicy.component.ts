@@ -45,7 +45,7 @@ export class PrivacypolicyComponent {
       this.router.navigateByUrl(previousUrl);
     } else {
       // fallback if no previous route
-      this.router.navigate(['/authentication/side-register']);
+      this.router.navigate(['/']);
     }
   }
 }

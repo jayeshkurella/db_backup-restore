@@ -1,7 +1,11 @@
 <div class="approval-container footer">
-    <mat-card>
+    
       <mat-card-content>
-        
+        <nav aria-label="breadcrumb" class="ms-2 mb-2">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item activee">User Approval</li>
+        </ol>
+      </nav>
         <mat-tab-group [(selectedIndex)]="selectedTabIndex">
           <mat-tab label="Pending ({{pendingCount}})"></mat-tab>
           <mat-tab label="Rejected ({{rejectedCount}})"></mat-tab>
@@ -180,5 +184,5 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumnsWithSelect;"></tr>
         </table>
       </mat-card-content>
-    </mat-card>
+   
   </div>

@@ -260,7 +260,7 @@
           </div>
 
           <div class="col-md-4" style="margin-bottom: 20px">
-            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+            <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="personPhotoInput.click()">
               <mat-icon>cloud_upload</mat-icon>Person Photo
             </button>
             <input #personPhotoInput type="file" accept="image/*" hidden (change)="onFileSelect_person_photo($event)" />
@@ -270,7 +270,7 @@
     </mat-card>
 
     <!-- Address Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Address
@@ -278,8 +278,15 @@
       <button mat-flat-button color="primary" type="button" (click)="addAddress()">
         Add Address
       </button>
-    </div>
-    <mat-card class="p-4 mb-4">
+    </div> -->
+
+    <mat-card class="p-4 mb-4 styled-card">
+         <span class="card-legend">Address</span>      
+      <div class="flex justify-content-end form-btn">
+        <button mat-flat-button color="primary" type="button" (click)="addAddress()">
+          Add Address
+        </button>
+      </div>
       <div formGroupName="addressForm" class="row g-3 m-2">
         <!-- Left Section: Address Fields -->
         <div class="col-md-6">
@@ -594,7 +601,7 @@
     </mat-card>
 
     <!-- contact Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Contact
@@ -602,10 +609,16 @@
       <button mat-flat-button color="primary" type="button" (click)="addContact()">
         Add Contact
       </button>
-    </div>
+    </div> -->
 
     <!-- Contact Information Card -->
-    <mat-card class="p-4 mb-4">
+    <mat-card class="p-4 mb-4 styled-card">
+         <span class="card-legend">Contact</span>      
+      <div class="flex justify-content-end form-btn">
+        <button mat-flat-button color="primary" type="button" (click)="addContact()">
+          Add Contact
+        </button>
+      </div>
       <form formGroupName="contactForm">
         <div class="row g-3 m-1">
           <!-- Contact Type -->
@@ -1011,7 +1024,7 @@
 
           <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
           <div class="col-md-4" style="margin-bottom: 20px">
-            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
+            <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="firInput.click()">
               <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
             </button>
             <input #firInput type="file" accept="image/*,application/pdf" hidden

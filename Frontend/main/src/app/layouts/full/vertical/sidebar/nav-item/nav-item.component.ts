@@ -38,7 +38,6 @@ import { CommonModule } from '@angular/common';
 export class AppNavItemComponent implements OnChanges {
   @Output() toggleMobileLink: any = new EventEmitter<void>();
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
-@Input() isSidebarOpen: boolean = true;
 
   expanded: any = false;
   disabled: any = false;

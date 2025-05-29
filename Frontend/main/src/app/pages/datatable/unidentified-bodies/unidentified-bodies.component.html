@@ -6,7 +6,7 @@
     <mat-card-content>
       <nav aria-label="breadcrumb" class="breadcrumb-container">
         <ol class="breadcrumb mb-2">
-          <li class="breadcrumb-item active s1" aria-current="page">
+          <li class="breadcrumb-item active" aria-current="page">
             Search Unidentified Body
           </li>
         </ol>
@@ -178,7 +178,7 @@
       <div class="row mt-3">
         <div class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-center gap-2">
           <button mat-flat-button (click)="applyFilters()"
-            [disabled]="!hasGeographicFiltersApplied() && !hasFiltersApplied()" class="me-md-3">
+            [disabled]="!hasGeographicFiltersApplied() && !hasdatefilterApplied() && !hasFiltersApplied()" class="me-md-3">
             <mat-icon>search</mat-icon> Search
           </button>
 
@@ -364,7 +364,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsResolved"></tr>
               </table>
 
-              <!-- Material Paginator for Resolved Tab -->\
+              <!-- Material Paginator for Resolved Tab -->
               <div class="row mt-3">
                 <div class="col-12 d-flex justify-content-center align-items-center">
                   <div *ngIf="getTotalItems() > 0" class="d-flex align-items-center custom-pagination">
@@ -403,7 +403,7 @@
                   </div>
                 </div>
               </div>
-              <!-- <mat-paginator #paginatorResolved [pageSizeOptions]="[5, 10, 20,30]" showFirstLastButtons></mat-paginator> -->
+              <mat-paginator #paginatorResolved [pageSizeOptions]="[5, 10, 20,30]" showFirstLastButtons></mat-paginator>
             </div>
           </mat-card-content>
         </mat-card>

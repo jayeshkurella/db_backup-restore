@@ -28,7 +28,7 @@ class HospitalViewSet(viewsets.ModelViewSet):
             return [AllowAny()]  # Public access for safe methods
         return [IsAuthenticated()]
 
-    # 🔹 1. LIST Hospitals with Pagination
+    # 1. LIST Hospitals with Pagination
 
     def list(self, request):
         try:

@@ -8,45 +8,34 @@ import { environment } from 'src/envirnment/envirnment';
 })
 export class MissingPersonApiService {
 
-  private apiUrl = environment.apiUrl; 
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
   getPersonsByFilters(filters: any): Observable<any> {
-  const { page, page_size, ...filterParams } = filters;
+    const { page, page_size, ...filterParams } = filters;
 
-  let params = new HttpParams({ fromObject: filterParams });
+    let params = new HttpParams({ fromObject: filterParams });
+    if (page) params = params.set('page', page);
+    if (page_size) params = params.set('page_size', page_size);
 
-  // Add pagination separately
-  if (page) params = params.set('page', page);
-  if (page_size) params = params.set('page_size', page_size);
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      return throwError(() => new Error('Unauthorized: No token found'));
+    }
 
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    console.error('No auth token found in localStorage!');
-    return throwError(() => new Error('Unauthorized: No token found'));
+    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+
+    return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, {
+      params,
+      headers
+    });
   }
 
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
-  return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, {
-    params,
-    headers,
-    observe: 'response'
-  }).pipe(
-    tap(response => console.log("Response Headers:", response.headers)),
-    catchError(error => {
-      console.error("Error Response:", error);
-      return throwError(() => error);
-    })
-  );
-}
 
-  
-  
-  
-  
-  
+
+
   getStates(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/api/filters_address/states/`);
   }
@@ -65,30 +54,30 @@ export class MissingPersonApiService {
   // Fetch villages for a selected city
   getVillages(city: string): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/api/filters_address/villages/?city=${city}`);
-  }  
-  
+  }
+
 
   matchMissingPersonWithUP(uuid: string): Observable<any> {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    console.error('No auth token found in localStorage!');
-    return throwError(() => new Error('Unauthorized: No token found'));
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      console.error('No auth token found in localStorage!');
+      return throwError(() => new Error('Unauthorized: No token found'));
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+
+    return this.http.get(`${this.apiUrl}/api/missing-person-with-ups/${uuid}/`, {
+      headers,
+      observe: 'response'
+    }).pipe(
+      tap(response => console.log("Response Headers:", response.headers)),
+      catchError(error => {
+        console.error("Error Response:", error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-  return this.http.get(`${this.apiUrl}/api/missing-person-with-ups/${uuid}/`, {
-    headers,
-    observe: 'response'
-  }).pipe(
-    tap(response => console.log("Response Headers:", response.headers)),
-    catchError(error => {
-      console.error("Error Response:", error);
-      return throwError(() => error);
-    })
-  );
-  }
-  
   rejectMatchWithUP(uuid: string, matchId: string, rejectReason: string): Observable<any> {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
@@ -116,30 +105,30 @@ export class MissingPersonApiService {
   }
 
   rejectUnrejectMatchWithUP(uuid: string, matchId: string, unrejectReason: string): Observable<any> {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    console.error('No auth token found in localStorage!');
-    return throwError(() => new Error('Unauthorized: No token found'));
-  }
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      console.error('No auth token found in localStorage!');
+      return throwError(() => new Error('Unauthorized: No token found'));
+    }
 
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
-  const body = {
-    match_id: matchId,
-    new_status: 'matched',  // Status when match is unrejected
-    unreject_reason: unrejectReason
-  };
+    const body = {
+      match_id: matchId,
+      new_status: 'matched',  // Status when match is unrejected
+      unreject_reason: unrejectReason
+    };
 
-  return this.http.post(`${this.apiUrl}/api/missing-person-with-ups/${uuid}/match-unreject/`, body, {
-    headers,
-    observe: 'response'
-  }).pipe(
-    tap(response => console.log("Response Headers:", response.headers)),
-    catchError(error => {
-      console.error("Error Response:", error);
-      return throwError(() => error);
-    })
-  );
+    return this.http.post(`${this.apiUrl}/api/missing-person-with-ups/${uuid}/match-unreject/`, body, {
+      headers,
+      observe: 'response'
+    }).pipe(
+      tap(response => console.log("Response Headers:", response.headers)),
+      catchError(error => {
+        console.error("Error Response:", error);
+        return throwError(() => error);
+      })
+    );
   }
 
   confirmMatchWithUP(uuid: string, matchId: string, confirmationNote: string): Observable<any> {

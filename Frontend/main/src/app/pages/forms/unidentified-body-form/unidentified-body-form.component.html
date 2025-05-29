@@ -1,6 +1,6 @@
 <div class="unidentified-person-form-container p-4 bg-white rounded shadow-sm">
   <div class="heading-container">
-    <h3 class="main-heading">Unidnetified Body Report Form</h3>
+    <h3 class="main-heading">Unidentified Body Report Form</h3>
   </div>
 
   <form [formGroup]="unidentifiedBodyForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
@@ -44,11 +44,11 @@
 
 
         <!-- Gender -->
-        <div class="col-12 col-md-3">
+          <div class="col-12 col-md-3">
           <mat-form-field appearance="outline" class="w-100">
             <!-- <mat-label>Gender</mat-label> -->
             <mat-select formControlName="gender" required>
-              <mat-option value="">Select Gender</mat-option>
+              <mat-option value="">Gender</mat-option>
               <mat-option value="male">Male</mat-option>
               <mat-option value="female">Female</mat-option>
               <mat-option value="other">Other</mat-option>
@@ -58,6 +58,7 @@
             </mat-error>
           </mat-form-field>
         </div>
+       
 
         <!-- Date of Birth -->
         <div class="col-12 col-md-3">
@@ -136,7 +137,7 @@
                   unidentifiedBodyForm.get('weight')?.invalid
               }">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Weight</mat-label>
+            <mat-label>Weight(kg)</mat-label>
             <input matInput type="number" formControlName="weight" (keypress)="allowOnlyNumbers($event)"
               (input)="restrictMaxAge($event)" min="1" max="200" />
             <mat-error *ngIf="
@@ -337,7 +338,7 @@
 
         <!-- Body Photo Upload -->
         <div class="col-md-3" style="margin-bottom: 20px">
-          <button mat-stroked-button color="primary" class="w-100" type="button" (click)="personPhotoInput.click()">
+          <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="personPhotoInput.click()">
             <mat-icon>cloud_upload</mat-icon>Body Photo
           </button>
           <input #personPhotoInput type="file" accept="image/*" hidden (change)="onFileSelect_person_photo($event)" />
@@ -346,7 +347,7 @@
     </mat-card>
 
     <!-- Address Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex  align-items-center justify-content-between">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Address
@@ -354,9 +355,15 @@
       <button mat-flat-button color="primary" type="button" (click)="addAddress()">
         Add Address
       </button>
-    </div>
+    </div> -->
 
-    <mat-card class="p-3 mb-4">
+    <mat-card class="p-3 mb-4 styled-card">
+         <span class="card-legend">Address</span>      
+      <div class="flex justify-content-end form-btn">
+        <button mat-flat-button color="primary" type="button" (click)="addAddress()">
+          Add Address
+        </button>
+      </div>
       <div formGroupName="addressForm" class="row g-3 m-2">
         <!-- Left Section: Address Fields -->
         <div class="col-md-6">
@@ -645,7 +652,7 @@
     </mat-card>
 
     <!-- Contact Section -->
-    <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
+    <!-- <div class="p-3 bordercolor rounded mt-4 mb-2 d-flex justify-content-between align-items-center">
       <h5 class="f-s-14 text-primary d-flex align-items-center f-w-600 mb-0">
         <i-tabler name="info-circle" class="icon-20 me-2 d-flex"></i-tabler>
         Contact
@@ -653,10 +660,16 @@
       <button mat-flat-button color="primary" type="button" (click)="addContact()">
         Add Contact
       </button>
-    </div>
+    </div> -->
 
     <!-- Contact Information Card -->
-    <mat-card class="p-3 mb-4">
+    <mat-card class="p-3 mb-4 styled-card">
+         <span class="card-legend">Contact</span>      
+      <div class="flex justify-content-end form-btn">
+        <button mat-flat-button color="primary" type="button" (click)="addContact()">
+          Add Contact
+        </button>
+      </div>
       <form formGroupName="contactForm">
         <div class="row g-2 m-1">
           <!-- Contact Type -->
@@ -1059,7 +1072,7 @@
 
           <!-- Upload FIR Photo -->
           <div class="col-md-4" style="margin-bottom: 20px">
-            <button mat-stroked-button color="primary" class="w-100" type="button" (click)="firInput.click()">
+            <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="firInput.click()">
               <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
             </button>
             <input #firInput type="file" accept="image/*,application/pdf" hidden

@@ -580,12 +580,14 @@ goToLastPage(): void {
       }
     };
   }
+ hasdatefilterApplied():boolean{
+  return !!this.filters.startDate && !!this.filters.endDate;
 
+  }
 hasFiltersApplied(): boolean {
-  return !(
+  return this.hasdatefilterApplied() ||!(
     !this.filters.full_name &&
-    !this.filters.startDate &&
-    !this.filters.endDate &&
+  
     !this.filters.caste &&
     !this.filters.gender &&
     !this.filters.age_range &&
