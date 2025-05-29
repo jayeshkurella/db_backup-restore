@@ -147,8 +147,14 @@
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
             <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-              {{ column === 'Sr.No' ? column : (column | titlecase) }}
+              {{
+              column === 'Sr.No' ? 'Sr.No' :
+              column === 'fullName' ? 'Full Name' :
+              (column | titlecase)
+              }}
             </th>
+
+
             <td mat-cell *matCellDef="let element; let i = index">
               <ng-container [ngSwitch]="column">
                 <span *ngSwitchCase="'Sr.No'">{{ i + 1 }}</span>
@@ -189,7 +195,11 @@
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
             <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-              {{ column === 'Sr.No' ? column : (column | titlecase) }}
+              {{
+              column === 'Sr.No' ? 'Sr.No' :
+              column === 'fullName' ? 'Full Name' :
+              (column | titlecase)
+              }}
             </th>
 
             <td mat-cell *matCellDef="let element; let i = index">
@@ -232,7 +242,11 @@
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
             <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-              {{ column === 'Sr.No' ? column : (column | titlecase) }}
+              {{
+              column === 'Sr.No' ? 'Sr.No' :
+              column === 'fullName' ? 'Full Name' :
+              (column | titlecase)
+              }}
             </th>
             <td mat-cell *matCellDef="let element; let i = index">
               <ng-container [ngSwitch]="column">

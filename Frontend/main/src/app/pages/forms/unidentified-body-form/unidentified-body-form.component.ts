@@ -261,7 +261,7 @@ export class UnidentifiedBodyFormComponent implements OnInit, AfterViewInit {
       age_range: [''],
       weight: ['', [Validators.min(1), Validators.max(200)]],
 
-      gender: ['', Validators.required],
+      gender: [''],
 
       height: ['', [Validators.pattern(/^[0-9]*$/), Validators.max(250)]],
 

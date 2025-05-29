@@ -116,17 +116,21 @@
 }
 
 .reject-button {
-  background-color: inherit;
-  color: inherit;
+  background-color: transparent;  
+  color: #f44336; 
 
   &[disabled] {
-    background-color: inherit;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.26); 
+    border-color: rgba(0, 0, 0, 0.12); 
   }
+
   .mat-tooltip {
     font-size: 13px;
-    background-color: inherit;
+    background-color: rgba(97, 97, 97, 0.9); 
   }
 }
+
 
 .table-wrapper {
   max-height: 400px;

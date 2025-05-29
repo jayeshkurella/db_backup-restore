@@ -135,7 +135,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Check if the reset token is valid (e.g., expires after 1 hour)."""
         if self.reset_token_created_at:
             time_difference = (now() - self.reset_token_created_at).total_seconds()
-            print(f"Time difference: {time_difference} seconds")
             return time_difference < 300  # 1 hour
         return False
 

@@ -169,13 +169,13 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
   months: any;
   displayedColumns: string[] = ['Sr.No', 'photo', 'fullName', 'age', 'gender', 'city', 'district', 'state', 'action'];
 
-tabs = [
-  { label: 'Missing Persons' },
-  { label: 'Unidentified Persons' },
-  { label: 'Unidentified Bodies' }
-];
+  tabs = [
+    { label: 'Missing Persons' },
+    { label: 'Unidentified Persons' },
+    { label: 'Unidentified Bodies' }
+  ];
 
-selectedTabIndex = 0;
+  selectedTabIndex = 0;
 
   constructor(
     private router: Router,
@@ -412,10 +412,10 @@ selectedTabIndex = 0;
   //   this.router.navigate(['/person', personId]);
   // }
   viewDetails(person: any): void {
-  const uuid = person.id.includes('.') ? person.id.split('.')[1] : person.id;
-  sessionStorage.setItem('viewData', JSON.stringify({ id: uuid }));
-  this.router.navigate(['/person-details']);
-}
+    const uuid = person.id.includes('.') ? person.id.split('.')[1] : person.id;
+    sessionStorage.setItem('viewData', JSON.stringify({ id: uuid }));
+    this.router.navigate(['/person-details']);
+  }
 
 
 
@@ -451,7 +451,7 @@ selectedTabIndex = 0;
       maxBounds: [[-100, -180], [85, 180]],
       maxBoundsViscosity: 0.8
     });
-      
+
     this.stateLayerName = L.tileLayer.wms(environment.geo_url, {
       layers: this.stateLayer,
       format: 'image/png',
@@ -943,17 +943,17 @@ selectedTabIndex = 0;
         if (remainingPoints.length > 0) {
           setTimeout(() => {
             this.addMarkersToMap(remainingPoints, maleIcon, femaleIcon);
-          }, 2000); 
+          }, 2000);
         }
 
       })
       .catch(error => {
         console.error("Error fetching GeoJSON:", error);
         this.snackBar.open('Error fetching data. Please try again.', 'Close', {
-            duration: 1000,
-            verticalPosition: 'top',
-            horizontalPosition: 'right'
-          });
+          duration: 1000,
+          verticalPosition: 'top',
+          horizontalPosition: 'right'
+        });
       });
 
     let state: L.Layer = L.tileLayer.wms(this.geo_url, {
@@ -1004,13 +1004,13 @@ selectedTabIndex = 0;
         const marker = L.marker(latlng, { icon });
 
         const imageUrl =
-        personDetails.type === 'Unidentified Body'
-          ? '/assets/old/images/body_default.jpeg'
-          : personDetails.photo_photo && personDetails.photo_photo.trim() !== ''
-      ? `${environment.ImgUrlss.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}`
-      : personDetails.gender?.toLowerCase() === 'male'
-        ? '/assets/old/images/final_male.png'
-        : personDetails.gender?.toLowerCase() === 'female'? '/assets/old/images/final_female.png': '/assets/old/images/other.png';
+          personDetails.type === 'Unidentified Body'
+            ? '/assets/old/images/body_default.jpeg'
+            : personDetails.photo_photo && personDetails.photo_photo.trim() !== ''
+              ? `${environment.ImgUrlss.replace(/\/$/, '')}/${personDetails.photo_photo.replace(/^\//, '')}`
+              : personDetails.gender?.toLowerCase() === 'male'
+                ? '/assets/old/images/final_male.png'
+                : personDetails.gender?.toLowerCase() === 'female' ? '/assets/old/images/final_female.png' : '/assets/old/images/other.png';
 
 
         const popupContent = `
@@ -1183,36 +1183,36 @@ selectedTabIndex = 0;
         return 'assets/old/images/favicon-32x32.png';
       case 'Missing Person':
       default:
-        return 'assets/old/images/favicon-32x32.png';  
+        return 'assets/old/images/favicon-32x32.png';
     }
   }
 
   onImageError(event: Event, type: string) {
-  const target = event.target as HTMLImageElement;
+    const target = event.target as HTMLImageElement;
 
-  switch (type) {
-    case 'Unidentified Body':
-      target.src = 'assets/old/images/body_default.jpeg';
-      break;
-    case 'Unidentified Person':
-      target.src = 'assets/old/images/favicon-32x32.png';
-      break;
-    case 'Missing Person':
-    default:
-      target.src = 'assets/old/images/favicon-32x32.png';
-      break;
+    switch (type) {
+      case 'Unidentified Body':
+        target.src = 'assets/old/images/body_default.jpeg';
+        break;
+      case 'Unidentified Person':
+        target.src = 'assets/old/images/favicon-32x32.png';
+        break;
+      case 'Missing Person':
+      default:
+        target.src = 'assets/old/images/favicon-32x32.png';
+        break;
+    }
   }
-}
-getGenderIcon(gender: string): string {
-  switch ((gender || '').toLowerCase()) {
-    case 'male':
-      return 'male';
-    case 'female':
-      return 'female';
-    default:
-      return 'transgender'; 
+  getGenderIcon(gender: string): string {
+    switch ((gender || '').toLowerCase()) {
+      case 'male':
+        return 'male';
+      case 'female':
+        return 'female';
+      default:
+        return 'transgender';
+    }
   }
-}
 
 
 

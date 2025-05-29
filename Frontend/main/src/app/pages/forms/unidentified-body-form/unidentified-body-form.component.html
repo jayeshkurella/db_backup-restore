@@ -47,15 +47,13 @@
           <div class="col-12 col-md-3">
           <mat-form-field appearance="outline" class="w-100">
             <!-- <mat-label>Gender</mat-label> -->
-            <mat-select formControlName="gender" required>
+            <mat-select formControlName="gender" >
               <mat-option value="">Gender</mat-option>
               <mat-option value="male">Male</mat-option>
               <mat-option value="female">Female</mat-option>
               <mat-option value="other">Other</mat-option>
             </mat-select>
-            <mat-error *ngIf="unidentifiedBodyForm.get('gender')?.hasError('required')">
-              Please select the Gender
-            </mat-error>
+           
           </mat-form-field>
         </div>
        
