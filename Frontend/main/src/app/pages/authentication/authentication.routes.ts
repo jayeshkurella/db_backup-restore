@@ -13,7 +13,7 @@ import { AppSideTwoStepsComponent } from './side-two-steps/side-two-steps.compon
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangepasswordComponent } from './changepassword/changepassword.component';
 import { EditprofileComponent } from './editprofile/editprofile.component';
-import { PrivacypolicyComponent } from './side-register/privacypolicy/privacypolicy.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 export const AuthenticationRoutes: Routes = [
   {

@@ -12,42 +12,30 @@ export class MissingPersonApiService {
 
   constructor(private http: HttpClient) { }
 
-  // getPersonsByFilters(filters: any): Observable<any> {
-  //   const { page, page_size, ...filterParams } = filters;
-
-  //   let params = new HttpParams({ fromObject: filterParams });
-  //   if (page) params = params.set('page', page);
-  //   if (page_size) params = params.set('page_size', page_size);
-
-  //   const authToken = localStorage.getItem('authToken');
-  //   if (!authToken) {
-  //     return throwError(() => new Error('Unauthorized: No token found'));
-  //   }
-
-  //   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-
-  //   return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, {
-  //     params,
-  //     headers
-  //   });
-  // }
-getPersonsByFilters(filters: any): Observable<any> {
+ getPersonsByFilters(filters: any = {}): Observable<any> {
   const { page, page_size, ...filterParams } = filters;
 
-  let params = new HttpParams();
-  Object.entries(filterParams).forEach(([key, value]) => {
-    if (value !== null && value !== undefined && value !== '') {
-      if (typeof value === 'object') {
-        params = params.set(key, JSON.stringify(value)); // Convert objects/arrays to strings
-      } else {
-        params = params.set(key, value.toString());
-      }
+  // Clean and convert filter parameters
+  const cleanedFilters: { [key: string]: string | number | boolean } = {};
+  for (const [key, value] of Object.entries(filterParams)) {
+    if (value !== null && value !== undefined && value !== '' && value !== 'null') {
+      cleanedFilters[key] = String(value); // Convert value to string
     }
-  });
+  }
 
-  if (page) params = params.set('page', page.toString());
-  if (page_size) params = params.set('page_size', page_size.toString());
+  // Add default filter for state if not provided
+  if (!cleanedFilters['state']) {
+    cleanedFilters['state'] = 'Maharashtra';
+  }
 
+  // Build HttpParams with explicit type
+  let params = new HttpParams({ fromObject: cleanedFilters });
+
+  // Add pagination params
+  if (page) params = params.set('page', String(page));
+  if (page_size) params = params.set('page_size', String(page_size));
+
+  // Authorization
   const authToken = localStorage.getItem('authToken');
   if (!authToken) {
     return throwError(() => new Error('Unauthorized: No token found'));
@@ -55,13 +43,19 @@ getPersonsByFilters(filters: any): Observable<any> {
 
   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
-  console.log(`Sending GET with query params: ${params.toString()}`);
-
+  // HTTP GET
   return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, { params, headers });
 }
 
+getPersonsByUrl(url: string): Observable<any> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
+  }
 
-
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  return this.http.get(url, { headers });
+}
 
 
   getStates(): Observable<string[]> {

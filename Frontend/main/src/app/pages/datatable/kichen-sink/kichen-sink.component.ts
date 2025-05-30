@@ -10,7 +10,7 @@ import {
   MatTable,
   MatTableModule,
 } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {
   MatDialog,
   MatDialogRef,
@@ -175,7 +175,7 @@ const employees = [
   providers: [DatePipe]
 })
 
-export class AppKichenSinkComponent implements AfterViewInit {
+export class AppKichenSinkComponent {
 
   today: Date = new Date();
 
@@ -231,19 +231,18 @@ export class AppKichenSinkComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['sr', 'photo', 'full_name', 'age', 'gender', 'date_of_missing', 'action', 'match_with'];
 
-  dataSource = new MatTableDataSource(employees);
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
-    Object.create(null);
-  // ✅ Initialize data sources with empty arrays
+  // dataSource = new MatTableDataSource(employees);
+  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
+  //   Object.create(null);
   dataSourcePending = new MatTableDataSource<any>([]);
   dataSourceResolved = new MatTableDataSource<any>([]);
-  ngAfterViewInit() {
-    this.dataSourcePending.paginator = this.paginatorPending;
-    this.dataSourceResolved.paginator = this.paginatorResolved;
-  }
+  // ngAfterViewInit() {
+  //   this.dataSourcePending.paginator = this.paginatorPending;
+  //   this.dataSourceResolved.paginator = this.paginatorResolved;
+  // }
 
-  @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
-  @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
+  // @ViewChild('paginatorPending') paginatorPending!: MatPaginator;
+  // @ViewChild('paginatorResolved') paginatorResolved!: MatPaginator;
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
@@ -334,9 +333,9 @@ export class AppKichenSinkComponent implements AfterViewInit {
 
   pendingPersons: any[] = [];
   resolvedPersons: any[] = [];
-   ngOnInit() {
-    this.allstates = STATES; 
-    this.filters.state = 'Maharashtra'; 
+  ngOnInit() {
+    this.allstates = STATES;
+    this.filters.state = 'Maharashtra';
     this.onStateChange();
     this.applyFilters();
   }
@@ -355,7 +354,11 @@ export class AppKichenSinkComponent implements AfterViewInit {
   //   });
   // }
 
-
+  onPaginatorChange(event: PageEvent): void {
+    this.itemsPerPage = event.pageSize;
+    this.currentPage = event.pageIndex + 1; // Angular Material paginator is zero-based
+    this.applyFilters();
+  }
   onStateChange() {
     this.filters.district = '';
     this.filters.city = '';
@@ -380,9 +383,10 @@ export class AppKichenSinkComponent implements AfterViewInit {
   }
 
   onPageSizeChange() {
-    this.currentPage = 1; // Reset to first page when changing page size
+    this.currentPage = 1; // Reset to first page
     this.applyFilters();
   }
+
   goToPage(page: number): void {
     if (page >= 1 && page <= this.getLastPageNumber()) {
       this.currentPage = page;
@@ -391,19 +395,54 @@ export class AppKichenSinkComponent implements AfterViewInit {
   }
 
   goToFirstPage(): void {
-    this.goToPage(1);
+    if (this.paginationLinks?.first) {
+      this.loadPageByUrl(this.paginationLinks.first);
+    } else {
+      this.goToPage(1);
+    }
   }
 
+  // Previous Page (FIXED)
   goToPreviousPage(): void {
-    this.goToPage(this.currentPage - 1);
+    if (this.paginationLinks?.previous) {
+      this.loadPageByUrl(this.paginationLinks.previous);
+    } else if (this.currentPage > 1) {
+      this.currentPage--;
+      this.applyFilters();
+    }
   }
 
+  // Next Page
   goToNextPage(): void {
-    this.goToPage(this.currentPage + 1);
+    if (this.paginationLinks?.next) {
+      this.loadPageByUrl(this.paginationLinks.next);
+    } else {
+      this.goToPage(this.currentPage + 1);
+    }
   }
 
+  // Last Page
   goToLastPage(): void {
-    this.goToPage(this.getLastPageNumber());
+    if (this.paginationLinks?.last) {
+      this.loadPageByUrl(this.paginationLinks.last);
+    } else {
+      this.goToPage(this.getLastPageNumber());
+    }
+  }
+  loadPageByUrl(url: string): void {
+    this.loading = true;
+    this.missingPersonService.getPersonsByUrl(url).subscribe(
+      (response) => {
+        this.loading = false;
+        this.handleApiResponse(response);
+        // Explicitly update current page from meta
+        this.currentPage = response?.meta?.current_page || this.currentPage;
+      },
+      (error) => {
+        this.loading = false;
+        console.error('Error loading page:', error);
+      }
+    );
   }
 
   getLastPageNumber(): number {
@@ -437,6 +476,10 @@ export class AppKichenSinkComponent implements AfterViewInit {
       this.filters.endDate = this.formatDate(parsedEndDate);
     }
 
+    if (!this.filters.state) {
+      this.filters.state = 'Maharashtra';
+    }
+
     const requestParams = {
       ...this.filters,
       page: this.currentPage,
@@ -445,44 +488,42 @@ export class AppKichenSinkComponent implements AfterViewInit {
 
     this.missingPersonService.getPersonsByFilters(requestParams).subscribe(
       (response) => {
-        console.log('API Response:', response);
         this.loading = false;
-        const responseData = response?.body?.results || response?.results || [];
-
-        // Update pagination info from API response
-        if (response?.body?.count || response?.count) {
-          this.totalItems = response.body?.count || response.count;
-        }
-
-        if (response?.body?.links || response?.links) {
-          this.paginationLinks = response.body?.links || response.links;
-        }
-
-        // Clear previous data
-        this.dataSourcePending.data = [];
-        this.dataSourceResolved.data = [];
-
-        if (responseData?.message) {
-          this.progressMessage = responseData.message;
-        } else if (Array.isArray(responseData)) {
-          this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
-          this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
-
-          this.progressMessage = responseData.length > 0
-            ? "✅ Filters applied successfully!"
-            : "No matching records found";
-        } else {
-          this.progressMessage = "❌ Unexpected response format from server";
-        }
+        this.handleApiResponse(response);
       },
       (error) => {
         this.loading = false;
         console.error('Error fetching data:', error);
-        this.progressMessage = error.error?.message
-          ? `❌ ${error.error.message}`
-          : "❌ Error applying filters!";
+        this.progressMessage = error.error?.message || "❌ Error applying filters!";
       }
     );
+  }
+  handleApiResponse(response: any): void {
+    const responseData = response?.body?.results || response?.results || [];
+    console.log("Total records from API:", responseData.length); 
+    this.totalItems = response?.body?.count || response?.count || 0;
+    this.paginationLinks = response?.body?.links || response?.links || null;
+
+    // Sync current page with API meta data
+    if (response?.meta?.current_page) {
+      this.currentPage = response.meta.current_page;
+    }
+
+    this.dataSourcePending.data = [];
+    this.dataSourceResolved.data = [];
+
+    if (responseData?.message) {
+      this.progressMessage = responseData.message;
+    } else if (Array.isArray(responseData)) {
+      this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
+      this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
+
+      this.progressMessage = responseData.length > 0
+        ? "✅ Filters applied successfully!"
+        : "No matching records found";
+    } else {
+      this.progressMessage = "❌ Unexpected response format from server";
+    }
   }
   resetFilters(): void {
     this.filters = {
@@ -550,50 +591,50 @@ export class AppKichenSinkComponent implements AfterViewInit {
   }
 
 
-  openDialog(obj: any): void {
-    const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
-      width: '80vw', // 80% of the viewport width
-      maxWidth: '900px', // Limit max width
-      data: obj,
-      panelClass: 'custom-dialog-container'
-    });
+  // openDialog(obj: any): void {
+  //   const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
+  //     width: '80vw', // 80% of the viewport width
+  //     maxWidth: '900px', // Limit max width
+  //     data: obj,
+  //     panelClass: 'custom-dialog-container'
+  //   });
 
-    // Ensure `selectedPerson` is set before initializing the map
-    this.selectedPerson = obj;
+  //   // Ensure `selectedPerson` is set before initializing the map
+  //   this.selectedPerson = obj;
 
-    // Delay to allow the dialog to render before initializing the map
-    setTimeout(() => {
-      this.initMap();
-    }, 500);
+  //   // Delay to allow the dialog to render before initializing the map
+  //   setTimeout(() => {
+  //     this.initMap();
+  //   }, 500);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.event === 'Update') {
-        this.updateRowData(result.data);
-      }
-    });
-  }
-
-  // tslint:disable-next-line - Disables all
-  updateRowData(row_obj: Employee): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      if (value.id === row_obj.id) {
-        value.Name = row_obj.Name;
-        value.Position = row_obj.Position;
-        value.Email = row_obj.Email;
-        value.Mobile = row_obj.Mobile;
-        value.DateOfJoining = row_obj.DateOfJoining;
-        value.imagePath = row_obj.imagePath;
-      }
-      return true;
-    });
-  }
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result?.event === 'Update') {
+  //       this.updateRowData(result.data);
+  //     }
+  //   });
+  // }
 
   // tslint:disable-next-line - Disables all
-  deleteRowData(row_obj: Employee): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      return value.id !== row_obj.id;
-    });
-  }
+  // updateRowData(row_obj: Employee): boolean | any {
+  //   this.dataSource.data = this.dataSource.data.filter((value: any) => {
+  //     if (value.id === row_obj.id) {
+  //       value.Name = row_obj.Name;
+  //       value.Position = row_obj.Position;
+  //       value.Email = row_obj.Email;
+  //       value.Mobile = row_obj.Mobile;
+  //       value.DateOfJoining = row_obj.DateOfJoining;
+  //       value.imagePath = row_obj.imagePath;
+  //     }
+  //     return true;
+  //   });
+  // }
+
+  // tslint:disable-next-line - Disables all
+  // deleteRowData(row_obj: Employee): boolean | any {
+  //   this.dataSource.data = this.dataSource.data.filter((value: any) => {
+  //     return value.id !== row_obj.id;
+  //   });
+  // }
 
   removePreviousMarker(): void {
     if (this.marker) {

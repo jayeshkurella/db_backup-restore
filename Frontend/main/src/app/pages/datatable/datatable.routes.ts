@@ -37,7 +37,6 @@ export const datatablesRoutes: Routes = [
       {
         path: 'missing-person',
         component: AppKichenSinkComponent,
-
       },
       {
         path: 'match-up-result',
@@ -67,7 +66,7 @@ export const datatablesRoutes: Routes = [
       },
       {
         path: 'view-missing-person',
-        component: DetaildataComponent        // This route is for viewing missing person details with url masked
+        component: DetaildataComponent        
       },
       {
         path: 'unidentified-person/person-view/:id',

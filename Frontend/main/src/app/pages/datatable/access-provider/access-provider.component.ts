@@ -27,6 +27,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { FormApiService } from '../../forms/form-layouts/form-api.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { STATES } from 'src/app/constants/states';
 export interface Person {
   id: string;
   full_name: string;
@@ -127,7 +128,7 @@ export class AccessProviderComponent implements OnInit {
   allvillages: any;
   policeStationList: any[] = [];
 
-    currentPage = 1;
+  currentPage = 1;
   itemsPerPage = 10;
   totalPendingItems = 0;
   totalHoldItems = 0;
@@ -156,27 +157,30 @@ export class AccessProviderComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.getStates();
-      this.onStateChange(); 
+    this.onStateChange();
     this.fetchPoliceStationList();
 
   }
 
-  // getStates() {
-  //   this.missingPersonService.getStates().subscribe(states => {
-  //     this.allstates = states;
-  //   });
-  // }
-
   getStates() {
-  this.missingPersonService.getStates().subscribe(states => {
-    this.allstates = states;
+    this.allstates = STATES;
 
     // Ensure 'Maharashtra' is in the list before setting
     if (this.allstates.includes('Maharashtra')) {
       this.filters.state = 'Maharashtra';
     }
-  });
-}
+  }
+
+  // getStates() {
+  //   this.missingPersonService.getStates().subscribe(states => {
+  //     this.allstates = states;
+
+  //     // Ensure 'Maharashtra' is in the list before setting
+  //     if (this.allstates.includes('Maharashtra')) {
+  //       this.filters.state = 'Maharashtra';
+  //     }
+  //   });
+  // }
   onStateChange() {
     this.filters.district = '';
     this.filters.city = '';
@@ -256,7 +260,7 @@ export class AccessProviderComponent implements OnInit {
     return false;
   }
 
- getTotalItems(): number {
+  getTotalItems(): number {
     switch (this.selectedTabIndex) {
       case 0: return this.totalPendingItems;
       case 1: return this.totalHoldItems;
@@ -276,7 +280,7 @@ export class AccessProviderComponent implements OnInit {
   }
 
 
-   loadData(): void {
+  loadData(): void {
     this.isLoading = true;
     this.resetSelectAllStates();
     this.cdr.markForCheck();
@@ -288,10 +292,10 @@ export class AccessProviderComponent implements OnInit {
     };
 
     forkJoin([
-      this.pendingService.getPendingPersons({...cleanFilters, ...paginationParams}),
-      this.pendingService.getHoldPersons({...cleanFilters, ...paginationParams}),
-      this.pendingService.getSuspendedPersons({...cleanFilters, ...paginationParams}),
-      this.pendingService.getApprovedPersons({...cleanFilters, ...paginationParams})
+      this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
     ]).pipe(
       finalize(() => {
         this.isLoading = false;
@@ -316,46 +320,46 @@ export class AccessProviderComponent implements OnInit {
 
 
   applyFilters(): void {
-  this.isLoading = true;
-  this.isFilterLoading = true;
-  this.cdr.markForCheck();
-  this.filtersApplied = this.hasActiveFilters();
+    this.isLoading = true;
+    this.isFilterLoading = true;
+    this.cdr.markForCheck();
+    this.filtersApplied = this.hasActiveFilters();
 
-  const currentFilters = { ...this.filters };
-  const cleanFilters = this.getCleanFilters();
-  const paginationParams = {
-    page: this.currentPage,
-    page_size: this.itemsPerPage
-  };
+    const currentFilters = { ...this.filters };
+    const cleanFilters = this.getCleanFilters();
+    const paginationParams = {
+      page: this.currentPage,
+      page_size: this.itemsPerPage
+    };
 
-  forkJoin([
-    this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
-    this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
-    this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
-    this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
-  ]).pipe(
-    finalize(() => {
-      this.isLoading = false;
-      this.isFilterLoading = false;
-      this.cdr.markForCheck();
-    })
-  ).subscribe({
-    next: ([pendingData, holdData, suspendedData, approvedData]) => {
-      if (this.areFiltersSame(currentFilters)) {
-        this.processResponseData({
-          pending_data: pendingData,
-          on_hold_data: holdData,
-          suspended_data: suspendedData,
-          approved_data: approvedData
-        });
+    forkJoin([
+      this.pendingService.getPendingPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getHoldPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getSuspendedPersons({ ...cleanFilters, ...paginationParams }),
+      this.pendingService.getApprovedPersons({ ...cleanFilters, ...paginationParams })
+    ]).pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.isFilterLoading = false;
+        this.cdr.markForCheck();
+      })
+    ).subscribe({
+      next: ([pendingData, holdData, suspendedData, approvedData]) => {
+        if (this.areFiltersSame(currentFilters)) {
+          this.processResponseData({
+            pending_data: pendingData,
+            on_hold_data: holdData,
+            suspended_data: suspendedData,
+            approved_data: approvedData
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Filter error:', error);
+        this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
       }
-    },
-    error: (error) => {
-      console.error('Filter error:', error);
-      this.snackBar.open('Error applying filters', 'Close', { duration: 2000 });
-    }
-  });
-}
+    });
+  }
 
 
   // private hasActiveFilters(): boolean {
@@ -367,23 +371,23 @@ export class AccessProviderComponent implements OnInit {
       this.filters[key as keyof CaseFilters] === compareFilters[key as keyof CaseFilters]
     );
   }
-resetFilters(): void {
-  this.filters = {
-    city: '',
-    state: '',
-    district: '',
-    village: '',
-    case_id: '',
-    police_station: ''
-  };
-  this.currentPage = 1;  // Reset to first page
-  this.loadData();
-  this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
-}
+  resetFilters(): void {
+    this.filters = {
+      city: '',
+      state: 'Maharashtra',
+      district: '',
+      village: '',
+      case_id: '',
+      police_station: ''
+    };
+    this.currentPage = 1;  // Reset to first page
+    this.loadData();
+    this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
+  }
 
- hasActiveFilters(): boolean {
-  return Object.values(this.filters).some(value => value !== '');
-}
+  hasActiveFilters(): boolean {
+    return Object.values(this.filters).some(value => value !== '');
+  }
 
   private getCleanFilters(): any {
     const cleanFilters: any = {};
@@ -398,50 +402,50 @@ resetFilters(): void {
     return cleanFilters;
   }
 
-getFirstItemNumber(): number {
-  return (this.currentPage - 1) * this.itemsPerPage + 1;
-}
-
-getLastItemNumber(): number {
-  const lastItem = this.currentPage * this.itemsPerPage;
-  return lastItem > this.getTotalItems() ? this.getTotalItems() : lastItem;
-}
-
-// You should already have these from previous implementation:
-goToFirstPage(): void {
-  if (this.currentPage !== 1) {
-    this.currentPage = 1;
-    this.loadData();
+  getFirstItemNumber(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
   }
-}
 
-goToPreviousPage(): void {
-  if (this.currentPage > 1) {
-    this.currentPage--;
-    this.loadData();
+  getLastItemNumber(): number {
+    const lastItem = this.currentPage * this.itemsPerPage;
+    return lastItem > this.getTotalItems() ? this.getTotalItems() : lastItem;
   }
-}
 
-goToNextPage(): void {
-  if (this.currentPage < this.getLastPageNumber()) {
-    this.currentPage++;
-    this.loadData();
+  // You should already have these from previous implementation:
+  goToFirstPage(): void {
+    if (this.currentPage !== 1) {
+      this.currentPage = 1;
+      this.loadData();
+    }
   }
-}
 
-goToLastPage(): void {
-  const lastPage = this.getLastPageNumber();
-  if (this.currentPage !== lastPage) {
-    this.currentPage = lastPage;
-    this.loadData();
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadData();
+    }
   }
-}
 
-getLastPageNumber(): number {
-  return Math.ceil(this.getTotalItems() / this.itemsPerPage);
-}
+  goToNextPage(): void {
+    if (this.currentPage < this.getLastPageNumber()) {
+      this.currentPage++;
+      this.loadData();
+    }
+  }
 
-    private processResponseData(response: {
+  goToLastPage(): void {
+    const lastPage = this.getLastPageNumber();
+    if (this.currentPage !== lastPage) {
+      this.currentPage = lastPage;
+      this.loadData();
+    }
+  }
+
+  getLastPageNumber(): number {
+    return Math.ceil(this.getTotalItems() / this.itemsPerPage);
+  }
+
+  private processResponseData(response: {
     pending_data: PaginatedResponse<Person>,
     on_hold_data: PaginatedResponse<Person>,
     suspended_data: PaginatedResponse<Person>,

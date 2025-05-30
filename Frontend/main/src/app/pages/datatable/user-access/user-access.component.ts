@@ -13,9 +13,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
-import { forkJoin } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { UserAccessServiceService } from './user-access-service.service';
+import { MissingPersonApiService } from '../kichen-sink/missing-person-api.service';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
+
 interface Person {
   id: string;
   first_name: string;
@@ -28,8 +33,17 @@ interface Person {
   status: string;
   status_updated_by?: string;
   selected?: boolean;
-//   registered_at?: string;
 }
+
+interface CaseFilters {
+  // full_name: string;
+    first_name: string;
+  last_name: string;
+  email_id: string;
+  phone_no: string;
+  user_type: string;
+}
+
 @Component({
   selector: 'app-user-access',
   imports: [
@@ -47,28 +61,52 @@ interface Person {
     MatTabsModule,
     MatSnackBarModule,
     FormsModule,
-    DatePipe
+    DatePipe,
+    MatOptionModule,
+    MatSelectModule,
+    SafeTitlecasePipe
   ],
   templateUrl: './user-access.component.html',
   styleUrl: './user-access.component.scss'
 })
+
 export class UserAccessComponent implements OnInit {
   displayedColumns: string[] = ['full_name', 'email_id', 'phone', 'user_type', 'sub_user_type', 'status', 'status_updated_by', 'actions'];
   displayedColumnsWithSelect = ['select', ...this.displayedColumns];
   pendingPersons: Person[] = [];
   rejectedPersons: Person[] = [];
   approvedPersons: Person[] = [];
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   pendingCount: number = 0;
   rejectedCount: number = 0;
   approvedCount: number = 0;
+  statusCounts:any;
   selectedTabIndex = 0;
   selectAllPending: boolean = false;
   selectAllRejected: boolean = false;
   selectAllApproved: boolean = false;
+  isFilterLoading: boolean = false;
+  filtersApplied: boolean = false;
+
+  userTypes = [
+    { value: 'reporting', label: 'Reporting' },
+    { value: 'volunteer', label: 'Volunteer' },
+    { value: 'family', label: 'Family' },
+    { value: 'admin', label: 'Admin' },
+    { value: 'police_station', label: 'Police Station' },
+    { value: 'medical_staff', label: 'Medical Staff' }
+  ];
+
+  filters: CaseFilters = {
+    first_name: '',
+    last_name: '',
+    email_id: '',
+    phone_no: '',
+    user_type: ''
+  };
 
   constructor(
-    private pendingService: UserAccessServiceService,
+    private userAccessService: UserAccessServiceService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -82,42 +120,45 @@ export class UserAccessComponent implements OnInit {
     this.rejectedPersons = [];
     this.approvedPersons = [];
     this.resetSelectAllStates();
-  
-    this.pendingService.getPendingData().subscribe({
-      next: (response: any) => {
-        if (response) {
-          this.pendingPersons = response.pending_data.map((person: any) => ({
-            ...person,
-            selected: false,
-            status: person.status || 'hold'
-          }));
-          
-          this.rejectedPersons = response.rejected_data.map((person: any) => ({
-            ...person,
-            selected: false,
-            status: person.status || 'rejected'
-          }));
-  
-          this.approvedPersons = response.approved_data.map((person: any) => ({
-            ...person,
-            selected: false,
-            status: person.status || 'approved'
-          }));
-  
-          this.pendingCount = response.counts?.hold || 0;
-          this.approvedCount = response.counts?.approved || 0;
-          this.rejectedCount = response.counts?.rejected || 0;
-        }
+    const cleanFilters = this.getCleanFilters();
+
+    forkJoin({
+      pending: this.userAccessService.getPendingData(cleanFilters),
+      approved: this.userAccessService.getApprovedData(cleanFilters),
+      rejected: this.userAccessService.getRejectedData(cleanFilters)
+    }).subscribe({
+      next: ({pending, approved, rejected}) => {
+        this.pendingPersons = pending.map((person: any) => ({
+          ...person,
+          selected: false,
+          status: person.status || 'hold'
+        }));
+        
+        this.approvedPersons = approved.map((person: any) => ({
+          ...person,
+          selected: false,
+          status: person.status || 'approved'
+        }));
+
+        this.rejectedPersons = rejected.map((person: any) => ({
+          ...person,
+          selected: false,
+          status: person.status || 'rejected'
+        }));
+
+    
+        this.pendingCount = this.pendingPersons.length;
+        this.approvedCount = this.approvedPersons.length;
+        this.rejectedCount = this.rejectedPersons.length;
+
+        console.log("approved count",this.approvedPersons)
+        
         this.isLoading = false;
+        this.filtersApplied = this.hasActiveFilters();
       },
+
       error: (error) => {
-        console.error('Error fetching data:', error);
-        this.pendingPersons = [];
-        this.rejectedPersons = [];
-        this.approvedPersons = [];
-        this.pendingCount = 0;
-        this.rejectedCount = 0;
-        this.approvedCount = 0;
+        console.error('Error loading data:', error);
         this.isLoading = false;
       }
     });
@@ -130,13 +171,10 @@ export class UserAccessComponent implements OnInit {
   getPhoneNumber(person: Person): string {
     return ` ${person.phone_no}`;
   }
-  //   getPhoneNumber(person: Person): string {
-//     return `${person.country_code} ${person.phone_no}`;
-//   }
 
   approvePerson(person: Person): void {
     const oldStatus = person.status;
-    this.pendingService.updatePersonStatus(person.id, 'approved').subscribe({
+    this.userAccessService.updatePersonStatus(person.id, 'approved').subscribe({
       next: () => {
         this.loadData();
         this.showStatusChangeMessage(person, oldStatus, 'approved');
@@ -147,7 +185,7 @@ export class UserAccessComponent implements OnInit {
 
   rejectPerson(person: Person): void {
     const oldStatus = person.status;
-    this.pendingService.updatePersonStatus(person.id, 'rejected').subscribe({
+    this.userAccessService.updatePersonStatus(person.id, 'rejected').subscribe({
       next: () => {
         this.loadData();
         this.showStatusChangeMessage(person, oldStatus, 'rejected');
@@ -158,22 +196,13 @@ export class UserAccessComponent implements OnInit {
 
   setPersonPending(person: Person): void {
     const oldStatus = person.status;
-    this.pendingService.updatePersonStatus(person.id, 'hold').subscribe({
+    this.userAccessService.updatePersonStatus(person.id, 'hold').subscribe({
       next: () => {
         this.loadData();
         this.showStatusChangeMessage(person, oldStatus, 'hold');
       },
       error: (error) => console.error('Error setting person to pending:', error)
     });
-  }
-
-  getCurrentDataSource() {
-    switch(this.selectedTabIndex) {
-      case 0: return this.pendingPersons;
-      case 1: return this.rejectedPersons;
-      case 2: return this.approvedPersons;
-      default: return this.pendingPersons;
-    }
   }
 
   toggleSelectAllPending(checked: boolean): void {
@@ -261,7 +290,7 @@ export class UserAccessComponent implements OnInit {
 
     const approveRequests = selectedPersons.map(person => {
       const oldStatus = person.status;
-      return this.pendingService.updatePersonStatus(person.id, 'approved').pipe(
+      return this.userAccessService.updatePersonStatus(person.id, 'approved').pipe(
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'approved'))
       );
     });
@@ -293,7 +322,7 @@ export class UserAccessComponent implements OnInit {
 
     const rejectRequests = selectedPersons.map(person => {
       const oldStatus = person.status;
-      return this.pendingService.updatePersonStatus(person.id, 'rejected').pipe(
+      return this.userAccessService.updatePersonStatus(person.id, 'rejected').pipe(
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'rejected'))
       );
     });
@@ -315,7 +344,7 @@ export class UserAccessComponent implements OnInit {
 
     const pendingRequests = selectedPersons.map(person => {
       const oldStatus = person.status;
-      return this.pendingService.updatePersonStatus(person.id, 'hold').pipe(
+      return this.userAccessService.updatePersonStatus(person.id, 'hold').pipe(
         tap(() => this.showStatusChangeMessage(person, oldStatus, 'hold'))
       );
     });
@@ -356,4 +385,50 @@ export class UserAccessComponent implements OnInit {
     this.selectAllApproved = false;
   }
 
+
+hasActiveFilters(): boolean {
+  return Object.values(this.filters).some(value => !!value);
+}
+
+
+  resetFilters(): void {
+  this.filters = {
+    first_name: '',
+    last_name: '',
+    email_id: '',
+    phone_no: '',
+    user_type: ''
+  };
+  this.filtersApplied = false; // Add this line
+  this.loadData();
+  this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
+}
+
+  filterDataByFilters(): void {
+
+    this.loadData();
+  }
+
+  isSearchEnabled(): boolean {
+    return this.hasActiveFilters();
+  }
+
+  private getCleanFilters(): any {
+    const cleanFilters: any = {};
+    Object.keys(this.filters).forEach(key => {
+      if (this.filters[key as keyof CaseFilters]) {
+        cleanFilters[key] = this.filters[key as keyof CaseFilters];
+      }
+    });
+    return cleanFilters;
+  }
+
+  getCurrentDataSource(): any[] {
+    switch (this.selectedTabIndex) {
+      case 0: return this.pendingPersons;
+      case 1: return this.rejectedPersons;
+      case 2: return this.approvedPersons;
+      default: return [];
+    }
+  }
 }

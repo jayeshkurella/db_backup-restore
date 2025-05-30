@@ -213,7 +213,7 @@
 
 
           <div class="col-md-3" style="margin-bottom: 20px">
-            <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="personPhotoInput.click()">
+            <button mat-stroked-button class="w-100 imgUploadborder" type="button" (click)="personPhotoInput.click()">
               <mat-icon>cloud_upload</mat-icon>Person Photo
             </button>
             <input #personPhotoInput type="file" accept="image/*" hidden (change)="onFileSelect_person_photo($event)" />
@@ -270,7 +270,7 @@
     </div> -->
 
     <mat-card class="p-4 mb-4 styled-card">
-         <span class="card-legend">Address</span>      
+      <span class="card-legend">Address</span>
       <div class="flex justify-content-end form-btn">
         <button mat-flat-button color="primary" type="button" (click)="addAddress()">
           Add Address
@@ -579,7 +579,7 @@
 
     <!-- Contact Information Card -->
     <mat-card class="p-4 mb-4 styled-card">
-         <span class="card-legend">Contact</span>      
+      <span class="card-legend">Contact</span>
       <div class="flex justify-content-end form-btn">
         <button mat-flat-button color="primary" type="button" (click)="addcontact()">
           Add Contact
@@ -1197,7 +1197,7 @@
 
           <!-- Upload FIR Photo (Fixed: Removed from <mat-form-field>) -->
           <div class="col-md-4" style="margin-bottom: 20px">
-            <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="firInput.click()">
+            <button mat-stroked-button class="w-100 imgUploadborder" type="button" (click)="firInput.click()">
               <mat-icon>cloud_upload</mat-icon> Upload FIR Photo
             </button>
             <input #firInput type="file" accept="image/*,application/pdf" hidden
@@ -1310,7 +1310,7 @@
     </div>
 
     <!-- Submit & Cancel Buttons -->
-    <div class="d-flex justify-content-between mt-4 space-down">
+    <div class="d-flex justify-content-center align-items-center mt-4 gap-3 space-down">
       <button mat-flat-button color="primary" type="button">Cancel</button>
 
       <span [matTooltip]="'Please accept the consent  before submitting.'"
