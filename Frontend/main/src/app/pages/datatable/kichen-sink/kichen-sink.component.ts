@@ -35,6 +35,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NavigationExtras, Router } from '@angular/router';
 import { MissingPersonApiService } from './missing-person-api.service';
+import { STATES } from 'src/app/constants/states';
 // import { ConsoleReporter } from 'jasmine';
 
 export interface Employee {
@@ -192,7 +193,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
   selectedPerson: any = null;
   selectedMatch: any = null;
   searchText: any;
-  allstates: any;
+  allstates: string[] = STATES;
   allcities: any;
   alldistricts: any;
   allmarital: any;
@@ -253,13 +254,32 @@ export class AppKichenSinkComponent implements AfterViewInit {
     const savedState = sessionStorage.getItem('missingPersonsSearchState');
     if (savedState) {
       const parsedState = JSON.parse(savedState);
-      this.filters = parsedState.filters;
+      this.filters = parsedState.filters || this.defaultFilters();
       this.dataSourcePending.data = parsedState.pendingPersons || [];
       this.dataSourceResolved.data = parsedState.resolvedPersons || [];
       this.filtersApplied = parsedState.filtersApplied || false;
       this.currentPage = parsedState.currentPage || 1;
       this.totalItems = parsedState.totalItems || 0;
+    } else {
+      // Apply default filters
+      this.filters = this.defaultFilters();
     }
+  }
+  defaultFilters() {
+    return {
+      full_name: '',
+      city: '',
+      state: 'Maharashtra',
+      startDate: null,
+      endDate: null,
+      caste: '',
+      age_range: '',
+      marital_status: '',
+      blood_group: '',
+      height_range: '',
+      district: '',
+      gender: ''
+    };
   }
   filters = {
     full_name: '',
@@ -314,28 +334,26 @@ export class AppKichenSinkComponent implements AfterViewInit {
 
   pendingPersons: any[] = [];
   resolvedPersons: any[] = [];
-  ngOnInit() {
-    this.getStates();
+   ngOnInit() {
+    this.allstates = STATES; 
+    this.filters.state = 'Maharashtra'; 
     this.onStateChange();
-    if (this.filtersApplied && (this.dataSourcePending.data.length === 0 && this.dataSourceResolved.data.length === 0)) {
-      this.applyFilters();
-    }
+    this.applyFilters();
   }
+  // getStates() {
+  //   this.missingPersonService.getStates().subscribe(states => {
+  //     this.allstates = states;
 
-  getStates() {
-    this.missingPersonService.getStates().subscribe(states => {
-      this.allstates = states;
+  //     // Ensure 'Maharashtra' is in the list before setting
+  //     if (this.allstates.includes('Maharashtra')) {
+  //       this.filters.state = 'Maharashtra';
+  //       this.onStateChange();
 
-      // Ensure 'Maharashtra' is in the list before setting
-      if (this.allstates.includes('Maharashtra')) {
-        this.filters.state = 'Maharashtra';
-        this.onStateChange();
-
-        // Automatically apply filters
-        this.applyFilters();
-      }
-    });
-  }
+  //       // Automatically apply filters
+  //       this.applyFilters();
+  //     }
+  //   });
+  // }
 
 
   onStateChange() {
@@ -505,8 +523,8 @@ export class AppKichenSinkComponent implements AfterViewInit {
   private saveSearchState(): void {
     const state = {
       filters: this.filters,
-      pendingPersons: this.dataSourcePending.data,
-      resolvedPersons: this.dataSourceResolved.data,
+      // pendingPersons: this.dataSourcePending.data,
+      // resolvedPersons: this.dataSourceResolved.data,
       filtersApplied: this.filtersApplied,
       currentPage: this.currentPage,
       totalItems: this.totalItems

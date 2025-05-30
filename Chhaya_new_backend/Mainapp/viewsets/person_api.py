@@ -46,7 +46,7 @@ class PersonViewSet(viewsets.ViewSet):
             return [AllowAny()]
         return [permission() for permission in self.permission_classes]
 
-        # 🔹 1. LIST all persons
+        #  1. LIST all persons
     @swagger_auto_schema(
         operation_description="Retrieve a list of all persons",
         responses={200: PersonSerializer(many=True)}
@@ -74,7 +74,7 @@ class PersonViewSet(viewsets.ViewSet):
             # Better error handling and logging
             return Response({'error': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 🔹 2. RETRIEVE a person by ID
+    #  2. RETRIEVE a person by ID
     @swagger_auto_schema(
         operation_description="Retrieve a person by ID",
         responses={200: PersonSerializer(), 404: "Person not found"}
@@ -88,7 +88,7 @@ class PersonViewSet(viewsets.ViewSet):
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # 🔹 3. CREATE a new person
+    #  3. CREATE a new person
     @swagger_auto_schema(
         operation_description="Create a new person with related information",
         request_body=PersonSerializer,
@@ -120,7 +120,7 @@ class PersonViewSet(viewsets.ViewSet):
                     return Response({'error': 'Unsupported media type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
                 logger.debug("Extracted JSON Data: %s", json.dumps(data, indent=4))
-                data['photo_photo'] = request.FILES.get('photo_photo')  # Assign uploaded file
+                data['photo_photo'] = request.FILES.get('photo_photo')
 
                 # Set status to pending for non-admin users
                 if not request.user.is_staff:
@@ -153,7 +153,6 @@ class PersonViewSet(viewsets.ViewSet):
                         'addresses', 'contacts', 'additional_info', 'last_known_details', 'firs', 'consent', 'hospital'
                     ]
                 }
-                # person = Person.objects.create(**person_data, hospital=hospital)
                 person = Person(**person_data, hospital=hospital,created_by=request.user)
                 logger.debug("Person Created: %s", person.id)
 
@@ -171,7 +170,6 @@ class PersonViewSet(viewsets.ViewSet):
                     person.district = first_address.get('district', '')
                     person.state = first_address.get('state', '')
                     person.country = first_address.get('country', '')
-                    # Safe location parsing and validation
                     location_data = first_address.get('location', {})
                     raw_lat = location_data.get('latitude')
                     raw_lon = location_data.get('longitude')
@@ -183,7 +181,7 @@ class PersonViewSet(viewsets.ViewSet):
                         if not (-90 <= lat <= 90 and -180 <= lon <= 180):
                             raise ValueError("Latitude must be between -90 and 90, and longitude between -180 and 180.")
 
-                        person.location = Point(lon, lat)  # GeoDjango expects (lon, lat)
+                        person.location = Point(lon, lat)
                     except (ValueError, TypeError) as e:
                         raise ValueError(f"Invalid coordinates provided: {e}")
                     person.save()
@@ -272,8 +270,6 @@ class PersonViewSet(viewsets.ViewSet):
                     raise ValueError(f"PoliceStation with ID {police_station_id} does not exist")
 
             fir_photo = fir.pop('fir_photo', None)
-
-            # 🔥 Exclude unwanted keys, especially "document"
             fir_data = {
                 k: v for k, v in fir.items()
                 if k not in ['police_station', 'person', 'fir_photo', 'document']
@@ -359,7 +355,7 @@ class PersonViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 🔹 5. PARTIAL UPDATE (PATCH)
+    #  5. PARTIAL UPDATE (PATCH)
     @swagger_auto_schema(
         operation_description="Partially update a person’s details",
         request_body=PersonSerializer,
@@ -496,7 +492,7 @@ class PersonViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 🔹 7. SOFT DELETE all persons
+    #  7. SOFT DELETE all persons
     @swagger_auto_schema(
         operation_description="Delete all persons",
         responses={200: openapi.Response("All persons deleted successfully")}

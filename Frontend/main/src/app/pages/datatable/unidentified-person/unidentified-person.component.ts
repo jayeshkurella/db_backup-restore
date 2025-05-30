@@ -27,6 +27,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UnidentifiedPersonDialogComponent } from './unidentified-person-dialog/unidentified-person-dialog.component';
 import { Router } from '@angular/router';
 import { SafeTitlecasePipe } from "../../../components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe";
+import { STATES } from 'src/app/constants/states';
 export interface Person {
   id: number;
   full_name: string;
@@ -70,7 +71,7 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
   filteredPersons: any[] = [];
   selectedMatch: any = null;
   searchText: any;
-  allstates: any;
+ allstates: string[] = STATES;
   allcities: any;
   alldistricts: any;
   allmarital: any;
@@ -118,19 +119,38 @@ export class UnidentifiedPersonComponent implements AfterViewInit, OnInit {
     private missingPersonService: UnidentifiedpersonApiService,
     private router: Router,
   ) {
-    // Load saved state from sessionStorage if available
-    const savedState = sessionStorage.getItem('unidentifiedBodySearchState');
+    const savedState = sessionStorage.getItem('unidentifiedPersonsSearchState');
     if (savedState) {
       const parsedState = JSON.parse(savedState);
-      this.filters = parsedState.filters;
+      this.filters = parsedState.filters || this.defaultFilters();
       this.dataSourcePending.data = parsedState.pendingPersons || [];
       this.dataSourceResolved.data = parsedState.resolvedPersons || [];
       this.filtersApplied = parsedState.filtersApplied || false;
       this.currentPage = parsedState.currentPage || 1;
       this.totalItems = parsedState.totalItems || 0;
+    } else {
+      // Apply default filters
+      this.filters = this.defaultFilters();
     }
   }
-filters = {
+  defaultFilters() {
+    return {
+      full_name: '',
+      city: '',
+      state: 'Maharashtra',
+      startDate: null,
+      endDate: null,
+      caste: '',
+      age_range: '',
+      marital_status: '',
+      blood_group: '',
+      height_range: '',
+      district: '',
+      gender: ''
+    };
+  }
+
+  filters = {
     full_name: '',
     city: '',
     state: 'Maharashtra',
@@ -190,27 +210,26 @@ filters = {
     this.dataSourcePending.paginator = this.paginatorPending;
     this.dataSourceResolved.paginator = this.paginatorResolved;
   }
- ngOnInit() {
-    this.getStates();
-      this.onStateChange(); 
-    if (this.filtersApplied && (this.dataSourcePending.data.length === 0 && this.dataSourceResolved.data.length === 0)) {
-      this.applyFilters();
-    }
+   ngOnInit() {
+    this.allstates = STATES; 
+    this.filters.state = 'Maharashtra'; 
+    this.onStateChange();
+    this.applyFilters();
   }
-  getStates() {
-  this.missingPersonService.getStates().subscribe(states => {
-    this.allstates = states;
+  // getStates() {
+  //   this.missingPersonService.getStates().subscribe(states => {
+  //     this.allstates = states;
 
-    // Ensure 'Maharashtra' is in the list before setting
-    if (this.allstates.includes('Maharashtra')) {
-      this.filters.state = 'Maharashtra';
-       this.onStateChange();
+  //     // Ensure 'Maharashtra' is in the list before setting
+  //     if (this.allstates.includes('Maharashtra')) {
+  //       this.filters.state = 'Maharashtra';
+  //       this.onStateChange();
 
-      // Automatically apply filters
-      this.applyFilters();
-    }
-  });
-}
+  //       // Automatically apply filters
+  //       this.applyFilters();
+  //     }
+  //   });
+  // }
   onStateChange() {
     this.filters.district = '';
     this.filters.city = '';
@@ -233,9 +252,9 @@ filters = {
       });
     }
   }
-  
 
- resetFilters(): void {
+
+  resetFilters(): void {
     this.filters = {
       full_name: '',
       city: '',
@@ -259,20 +278,20 @@ filters = {
     this.filtersApplied = false;
 
     // Clear saved state
-    sessionStorage.removeItem('missingPersonsSearchState');
+    sessionStorage.removeItem('unidentifiedPersonsSearchState');
 
     this.progressMessage = "Filters have been reset";
-     // Load district and cities again for Maharashtra
-  this.onStateChange();
+    // Load district and cities again for Maharashtra
+    this.onStateChange();
 
-  // Apply Maharashtra filters again
-  this.applyFilters();
+    // Apply Maharashtra filters again
+    this.applyFilters();
   }
   private saveSearchState(): void {
     const state = {
       filters: this.filters,
-      pendingPersons: this.dataSourcePending.data,
-      resolvedPersons: this.dataSourceResolved.data,
+      // pendingPersons: this.dataSourcePending.data,
+      // resolvedPersons: this.dataSourceResolved.data,
       filtersApplied: this.filtersApplied,
       currentPage: this.currentPage,
       totalItems: this.totalItems

@@ -12,8 +12,7 @@ from django.conf import settings
 from Mainapp.all_paginations.users_pagination import AdminUserPagination
 from Mainapp.authentication.auth_serializer import User, UserSerializer
 
-
-
+from django.db.models import Q
 
 
 class AdminUserApprovalView(generics.ListAPIView):
@@ -24,8 +23,26 @@ class AdminUserApprovalView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all()
-        search_query = self.request.query_params.get("search", "")
+        first_name = self.request.query_params.get("first_name")
+        last_name = self.request.query_params.get("last_name")
+        email_id = self.request.query_params.get("email_id")
+        phone_no = self.request.query_params.get("phone_no")
+        user_type = self.request.query_params.get("user_type")
+        search_query = self.request.query_params.get("search")
 
+
+        if first_name:
+            queryset = queryset.filter(first_name__icontains=first_name)
+        if last_name:
+            queryset = queryset.filter(last_name__icontains=last_name)
+        if email_id:
+            queryset = queryset.filter(email_id__icontains=email_id)
+        if phone_no:
+            queryset = queryset.filter(phone_no__icontains=phone_no)
+        if user_type:
+            queryset = queryset.filter(user_type__iexact=user_type)
+
+        # Optional: General search (if you still want this)
         if search_query:
             queryset = queryset.filter(
                 Q(first_name__icontains=search_query) |
@@ -34,12 +51,13 @@ class AdminUserApprovalView(generics.ListAPIView):
                 Q(phone_no__icontains=search_query) |
                 Q(user_type__icontains=search_query)
             )
+
         return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
-        # Count for each status
+        # Count for each status (respects all filters)
         counts = {
             "hold": queryset.filter(status=User.StatusChoices.HOLD).count(),
             "approved": queryset.filter(status=User.StatusChoices.ACTIVE).count(),
@@ -53,7 +71,6 @@ class AdminUserApprovalView(generics.ListAPIView):
             "counts": counts,
             "data": self.paginator.get_paginated_response(serializer.data).data
         }, status=status.HTTP_200_OK)
-
 
     def patch(self, request, user_id):
         try:

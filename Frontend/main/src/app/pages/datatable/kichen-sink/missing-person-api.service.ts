@@ -12,25 +12,53 @@ export class MissingPersonApiService {
 
   constructor(private http: HttpClient) { }
 
-  getPersonsByFilters(filters: any): Observable<any> {
-    const { page, page_size, ...filterParams } = filters;
+  // getPersonsByFilters(filters: any): Observable<any> {
+  //   const { page, page_size, ...filterParams } = filters;
 
-    let params = new HttpParams({ fromObject: filterParams });
-    if (page) params = params.set('page', page);
-    if (page_size) params = params.set('page_size', page_size);
+  //   let params = new HttpParams({ fromObject: filterParams });
+  //   if (page) params = params.set('page', page);
+  //   if (page_size) params = params.set('page_size', page_size);
 
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      return throwError(() => new Error('Unauthorized: No token found'));
+  //   const authToken = localStorage.getItem('authToken');
+  //   if (!authToken) {
+  //     return throwError(() => new Error('Unauthorized: No token found'));
+  //   }
+
+  //   const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+
+  //   return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, {
+  //     params,
+  //     headers
+  //   });
+  // }
+getPersonsByFilters(filters: any): Observable<any> {
+  const { page, page_size, ...filterParams } = filters;
+
+  let params = new HttpParams();
+  Object.entries(filterParams).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== '') {
+      if (typeof value === 'object') {
+        params = params.set(key, JSON.stringify(value)); // Convert objects/arrays to strings
+      } else {
+        params = params.set(key, value.toString());
+      }
     }
+  });
 
-    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+  if (page) params = params.set('page', page.toString());
+  if (page_size) params = params.set('page_size', page_size.toString());
 
-    return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, {
-      params,
-      headers
-    });
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    return throwError(() => new Error('Unauthorized: No token found'));
   }
+
+  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+
+  console.log(`Sending GET with query params: ${params.toString()}`);
+
+  return this.http.get(`${this.apiUrl}/api/persons/missing-persons/`, { params, headers });
+}
 
 
 

@@ -321,7 +321,6 @@ class Person(models.Model):
     )
     matched_person_id = models.UUIDField(null=True, blank=True, help_text="UUID of the matched person")
 
-
     def save(self, *args, **kwargs):
         if not self.case_id:
             self.case_id = self.generate_case_id()
@@ -340,15 +339,14 @@ class Person(models.Model):
         location_code = (self.city[:3].upper() if self.city else 'XXX')
 
         with transaction.atomic():
+            # Only filter by type and report month/year, NOT city
             count = Person.objects.filter(
                 type=self.type,
-                city=self.city,
                 reported_date__year=report_date.year,
                 reported_date__month=report_date.month
             ).select_for_update().count() + 1
 
-        return f"{case_type_code}-{year_month}-{location_code}-{count:04d}"
-
+        return f"{case_type_code}-{year_month}-{location_code}-{count:03d}"
     def __str__(self):
         return f"{self.full_name} ({self.type})"
 
