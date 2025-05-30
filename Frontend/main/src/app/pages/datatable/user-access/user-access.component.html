@@ -48,10 +48,9 @@
                           [disabled]="!hasSelectedItems()">
                     Approve Selected ({{selectedCount()}})
                   </button>
-                  <button mat-stroked-button color="warn" 
+                  <button mat-stroked-button 
                           (click)="rejectSelected()"
-                          [disabled]="!hasSelectedItems()"
-                          class="reject-button">
+                          [disabled]="!hasSelectedItems()">
                     Reject Selected ({{selectedCount()}})
                   </button>
                 </ng-container>
@@ -70,10 +69,9 @@
                           [disabled]="!hasSelectedItems()">
                     Set as Pending ({{selectedCount()}})
                   </button>
-                  <button mat-stroked-button color="warn" 
+                  <button mat-stroked-button 
                           (click)="rejectSelected()"
-                          [disabled]="!hasSelectedItems()"
-                          class="reject-button">
+                          [disabled]="!hasSelectedItems()">
                     Reject Selected ({{selectedCount()}})
                   </button>
                 </ng-container>

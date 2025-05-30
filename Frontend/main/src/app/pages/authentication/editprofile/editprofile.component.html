@@ -2,12 +2,12 @@
   <mat-card class="profile-card mat-elevation-z8">
     <div class="profile-header">
       <div class="avatar-container">
-        <img [src]="user?.picture || user?.profile_image || 'assets/default-avatar.png'" 
-             class="profile-avatar" alt="Profile picture">
+        <img [src]="user?.picture || user?.profile_image || 'assets/default-avatar.png'" class="profile-avatar"
+          alt="Profile picture">
         <div class="status-indicator" [ngClass]="{'active': user?.status === 'active'}"></div>
       </div>
       <div class="profile-title">
-        <h1>{{ user?.first_name }} {{ user?.last_name }}</h1>
+        <h1>{{ user?.first_name | titlecase }} {{ user?.last_name | titlecase }}</h1>
         <div class="user-meta">
           <span class="user-type">{{ user?.user_type | titlecase }}</span>
           <span *ngIf="user?.sub_user_type" class="user-subtype">• {{ user?.sub_user_type | titlecase }}</span>
@@ -27,16 +27,16 @@
           </div>
         </div>
 
-    
+
 
         <div class="detail-row">
-        <mat-icon class="detail-icon">phone</mat-icon>
-        <div class="detail-content">
+          <mat-icon class="detail-icon">phone</mat-icon>
+          <div class="detail-content">
             <div class="detail-label">Phone Number</div>
             <div class="detail-value">
-            {{ user?.phone_no || 'Not provided' }}
+              {{ user?.phone_no || 'Not provided' }}
             </div>
-        </div>
+          </div>
         </div>
 
 
@@ -67,9 +67,9 @@
         <mat-icon>edit</mat-icon> Edit Profile
       </button>
       <button mat-stroked-button color="primary" class="action-button" [routerLink]="'/'">
-  <mat-icon>home</mat-icon>
-  Home
-</button>
+        <mat-icon>home</mat-icon>
+        Home
+      </button>
 
     </mat-card-actions>
   </mat-card>

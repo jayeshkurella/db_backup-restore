@@ -170,7 +170,7 @@ const employees = [
     FormsModule,
     HttpClientModule,
     MatProgressSpinnerModule
-],
+  ],
   providers: [DatePipe]
 })
 
@@ -215,8 +215,8 @@ export class AppKichenSinkComponent implements AfterViewInit {
   progressColor: string = 'bg-primary'; // Corrected type of progressColor
   progressMessage: string = '';
 
-  
-  
+
+
 
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -261,11 +261,10 @@ export class AppKichenSinkComponent implements AfterViewInit {
       this.totalItems = parsedState.totalItems || 0;
     }
   }
-  // constructor(public dialog: MatDialog, public datePipe: DatePipe,private missingPersonService:MissingPersonApiService,private router:Router) {}
   filters = {
     full_name: '',
     city: '',
-    state: '',
+    state: 'Maharashtra',
     startDate: null as string | null,  // Change type to string | null
     endDate: null as string | null,    // Change type to string | null
     caste: '',
@@ -317,6 +316,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
   resolvedPersons: any[] = [];
   ngOnInit() {
     this.getStates();
+    this.onStateChange();
     if (this.filtersApplied && (this.dataSourcePending.data.length === 0 && this.dataSourceResolved.data.length === 0)) {
       this.applyFilters();
     }
@@ -325,6 +325,15 @@ export class AppKichenSinkComponent implements AfterViewInit {
   getStates() {
     this.missingPersonService.getStates().subscribe(states => {
       this.allstates = states;
+
+      // Ensure 'Maharashtra' is in the list before setting
+      if (this.allstates.includes('Maharashtra')) {
+        this.filters.state = 'Maharashtra';
+        this.onStateChange();
+
+        // Automatically apply filters
+        this.applyFilters();
+      }
     });
   }
 
@@ -392,7 +401,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
     return lastItem > this.totalItems ? this.totalItems : lastItem;
   }
 
-  
+
 
   applyFilters(): void {
     this.loading = true;
@@ -461,7 +470,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
     this.filters = {
       full_name: '',
       city: '',
-      state: '',
+      state: 'Maharashtra',
       startDate: null,
       endDate: null,
       caste: '',
@@ -484,7 +493,13 @@ export class AppKichenSinkComponent implements AfterViewInit {
     sessionStorage.removeItem('missingPersonsSearchState');
 
     this.progressMessage = "Filters have been reset";
+    // Load district and cities again for Maharashtra
+    this.onStateChange();
+
+    // Apply Maharashtra filters again
+    this.applyFilters();
   }
+
 
   // Update your saveSearchState method
   private saveSearchState(): void {
@@ -644,11 +659,11 @@ export class AppKichenSinkComponent implements AfterViewInit {
   }
 
   hasGeographicFiltersApplied(): boolean {
-    return !!this.filters.state && !!this.filters.district && !!this.filters.city;
+    return !!this.filters.state || !!this.filters.district && !!this.filters.city;
   }
 
-  hasdatefilterApplied():boolean{
-  return !!this.filters.startDate && !!this.filters.endDate;
+  hasdatefilterApplied(): boolean {
+    return !!this.filters.startDate && !!this.filters.endDate;
 
   }
   hasActiveFilters(): boolean {
@@ -658,7 +673,7 @@ export class AppKichenSinkComponent implements AfterViewInit {
   hasFiltersApplied(): boolean {
     return this.hasGeographicFiltersApplied() || this.hasdatefilterApplied() ||
       !!(this.filters.full_name ||
-       
+
         this.filters.caste ||
         this.filters.gender ||
         this.filters.age_range ||

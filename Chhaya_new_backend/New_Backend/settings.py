@@ -88,7 +88,6 @@ WSGI_APPLICATION = 'New_Backend.wsgi.application'
 #     }
 # }
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',

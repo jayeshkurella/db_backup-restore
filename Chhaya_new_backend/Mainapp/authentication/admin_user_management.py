@@ -2,51 +2,58 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import status
+from rest_framework import status, generics
 from django.db.models import Q
 from django.utils.timezone import now
 
 from django.core.mail import send_mail
 from django.conf import settings
+
+from Mainapp.all_paginations.users_pagination import AdminUserPagination
 from Mainapp.authentication.auth_serializer import User, UserSerializer
 
 
-class AdminUserApprovalView(APIView):
+
+
+
+class AdminUserApprovalView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    pagination_class = AdminUserPagination
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
 
-    def get(self, request):
-        """Fetch all users grouped by status with counts and optional search."""
-        query = request.query_params.get("search", "")
+    def get_queryset(self):
+        queryset = User.objects.all()
+        search_query = self.request.query_params.get("search", "")
 
-        base_queryset = User.objects.all()
-
-        if query:
-            base_queryset = base_queryset.filter(
-                Q(first_name__icontains=query) |
-                Q(last_name__icontains=query) |
-                Q(email_id__icontains=query) |
-                Q(phone_no__icontains=query)
+        if search_query:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query) |
+                Q(email_id__icontains=search_query) |
+                Q(phone_no__icontains=search_query) |
+                Q(user_type__icontains=search_query)
             )
+        return queryset
 
-        hold_users = base_queryset.filter(status=User.StatusChoices.HOLD)
-        approved_users = base_queryset.filter(status=User.StatusChoices.ACTIVE)
-        rejected_users = base_queryset.filter(status=User.StatusChoices.REJECTED)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
 
-        response_data = {
-            "counts": {
-                "hold": hold_users.count(),
-                "approved": approved_users.count(),
-                "rejected": rejected_users.count()
-            },
-            "data": {
-                "hold": UserSerializer(hold_users, many=True).data,
-                "approved": UserSerializer(approved_users, many=True).data,
-                "rejected": UserSerializer(rejected_users, many=True).data
-            }
+        # Count for each status
+        counts = {
+            "hold": queryset.filter(status=User.StatusChoices.HOLD).count(),
+            "approved": queryset.filter(status=User.StatusChoices.ACTIVE).count(),
+            "rejected": queryset.filter(status=User.StatusChoices.REJECTED).count()
         }
 
-        return Response(response_data, status=status.HTTP_200_OK)
+        paginated_queryset = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(paginated_queryset, many=True)
+
+        return Response({
+            "counts": counts,
+            "data": self.paginator.get_paginated_response(serializer.data).data
+        }, status=status.HTTP_200_OK)
+
 
     def patch(self, request, user_id):
         try:
@@ -108,3 +115,24 @@ class AdminUserApprovalView(APIView):
             )
         except Exception as e:
             print(f"Error sending email: {str(e)}")
+
+
+class StatusUserView(AdminUserApprovalView):
+    status_filter = None  # To be set by subclasses
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.status_filter:
+            queryset = queryset.filter(status=self.status_filter)
+        return queryset
+
+class ApprovedUsersView(StatusUserView):
+    status_filter = User.StatusChoices.ACTIVE
+
+
+class HoldUsersView(StatusUserView):
+    status_filter = User.StatusChoices.HOLD
+
+
+class RejectedUsersView(StatusUserView):
+    status_filter = User.StatusChoices.REJECTED

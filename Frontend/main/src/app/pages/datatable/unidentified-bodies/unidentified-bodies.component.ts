@@ -140,7 +140,7 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
   filters = {
     full_name: '',
     city: '',
-    state: '',
+    state: 'Maharashtra',
     startDate: null as string | null,  // Change type to string | null
     endDate: null as string | null,    // Change type to string | null
     caste: '',
@@ -197,15 +197,24 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
   }
   ngOnInit() {
     this.getStates();
-    this.getStates();
+    this.onStateChange();
     if (this.filtersApplied && (this.dataSourcePending.data.length === 0 && this.dataSourceResolved.data.length === 0)) {
       this.applyFilters();
     }
-
   }
+
   getStates() {
     this.missingPersonService.getStates().subscribe(states => {
       this.allstates = states;
+
+      // Ensure 'Maharashtra' is in the list before setting
+      if (this.allstates.includes('Maharashtra')) {
+        this.filters.state = 'Maharashtra';
+        this.onStateChange();
+
+        // Automatically apply filters
+        this.applyFilters();
+      }
     });
   }
   onStateChange() {
@@ -278,75 +287,7 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
       }
     }
   }
-  //   applyFilters(): void {
-  //   this.loading = true;
-  //   this.progressMessage = "🔄 Applying filters...";
-  //   this.filtersApplied = true;
 
-  //   // Safely parse and format dates
-  //   const parsedStartDate = this.parseToDate(this.filters.startDate);
-  //   const parsedEndDate = this.parseToDate(this.filters.endDate);
-
-  //   if (parsedStartDate) {
-  //     this.filters.startDate = this.formatDate(parsedStartDate);
-  //   }
-
-  //   if (parsedEndDate) {
-  //     this.filters.endDate = this.formatDate(parsedEndDate);
-  //   }
-
-  //   this.missingPersonService.getPersonsByFilters(this.filters).subscribe(
-  //     (response) => {
-  //       this.loading = false;
-  //       const responseData = response?.body?.results || response;
-
-  //       // Clear previous data
-  //       this.dataSourcePending.data = [];
-  //       this.dataSourceResolved.data = [];
-
-  //       if (responseData?.message) {
-  //         this.progressMessage = responseData.message;
-  //       } else if (Array.isArray(responseData)) {
-  //         // Filter and set data
-  //         this.dataSourcePending.data = responseData.filter(person => person.case_status === 'pending');
-  //         this.dataSourceResolved.data = responseData.filter(person => person.case_status === 'resolved');
-
-  //         // Save current search state
-  //         this.saveSearchState();
-
-  //         // Debug logs
-  //         console.log("Pending Persons:", this.dataSourcePending.data);
-  //         console.log("Resolved Persons:", this.dataSourceResolved.data);
-
-  //         // Connect paginators
-  //         this.dataSourcePending.paginator = this.paginatorPending;
-  //         this.dataSourceResolved.paginator = this.paginatorResolved;
-
-  //         // Reset pagination to first page
-  //         if (this.paginatorPending) {
-  //           this.paginatorPending.firstPage();
-  //         }
-  //         if (this.paginatorResolved) {
-  //           this.paginatorResolved.firstPage();
-  //         }
-
-  //         // Set progress message
-  //         this.progressMessage = responseData.length > 0 
-  //           ? "✅ Filters applied successfully!" 
-  //           : "No matching records found";
-  //       } else {
-  //         this.progressMessage = "❌ Unexpected response format from server";
-  //       }
-  //     },
-  //     (error) => {
-  //       this.loading = false;
-  //       console.error('Error fetching data:', error);
-  //       this.progressMessage = error.error?.message 
-  //         ? `❌ ${error.error.message}` 
-  //         : "❌ Error applying filters!";
-  //     }
-  //   );
-  // }
   applyFilters(): void {
     this.loading = true;
     this.progressMessage = "🔄 Applying filters...";
@@ -422,21 +363,20 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
 
 
   hasGeographicFiltersApplied(): boolean {
-    return !!this.filters.state && !!this.filters.district && !!this.filters.city;
+    return !!this.filters.state || !!this.filters.district && !!this.filters.city;
   }
   hasActiveFilters(): boolean {
     return Object.values(this.filters).some(value => value !== '');
   }
-   hasdatefilterApplied():boolean{
-  return !!this.filters.startDate && !!this.filters.endDate;
+  hasdatefilterApplied(): boolean {
+    return !!this.filters.startDate && !!this.filters.endDate;
 
   }
-
   resetFilters(): void {
     this.filters = {
       full_name: '',
       city: '',
-      state: '',
+      state: 'Maharashtra',
       startDate: null,
       endDate: null,
       caste: '',
@@ -447,6 +387,7 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
       district: '',
       gender: ''
     };
+
     this.currentPage = 1; // Reset to first page
     this.totalItems = 0;
 
@@ -455,9 +396,14 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
     this.filtersApplied = false;
 
     // Clear saved state
-    sessionStorage.removeItem('unidentifiedPersonsSearchState');
+    sessionStorage.removeItem('missingPersonsSearchState');
 
     this.progressMessage = "Filters have been reset";
+    // Load district and cities again for Maharashtra
+    this.onStateChange();
+
+    // Apply Maharashtra filters again
+    this.applyFilters();
   }
   private saveSearchState(): void {
     const state = {
@@ -574,7 +520,7 @@ export class UnidentifiedBodiesComponent implements AfterViewInit, OnInit {
   hasFiltersApplied(): boolean {
     return this.hasdatefilterApplied() || !(
       !this.filters.full_name &&
-    
+
       !this.filters.caste &&
       !this.filters.gender &&
       !this.filters.age_range &&

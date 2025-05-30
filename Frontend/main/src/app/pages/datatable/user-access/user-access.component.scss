@@ -4,7 +4,11 @@
     color: var(--mat-text-color);
   }
 
-
+.select-box {
+      // flex: 1;
+      min-width: 220px;
+      // margin-left: 14px;
+    }
 
 .select-all-container {
     margin-bottom: 20px;

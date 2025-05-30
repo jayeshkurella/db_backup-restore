@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 from .Additional_info_Tags.tags_apis import CasteListCreateAPIView, CasteDestroyAPIView, educationaltagAPIView, \
     occupationtagAPIView
-from .authentication.admin_user_management import AdminUserApprovalView
+from .authentication.admin_user_management import AdminUserApprovalView, ApprovedUsersView, HoldUsersView, \
+    RejectedUsersView
 from .authentication.user_authentication import AuthAPIView
 from .viewsets.casetype_apis import PendingPersonsView, ApprovedPersonsView, RejectedPersonsView, OnHoldPersonsView, \
     SuspendedPersonsView, StatusCountView
@@ -37,6 +38,9 @@ urlpatterns = [
     path("api/hospital-name-list/", HospitalListView.as_view(), name="hospital-list"),
     path("api/police-station-name-list/", PoliceStationListView.as_view(), name="police-station-list"),
     path("api/pending-users/", AdminUserApprovalView.as_view(), name="pending-users"),
+    path('api/users/approved/', ApprovedUsersView.as_view(), name='approved-users'),
+    path('api/users/hold/', HoldUsersView.as_view(), name='hold-users'),
+    path('api/users/rejected/', RejectedUsersView.as_view(), name='rejected-users'),
     path("api/users/approve/<uuid:user_id>/", AdminUserApprovalView.as_view(), name="admin-approve-user"),
     path('api/persons_status/pending/', PendingPersonsView.as_view(), name='pending-persons'),
     path('api/persons_status/approved/', ApprovedPersonsView.as_view(), name='approved-persons'),
