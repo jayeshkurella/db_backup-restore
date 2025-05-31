@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [class.dark-theme]="currentTheme === 'dark'" [class.light-theme]="currentTheme === 'light'">
   <!-- Side Navigation Tabs -->
   <mat-nav-list class="sidenav">
     <div class="logo-container">
@@ -26,7 +26,7 @@
 
   <!-- Main Content -->
   <div class="content">
-    <h3 class="text-center ">Legal Documents</h3>
+    <h3 class="text-center">Legal Documents</h3>
 
     <div *ngIf="selectedTab === 'privacy'" class="tab-content">
       <h4>Privacy Policy</h4>
@@ -104,12 +104,11 @@
       <ul>
         <li>All legal disputes or complaints shall fall under the jurisdiction of the Courts of Pune, Maharashtra,
           India.</li>
-        <li>Chhaya Foundation’s name, reputation, and volunteers shall be protected from defamatory or false
+        <li>Chhaya Foundation's name, reputation, and volunteers shall be protected from defamatory or false
           allegations.</li>
         <li>Frivolous or malicious submissions will be shared with law enforcement for action under IPC and IT Act.</li>
       </ul>
     </div>
-
 
     <div *ngIf="selectedTab === 'Updates'" class="tab-content">
       <h5>Updates to the Policy</h5>
@@ -121,7 +120,6 @@
       </p>
     </div>
 
-
     <div *ngIf="selectedTab === 'Contact'" class="tab-content">
       <h5>Contact for Legal and Compliance Matters</h5>
       <br>
@@ -132,8 +130,8 @@
     </div>
   </div>
   <footer class="footer">
-   <button mat-flat-button color="primary" class="btn-back" (click)="goBack()">
-      <i class="material-icons">arrow_back</i> Back
+    <button mat-flat-button color="primary" class="btn-back" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Back
     </button>
   </footer>
 </div>

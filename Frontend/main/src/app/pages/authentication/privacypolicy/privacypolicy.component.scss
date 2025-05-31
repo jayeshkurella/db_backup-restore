@@ -1,20 +1,91 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
-
 :host {
   display: block;
   height: 100vh;
-  width: 100vw; /* Ensure full viewport width */
+  width: 100vw;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent any scrollbars */
-}
+  overflow: hidden;
 
+  &.dark-theme {
+    background-color: inherit;
+    color:  inherit;
+
+    .sidenav {
+      background:  inherit;
+      color:  inherit;
+
+      .logo-container {
+        border-bottom: 1px solid inherit;
+      }
+
+      mat-list-item {
+        color:  inherit; // Force white text in dark mode
+
+        span {
+          color: inherit inherit; // Ensure the span inherits the color
+        }
+
+        &.active {
+          background-color:  inherit;
+        }
+
+        &:hover:not(.active) {
+          background-color:  inherit;
+        }
+      }
+    }
+
+    .content {
+      background-color:  inherit;
+      color: inherit;
+
+      h3, h4, h5, p, li {
+        color:  inherit;
+      }
+
+      .tab-content {
+        ul li {
+          color:  inherit;
+        }
+      }
+    }
+  }
+
+  &.light-theme {
+    background-color: inherit;
+    color: inherit;
+
+    .sidenav {
+      background: inherit;
+      color: inherit;
+
+      mat-list-item {
+        color: inherit !important; // Force black text in light mode
+
+        span {
+          color: inherit !important;
+        }
+
+        .logo-container {
+          border-bottom: 1px solid #ddd;
+        }
+
+        &.active {
+          background-color: #ffffff;
+        }
+
+        &:hover:not(.active) {
+          background-color: #eeeeee;
+        }
+      }
+    }
+
+    .content {
+      background-color: #ffffff;
+      color: #000000;
+    }
+  }
+}
 
 .container {
   display: flex;
@@ -23,47 +94,35 @@ body, html {
   margin: 0;
   padding: 0;
 }
+
 .sidenav {
   width: 260px;
-  background: inherit;
-  height: 100vh; /* Changed from 100% */
+  height: 100vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0; /* Added to prevent shrinking */
-  margin: 0; /* Added */
-  padding: 0; /* Added */
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease;
 
   .logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 24px;
-    border-bottom: 1px solid #ddd;
+
     img {
       max-width: 160px;
       height: auto;
     }
   }
 
-  mat-nav-list {
-    flex: 1;
-  }
-
   mat-list-item {
     cursor: pointer;
-    // padding: 16px 20px;
     font-size: 16px;
-    &.active {
-      
-      background-color: #F15A22 !important;
-      font-weight: 800;
-    }
+    transition: background-color 0.3s ease;
   }
-}
-
-.content-heading{
-  border-bottom: 2px solid inherit;
 }
 
 .content {
@@ -74,60 +133,30 @@ body, html {
   overflow-y: auto;
   padding: 30px;
   margin: 0;
+  transition: background-color 0.3s ease;
 
   .tab-content {
     margin-top: 35px;
     flex-grow: 1;
 
-    .heading-lg {
-      font-size: 18px;
-      color: orange !important;
-      margin-bottom: 10px;
+    h4, h5 {
+      color: inherit;
     }
 
-    .heading-md {
-      font-size: 16px;
-      color: orange;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: 16px;
-      font-weight: bold;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 5px;
-      color: orange;
-      margin-top: 30px;
-    }
-
-    .paragraph {
-      font-size: 16px;
-      margin-bottom: 15px;
-      color: #444;
-    }
-
-    .list {
+    ul {
       padding-left: 20px;
 
       li {
-        font-size: 16px;
         margin-bottom: 8px;
-        color: #333;
       }
     }
   }
 }
 
-
-
-
 .footer {
   margin-top: auto;
   padding: 20px 0 0 0;
-
   display: flex;
-  justify-content: flex-start; /* Aligns button to the left */
+  justify-content: flex-start;
   margin-bottom: 50px;
 }
-

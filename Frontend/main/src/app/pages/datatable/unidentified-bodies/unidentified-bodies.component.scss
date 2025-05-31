@@ -39,3 +39,9 @@
   flex-wrap: wrap;
   // gap: 1rem;
 }
+
+
+
+.mat-mdc-unelevated-button:not(:disabled){
+  width: 100px;
+}

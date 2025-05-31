@@ -44,6 +44,53 @@ interface CaseFilters {
   phone_no: string;
   user_type: string;
 }
+interface PaginationLinks {
+  first: string | null;
+  previous: string | null;
+  next: string | null;
+  last: string | null;
+}
+
+interface PaginationMeta {
+  current_page: number;
+  page_size: number;
+  total_pages: number;
+  total_items: number;
+}
+
+interface StatusCounts {
+  hold: number;
+  approved: number;
+  rejected: number;
+}
+
+interface UserResponse {
+  data: {
+    results: any[];
+    links: PaginationLinks;
+    meta: PaginationMeta;
+  };
+  counts: StatusCounts;
+}
+// interface PaginationLinks {
+//   first: string | null;
+//   previous: string | null;
+//   next: string | null;
+//   last: string | null;
+// }
+
+// interface PaginationMeta {
+//   current_page: number;
+//   page_size: number;
+//   total_pages: number;
+//   total_items: number;
+// }
+
+// interface PaginationData {
+//   links: PaginationLinks;
+//   meta: PaginationMeta;
+//   results: any[];
+// }
 
 @Component({
   selector: 'app-user-access',
@@ -98,19 +145,34 @@ export class UserAccessComponent implements OnInit {
   filtersApplied: boolean = false;
 
   pendingPagination = {
+    first: null as string | null,
     next: null as string | null,
     previous: null as string | null,
+    last: null as string | null,
     count: 0,
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 10,
   };
   approvedPagination = {
+    first: null as string | null,
     next: null as string | null,
     previous: null as string | null,
+    last: null as string | null,
     count: 0,
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 10,
   };
   rejectedPagination = {
+    first: null as string | null,
     next: null as string | null,
     previous: null as string | null,
+    last: null as string | null,
     count: 0,
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 10,
   };
   userTypes: { label: string; value: string }[] = [];
 
@@ -131,6 +193,209 @@ export class UserAccessComponent implements OnInit {
     this.loadData();
   }
 
+  // loadData(): void {
+  //     this.isLoading = true;
+  //     this.resetSelectAllStates();
+  //     const cleanFilters = this.getCleanFilters();
+
+  //     forkJoin({
+  //       pending: this.userAccessService.getPendingData(cleanFilters),
+  //       approved: this.userAccessService.getApprovedData(cleanFilters),
+  //       rejected: this.userAccessService.getRejectedData(cleanFilters),
+  //     }).subscribe({
+  //       next: ({ pending, approved, rejected }) => {
+  //         // Update allUsers list
+  //         const allUsers = [
+  //           ...pending.data.results,
+  //           ...approved.data.results,
+  //           ...rejected.data.results,
+  //         ];
+
+  //         // Extract unique user types
+  //         this.userTypes = Array.from(
+  //           new Set(allUsers.map((user) => user.user_type).filter(Boolean))
+  //         );
+
+  //         // Process Pending
+  //         this.pendingPersons = pending.data.results.map((person: any) => ({
+  //           ...person,
+  //           selected: false,
+  //           status: person.status || 'hold',
+  //         }));
+  //         this.pendingPagination = {
+  //           first: pending.data.links?.first,
+  //           previous: pending.data.links?.previous,
+  //           next: pending.data.links?.next,
+  //           last: pending.data.links?.last,
+
+  //         };
+
+  //         // Process Approved
+  //         this.approvedPersons = approved.data.results.map((person: any) => ({
+  //           ...person,
+  //           selected: false,
+  //           status: person.status || 'approved',
+  //         }));
+  //         this.approvedPagination = {
+  //           first: approved.data.links?.first,
+  //           previous: approved.data.links?.previous,
+  //           next: approved.data.links?.next,
+  //           last: approved.data.links?.last,
+
+  //         };
+  //         console.log("approvedPagination",this.approvedPagination)
+
+  //         // Process Rejected
+  //         this.rejectedPersons = rejected.data.results.map((person: any) => ({
+  //           ...person,
+  //           selected: false,
+  //           status: person.status || 'rejected',
+  //         }));
+  //         this.rejectedPagination = {
+  //           first: rejected.data.links?.first,
+  //           previous: rejected.data.links?.previous,
+  //           next: rejected.data.links?.next,
+  //           last: rejected.data.links?.last,
+
+  //         };
+
+  //         // Update counts if needed
+  //         this.pendingCount = pending.counts?.hold || 0;
+  //         this.approvedCount = pending.counts?.approved || 0;
+  //         this.rejectedCount = pending.counts?.rejected || 0;
+
+  //         this.isLoading = false;
+  //         this.filtersApplied = this.hasActiveFilters();
+  //       },
+  //       error: (error) => {
+  //         console.error('Error loading data:', error);
+  //         this.isLoading = false;
+  //       },
+  //     });
+  //   }
+
+  //   loadNextPage(): void {
+  //     const nextUrl = this.getCurrentPagination().next;
+  //     if (!nextUrl) return;
+  //     this.loadPageByUrl(nextUrl);
+  //   }
+
+  //   loadPreviousPage(): void {
+  //     const previousUrl = this.getCurrentPagination().previous;
+  //     if (!previousUrl) return;
+  //     this.loadPageByUrl(previousUrl);
+  //   }
+
+  //   loadFirstPage(): void {
+  //     const firstUrl = this.getCurrentPagination().first;
+  //     if (!firstUrl) return;
+  //     this.loadPageByUrl(firstUrl);
+  //   }
+
+  //   loadLastPage(): void {
+  //     const lastUrl = this.getCurrentPagination().last;
+  //     if (!lastUrl) return;
+  //     this.loadPageByUrl(lastUrl);
+  //   }
+
+  //   private loadPageByUrl(url: string): void {
+  //     this.isLoading = true;
+  //     this.userAccessService.getPaginatedData(url).subscribe({
+  //       next: (response) => {
+  //         const newPersons = response.results.map((person: any) => ({
+  //           ...person,
+  //           selected: false,
+  //           status: person.status || this.getStatusForTab(),
+  //         }));
+
+  //         this.updateCurrentData(newPersons, response);
+  //         this.isLoading = false;
+  //       },
+  //       error: (error) => {
+  //         console.error('Error loading page:', error);
+  //         this.isLoading = false;
+  //       },
+  //     });
+  //   }
+
+  //   private updateCurrentData(persons: any[], paginationData: any): void {
+  //     const pagination = {
+  //       first: paginationData.links?.first,
+  //       previous: paginationData.links?.previous,
+  //       next: paginationData.links?.next,
+  //       last: paginationData.links?.last,
+  //       count: paginationData.meta?.total_items,
+  //       currentPage: paginationData.meta?.current_page,
+  //       totalPages: paginationData.meta?.total_pages,
+  //       pageSize: paginationData.meta?.page_size,
+  //     };
+
+  //     switch (this.selectedTabIndex) {
+  //       case 0:
+  //         this.pendingPersons = persons;
+  //         this.pendingPagination = pagination;
+  //         break;
+  //       case 1:
+  //         this.rejectedPersons = persons;
+  //         this.rejectedPagination = pagination;
+  //         break;
+  //       case 2:
+  //         this.approvedPersons = persons;
+  //         this.approvedPagination = pagination;
+  //         break;
+  //     }
+  //   }
+
+  //   // Helper method to get status based on current tab
+  //   private getStatusForTab(): string {
+  //     switch (this.selectedTabIndex) {
+  //       case 0:
+  //         return 'hold';
+  //       case 1:
+  //         return 'rejected';
+  //       case 2:
+  //         return 'approved';
+  //       default:
+  //         return 'hold';
+  //     }
+  //   }
+
+  //   getCurrentPageNumber(): number {
+  //     return this.getCurrentPagination().currentPage || 1;
+  //   }
+
+  //   private getCurrentPagination(): any {
+  //     switch (this.selectedTabIndex) {
+  //       case 0:
+  //         return this.pendingPagination || {};
+  //       case 1:
+  //         return this.rejectedPagination || {};
+  //       case 2:
+  //         return this.approvedPagination || {};
+  //       default:
+  //         return {};
+  //     }
+  //   }
+
+  //   hasNextPage(): boolean {
+  //     return !!this.getCurrentPagination().next;
+  //   }
+
+  //   hasPreviousPage(): boolean {
+  //     return !!this.getCurrentPagination().previous;
+  //   }
+
+  //   getTotalCount(): number {
+  //     return this.getCurrentPagination().count || 0;
+  //   }
+
+  //   getTotalPages(): number {
+  //     return this.getCurrentPagination().totalPages || 1;
+  //   }
+
+  //   getPageSize(): number {
+  //     return this.getCurrentPagination().pageSize || 10;
+  //   }
   loadData(): void {
     this.isLoading = true;
     this.resetSelectAllStates();
@@ -142,10 +407,11 @@ export class UserAccessComponent implements OnInit {
       rejected: this.userAccessService.getRejectedData(cleanFilters),
     }).subscribe({
       next: ({ pending, approved, rejected }) => {
+        // Update allUsers list
         const allUsers = [
-          ...pending.results,
-          ...approved.results,
-          ...rejected.results,
+          ...pending.data.results,
+          ...approved.data.results,
+          ...rejected.data.results,
         ];
 
         // Extract unique user types
@@ -153,39 +419,61 @@ export class UserAccessComponent implements OnInit {
           new Set(allUsers.map((user) => user.user_type).filter(Boolean))
         );
 
-        console.log('user types:', this.userTypes);
-        this.pendingPersons = pending.results.map((person: any) => ({
+        // Process Pending
+        this.pendingPersons = pending.data.results.map((person: any) => ({
           ...person,
           selected: false,
           status: person.status || 'hold',
         }));
         this.pendingPagination = {
-          next: pending.next,
-          previous: pending.previous,
-          count: pending.count,
+          first: pending.data.links?.first,
+          previous: pending.data.links?.previous,
+          next: pending.data.links?.next,
+          last: pending.data.links?.last,
+          count: pending.data.meta?.total_items || 0,
+          currentPage: pending.data.meta?.current_page || 1,
+          totalPages: pending.data.meta?.total_pages || 1,
+          pageSize: pending.data.meta?.page_size || 10,
         };
 
-        this.approvedPersons = approved.results.map((person: any) => ({
+        // Process Approved
+        this.approvedPersons = approved.data.results.map((person: any) => ({
           ...person,
           selected: false,
           status: person.status || 'approved',
         }));
         this.approvedPagination = {
-          next: approved.next,
-          previous: approved.previous,
-          count: approved.count,
+          first: approved.data.links?.first,
+          previous: approved.data.links?.previous,
+          next: approved.data.links?.next,
+          last: approved.data.links?.last,
+          count: approved.data.meta?.total_items || 0,
+          currentPage: approved.data.meta?.current_page || 1,
+          totalPages: approved.data.meta?.total_pages || 1,
+          pageSize: approved.data.meta?.page_size || 10,
         };
 
-        this.rejectedPersons = rejected.results.map((person: any) => ({
+        // Process Rejected
+        this.rejectedPersons = rejected.data.results.map((person: any) => ({
           ...person,
           selected: false,
           status: person.status || 'rejected',
         }));
         this.rejectedPagination = {
-          next: rejected.next,
-          previous: rejected.previous,
-          count: rejected.count,
+          first: rejected.data.links?.first,
+          previous: rejected.data.links?.previous,
+          next: rejected.data.links?.next,
+          last: rejected.data.links?.last,
+          count: rejected.data.meta?.total_items || 0,
+          currentPage: rejected.data.meta?.current_page || 1,
+          totalPages: rejected.data.meta?.total_pages || 1,
+          pageSize: rejected.data.meta?.page_size || 10,
         };
+
+        // Update counts if needed
+        this.pendingCount = pending.counts?.hold || 0;
+        this.approvedCount = pending.counts?.approved || 0;
+        this.rejectedCount = pending.counts?.rejected || 0;
 
         this.isLoading = false;
         this.filtersApplied = this.hasActiveFilters();
@@ -198,30 +486,75 @@ export class UserAccessComponent implements OnInit {
   }
 
   loadNextPage(): void {
-    let nextUrl: string | null = null;
-    const currentPagination = this.getCurrentPagination();
-    nextUrl = currentPagination.next;
-
+    const nextUrl = this.getCurrentPagination().next;
     if (!nextUrl) return;
+    this.loadPageByUrl(nextUrl);
+  }
 
+  loadPreviousPage(): void {
+    const previousUrl = this.getCurrentPagination().previous;
+    if (!previousUrl) return;
+    this.loadPageByUrl(previousUrl);
+  }
+
+  loadFirstPage(): void {
+    const firstUrl = this.getCurrentPagination().first;
+    if (!firstUrl) return;
+    this.loadPageByUrl(firstUrl);
+  }
+
+  loadLastPage(): void {
+    const lastUrl = this.getCurrentPagination().last;
+    if (!lastUrl) return;
+    this.loadPageByUrl(lastUrl);
+  }
+
+  private loadPageByUrl(url: string): void {
     this.isLoading = true;
-    this.userAccessService.getPaginatedData(nextUrl).subscribe({
-      next: (response) => {
-        const newPersons = response.results.map((person: any) => ({
+    this.userAccessService.getPaginatedData(url).subscribe({
+      next: (response: any) => {
+        const newPersons = response.data.results.map((person: any) => ({
           ...person,
           selected: false,
           status: person.status || this.getStatusForTab(),
         }));
 
-        this.updateCurrentData(newPersons, response);
+        this.updateCurrentData(newPersons, response.data);
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading next page:', error);
+        console.error('Error loading page:', error);
         this.isLoading = false;
-        // Consider showing a user-friendly error message
       },
     });
+  }
+
+  private updateCurrentData(persons: any[], paginationData: any): void {
+    const pagination = {
+      first: paginationData.links?.first,
+      previous: paginationData.links?.previous,
+      next: paginationData.links?.next,
+      last: paginationData.links?.last,
+      count: paginationData.meta?.total_items,
+      currentPage: paginationData.meta?.current_page,
+      totalPages: paginationData.meta?.total_pages,
+      pageSize: paginationData.meta?.page_size,
+    };
+
+    switch (this.selectedTabIndex) {
+      case 0:
+        this.pendingPersons = persons;
+        this.pendingPagination = pagination;
+        break;
+      case 1:
+        this.rejectedPersons = persons;
+        this.rejectedPagination = pagination;
+        break;
+      case 2:
+        this.approvedPersons = persons;
+        this.approvedPagination = pagination;
+        break;
+    }
   }
 
   // Helper method to get status based on current tab
@@ -238,185 +571,56 @@ export class UserAccessComponent implements OnInit {
     }
   }
 
-  // Helper method to update current data
-  private updateCurrentData(persons: any[], paginationData: any): void {
-    switch (this.selectedTabIndex) {
-      case 0:
-        this.pendingPersons = persons;
-        this.pendingPagination = {
-          next: paginationData.next,
-          previous: paginationData.previous,
-          count: paginationData.count,
-        };
-        break;
-      case 1:
-        this.rejectedPersons = persons;
-        this.rejectedPagination = {
-          next: paginationData.next,
-          previous: paginationData.previous,
-          count: paginationData.count,
-        };
-        break;
-      case 2:
-        this.approvedPersons = persons;
-        this.approvedPagination = {
-          next: paginationData.next,
-          previous: paginationData.previous,
-          count: paginationData.count,
-        };
-        break;
-    }
-  }
-  loadPreviousPage(): void {
-    let previousUrl: string | null = null;
-
-    switch (this.selectedTabIndex) {
-      case 0:
-        previousUrl = this.pendingPagination.previous;
-        break;
-      case 1:
-        previousUrl = this.rejectedPagination.previous;
-        break;
-      case 2:
-        previousUrl = this.approvedPagination.previous;
-        break;
-    }
-
-    if (!previousUrl) return;
-
-    this.isLoading = true;
-    this.userAccessService.getPaginatedData(previousUrl).subscribe({
-      next: (response) => {
-        const newPersons = response.results.map((person: any) => ({
-          ...person,
-          selected: false,
-          status:
-            person.status ||
-            (this.selectedTabIndex === 0
-              ? 'hold'
-              : this.selectedTabIndex === 1
-              ? 'rejected'
-              : 'approved'),
-        }));
-
-        switch (this.selectedTabIndex) {
-          case 0:
-            this.pendingPersons = newPersons;
-            this.pendingPagination = {
-              next: response.next,
-              previous: response.previous,
-              count: response.count,
-            };
-            break;
-          case 1:
-            this.rejectedPersons = newPersons;
-            this.rejectedPagination = {
-              next: response.next,
-              previous: response.previous,
-              count: response.count,
-            };
-            break;
-          case 2:
-            this.approvedPersons = newPersons;
-            this.approvedPagination = {
-              next: response.next,
-              previous: response.previous,
-              count: response.count,
-            };
-            break;
-        }
-
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading previous page:', error);
-        this.isLoading = false;
-      },
-    });
-  }
-
   getCurrentPageNumber(): number {
-    let currentUrl: string | null = null;
-
-    switch (this.selectedTabIndex) {
-      case 0:
-        currentUrl =
-          this.pendingPagination.next || this.pendingPagination.previous;
-        break;
-      case 1:
-        currentUrl =
-          this.rejectedPagination.next || this.rejectedPagination.previous;
-        break;
-      case 2:
-        currentUrl =
-          this.approvedPagination.next || this.approvedPagination.previous;
-        break;
-    }
-
-    if (!currentUrl) return 1; // First page
-
-    // Extract page number from URL
-    const pageMatch = currentUrl.match(/page=(\d+)/);
-    if (pageMatch) {
-      const pageNumber = parseInt(pageMatch[1], 10);
-      // If we have a next URL, we're on the previous page
-      if (currentUrl === this.getCurrentPagination().next) {
-        return pageNumber - 1;
-      }
-      return pageNumber;
-    }
-    return 1;
+    return this.getCurrentPagination().currentPage || 1;
   }
 
   private getCurrentPagination(): any {
     switch (this.selectedTabIndex) {
       case 0:
-        return this.pendingPagination;
+        return this.pendingPagination || {};
       case 1:
-        return this.rejectedPagination;
+        return this.rejectedPagination || {};
       case 2:
-        return this.approvedPagination;
+        return this.approvedPagination || {};
       default:
-        return { next: null, previous: null, count: 0 };
+        return {};
     }
   }
+
   hasNextPage(): boolean {
-    switch (this.selectedTabIndex) {
-      case 0:
-        return !!this.pendingPagination.next;
-      case 1:
-        return !!this.rejectedPagination.next;
-      case 2:
-        return !!this.approvedPagination.next;
-      default:
-        return false;
-    }
+    return !!this.getCurrentPagination().next;
   }
 
   hasPreviousPage(): boolean {
-    switch (this.selectedTabIndex) {
-      case 0:
-        return !!this.pendingPagination.previous;
-      case 1:
-        return !!this.rejectedPagination.previous;
-      case 2:
-        return !!this.approvedPagination.previous;
-      default:
-        return false;
-    }
+    return !!this.getCurrentPagination().previous;
   }
 
   getTotalCount(): number {
-    switch (this.selectedTabIndex) {
-      case 0:
-        return this.pendingPagination.count;
-      case 1:
-        return this.rejectedPagination.count;
-      case 2:
-        return this.approvedPagination.count;
-      default:
-        return 0;
-    }
+    return this.getCurrentPagination().count || 0;
+  }
+  getStartIndex(): number {
+    const currentPage = this.getCurrentPageNumber();
+    const pageSize = this.getPageSize();
+    return this.getTotalCount() === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  }
+
+  getEndIndex(): number {
+    const startIndex = this.getStartIndex();
+    const currentLength = this.getCurrentDataSource().length;
+    return startIndex + currentLength - 1;
+  }
+
+  getPageSize(): number {
+    return (
+      this.getCurrentPagination().pageSize ||
+      this.getCurrentDataSource().length ||
+      10
+    );
+  }
+
+  getTotalPages(): number {
+    return this.getCurrentPagination().totalPages || 1;
   }
 
   getFullName(person: Person): string {

@@ -187,9 +187,16 @@ export class HeaderComponent implements OnInit  {
     this.optionsChange.emit(this.options);
   }
 
+  // setlightDark(theme: string) {
+  //   this.options.theme = theme;
+  //   this.emitOptions();
+  // }
+
   setlightDark(theme: string) {
     this.options.theme = theme;
     this.emitOptions();
+     localStorage.setItem('selectedTheme', theme); 
+    console.log("theme",this.options.theme)
   }
 
   changeLanguage(lang: any): void {

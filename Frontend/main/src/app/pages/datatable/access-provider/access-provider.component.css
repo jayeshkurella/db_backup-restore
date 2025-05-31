@@ -224,3 +224,10 @@ table {
     }
   }
 }
+
+
+
+.mat-mdc-unelevated-button, .mat-mdc-unelevated-button .mdc-button__ripple {
+    border-radius: var(--mdc-filled-button-container-shape, var(--mat-sys-corner-full));
+    width: 100px !important;
+}

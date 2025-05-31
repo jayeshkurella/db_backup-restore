@@ -349,7 +349,7 @@
       </table>
     </div>
 
-    <div class="pagination-container" *ngIf="getTotalCount() > 0">
+    <div class="pagination-container">
       <div
         class="pagination-controls"
         style="
@@ -359,27 +359,58 @@
           gap: 1rem;
         "
       >
-        <!-- Previous Button (icon only) -->
+        <!-- First Page Button -->
+        <button
+          mat-icon-button
+          (click)="loadFirstPage()"
+          [disabled]="
+            !hasPreviousPage() || isLoading || getCurrentPageNumber() === 1
+          "
+          matTooltip="First page"
+        >
+          <mat-icon>first_page</mat-icon>
+        </button>
+
+        <!-- Previous Button -->
         <button
           mat-icon-button
           (click)="loadPreviousPage()"
           [disabled]="!hasPreviousPage() || isLoading"
+          matTooltip="Previous page"
         >
           <mat-icon>chevron_left</mat-icon>
         </button>
 
         <!-- Pagination Info -->
         <div class="pagination-info">
-          Showing {{ getCurrentDataSource().length }} of {{ getTotalCount() }}
+          <span *ngIf="getTotalCount() > 0">
+            {{ getStartIndex() }} - {{ getEndIndex() }} of {{ getTotalCount() }}
+          </span>
+          <span *ngIf="getTotalCount() === 0"> No items found </span>
         </div>
 
-        <!-- Next Button (icon only) -->
+        <!-- Next Button -->
         <button
           mat-icon-button
           (click)="loadNextPage()"
           [disabled]="!hasNextPage() || isLoading"
+          matTooltip="Next page"
         >
           <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <!-- Last Page Button -->
+        <button
+          mat-icon-button
+          (click)="loadLastPage()"
+          [disabled]="
+            !hasNextPage() ||
+            isLoading ||
+            getCurrentPageNumber() === getTotalPages()
+          "
+          matTooltip="Last page"
+        >
+          <mat-icon>last_page</mat-icon>
         </button>
       </div>
     </div>

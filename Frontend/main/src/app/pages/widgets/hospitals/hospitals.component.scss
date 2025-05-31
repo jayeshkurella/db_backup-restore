@@ -3,7 +3,7 @@
   }
 
 .footer{
-  min-height: 82vh;
+  min-height: 95vh !important;
 }
 .page-container {
   padding: 16px;
@@ -157,4 +157,10 @@ mat-form-field{
   .buttons-row > button {
     width: 100% !important;
   }
+}
+
+
+
+.mat-mdc-unelevated-button:not(:disabled){
+  width: 100px;
 }

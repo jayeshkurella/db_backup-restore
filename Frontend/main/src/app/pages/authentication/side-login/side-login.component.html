@@ -1,35 +1,16 @@
 <div class="blank-layout-container justify-content-center">
-  <div class="position-relative row w-100 h-100">
-    <div class="col-lg-7 col-xl-8 bg-gredient p-0">
-      <div class="p-24 h-100">
-        <app-branding></app-branding>
-
-        <div class="align-items-center justify-content-center img-height d-none d-lg-flex">
-          <img src="assets/images/backgrounds/login-bg.svg" alt="login" style="max-width: 500px" />
-        </div>
-      </div>
+  <div class=" row w-100 h-100 g-0">
+    <div class="col-lg-7 col-xl-8 p-0 ">
+        <div class="img-full-cover"></div>
     </div>
     <div class="col-lg-5 col-xl-4 p-0">
-      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
+      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center mt-5">
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form">
-            <h2 class="chhaya-heading">
-              Welcome to <span class="chhaya-brand">Chhaya Foundation</span>
-            </h2>
-          
-             
-               
-                  <div class="googles  d-flex justify-content-center m-t-24" id="google-login">
-                    <img src="assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-10" />
-                    Sign in with Google
-                  </div>
-                
-             
-         
-
-
-
-
+            <div class="googles  d-flex justify-content-center m-t-24" id="google-login">
+              <img src="assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-10" />
+              Sign in with Google
+            </div>
             <div class="or-border m-t-30">or log in with</div>
 
             <form class="m-t-30" [formGroup]="loginForm" (ngSubmit)="submit()">
@@ -37,7 +18,7 @@
               <mat-form-field appearance="outline" class="w-100" color="primary">
                 <input type="email" matInput formControlName="email_id" [matAutocomplete]="auto"
                   (focus)="loadSavedEmails()" (input)="filterEmails()" />
-                <mat-autocomplete #auto="matAutocomplete"  class="borders">
+                <mat-autocomplete #auto="matAutocomplete" class="borders">
                   <mat-option *ngFor="let email of filteredEmails" [value]="email">
                     {{ email }}
                   </mat-option>

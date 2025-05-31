@@ -1,5 +1,56 @@
+// import { CommonModule } from '@angular/common';
+// import { Component } from '@angular/core';
+// import { MatIcon } from '@angular/material/icon';
+// import { MatTab, MatTabGroup } from '@angular/material/tabs';
+// import { Router } from '@angular/router';
+// import { MatButtonModule } from '@angular/material/button';
+// import { MatListModule } from '@angular/material/list';
+// import { MatIconModule } from '@angular/material/icon';
+// import { MatDividerModule } from '@angular/material/divider';
+// import { PrivacyrouteService } from './privacyroute.service';
+
+
+// @Component({
+//   selector: 'app-privacypolicy',
+//   imports: [CommonModule, MatButtonModule, MatListModule, MatIconModule, MatDividerModule],
+//   templateUrl: './privacypolicy.component.html',
+//   styleUrl: './privacypolicy.component.scss',
+//   host: {
+//     style: 'display: block; width: 100%; height: 100%;'
+//   }
+
+// })
+// export class PrivacypolicyComponent {
+//   selectedTab: string = 'privacy';
+
+
+//   constructor(private router: Router, private previousRouteService:PrivacyrouteService, ) { }
+
+
+//   agreeAndReturn() {
+//     localStorage.setItem('userAgreedToPrivacy', 'true');
+//     this.router.navigate(['/authentication/side-register']);
+//   }
+//   disagreeAndReturn() {
+//     localStorage.setItem('userAgreedToPrivacy', 'false');
+//     this.router.navigate(['/authentication/side-register']);
+//   }
+
+//   // goBack(){
+//   //     this.router.navigate(['/authentication/side-register']);
+//   // }
+//   goBack() {
+//     const previousUrl = this.previousRouteService.getPreviousUrl();
+//     if (previousUrl) {
+//       this.router.navigateByUrl(previousUrl);
+//     } else {
+//       // fallback if no previous route
+//       this.router.navigate(['/']);
+//     }
+//   }
+// }
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
@@ -8,8 +59,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { PrivacyrouteService } from './privacyroute.service';
-import { CoreService } from 'src/app/services/core.service';
-
 
 @Component({
   selector: 'app-privacypolicy',
@@ -19,32 +68,32 @@ import { CoreService } from 'src/app/services/core.service';
   host: {
     style: 'display: block; width: 100%; height: 100%;'
   }
-
 })
-export class PrivacypolicyComponent implements OnInit {
+export class PrivacypolicyComponent {
   selectedTab: string = 'privacy';
-  currentTheme: string = 'light'; 
+  // currentTheme: string = 'light'; // Default to light theme
+@HostBinding('class') currentTheme: string = 'light-theme'; // Initialize with default theme
 
-
-  constructor(private router: Router, private previousRouteService: PrivacyrouteService, private coreService: CoreService) { }
-
-  ngOnInit(): void {
-    this.currentTheme = this.coreService.getOptions().theme;
-    console.log('Privacy Policy - Current Theme:', this.currentTheme);
+  constructor(private router: Router, private previousRouteService: PrivacyrouteService) {
+    // Get the saved theme from localStorage and apply it
+    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
+    this.currentTheme = savedTheme === 'dark' ? 'dark-theme' : 'light-theme';
   }
 
+  getThemeClass(): string {
+    return this.currentTheme;
+  }
   agreeAndReturn() {
     localStorage.setItem('userAgreedToPrivacy', 'true');
     this.router.navigate(['/authentication/side-register']);
   }
+  
   disagreeAndReturn() {
     localStorage.setItem('userAgreedToPrivacy', 'false');
     this.router.navigate(['/authentication/side-register']);
   }
-  get options() {
-    return this.coreService.getOptions();
-  }
-goBack() {
-  this.previousRouteService.goBack('/'); // Optional default route
+
+  goBack() {
+  this.previousRouteService.goBack('/'); 
 }
 }

@@ -1180,10 +1180,10 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
       case 'Unidentified Body':
         return 'assets/old/images/body_default.jpeg';
       case 'Unidentified Person':
-        return 'assets/old/images/favicon-32x32.png';
+        return 'assets/main-logos/TraceMapr_icon.png';
       case 'Missing Person':
       default:
-        return 'assets/old/images/favicon-32x32.png';
+        return 'assets/main-logos/TraceMapr_icon.png';
     }
   }
 
@@ -1195,11 +1195,11 @@ export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
         target.src = 'assets/old/images/body_default.jpeg';
         break;
       case 'Unidentified Person':
-        target.src = 'assets/old/images/favicon-32x32.png';
+        target.src = 'assets/main-logos/TraceMapr_icon.png';
         break;
       case 'Missing Person':
       default:
-        target.src = 'assets/old/images/favicon-32x32.png';
+        target.src = 'assets/main-logos/TraceMapr_icon.png';
         break;
     }
   }

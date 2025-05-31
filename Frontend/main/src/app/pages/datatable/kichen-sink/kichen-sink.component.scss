@@ -67,3 +67,8 @@
 .custom-pagination button {
   min-width: 80px;
 }
+
+
+.mat-mdc-unelevated-button:not(:disabled){
+  width: 100px;
+}

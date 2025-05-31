@@ -21,7 +21,7 @@ div.leaflet-popup-content{
 
 /* Override Toastr warning background to orange */
 .toast-success {
-  background-color: #f15a22 !important; /* bright orange */
+  background-color: #F58C34  !important; /* bright orange */
   color: white !important;
 }
 
@@ -46,6 +46,9 @@ mat-datepicker-toggle .mat-datepicker-toggle-default-icon {
  
 }
 
+
+
+
 .styled-card {
   position: relative;
   border: 1px solid #ccc;
@@ -69,4 +72,6 @@ mat-datepicker-toggle .mat-datepicker-toggle-default-icon {
 
 .form-btn{
   text-align: right !important;
+  margin-right: 20px !important;
+  margin-top: 05px;
 }

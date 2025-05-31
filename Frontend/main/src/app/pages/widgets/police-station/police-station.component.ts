@@ -25,17 +25,17 @@ import { StateAbbreviationPipe } from 'src/app/components/dashboard1/revenue-upd
 @Component({
   selector: 'app-police-station',
   standalone: true,
-  imports: [MatCardModule, MatChipsModule, TablerIconsModule, MatButtonModule, MatFormFieldModule,StateAbbreviationPipe,
+  imports: [MatCardModule, MatChipsModule, TablerIconsModule, MatButtonModule, MatFormFieldModule, StateAbbreviationPipe,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    CommonModule,MatOptionModule,RouterModule,MatProgressSpinnerModule,MatPaginatorModule,MatSelectModule ],
+    CommonModule, MatOptionModule, RouterModule, MatProgressSpinnerModule, MatPaginatorModule, MatSelectModule],
   templateUrl: './police-station.component.html',
   styleUrl: './police-station.component.scss'
 })
 export class PoliceStationComponent implements OnInit {
-  
+
   policeStationForm!: FormGroup;
 
   environment = environment;
@@ -44,12 +44,12 @@ export class PoliceStationComponent implements OnInit {
   selectedPerson: any = null;
   map: L.Map | undefined;
   marker: L.Marker | undefined;
-  searchQuery: string = '';  
+  searchQuery: string = '';
 
   markerr!: L.Marker | null;
   latitude: number | null = null;
   longitude: number | null = null;
-  markerMissing: any; 
+  markerMissing: any;
 
   searchFilters = {
     name: '',
@@ -57,7 +57,7 @@ export class PoliceStationComponent implements OnInit {
     district: '',
     state: ''
   };
-  
+
   isAdmin: boolean = false;
   isLoggedIn = false;
 
@@ -68,9 +68,9 @@ export class PoliceStationComponent implements OnInit {
   allstates: string[] = [];
   alldistricts: string[] = [];
   allcities: string[] = [];
-  constructor(private policeapi:PoliceStationApiService,private fb: FormBuilder ,private router: Router,private dialog: MatDialog,private missingPersonService: UnidentifiedpersonApiService) { }
+  constructor(private policeapi: PoliceStationApiService, private fb: FormBuilder, private router: Router, private dialog: MatDialog, private missingPersonService: UnidentifiedpersonApiService) { }
 
- 
+
 
   ngOnInit(): void {
     const userType = localStorage.getItem('user_type');
@@ -81,28 +81,28 @@ export class PoliceStationComponent implements OnInit {
 
     this.getallPolicestation(1);
   }
- 
+
 
 
 
   navigateToAddStation(): void {
     this.router.navigate(['/resources/add-police-station']);
   }
-  
-  defaultHospitalImage = 'assets/old/images/polices_default.jpeg'; 
-  
-onImageError(event: Event) {
-  const target = event.target as HTMLImageElement;
-  target.src = this.defaultHospitalImage;
-}
-  
+
+  defaultHospitalImage = 'assets/old/images/polices_default.jpeg';
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.defaultHospitalImage;
+  }
+
 
   loading: boolean = false;
 
   getallPolicestation(page: number = 1): void {
     this.loading = true;
     this.currentPage = page;
-  
+
     const queryParams: any = {
       name: this.searchFilters.name || '',
       city: this.searchFilters.city || '',
@@ -110,7 +110,7 @@ onImageError(event: Event) {
       state: this.searchFilters.state || '',
       page: this.currentPage
     };
-  
+
     this.policeapi.searchPoliceStations(queryParams).subscribe(
       (res: any) => {
         this.total_policestation = res.results || [];
@@ -125,64 +125,69 @@ onImageError(event: Event) {
       }
     );
   }
-  
-  
-  
+
+
+
   // Modified search method
   onSearch(): void {
     this.currentPage = 1;
     // No need to reassign searchFilters - it's already bound to the form
     this.getallPolicestation(this.currentPage);
   }
-  
+
   resetFilters(): void {
-  this.searchFilters = {
-    name: '',
-    state: '',
-    district: '',
-    city: ''
-  };
-  // this.onSearch(); 
-}
+    this.searchFilters = {
+      name: '',
+      state: 'Maharashtra',
+      district: '',
+      city: ''
+    };
+    this.onStateChange();
+    this.getallPolicestation();
+
+    // Automatically apply filters
+    // this.applyFilters();
+    // this.onSearch(); 
+  }
 
   // Pagination event handler
   onPageChange(event: any): void {
     this.currentPage = event.pageIndex + 1;
     this.itemsPerPage = event.pageSize;
-  
+
     this.getallPolicestation(this.currentPage);
   }
-  
+
 
   seeMores(police: any) {
     this.dialog.open(PoliceStatioDialogComponent, {
-      width: '800px', 
-      maxWidth: '80vw', 
+      width: '800px',
+      maxWidth: '80vw',
     });
   }
 
 
   seeMorepolicestationdata(policestation: any) {
     console.log('policesstation', policestation),
-    this.router.navigate(['/resources/police-station-detail/', policestation.id], {
-      state: { policestation  } 
-    });
+      this.router.navigate(['/resources/police-station-detail/', policestation.id], {
+        state: { policestation }
+      });
   }
 
- getStates() {
-  this.missingPersonService.getStates().subscribe(states => {
-    this.allstates = states;
+  getStates() {
+    this.missingPersonService.getStates().subscribe(states => {
+      this.allstates = states;
 
-    // Set default state to Maharashtra only if not already selected
-    if (!this.searchFilters.state) {
-      const defaultState = this.allstates.find(state => state.toLowerCase() === 'maharashtra');
-      if (defaultState) {
-        this.searchFilters.state = defaultState;
-        this.onStateChange(); // Trigger district loading for Maharashtra
+      // Ensure 'Maharashtra' is in the list before setting
+      if (this.allstates.includes('Maharashtra')) {
+        this.searchFilters.state = 'Maharashtra';
+        this.onStateChange();
+
+        // Automatically apply filters
+        // this.applyFilters();
       }
-    }
-  });
-}
+    });
+  }
   onStateChange() {
     this.searchFilters.district = '';
     this.searchFilters.city = '';
