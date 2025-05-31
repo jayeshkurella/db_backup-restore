@@ -22,49 +22,60 @@ export class UserAccessServiceService {
   getApprovedData(filters?: any): Observable<any> {
     return this.makeUserRequest('approved', filters);
   }
-//   getApprovedData(filters: any) {
-//   return this.makeUserRequest(`approved`, { params: filters });
-// }
 
   getRejectedData(filters?: any): Observable<any> {
     return this.makeUserRequest('rejected', filters);
   }
-getPaginatedData(url: string): Observable<any> {
-  return this.http.get(url);
-}
 
+  getPaginatedData(url: string): Observable<any> {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      return of({ results: [], next: null, previous: null, count: 0 });
+    }
+    
+    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+    return this.http.get(url, { headers }).pipe(
+      catchError(error => {
+        console.error('Error fetching paginated data:', error);
+        return of({ results: [], next: null, previous: null, count: 0 });
+      })
+    );
+  }
 
-private makeUserRequest(status: string, filters?: any): Observable<any> {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    return of([]); // Return empty array instead of throwing error
+  private makeUserRequest(status: string, filters?: any): Observable<any> {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      return of({ results: [], next: null, previous: null, count: 0 });
+    }
+    
+    const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
+    let params = new HttpParams();
+    
+    if (filters) {
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) {
+          params = params.append(key, filters[key]);
+        }
+      });
+    }
+    
+    return this.http.get(`${this.apiUrl}/api/users/${status}/`, { headers, params }).pipe(
+      map((response: any) => {
+        // Return the entire paginated response structure
+        return {
+          results: response.data?.results || [],
+          next: response.data?.next || null,
+          previous: response.data?.previous || null,
+          count: response.data?.count || 0
+        };
+      }),
+      catchError(error => {
+        console.error(`Error fetching ${status} users:`, error);
+        return of({ results: [], next: null, previous: null, count: 0 });
+      })
+    );
   }
-  
-  const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
-  let params = new HttpParams();
-  
-  if (filters) {
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) {
-        params = params.append(key, filters[key]);
-      }
-    });
-  }
-  
-  return this.http.get(`${this.apiUrl}/api/users/${status}/`, { headers, params }).pipe(
-    map((response: any) => {
-      // Handle the response structure from your backend
-      if (response && response.data && response.data.results) {
-        return response.data.results;
-      }
-      return [];
-    }),
-    catchError(error => {
-      console.error(`Error fetching ${status} users:`, error);
-      return of([]); // Return empty array on error
-    })
-  );
-}
+
   updatePersonStatus(id: string, status: string): Observable<any> {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {

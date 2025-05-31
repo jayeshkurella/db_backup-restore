@@ -1,7 +1,5 @@
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
-
-
+from django.conf import settings
+from urllib.parse import urljoin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -11,28 +9,48 @@ class searchCase_Pagination(PageNumberPagination):
     max_page_size = 100
 
     def get_paginated_response(self, data):
-        request = self.request
-        base_url = request.build_absolute_uri().split('?')[0]
-        current_page = self.page.number
         total_pages = self.page.paginator.num_pages
-
-        def build_url(page):
-            query_params = request.query_params.copy()
-            query_params['page'] = page
-            return f"{base_url}?{query_params.urlencode()}"
+        current_page = self.page.number
 
         return Response({
             'links': {
-                'first': build_url(1),
-                'previous': build_url(current_page - 1) if self.page.has_previous() else None,
-                'next': build_url(current_page + 1) if self.page.has_next() else None,
-                'last': build_url(total_pages),
+                'first': self.build_absolute_uri(self.get_page_link(1)),
+                'previous': self.build_absolute_uri(self.get_previous_link()),
+                'next': self.build_absolute_uri(self.get_next_link()),
+                'last': self.build_absolute_uri(self.get_page_link(total_pages)),
             },
             'meta': {
                 'current_page': current_page,
+                'page_size': self.page.paginator.per_page,
                 'total_pages': total_pages,
-                'page_size': self.get_page_size(request),
-                'count': self.page.paginator.count,
+                'total_items': self.page.paginator.count,
             },
             'results': data
         })
+
+    def build_absolute_uri(self, url):
+        if url is None:
+            return None
+
+        # Dynamically determine the base URL from the request
+        request = self.request
+        scheme = request.scheme  # 'http' or 'https'
+        host = request.get_host()  # '127.0.0.1:8000' or 'tracemapr.com'
+
+        # Custom logic: Add '/backend' for production domain
+        if 'tracemapr.com' in host:
+            base_url = f"{scheme}://{host}/backend"
+        else:
+            base_url = f"{scheme}://{host}"
+
+        # Extract path after '/api/'
+        path = url.split('/api/', 1)[-1]
+        return urljoin(f"{base_url}/api/", path)
+
+    def get_page_link(self, page_number):
+        if page_number < 1 or page_number > self.page.paginator.num_pages:
+            return None
+        request = self.request
+        query_params = request.query_params.copy()
+        query_params[self.page_query_param] = page_number
+        return f'{request.path}?{query_params.urlencode()}'

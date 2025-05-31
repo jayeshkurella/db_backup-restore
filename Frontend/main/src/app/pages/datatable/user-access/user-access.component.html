@@ -39,7 +39,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-12 col-lg-3 col-md-6">
+      <div class="col-12 col-lg-3 col-md-3">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
@@ -48,22 +48,20 @@
           />
         </mat-form-field>
       </div>
-<div class="col-lg-3">
+      <div class="col-12 col-lg-3 col-md-3">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-select
             [(ngModel)]="filters.user_type"
             placeholder="Select User Type"
           >
             <mat-option value="">All User Types</mat-option>
-            <mat-option *ngFor="let type of userTypes" [value]="type.value">
-              {{ type.label }}
+            <mat-option *ngFor="let type of userTypes" [value]="type">
+              {{ type | safeTitlecase }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
     </div>
-
-    
 
     <div class="row justify-content-center mt-3">
       <div class="col-auto d-flex align-items-center">
@@ -95,11 +93,10 @@
   </div>
   <mat-card-content>
     <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-      <mat-tab label="Pending ({{ pendingCount }})"></mat-tab>
-      <mat-tab label="Rejected ({{ rejectedCount }})"></mat-tab>
-      <mat-tab label="Approved ({{ approvedCount }})"></mat-tab>
+      <mat-tab label="Pending "></mat-tab>
+      <mat-tab label="Rejected"></mat-tab>
+      <mat-tab label="Approved "></mat-tab>
     </mat-tab-group>
-
     <!-- Select All + Action Buttons -->
     <div class="select-all-container">
       <div class="select-action-wrapper">
@@ -113,7 +110,7 @@
             [indeterminate]="isIndeterminatePending()"
             (change)="toggleSelectAllPending($event.checked)"
           >
-            Select All Pending Cases ({{ pendingCount }})
+            Select All Pending User ({{ pendingCount }})
           </mat-checkbox>
 
           <!-- Rejected -->
@@ -124,7 +121,7 @@
             [indeterminate]="isIndeterminateRejected()"
             (change)="toggleSelectAllRejected($event.checked)"
           >
-            Select All Rejected Cases ({{ rejectedCount }})
+            Select All Rejected User ({{ rejectedCount }})
           </mat-checkbox>
 
           <!-- Approved -->
@@ -135,7 +132,7 @@
             [indeterminate]="isIndeterminateApproved()"
             (change)="toggleSelectAllApproved($event.checked)"
           >
-            Select All Approved Cases ({{ approvedCount }})
+            Select All Approved User ({{ approvedCount }})
           </mat-checkbox>
         </div>
 
@@ -148,14 +145,14 @@
               (click)="approveSelected()"
               [disabled]="!hasSelectedItems()"
             >
-              Approve Case Selected ({{ selectedCount() }})
+              Approve User Selected ({{ selectedCount() }})
             </button>
             <button
               mat-stroked-button
               (click)="rejectSelected()"
               [disabled]="!hasSelectedItems()"
             >
-              Reject Case Selected ({{ selectedCount() }})
+              Reject User Selected ({{ selectedCount() }})
             </button>
           </ng-container>
 
@@ -166,7 +163,7 @@
               (click)="approveSelected()"
               [disabled]="!hasSelectedItems()"
             >
-              Approve Case Selected ({{ selectedCount() }})
+              Approve User Selected ({{ selectedCount() }})
             </button>
           </ng-container>
 
@@ -176,14 +173,14 @@
               (click)="setPendingSelected()"
               [disabled]="!hasSelectedItems()"
             >
-              Pending Case Selected ({{ selectedCount() }})
+              Pending User Selected ({{ selectedCount() }})
             </button>
             <button
               mat-stroked-button
               (click)="rejectSelected()"
               [disabled]="!hasSelectedItems()"
             >
-              Reject Case Selected ({{ selectedCount() }})
+              Reject User Selected ({{ selectedCount() }})
             </button>
           </ng-container>
         </div>
@@ -350,6 +347,41 @@
           *matRowDef="let row; columns: displayedColumnsWithSelect"
         ></tr>
       </table>
+    </div>
+
+    <div class="pagination-container" *ngIf="getTotalCount() > 0">
+      <div
+        class="pagination-controls"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+        "
+      >
+        <!-- Previous Button (icon only) -->
+        <button
+          mat-icon-button
+          (click)="loadPreviousPage()"
+          [disabled]="!hasPreviousPage() || isLoading"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <!-- Pagination Info -->
+        <div class="pagination-info">
+          Showing {{ getCurrentDataSource().length }} of {{ getTotalCount() }}
+        </div>
+
+        <!-- Next Button (icon only) -->
+        <button
+          mat-icon-button
+          (click)="loadNextPage()"
+          [disabled]="!hasNextPage() || isLoading"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
     </div>
   </mat-card-content>
 </div>

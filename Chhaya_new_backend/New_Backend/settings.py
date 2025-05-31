@@ -223,3 +223,4 @@ EMAIL_HOST_PASSWORD = 'yvun jgkh lueq fodt'
 DEFAULT_FROM_EMAIL = 'sanketlodheofficial@gmail.com'
 
 
+BACKEND_BASE_URL = 'https://tracemapr.com/backend'  # Correct backend URL
