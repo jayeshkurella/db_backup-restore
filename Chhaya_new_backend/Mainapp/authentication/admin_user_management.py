@@ -22,7 +22,7 @@ class AdminUserApprovalView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
 
     def get_queryset(self):
-        queryset = User.objects.all()
+        queryset = User.objects.order_by('id')
         first_name = self.request.query_params.get("first_name")
         last_name = self.request.query_params.get("last_name")
         email_id = self.request.query_params.get("email_id")
