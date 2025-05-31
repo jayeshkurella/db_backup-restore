@@ -25,7 +25,7 @@ body, html {
 }
 .sidenav {
   width: 260px;
-  background: #f8f8f8;
+  background: inherit;
   height: 100vh; /* Changed from 100% */
   overflow-y: auto;
   display: flex;
@@ -55,14 +55,15 @@ body, html {
     // padding: 16px 20px;
     font-size: 16px;
     &.active {
-      background-color: #ffffff;
-      font-weight: 600;
+      
+      background-color: #F15A22 !important;
+      font-weight: 800;
     }
   }
 }
 
 .content-heading{
-  border-bottom: 2px solid #3f51b5;
+  border-bottom: 2px solid inherit;
 }
 
 .content {

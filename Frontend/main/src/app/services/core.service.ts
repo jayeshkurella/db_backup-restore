@@ -6,6 +6,7 @@ import { AppSettings, defaults } from '../config';
 })
 export class CoreService {
   private optionsSignal = signal<AppSettings>(defaults);
+  
 
   getOptions() {
     return this.optionsSignal();
