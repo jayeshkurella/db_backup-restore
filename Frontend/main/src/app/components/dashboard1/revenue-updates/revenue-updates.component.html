@@ -1,6 +1,6 @@
-<mat-card>
+<mat-card class="cardWithShadow">
   <mat-card-content>
-    <div class="containerx h-100">
+    <div class="containerx h-100 ">
       <!-- Filters Section -->
       <div class="filter-container">
         <!-- First Row -->
@@ -101,7 +101,7 @@
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
 
-          <button mat-button class="search-btn dark-orange" (click)="filterDataByFilters()">
+          <button mat-flat-button class="search-btn" (click)="filterDataByFilters()">
             Search
           </button>
         </div>
@@ -133,13 +133,30 @@
     </div>
   </mat-card-header>
 
-  <mat-card-content>
+  <mat-card-content >
     <!-- Tab Headers Only -->
-    <mat-tab-group [(selectedIndex)]="selectedTabIndex" mat-align-tabs="start" class="custom-tab-group">
-      <mat-tab label="Missing Persons"></mat-tab>
-      <mat-tab label="Unidentified Persons"></mat-tab>
-      <mat-tab label="Unidentified Bodies"></mat-tab>
-    </mat-tab-group>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [ngClass]="{'active': selectedTabIndex === 0}" (click)="selectedTabIndex = 0"
+          id="missing-tab" type="button">
+          Missing Persons
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [ngClass]="{'active': selectedTabIndex === 1}" (click)="selectedTabIndex = 1"
+          id="unidentified-tab" type="button">
+          Unidentified Persons
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [ngClass]="{'active': selectedTabIndex === 2}" (click)="selectedTabIndex = 2"
+          id="bodies-tab" type="button">
+          Unidentified Bodies
+        </button>
+      </li>
+    </ul>
+
+
 
     <!-- Missing Persons Table -->
     <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 0">

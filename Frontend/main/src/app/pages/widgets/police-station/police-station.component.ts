@@ -21,6 +21,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { UnidentifiedpersonApiService } from '../../datatable/unidentified-person/unidentifiedperson-api.service';
 import { MatSelectModule } from '@angular/material/select';
 import { StateAbbreviationPipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
+import { STATES } from 'src/app/constants/states';
 
 @Component({
   selector: 'app-police-station',
@@ -65,7 +66,7 @@ export class PoliceStationComponent implements OnInit {
   currentPage: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 8;
-  allstates: string[] = [];
+  allstates: string[] = STATES;
   alldistricts: string[] = [];
   allcities: string[] = [];
   constructor(private policeapi: PoliceStationApiService, private fb: FormBuilder, private router: Router, private dialog: MatDialog, private missingPersonService: UnidentifiedpersonApiService) { }
@@ -78,7 +79,7 @@ export class PoliceStationComponent implements OnInit {
     const token = localStorage.getItem('authToken');
     this.isLoggedIn = !!token;
     this.getStates();
-
+    this.onSearch()
     this.getallPolicestation(1);
   }
 
@@ -174,20 +175,18 @@ export class PoliceStationComponent implements OnInit {
       });
   }
 
-  getStates() {
-    this.missingPersonService.getStates().subscribe(states => {
-      this.allstates = states;
-
-      // Ensure 'Maharashtra' is in the list before setting
-      if (this.allstates.includes('Maharashtra')) {
-        this.searchFilters.state = 'Maharashtra';
-        this.onStateChange();
-
-        // Automatically apply filters
-        // this.applyFilters();
-      }
-    });
-  }
+ getStates() {
+   this.allstates = STATES;
+ 
+   // Set default state to Maharashtra only if not already selected
+   if (!this.searchFilters.state) {
+     const defaultState = this.allstates.find(state => state.toLowerCase() === 'maharashtra');
+     if (defaultState) {
+       this.searchFilters.state = defaultState;
+       this.onStateChange(); 
+     }
+   }
+ }
   onStateChange() {
     this.searchFilters.district = '';
     this.searchFilters.city = '';

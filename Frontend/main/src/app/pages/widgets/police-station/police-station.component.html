@@ -14,7 +14,7 @@
     <!-- Filters Row -->
     <div class="d-flex align-items-end gap-2 w-100 flex-nowrap overflow-auto pb-2 mt-3 filters-row">
       <mat-form-field appearance="outline" class="with-icon flex-grow-1 min-width-200">
-        <input matInput [(ngModel)]="searchFilters.name" name="searchName" placeholder="Search by Name"
+        <input matInput [(ngModel)]="searchFilters.name" (ngModelChange)="onSearch()" name="searchName" placeholder="Search by Name"
           class="field-color" />
       </mat-form-field>
 

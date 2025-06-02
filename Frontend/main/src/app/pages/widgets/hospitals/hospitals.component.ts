@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UnidentifiedpersonApiService } from '../../datatable/unidentified-person/unidentifiedperson-api.service';
 import { SafeTitlecasePipe, StateAbbreviationPipe } from "../../../components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe";
+import { STATES } from 'src/app/constants/states';
 
 @Component({
   selector: 'app-hospitals',
@@ -59,7 +60,7 @@ export class HospitalsComponent implements OnInit{
   totalHospitalItems = 0;
   itemsPerPage = 8;
   currentPage = 1;
-  allstates: string[] = [];
+  allstates: string[] = STATES
   alldistricts: string[] = [];
   allcities: string[] = [];
   isAdmin: boolean = false;
@@ -86,6 +87,7 @@ export class HospitalsComponent implements OnInit{
     this.isLoggedIn = !!token;
     this.fetchHospitalData()
     this.getStates();
+    this.onsearch()
   }
 
   addhospital(): void {
@@ -181,19 +183,17 @@ resetFilters(): void {
     }); 
   }
   
-  getStates() {
-  this.missingPersonService.getStates().subscribe(states => {
-    this.allstates = states;
+getStates() {
+  this.allstates = STATES;
 
-    // Set default state to Maharashtra only if not already selected
-    if (!this.searchFilters.state) {
-      const defaultState = this.allstates.find(state => state.toLowerCase() === 'maharashtra');
-      if (defaultState) {
-        this.searchFilters.state = defaultState;
-        this.onStateChange(); 
-      }
+  // Set default state to Maharashtra only if not already selected
+  if (!this.searchFilters.state) {
+    const defaultState = this.allstates.find(state => state.toLowerCase() === 'maharashtra');
+    if (defaultState) {
+      this.searchFilters.state = defaultState;
+      this.onStateChange(); 
     }
-  });
+  }
 }
   onStateChange() {
     this.searchFilters.district = '';

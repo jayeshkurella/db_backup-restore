@@ -1,3 +1,10 @@
+mat-card.cardWithShadow {
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+
 .filter-container {
   display: flex;
   flex-direction: column;
@@ -19,8 +26,8 @@
 
 .search-btn {
   min-width: 100px;
-  height: 35px; 
-  margin-top: -20px;
+  /* height: 35px;  */
+  margin-top: -19px;
   margin-left: auto;
 }
 
@@ -37,17 +44,44 @@
   .search-btn {
     margin-left: 0;
     width: 100%;
+    margin-bottom: 10px;
     
   }
 }
 
-
-
-.custom-tab-group{
-  color: red !important;
-}
-.custom-tab-group .mat-tab-header {
-  justify-content: flex-start !important;
-  color:red !important;
+/* Remove Bootstrap's default active tab styling */
+.nav-tabs .nav-link {
+  background-color: transparent;
+  border: none;
+  color: inherit; 
 }
 
+/* Active tab styling */
+.nav-tabs .nav-link.active {
+  background-color: inherit;
+  color: inherit; 
+  position: relative;
+  border: none;
+}
+
+/* Optional: Add bottom border for active tab */
+.nav-tabs .nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor; /* Use current text color */
+}
+
+
+/* More compact solution */
+mat-card-header.d-flex {
+  padding-bottom: 0;
+  margin-bottom: -8px; /* Pulls the tabs closer */
+}
+
+.nav-tabs {
+  margin-top: -10px; /* Makes tabs touch the header */
+}

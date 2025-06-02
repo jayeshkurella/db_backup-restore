@@ -35,6 +35,7 @@
           name="searchName"
           placeholder="Search by Name"
           class="field-color"
+        (ngModelChange)="onsearch()"
         />
       </mat-form-field>
 
@@ -42,6 +43,7 @@
         <mat-select
           [(ngModel)]="searchFilters.state"
           name="state"
+          placeholder="Maharashtra"
           (selectionChange)="onStateChange()"
         >
           <mat-option value="">All States</mat-option>

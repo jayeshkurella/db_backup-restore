@@ -8,32 +8,17 @@
           <!-- Input -->
           <div class="flex-grow-1 me-2" style="min-width:200px">
             <mat-form-field appearance="outline" class="w-100">
-              <input
-                matInput
-                [(ngModel)]="caseId"
-                name="caseId"
-                placeholder="e.g., MP-202505-MUM-0001"
-                required
-              />
+              <input matInput [(ngModel)]="caseId" name="caseId" placeholder="e.g., MP-202505-MUM-0001" required />
             </mat-form-field>
           </div>
 
           <!-- Button -->
           <div class="btn-wrapper">
-            <button
-              mat-flat-button
-              color="primary"
-              class="btn-height d-flex align-items-center btn-mobile"
-              type="submit"
-              [disabled]="isLoading"
-            >
+            <button mat-flat-button color="primary" class="btn-height d-flex align-items-center btn-mobile"
+              type="submit" [disabled]="isLoading">
               <mat-icon class="me-2">search</mat-icon>
               Search
-              <mat-spinner
-                *ngIf="isLoading"
-                diameter="20"
-                class="ms-2"
-              ></mat-spinner>
+              <mat-spinner *ngIf="isLoading" diameter="20" class="ms-2"></mat-spinner>
             </button>
           </div>
         </div>
@@ -43,7 +28,7 @@
 
 
   <ng-container class=".parent-container">
-    <img *ngIf="!caseData" src="assets/main-logos/TraceMapr_logo.png" alt="Loading..." class="placeholder-image">
+    <img *ngIf="!caseData" [src]="logoPath" alt="Loading..." class="placeholder-image">
     <mat-card-content *ngIf="caseData" class="mat-typography container-fluid py-2 mt-3">
       <!-- Basic Information -->
       <mat-card class="mb-4 p-3">
@@ -61,11 +46,11 @@
               </div>
               <div class="col-6 col-md-4">
                 <p class="case-detail-label mb-1">Full Name</p>
-                <p class="case-detail-value mb-0">{{ caseData.full_name  | safeTitlecase }}</p>
+                <p class="case-detail-value mb-0">{{ caseData.full_name | safeTitlecase }}</p>
               </div>
               <div class="col-6 col-md-4">
                 <p class="case-detail-label mb-1">Gender</p>
-                <p class="case-detail-value mb-0">{{ caseData.gender  | safeTitlecase }}</p>
+                <p class="case-detail-value mb-0">{{ caseData.gender | safeTitlecase }}</p>
               </div>
               <div class="col-6 col-md-4"
                 *ngIf="caseData.type === 'Missing Person' && caseData.age !== null && caseData.age !== undefined">
@@ -130,7 +115,7 @@
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Hair Color</p>
-            <p class="case-detail-value mb-0">{{ caseData.hair_color  | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ caseData.hair_color | safeTitlecase }}</p>
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Hair Type</p>
@@ -239,11 +224,11 @@
         <div class="row g-3">
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Caste</p>
-            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.caste  | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.caste | safeTitlecase }}</p>
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Sub Caste</p>
-            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.subcaste  | safeTitlecase }}</p>
+            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.subcaste | safeTitlecase }}</p>
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Religion</p>
@@ -251,12 +236,12 @@
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Marital Status</p>
-            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.marital_status  | safeTitlecase }}
+            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.marital_status | safeTitlecase }}
             </p>
           </div>
           <div class="col-6 col-md-4 col-lg-3">
             <p class="case-detail-label mb-1">Mother Tongue</p>
-            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.mother_tongue  | safeTitlecase }}
+            <p class="case-detail-value mb-0">{{ caseData.additional_info[0]?.mother_tongue | safeTitlecase }}
             </p>
           </div>
           <div class="col-6 col-md-4 col-lg-3">

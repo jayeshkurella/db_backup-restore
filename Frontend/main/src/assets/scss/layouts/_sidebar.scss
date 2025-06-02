@@ -8,6 +8,8 @@
   overflow-x: hidden;
   border-right: 1px solid $borderColor;
   border-radius: 0px !important;
+
+  
 }
 
 .branding {
@@ -37,36 +39,38 @@
       }
     }
 
-    &:hover {
-      width: $sidenav-desktop;
+    // for sidebar hover in and out
 
-      .profile-bar {
-        display: block;
-      }
+    // &:hover {
+    //   width: $sidenav-desktop;
 
-      .sidebar-list {
-        .menu-list-item {
-          padding: 8px 10px;
+    //   .profile-bar {
+    //     display: block;
+    //   }
 
-          .mdc-list-item__content {
-            display: inline;
-          }
+    //   .sidebar-list {
+    //     .menu-list-item {
+    //       padding: 8px 10px;
 
-          .mdc-list-item__start {
-            margin-left: 0 !important;
-          }
-        }
+    //       .mdc-list-item__content {
+    //         display: inline;
+    //       }
 
-        &.mdc-list {
-          padding: 0 24px;
-          max-width: $sidenav-desktop;
+    //       .mdc-list-item__start {
+    //         margin-left: 0 !important;
+    //       }
+    //     }
 
-          .mdc-list-group__subheader {
-            text-align: left;
-          }
-        }
-      }
-    }
+    //     &.mdc-list {
+    //       padding: 0 24px;
+    //       max-width: $sidenav-desktop;
+
+    //       .mdc-list-group__subheader {
+    //         text-align: left;
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   .hideMenu {

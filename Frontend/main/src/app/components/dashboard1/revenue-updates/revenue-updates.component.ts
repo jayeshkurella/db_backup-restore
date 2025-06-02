@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -38,6 +38,7 @@ import { MatButton } from '@angular/material/button';
     MatButton],
   templateUrl: './revenue-updates.component.html',
   styleUrls: ['./revenue-updates.component.css'],
+
 })
 export class AppRevenueUpdatesComponent implements OnInit, AfterViewInit {
 

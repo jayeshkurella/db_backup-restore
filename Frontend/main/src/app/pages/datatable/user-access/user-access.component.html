@@ -54,7 +54,7 @@
             [(ngModel)]="filters.user_type"
             placeholder="Select User Type"
           >
-            <mat-option value="">All User Types</mat-option>
+            <mat-option value="">Select Types</mat-option>
             <mat-option *ngFor="let type of userTypes" [value]="type">
               {{ type | safeTitlecase }}
             </mat-option>

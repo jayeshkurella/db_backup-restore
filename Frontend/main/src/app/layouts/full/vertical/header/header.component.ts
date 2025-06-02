@@ -4,7 +4,7 @@ import {
   EventEmitter,
   Input,
   ViewEncapsulation,
-  OnInit ,
+  OnInit,
 } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -50,22 +50,22 @@ interface quicklinks {
 }
 
 @Component({
-    selector: 'app-header',
-    imports: [
-        RouterModule,
-        CommonModule,
-        NgScrollbarModule,
-        TablerIconsModule,
-        MaterialModule,
-    ],
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.css'],  
+  selector: 'app-header',
+  imports: [
+    RouterModule,
+    CommonModule,
+    NgScrollbarModule,
+    TablerIconsModule,
+    MaterialModule,
+  ],
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css'],
 
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None
 })
-export class HeaderComponent implements OnInit  {
+export class HeaderComponent implements OnInit {
   user: any;
- 
+
 
   @Input() showToggle = true;
   @Input() toggleChecked = false;
@@ -122,19 +122,19 @@ export class HeaderComponent implements OnInit  {
     private translate: TranslateService,
     private authService: LoginApiService,
     private router: Router,
-    
+
 
   ) {
     translate.setDefaultLang('en');
   }
   ngOnInit() {
-      this.authService.user$.subscribe(user => {
-    this.user = user;
-  });
-  
+    this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
+
     this.authService.profilePic$.subscribe(pic => {
       this.profilePic = pic || 'assets/images/profile/user-1.jpg';
-    });    this.authService.isLoggedIn$.subscribe((status) => {
+    }); this.authService.isLoggedIn$.subscribe((status) => {
       this.isLoggedIn = status;
     });
     this.authService.initializeProfilePic();  // restore pic on refresh
@@ -142,12 +142,12 @@ export class HeaderComponent implements OnInit  {
   }
 
   onImageError(event: Event): void {
-  (event.target as HTMLImageElement).src = 'assets/images/profile/user-1.jpg';
-}
+    (event.target as HTMLImageElement).src = 'assets/images/profile/user-1.jpg';
+  }
 
   logout() {
-    
-     this.authService.setUser(null);
+
+    this.authService.setUser(null);
     localStorage.removeItem('user');
     this.authService.setProfilePic('');  // Clear the picture
     this.authService.logout();
@@ -192,11 +192,15 @@ export class HeaderComponent implements OnInit  {
   //   this.emitOptions();
   // }
 
-  setlightDark(theme: string) {
-    this.options.theme = theme;
-    this.emitOptions();
-     localStorage.setItem('selectedTheme', theme); 
-    console.log("theme",this.options.theme)
+  setlightDark(theme: string): void {
+    if (theme === 'light' || theme === 'dark') {
+      this.options.theme = theme;
+      this.emitOptions();
+      localStorage.setItem('selectedTheme', theme);
+      console.log("Theme set to:", this.options.theme);
+    } else {
+      console.warn("Invalid theme provided:", theme);
+    }
   }
 
   changeLanguage(lang: any): void {
@@ -365,9 +369,9 @@ export class HeaderComponent implements OnInit  {
 }
 
 @Component({
-    selector: 'search-dialog',
-    imports: [RouterModule, MaterialModule, TablerIconsModule, FormsModule],
-    templateUrl: 'search-dialog.component.html'
+  selector: 'search-dialog',
+  imports: [RouterModule, MaterialModule, TablerIconsModule, FormsModule],
+  templateUrl: 'search-dialog.component.html'
 })
 export class AppSearchDialogComponent {
   searchText: string = '';

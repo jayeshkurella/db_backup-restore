@@ -25,7 +25,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
     serializer_class = PoliceStationSerializer
     pagination_class = PageNumberPagination
     queryset = PoliceStation.objects.all()
-    parser_classes = (MultiPartParser, FormParser)  # ✅ Allow file uploads
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_permissions(self):
         if self.request.method in ['GET', 'HEAD', 'OPTIONS']:
@@ -33,7 +33,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
 
-        # 🔹 1. LIST Police Stations with Pagination
+        #  1. LIST Police Stations with Pagination
     def list(self, request):
         try:
             # Extract query parameters
@@ -65,7 +65,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    # 🔹 2. RETRIEVE Police Station by ID
+    #  2. RETRIEVE Police Station by ID
     def retrieve(self, request, pk=None):
         try:
             police_station = cache.get(f'police_station_{pk}')
@@ -79,31 +79,31 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
         except PoliceStation.DoesNotExist:
             return Response({'error': 'Police station not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # 🔹 3. CREATE a new Police Station
+    #  3. CREATE a new Police Station
     def create(self, request, *args, **kwargs):
         try:
             print("\n🔹 Received API Request Data:", request.data)  # Log incoming data
 
             with transaction.atomic():
-                # 🔹 Validate `name` field
+                #  Validate `name` field
                 if not request.data.get("name"):
                     return Response({"error": "Name is required and cannot be blank."},
                                     status=status.HTTP_400_BAD_REQUEST)
 
-                # 🔹 Handle `station_photo` (File Handling)
-                station_photo = request.FILES.get("station_photo")  # ✅ Use `request.FILES`
+                #  Handle `station_photo` (File Handling)
+                station_photo = request.FILES.get("station_photo")
                 if not station_photo:
                     return Response(
                         {"error": "Invalid station photo. Ensure you're sending a valid file."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
-                # 🔹 Process Address Data
+                # Process Address Data
                 address_data = request.data.get("address")
                 if not address_data:
                     return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-                # ✅ Convert JSON string to Python dictionary (Fixes `[object Object]` issue)
+                #  Convert JSON string to Python dictionary ()
                 if isinstance(address_data, str):
                     address_data = json.loads(address_data)
 
@@ -125,7 +125,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST
                         )
 
-                # 🔹 Validate and create address
+                #  Validate and create address
                 address_serializer = AddressSerializer(data=address_data)
                 if not address_serializer.is_valid():
                     return Response({"address": address_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -135,52 +135,52 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
                 # 🔹 Prepare police station data
                 police_station_data = request.data.copy()
                 police_station_data["address"] = address.id
-                police_station_data["station_photo"] = station_photo  # ✅ Assign file correctly
+                police_station_data["station_photo"] = station_photo
 
-                # ✅ Convert JSON string for `police_contact`
+                #  Convert JSON string for `police_contact`
                 contacts_data = request.data.get("police_contact", "[]")
                 if isinstance(contacts_data, str):
                     contacts_data = json.loads(contacts_data)
 
-                # 🔹 Create police station
+                #  Create police station
                 police_station_serializer = self.get_serializer(data=police_station_data)
                 if not police_station_serializer.is_valid():
                     return Response(police_station_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 police_station = police_station_serializer.save()
 
-                # 🔹 Corrected Contact Creation Logic
+                #  Corrected Contact Creation Logic
                 contact_objects = []
                 for contact in contacts_data:
-                    contact["police_station"] = police_station  # ✅ Assign correctly
+                    contact["police_station"] = police_station
 
-                    # 🔹 Ensure `person` is always `None`
-                    contact["person"] = None  # ✅ Set `person` as NULL
+                    #  Ensure `person` is always `None`
+                    contact["person"] = None
 
                     contact_objects.append(Contact(**contact))
 
-                # ✅ Bulk create contacts properly
+                #  Bulk create contacts properly
                 Contact.objects.bulk_create(contact_objects)
 
-                # 🔹 Return response with contacts
+                # Return response with contacts
                 response_data = self.get_serializer(police_station).data
                 response_data['police_contact'] = ContactSerializer(police_station.police_contact.all(), many=True).data
 
-                print("\n🚀 Final Response Data:", response_data)
+                print("\n Final Response Data:", response_data)
                 return Response(response_data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            print("\n❌ API Error:", str(e))
+            print("\n API Error:", str(e))
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    # 🔹 4. FULL UPDATE (PUT)
+    #  4. FULL UPDATE (PUT)
     def update(self, request, pk=None):
         return self._update_police_station(request, pk, partial=False)
 
-    # 🔹 5. PARTIAL UPDATE (PATCH)
+    #  5. PARTIAL UPDATE (PATCH)
     def partial_update(self, request, pk=None):
         return self._update_police_station(request, pk, partial=True)
 
-    # 🔹 Common function for PUT & PATCH
+    # Common function for PUT & PATCH
     def _update_police_station(self, request, pk, partial):
         try:
             with transaction.atomic():
@@ -232,7 +232,7 @@ class PoliceStationViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 🔹 6. DELETE Police Station
+    # 6. DELETE Police Station
     def destroy(self, request, pk=None):
         try:
             police_station = get_object_or_404(PoliceStation, pk=pk)

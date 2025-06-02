@@ -167,15 +167,14 @@
       </div>
 
       <div class="row mt-3">
-        <div class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-center gap-2">
+        <div class=" d-flex justify-content-end align-items-end gap-3">
+          <button mat-stroked-button (click)="resetFilters()" [disabled]="!filtersApplied" color="warn">
+            <mat-icon>refresh</mat-icon> Reset
+          </button>
           <button mat-flat-button (click)="applyFilters()"
             [disabled]="!hasGeographicFiltersApplied() && !hasdatefilterApplied() && !hasFiltersApplied()"
-            class="me-md-3">
+            class="me-md-1">
             <mat-icon>search</mat-icon> Search
-          </button>
-
-          <button mat-flat-button (click)="resetFilters()" [disabled]="!filtersApplied" color="warn">
-            <mat-icon>refresh</mat-icon> Reset
           </button>
         </div>
       </div>

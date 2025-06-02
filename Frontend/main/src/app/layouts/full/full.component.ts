@@ -244,6 +244,10 @@ export class FullComponent implements OnInit {
     this.resetCollapsedState();
   }
 
+    refreshTheme() {
+    const currentTheme = this.settings.getOptions().theme; 
+    localStorage.setItem('selectedTheme', currentTheme);
+  }
   resetCollapsedState(timer = 400) {
     setTimeout(() => this.settings.setOptions(this.options), timer);
   }

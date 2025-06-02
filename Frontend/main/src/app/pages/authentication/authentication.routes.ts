@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { AppBoxedForgotPasswordComponent } from './boxed-forgot-password/boxed-forgot-password.component';
 import { AppBoxedLoginComponent } from './boxed-login/boxed-login.component';
 import { AppBoxedRegisterComponent } from './boxed-register/boxed-register.component';

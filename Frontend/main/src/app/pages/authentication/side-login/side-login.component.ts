@@ -166,7 +166,7 @@ saveEmailToLocalStorage(email: string): void {
 private renderGoogleButton(): void {
   if (typeof google !== 'undefined') {
     // Disable auto-selection of previously signed-in accounts
-    google.accounts.id.disableAutoSelect(); // 👈 Add this line
+    google.accounts.id.disableAutoSelect(); 
 
     google.accounts.id.initialize({
       client_id: '175428916411-vjqlrrr7n468lnoa5g92s7rfgr4apijd.apps.googleusercontent.com',
