@@ -9,7 +9,7 @@ import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-changelogs',
-  imports: [MatFormFieldModule,ReactiveFormsModule,MatInputModule,MatCardModule,MatButton],
+  imports: [MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, MatButton],
   templateUrl: './changelogs.component.html',
   styleUrl: './changelogs.component.scss'
 })
@@ -32,7 +32,7 @@ export class ChangelogsComponent {
 
   onSubmit() {
     if (this.form.invalid) return;
-  
+
     const value = this.form.value;
     const log = {
       date: value.date,
@@ -41,8 +41,7 @@ export class ChangelogsComponent {
       modified: this.splitLines(value.modified),
       tested: this.splitLines(value.tested),
     };
-  
-    // You can now submit the log without the `id`
+
     this.logService.addLog(log).subscribe({
       next: () => {
         this.form.reset({ date: new Date().toISOString().substring(0, 10) });
@@ -53,10 +52,6 @@ export class ChangelogsComponent {
       }
     });
   }
-  
-  
-  
-  
 
   private splitLines(text: string): string[] {
     return text ? text.split('\n').map(line => line.trim()).filter(Boolean) : [];

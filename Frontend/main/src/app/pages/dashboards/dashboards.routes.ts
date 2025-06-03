@@ -13,23 +13,29 @@ export const DashboardsRoutes: Routes = [
         path: '',
         component: AppDashboard1Component,
         data: {
-          title: 'Analytical',
+          title: 'home',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Analytical' },
+            { title: 'Dashboard', url: '/home' },
+            { title: 'Dashboard' },
           ],
         },
       },
-       {
+      {
         path: 'home',
         component: AppDashboard1Component,
-        
-  
-      },
+        data: {
+          title: 'Dashboard',
+          urls: [
+            { title: 'Home', url: '/' },
+            { title: 'Dashboard', url: '/home' }
+          ]
+        }
+      }
+      ,
       {
         path: 'dashboard2',
         component: AppDashboard2Component,
-        canActivate: [authGuard],  
+        canActivate: [authGuard],
         data: {
           title: 'eCommerce',
           urls: [
@@ -38,7 +44,7 @@ export const DashboardsRoutes: Routes = [
           ],
         },
       }
-      
+
     ],
   },
 ];

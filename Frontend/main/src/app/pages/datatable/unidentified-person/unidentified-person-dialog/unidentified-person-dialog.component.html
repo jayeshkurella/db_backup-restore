@@ -5,11 +5,11 @@
   class="d-block mx-auto my-4"
 ></mat-progress-spinner>
 
-<mat-card class="mat-elevation-z4 p-3">
+<mat-card class="cardWithShadow mat-elevation-z4 p-3">
   <mat-dialog-content class="mat-typography">
     <div *ngIf="person" class="container">
       <!-- Basic Information -->
-      <mat-card class="mb-4 p-3">
+      <mat-card class="cardWithShadow mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Basic Information</mat-card-title>
         <div class="row g-3">
           <div class="col-md-2">
@@ -60,7 +60,7 @@
       </mat-card>
 
       <!-- Appearance Information -->
-      <mat-card class="mb-4 p-3">
+      <mat-card class="cardWithShadow mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Appearance Information</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
@@ -99,7 +99,7 @@
       </mat-card>
 
       <!-- Address Information -->
-      <mat-card class="mb-4 p-3">
+      <mat-card class="cardWithShadow mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Address Information</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
@@ -138,7 +138,7 @@
       </mat-card>
 
       <!-- Contact Information -->
-      <mat-card class="mb-4 p-3">
+      <mat-card class="cardWithShadow mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Contact Information</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.type">
@@ -181,7 +181,7 @@
       </mat-card>
 
       <!-- Personal Details -->
-      <mat-card class="mb-4 p-3">
+      <mat-card class="cardWithShadow mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Personal Details</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
@@ -229,7 +229,7 @@
 
 
       <!-- FIR Details -->
-      <mat-card class="mb-4 p-3">
+      <mat-card class="cardWithShadow mb-4 p-3">
         <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">FIR Details</mat-card-title>
         <div class="row g-3">
           <div class="col-sm-6 col-md-4 col-lg-3">
@@ -255,11 +255,12 @@
         </div>
       </mat-card>
     </div>
-  </mat-dialog-content>
-  
-  <div class="d-flex justify-content-start p-2">
+     <div class="d-flex justify-content-start p-2 ms-4">
     <button mat-flat-button (click)="goBack()" class="back-btn">
       <mat-icon>arrow_back</mat-icon> Back
     </button>
   </div>
+  </mat-dialog-content>
+  
+ 
 </mat-card>

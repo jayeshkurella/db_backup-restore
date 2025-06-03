@@ -9,7 +9,7 @@
                   policeStationForm.get('name')?.invalid
               }">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Name</mat-label>
+            <mat-label>Police Station Name</mat-label>
             <input matInput formControlName="name" type="text" required />
             <mat-error *ngIf="policeStationForm.get('name')?.hasError('required')">
               Name is required

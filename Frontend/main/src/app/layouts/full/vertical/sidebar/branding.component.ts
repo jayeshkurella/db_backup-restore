@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common'; // Add this for ngStyle
   template: `
     <div class="branding-container">
       <a (click)="resetPage($event)" class="logodark" style="cursor: pointer;" aria-hidden="true" 
-         data-toggle="tooltip" data-placement="bottom" title="Refresh" data-animation="false">
+         data-toggle="tooltip" data-placement="bottom"  data-animation="false">
         <img
           src="assets/main-logos/TraceMapr_logo.png"
           [ngStyle]="{'height': logoHeight}"
@@ -21,7 +21,7 @@ import { CommonModule } from '@angular/common'; // Add this for ngStyle
       </a>
 
       <a (click)="resetPage($event)" class="logolight" style="cursor: pointer;" aria-hidden="true" 
-         data-toggle="tooltip" data-placement="bottom" title="Refresh" data-animation="false">
+         data-toggle="tooltip" data-placement="bottom"  data-animation="false">
         <img
           src="assets/main-logos/TraceMapr_logo_dark.png"
           [ngStyle]="{'height': logoHeight}"

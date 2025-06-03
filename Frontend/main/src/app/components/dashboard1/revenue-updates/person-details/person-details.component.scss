@@ -2,6 +2,10 @@
   max-height: 80vh;
   overflow-y: auto;
 }
+mat-card.cardWithShadow {
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
 
 .compact-view .mat-expansion-panel {
   margin-bottom: 8px;

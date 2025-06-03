@@ -34,7 +34,7 @@
           </mat-form-field>
         </div>
         <div class="col-md-4 mb-2">
-          <button mat-stroked-button  class="w-100 imgUploadborder" type="button" (click)="hospitalPhotoInput.click()">
+          <button mat-stroked-button class="w-100 imgUploadborder" type="button" (click)="hospitalPhotoInput.click()">
             <mat-icon>cloud_upload</mat-icon>
             Hospital Photo
           </button>
@@ -80,12 +80,15 @@
               </div>
             </div>
 
-            <div class="row mb-0.5">
+            <div class="row mb-0.3">
               <div class="col-md-6">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Apartment No.</mat-label>
-                  <input matInput formControlName="appartment_no" type="number" />
+                  <input matInput formControlName="appartment_no" type="number" min="0" />
                 </mat-form-field>
+                <mat-error *ngIf="hospitalForm.get('address.appartment_no')?.hasError('min')">
+                  Apartment number cannot be negative
+                </mat-error>
               </div>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" class="w-100">
@@ -104,7 +107,7 @@
 
                 </mat-form-field>
               </div>
-              <div class="col-md-6"  [ngClass]="{
+              <div class="col-md-6" [ngClass]="{
                 'mb-3':
                   hospitalForm.get('address.city')?.touched &&
                   hospitalForm.get('address.city')?.invalid
@@ -133,7 +136,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-md-6"[ngClass]="{
+              <div class="col-md-6" [ngClass]="{
                 'mb-3':
                   hospitalForm.get('address.state')?.touched &&
                   hospitalForm.get('address.state')?.invalid
@@ -206,11 +209,11 @@
           <!-- Map and Location details on the right side -->
           <div class="col-md-6">
             <div formGroupName="location">
-              <div class="d-flex gap-2 align-items-start mb-1"[ngClass]="{
+              <div class="d-flex gap-2 align-items-start mb-1" [ngClass]="{
                 'mb-3':
                   hospitalForm.get('address.location.latitude')?.touched &&
                   hospitalForm.get('address.location.latitude')?.invalid
-              }"[ngClass]="{
+              }" [ngClass]="{
                 'mb-3':
                   hospitalForm.get('address.location.longitude')?.touched &&
                   hospitalForm.get('address.location.longitude')?.invalid
@@ -270,7 +273,7 @@
       <div formArrayName="hospital_contact">
         <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="p-2 mt-2 mb-3 rounded">
           <div class="row">
-            <div class="col-md-4"[ngClass]="{
+            <div class="col-md-4" [ngClass]="{
                 'mb-3':
                   contact.get('type')?.touched &&
                   contact.get('type')?.invalid
@@ -458,7 +461,7 @@
 
 
     </mat-card>
-   <div class="d-flex justify-content-center align-items-center mt-4 gap-3 space-down">
+    <div class="d-flex justify-content-center align-items-center mt-4 gap-3 space-down">
       <button mat-flat-button (click)="goBack()" class="back-btn">
         <mat-icon>arrow_back</mat-icon> Back
       </button>

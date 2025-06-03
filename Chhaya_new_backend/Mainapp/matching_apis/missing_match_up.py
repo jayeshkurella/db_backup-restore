@@ -189,7 +189,7 @@ class MissingPersonMatchWithUPsViewSet(viewsets.ViewSet):
         if mp.distinctive_mark and up.distinctive_mark and mp.distinctive_mark.lower() == up.distinctive_mark.lower():
             score += 25
 
-        return min(score, 100)  # Cap score at 100%
+        return min(score, 100)
 
     def _parse_height_range(self, height_range):
         try:

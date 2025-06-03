@@ -88,18 +88,17 @@
     </div>
 
     <!-- Buttons row -->
-    <div class="buttons-row d-flex justify-content-center gap-3 mb-3">
-      <button mat-flat-button color="primary" type="submit">
-        <mat-icon>search</mat-icon>Search
-      </button>
-
+    <div class="buttons-row d-flex justify-content-end gap-3 mb-3">
       <button
-        mat-flat-button
+        mat-stroked-button
         color="warn"
         type="button"
         (click)="resetFilters()"
       >
-        <mat-icon>refresh</mat-icon>&nbsp;Reset
+        <mat-icon>refresh</mat-icon>&nbsp;&nbsp;Reset
+      </button>
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon>search</mat-icon>Search
       </button>
     </div>
   </form>

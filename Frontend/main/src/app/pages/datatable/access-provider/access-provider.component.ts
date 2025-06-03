@@ -28,6 +28,7 @@ import { MatSelect } from '@angular/material/select';
 import { FormApiService } from '../../forms/form-layouts/form-api.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { STATES } from 'src/app/constants/states';
+import { TablerIconsModule } from 'angular-tabler-icons';
 export interface Person {
   id: string;
   full_name: string;
@@ -90,7 +91,8 @@ enum PersonStatus {
     MatOptionModule,
     MatFormField,
     MatSelect,
-    MatPaginatorModule
+    MatPaginatorModule,
+    TablerIconsModule
   ],
   templateUrl: './access-provider.component.html',
   styleUrl: './access-provider.component.css',

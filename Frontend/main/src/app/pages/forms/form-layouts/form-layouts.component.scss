@@ -2,6 +2,11 @@
   display: block;
 }
 
+mat-card.cardWithShadow {
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
 .coming-soon-container {
   display: flex;
   justify-content: center;

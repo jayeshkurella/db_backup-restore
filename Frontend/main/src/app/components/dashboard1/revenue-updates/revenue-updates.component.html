@@ -127,39 +127,25 @@
 
 <!-- filtered data as per tab -->
 <mat-card class="cardWithShadow">
-  <mat-card-header class="d-flex">
+
+  <mat-card-header class="d-flex mb-3">
     <div class="m-r-auto">
       <mat-card-title>Filtered Persons</mat-card-title>
     </div>
   </mat-card-header>
+  
 
-  <mat-card-content >
-    <!-- Tab Headers Only -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" [ngClass]="{'active': selectedTabIndex === 0}" (click)="selectedTabIndex = 0"
-          id="missing-tab" type="button">
-          Missing Persons
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" [ngClass]="{'active': selectedTabIndex === 1}" (click)="selectedTabIndex = 1"
-          id="unidentified-tab" type="button">
-          Unidentified Persons
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" [ngClass]="{'active': selectedTabIndex === 2}" (click)="selectedTabIndex = 2"
-          id="bodies-tab" type="button">
-          Unidentified Bodies
-        </button>
-      </li>
-    </ul>
-
-
-
-    <!-- Missing Persons Table -->
-    <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 0">
+  <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [(selectedIndex)]="selectedTabIndex">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="d-flex align-items-center">
+        <mat-icon class="d-flex align-items-center">
+          <i-tabler name="user-search" class="icon-20 m-r-8 d-flex"></i-tabler>
+        </mat-icon>
+        Missing Persons
+      </div>
+    </ng-template>
+    <div class="table-responsive mt-1 p-3">
       <table mat-table [dataSource]="filteredMissingPersonssss" class="w-100">
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
@@ -170,8 +156,6 @@
               (column | titlecase)
               }}
             </th>
-
-
             <td mat-cell *matCellDef="let element; let i = index">
               <ng-container [ngSwitch]="column">
                 <span *ngSwitchCase="'Sr.No'">{{ i + 1 }}</span>
@@ -205,9 +189,18 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
+  </mat-tab>
 
-    <!-- Unidentified Persons Table -->
-    <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 1">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="d-flex align-items-center">
+        <mat-icon class="d-flex align-items-center">
+          <i-tabler name="user-question" class="icon-20 m-r-8 d-flex"></i-tabler>
+        </mat-icon>
+        Unidentified Persons
+      </div>
+    </ng-template>
+    <div class="table-responsive mt-1 p-3">
       <table mat-table [dataSource]="filteredUnidentifiedPersonssss" class="w-100">
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
@@ -218,7 +211,6 @@
               (column | titlecase)
               }}
             </th>
-
             <td mat-cell *matCellDef="let element; let i = index">
               <ng-container [ngSwitch]="column">
                 <span *ngSwitchCase="'Sr.No'">{{ i + 1 }}</span>
@@ -252,9 +244,18 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
+  </mat-tab>
 
-    <!-- Unidentified Bodies Table -->
-    <div class="table-responsive mt-1" *ngIf="selectedTabIndex === 2">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="d-flex align-items-center">
+        <mat-icon class="d-flex align-items-center">
+          <i-tabler name="user-question" class="icon-20 m-r-8 d-flex"></i-tabler>
+        </mat-icon>
+        Unidentified Bodies
+      </div>
+    </ng-template>
+    <div class="table-responsive mt-1 p-3">
       <table mat-table [dataSource]="filteredunidentifiedboidessss" class="w-100">
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
@@ -298,5 +299,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-  </mat-card-content>
+  </mat-tab>
+  
+</mat-tab-group>
 </mat-card>

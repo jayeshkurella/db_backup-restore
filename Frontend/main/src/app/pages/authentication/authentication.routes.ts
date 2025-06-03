@@ -12,7 +12,6 @@ import { AppSideTwoStepsComponent } from './side-two-steps/side-two-steps.compon
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChangepasswordComponent } from './changepassword/changepassword.component';
 import { EditprofileComponent } from './editprofile/editprofile.component';
-import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 export const AuthenticationRoutes: Routes = [
   {
@@ -70,10 +69,7 @@ export const AuthenticationRoutes: Routes = [
         path: 'edit-profile',
         component: EditprofileComponent
       },
-      {
-        path: 'privacy-policy',
-        component: PrivacypolicyComponent,
-      },
+     
     ],
   },
 ];

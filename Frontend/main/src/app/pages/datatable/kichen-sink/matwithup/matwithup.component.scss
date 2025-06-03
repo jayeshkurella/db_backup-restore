@@ -1,15 +1,25 @@
+mat-card.cardWithShadow {
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.buttons{
+  gap: 3;
+}
 .toolbar {
   justify-content: start;
   display: block;
 }
 .toolbar-row {
   width: 100%;
+  padding: auto;
 }
 
 .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+   margin-top: 20px;
 }
 
 .toolbar-content {
@@ -17,6 +27,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+ 
 }
 
 .left-content {
@@ -30,9 +41,9 @@
   font-size: 20px;
 }
 
-.subtext {
-  font-size: 14px;
-  margin: 0;
+.subtitle{
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .right-buttons {
@@ -48,8 +59,71 @@
 
 .subtext {
   font-size: 16px;
-  color: #555;
+  
 }
+/* Ensure full width */
+.cardWithShadow {
+  width: 100%;
+}
+
+/* Photo styling */
+.missing-person-photo {
+  margin-right: 20px;
+}
+
+.person-img {
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Text styling */
+p {
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .d-flex {
+    flex-direction: column;
+  }
+  
+  .missing-person-photo {
+    margin-right: 0;
+    margin-bottom: 20px;
+    align-self: center;
+  }
+}
+.horizontal-missing-person-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.person-block {
+  display: flex;
+  width: 100%;
+}
+
+.missing-person-photo {
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.person-img {
+  max-width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* Adjust spacing between rows */
+.row {
+  margin-bottom: 15px;
+}
+
 
 .tabs {
   margin: 10px 0;
@@ -98,7 +172,7 @@
 
 .score-chip {
   background-color: #4caf50;
-  color: white;
+ 
   padding: 5px 10px;
   border-radius: 20px;
   font-weight: bold;
@@ -116,7 +190,7 @@
 
 .last-updated {
   font-size: 13px;
-  color: gray;
+  
 }
 
 .buttons button {
@@ -137,7 +211,6 @@
 .card-body {
   
   display: flex;
-  justify-content: space-between;
   padding: 10px;
   position: relative;
   flex-wrap: wrap;
@@ -174,7 +247,7 @@
 }
 
 .card-footer {
-  background: #f9f9f9;
+ 
   padding: 05px 10px;
   display: flex;
   justify-content: space-between;
@@ -185,7 +258,7 @@
 
 .updated-date {
   font-size: 14px;
-  color: #666;
+  // color: #666;
 }
 
 .action-buttons {
@@ -196,7 +269,7 @@
 
 .vertical-divider {
   width: 2px;
-  background-color: #ccc;
+ 
   height: auto;
   margin: 0 16px;
   top: 200px;
@@ -204,18 +277,17 @@
 
 
 .custom-button {
-  color: black !important;
+  // color: inherit !important;
   border-color: #ccc;
   margin-left: 8px;
-
   mat-icon {
     margin-right: 4px;
   }
 }
 
-.icon-default {
-  color: black;
-}
+// .icon-default {
+//   color: black;
+// }
 
 .icon-success {
   color: #4caf50; // Material green
@@ -239,14 +311,14 @@
 
 .label {
   font-weight: 500;
-  color: #333;
+  // color: #333;
   min-width: 100px;
 }
 
 .value {
   flex: 1;
   text-align: right;
-  color: #555;
+  // color: #555;
 }
 
 

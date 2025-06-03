@@ -1,48 +1,51 @@
 .hospital-detail-container {
-  max-width: 1200px;
+  /* max-width: 1000px; */
   margin: 0 auto;
   padding: 0;
 
   .header-section {
-    background-color: inherit;
-    padding: 24px;
-    margin-bottom: 24px;
-    border-radius: 1px solid inherit;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   
+  background-color: inherit;
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 1px solid inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    .header-content {
+  .header-content {
+    display: flex;
+    align-items: center; /* ✅ Change from flex-start to center for vertical alignment */
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px; 
+  }
+
+  .title-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .hospital-name {
+      margin: 0 0 8px 0;
+      font-weight: 500;
+    }
+
+    .status-badge {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
+      align-items: center;
+      gap: 8px;
 
-    .title-section {
-      .hospital-name {
-        margin: 0 0 8px 0;
-        font-weight: 500;
+      .last-updated {
+        font-size: 0.875rem;
+        color: inherit;
       }
-
-      .status-section {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        flex-wrap: wrap;
-
-        mat-chip-list {
-          display: inline-block;
-        }
-
-        .last-updated {
-          color: inherit;
-        }
-      }
-    }
-
-    .back-button {
-      margin-top: 8px;
     }
   }
+
+  .back-button {
+    margin-top: 8px;
+  }
+}
+
 
   .main-content {
     padding: 0 16px 24px;

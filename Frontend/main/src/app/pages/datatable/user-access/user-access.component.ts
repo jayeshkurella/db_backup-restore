@@ -21,7 +21,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 import { PageEvent } from '@angular/material/paginator';
-
+import { TablerIconsModule } from 'angular-tabler-icons';
 interface Person {
   id: string;
   first_name: string;
@@ -113,6 +113,7 @@ interface UserResponse {
     MatOptionModule,
     MatSelectModule,
     SafeTitlecasePipe,
+    TablerIconsModule
   ],
   templateUrl: './user-access.component.html',
   styleUrl: './user-access.component.scss',

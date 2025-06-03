@@ -14,6 +14,8 @@ import { SearchbyIDComponent } from './searchby-id/searchby-id.component';
 import { DetaildataComponent } from './detaildata/detaildata.component';
 import { UnidentifiedPersonDialogComponent } from './unidentified-person/unidentified-person-dialog/unidentified-person-dialog.component';
 import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies/unidentified-bodies-dialog/unidentified-bodies-dialog.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { PolicyComponent } from './policy/policy.component';
 
 export const datatablesRoutes: Routes = [
   {
@@ -66,7 +68,7 @@ export const datatablesRoutes: Routes = [
       },
       {
         path: 'view-missing-person',
-        component: DetaildataComponent        
+        component: DetaildataComponent
       },
       {
         path: 'unidentified-person/person-view/:id',
@@ -83,8 +85,15 @@ export const datatablesRoutes: Routes = [
       {
         path: 'view-unidentified-body',
         component: UnidentifiedBodiesDialogComponent,             // This route is for viewing missing person details with url masked
-      }
-
+      },
+       {
+        path: 'privacy-policy',
+        component: PrivacypolicyComponent,
+      },
+      {
+        path: 'privacy-policy2',
+        component: PolicyComponent,
+      },
 
     ],
   },

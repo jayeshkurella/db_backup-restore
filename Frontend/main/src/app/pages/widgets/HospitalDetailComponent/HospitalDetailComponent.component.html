@@ -7,9 +7,7 @@
         <div class="status-badge">
           <span class="last-updated">Last updated: {{ hospital.updated_at | date: 'mediumDate' }}</span>
         </div>
-
       </div>
-
     </div>
   </div>
 
@@ -154,7 +152,7 @@
         </button>
       </mat-card-actions> -->
     </mat-card>
-    <button mat-stroked-button color="primary" (click)="goBack()" class="back-button">
+    <button mat-flat-button color="primary" (click)="goBack()" class="back-button">
       <mat-icon>arrow_back</mat-icon> Back to List
     </button>
   </div>

@@ -9,14 +9,21 @@ export const routes: Routes = [
     path: '',
     component: FullComponent,
     children: [
-       {
-      path: '',
-      component: AppDashboard1Component, 
-    },{
-      path: 'home',
-      component: AppDashboard1Component, // Reuse the same component for /home
-    },
-      { 
+      {
+        path: '',
+        component: AppDashboard1Component,
+      }, {
+        path: 'home',
+        component: AppDashboard1Component,
+        data: {
+          title: 'Dashboard',
+          urls: [
+            { title: 'Home', url: '/' },
+            { title: 'Dashboard', url: '/home' }
+          ]
+        }
+      },
+      {
         path: 'starter',
         loadChildren: () =>
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
@@ -75,10 +82,14 @@ export const routes: Routes = [
             (m) => m.UiComponentsRoutes
           ),
       },
-      { path: 'person/:id',
-         component: PersonDetailsComponent },
-         { path: 'person-details',
-         component: PersonDetailsComponent },
+      {
+        path: 'person/:id',
+        component: PersonDetailsComponent
+      },
+      {
+        path: 'person-details',
+        component: PersonDetailsComponent
+      },
 
     ],
   },

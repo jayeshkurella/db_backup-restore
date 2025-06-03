@@ -53,18 +53,20 @@ mat-card.cardWithShadow {
 .nav-tabs .nav-link {
   background-color: transparent;
   border: none;
-  color: inherit; 
+  color: inherit;
+  font-weight: bold;
 }
 
 /* Active tab styling */
 .nav-tabs .nav-link.active {
   background-color: inherit;
-  color: inherit; 
+  color: inherit;
   position: relative;
   border: none;
+  font-weight: bold;
 }
 
-/* Optional: Add bottom border for active tab */
+/* Bottom border (underline) in orange for active tab */
 .nav-tabs .nav-link.active::after {
   content: '';
   position: absolute;
@@ -72,7 +74,7 @@ mat-card.cardWithShadow {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: currentColor; /* Use current text color */
+  background-color: orange; 
 }
 
 
