@@ -2,6 +2,19 @@ mat-card.cardWithShadow {
   border: none !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
+mat-card.cardWithShadownone {
+  border: none !important;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.main-headingg {
+  font-size: 20px;
+  font-weight:600;
+  color: inherit; 
+  text-transform: capitalize;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+  // margin-left: 20px;
+}
 
 .buttons{
   gap: 3;
@@ -36,31 +49,19 @@ mat-card.cardWithShadow {
   gap: 4px;
 }
 
-.title {
-  font-weight: bold;
-  font-size: 20px;
-}
 
-.subtitle{
-  font-size: 16px;
-  font-weight: 400;
-}
 
 .right-buttons {
   display: flex;
   gap: 10px;
 }
 
-
-.title {
-  font-size: 20px;
-  font-weight: 400;
+.card-height{
+  padding: 10px;
+  min-height:150px !important;
 }
 
-.subtext {
-  font-size: 16px;
-  
-}
+
 /* Ensure full width */
 .cardWithShadow {
   width: 100%;

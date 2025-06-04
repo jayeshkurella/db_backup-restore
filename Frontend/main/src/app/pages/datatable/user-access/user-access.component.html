@@ -6,162 +6,162 @@
       </ol>
     </nav>
 
-    <div class="row filter-row g-3 mb-3">
-      <div class="col-12 col-lg-6 col-md-6">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input
-            matInput
-            [(ngModel)]="filters.first_name"
-            placeholder="Enter First Name"
-          />
-        </mat-form-field>
+    <form [formGroup]="filterForm">
+      <div class="row filter-row g-3 mb-1">
+        <div class="col-12 col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="first_name"
+              placeholder="Enter First Name"
+            />
+            <mat-error
+              *ngIf="filterForm.get('first_name')?.hasError('invalidName')"
+            >
+              First name should start with capital letter and contain only
+              letters
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="last_name"
+              placeholder="Enter Last Name"
+            />
+            <mat-error
+              *ngIf="filterForm.get('last_name')?.hasError('invalidName')"
+            >
+              Last name should start with capital letter and contain only
+              letters
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="col-12 col-lg-6 col-md-6">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input
-            matInput
-            [(ngModel)]="filters.last_name"
-            placeholder="Enter Last Name"
-          />
-        </mat-form-field>
-      </div>
-    </div>
+      <div class="row filter-row g-3 mb-1">
+        <div class="col-12 col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="email_id"
+              placeholder="Enter Email ID"
+            />
+            <mat-error
+              *ngIf="filterForm.get('email_id')?.hasError('invalidEmail')"
+            >
+              Please enter a valid email address
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-    <div class="row filter-row g-3 mb-3">
-      <div class="col-12 col-lg-6 col-md-6">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input
-            matInput
-            [(ngModel)]="filters.email_id"
-            placeholder="Enter Email ID"
-          />
-        </mat-form-field>
+        <div class="col-12 col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="phone_no"
+              placeholder="Enter Phone Number"
+              maxlength="10"
+            />
+            <mat-error
+              *ngIf="filterForm.get('phone_no')?.hasError('invalidPhone')"
+            >
+              Phone number must be 10 digits
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-select
+              formControlName="user_type"
+              placeholder="Select User Type"
+            >
+              <mat-option value="">Select Types</mat-option>
+              <mat-option *ngFor="let type of userTypes" [value]="type">
+                {{ type | safeTitlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="col-12 col-lg-3 col-md-3">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input
-            matInput
-            [(ngModel)]="filters.phone_no"
-            placeholder="Enter Phone Number"
-          />
-        </mat-form-field>
-      </div>
-      <div class="col-12 col-lg-3 col-md-3">
-        <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <mat-select
-            [(ngModel)]="filters.user_type"
-            placeholder="Select User Type"
+      <div class="row mt-3">
+        <div class="d-flex justify-content-end align-items-end gap-3">
+          <!-- Reset Button -->
+          <button
+            mat-stroked-button
+            color="warn"
+            class="reset-btn"
+            (click)="resetFilters()"
+            [disabled]="!hasActiveFilters()"
           >
-            <mat-option value="">Select Types</mat-option>
-            <mat-option *ngFor="let type of userTypes" [value]="type">
-              {{ type | safeTitlecase }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
+            <mat-icon class="me-1">refresh</mat-icon>&nbsp;&nbsp; Reset
+          </button>
 
-    <!-- <div class="row justify-content-center mt-3">
-      <div class="col-auto d-flex align-items-center">
-        <button
-          mat-flat-button
-          color="primary"
-          class="search-btn w-100"
-          (click)="filterDataByFilters()"
-          [disabled]="!hasActiveFilters() || isFilterLoading"
-        >
-          <mat-icon class="me-1">search</mat-icon>
-          <span *ngIf="!isFilterLoading">Search</span>
-          <span *ngIf="isFilterLoading">Searching...</span>
-        </button>
+          <!-- Search Button -->
+          <button
+            mat-flat-button
+            color="primary"
+            class="search-btn"
+            (click)="filterDataByFilters()"
+            [disabled]="!isSearchEnabled() || isFilterLoading"
+          >
+            <mat-icon class="me-1">search</mat-icon>
+            <span *ngIf="!isFilterLoading">Search</span>
+            <span *ngIf="isFilterLoading">Searching...</span>
+          </button>
+        </div>
       </div>
-      <div class="col-auto d-flex align-items-center">
-        <button
-          mat-flat-button
-          color="warn"
-          class="reset-btn w-100"
-          (click)="resetFilters()"
-          [disabled]="!hasActiveFilters()"
-        >
-          <mat-icon class="me-1">refresh</mat-icon>
-          Reset
-        </button>
-      </div>
-    </div> -->
-<div class="row mt-3">
-  <div class="d-flex justify-content-end align-items-end gap-3">
-    <!-- Reset Button -->
-    <button
-      mat-stroked-button
-      color="warn"
-      class="reset-btn"
-      (click)="resetFilters()"
-      [disabled]="!hasActiveFilters()"
-    >
-      <mat-icon class="me-1">refresh</mat-icon>&nbsp;&nbsp; Reset
-    </button>
-
-    <!-- Search Button -->
-    <button
-      mat-flat-button
-      color="primary"
-      class="search-btn"
-      (click)="filterDataByFilters()"
-      [disabled]="!isSearchEnabled() || isFilterLoading"
-    >
-      <mat-icon class="me-1">search</mat-icon>
-      <span *ngIf="!isFilterLoading">Search</span>
-      <span *ngIf="isFilterLoading">Searching...</span>
-    </button>
+    </form>
   </div>
-</div>
 
-  </div>
   <mat-card-content>
-    <mat-tab-group [(selectedIndex)]="selectedTabIndex"     class="custom-tabs m-1 mb-1"
-    mat-stretch-tabs="false"
-    animationDuration="0ms">
+    <mat-tab-group
+      [(selectedIndex)]="selectedTabIndex"
+      class="custom-tabs m-1 mb-1"
+      mat-stretch-tabs="false"
+      animationDuration="0ms"
+    >
       <!-- <mat-tab label="Pending "></mat-tab>
       <mat-tab label="Rejected"></mat-tab>
       <mat-tab label="Approved "></mat-tab> -->
       <mat-tab>
-  <ng-template mat-tab-label>
-    <div class="d-flex align-items-center">
-      <mat-icon class="d-flex align-items-center">
-        <i-tabler name="clock" class="icon-20 m-r-8 d-flex"></i-tabler>
-      </mat-icon>
-      Pending Cases
-    </div>
-  </ng-template>
-  <!-- Tab content for Pending Cases goes here -->
-</mat-tab>
+        <ng-template mat-tab-label>
+          <div class="d-flex align-items-center">
+            <mat-icon class="d-flex align-items-center">
+              <i-tabler name="clock" class="icon-20 m-r-8 d-flex"></i-tabler>
+            </mat-icon>
+            Pending Cases
+          </div>
+        </ng-template>
+        <!-- Tab content for Pending Cases goes here -->
+      </mat-tab>
 
-<mat-tab>
-  <ng-template mat-tab-label>
-    <div class="d-flex align-items-center">
-      <mat-icon class="d-flex align-items-center">
-        <i-tabler name="x" class="icon-20 m-r-8 d-flex"></i-tabler>
-      </mat-icon>
-      Rejected Cases
-    </div>
-  </ng-template>
-  <!-- Tab content for Rejected Cases goes here -->
-</mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="d-flex align-items-center">
+            <mat-icon class="d-flex align-items-center">
+              <i-tabler name="x" class="icon-20 m-r-8 d-flex"></i-tabler>
+            </mat-icon>
+            Rejected Cases
+          </div>
+        </ng-template>
+        <!-- Tab content for Rejected Cases goes here -->
+      </mat-tab>
 
-<mat-tab>
-  <ng-template mat-tab-label>
-    <div class="d-flex align-items-center">
-      <mat-icon class="d-flex align-items-center">
-        <i-tabler name="check" class="icon-20 m-r-8 d-flex"></i-tabler>
-      </mat-icon>
-      Approved Cases
-    </div>
-  </ng-template>
-  <!-- Tab content for Approved Cases goes here -->
-</mat-tab>
-
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="d-flex align-items-center">
+            <mat-icon class="d-flex align-items-center">
+              <i-tabler name="check" class="icon-20 m-r-8 d-flex"></i-tabler>
+            </mat-icon>
+            Approved Cases
+          </div>
+        </ng-template>
+        <!-- Tab content for Approved Cases goes here -->
+      </mat-tab>
     </mat-tab-group>
     <!-- Select All + Action Buttons -->
     <div class="select-all-container">
@@ -212,7 +212,7 @@
               [disabled]="!hasSelectedItems()"
               matTooltip="Approve the selected users"
             >
-              Approve User Selected 
+              Approve User Selected
             </button>
             <button
               mat-stroked-button
@@ -220,7 +220,7 @@
               [disabled]="!hasSelectedItems()"
               matTooltip="Reject the selected users"
             >
-              Reject User Selected 
+              Reject User Selected
             </button>
           </ng-container>
 
@@ -230,9 +230,9 @@
               color="primary"
               (click)="approveSelected()"
               [disabled]="!hasSelectedItems()"
-               matTooltip="Approve the selected users"
+              matTooltip="Approve the selected users"
             >
-              Approve User Selected 
+              Approve User Selected
             </button>
           </ng-container>
 
@@ -241,7 +241,7 @@
               mat-stroked-button
               (click)="setPendingSelected()"
               [disabled]="!hasSelectedItems()"
-               matTooltip="Mark selected users as pending"
+              matTooltip="Mark selected users as pending"
             >
               Pending User Selected
             </button>
@@ -251,7 +251,7 @@
               [disabled]="!hasSelectedItems()"
               matTooltip="Reject the selected users"
             >
-              Reject User Selected 
+              Reject User Selected
             </button>
           </ng-container>
         </div>

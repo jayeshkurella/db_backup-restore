@@ -19,6 +19,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AppSettings } from 'src/app/config';
 import { LoginApiService } from 'src/app/pages/authentication/side-login/login-api.service';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { SafeTitlecasePipe } from "../../../../components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe";
 
 interface notifications {
   id: number;
@@ -57,7 +58,8 @@ interface quicklinks {
     NgScrollbarModule,
     TablerIconsModule,
     MaterialModule,
-  ],
+    SafeTitlecasePipe
+],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 

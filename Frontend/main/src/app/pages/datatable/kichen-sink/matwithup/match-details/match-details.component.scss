@@ -1,9 +1,30 @@
+.compact-view {
+  max-height: 80vh;
+  overflow-y: auto;
+}
 mat-card.cardWithShadow {
   border: none !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
+.compact-view .mat-expansion-panel {
+  margin-bottom: 8px;
+}
 
+.compact-view .mat-list-item {
+  height: auto !important;
+  padding: 4px 0;
+}
+
+.compact-view mat-card {
+  padding: 12px;
+}
+
+.back-btn {
+  margin-right: 25px; /* This will push the button to the right */
+}
+
+/* Remove the .s1 padding if you want the title flush left */
 .s1 {
   padding-left: 8px;
 }
@@ -17,6 +38,7 @@ mat-card.cardWithShadow {
   font-size: 16px;
   font-weight: bold;
 text-transform: capitalize;
+
 }
 
 .case-detail-value {

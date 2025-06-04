@@ -45,16 +45,15 @@
     <!-- User Profile Block -->
     <div class="p-x-32 p-y-16" *ngIf="user">
       <h6 class="f-s-16 f-w-600 m-0">User Profile</h6>
-
-      <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
+<div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
         <img [src]="user?.profile_image_upload || 'assets/images/default-avatar.png'" (error)="onImageError($event)"
           class="rounded-circle" width="80" height="80" alt="User" alt="User" />
         <div class="m-l-16">
           <h6 class="f-s-14 f-w-600 m-0">
-            {{ user.first_name | titlecase }} {{ user.last_name | titlecase }}
+            {{ user.first_name | safeTitlecase}} {{ user.last_name | safeTitlecase}}
           </h6>
           <span class="f-s-14 d-block m-b-4">
-            {{ user.user_type | titlecase }}
+            {{ user.user_type | safeTitlecase }}
           </span>
           <span class="d-flex align-items-center">
             <i-tabler name="mail" class="icon-15 m-r-4 mb-2"></i-tabler>

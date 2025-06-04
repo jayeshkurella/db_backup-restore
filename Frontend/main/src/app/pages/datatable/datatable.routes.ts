@@ -16,6 +16,7 @@ import { UnidentifiedPersonDialogComponent } from './unidentified-person/unident
 import { UnidentifiedBodiesDialogComponent } from './unidentified-bodies/unidentified-bodies-dialog/unidentified-bodies-dialog.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { PolicyComponent } from './policy/policy.component';
+import { MatchDetailsComponent } from './kichen-sink/matwithup/match-details/match-details.component';
 
 export const datatablesRoutes: Routes = [
   {
@@ -86,7 +87,7 @@ export const datatablesRoutes: Routes = [
         path: 'view-unidentified-body',
         component: UnidentifiedBodiesDialogComponent,             // This route is for viewing missing person details with url masked
       },
-       {
+      {
         path: 'privacy-policy',
         component: PrivacypolicyComponent,
       },
@@ -94,6 +95,8 @@ export const datatablesRoutes: Routes = [
         path: 'privacy-policy2',
         component: PolicyComponent,
       },
+     { path: 'match-details/:id', component: MatchDetailsComponent }
+
 
     ],
   },

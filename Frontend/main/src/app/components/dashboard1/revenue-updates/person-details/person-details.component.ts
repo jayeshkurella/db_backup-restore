@@ -52,8 +52,8 @@ isLoading = false;
 
 
  goBack(): void {
-    sessionStorage.removeItem('viewData'); // ✅ Clear the stored ID
-    this.router.navigate(['/']); // Navigate to the main component or home route
+    sessionStorage.removeItem('viewData'); 
+    this.router.navigate(['/']); 
   }
 
  onImgError(event: Event, type?: string, gender?: string) {

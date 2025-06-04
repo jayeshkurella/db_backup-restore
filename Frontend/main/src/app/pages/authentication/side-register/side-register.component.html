@@ -1,178 +1,324 @@
 <div class="blank-layout-container justify-content-center">
   <div class="position-relative row w-100 h-100">
-    <div class="col-lg-7 col-xl-8 p-0 ">
-        <div class="img-full-cover"></div>
+    <div class="col-lg-7 col-xl-8 p-0">
+      <div class="img-full-cover"></div>
     </div>
     <div class="col-lg-5 col-xl-4 p-0">
-      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
+      <div
+        class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100"
+      >
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form">
-
-            <div class="or-border m-t-30 mb-5">Sign Up</div>
+            <div class="or-border mb-5">
+              <h5 class="mat-headline-5">Sign Up</h5>
+            </div>
 
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
               <!-- First Name & Last Name -->
-              <div class="row mb-3">
-                <div class="col-12 col-md-6 mb-3 mb-md-0">
-                  <div class="input-group">
-                    <span class="input-group-text bg-light border-0"><i class="bi bi-person"></i></span>
-                    <input type="text"  class="form-control border-0 border-bottom" formControlName="first_name"
-                      placeholder="First Name">
-                  </div>
-                  <small class="text-danger"
-                    *ngIf="registerForm.controls['first_name'].invalid && registerForm.controls['first_name'].touched">
-                    First letter must be capital & Only letters are allowed.
-                  </small>
+              <div class="row mb-1">
+                <div
+                  class="col-12 col-md-6"
+                  [ngClass]="{
+                    'mb-1': !(
+                      registerForm.controls['first_name'].touched &&
+                      registerForm.controls['first_name'].invalid
+                    ),
+                    'mb-5':
+                      registerForm.controls['first_name'].touched &&
+                      registerForm.controls['first_name'].invalid
+                  }"
+                >
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>First Name</mat-label>
+                    <input matInput type="text" formControlName="first_name" />
+                    <mat-icon matSuffix>person</mat-icon>
+                    <mat-error
+                      *ngIf="
+                        registerForm.controls['first_name'].touched &&
+                        registerForm.controls['first_name'].invalid
+                      "
+                    >
+                      First letter must be capital & Only letters are allowed.
+                    </mat-error>
+                  </mat-form-field>
                 </div>
-                <div class="col-12 col-md-6">
-                  <div class="input-group">
-                    <span class="input-group-text bg-light border-0"><i class="bi bi-person"></i></span>
-                    <input type="text" class="form-control border-0 border-bottom" formControlName="last_name"
-                      placeholder="Last Name">
-                  </div>
-                  <small class="text-danger"
-                    *ngIf="registerForm.controls['last_name'].invalid && registerForm.controls['last_name'].touched">
-                    First letter must be capital & Only letters are allowed.
-                  </small>
+
+                <div
+                  class="col-12 col-md-6"
+                  [ngClass]="{
+                    'mb-1': !(
+                      registerForm.controls['last_name'].touched &&
+                      registerForm.controls['last_name'].invalid
+                    ),
+                    'mb-5':
+                      registerForm.controls['last_name'].touched &&
+                      registerForm.controls['last_name'].invalid
+                  }"
+                >
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput type="text" formControlName="last_name" />
+                    <mat-icon matSuffix>person</mat-icon>
+                    <mat-error
+                      *ngIf="
+                        registerForm.controls['last_name'].invalid &&
+                        registerForm.controls['last_name'].touched
+                      "
+                    >
+                      First letter must be capital & Only letters are allowed.
+                    </mat-error>
+                  </mat-form-field>
                 </div>
               </div>
 
               <!-- Email -->
-              <div class="mb-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
-                  <input type="email" class="form-control border-0 border-bottom"
-                    [class.is-invalid]="registerForm.controls['email_id'].invalid && registerForm.controls['email_id'].touched"
-                    [class.is-valid]="registerForm.controls['email_id'].valid && registerForm.controls['email_id'].touched"
-                    formControlName="email_id" placeholder="Enter your email">
-                </div>
+              <div
+                [ngClass]="{
+                  'mb-1': !(
+                    registerForm.controls['email_id'].touched &&
+                    registerForm.controls['email_id'].invalid
+                  ),
+                  'mb-3':
+                    registerForm.controls['email_id'].touched &&
+                    registerForm.controls['email_id'].invalid
+                }"
+              >
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" formControlName="email_id" />
+                  <mat-icon matSuffix>email</mat-icon>
 
-                <!-- Validation Messages -->
-                <div *ngIf="registerForm.controls['email_id'].touched">
-                  <small class="text-danger" *ngIf="registerForm.controls['email_id'].errors?.['required']">
-                    Email is required
-                  </small>
-                  <small class="text-danger"
-                    *ngIf="registerForm.controls['email_id'].errors?.['email'] && !registerForm.controls['email_id'].errors?.['required']">
-                    Please enter a valid email address.
-                  </small>
-                  <small class="text-danger" *ngIf="registerForm.controls['email_id'].errors?.['pattern']">
-                    Email must contain &#64; and a valid domain
-                  </small>
-                  <small class="text-danger" *ngIf="registerForm.controls['email_id'].errors?.['forbiddenDomain']">
-                    This email domain is not allowed
-                  </small>
-                </div>
+                  <mat-error *ngIf="registerForm.controls['email_id'].touched">
+                    <span
+                      *ngIf="registerForm.controls['email_id'].errors?.['required']"
+                    >
+                      Email is required
+                    </span>
+                    <span
+                      *ngIf="registerForm.controls['email_id'].errors?.['email'] && !registerForm.controls['email_id'].errors?.['required']"
+                    >
+                      Please enter a valid email address.
+                    </span>
+                    <span
+                      *ngIf="registerForm.controls['email_id'].errors?.['pattern']"
+                    >
+                      Email must contain &#64; and a valid domain
+                    </span>
+                    <span
+                      *ngIf="registerForm.controls['email_id'].errors?.['forbiddenDomain']"
+                    >
+                      This email domain is not allowed
+                    </span>
+                  </mat-error>
+                </mat-form-field>
               </div>
 
               <!-- Phone Number -->
-              <div class="mb-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0"><i class="bi bi-telephone"></i></span>
-                  <select class="form-select border-0 border-bottom small-select " formControlName="country_code">
-                    <option value="+1">🇺🇸 +1</option>
-                    <option value="+91" selected>🇮🇳 +91</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+61">🇦🇺 +61</option>
-                    <option value="+81">🇯🇵 +81</option>
-                  </select>
-                  <input type="text" class="form-control border-0 border-bottom" formControlName="phone_no"
-                    placeholder="Phone Number">
+              
+              <div
+                [ngClass]="{
+                  'mb-1': !(
+                    registerForm.controls['phone_no'].touched &&
+                    registerForm.controls['phone_no'].invalid
+                  ),
+                  'mb-5':
+                    registerForm.controls['phone_no'].touched &&
+                    registerForm.controls['phone_no'].invalid
+                }"
+              >
+                <div class="d-flex align-items-center phone-wrapper">
+                  <mat-form-field
+                    appearance="outline"
+                    class="country-code-field"
+                  >
+                
+                    <mat-select formControlName="country_code" disableRipple>
+                      <mat-option value="+1">🇺🇸 +1</mat-option>
+                      <mat-option value="+91">🇮🇳 +91</mat-option>
+                      <mat-option value="+44">🇬🇧 +44</mat-option>
+                      <mat-option value="+61">🇦🇺 +61</mat-option>
+                      <mat-option value="+81">🇯🇵 +81</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    class="flex-grow-1 phone-number-field"
+                  >
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <input
+                      matInput
+                      type="text"
+                      formControlName="phone_no"
+                      placeholder="Phone number"
+                    />
+                    <mat-error
+                      *ngIf="
+                        registerForm.controls['phone_no'].touched &&
+                        registerForm.controls['phone_no'].invalid
+                      "
+                    >
+                      Enter a valid 10-digit phone number.
+                    </mat-error>
+                  </mat-form-field>
                 </div>
-                <small class="text-danger"
-                  *ngIf="registerForm.controls['phone_no'].invalid && registerForm.controls['phone_no'].touched">
-                  Enter a valid 10-digit phone number.
-                </small>
               </div>
 
               <!-- User Type & Sub Type -->
-              <div class="mb-3 d-flex align-items-center gap-2">
-                <div class="input-group" [class.w-50]="registerForm.value.user_type !== 'reporting_person'"
-                  [class.w-100]="registerForm.value.user_type === 'reporting_person'">
-                  <span class="input-group-text bg-light border-0"><i class="bi bi-people"></i></span>
-                  <select class="form-select border-0 border-bottom" formControlName="user_type"
-                    (change)="onUserTypeChange()">
-                    <option value="" disabled>User Type</option>
-                    <option *ngFor="let type of userTypes" [value]="type.value">{{ type.label }}</option>
-                  </select>
-                </div>
+              <div class="mb-1 d-flex align-items-center gap-2">
+                <mat-form-field
+                  appearance="outline"
+                  [class.w-50]="
+                    registerForm.value.user_type !== 'reporting_person'
+                  "
+                  [class.w-100]="
+                    registerForm.value.user_type === 'reporting_person'
+                  "
+                >
+                  <mat-label>User Type</mat-label>
+                  <mat-select
+                    formControlName="user_type"
+                    (selectionChange)="onUserTypeChange()"
+                  >
+                    <mat-option
+                      *ngFor="let type of userTypes"
+                      [value]="type.value"
+                      >{{ type.label }}</mat-option
+                    >
+                  </mat-select>
+                  <mat-icon matSuffix>people</mat-icon>
+                </mat-form-field>
 
-                <div class="input-group w-50" *ngIf="subUserTypes[registerForm.value.user_type]">
-                  <span class="input-group-text bg-light border-0"><i class="bi bi-person-badge"></i></span>
-                  <select class="form-select border-0 border-bottom" formControlName="sub_user_type">
-                    <option value="" disabled>Sub Type</option>
-                    <option *ngFor="let subtype of subUserTypes[registerForm.value.user_type]" [value]="subtype.value">
+                <mat-form-field
+                  appearance="outline"
+                  class="w-50"
+                  *ngIf="subUserTypes[registerForm.value.user_type]"
+                >
+                  <mat-label>Sub Type</mat-label>
+                  <mat-select formControlName="sub_user_type">
+                    <mat-option
+                      *ngFor="
+                        let subtype of subUserTypes[
+                          registerForm.value.user_type
+                        ]
+                      "
+                      [value]="subtype.value"
+                    >
                       {{ subtype.label }}
-                    </option>
-                  </select>
-                </div>
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix>person_badge</mat-icon>
+                </mat-form-field>
               </div>
 
               <!-- Password Field -->
-              <div class="mb-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0">
-                    <i class="bi bi-lock"></i>
-                  </span>
-                  <input [type]="hidePassword ? 'password' : 'text'" class="form-control border-0 border-bottom"
-                    formControlName="password" placeholder="Enter password" />
-                  <button type="button" class="bg-transparent border-0 text-dark"
-                    (click)="hidePassword = !hidePassword">
-                    <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-                  </button>
-                </div>
-                <small class="text-danger"
-                  *ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].touched">
-                  Password must be 6+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special character.
-                </small>
+              <div
+                [ngClass]="{
+                  'mb-1': !(
+                    registerForm.controls['password'].touched &&
+                    registerForm.controls['password'].invalid
+                  ),
+                  'mb-5':
+                    registerForm.controls['password'].touched &&
+                    registerForm.controls['password'].invalid
+                }"
+              >
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Password</mat-label>
+                  <input
+                    matInput
+                    [type]="hidePassword ? 'password' : 'text'"
+                    formControlName="password"
+                  />
+                  <mat-icon
+                    matSuffix
+                    (click)="hidePassword = !hidePassword"
+                    class="cursor-pointer"
+                  >
+                    {{ hidePassword ? "visibility_off" : "visibility" }}
+                  </mat-icon>
+                  <mat-error
+                    *ngIf="
+                      registerForm.controls['password'].touched &&
+                      registerForm.controls['password'].invalid
+                    "
+                  >
+                    Password must be 6+ chars, 1 uppercase, 1 lowercase, 1
+                    number, 1 special character.
+                  </mat-error>
+                </mat-form-field>
               </div>
 
               <!-- Confirm Password Field -->
-              <div class="mb-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0">
-                    <i class="bi bi-lock"></i>
-                  </span>
-                  <input [type]="hideConfirmPassword ? 'password' : 'text'" class="form-control border-0 border-bottom"
-                    formControlName="password2" placeholder="Confirm password" />
-                  <button type="button" class="bg-transparent border-0 text-dark"
-                    (click)="hideConfirmPassword = !hideConfirmPassword">
-                    <i class="bi" [ngClass]="hideConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-                  </button>
-                </div>
-                <small class="text-danger" *ngIf="registerForm.errors?.['passwordMismatch']">
-                  Passwords do not match.
-                </small>
+              <div
+                [ngClass]="{
+    'mb-1': !registerForm.errors?.['passwordMismatch'],
+    'mb-5': registerForm.errors?.['passwordMismatch']
+  }"
+              >
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Confirm Password</mat-label>
+                  <input
+                    matInput
+                    [type]="hideConfirmPassword ? 'password' : 'text'"
+                    formControlName="password2"
+                  />
+                  <mat-icon
+                    matSuffix
+                    (click)="hideConfirmPassword = !hideConfirmPassword"
+                    class="cursor-pointer"
+                  >
+                    {{ hideConfirmPassword ? "visibility_off" : "visibility" }}
+                  </mat-icon>
+                  <mat-error *ngIf="registerForm.errors?.['passwordMismatch']">
+                    Passwords do not match.
+                  </mat-error>
+                </mat-form-field>
               </div>
 
-              <!-- Consent Checkbox -->
-              <!-- Simplified Consent Checkbox Bound to Form -->
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" formControlName="is_consent"
-                  [ngClass]="{ 'is-invalid': registerForm.controls['is_consent'].invalid && submitted }">
-                <label class="form-check-label">
+              <!-- <div
+                [ngClass]="{
+                  'mb-3': !(
+                    registerForm.controls['is_consent'].invalid && submitted
+                  ),
+                  'mb-5':
+                    registerForm.controls['is_consent'].invalid && submitted
+                }"
+              >
+                <mat-checkbox formControlName="is_consent">
                   I agree to the Privacy Policy.
-                </label>
-                <div class="text-danger" *ngIf="registerForm.controls['is_consent'].invalid && submitted">
+                </mat-checkbox>
+                <mat-error
+                  *ngIf="
+                    registerForm.controls['is_consent'].invalid && submitted
+                  "
+                >
                   You must agree to the privacy policy.
-                </div>
-              </div>
-
-
+                </mat-error>
+              </div> -->
 
               <!-- Submit Button -->
               <div class="d-grid">
-                <button type="submit" class="btn text-white fw-bold py-2"
-                  mat-flat-button color="primary" class="w-100"[disabled]="registerForm.invalid">
-                  Register
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="registerForm.invalid"
+                  class="w-100"
+                >
+                  Sign Up
                 </button>
               </div>
             </form>
-            <span class="d-block f-w-500 d-block m-t-24">Already have an Account?
 
-              <a [routerLink]="['/authentication/login']" class="text-decoration-none text-primary f-w-500 f-s-14">
-                Sign In</a>
+            <span class="d-block f-w-500 d-block m-t-24"
+              >Already have an Account?
+              <a
+                [routerLink]="['/authentication/login']"
+                class="text-decoration-none text-primary f-w-500 f-s-14"
+              >
+                Sign In
+              </a>
             </span>
           </div>
         </div>

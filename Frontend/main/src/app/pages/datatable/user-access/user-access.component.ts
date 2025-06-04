@@ -12,7 +12,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { FormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ValidationErrors } from '@angular/forms';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { UserAccessServiceService } from './user-access-service.service';
@@ -22,6 +22,7 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { SafeTitlecasePipe } from 'src/app/components/dashboard1/revenue-updates/person-details/safe-titlecase.pipe';
 import { PageEvent } from '@angular/material/paginator';
 import { TablerIconsModule } from 'angular-tabler-icons';
+import { ReactiveFormsModule } from '@angular/forms';
 interface Person {
   id: string;
   first_name: string;
@@ -72,25 +73,6 @@ interface UserResponse {
   };
   counts: StatusCounts;
 }
-// interface PaginationLinks {
-//   first: string | null;
-//   previous: string | null;
-//   next: string | null;
-//   last: string | null;
-// }
-
-// interface PaginationMeta {
-//   current_page: number;
-//   page_size: number;
-//   total_pages: number;
-//   total_items: number;
-// }
-
-// interface PaginationData {
-//   links: PaginationLinks;
-//   meta: PaginationMeta;
-//   results: any[];
-// }
 
 @Component({
   selector: 'app-user-access',
@@ -113,7 +95,8 @@ interface UserResponse {
     MatOptionModule,
     MatSelectModule,
     SafeTitlecasePipe,
-    TablerIconsModule
+    TablerIconsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './user-access.component.html',
   styleUrl: './user-access.component.scss',
@@ -144,6 +127,8 @@ export class UserAccessComponent implements OnInit {
   selectAllApproved: boolean = false;
   isFilterLoading: boolean = false;
   filtersApplied: boolean = false;
+
+filterForm: FormGroup;
 
   pendingPagination = {
     first: null as string | null,
@@ -187,216 +172,42 @@ export class UserAccessComponent implements OnInit {
 
   constructor(
     private userAccessService: UserAccessServiceService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+    this.initFilterForm();
   }
+private initFilterForm(): void {
+  this.filterForm = this.fb.group({
+    first_name: ['', [this.validNameValidator]],
+    last_name: ['', [this.validNameValidator]],
+    email_id: ['', [this.validEmailValidator]],
+    phone_no: ['', [this.validPhoneValidator]],
+    user_type: ['']
+  });
+}
 
-  // loadData(): void {
-  //     this.isLoading = true;
-  //     this.resetSelectAllStates();
-  //     const cleanFilters = this.getCleanFilters();
+validNameValidator(control: FormControl) {
+  if (!control.value) return null; // Not required field
+  const isValid = /^[A-Z][a-zA-Z]*$/.test(control.value);
+  return isValid ? null : { invalidName: true };
+}
 
-  //     forkJoin({
-  //       pending: this.userAccessService.getPendingData(cleanFilters),
-  //       approved: this.userAccessService.getApprovedData(cleanFilters),
-  //       rejected: this.userAccessService.getRejectedData(cleanFilters),
-  //     }).subscribe({
-  //       next: ({ pending, approved, rejected }) => {
-  //         // Update allUsers list
-  //         const allUsers = [
-  //           ...pending.data.results,
-  //           ...approved.data.results,
-  //           ...rejected.data.results,
-  //         ];
+validEmailValidator(control: FormControl) {
+  if (!control.value) return null; // Not required field
+  const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return pattern.test(control.value) ? null : { invalidEmail: true };
+}
 
-  //         // Extract unique user types
-  //         this.userTypes = Array.from(
-  //           new Set(allUsers.map((user) => user.user_type).filter(Boolean))
-  //         );
+validPhoneValidator(control: FormControl) {
+  if (!control.value) return null; // Not required field
+  const isValid = /^\d{10}$/.test(control.value);
+  return isValid ? null : { invalidPhone: true };
+}
 
-  //         // Process Pending
-  //         this.pendingPersons = pending.data.results.map((person: any) => ({
-  //           ...person,
-  //           selected: false,
-  //           status: person.status || 'hold',
-  //         }));
-  //         this.pendingPagination = {
-  //           first: pending.data.links?.first,
-  //           previous: pending.data.links?.previous,
-  //           next: pending.data.links?.next,
-  //           last: pending.data.links?.last,
-
-  //         };
-
-  //         // Process Approved
-  //         this.approvedPersons = approved.data.results.map((person: any) => ({
-  //           ...person,
-  //           selected: false,
-  //           status: person.status || 'approved',
-  //         }));
-  //         this.approvedPagination = {
-  //           first: approved.data.links?.first,
-  //           previous: approved.data.links?.previous,
-  //           next: approved.data.links?.next,
-  //           last: approved.data.links?.last,
-
-  //         };
-  //         console.log("approvedPagination",this.approvedPagination)
-
-  //         // Process Rejected
-  //         this.rejectedPersons = rejected.data.results.map((person: any) => ({
-  //           ...person,
-  //           selected: false,
-  //           status: person.status || 'rejected',
-  //         }));
-  //         this.rejectedPagination = {
-  //           first: rejected.data.links?.first,
-  //           previous: rejected.data.links?.previous,
-  //           next: rejected.data.links?.next,
-  //           last: rejected.data.links?.last,
-
-  //         };
-
-  //         // Update counts if needed
-  //         this.pendingCount = pending.counts?.hold || 0;
-  //         this.approvedCount = pending.counts?.approved || 0;
-  //         this.rejectedCount = pending.counts?.rejected || 0;
-
-  //         this.isLoading = false;
-  //         this.filtersApplied = this.hasActiveFilters();
-  //       },
-  //       error: (error) => {
-  //         console.error('Error loading data:', error);
-  //         this.isLoading = false;
-  //       },
-  //     });
-  //   }
-
-  //   loadNextPage(): void {
-  //     const nextUrl = this.getCurrentPagination().next;
-  //     if (!nextUrl) return;
-  //     this.loadPageByUrl(nextUrl);
-  //   }
-
-  //   loadPreviousPage(): void {
-  //     const previousUrl = this.getCurrentPagination().previous;
-  //     if (!previousUrl) return;
-  //     this.loadPageByUrl(previousUrl);
-  //   }
-
-  //   loadFirstPage(): void {
-  //     const firstUrl = this.getCurrentPagination().first;
-  //     if (!firstUrl) return;
-  //     this.loadPageByUrl(firstUrl);
-  //   }
-
-  //   loadLastPage(): void {
-  //     const lastUrl = this.getCurrentPagination().last;
-  //     if (!lastUrl) return;
-  //     this.loadPageByUrl(lastUrl);
-  //   }
-
-  //   private loadPageByUrl(url: string): void {
-  //     this.isLoading = true;
-  //     this.userAccessService.getPaginatedData(url).subscribe({
-  //       next: (response) => {
-  //         const newPersons = response.results.map((person: any) => ({
-  //           ...person,
-  //           selected: false,
-  //           status: person.status || this.getStatusForTab(),
-  //         }));
-
-  //         this.updateCurrentData(newPersons, response);
-  //         this.isLoading = false;
-  //       },
-  //       error: (error) => {
-  //         console.error('Error loading page:', error);
-  //         this.isLoading = false;
-  //       },
-  //     });
-  //   }
-
-  //   private updateCurrentData(persons: any[], paginationData: any): void {
-  //     const pagination = {
-  //       first: paginationData.links?.first,
-  //       previous: paginationData.links?.previous,
-  //       next: paginationData.links?.next,
-  //       last: paginationData.links?.last,
-  //       count: paginationData.meta?.total_items,
-  //       currentPage: paginationData.meta?.current_page,
-  //       totalPages: paginationData.meta?.total_pages,
-  //       pageSize: paginationData.meta?.page_size,
-  //     };
-
-  //     switch (this.selectedTabIndex) {
-  //       case 0:
-  //         this.pendingPersons = persons;
-  //         this.pendingPagination = pagination;
-  //         break;
-  //       case 1:
-  //         this.rejectedPersons = persons;
-  //         this.rejectedPagination = pagination;
-  //         break;
-  //       case 2:
-  //         this.approvedPersons = persons;
-  //         this.approvedPagination = pagination;
-  //         break;
-  //     }
-  //   }
-
-  //   // Helper method to get status based on current tab
-  //   private getStatusForTab(): string {
-  //     switch (this.selectedTabIndex) {
-  //       case 0:
-  //         return 'hold';
-  //       case 1:
-  //         return 'rejected';
-  //       case 2:
-  //         return 'approved';
-  //       default:
-  //         return 'hold';
-  //     }
-  //   }
-
-  //   getCurrentPageNumber(): number {
-  //     return this.getCurrentPagination().currentPage || 1;
-  //   }
-
-  //   private getCurrentPagination(): any {
-  //     switch (this.selectedTabIndex) {
-  //       case 0:
-  //         return this.pendingPagination || {};
-  //       case 1:
-  //         return this.rejectedPagination || {};
-  //       case 2:
-  //         return this.approvedPagination || {};
-  //       default:
-  //         return {};
-  //     }
-  //   }
-
-  //   hasNextPage(): boolean {
-  //     return !!this.getCurrentPagination().next;
-  //   }
-
-  //   hasPreviousPage(): boolean {
-  //     return !!this.getCurrentPagination().previous;
-  //   }
-
-  //   getTotalCount(): number {
-  //     return this.getCurrentPagination().count || 0;
-  //   }
-
-  //   getTotalPages(): number {
-  //     return this.getCurrentPagination().totalPages || 1;
-  //   }
-
-  //   getPageSize(): number {
-  //     return this.getCurrentPagination().pageSize || 10;
-  //   }
   loadData(): void {
     this.isLoading = true;
     this.resetSelectAllStates();
@@ -883,31 +694,65 @@ export class UserAccessComponent implements OnInit {
     this.selectAllApproved = false;
   }
 
-  hasActiveFilters(): boolean {
-    return Object.values(this.filters).some((value) => !!value);
-  }
+resetFilters(): void {
+  this.filterForm.reset({
+    first_name: '',
+    last_name: '',
+    email_id: '',
+    phone_no: '',
+    user_type: '',
+  });
+  
+  this.filters = {
+    first_name: '',
+    last_name: '',
+    email_id: '',
+    phone_no: '',
+    user_type: '',
+  };
+  
+  this.resetPagination();
+  
+  this.filtersApplied = false;
+  this.loadData();
+  this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
+}
+private resetPagination(): void {
+  this.pendingPagination.currentPage = 1;
+  this.approvedPagination.currentPage = 1;
+  this.rejectedPagination.currentPage = 1;
+}
+hasActiveFilters(): boolean {
+  const formValues = this.filterForm.value;
+  return !!(
+    formValues.first_name ||
+    formValues.last_name ||
+    formValues.email_id ||
+    formValues.phone_no ||
+    formValues.user_type
+  );
+}
 
-  resetFilters(): void {
-    this.filters = {
-      first_name: '',
-      last_name: '',
-      email_id: '',
-      phone_no: '',
-      user_type: '',
-    };
-    this.filtersApplied = false; // Add this line
-    this.loadData();
-    this.snackBar.open('Filters cleared', 'Close', { duration: 1000 });
-  }
+filterDataByFilters(): void {
+  if (this.filterForm.invalid) return;
 
-  filterDataByFilters(): void {
-    this.loadData();
-  }
+  this.filters = {
+    first_name: this.filterForm.value.first_name || '',
+    last_name: this.filterForm.value.last_name || '',
+    email_id: this.filterForm.value.email_id || '',
+    phone_no: this.filterForm.value.phone_no || '',
+    user_type: this.filterForm.value.user_type || '',
+  };
+  
+  this.resetPagination();
+  
+  this.loadData();
+}
 
-  isSearchEnabled(): boolean {
-    return this.hasActiveFilters();
-  }
 
+isSearchEnabled(): boolean {
+  return this.filterForm.valid && this.hasActiveFilters();
+}
   private getCleanFilters(): any {
     const cleanFilters: any = {};
     Object.keys(this.filters).forEach((key) => {

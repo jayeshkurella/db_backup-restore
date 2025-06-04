@@ -4,6 +4,7 @@ import {
   Optional,
   ViewChild,
   AfterViewInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {
   MatTableDataSource,
@@ -17,7 +18,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogModule,
 } from '@angular/material/dialog';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AppAddKichenSinkComponent } from './add/add.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,9 +34,11 @@ import * as L from 'leaflet';
 import { environment } from 'src/envirnment/envirnment';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { MissingPersonApiService } from './missing-person-api.service';
 import { STATES } from 'src/app/constants/states';
+import { ConfirmationDialogComponent } from './matwithup/confirmation-dialog/confirmation-dialog.component';
+import { MatchDataStoreService } from './matwithup/match-data-store.service';
 // import { ConsoleReporter } from 'jasmine';
 
 export interface Employee {
@@ -78,7 +81,8 @@ export interface Person {
 export class AppKichenSinkComponent {
 
   today: Date = new Date();
-
+ uuid: string = '';
+  match_id: string = '';
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -147,7 +151,11 @@ export class AppKichenSinkComponent {
     public dialog: MatDialog,
     public datePipe: DatePipe,
     private missingPersonService: MissingPersonApiService,
-    private router: Router
+    private router: Router,
+     private snackBar: MatSnackBar,
+     private cdr: ChangeDetectorRef,
+     private route: ActivatedRoute,
+    private matchDataStore: MatchDataStoreService,
   ) {
     // Load saved state from sessionStorage if available
     const savedState = sessionStorage.getItem('missingPersonsSearchState');
@@ -238,6 +246,7 @@ export class AppKichenSinkComponent {
     this.filters.state = 'Maharashtra';
     this.onStateChange();
     this.applyFilters();
+    
   }
   // getStates() {
   //   this.missingPersonService.getStates().subscribe(states => {
@@ -491,51 +500,7 @@ export class AppKichenSinkComponent {
   }
 
 
-  // openDialog(obj: any): void {
-  //   const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
-  //     width: '80vw', // 80% of the viewport width
-  //     maxWidth: '900px', // Limit max width
-  //     data: obj,
-  //     panelClass: 'custom-dialog-container'
-  //   });
-
-  //   // Ensure `selectedPerson` is set before initializing the map
-  //   this.selectedPerson = obj;
-
-  //   // Delay to allow the dialog to render before initializing the map
-  //   setTimeout(() => {
-  //     this.initMap();
-  //   }, 500);
-
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result?.event === 'Update') {
-  //       this.updateRowData(result.data);
-  //     }
-  //   });
-  // }
-
-  // tslint:disable-next-line - Disables all
-  // updateRowData(row_obj: Employee): boolean | any {
-  //   this.dataSource.data = this.dataSource.data.filter((value: any) => {
-  //     if (value.id === row_obj.id) {
-  //       value.Name = row_obj.Name;
-  //       value.Position = row_obj.Position;
-  //       value.Email = row_obj.Email;
-  //       value.Mobile = row_obj.Mobile;
-  //       value.DateOfJoining = row_obj.DateOfJoining;
-  //       value.imagePath = row_obj.imagePath;
-  //     }
-  //     return true;
-  //   });
-  // }
-
-  // tslint:disable-next-line - Disables all
-  // deleteRowData(row_obj: Employee): boolean | any {
-  //   this.dataSource.data = this.dataSource.data.filter((value: any) => {
-  //     return value.id !== row_obj.id;
-  //   });
-  // }
-
+  
   removePreviousMarker(): void {
     if (this.marker) {
       this.map?.removeLayer(this.marker);
@@ -606,7 +571,7 @@ export class AppKichenSinkComponent {
       next: response => {
         const resultData = response.body;
         console.log('Matched with UP:', resultData);
-
+        this.matchDataStore.set(resultData); 
         this.router.navigate(['/search/match-up-result'], {
           state: { data: resultData }
         });
@@ -647,6 +612,43 @@ export class AppKichenSinkComponent {
     sessionStorage.setItem('viewData', JSON.stringify({ id: person.id }));
     this.router.navigate(['/search/view-missing-person']);
   }
+
+
+  unmatchPerson(uuid: string,) {
+    console.log("uid,",uuid)
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '500px',
+        data: {
+          title: 'Unconfirm Match',
+          message: 'Are you sure you want to unconfirm this match?',
+          confirmText: 'Unconfirm',
+          cancelText: 'Cancel',
+          showNote: true,
+          noteLabel: 'Reason for unconfirming',
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result && result.confirmed) {
+          const unconfirmReason = result.note || '';
+          this.missingPersonService.unconfirmMatchWithUP(
+            uuid,
+            unconfirmReason
+          ).subscribe({
+            next: (response) => {
+              this.applyFilters();
+              this.onMatchWithUP(this.uuid)
+              this.snackBar.open('Match unconfirmed successfully!', 'Close', { duration: 1000 });
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              console.error('Error unconfirming match:', err);
+              this.snackBar.open('Error unconfirming match', 'Close', { duration: 1000 });
+            }
+          });
+        }
+      });
+    }
 }
 
 

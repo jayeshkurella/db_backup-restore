@@ -183,7 +183,7 @@ export class MissingPersonApiService {
     );
   }
 
-  unconfirmMatchWithUP(uuid: string, matchId: string, unconfirmReason: string): Observable<any> {
+  unconfirmMatchWithUP(uuid: string,unconfirmReason: string): Observable<any> {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       console.error('No auth token found in localStorage!');
@@ -193,8 +193,7 @@ export class MissingPersonApiService {
     const headers = new HttpHeaders().set('Authorization', `Token ${authToken}`);
 
     const body = {
-      match_id: matchId,
-      new_status: 'matched',  // Status when match is unconfirmed
+      new_status: 'matched',  
       unconfirm_reason: unconfirmReason
     };
 

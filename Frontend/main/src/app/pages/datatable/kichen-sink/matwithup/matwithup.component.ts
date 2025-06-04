@@ -15,6 +15,9 @@ import { UnrejectDialogComponent } from './unreject-dialog/unreject-dialog.compo
 import { environment } from 'src/envirnment/envirnment';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { MatchDataStoreService } from './match-data-store.service';
 
 @Component({
   selector: 'app-matwithup',
@@ -33,12 +36,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
   styleUrl: './matwithup.component.scss'
 })
 export class MatwithupComponent implements OnInit {
-  viewDetails(_t185: any) {
-    throw new Error('Method not implemented.');
-  }
-  confirmMatch(_t185: any) {
-    throw new Error('Method not implemented.');
-  }
+
+
+
   matchData: any;
   uuid: string = '';
   match_id: string = '';
@@ -62,14 +62,19 @@ export class MatwithupComponent implements OnInit {
     'location',
     'actions',
   ];
+  rejectedDisplayedColumns = ['score', 'full_name', 'age_range', 'gender', 'reported_date', 'location', 'reject_reason', 'actions'];
+  confirmedDisplayedColumns = ['score', 'full_name', 'age_range', 'gender', 'reported_date', 'location', 'confirmed_date', 'actions'];
+
   dataSourceMatches = new MatTableDataSource();
-  dataSourcePrevious = new MatTableDataSource(); 
+  dataSourcePrevious = new MatTableDataSource();
 
   constructor(private route: ActivatedRoute,
     private matchapi: MissingPersonApiService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private matchDataStore: MatchDataStoreService) { }
 
   ngOnInit(): void {
     this.loadMatchData();
@@ -78,22 +83,56 @@ export class MatwithupComponent implements OnInit {
     }
   }
 
-  loadMatchData(): void {
-    this.matchData = history.state.data || {
-      newly_matched: [],
-      previously_matched: [],
-      rejected: [],
-      confirmed: [],
-      missing_person: {}
-    };
-    this.setUUIDFromMissingPerson();
-      // Set data sources only after matchData is initialized
-  this.dataSourceMatches.data = this.matchData.newly_matched || [];
-  this.dataSourcePrevious.data = this.matchData.previously_matched || [];
+  viewDetails(matchData: any) {
+    console.log("data", matchData);
 
-    this.cdr.detectChanges();
+    const personId = matchData?.person?.id;
+
+    if (!personId) {
+      console.error('Person ID is undefined', matchData);
+      return;
+    }
+
+    this.router.navigate(['search/match-details', personId], { state: { person: matchData.person } });
   }
 
+
+
+
+
+  // loadMatchData(): void {
+  //   this.matchData = history.state.data || {
+  //     newly_matched: [],
+  //     previously_matched: [],
+  //     rejected: [],
+  //     confirmed: [],
+  //     missing_person: {}
+  //   };
+  //   this.setUUIDFromMissingPerson();
+  //   // Set data sources only after matchData is initialized
+  //   this.dataSourceMatches.data = this.matchData.newly_matched || [];
+  //   this.dataSourcePrevious.data = this.matchData.previously_matched || [];
+
+  //   this.cdr.detectChanges();
+  // }
+
+  loadMatchData(): void {
+  this.matchData = history.state.data || this.matchDataStore.get() || {
+    newly_matched: [],
+    previously_matched: [],
+    rejected: [],
+    confirmed: [],
+    missing_person: {}
+  };
+
+  this.matchDataStore.set(this.matchData);
+    this.setUUIDFromMissingPerson(); 
+
+
+  this.dataSourceMatches.data = this.matchData.newly_matched || [];
+  this.dataSourcePrevious.data = this.matchData.previously_matched || [];
+   this.cdr.detectChanges();
+}
 
   onMatchWithUP(uuid: string): void {
     this.matchapi.matchMissingPersonWithUP(uuid).subscribe({
@@ -165,7 +204,75 @@ export class MatwithupComponent implements OnInit {
   }
 
 
+  confirmMatch(match_id: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: {
+        title: 'Confirm Match',
+        message: 'Are you sure you want to confirm this match?',
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        showNote: true,
+        match_id
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirmed) {
+        const confirmationNote = result.note || '';
+        this.matchapi.confirmMatchWithUP(
+          this.uuid,
+          match_id,
+          confirmationNote
+        ).subscribe({
+          next: (response) => {
+            this.snackBar.open('Match confirmed successfully!', 'Close', { duration: 1000 });
+            this.onMatchWithUP(this.uuid)
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            console.error('Error confirming match:', err);
+            this.snackBar.open('Error confirming match', 'Close', { duration: 1000 });
+          }
+        });
+      }
+    });
+  }
+
+  onUnconfirmMatch(uuid: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: {
+        title: 'Unconfirm Match',
+        message: 'Are you sure you want to unconfirm this match?',
+        confirmText: 'Unconfirm',
+        cancelText: 'Cancel',
+        showNote: true,
+        noteLabel: 'Reason for unconfirming',
+        uuid
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirmed) {
+        const unconfirmReason = result.note || '';
+        this.matchapi.unconfirmMatchWithUP(
+          this.uuid,
+          unconfirmReason
+        ).subscribe({
+          next: (response) => {
+            this.onMatchWithUP(this.uuid)
+            this.snackBar.open('Match unconfirmed successfully!', 'Close', { duration: 1000 });
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            console.error('Error unconfirming match:', err);
+            this.snackBar.open('Error unconfirming match', 'Close', { duration: 1000 });
+          }
+        });
+      }
+    });
+  }
 
 
 }
