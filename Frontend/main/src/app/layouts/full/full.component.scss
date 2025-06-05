@@ -1,0 +1,28 @@
+
+
+.footer {
+  width: 100%;
+  font-size: 14px;
+  // position: relative;
+  color: inherit;
+   flex-shrink: 0; 
+}
+
+.footer-light {
+  border-top: 1px solid #e0e0e0; 
+  background-color: #ffffff;
+}
+
+.footer-dark {
+  border-top: 1px solid #444;
+  background-color: #1c252e;
+}
+
+.footer-link {
+  color: #3f51b5;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}

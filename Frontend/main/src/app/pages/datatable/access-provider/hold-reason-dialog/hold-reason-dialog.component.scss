@@ -1,0 +1,36 @@
+mat-dialog-content {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  mat-form-field.full-width {
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  textarea[matInput] {
+    min-height: 100px;
+    padding: 10px;
+    font-size: 15px;
+    line-height: 1.4;
+    resize: vertical;
+  }
+  
+  mat-dialog-actions {
+    margin-top: 20px;
+  }
+  
+  button[mat-button], button[mat-raised-button] {
+    min-width: 100px;
+    font-weight: 500;
+  }
+  
+  button[mat-button] {
+    color: #575353;
+  }
+  
+  mat-dialog-actions button + button {
+    margin-left: 10px;
+  }
+  

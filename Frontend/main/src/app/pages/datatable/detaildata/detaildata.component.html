@@ -1,0 +1,288 @@
+<mat-progress-spinner
+  *ngIf="isLoading"
+  mode="indeterminate"
+  color="primary"
+  class="d-block mx-auto my-4"
+></mat-progress-spinner>
+
+<mat-card class="cardWithShadow mat-elevation-z4 p-3">
+  <mat-dialog-content class="mat-typography">
+    <div *ngIf="person" class="container">
+      <!-- Basic Information -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Basic Information</mat-card-title>
+        <div class="row g-3">
+          <div class="col-md-2">
+            <img
+              [src]="environment.ImgUrlss + person.photo_photo"
+              alt="Person Photo"
+              class="img-fluid rounded shadow-sm"
+              style="height: auto; width: 100%; object-fit: cover;"
+            />
+          </div>
+          <div class="col-md-10">
+            <div class="row g-3">
+              <div class="col-sm-6 col-md-4">
+                <p class="case-detail-label mb-1">Full Name</p>
+                <p class="case-detail-value mb-0">{{ person.full_name || 'N/A' |safeTitlecase}}</p>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <p class="case-detail-label mb-1">Gender</p>
+                <p class="case-detail-value mb-0">{{ person.gender || 'N/A' | safeTitlecase }}</p>
+              </div>
+              <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
+                <p class="case-detail-label mb-1">Age</p>
+                <p class="case-detail-value mb-0">{{ person.age }}</p>
+              </div>
+              <div class="col-sm-6 col-md-4" *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
+                <p class="case-detail-label mb-1">Age Range</p>
+                <p class="case-detail-value mb-0">{{ person.age_range }}</p>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <p class="case-detail-label mb-1">Blood Group</p>
+                <p class="case-detail-value mb-0">{{ person.blood_group || 'N/A' }}</p>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <p class="case-detail-label mb-1">Case Type</p>
+                <p class="case-detail-value mb-0">{{ person.type || 'N/A' }}</p>
+              </div>
+              <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Unidentified Person'">
+                <p class="case-detail-label mb-1">Condition</p>
+                <p class="case-detail-value mb-0">{{ person.up_condition | safeTitlecase }}</p>
+              </div>
+              <div class="col-sm-6 col-md-4" *ngIf="person.type === 'Unidentified Body'">
+                <p class="case-detail-label mb-1">Body Condition</p>
+                <p class="case-detail-value mb-0">{{ person.bodies_condition | safeTitlecase }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Appearance Information -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Appearance Information</mat-card-title>
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Height</p>
+            <p class="case-detail-value mb-0">{{ person.height_range || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Weight</p>
+            <p class="case-detail-value mb-0">{{ person.weight || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Complexion</p>
+            <p class="case-detail-value mb-0">{{ person.complexion || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Hair Color</p>
+            <p class="case-detail-value mb-0">{{ person.hair_color || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Hair Type</p>
+            <p class="case-detail-value mb-0">{{ person.hair_type || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Eye Color</p>
+            <p class="case-detail-value mb-0">{{ person.eye_color || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Birth Mark</p>
+            <p class="case-detail-value mb-0">{{ person.birth_mark || 'None reported' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Distinctive Mark</p>
+            <p class="case-detail-value mb-0">{{ person.distinctive_mark || 'None reported' }}</p>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Address Information -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Address Information</mat-card-title>
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Address Type</p>
+            <p class="case-detail-value mb-0">{{ person.address_type | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Street</p>
+            <p class="case-detail-value mb-0">{{ person.street || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Village</p>
+            <p class="case-detail-value mb-0">{{ person.village | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">City</p>
+            <p class="case-detail-value mb-0">{{ person.city | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">District</p>
+            <p class="case-detail-value mb-0">{{ person.district | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">State</p>
+            <p class="case-detail-value mb-0">{{ person.state | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Country</p>
+            <p class="case-detail-value mb-0">{{ person.country | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Landmark</p>
+            <p class="case-detail-value mb-0">{{ person.landmark_details || 'N/A' }}</p>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Contact Information -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Contact Information</mat-card-title>
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.type">
+            <p class="case-detail-label mb-1">Contact Type</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.type | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.phone_no">
+            <p class="case-detail-label mb-1">Phone</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.phone_no }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.email_id">
+            <p class="case-detail-label mb-1">Email</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.email_id }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.company_name">
+            <p class="case-detail-label mb-1">Company</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.company_name | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.person_name">
+            <p class="case-detail-label mb-1">Contact Person</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.person_name | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.job_title">
+            <p class="case-detail-label mb-1">Job Title</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.job_title | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.social_media_url">
+            <p class="case-detail-label mb-1">Social Media</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.social_media_url }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.website_url">
+            <p class="case-detail-label mb-1">Website</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.website_url }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="person.contacts[0]?.additional_details">
+            <p class="case-detail-label mb-1">Additional Details</p>
+            <p class="case-detail-value mb-0">{{ person.contacts[0]?.additional_details }}</p>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Personal Details -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Personal Details</mat-card-title>
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Caste</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.caste || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Sub Caste</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.subcaste || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Religion</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.religion |safeTitlecase}}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Marital Status</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.marital_status || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Mother Tongue</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.mother_tongue || 'N/A' | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Languages Known</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.other_known_languages |safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Education</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.education_details || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Occupation</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.occupation_details || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">ID Type</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.id_type | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">ID Number</p>
+            <p class="case-detail-value mb-0">{{ person.additional_info[0]?.id_no || 'N/A' }}</p>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Missing Details -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">Missing Details</mat-card-title>
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Missing Date</p>
+            <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.missing_date || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Missing Time</p>
+            <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.missing_time || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Last Seen Details</p>
+            <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.last_seen_location || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Missing Location</p>
+            <p class="case-detail-value mb-0">{{ person.last_known_details[0]?.missing_location_details || 'N/A' }}</p>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- FIR Details -->
+      <mat-card class="cardWithShadow mb-4 p-3">
+        <mat-card-title class="case-detail-title mb-3 pb-2 border-bottom">FIR Details</mat-card-title>
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Police Station</p>
+            <p class="case-detail-value mb-0">{{ person.firs[0]?.police_station | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">FIR Number</p>
+            <p class="case-detail-value mb-0">{{ person.firs[0]?.fir_number || 'N/A' }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Case Status</p>
+            <p class="case-detail-value mb-0">{{ person.firs[0]?.case_status | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Investigation Officer</p>
+            <p class="case-detail-value mb-0">{{ person.firs[0]?.investigation_officer_name | safeTitlecase }}</p>
+          </div>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <p class="case-detail-label mb-1">Officer Contact</p>
+            <p class="case-detail-value mb-0">{{ person.firs[0]?.investigation_officer_contacts || 'N/A' }}</p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+     <div class="d-flex justify-content-start p-2 ms-4">
+    <button mat-flat-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+  </mat-dialog-content>
+  
+ 
+</mat-card>

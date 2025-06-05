@@ -1,0 +1,260 @@
+.breadcrumb-item {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--mat-text-color);
+  }
+.table-scroll-container {
+  max-height: 400px; /* adjust this as needed */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  // margin-top: 20px;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  td,
+  th {
+    padding: 12px 16px;
+    text-align: left;
+  }
+}
+
+.select-all-container {
+    margin-bottom: 20px;
+  
+    .select-action-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;  
+      flex-wrap: wrap;
+    }
+  
+    .select-box {
+      // flex: 1;
+      min-width: 220px;
+      // margin-left: 14px;
+    }
+    .select-box.select-box-pending{
+            min-width: 210px;
+
+    }
+  
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+  
+      button {
+        height: 42px;
+        white-space: nowrap;
+  
+        &[disabled] {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+  
+  // .reject-button {
+  //   color: inherit;
+  //   border-color: inherit;
+    
+  //   &[disabled] {
+  //     color: inherit;
+  //     border-color: inherit;
+  //   }
+  // }
+  
+  .approval-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  
+    h2 {
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+  
+  .view-options {
+    margin: 20px 0;
+    
+    button {
+      margin-right: 10px;
+    }
+  }
+  
+  .select-all-container {
+    margin-bottom: 20px;
+    
+  }
+  
+  .name-cell {
+    .name {
+      font-weight: 500;
+    }
+    .details {
+      font-size: 0.8em;
+      color: inherit;
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 1em;
+    // font-weight: 500;
+    
+    &.pending,
+    &.approved,
+    &.rejected {
+
+      background-color: inherit;
+      color: inherit;
+    }
+  }
+  
+  table {
+    width: 100%;
+    margin-top: 20px;
+    
+    th {
+      font-weight: 600;
+      color:  inherit;
+    
+      background-color: inherit;
+    }
+  
+    td, th {
+      padding: 12px 16px;
+    }
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+  }
+  
+  .mat-mdc-icon-button {
+    margin: 0 4px;
+  }
+  
+  .reject-button {
+    background-color: inherit;
+    color: inherit;
+    
+    &[disabled] {
+      background-color: inherit;
+    }
+  }
+
+  .footer {
+  margin-top: auto;
+  padding: 20px 0;
+  text-align: center;
+  color: inherit;
+  font-size: 0.9em;
+  border-top: 1px solid inherit;
+}
+.approval-container {
+  min-height: calc(100vh - 120px); /* Adjust this value based on your header/footer height */
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* For empty state */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: inherit;
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: inherit;
+}
+.filter-section {
+  .filter-row {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .filter-section {
+    .filter-row {
+      > div {
+        margin-bottom: 15px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .filter-section {
+    padding: 1rem !important;
+
+    .breadcrumb {
+      margin-left: 0 !important;
+      margin-bottom: 1.5rem !important;
+    }
+
+    .filter-row {
+      > div {
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+.mat-mdc-unelevated-button, .mat-mdc-unelevated-button .mdc-button__ripple {
+    border-radius: var(--mdc-filled-button-container-shape, var(--mat-sys-corner-full));
+    width: 100px !important;
+}

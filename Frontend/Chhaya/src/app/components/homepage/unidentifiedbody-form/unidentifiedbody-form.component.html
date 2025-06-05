@@ -1,0 +1,555 @@
+<div class="heading-container">
+  <h3 class="main-heading">Unidentified Bodies Report Form</h3>
+</div>
+
+
+
+<div class="container"> 
+<form [formGroup]="UnidentifiedbodyForm" (ngSubmit)="submitupForm()">
+  <div class="card p-4 mb-2 bg-light">
+    <h5 class="header-bottom pb-2">Personal Information</h5>
+      <div class="row g-3">
+          <div class="col-md-12"><input type="text" class="form-control" formControlName="full_name" placeholder="Full Name"></div>
+          <div class="col-md-3">
+            <select class="form-select border-dark" id="gender" name="gender" formControlName="gender">
+                <option value="" selected disabled>Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+          </div>
+
+            <div class="col-md-3">
+              <select class="form-select border-dark" id="bloodGroup" formControlName="blood_group">
+                  <option value="" selected hidden>Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="O+">O+</option>
+                  <option value="B+">B+</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+              </select>
+          </div>
+
+          <div class="col-md-3">
+            <input 
+                type="date" 
+                class="form-control border-dark" 
+                id="dob" 
+                formControlName="date_found" 
+                
+            />
+          </div>
+
+          <div class="col-md-3">
+            <input
+                type="number"
+                class="form-control border-dark"
+                id="age"
+                formControlName="estimated_age"
+                placeholder="Age"
+                [value]="age"
+                readonly
+                [disabled]="true"
+            />
+          </div>
+
+
+        <!-- Height -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="height" formControlName="height" placeholder="Height (e.g., 151)">
+        </div>
+
+        <!-- Weight -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="weight" formControlName="weight" placeholder="Weight (e.g., 50,55)">
+        </div>
+
+        <!-- Complexion -->
+        <div class="col-md-3">
+          <select class="form-select" id="complexion" formControlName="complexion">
+              <option value="" disabled selected>Complexion</option>
+              <option value="Fair">Fair</option>
+              <option value="Dusky">Dusky</option>
+              <option value="Wheatish">Wheatish</option>
+              <option value="Dark">Dark</option>
+          </select>
+        </div>
+
+        <!-- Hair Color -->
+        <div class="col-md-3">
+          <select class="form-select" id="hairColor" formControlName="hair_color">
+              <option value="" disabled selected>Hair Color</option>
+              <option value="Black">Black</option>
+              <option value="Brown">Brown</option>
+              <option value="Grey">Grey</option>
+          </select>
+        </div>
+
+        <!-- Hair Type -->
+        <div class="col-md-3">
+          <select class="form-select" id="hairType" formControlName="hair_type">
+              <option value="" disabled selected>Hair Type</option>
+              <option value="Straight">Straight</option>
+              <option value="Wavy">Wavy</option>
+              <option value="Curly">Curly</option>
+              <option value="Bald">Bald</option>
+          </select>
+        </div>
+
+        <!-- Eye Color -->
+        <div class="col-md-3">
+          <select class="form-select" id="eyeColor" formControlName="eye_color">
+              <option value="" disabled selected>Eye Color</option>
+              <option value="Dark Brown">Dark Brown</option>
+              <option value="Light Brown">Light Brown</option>
+              <option value="Hazel">Hazel</option>
+              <option value="Amber">Amber</option>
+              <option value="Green">Green</option>
+              <option value="Gray">Gray</option>
+          </select>
+        </div>
+
+        
+
+        <!-- Distinctive Marks -->
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="distinctive_mark" formControlName="other_distinctive_mark" placeholder="Distinctive Marks">
+        </div>
+        
+
+        <!-- Condition -->
+        <div class="col-md-3">
+          <select class="form-select" id="condition" formControlName="condition">
+              <option value="" disabled selected>Condition</option>
+              <option value="Memory loss">Memory loss</option>
+              <option value="Shock">Shock</option>
+              <option value="Anxiety">Anxiety</option>
+              <option value="Depression">Depression</option>
+              <option value="Fatigue">Fatigue</option>
+              <option value="Headache">Headache</option>
+              <option value="Dizziness">Dizziness</option>
+              <option value="Nausea">Nausea</option>
+              <option value="Chest pain">Chest pain</option>
+              <option value="Shortness of breath">Shortness of breath</option>
+              <option value="Confusion">Confusion</option>
+              <option value="Hallucinations">Hallucinations</option>
+              <option value="Severe pain">Severe pain</option>
+              <option value="Paralysis">Paralysis</option>
+          </select>
+        </div>
+        <!-- Birthmark -->
+        <div class="col-md-12">
+          <textarea type="text" class="form-control" id="birthmark" formControlName="clothing_description" placeholder=" Enter clothing description"></textarea>
+        </div>
+      </div>
+  </div>
+
+  <!-- address table  -->
+  <div class="card bg-light p-4 mb-3">
+    <div formGroupName="address">
+      <h5 class="header-bottom pb-2">Address Details</h5>
+      <div class="row g-3">
+        <!-- Left Side: Latitude, Longitude & Address Fields -->
+        <div class="col-md-6">
+          <div class="row g-2">
+            <!-- Address Fields -->
+            <div class="col-md-6"><input type="text" class="form-control" formControlName="street" placeholder="Street"></div>
+            <div class="col-md-6"><input type="text" class="form-control" formControlName="apartment_number" placeholder="apartment number"></div>
+            <div class="col-md-6"><input type="text" class="form-control" formControlName="village" placeholder="Village"></div>
+            <div class="col-md-6"><input type="text" class="form-control" formControlName="city" placeholder="City"></div>
+            <div class="col-md-6"><input type="text" class="form-control" formControlName="district" placeholder="district"></div>
+            <div class="col-md-6">
+              <select id="state" class="form-control border-dark" formControlName="state">
+                <option value="" selected disabled>Select State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+              </select>
+            </div>
+            <div class="col-md-6"><input type="text" class="form-control" placeholder="postal_code"  placeholder="Pincode"></div>
+            <div class="col-md-6">
+              <select id="country" class="form-control border-dark" formControlName="country">
+                <option value="" disabled selected>Select Country</option>
+                <option value="India">India</option>
+                <option value="United States of America">United States of America</option>
+                <option value="China">China</option>
+                <option value="Japan">Japan</option>
+                <option value="Germany">Germany</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="France">France</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Australia">Australia</option>
+                <option value="Canada">Canada</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <input type="text" id="country_code" class="form-control border-dark" formControlName="country_code" placeholder="Enter country code" />
+            </div>
+            <div class="col-md-6">
+              <input type="text" id="type_" class="form-control border-dark" formControlName="type" value="Missing Person" readonly />
+            </div>
+          
+            <div class="col-md-6">
+              <select id="subtype" class="form-control border-dark" formControlName="subtype">
+                <option value="" selected disabled>Select Subtype</option>
+                <option value="Permanent Address">Permanent Address</option>
+                <option value="Current Address">Current Address</option>
+                <option value="Emergency">Emergency</option>
+              </select>
+            </div>
+          
+            <div class="col-md-6">
+              <input type="text" id="landmark_details" class="form-control border-dark" formControlName="landmark_details" placeholder="Enter landmark details (e.g., near park)" />
+            </div>
+          
+            <!-- <div class="col-md-6 d-flex align-items-center">
+              <input type="checkbox" id="is_active" class="form-check-input border-dark me-2" formControlName="is_active" />
+              <label for="is_active" class="form-label mb-0">Is Active</label>
+            </div> -->
+                   
+           
+          </div>
+        </div>
+      
+        <!-- Right Side: Map & Get Location Button -->
+        <div class="col-md-6">
+          <div formGroupName="location">
+          <label for="mapLocationHome" class="form-label">Body Founded Location</label>
+          <div id="mapMissing" style="height: 180px; border: 1px solid black;"></div>
+          
+          <div class="d-flex gap-2 mt-3">
+            <button type="button" class="btn btn-outline-dark border-dark" (click)="getCurrentLocation()">
+            Current
+            </button>
+            <input type="text" class="form-control" id="latitudelocation" formControlName="latitude" readonly placeholder="Latitude">
+            <input type="text" class="form-control" id="longitudelocation" formControlName="longitude" readonly placeholder="Longitude">
+          </div>
+        </div>
+        </div>
+        
+        
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <!-- contact -->
+  <div class="card bg-light p-4 mb-3">
+    <div formGroupName="contact">
+      <h5 class="header-bottom pb-2">Contact Information</h5>
+      <div class="row  g-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control border-dark" formControlName="phone_number" placeholder="Phone Number">
+        </div>
+        <div class="col-md-6">
+          <input type="email" class="form-control border-dark" formControlName="email" placeholder="Email">
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control border-dark" formControlName="type" value="Missing Person" readonly>
+        </div>
+        <div class="col-md-6">
+          <select class="form-select border-dark" formControlName="subtype">
+            <option value="" disabled selected>Select Subtype</option>
+            <option value="Personal">Personal</option>
+            <option value="Business">Business</option>
+            <option value="Emergency">Emergency</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control border-dark" formControlName="company_name" placeholder="Company Name">
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control border-dark" formControlName="job_title" placeholder="Job Title">
+        </div>
+        <div class="col-md-6">
+          <input type="url" class="form-control border-dark" formControlName="website" placeholder="Website URL">
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control border-dark" formControlName="social_media_handles" placeholder="Social Media Handles">
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control border-dark" formControlName="notes" placeholder="Additional Notes">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+          <input type="checkbox" class="form-check-input border-dark me-2" formControlName="is_primary">
+          <label class="form-label mb-0">Is Primary</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- addtional -->
+  <div class="card bg-light p-4 mb-3">
+    <h5 class="header-bottom pb-2" >Additional Information</h5>
+    
+    <div class="row g-3">
+      <!-- Caste -->
+      <div class="col-md-6">
+        <select class="form-select border-dark" formControlName="caste">
+          <option value="" selected disabled>Select Caste</option>
+          <option value="Open">Open</option>
+          <option value="SC">SC</option>
+          <option value="ST">ST</option>
+          <option value="OBC">OBC</option>
+        </select>
+      </div>
+      <!-- <div class="col-md-6">
+        <input type="text" class="form-control border-dark" formControlName="sub_caste" placeholder="Enter Sub-Caste">
+      </div> -->
+  
+      <!-- Marital Status -->
+      <div class="col-md-6">
+        <select class="form-select border-dark" formControlName="marital_status">
+          <option value="" disabled selected>Select Marital Status</option>
+          <option value="Single">Single</option>
+          <option value="Married">Married</option>
+          <option value="Divorced">Divorced</option>
+        </select>
+      </div>
+  
+      <!-- Religion -->
+      <div class="col-md-6">
+        <select class="form-select border-dark" formControlName="religion">
+          <option value="" selected>Select Religion</option>
+          <option value="Hindu">Hindu</option>
+          <option value="Muslim">Muslim</option>
+          <option value="Sikh">Sikh</option>
+          <option value="Christian">Christian</option>
+        </select>
+      </div>
+  
+      <!-- Mother Tongue -->
+      <!-- <div class="col-md-6">
+        <select class="form-select border-dark" formControlName="mother_tongue">
+          <option value="" selected>Select Mother Tongue</option>
+          <option value="Hindi">Hindi</option>
+          <option value="English">English</option>
+          <option value="Marathi">Marathi</option>
+        </select>
+      </div> -->
+  
+      <!-- Known Languages -->
+      <div class="col-md-6">
+        <input type="text" class="form-control border-dark" formControlName="other_known_languages" placeholder="Enter Other Known Languages">
+      </div>
+  
+      <!-- Identification Type -->
+      <div class="col-md-6">
+        <select class="form-select border-dark" formControlName="identification_details">
+          <option value="" selected>Select Identification Type</option>
+          <option value="Aadhar Card">Aadhar Card</option>
+          <option value="Pan Card">Pan Card</option>
+          <option value="Driving License">Driving License</option>
+          <option value="Passport">Passport</option>
+          <option value="VoterID">VoterID</option>
+        </select>
+      </div>
+  
+      <!-- Identification Card Number -->
+      <div class="col-md-6">
+        <input type="text" class="form-control border-dark" formControlName="identification_details" placeholder="Enter Identification Card Number">
+      </div>
+  
+      <!-- Educational Details
+      <div class="col-md-6">
+        <input type="text" class="form-control border-dark" formControlName="educational_details" placeholder="Enter Educational Details">
+      </div>
+  
+      <!Occupation -->
+      <!-- <div class="col-md-6">
+        <input type="text" class="form-control border-dark" formControlName="occupation" placeholder="Enter Occupation">
+      </div>  -->
+    </div>
+  </div>
+
+  <!-- missig data -->
+  <div class="card bg-light p-4 mb-3">
+    <h5 class="header-bottom pb-2">body seen Details</h5>
+  
+    <div class="row g-3">
+      <!-- Upload Person Photo -->
+      <div class="col-md-6">
+        <label class="form-label">Upload body Photo</label>
+        <input type="file" class="form-control border-dark" accept="image/*" (change)="onFileChange($event, 'photo')">
+      </div>
+  
+      <!-- Location Details -->
+      <div class="col-md-6">
+        <label class="form-label">last_location</label>
+        <input type="text" class="form-control border-dark" formControlName="last_location" placeholder="Enter last location">
+      </div>
+  
+      <div class="col-md-6">
+        <label class="form-label">body Seen Details</label>
+        <input type="text" class="form-control" id="body_seen_details" formControlName="body_seen_details" placeholder="body_seen_details">
+      </div>
+  
+      <!-- Last Seen Location -->
+      <div class="col-md-6">
+        <label class="form-label">Last last seen details</label>
+        <input type="text" class="form-control border-dark" formControlName="last_seen_details" placeholder="Enter last_seen_details">
+      </div>
+    </div>
+  </div>
+  
+  <!-- legal info -->
+  <div class="card bg-light p-4 mb-3">
+    <h5 class="header-bottom pb-2">FIR & Investigating Officer Details</h5>
+  
+    <div class="row g-3">
+      <!-- FIR Number -->
+      <div class="col-md-6">
+        <label class="form-label">FIR Number</label>
+        <input type="text" class="form-control border-dark" formControlName="fir_number" placeholder="Enter FIR number">
+      </div>
+  
+      <!-- Upload FIR Photo -->
+      <div class="col-md-6">
+        <label class="form-label">Upload FIR Photo</label>
+        <input type="file" class="form-control border-dark" accept="image/*,application/pdf" (change)="onFileChange($event, 'file')">
+      </div>
+  
+      <!-- Case Status -->
+      <div class="col-md-6">
+        <label class="form-label">Case Status</label>
+        <select class="form-select border-dark" formControlName="case_status">
+          <option value="" >Select case status</option>
+          <option value="Open">Open</option>
+          <option value="Resolved">Resolved</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed">Closed</option>
+          <option value="Reopened">Reopened</option>
+          <option value="Pending" selected>Pending</option>
+          <option value="Found Alive">Found Alive</option>
+          <option value="Deceased">Deceased</option>
+        </select>
+      </div>
+  
+      <!-- Police Station Name & Address -->
+      <div class="col-md-6">
+        <label class="form-label">Police Station Name & Address</label>
+        <input type="text" class="form-control border-dark" formControlName="police_station_name_and_address" placeholder="Enter police station details">
+      </div>
+  
+      <!-- Investigating Officer Name -->
+      <div class="col-md-6">
+        <label class="form-label">Investigating Officer's Name</label>
+        <input type="text" class="form-control border-dark" formControlName="investigating_officer_name" placeholder="Enter officer's name">
+      </div>
+  
+      <!-- Investigating Officer Contact -->
+      <div class="col-md-6">
+        <label class="form-label">Investigating Officer's Contact Number</label>
+        <input type="text" class="form-control border-dark" formControlName="investigating_officer_contact_number" placeholder="Enter contact number">
+      </div>
+    </div>
+  </div>
+
+  <!-- hospital -->
+  <div class="card bg-light p-4 mb-3">
+    <h5 class="header-bottom pb-2">Hospital Details</h5>
+  
+    <div class="row g-3">
+      <!-- Reporting Person Name -->
+      <div class="col-md-6">
+        <label class="form-label">Hospital</label>
+        <input type="text" class="form-control border-dark" formControlName="hospital" placeholder="Enter hospital name">
+      </div>
+  
+      <!-- Phone Number -->
+      <div class="col-md-6">
+        <label class="form-label">Fingerprints Collected</label>
+        <input type="file" class="form-control border-dark" formControlName="fingerprints_collected" placeholder="upload fingerprints collected">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Dna Sample Collected</label>
+        <input type="file" class="form-control border-dark" formControlName="dna_sample_collected" placeholder="upload dna_sample_collected">
+      </div><div class="col-md-6">
+        <label class="form-label">post mortem report upload</label>
+        <input type="file" class="form-control border-dark" formControlName="post_mortem_report_upload" placeholder="upload post_mortem_report_upload">
+      </div>
+  
+      
+      
+    </div>
+  </div>
+
+  <!-- reporting -->
+  <div class="card bg-light p-4 mb-3">
+    <h5 class="header-bottom pb-2">Reporting Person Contact Details</h5>
+  
+    <div class="row g-3">
+      <!-- Reporting Person Name -->
+      <div class="col-md-6">
+        <label class="form-label">Reporting Person Name</label>
+        <input type="text" class="form-control border-dark" formControlName="reporting_person_name" placeholder="Enter your full name">
+      </div>
+  
+      <!-- Phone Number -->
+      <div class="col-md-6">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" class="form-control border-dark" formControlName="reporting_person_contact_number" placeholder="Enter your phone number">
+      </div>
+  
+      <!-- Relationship with Victim -->
+      <div class="col-md-6">
+        <label class="form-label">Relationship with Victim</label>
+        <select class="form-select border-dark" formControlName="relationship_with_victim">
+          <option value="" disabled selected>Select Relationship</option>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+          <option value="Brother">Brother</option>
+          <option value="Sister">Sister</option>
+          <option value="Friend">Friend</option>
+        </select>
+      </div>
+  
+      <!-- Email Address -->
+      <div class="col-md-6">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-control border-dark" formControlName="reporting_person_email" placeholder="Enter your email address">
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="card bg-light p-4 mb-3">  
+    <h5 class="header-bottom pb-2">Consent & Submission</h5>    
+    <!-- Consent Checkbox -->
+    <div class="form-check mb-3">
+      <input type="checkbox" class="form-check-input border-dark" id="consentCheckbox" formControlName="consent" required>
+      <label class="form-check-label" for="consentCheckbox">
+        I hereby declare that the information provided in this report is true and accurate to the best of my knowledge.
+        I consent to the use of this information for the purpose of locating the missing person.
+      </label>
+    </div>
+  </div>
+  <button class="btn btn-success w-20">SUBMIT REPORT</button>
+</form>
+</div>

@@ -1,0 +1,603 @@
+<div class="footer">
+  <mat-card class="cardWithShadow m-1 mb-2">
+    <mat-card-content>
+      <nav aria-label="breadcrumb" class="breadcrumb-container">
+        <ol class="breadcrumb mb-3">
+          <li class="breadcrumb-item active" aria-current="page">
+            Search Unidentified Person
+          </li>
+        </ol>
+      </nav>
+
+      <!-- First Row (5 Fields) -->
+      <div class="row">
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <input
+              matInput
+              placeholder="Full Name"
+              [(ngModel)]="filters.full_name"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>State</mat-label> -->
+            <mat-select
+              [(ngModel)]="filters.state"
+              (selectionChange)="onStateChange()"
+            >
+              <mat-option value="">All States</mat-option>
+              <mat-option *ngFor="let state of allstates" [value]="state">
+                {{ state }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>District</mat-label> -->
+            <mat-select
+              [(ngModel)]="filters.district"
+              (selectionChange)="onDistrictChange()"
+            >
+              <mat-option value="">All Districts</mat-option>
+              <mat-option
+                *ngFor="let district of alldistricts"
+                [value]="district"
+              >
+                {{ district }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>City</mat-label> -->
+            <mat-select [(ngModel)]="filters.city">
+              <mat-option value="">All Cities</mat-option>
+              <mat-option *ngFor="let city of allcities" [value]="city">
+                {{ city }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Start Date Picker -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-label>Start Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              [(ngModel)]="filters.startDate"
+              placeholder="Choose start date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-label>End Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="endPicker"
+              [(ngModel)]="filters.endDate"
+              [min]="filters.startDate"
+              [max]="today"
+              placeholder="Choose end date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Second Row (5 Fields) -->
+      <div class="row mt-3">
+        <!-- Caste Dropdown -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-label>Caste</mat-label>
+            <mat-select [(ngModel)]="filters.caste">
+              <mat-option
+                *ngFor="let caste of casteOptions"
+                [value]="caste.value"
+              >
+                {{ caste.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Gender Dropdown -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>Gender</mat-label> -->
+            <mat-select [(ngModel)]="filters.gender">
+              <mat-option value="">Gender</mat-option>
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Age Input -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>Age Range</mat-label> -->
+            <mat-select [(ngModel)]="filters.age_range">
+              <mat-option value="">Age Range</mat-option>
+              <mat-option *ngFor="let range of ageRanges" [value]="range.value">
+                {{ range.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Marital Status Dropdown -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <mat-select [(ngModel)]="filters.marital_status">
+              <mat-option value="">Marital Status</mat-option>
+              <mat-option value="single">Single</mat-option>
+              <mat-option value="married">Married</mat-option>
+              <mat-option value="divorced">Divorced</mat-option>
+              <mat-option value="widowed">Widowed</mat-option>
+              <mat-option value="separated">Separated</mat-option>
+              <mat-option value="annulled">Annulled</mat-option>
+              <mat-option value="in_relationship">In a Relationship</mat-option>
+              <mat-option value="engaged">Engaged</mat-option>
+              <mat-option value="domestic_partnership"
+                >Domestic Partnership</mat-option
+              >
+              <mat-option value="unknown">Unknown</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Blood Group Dropdown -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>Blood Group</mat-label> -->
+            <mat-select [(ngModel)]="filters.blood_group">
+              <mat-option value="">Blood Group</mat-option>
+              <mat-option value="A+">A+</mat-option>
+              <mat-option value="A-">A-</mat-option>
+              <mat-option value="B+">B+</mat-option>
+              <mat-option value="B-">B-</mat-option>
+              <mat-option value="O+">O+</mat-option>
+              <mat-option value="O-">O-</mat-option>
+              <mat-option value="AB+">AB+</mat-option>
+              <mat-option value="AB-">AB-</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Height Input -->
+        <div class="col-lg-2 col-md-2">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- <mat-label>Height Range</mat-label> -->
+            <mat-select [(ngModel)]="filters.height_range">
+              <mat-option [value]="''">Height Range</mat-option>
+              <mat-option
+                *ngFor="let option of heightRangeOptions"
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="d-flex justify-content-end align-items-end gap-3">
+          <button
+            mat-stroked-button
+            (click)="resetFilters()"
+            [disabled]="!filtersApplied"
+            color="warn"
+          >
+            <mat-icon>refresh</mat-icon>&nbsp; Reset
+          </button>
+          <button
+            mat-flat-button
+            (click)="applyFilters()"
+            [disabled]="
+              !hasGeographicFiltersApplied() &&
+              !hasdatefilterApplied() &&
+              !hasFiltersApplied()
+            "
+            class="me-md-1"
+          >
+            <mat-icon>search</mat-icon> Search
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!-- Show message when filters are not applied -->
+  <div *ngIf="!filtersApplied" class="text-center text-muted mt-3">
+    Kindly apply some filters to start your search.
+  </div>
+
+  <!-- <mat-tab-group class="custom-tabs m-1 mb-1"> -->
+  <mat-tab-group
+    class="custom-tabs m-1 mb-1"
+    mat-stretch-tabs="false"
+    animationDuration="0ms"
+  >
+    <div
+      *ngIf="progressMessage.includes('❌')"
+      class="text-center text-danger mt-3"
+    >
+      {{ progressMessage }}
+    </div>
+    <!-- Pending Tab -->
+    <!-- <mat-tab label="Pending"> -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="d-flex align-items-center">
+          <mat-icon class="d-flex align-items-center">
+            <i-tabler name="clock" class="icon-20 m-r-8 d-flex"></i-tabler>
+          </mat-icon>
+          Pending
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <mat-card class="cardWithShadow">
+          <mat-card-content>
+            <div class="table-responsive">
+              <div
+                *ngIf="loading"
+                class="d-flex justify-content-center align-items-center"
+                style="height: 300px"
+              >
+                <mat-spinner diameter="50"></mat-spinner>
+              </div>
+              <div
+                *ngIf="dataSourcePending.data.length === 0 && filtersApplied"
+                class="text-center text-danger mt-3"
+              >
+                No Data Found.
+              </div>
+
+              <table
+                *ngIf="dataSourcePending.data.length > 0"
+                mat-table
+                [dataSource]="dataSourcePending"
+                class="w-100"
+              >
+                <ng-container matColumnDef="sr">
+                  <th mat-header-cell *matHeaderCellDef>Sr.No</th>
+                  <td mat-cell *matCellDef="let person; let i = index">
+                    {{
+                      i +
+                        1 +
+                        paginatorPending.pageIndex * paginatorPending.pageSize
+                    }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="photo">
+                  <th mat-header-cell *matHeaderCellDef>Photo</th>
+                  <td mat-cell *matCellDef="let person">
+                    <img
+                      [src]="
+                        person.photo_photo
+                          ? environment.ImgUrlss + person.photo_photo
+                          : 'assets/old/images/Chhaya.png'
+                      "
+                      alt="Person Photo"
+                      class="rounded-square"
+                      width="40"
+                      height="40"
+                      style="object-fit: cover"
+                    />
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="full_name">
+                  <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                  <td mat-cell *matCellDef="let person">
+                    {{ person.full_name | safeTitlecase }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="age">
+                  <th mat-header-cell *matHeaderCellDef>Age</th>
+                  <td mat-cell *matCellDef="let person">
+                    {{ person.age_range }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="gender">
+                  <th mat-header-cell *matHeaderCellDef>Gender</th>
+                  <td mat-cell *matCellDef="let person">
+                    <mat-icon
+                      *ngIf="person.gender === 'male'; else femaleIcon"
+                      color="primary"
+                    >
+                      male
+                    </mat-icon>
+                    <ng-template #femaleIcon>
+                      <mat-icon color="accent">female</mat-icon>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date_of_missing">
+                  <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
+                  <td mat-cell *matCellDef="let person">
+                    {{ person.date_reported }}
+                  </td>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let person">
+                  <button mat-icon-button color="primary" (click)="openDialog(person)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+              </ng-container> -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let person">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="viewDetails(person)"
+                    >
+                      <!-- <mat-icon>visibility</mat-icon> -->
+                      <i-tabler
+                        name="eye"
+                        class="icon-22"
+                        style="cursor: pointer"
+                      ></i-tabler>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="match_with">
+                  <th mat-header-cell *matHeaderCellDef>Match With</th>
+                  <td mat-cell *matCellDef="let person">coming soon</td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumnsPending"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumnsPending"
+                ></tr>
+              </table>
+
+              <!-- Material Paginator for Pending Tab -->
+              <mat-paginator
+                #paginatorPending
+                [pageSizeOptions]="[5, 10, 20, 25, 30]"
+                showFirstLastButtons
+              ></mat-paginator>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-template>
+    </mat-tab>
+
+    <!-- Resolved Tab -->
+    <!-- <mat-tab label="Resolved"> -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="d-flex align-items-center">
+          <mat-icon class="d-flex align-items-center">
+            <i-tabler
+              name="circle-check"
+              class="icon-20 m-r-8 d-flex"
+            ></i-tabler>
+          </mat-icon>
+          Resolved
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <mat-card class="cardWithShadow">
+          <mat-card-content>
+            <div class="table-responsive">
+              <div
+                *ngIf="loading"
+                class="d-flex justify-content-center align-items-center"
+                style="height: 300px"
+              >
+                <mat-spinner diameter="50"></mat-spinner>
+              </div>
+              <div
+                *ngIf="dataSourceResolved.data.length === 0 && filtersApplied"
+                class="text-center text-danger mt-3"
+              >
+                No Data Found.
+              </div>
+
+              <table
+                *ngIf="dataSourceResolved.data.length > 0"
+                mat-table
+                [dataSource]="dataSourceResolved"
+                class="w-100"
+              >
+                <ng-container matColumnDef="sr">
+                  <th mat-header-cell *matHeaderCellDef>S.No</th>
+                  <td mat-cell *matCellDef="let person; let i = index">
+                    {{
+                      i +
+                        1 +
+                        paginatorResolved.pageIndex * paginatorResolved.pageSize
+                    }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="photo">
+                  <th mat-header-cell *matHeaderCellDef>Photo</th>
+                  <td mat-cell *matCellDef="let person">
+                    <img
+                      [src]="
+                        person.photo_photo
+                          ? environment.ImgUrlss + person.photo_photo
+                          : 'assets/images/pngwing.com.png'
+                      "
+                      alt="Person Photo"
+                      class="rounded-square"
+                      width="40"
+                      height="40"
+                      style="object-fit: cover"
+                    />
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="full_name">
+                  <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                  <td mat-cell *matCellDef="let person">
+                    {{ person.full_name | safeTitlecase }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="age">
+                  <th mat-header-cell *matHeaderCellDef>Age</th>
+                  <td mat-cell *matCellDef="let person">{{ person.age }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="gender">
+                  <th mat-header-cell *matHeaderCellDef>Gender</th>
+                  <td mat-cell *matCellDef="let person">{{ person.gender }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="date_of_missing">
+                  <th mat-header-cell *matHeaderCellDef>Date of Missing</th>
+                  <td mat-cell *matCellDef="let person">
+                    {{ person.date_reported }}
+                  </td>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let person">
+                  <button mat-icon-button color="primary" (click)="openDialog(person)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+              </ng-container> -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let person">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="viewDetails(person)"
+                    >
+                      <!-- <mat-icon>visibility</mat-icon> -->
+                      <i-tabler
+                        name="eye"
+                        class="icon-22"
+                        style="cursor: pointer"
+                      ></i-tabler>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumnsResolved"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumnsResolved"
+                ></tr>
+              </table>
+
+              <!-- Material Paginator for Resolved Tab -->
+              <div class="row mt-3">
+                <div
+                  class="col-12 d-flex justify-content-center align-items-center"
+                >
+                  <div
+                    *ngIf="getTotalItems() > 0"
+                    class="d-flex align-items-center custom-pagination"
+                  >
+                    <span class="page-info mr-2">
+                      {{ getFirstItemNumber() }}-{{ getLastItemNumber() }} of
+                      {{ getTotalItems() }}
+                    </span>
+
+                    <div class="d-flex">
+                      <button
+                        mat-icon-button
+                        (click)="goToFirstPage()"
+                        [disabled]="currentPage === 1 || !paginationLinks.first"
+                        matTooltip="First Page"
+                        matTooltipPosition="above"
+                      >
+                        <mat-icon>first_page</mat-icon>
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        (click)="goToPreviousPage()"
+                        [disabled]="
+                          currentPage === 1 || !paginationLinks.previous
+                        "
+                        matTooltip="Previous Page"
+                        matTooltipPosition="above"
+                      >
+                        <mat-icon>chevron_left</mat-icon>
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        (click)="goToNextPage()"
+                        [disabled]="
+                          currentPage === getLastPageNumber() ||
+                          !paginationLinks.next
+                        "
+                        matTooltip="Next Page"
+                        matTooltipPosition="above"
+                      >
+                        <mat-icon>chevron_right</mat-icon>
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        (click)="goToLastPage()"
+                        [disabled]="
+                          currentPage === getLastPageNumber() ||
+                          !paginationLinks.last
+                        "
+                        matTooltip="Last Page"
+                        matTooltipPosition="above"
+                      >
+                        <mat-icon>last_page</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <mat-paginator
+                #paginatorResolved
+                [pageSizeOptions]="[5, 10, 20, 30]"
+                showFirstLastButtons
+              ></mat-paginator>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

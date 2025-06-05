@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Select User Type</h2>
+<form [formGroup]="userForm" (ngSubmit)="submit()">
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>User Type</mat-label>
+    <mat-select formControlName="user_type">
+      <mat-option value="reporting">Reporting</mat-option>
+      <mat-option value="volunteer">Volunteer</mat-option>
+      <mat-option value="family">Family</mat-option>
+      <mat-option value="admin">Admin</mat-option>
+      <mat-option value="police_station">Police Station</mat-option>
+      <mat-option value="medical_staff">Medical Staff</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-100" *ngIf="showSubType">
+    <mat-label>Family Sub Type</mat-label>
+    <mat-select formControlName="sub_user_type">
+      <mat-option value="father">Father</mat-option>
+      <mat-option value="mother">Mother</mat-option>
+      <mat-option value="son">Son</mat-option>
+      <mat-option value="daughter">Daughter</mat-option>
+      <mat-option value="brother">Brother</mat-option>
+      <mat-option value="sister">Sister</mat-option>
+      <mat-option value="relative">Relative</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="text-right">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      Continue
+    </button>  </div>
+</form>

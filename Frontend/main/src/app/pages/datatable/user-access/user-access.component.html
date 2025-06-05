@@ -1,0 +1,489 @@
+<div class="approval-container footer p-2">
+  <div class="filter-section p-3 m-2">
+    <nav aria-label="breadcrumb" class="ms-2 mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item activee">Filter Users</li>
+      </ol>
+    </nav>
+
+    <form [formGroup]="filterForm">
+      <div class="row filter-row g-3 mb-1">
+        <div class="col-12 col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="first_name"
+              placeholder="Enter First Name"
+            />
+            <mat-error
+              *ngIf="filterForm.get('first_name')?.hasError('invalidName')"
+            >
+              First name should start with capital letter and contain only
+              letters
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="last_name"
+              placeholder="Enter Last Name"
+            />
+            <mat-error
+              *ngIf="filterForm.get('last_name')?.hasError('invalidName')"
+            >
+              Last name should start with capital letter and contain only
+              letters
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row filter-row g-3 mb-1">
+        <div class="col-12 col-lg-6 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="email_id"
+              placeholder="Enter Email ID"
+            />
+            <mat-error
+              *ngIf="filterForm.get('email_id')?.hasError('invalidEmail')"
+            >
+              Please enter a valid email address
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              matInput
+              formControlName="phone_no"
+              placeholder="Enter Phone Number"
+              maxlength="10"
+            />
+            <mat-error
+              *ngIf="filterForm.get('phone_no')?.hasError('invalidPhone')"
+            >
+              Phone number must be 10 digits
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-lg-3 col-md-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-select
+              formControlName="user_type"
+              placeholder="Select User Type"
+            >
+              <mat-option value="">Select Types</mat-option>
+              <mat-option *ngFor="let type of userTypes" [value]="type">
+                {{ type | safeTitlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="d-flex justify-content-end align-items-end gap-3">
+          <!-- Reset Button -->
+          <button
+            mat-stroked-button
+            color="warn"
+            class="reset-btn"
+            (click)="resetFilters()"
+            [disabled]="!hasActiveFilters()"
+          >
+            <mat-icon class="me-1">refresh</mat-icon>&nbsp;&nbsp; Reset
+          </button>
+
+          <!-- Search Button -->
+          <button
+            mat-flat-button
+            color="primary"
+            class="search-btn"
+            (click)="filterDataByFilters()"
+            [disabled]="!isSearchEnabled() || isFilterLoading"
+          >
+            <mat-icon class="me-1">search</mat-icon>
+            <span *ngIf="!isFilterLoading">Search</span>
+            <span *ngIf="isFilterLoading">Searching...</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <mat-card-content>
+    <mat-tab-group
+      [(selectedIndex)]="selectedTabIndex"
+      class="custom-tabs m-1 mb-1"
+      mat-stretch-tabs="false"
+      animationDuration="0ms"
+    >
+      <!-- <mat-tab label="Pending "></mat-tab>
+      <mat-tab label="Rejected"></mat-tab>
+      <mat-tab label="Approved "></mat-tab> -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="d-flex align-items-center">
+            <mat-icon class="d-flex align-items-center">
+              <i-tabler name="clock" class="icon-20 m-r-8 d-flex"></i-tabler>
+            </mat-icon>
+            Pending Cases
+          </div>
+        </ng-template>
+        <!-- Tab content for Pending Cases goes here -->
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="d-flex align-items-center">
+            <mat-icon class="d-flex align-items-center">
+              <i-tabler name="x" class="icon-20 m-r-8 d-flex"></i-tabler>
+            </mat-icon>
+            Rejected Cases
+          </div>
+        </ng-template>
+        <!-- Tab content for Rejected Cases goes here -->
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="d-flex align-items-center">
+            <mat-icon class="d-flex align-items-center">
+              <i-tabler name="check" class="icon-20 m-r-8 d-flex"></i-tabler>
+            </mat-icon>
+            Approved Cases
+          </div>
+        </ng-template>
+        <!-- Tab content for Approved Cases goes here -->
+      </mat-tab>
+    </mat-tab-group>
+    <!-- Select All + Action Buttons -->
+    <div class="select-all-container">
+      <div class="select-action-wrapper">
+        <div class="select-box">
+          <!-- Pending -->
+          <mat-checkbox
+            *ngIf="selectedTabIndex === 0"
+            class="select-box-pending"
+            color="primary"
+            [checked]="selectAllPending"
+            [indeterminate]="isIndeterminatePending()"
+            (change)="toggleSelectAllPending($event.checked)"
+          >
+            Select All Pending User
+          </mat-checkbox>
+
+          <!-- Rejected -->
+          <mat-checkbox
+            *ngIf="selectedTabIndex === 1"
+            color="primary"
+            [checked]="selectAllRejected"
+            [indeterminate]="isIndeterminateRejected()"
+            (change)="toggleSelectAllRejected($event.checked)"
+          >
+            Select All Rejected User
+          </mat-checkbox>
+
+          <!-- Approved -->
+          <mat-checkbox
+            *ngIf="selectedTabIndex === 2"
+            color="primary"
+            [checked]="selectAllApproved"
+            [indeterminate]="isIndeterminateApproved()"
+            (change)="toggleSelectAllApproved($event.checked)"
+          >
+            Select All Approved User
+          </mat-checkbox>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <ng-container *ngIf="selectedTabIndex === 0">
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="approveSelected()"
+              [disabled]="!hasSelectedItems()"
+              matTooltip="Approve the selected users"
+            >
+              Approve User Selected
+            </button>
+            <button
+              mat-stroked-button
+              (click)="rejectSelected()"
+              [disabled]="!hasSelectedItems()"
+              matTooltip="Reject the selected users"
+            >
+              Reject User Selected
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="selectedTabIndex === 1">
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="approveSelected()"
+              [disabled]="!hasSelectedItems()"
+              matTooltip="Approve the selected users"
+            >
+              Approve User Selected
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="selectedTabIndex === 2">
+            <button
+              mat-stroked-button
+              (click)="setPendingSelected()"
+              [disabled]="!hasSelectedItems()"
+              matTooltip="Mark selected users as pending"
+            >
+              Pending User Selected
+            </button>
+            <button
+              mat-stroked-button
+              (click)="rejectSelected()"
+              [disabled]="!hasSelectedItems()"
+              matTooltip="Reject the selected users"
+            >
+              Reject User Selected
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <!-- Data Table -->
+
+    <div class="table-wrapper">
+      <table
+        *ngIf="!isLoading"
+        mat-table
+        [dataSource]="getCurrentDataSource()"
+        class="mat-elevation-z1"
+      >
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let person">
+            <mat-checkbox
+              color="primary"
+              [(ngModel)]="person.selected"
+              (click)="$event.stopPropagation()"
+              (change)="updateSelectAllState()"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Full Name -->
+        <ng-container matColumnDef="full_name">
+          <th mat-header-cell *matHeaderCellDef>FULL NAME</th>
+          <td mat-cell *matCellDef="let person">
+            <div class="name-cell">
+              <div class="name">{{ getFullName(person) }}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="email_id">
+          <th mat-header-cell *matHeaderCellDef>EMAIL</th>
+          <td mat-cell *matCellDef="let person">{{ person.email_id }}</td>
+        </ng-container>
+
+        <!-- Phone -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>PHONE</th>
+          <td mat-cell *matCellDef="let person">
+            {{ getPhoneNumber(person) }}
+          </td>
+        </ng-container>
+
+        <!-- Type -->
+        <ng-container matColumnDef="user_type">
+          <th mat-header-cell *matHeaderCellDef>TYPE</th>
+          <td mat-cell *matCellDef="let person">
+            {{ person.user_type | safeTitlecase }}
+          </td>
+        </ng-container>
+
+        <!-- Subtype -->
+        <ng-container matColumnDef="sub_user_type">
+          <th mat-header-cell *matHeaderCellDef>SUBTYPE</th>
+          <td mat-cell *matCellDef="let person">
+            {{ person.sub_user_type | safeTitlecase }}
+          </td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>STATUS</th>
+          <td mat-cell *matCellDef="let person">
+            <span
+              class="status-badge"
+              [class.pending]="person.status === 'hold'"
+              [class.approved]="person.status === 'approved'"
+              [class.rejected]="person.status === 'rejected'"
+            >
+              {{ person.status | titlecase }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Updated By -->
+        <ng-container matColumnDef="status_updated_by">
+          <th mat-header-cell *matHeaderCellDef>UPDATED BY</th>
+          <td mat-cell *matCellDef="let person">
+            {{ person.status_updated_by || "-" }}
+          </td>
+        </ng-container>
+
+        <!-- Registered At -->
+        <ng-container matColumnDef="registered_at">
+          <th mat-header-cell *matHeaderCellDef>REGISTERED AT</th>
+          <td mat-cell *matCellDef="let person">
+            {{ person.registered_at | date : "medium" }}
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+          <td mat-cell *matCellDef="let person">
+            <ng-container *ngIf="selectedTabIndex === 0">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="approvePerson(person)"
+                matTooltip="Approve"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="rejectPerson(person)"
+                matTooltip="Reject"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 1">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="approvePerson(person)"
+                matTooltip="Approve"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="selectedTabIndex === 2">
+              <button
+                mat-icon-button
+                (click)="setPersonPending(person)"
+                matTooltip="Set as Pending"
+              >
+                <mat-icon>schedule</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="rejectPerson(person)"
+                matTooltip="Reject"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsWithSelect"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumnsWithSelect"
+        ></tr>
+      </table>
+    </div>
+
+    <div class="pagination-container">
+      <div
+        class="pagination-controls"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+        "
+      >
+        <!-- First Page Button -->
+        <button
+          mat-icon-button
+          (click)="loadFirstPage()"
+          [disabled]="
+            !hasPreviousPage() || isLoading || getCurrentPageNumber() === 1
+          "
+          matTooltip="First page"
+        >
+          <mat-icon>first_page</mat-icon>
+        </button>
+
+        <!-- Previous Button -->
+        <button
+          mat-icon-button
+          (click)="loadPreviousPage()"
+          [disabled]="!hasPreviousPage() || isLoading"
+          matTooltip="Previous page"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <!-- Pagination Info -->
+        <div class="pagination-info">
+          <span *ngIf="getTotalCount() > 0">
+            {{ getStartIndex() }} - {{ getEndIndex() }} of {{ getTotalCount() }}
+          </span>
+          <span *ngIf="getTotalCount() === 0"> No items found </span>
+        </div>
+
+        <!-- Next Button -->
+        <button
+          mat-icon-button
+          (click)="loadNextPage()"
+          [disabled]="!hasNextPage() || isLoading"
+          matTooltip="Next page"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <!-- Last Page Button -->
+        <button
+          mat-icon-button
+          (click)="loadLastPage()"
+          [disabled]="
+            !hasNextPage() ||
+            isLoading ||
+            getCurrentPageNumber() === getTotalPages()
+          "
+          matTooltip="Last page"
+        >
+          <mat-icon>last_page</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</div>

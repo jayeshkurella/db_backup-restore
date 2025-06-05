@@ -1,0 +1,253 @@
+<div class="container-fluid mt-2">
+    <!-- Volunteer Cards Section -->
+    <div class="row">
+      <div class="col-md-3" *ngFor="let person of allvolunteersPersons">
+        <div class="card testimonial-card mt-1 mb-3">
+          <div class="card-up aqua-gradient"></div>
+  
+          <!-- Profile Image -->
+          <div class="avatar mx-auto white">
+            <img
+              [src]="person.photo_upload ? (environment.apiUrl + person.photo_upload) : 'assets/images/pngwing.com.png'"
+              class="rounded-circle img-fluid"
+              alt="Person Photo"
+            />
+          </div>
+  
+          <!-- Card Body -->
+          <div class="card-body text-center">
+            <h4 class="card-title font-weight-bold">{{ person.full_name }}</h4>
+            <hr />
+            <p class="card-subtitle">{{ person.role || 'Volunteer' }}</p>
+  
+            <!-- Card Details -->
+            <div class="card-details">
+              <table class="details-table">
+                <tr>
+                  <td><strong>Age:</strong></td>
+                  <td>{{ person.Age }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Gender:</strong></td>
+                  <td>{{ person.gender }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Group:</strong></td>
+                  <td>{{ person.volunteer_group }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Region:</strong></td>
+                  <td>{{ person.assigned_region }}</td>
+                </tr>
+              </table>
+            </div>
+  
+            <!-- View Button -->
+            <div class="card-footer">
+              <button class="btn btn-outline-dark" (click)="viewDetails(person)">View</button>
+            </div>
+          </div>
+  
+          <!-- Footer Section (New) -->
+          <div class="card-footer">
+            <ul class="footer-icons">
+              <li><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+              <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
+              <li><a href="#" aria-label="Whatsapp"><i class="fab fa-whatsapp"></i></a></li>
+              <li><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Pagination Component -->
+    <div *ngIf="allvolunteersPersons.length > 0">
+      <app-pagination
+        [currentPage]="pagination.current_page"
+        [totalPages]="pagination.total_pages"
+        [hasPrevious]="pagination.has_previous"
+        [hasNext]="pagination.has_next"
+        (pageChange)="onPageChangeevent($event)">
+      </app-pagination>
+    </div>
+  
+    <!-- No Volunteers Message -->
+    <div *ngIf="allvolunteersPersons?.length === 0">
+      <p>No Persons Available.</p>
+    </div>
+      
+      <div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="volunteerModalLabel">Volunteer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="selectedPerson" class="container">
+    
+                        <!-- Volunteer Overview Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-5 text-center">
+                                <img [src]="selectedPerson.photo_upload ? (environment.apiUrl + selectedPerson.photo_upload) : 'assets/images/pngwing.com.png'" alt="Volunteer Photo" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-7">
+                                <h4>{{ selectedPerson.full_name }}</h4>
+                                <p><strong>Age:</strong> {{ selectedPerson.Age }}</p>
+                                <p><strong>Gender:</strong> {{ selectedPerson.gender }}</p>
+                                <p><strong>Blood Group:</strong> {{ selectedPerson.blood_group }}</p>
+                                <p><strong>Volunteer Group:</strong> {{ selectedPerson.volunteer_group }}</p>
+                                <p><strong>Assigned Region:</strong> {{ selectedPerson.assigned_region }}</p>
+                            </div>
+                        </div>
+    
+                        <!-- Volunteer Search Details Section -->
+                        <h5 class="mb-3 text-primary">Search Details</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Search Start Date:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.search_start_date | date }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Search End Date:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.search_end_date | date }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Search Timing:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.search_timing }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Mode of Search:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.mode_of_search }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Other Equipment Issued:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.other_equipment_issued }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>GPS Tracker Enabled:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.gps_tracker_enabled ? 'Yes' : 'No' }}</div>
+                        </div>
+                        
+                        <!-- Volunteer Medical and Allergy Information -->
+                        <h5 class="mb-3 text-primary">Medical & Allergy Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Known Allergies:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.known_allergies }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Pre-existing Medical Conditions:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.pre_existing_medical_conditions }}</div>
+                        </div>
+    
+                        <!-- Emergency Contact Information -->
+                        <h5 class="mb-3 text-primary">Emergency Contact</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Name:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.emergency_contact_name }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Phone Number:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.emergency_contact_number }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Relationship:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.relationship_with_volunteer }}</div>
+                        </div>
+    
+                        <!-- Volunteer Feedback and Issues -->
+                        <h5 class="mb-3 text-primary">Volunteer Feedback</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Feedback After Search:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.feedback_after_search }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Issues Faced During Search:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.issues_faced_during_search }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Additional Suggestions:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.additional_suggestions }}</div>
+                        </div>
+    
+                        <!-- Contact Information Section -->
+                        <h5 class="mb-3 text-primary">Contact Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Phone Number:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.contact.phone_number }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Email:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.contact.email }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Type:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.contact.type }} ({{ selectedPerson.contact.subtype }})</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Company Name:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.contact.company_name }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Job Title:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.contact.job_title }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Website:</strong></div>
+                            <div class="col-md-9"><a [href]="selectedPerson.contact.website" target="_blank">{{ selectedPerson.contact.website }}</a></div>
+                        </div>
+    
+                        <!-- Address Information Section -->
+                        <h5 class="mb-3 text-primary">Address Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Street:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.street }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Apartment:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.apartment_number }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Village:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.village }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>City:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.city }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>District:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.district }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>State:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.state }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Postal Code:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.postal_code }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Country:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.country }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3"><strong>Landmark:</strong></div>
+                            <div class="col-md-9">{{ selectedPerson.address.landmark_details }}</div>
+                        </div>
+                        <!-- Map Section -->
+              <h5 class="mb-3 text-primary">Location of missing Person</h5>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <div id="map"></div>
+                </div>
+              </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    

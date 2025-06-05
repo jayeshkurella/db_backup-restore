@@ -1,0 +1,142 @@
+<div class="container" [class.dark-theme]="currentTheme === 'dark'" [class.light-theme]="currentTheme === 'light'">
+  <!-- Side Navigation Tabs -->
+  <button mat-icon-button class="sidebar-toggle" (click)="toggleSidebar()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <!-- Side Navigation Tabs -->
+  <mat-nav-list class="sidenav" [class.sidenav-open]="sidebarOpen" [class.sidenav-closed]="!sidebarOpen">
+    <div class="logo-container">
+      <img src="assets/main-logos/TraceMapr_logo.png" alt="Logo" />
+    </div>
+    <mat-list-item (click)="selectedTab = 'privacy'; onNavItemClick()" [class.active]="selectedTab === 'privacy'">
+      <span>Privacy Policy</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'terms'; onNavItemClick()" [class.active]="selectedTab === 'terms'">
+      <span>Terms of Use</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'disclaimer'; onNavItemClick()" [class.active]="selectedTab === 'disclaimer'">
+      <span>Legal Disclaimer</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'Jurisdiction'; onNavItemClick()"
+      [class.active]="selectedTab === 'Jurisdiction'">
+      <span>Jurisdiction</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'Updates'; onNavItemClick()" [class.active]="selectedTab === 'Updates'">
+      <span>Policy Updates</span>
+    </mat-list-item>
+    <mat-list-item (click)="selectedTab = 'Contact'; onNavItemClick()" [class.active]="selectedTab === 'Contact'">
+      <span>Contact</span>
+    </mat-list-item>
+  </mat-nav-list>
+
+  <!-- Main Content -->
+  <div class="content" [class.content-expanded]="!sidebarOpen">
+    <h3 class="text-center">Legal Documents</h3>
+
+    <div *ngIf="selectedTab === 'privacy'" class="tab-content">
+      <h4>Privacy Policy</h4>
+      <p>Chhaya Foundation ("we", "our", or "us") is committed to protecting your privacy in our TraceMapr application.
+      </p>
+
+      <h5>1.1 Information We Collect</h5>
+      <ul>
+        <li>Personal Identifiable Information (PII): Name, phone number, email address</li>
+        <li>Sensitive and Biometric Data: Photographs, distinguishing marks, DNA reports</li>
+        <li>Case-Specific Inputs: Last seen details, police report numbers</li>
+        <li>Device & Usage Data: IP addresses, browser details, timestamps</li>
+      </ul>
+
+      <h5>1.2 Purpose of Collection</h5>
+      <ul>
+        <li>Assist in lawful tracing and identification</li>
+        <li>Responsible data sharing with consent</li>
+        <li>Aggregated analytics for research</li>
+        <li>Preventive measures through case studies</li>
+      </ul>
+
+      <h5>1.3 Data Security</h5>
+      <ul>
+        <li>Data encrypted using AES protocols</li>
+        <li>TLS encrypted network communication</li>
+        <li>Strict role-based access control</li>
+      </ul>
+    </div>
+
+    <div *ngIf="selectedTab === 'terms'" class="tab-content">
+      <h4>Terms of Use</h4>
+      <h5>2.1 Platform Intent & Limitations</h5>
+      <p>TraceMapr is a civic technology platform developed by Chhaya Foundation for public assistance. It provides...
+      </p>
+      <h5>2.2 User Conduct</h5>
+      <ul>
+        <li>Submit accurate, lawful, and non-malicious content.</li>
+        <li>Avoid defamation, impersonation, or obscenity.</li>
+        <li>Refrain from submitting copyrighted materials without permission.</li>
+      </ul>
+      <p>Chhaya Foundation reserves the right to reject or redact submissions and share case details with authorities.
+      </p>
+      <h5>2.3 Limitation of Liability</h5>
+      <ul>
+        <li>Unresolved or misdirected cases.</li>
+        <li>Third-party misuse of data.</li>
+        <li>Submitter errors.</li>
+      </ul>
+    </div>
+
+    <div *ngIf="selectedTab === 'disclaimer'" class="tab-content">
+      <h4>Legal Disclaimer</h4>
+      <h5>3.1 Enhanced Discovery Support and Legal Position</h5>
+      <p>Chhaya Foundation does not guarantee case resolutions, but TraceMapr offers smart-matching tools, alerts, and
+        accessible digital records.</p>
+      <h5>3.2 Public Sharing and Responsible Disclosure</h5>
+      <ul>
+        <li>Indexed by search engines</li>
+        <li>Shared in public/closed groups</li>
+        <li>Referenced anonymously in research</li>
+      </ul>
+      <h5>3.3 Research and Analytics</h5>
+      <ul>
+        <li>Trends in trafficking, homelessness, etc.</li>
+        <li>Government policy support</li>
+      </ul>
+      <p>No identifiable data will be used without explicit consent.</p>
+    </div>
+
+    <div *ngIf="selectedTab === 'Jurisdiction'" class="tab-content">
+      <h5>Jurisdiction and Legal Standing</h5>
+      <p>Chhaya Foundation is registered in Pune, Maharashtra, India. All legal matters will be governed by Indian law.
+      </p>
+      <ul>
+        <li>All legal disputes or complaints shall fall under the jurisdiction of the Courts of Pune, Maharashtra,
+          India.</li>
+        <li>Chhaya Foundation's name, reputation, and volunteers shall be protected from defamatory or false
+          allegations.</li>
+        <li>Frivolous or malicious submissions will be shared with law enforcement for action under IPC and IT Act.</li>
+      </ul>
+    </div>
+
+    <div *ngIf="selectedTab === 'Updates'" class="tab-content">
+      <h5>Updates to the Policy</h5>
+      <br>
+      <p>
+        We may update this policy periodically. Substantial changes will be communicated via app updates, email, or
+        in-app/platform notices.
+        Continued use of the platform after such updates implies your acceptance of the revised policy.
+      </p>
+    </div>
+
+    <div *ngIf="selectedTab === 'Contact'" class="tab-content">
+      <h5>Contact for Legal and Compliance Matters</h5>
+      <br>
+      <p>For any legal or compliance inquiries, please contact us at:</p>
+      <p>Email: support&#64;tracemapr.com</p>
+      <p>Phone: 8010318285</p>
+      <p>Address: Chhaya Foundation, Pune, Maharashtra, India</p>
+    </div>
+  </div>
+  <footer class="footer">
+    <button mat-flat-button color="primary" class="btn-back" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </footer>
+</div>

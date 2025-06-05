@@ -1,0 +1,21 @@
+.contact-item {
+    min-width: 200px;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+  }
+
+  
+  
+  .gap-3 {
+    gap: 1rem;
+  }
+  .heading{
+    font-size: 18px;
+  }
+  .space-below{
+  margin-bottom: 100px;
+}
+mat-error {
+  color: red;
+}

@@ -1,0 +1,82 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+div.leaflet-popup-content{
+  width: 400px;
+}
+
+
+
+
+.main-heading {
+  font-size: 18px;
+  font-weight:600;
+  color: inherit; 
+  text-transform: capitalize;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+  margin-left: 20px;
+}
+
+
+/* Override Toastr warning background to orange */
+.toast-success {
+  background-color: #F58C34  !important; /* bright orange */
+  color: white !important;
+}
+
+
+.bordercolor{
+  border: 2px solid;
+  border-color: #FFD7BE  !important; 
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+mat-datepicker-toggle .mat-datepicker-toggle-default-icon {
+  color: #aaa !important;
+}
+
+.imgUploadborder{
+   color: #898585 !important;
+   
+ 
+}
+
+
+
+.styled-card {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 30px 20px 20px 20px; /* space for legend */
+  
+}
+
+.card-legend {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background: inherit;
+  padding: 0 10px;
+  font-weight: 600;
+  color:#f15a22;
+  font-size: 16px;
+
+}
+
+
+.form-btn{
+  text-align: right !important;
+  margin-right: 20px !important;
+  margin-top: 05px;
+}
+
+mat-card.cardWithShadow {
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}

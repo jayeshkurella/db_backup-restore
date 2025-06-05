@@ -1,0 +1,195 @@
+<div class="container text-center text-dark mt-3">
+  <h4 class="fw-bold fs-5">Find Your Local Police Station</h4>
+  <p class="fs-6">Quick access to emergency services and police stations across the country</p>
+</div>
+
+<div class="d-flex justify-content-center border-bottom">
+  <div class="filter-section bg-light rounded mb-2 border px-2 py-2 border-dark" style="max-width: 1000px; width: 100%;">
+    <div class="row g-2 align-items-center text-center">
+      <form class="mt-4" (ngSubmit)="onSearch()">
+        <div class="row g-3 justify-content-center">
+          <!-- Search by Name -->
+          <div class="col-md-3">
+            <input type="text" class="form-control border-dark" placeholder="Search by Name" [(ngModel)]="searchName" name="searchName">
+          </div>
+          <!-- Search by City -->
+          <div class="col-md-3">
+            <input type="text" class="form-control border-dark" placeholder="Search by City" [(ngModel)]="searchCity" name="searchCity">
+          </div>
+          <!-- Search by District -->
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" placeholder="Search by District" [(ngModel)]="searchdistrict" name="searchDistrict">
+          </div>
+          <!-- Search by State -->
+          <div class="col-md-2">
+            <input type="text" class="form-control border-dark" placeholder="Search by State" [(ngModel)]="searchstate" name="searchState">
+          </div>
+          <!-- Search Button -->
+          <div class="col-md-2">
+            <button class="btn btn-primary search-btn btn-sm w-100">
+              <i class="bi bi-search"></i> Search
+            </button>        
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="container my-4">
+  <div class="row">
+    <div class="col-md-4 mb-2" *ngFor="let police of total_policestation">
+      <div class="card shadow-sm rounded border-1 p-3 mb-3 h-100"> <!-- Added h-100 for equal height -->
+        <div class="row g-0 h-100"> <!-- Added h-100 for equal height -->
+          <!-- Image Placeholder -->
+          <div class="col-12 text-center bg-light" style="height: 250px;"> <!-- Fixed height for image container -->
+            <div class="w-100 h-100 overflow-hidden d-flex align-items-center justify-content-center">
+              <img *ngIf="police.photo_upload; else placeholder" 
+                  [src]="environment.apiUrl + police.photo_upload" 
+                  alt="{{police.name}}" 
+                  class="img-fluid object-fit-cover w-100 h-100" 
+                  style="border-radius: 8px;">
+              <ng-template #placeholder>
+                <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+              </ng-template>
+            </div>
+          </div>
+          
+          <!-- Details -->
+          <div class="col-12 p-3 d-flex flex-column"> <!-- Added flex-column for equal height -->
+            <div class="d-flex justify-content-between align-items-start">
+              <h5 class="f">{{ police.name }}</h5>
+              <span class="badge search-btn" [ngClass]="{'bg-dark': police.station_status === 'Active', 'bg-danger': police.station_status !== 'Active'}">
+                {{ police.station_status }}
+              </span>
+            </div>
+            <p class="text-muted small">
+              <i class="bi bi-geo-alt"></i> {{ police.address }}, {{ police.city }}
+            </p>
+            
+            <!-- Contact & Officer Info -->
+            <div class="row flex-grow-1"> <!-- Added flex-grow-1 for equal height -->
+              <div class="col-6">
+                <h6 class="fw-semibold"><i class="bi bi-telephone"></i> Contact</h6>
+                <p class="mb-1 small">Emergency: 112</p>
+                <p class="mb-1 small">Helpline: 1091</p>
+                <p class="mb-1 small">Office: {{ police.telephone_no }}</p>
+              </div>
+              <div class="col-6">
+                <h6 class="fw-semibold"><i class="bi bi-person-fill"></i> Officer In Charge</h6>
+                <p class="mb-1 small">{{ police.officer_name }}</p>
+                <p class="mb-1 small">{{ police.officer_rank }}</p>
+                <p class="mb-1 small">{{ police.officer_contact }}</p>
+              </div>
+            </div>
+            
+            <!-- Footer Section -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <p class="text-muted small mb-0">
+                <i class="bi bi-clock"></i> 24/7 &bull; Est. {{ police.established_year }}
+              </p>
+              <button class="btn btn-outline-primary search-btn btn-sm" (click)="seeMores(police)">
+                More Info
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    
+    </div>
+    
+  </div>
+  <div *ngIf="total_policestation?.length > 0">
+    <app-pagination
+      [currentPage]="pagination.current_page"
+      [totalPages]="pagination.total_pages"
+      [hasPrevious]="pagination.has_previous"
+      [hasNext]="pagination.has_next"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+    </div>
+    <div *ngIf="total_policestation?.length === 0">
+    <p>No Police Station Available.</p>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="personModalLabel">Police Station Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="selectedPoliceStation" class="container">
+            <!-- Person Overview Section -->
+            <div class="row mb-12">
+              <div class="col-md-5 text-center">
+                <img [src]="selectedPoliceStation.photo_upload ? (environment.apiUrl + selectedPoliceStation.photo_upload) : 'assets/images/pngwng.com.png'" alt="station Photo" class="img-fluid rounded">
+              </div>
+              <div class="col-md-7">
+                <h5>{{ selectedPoliceStation.name }}</h5>
+                <p>Website:
+                  <a *ngIf="selectedPoliceStation.website" [href]="selectedPoliceStation.website" target="_blank" class="text-primary">{{ selectedPoliceStation.website }}</a>
+                  <span *ngIf="!selectedPoliceStation.website">Not Available</span>
+                </p>
+              </div>
+            </div>
+            <!-- Contact Information Section -->
+            <h5 class="mb-3 text-primary">Information</h5>
+            <div class="row mb-3">
+                <div class="col-md-3">Zone:</div>
+                <div class="col-md-9">{{ selectedPoliceStation.zone_name }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">Division Name:</div>
+                <div class="col-md-9">{{ selectedPoliceStation.division_name }}</div>
+              </div>
+            <div class="row mb-3">
+              <div class="col-md-3">Address:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.address }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">Telephone No:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.telephone_no }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">Village:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.village }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">City:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.city }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">Cistrict:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.district }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">District:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.state }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">Country:</div>
+              <div class="col-md-9">{{ selectedPoliceStation.country }}</div>
+            </div>
+            <!-- Map Section -->
+            <h5 class="mb-3 text-primary">Location of police station</h5>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <div id="map" ></div>
+              </div>
+            </div>         
+           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary search-btn" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

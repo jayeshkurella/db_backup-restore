@@ -1,0 +1,542 @@
+<div class="m-2 cardheader">
+  <form [formGroup]="policeStationForm" (ngSubmit)="submitForm()" class="container-fluid py-3 px-3">
+    <mat-card class="mt-1 p-3 styled-card styledd-card">
+      <span class="card-legend">Details</span>
+      <div class="row">
+        <div class="col-md-6"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('name')?.touched &&
+                  policeStationForm.get('name')?.invalid
+              }">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Police Station Name</mat-label>
+            <input matInput formControlName="name" type="text" required />
+            <mat-error *ngIf="policeStationForm.get('name')?.hasError('required')">
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('phone_no')?.touched &&
+                  policeStationForm.get('phone_no')?.invalid
+              }">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone_no" type="text" required />
+            <mat-error *ngIf="policeStationForm.get('phone_no')?.hasError('required')">
+              Phone number is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- <div class="col-md-6">
+        <input type="file" id="photo" class="form-control" (change)="onFileChange($event)">
+      </div> -->
+
+        <div class="col-md-6" style="margin-bottom: 20px">
+          <button mat-stroked-button  class="w-100 imgUploadborder" type="button"
+            (click)="policestationPhotoInput.click()">
+            <mat-icon>cloud_upload</mat-icon>Police Station Photo
+          </button>
+          <input #policestationPhotoInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
+        </div>
+        <div class="col-md-6"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('activ_Status')?.touched &&
+                  policeStationForm.get('activ_Status')?.invalid
+              }">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="activ_Status">
+              <mat-option value="Active">Active</mat-option>
+              <mat-option value="Inactive">Inactive</mat-option>
+            </mat-select>
+            <mat-error *ngIf="
+                policeStationForm.get('activ_Status')?.hasError('required')
+              ">
+              Status is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card>
+    <!-- Police Station Information -->
+
+    <!-- Address Section -->
+
+    <mat-card class="mt-2 p-2">
+      <span class="card-legend">Address</span>
+      <div formGroupName="address" class="p-3">
+        <div class="row">
+          <!-- Left Side: All form fields arranged two per row -->
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.address_type')?.touched &&
+                  policeStationForm.get('address.address_type')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Address Type</mat-label>
+                  <mat-select formControlName="address_type">
+                    <mat-option value="permanent">Permanent</mat-option>
+                    <mat-option value="current">Current</mat-option>
+                    <mat-option value="old">Old</mat-option>
+                    <mat-option value="office">Office</mat-option>
+                  </mat-select>
+
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.address_type')
+                        ?.hasError('required')
+                    ">
+                    Address type is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.street')?.touched &&
+                  policeStationForm.get('address.street')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Street</mat-label>
+                  <input matInput formControlName="street" type="text" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.street')
+                        ?.hasError('required')
+                    ">
+                    Street is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Apartment No.</mat-label>
+                <input matInput formControlName="appartment_no" type="number">
+                <mat-error *ngIf="policeStationForm.get('address.appartment_no')?.hasError('required')">
+                  Apartment No. is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Apartment Name</mat-label>
+                <input matInput formControlName="appartment_name" type="text">
+                <mat-error *ngIf="policeStationForm.get('address.appartment_name')?.hasError('required')">
+                  Apartment Name is required.
+                </mat-error>
+              </mat-form-field>
+            </div> -->
+
+              <div class="col-md-6"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.village')?.touched &&
+                  policeStationForm.get('address.village')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Village</mat-label>
+                  <input matInput formControlName="village" type="text" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.village')
+                        ?.hasError('required')
+                    ">
+                    Village is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6" [ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.city')?.touched &&
+                  policeStationForm.get('address.city')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" type="text" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.city')
+                        ?.hasError('required')
+                    ">
+                    City is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6" [ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.district')?.touched &&
+                  policeStationForm.get('address.district')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>District</mat-label>
+                  <input matInput formControlName="district" type="text" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.district')
+                        ?.hasError('required')
+                    ">
+                    District is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6" [ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.state')?.touched &&
+                  policeStationForm.get('address.state')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>State</mat-label>
+                  <mat-select formControlName="state">
+                    <mat-option *ngFor="let state of states" [value]="state">{{
+                      state
+                      }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.state')
+                        ?.hasError('required')
+                    ">
+                    State is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6" [ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.country')?.touched &&
+                  policeStationForm.get('address.country')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Country</mat-label>
+                  <mat-select formControlName="country">
+                    <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.country')
+                        ?.hasError('required')
+                    ">
+                    country is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6" [ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.pincode')?.touched &&
+                  policeStationForm.get('address.pincode')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Pincode</mat-label>
+                  <input matInput formControlName="pincode" type="number" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.pincode')
+                        ?.hasError('required')
+                    ">
+                    Pincode is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-12" [ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.landmark_details')?.touched &&
+                  policeStationForm.get('address.landmark_details')?.invalid
+              }">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Landmark Details</mat-label>
+                  <textarea matInput formControlName="landmark_details" type="text"></textarea>
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.landmark_details')
+                        ?.hasError('required')
+                    ">
+                    Landmark details are required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Map and Location fields -->
+          <!-- <div class="col-md-6" formGroupName="location">
+            <div id="mapAddStation" style="height: 200px; margin-bottom: 1rem; z-index: 1;"></div>
+            <div class="row align-items-center">
+              <div class="col-md-2 text-center">
+                <button type="button" mat-icon-button color="primary" (click)="getCurrentLocation()" aria-label="Get Current Location">
+                  <mat-icon>my_location</mat-icon>
+                </button>
+              </div>
+              <div class="col-md-5">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Latitude</mat-label>
+                  <input matInput formControlName="latitude"  type="number">
+                  <mat-error *ngIf="policeStationForm.get('address.location.latitude')?.hasError('required')">
+                    Latitude is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-5">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Longitude</mat-label>
+                  <input matInput formControlName="longitude"  type="number">
+                  <mat-error *ngIf="policeStationForm.get('address.location.longitude')?.hasError('required')">
+                    Longitude is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+            </div>
+            
+          </div> -->
+          <div class="col-md-6">
+            <div formGroupName="location">
+              <!-- Latitude & Longitude Fields + Location Button -->
+              <div class="d-flex gap-2 align-items-start mb-2"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.location.longitude')?.touched &&
+                  policeStationForm.get('address.location.longitude')?.invalid
+              }"[ngClass]="{
+                'mb-3':
+                  policeStationForm.get('address.location.longitude')?.touched &&
+                  policeStationForm.get('address.location.longitude')?.invalid
+              }">
+                <!-- Latitude Field -->
+                <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+                  <mat-label>Latitude</mat-label>
+                  <input matInput type="number" formControlName="latitude" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.location.latitude')
+                        ?.hasError('required')
+                    ">
+                    Latitude is required.
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Longitude Field -->
+                <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+                  <mat-label>Longitude</mat-label>
+                  <input matInput type="number" formControlName="longitude" />
+                  <mat-error *ngIf="
+                      policeStationForm
+                        .get('address.location.longitude')
+                        ?.hasError('required')
+                    ">
+                    Longitude is required.
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Get Current Location Button -->
+                <button type="button" mat-icon-button color="primary" (click)="getCurrentLocation()"
+                  matTooltip="Fetch your current location">
+                  <mat-icon>my_location</mat-icon>
+                </button>
+              </div>
+
+              <!-- Map Container -->
+              <div id="mapAddStation" style="
+                  height: 220px;
+                  border: 1px solid black;
+                  border-radius: 5px;
+                  z-index: 1;
+                "></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <!-- Contact Info -->
+    <!-- <div class="p-3 bg-light-primary rounded mt-2">
+      <h5 class="heading">contacts Details</h5>
+    </div> -->
+    <!-- <div class="p-3 bg-light-primary rounded d-flex justify-content-between align-items-center">
+      <h5 class="heading">Contact Details</h5>
+      <button type="button" mat-flat-button color="accent" (click)="addContact()">
+        Add Contact
+      </button>
+    </div> -->
+    <mat-card class="mt-2 p-2 styled-card">
+         <span class="card-legend">Contact</span>      
+      <div class="flex justify-content-end form-btn">
+        <button mat-flat-button color="primary" type="button" (click)="addContact()">
+          Add Contact
+        </button>
+      </div>
+      <div formArrayName="police_contact">
+        <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="p-3 mb-3 rounded">
+          <div class="row">
+            <div class="col-md-4" [ngClass]="{
+                'mb-3':
+                  contact.get('type')?.touched &&
+                  contact.get('type')?.invalid
+              }">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Contact Type</mat-label>
+                <mat-select formControlName="type">
+                  <mat-option value="personal">Personal</mat-option>
+                  <mat-option value="office">Office</mat-option>
+                  <mat-option value="home">Home</mat-option>
+                </mat-select>
+                <mat-error *ngIf="contact.get('type')?.hasError('required')">
+                  Type is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4" [ngClass]="{
+                'mb-3':
+                  contact.get('phone_no')?.touched &&
+                  contact.get('phone_no')?.invalid
+              }">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Phone No</mat-label>
+                <input matInput formControlName="phone_no" type="text" />
+                <mat-error *ngIf="contact.get('phone_no')?.hasError('required')">
+                  Phone number is required.
+                </mat-error>
+                <mat-error *ngIf="contact.get('phone_no')?.hasError('pattern')">
+                  Enter a valid phone number (mobile or landline).
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4" [ngClass]="{
+                'mb-3':
+                  contact.get('country_cd')?.touched &&
+                  contact.get('country_cd')?.invalid
+              }">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Country Code</mat-label>
+                <mat-select formControlName="country_cd">
+                  <mat-option value="+91">+91 (India)</mat-option>
+                  <mat-option value="+1">+1 (USA/Canada)</mat-option>
+                  <mat-option value="+44">+44 (UK)</mat-option>
+                  <mat-option value="+61">+61 (Australia)</mat-option>
+                </mat-select>
+                <mat-error *ngIf="contact.get('country_cd')?.hasError('required')">
+                  Country code is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Company</mat-label>
+                <input matInput formControlName="company_name">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Job Title</mat-label>
+                <input matInput formControlName="job_title">
+              </mat-form-field>
+            </div> -->
+          </div>
+
+          <div class="row">
+            <!-- <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email_id" type="email">
+                <mat-error *ngIf="contact.get('email_id')?.hasError('required')">
+                  Email is required
+                </mat-error>
+              </mat-form-field>
+            </div> -->
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email_id" type="email" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Website</mat-label>
+                <input matInput formControlName="website_url" type="url" placeholder="Enter the official website URL" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Social Media</mat-label>
+                <input matInput formControlName="social_media_url" type="url" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
+              <mat-checkbox formControlName="is_primary">Primary Contact</mat-checkbox>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <button type="button" mat-flat-button color="warn" (click)="removeContact(i)" *ngIf="contacts.length > 1">
+              Remove
+            </button>
+          </div>
+        </div>
+        <div *ngIf="savedContacts.length > 0">
+          <h6>Added Contacts:</h6>
+          <div *ngFor="let contact of savedContacts; let i = index" class="border p-3 mb-3 rounded bg-light">
+            <div class="d-flex flex-wrap align-items-center gap-3">
+              <!-- Delete Icon Button -->
+              <button mat-icon-button type="button" color="warn" (click)="removeSavedContact(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+              <!-- Contact Info (flex wrapped for better spacing) -->
+              <div class="contact-item">
+                <strong>Type:</strong> {{ contact.type }}
+              </div>
+              <div class="contact-item">
+                <strong>Phone:</strong> {{ contact.phone_no }}
+              </div>
+              <div class="contact-item">
+                <strong>Country:</strong> {{ contact.country_cd }}
+              </div>
+              <div class="contact-item">
+                <strong>Email:</strong> {{ contact.email_id }}
+              </div>
+              <div class="contact-item" *ngIf="contact.company_name">
+                <strong>Company:</strong> {{ contact.company_name }}
+              </div>
+              <div class="contact-item" *ngIf="contact.job_title">
+                <strong>Job Title:</strong> {{ contact.job_title }}
+              </div>
+              <div class="contact-item" *ngIf="contact.website_url">
+                <strong>Website:</strong> {{ contact.website_url }}
+              </div>
+              <div class="contact-item" *ngIf="contact.social_media_url">
+                <strong>Social:</strong> {{ contact.social_media_url }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Contact aligned to the right -->
+      <!-- <div class="text-end m-2">
+        <button type="button" mat-flat-button color="accent" (click)="addContact()">Add Contact</button>
+      </div> -->
+    </mat-card>
+
+    <!-- Submit -->
+   <div class="d-flex justify-content-center align-items-center mt-4 gap-3 space-down">
+      <button mat-flat-button (click)="goBack()" class="back-btn">
+        <mat-icon>arrow_back</mat-icon> Back
+      </button>
+
+      <button mat-stroked-button color="primary" type="submit" class="me-3">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,70 @@
+<div class="card bg-light p-4 mb-3">
+    <div formArrayName="addresses">
+      <h5 class="header-bottom pb-2">Address Details</h5>
+      <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i" class="row g-3">
+        
+        <!-- Address Fields -->
+        <div class="col-md-6">
+          <div class="row g-2">
+            <div class="col-md-6">
+                <select class="form-control border-dark selectors-font" formControlName="type">
+                  <option value="" disabled selected>Select Address Type</option>
+                  <option value="PERMANENT">Permanent</option>
+                  <option value="CURRENT">Current</option>
+                  <option value="OLD">Old</option>
+                  <option value="HOME">Home</option>
+                  <option value="OFFICE">Office</option>
+                </select>
+              </div>
+              
+            <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="street" placeholder="Street"></div>
+            <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="appartment_no" placeholder="Apartment Number"></div>
+            <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="village" placeholder="Village"></div>
+            <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="city" placeholder="City"></div>
+            <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="district" placeholder="District"></div>
+  
+            <!-- State Dropdown -->
+            <div class="col-md-6">
+              <select class="form-control border-dark selectors-font" formControlName="state">
+                <option value="" selected disabled>State</option>
+                <option *ngFor="let state of states" [value]="state">{{ state }}</option>
+              </select>
+            </div>
+  
+            <div class="col-md-6"><input type="text" class="form-control border-dark selectors-font" formControlName="pincode" placeholder="Pincode"></div>
+  
+            <!-- Country Dropdown -->
+            <div class="col-md-6">
+              <select class="form-control border-dark selectors-font" formControlName="country">
+                <option value="" disabled selected>Country</option>
+                <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+              </select>
+            </div>
+  
+  
+            <div class="col-md-12"><textarea class="form-control border-dark selectors-font" formControlName="landmark_details" placeholder="Enter Landmark Details (e.g., Near Park)"></textarea></div>
+          </div>
+        </div>
+  
+        <!-- Right Side: Map & Get Location Button -->
+        <div class="col-md-6">
+          <div formGroupName="location">
+            <label class="form-label selectors-font">Missing Person Home Location</label>
+            <div id="mapHome" style="height: 180px; border: 1px solid black;"></div>
+  
+            <div class="d-flex gap-2 mt-3">
+              <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="getCurrentLocation(i)">
+                <i class="bi bi-geo-alt"></i> 
+              </button>
+  
+              <input type="text" class="form-control border-dark selectors-font" formControlName="latitude" [value]="latitude ?? ''" readonly placeholder="Latitude">
+              <input type="text" class="form-control border-dark selectors-font" formControlName="longitude" [value]="longitude ?? ''" readonly placeholder="Longitude">
+            </div>
+          </div>
+        </div>
+  
+      </div>
+      <button type="button" class="btn btn-outline-primary border-dark selectors-font custom-hover" (click)="addAddress()">Add Another Address</button>
+    </div>
+    
+  </div>

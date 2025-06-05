@@ -1,0 +1,57 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center" style="background: #decda438;">
+  <div class="row shadow-lg rounded w-100" style="max-width: 900px; overflow: hidden;">
+    
+    <!-- Left Side: Branding -->
+    <div class="col-md-4 d-none d-md-flex flex-column align-items-center justify-content-center text-white p-4"
+         style="background: url('assets/images/register.jpeg') no-repeat center center; 
+                background-size: cover;">
+    </div>
+
+    <!-- Right Side: Login Form -->
+    <div class="col-md-8 bg-white p-3 p-md-5">
+      <div class="d-flex flex-column align-items-center">
+        <img src="assets/images/Chhaya.png" alt="Chhaya Logo" class="mb-3" 
+             style="width: 150px; height: auto; max-width: 100%; margin-top: -20px;">
+        <h4 class="text-center mb-4">Login Here</h4>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    
+        <!-- Email -->
+        <div class="mb-3 input-group">
+          <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
+          <input type="email" class="form-control border-0 border-bottom" formControlName="email_id" placeholder="Enter your email">
+        </div>
+    
+        <!-- Password -->
+        <div class="mb-3 input-group">
+          <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
+          <input type="password" class="form-control border-0 border-bottom" formControlName="password" 
+                placeholder="Enter password" id="passwordInput">
+          <span class="input-group-text bg-light border-0" style="cursor: pointer;" 
+                (click)="togglePasswordVisibility('password')">
+            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+          </span>
+        </div>
+    
+        <!-- Submit Button -->
+        <div class="d-grid">
+          <button type="submit" class="btn text-white fw-bold py-2" 
+                  style="background: linear-gradient(45deg, #FA6400, #E63946);">
+            Login
+          </button>
+        </div>
+    
+        <!-- New User? Register Link -->
+        <p class="text-center mt-3">
+          New user? 
+          <a routerLink="/register" class="text-danger fw-bold">Register</a>
+        </p>
+    
+      </form>
+
+      <!-- Success and Error Messages -->
+      
+    </div>
+    
+  </div>
+</div>

@@ -1,0 +1,150 @@
+<h2 mat-dialog-title>Person Details</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="person" class="container">
+
+    <!-- Person Overview -->
+    <div class="row mb-4">
+  <!-- Photo Section -->
+  <div class="col-md-5 text-center">
+    <img
+      [src]="environment.ImgUrlss + person.photo_photo"
+      alt="Person Photo"
+      class="img-fluid rounded"
+      style="height: 300px; width: 100%; object-fit: cover;"
+    />
+  </div>
+
+  <!-- Details Section -->
+  <div class="col-md-7">
+    <h3 class="mb-3">{{ person.full_name }}</h3>
+
+    <div class="row mb-2">
+      <div class="col-sm-4 font-weight-bold">Age:</div>
+      <div class="col-sm-8" *ngIf="person.type === 'Missing Person' && person.age !== null && person.age !== undefined">
+        {{ person.age }}
+      </div>
+      <div class="col-sm-8" *ngIf="(person.type === 'Unidentified Person' || person.type === 'Unidentified Body') && person.age_range">
+        {{ person.age_range }}
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-sm-4 font-weight-bold">Gender:</div>
+      <div class="col-sm-8">{{ person.gender }}</div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-sm-4 font-weight-bold">Blood Group:</div>
+      <div class="col-sm-8">{{ person.blood_group }}</div>
+    </div>
+
+    <div class="row mb-2" *ngIf="person.type === 'Unidentified Person'">
+      <div class="col-sm-4 font-weight-bold">Condition:</div>
+      <div class="col-sm-8">{{ person.condition }}</div>
+    </div>
+
+    <div class="row mb-2" *ngIf="person.type === 'Unidentified Body'">
+      <div class="col-sm-4 font-weight-bold">Body Condition:</div>
+      <div class="col-sm-8">{{ person.Body_Condition }}</div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Appearance Info -->
+    <h5 class="text-primary">Appearance Information</h5>
+    <p><strong>Height:</strong> {{ person.height_range || 'N/A' }}</p>
+    <p><strong>Weight:</strong> {{ person.weight || 'N/A' }}</p>
+    <p><strong>Complexion:</strong> {{ person.complexion || 'N/A' }}</p>
+    <p><strong>Hair Color:</strong> {{ person.hair_color || 'N/A' }}</p>
+    <p><strong>Hair Type:</strong> {{ person.hair_type || 'N/A' }}</p>
+    <p><strong>Eye Color:</strong> {{ person.eye_color || 'N/A' }}</p>
+    <p><strong>Birth Mark:</strong> {{ person.birth_mark || 'N/A' }}</p>
+    <p><strong>Distinctive Mark:</strong> {{ person.distinctive_mark || 'N/A' }}</p>
+
+   <!-- Contact Info -->
+   <div *ngIf="person?.contacts?.length > 0">
+    <h5 class="text-primary mt-3">Contact Information</h5>
+  
+    <p *ngIf="person.contacts[0]?.type">
+      <strong>Contact Type:</strong> {{ person.contacts[0]?.type }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.company_name">
+      <strong>Company:</strong> {{ person.contacts[0]?.company_name }}
+    </p>
+    <p *ngIf="person.contacts[0]?.person_name">
+      <strong>Contact Person:</strong> {{ person.contacts[0]?.person_name }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.job_title">
+      <strong>Job Title:</strong> {{ person.contacts[0]?.job_title }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.phone_no">
+      <strong>Phone:</strong> {{ person.contacts[0]?.phone_no }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.email_id">
+      <strong>Email:</strong> {{ person.contacts[0]?.email_id }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.social_media_url">
+      <strong>Social Media:</strong> {{ person.contacts[0]?.social_media_url }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.website_url">
+      <strong>Website:</strong> {{ person.contacts[0]?.website_url }}
+    </p>
+  
+    <p *ngIf="person.contacts[0]?.additional_details">
+      <strong>Additional Details:</strong> {{ person.contacts[0]?.additional_details }}
+    </p>
+  </div>
+  
+
+
+    <!-- Address Info -->
+    <h5 class="text-primary mt-3">Address Information</h5>
+    <p><strong>Address Type:</strong> {{ person.address_type }}</p>
+    <p><strong>Street:</strong> {{ person.street }}</p>
+    <p><strong>City:</strong> {{ person.city }}</p>
+    <p><strong>Village:</strong> {{ person.village }}</p>
+    <p><strong>Landmark:</strong> {{ person.landmark_details }}</p>
+    <p><strong>State:</strong> {{ person.state }}</p>
+    <p><strong>Country:</strong> {{ person.country }}</p>
+
+    <!-- Education & Occupation -->
+    <h5 class="text-primary mt-3">Educational & Occupation Details</h5>
+    <p><strong>Caste:</strong> {{ person.additional_info[0]?.caste || 'N/A' | titlecase }}</p>
+    <p><strong>Sub Caste:</strong> {{ person.additional_info[0]?.subcaste || 'N/A' | titlecase}}</p>
+    <p><strong>Religion:</strong> {{ person.additional_info[0]?.religion || 'N/A' | titlecase}}</p>
+    <p><strong>Marital Status:</strong> {{ person.additional_info[0]?.marital_status || 'N/A' | titlecase }}</p>
+    <p><strong>Mother Tongue:</strong> {{ person.additional_info[0]?.mother_tongue || 'N/A' | titlecase}}</p>
+    <p><strong>Languages Known:</strong> {{ person.additional_info[0]?.other_known_languages || 'N/A' | titlecase }}</p>
+    <p><strong>Education:</strong> {{ person.additional_info[0]?.education_details }}</p>
+    <p><strong>Occupation:</strong> {{ person.additional_info[0]?.occupation_details }}</p>
+    <p><strong>ID Type:</strong> {{ person.additional_info[0]?.id_type | titlecase }}</p>
+    <p><strong>ID Number:</strong> {{ person.additional_info[0]?.id_no }}</p>
+
+    <!-- Identification -->
+    <h5 class="text-primary mt-3">Identification & Missing Info</h5>
+    
+    <p><strong>Missing Date:</strong> {{ person.last_known_details[0]?.missing_date }}</p>
+    <p><strong>Missing Time:</strong> {{ person.last_known_details[0]?.missing_time }}</p>
+    <p><strong>Last Seen Details:</strong> {{ person.last_known_details[0]?.last_seen_location }}</p>
+    <p><strong>Missing Location Details:</strong> {{ person.last_known_details[0]?.missing_location_details }}</p>
+
+    <h5 class="text-primary mt-3">fir Details</h5>
+    <p><strong>Police Station:</strong> {{ person.firs[0]?.police_station }}</p>
+      <p><strong>FIR Number:</strong> {{ person.firs[0]?.fir_number }}</p>
+      <p><strong>Case Status:</strong> {{ person.firs[0]?.case_status }}</p>
+      <p><strong>Investigation Officer Name:</strong> {{ person.firs[0]?.investigation_officer_name }}</p>
+      <p><strong>Investigation Officer Contact Number:</strong> {{ person.firs[0]?.investigation_officer_contacts }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close()">Close</button>
+</mat-dialog-actions>
