@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_report_opd_invoice" model="ir.actions.report">
+        <field name="name">Opd Invoice</field>
+        <field name="model">hms.opd</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">customized_acs_hms.report_opd_invoice</field>
+        <field name="report_file">customized_acs_hms.report_opd_invoice</field>
+        <field name="print_report_name">'OPD Invoice - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hms_opd"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="external_layout_standard_opd">
+        <div t-attf-class="header">
+            <div class="row">
+                <div class="col-4"/>
+                <div class="col-4"/>
+                <div class="col-4">
+                    <span t-field="o.patient_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/><br/>
+                    <span t-field="o.patient_id.street"/>,
+                    <span t-field="o.patient_id.city"/><br/>
+                    <span t-field="o.patient_id.state_id"/>,
+                    <span t-field="o.patient_id.zip"/>
+                </div>
+            </div>
+        </div>
+
+        <div t-attf-class="article o_report_layout_standard">
+            <div class="pt-5">
+                <!-- This div ensures that the address is not cropped by the header. -->
+                <t t-call="web.address_layout"/>
+            </div>
+            <t t-out="0"/>
+        </div>
+
+        <div t-attf-class="footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <div t-if="report_type == 'pdf'" class="text-muted">
+                    Page:
+                    <span class="page"/>
+                    /
+                    <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Public api: layout to t-call from reports -->
+
+    <template id="external_layout_opd">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="customized_acs_hms.external_layout_standard_opd">
+            <t t-out="0"/>
+        </t>
+    </template>
+
+    <template id="report_opd_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="customized_acs_hms.external_layout_opd">
+                    <div class="page">
+                        <div>
+                            <p>
+                                <h2>Invoices
+                                    <span t-esc="o.name"/>
+                                </h2>
+                            </p>
+                        </div>
+                        <br/>
+                        <table class="table-borderless" width="100%">
+                            <tr width="100%">
+                                <td width="25%">Enrollment No:</td>
+                                <td width="25%">
+                                    <span t-esc="o.enrollment_no"/>
+                                </td>
+                                <td width="25%">Name:</td>
+                                <td width="25%">
+                                    <span t-esc="o.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Age:</td>
+                                <td>
+                                    <span t-esc="o.age"/>
+                                </td>
+                                <td>Date of Diagnosis:</td>
+                                <td>
+                                    <span t-esc="o.diagnosis_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Date of Record:</td>
+                                <td>
+                                    <span t-esc="o.date_of_record"/>
+                                </td>
+                                <td>Height:</td>
+                                <td>
+                                    <span t-esc="o.height"/>
+                                    Cm
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Weight:</td>
+                                <td>
+                                    <span t-esc="o.weight"/>
+                                    Kg
+                                </td>
+                                <td>BP:</td>
+                                <td>
+                                    <span t-esc="o.systolic_bp"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Last HbA1c:</td>
+                                <td>
+                                    <span t-esc="o.hbA1C"/>
+                                </td>
+                                <td>Insulin Dose:</td>
+                                <td>
+                                    <span t-esc="o.insulin_24"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Medication:</td>
+                                <td></td>
+                                <td>Primary Care Doctor:</td>
+                                <td>
+                                    <span t-esc="o.primary_physician_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Next Follow up:</td>
+                                <td>
+
+                                </td>
+                                <td>Description:</td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

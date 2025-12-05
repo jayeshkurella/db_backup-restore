@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_hms_annual_kanban" model="ir.ui.view">
+            <field name="name">hms.annual.kanban</field>
+            <field name="model">hms.annual</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" sample="1" quick_create="false">
+                    <field name="study_center"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings mt4">
+                                        
+                                        <div class="oe_kanban_details">
+                                            <strong class="oe_partner_heading"><field name="patient_id"/></strong>
+                                            <ul>
+                                                <li t-if="record.study_center.raw_value"><b>Study Center:</b> <field name="study_center"/></li>
+                                            </ul>
+                                            <ul>
+                                                <li t-if="record.gender.raw_value"><b>Gender:</b> <field name="gender"/></li>
+                                            </ul>
+                                            <ul>
+                                                <li t-if="record.enrollment_no.raw_value"><b>Enrollment No:</b> <field name="enrollment_no"/></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        
+                    </templates>                       
+                </kanban>
+            </field>
+        </record>
+
+        <record id="hms_annual_tree" model="ir.ui.view">
+            <field name="name">hms.annual.tree</field>
+            <field name="model">hms.annual</field>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <tree class="o_hms_annual"
+                      string="OPD">
+                    <field name="enrollment_no"/>
+                    <field name="patient_id"/>
+                    <field name="age"/>
+                    <field name="gender"/>
+                    <field name="mobile"/>
+                    <!-- <field name="jhrn_reg_no"/>
+                    <field name="gender"/>
+                    <field name="enrollment_no"/>
+                    <field name="enrollment_date"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hms_annual_form" model="ir.ui.view">
+            <field name="name">hms.annual.form</field>
+            <field name="model">hms.annual</field>
+            <field name="arch" type="xml">
+                <form string="Annual" class="o_hms_annual">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="jhrn_reg_no"/>
+                                <field name="gender"/>
+                                <field name="enrollment_no"/>
+                                <field name="enrollment_date"/>
+                                <field name="diagnosis_date"/>
+                                <field name="diabetes_age"/>
+                            </group>
+                            <group>
+                                <field name="birthday"/>
+                                <field name="age"/>
+                                <field name="study_center"/>
+                                <field name="include_exclude"/>
+                                <field name="study_code"/>
+                                <field name="study_sub_code"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="info" string="General Information">
+                                <group>
+                                    <group>
+                                        <label for="street" string="Address"/>
+                                        <div class="o_address_format">
+                                            <field name="street" placeholder="Street..." class="o_address_street"
+                                            />
+                                            <field name="street2" placeholder="Street 2..." class="o_address_street"
+                                            />
+                                            <field name="city" placeholder="City" class="o_address_city"
+                                            />
+                                            <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'
+                                                   context="{'country_id': country_id, 'zip': zip}"/>
+                                            <field name="zip" placeholder="ZIP" class="o_address_zip"
+                                            />
+                                            <field name="country_id" placeholder="Country" class="o_address_country"
+                                                   options='{"no_open": True, "no_create": True}'
+                                            />
+                                        </div>
+                                        <field name="nationality_id" invisible="1"/>
+                                        <field name="passport" invisible="1"/>
+                                        <field name="location_url"
+                                               placeholder="https://www.google.com/maps/place/Almighty+Consulting+Solutions+Pvt.+Ltd./@23.1645694,72.6554962,17z/data=!3m1!4b1!4m6!3m5!1s0x395e872719d44beb:0x38d56e6bb07adf0b!8m2!3d23.1645645!4d72.6597234!16s%2Fg%2F11hbk9x_k2"
+                                               widget="url"/>
+                                    </group>
+                                    <group>
+                                        <field name="phone" widget="phone"/>
+                                        <field name="mobile" widget="phone"/>
+                                        <field name="email"/>
+                                        <field name="gov_code" string="Aadhar Card No"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group name="basic_details">
+                                        <field name="occupation"/>
+                                        <field name="education"/>
+                                        <field name="religion"/>
+                                        <field name="caste"/>
+                                        <field name="category"/>
+                                    </group>
+                                    <group>
+                                        <field name="marital_status"/>
+                                        <field name="maternal_height"/>
+                                        <field name="paternal_height"/>
+                                        <field name="mid_parental_height"/>
+                                    </group>
+                                </group>
+
+                            </page>
+                            <page string="Clinical Assessment" name="clinical_assessment">
+                                <group>
+                                    <group>
+                                        <label for="height"/>
+                                        <div class="o_row">
+                                            <field name="height"/>
+
+                                        </div>
+                                        <label for="weight"/>
+                                        <div class="o_row">
+                                            <field name="weight"/>
+                                        </div>
+                                        <field name="bmi"/>
+                                        <field name="muac"/>
+                                        <field name="tsft"/>
+                                    </group>
+                                    <group>
+                                        <label string="Systolic/Diastolic BP" for="systolic_bp"/>
+                                        <div name="systolic_bp">
+                                            <div class="oe_inline" style="display: inline;">
+                                                <field name="systolic_bp" class="oe_inline"/>/
+                                                <field name="diastolic_bp" class="oe_inline"/>
+                                            </div>
+                                        </div>
+                                        <field name="bmi_state"/>
+                                        <field name="spo2"/>
+                                        <field name="birth_weight"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="socio_economic_page" string="SocioEconomic">
+                                <group>
+                                    <group>
+                                        <field name="monthly_family_categorical_income"/>
+                                    </group>
+                                    <group>
+                                        <field name="monthly_family_income"/>
+                                    </group>
+                                </group>
+                                <group string="Infrastructure">
+                                </group>
+                                <field name="socioeconomic_infrastructure_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="access_home"/>
+                                        <field name="availability"/>
+                                    </tree>
+                                </field>
+                                <group string="Achievement Details">
+                                </group>
+                                <field name="patient_achievements_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="sr_no"/>
+                                        <field name="achievement"/>
+                                        <field name="year"/>
+                                        <field name="awards"/>
+                                        <field name="certificate"/>
+                                        <field name="other"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="life_style_page" string="Life Style">
+                                <group string="Weekly Physical Activity">
+                                </group>
+                                <field name="patient_physical_activity_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="activity_name" required="1"/>
+                                        <field name="child_rec"/>
+                                        <field name="mother_rec"/>
+                                        <field name="father_rec"/>
+                                    </tree>
+                                </field>
+                                <group string="Sunlight Exposure Question"></group>
+                                <label for="sunlight_exposure">Time of Sunlight Exposure</label>
+                                <field name="sunlight_exposure"/>
+                                <br/>
+                                <label for="face_cover">Do you use Helmet / Facecover ?</label>
+                                <field name="face_cover"/>
+                                <br/>
+                                <label for="gloves">Do you use Gloves ?</label>
+                                <field name="gloves"/>
+                                <br/>
+                                <label for="sleeve_length">What is Length of your Sleeves ?</label>
+                                <field name="sleeve_length"/>
+                                <br/>
+                                <label for="trouser_length">What is Length of your Trouser ?</label>
+                                <field name="trouser_length"/>
+                                <br/>
+                                <label for="sun_screen">Do you use Sun Screen on Face/Arms ?</label>
+                                <field name="sun_screen"/>
+                                <br/>
+                                <label for="travel_mode">ow do you Travel ?</label>
+                                <field name="travel_mode"/>
+                                <br/>
+                                <label for="travel_time">Total Travel time(Mins)</label>
+                                <field name="travel_time"/>
+                            </page>
+                            <page name="family_member_page" string="Family">
+                                <field name="family_member_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="related_patient_id" />
+                                        <field name="relation_id" readonly="false" placeholder="Select from here"/>
+                                        <field name="dob"/>
+                                        <field name="education" placeholder="Select from here"/>
+                                        <field name="education_category" placeholder="Select from here"/>
+                                        <field name="occupation"/>
+                                        <field name="occupation_category" placeholder="Select from here"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="diet_page" string="Diet Info">
+                                <group string="Diet Info">
+                                </group>
+                                <field name="patient_diet_info_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="date" required="1"/>
+                                        <field name="day"/>
+                                        <field name="time"/>
+                                        <field name="food_category_id"/>
+                                        <field name="dishes"/>
+                                        <field name="dish_code"/>
+                                        <field name="servings"/>
+                                        <field name="consistency"/>
+                                        <field name="quantity"/>
+                                        <field name="additional_comment"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="history_page" string="Patient History">
+                                <group>
+                                    <group>
+                                        <field name="antibiotic_history"/>
+                                        <field name="hypo_months"/>
+                                        <field name="bsl1"/>
+                                        <field name="bsl3"/>
+                                        <field name="family_history"/>
+                                    </group>
+                                    <group>
+                                        <field name="dka_admissions"/>
+                                        <field name="total_admissions"/>
+                                        <field name="last_hypo_date"/>
+                                        <field name="bsl2"/>
+                                        <field name="avg_breakfast_value"/>
+                                        <field name="presentation_at_diagnosis"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="cco_page" string="CCO">
+                                <field name="annual_cco_ids">
+                                    <tree editable="bottom">
+                                        <field name="complications"/>
+                                        <field name="comorbidities"/>
+                                        <field name="others"/>
+                                    </tree>
+                                </field>
+                                <label string="Notes" for="cco_notes"/>
+                                <field name="cco_notes"/>
+                            </page>
+                            <page name="tanner_page" string="Tanner Stage">
+                                <group name="group_top">
+                                    <group name="group_left">
+                                        <field name="tanner_stage"/>
+                                        <field name="auxillary_hair"/>
+                                        <field name="testes_vol_right"/>
+                                        <field name="breast_vol_right"/>
+                                    </group>
+                                    <group name="group_right">
+                                        <field name="genital_length"/>
+                                        <field name="pubic_hair"/>
+                                        <field name="testes_vol_left"/>
+                                        <field name="breast_vol_left"/>
+                                    </group>
+                                </group>
+                                <group name="group_bottom">
+                                    <label string="Notes" for="tanner_notes"/>
+                                    <field name="tanner_notes" nolabel="1"/>
+                                </group>
+                            </page>
+                            <page name="insulin_page" string="Insulin Treatment">
+                                <field name="insulin_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="time_frame"/>
+                                        <field name="meal_time"/>
+                                        <field name="insulin_type"/>
+                                        <field name="quantity"/>
+                                        <field name="description"/>
+                                    </tree>
+                                </field>
+                                <label string="Notes" for="insulin_notes"/>
+                                <field name="insulin_notes"/>
+                            </page>
+                            <page name="clinical_examination_page" string="Clinical Examination">
+                                <group name="group_top">
+                                    <group name="group_left">
+                                        <field name="goiter"/>
+                                        <field name="lipohypertrophy"/>
+                                        <field name="acanthosis"/>
+                                    </group>
+                                    <group name="group_right">
+                                        <field name="atrophy"/>
+                                        <field name="hbA1C"/>
+                                    </group>
+                                </group>
+                                <group name="group_bottom">
+                                    <label string="Notes" for="clinical_examination_notes"/>
+                                    <field name="clinical_examination_notes" nolabel="1"/>
+                                </group>
+                            </page>
+                            <!--                            <page name="prescription_lines" string="Prescription Lines">-->
+                            <!--                                <field name="prescription_line_ids" nolabel="1" colspan="4"-->
+                            <!--                                       widget="section_and_note_one2many">-->
+                            <!--                                    <tree string="Prescription Line" editable="bottom">-->
+                            <!--                                        <control>-->
+                            <!--                                            <create name="add_line_control" string="Add a line"/>-->
+                            <!--                                            <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>-->
+                            <!--                                            <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>-->
+                            <!--                                        </control>-->
+                            <!--                                        <field name="sequence" widget="handle"/>-->
+                            <!--                                        <field name="product_id" string="Medicine Name"/>-->
+                            <!--                                        <field name="name"  widget="section_and_note" optional="hide"/>-->
+                            <!--                                        <field name="active_component_ids" widget="many2many_tags" optional="hide"/>-->
+                            <!--                                        <field name="allow_substitution" optional="hide"/>-->
+                            <!--                                        <field name="common_dosage_id"/>-->
+                            <!--                                        <field name="dose" required="not display_type" string="Qty Dose"/>-->
+                            <!--                                        <field name="dosage_uom_id" optional="hide" groups="uom.group_uom"/>-->
+                            <!--                                        <field name="qty_per_day" required="not display_type" optional="hide"/>-->
+                            <!--                                        <field name="days" required="not display_type"/>-->
+                            <!--                                        <field name="quantity" required="not display_type" string="Total Qty"-->
+                            <!--                                               force_save="1"/>-->
+                            <!--                                        <field name="qty_available" readonly="1" optional="hide"/>-->
+                            <!--                                        <field name="short_comment"/>-->
+                            <!--                                        &lt;!&ndash; Others fields &ndash;&gt;-->
+                            <!--                                        <field name="id" force_save="1" column_invisible="True"/>-->
+                            <!--                                        <field name="display_type" force_save="1" column_invisible="True"/>-->
+                            <!--                                        <field name="product_uom_category_id" column_invisible="True"/>-->
+                            <!--                                        <field name="prnt" column_invisible="1"/>-->
+                            <!--                                        <field name="manual_prescription_qty" column_invisible="1"/>-->
+                            <!--                                        <field name="manual_quantity" column_invisible="1"/>-->
+                            <!--                                        <field name="treatment_id" column_invisible="1"/>-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                            </page>-->
+                            <!--                            <page name="diet_page" string="Diet Info">-->
+                            <!--                                <group string="Diet Info">-->
+                            <!--                                </group>-->
+                            <!--                                <field name="annual_diet_info_ids" nolabel="1">-->
+                            <!--                                    <tree editable="bottom">-->
+                            <!--                                        <field name="date" />-->
+                            <!--                                        <field name="day"/>-->
+                            <!--                                        <field name="time"/>-->
+                            <!--                                        <field name="food_consumed"/>-->
+                            <!--                                        <field name="servings"/>-->
+                            <!--                                        <field name="consistency"/>-->
+                            <!--                                        <field name="quantity"/>-->
+                            <!--                                        <field name="additional_comment"/>-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                            </page>-->
+                            <!--                            <page name="psychological_page" string="Psychological Details">-->
+                            <!--                                <group name="group_top">-->
+                            <!--                                    <field name="psychological_observations"/>-->
+                            <!--                                </group>-->
+                            <!--                                <group name="group_bottom">-->
+                            <!--                                    <field name="psychological_remarks" string="Remarks"/>-->
+                            <!--                                </group>-->
+                            <!--                            </page>-->
+                            <!--                            <page name="skilling_page" string="Skilling Details">-->
+                            <!--                                <group name="group_top">-->
+                            <!--                                    <field name="skilling_interest" string="Interest"/>-->
+                            <!--                                    <field name="skilling_observations" string="Observations"/>-->
+                            <!--                                    <field name="skilling_remarks" string="Remarks"/>-->
+                            <!--                                </group>-->
+                            <!--                            </page>-->
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hms_annual_filter" model="ir.ui.view">
+            <field name="name">hms.annual.filter</field>
+            <field name="model">hms.annual</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <search string="Patient">
+                    <field name="patient_id"/>
+                    <field name="enrollment_no" string="Enrollment no"/>
+                    <separator/>
+                    <filter string="Male" name="gender" domain="[('gender','=','male')]"/>
+                    <filter string="Female" name="gender" domain="[('gender','=','female')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hms_annual" model="ir.actions.act_window">
+            <field name="name">Annual</field>
+            <field name="res_model">hms.annual</field>
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+
+        <menuitem id="menu_hms_annual"
+            action="action_hms_annual"
+            groups="acs_hms_base.group_hms_user" 
+            web_icon="customized_acs_hms,static/src/img/opd.png"
+            sequence="7"/> 
+
+        <!-- <menuitem id="menu_hms_annual"
+                  action="action_hms_annual"
+                  parent="acs_hms_base.main_menu_physician"
+                  sequence="2"/> -->
+    </data>
+</odoo>

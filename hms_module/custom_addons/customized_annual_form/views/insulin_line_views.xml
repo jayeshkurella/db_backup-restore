@@ -1,0 +1,19 @@
+<odoo>
+
+    <!-- Insulin View -->
+    <record id="view_annual_insulin_line_tree" model="ir.ui.view">
+        <field name="name">insulin.line.tree</field>
+        <field name="model">insulin.line</field>
+        <field name="arch" type="xml">
+            <tree string="Annual Insulin Lines">
+                <field name="date_of_record"/>
+                <field name="time_frame"/>
+                <field name="meal_time"/>
+                <field name="insulin_type"/>
+                <field name="insulin_range"/>
+                <field name="quantity"/>
+                <field name="how_many_min_before" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+</odoo>
