@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('H 2 * * *')   // Runs daily around 2AM
+    }
+
+    environment {
+        GIT_REPO       = "https://github.com/jayeshkurella/db_backup-restore.git"
+        BRANCH         = "master"
+        UPLOAD_DIR     = "/mnt/central-backup"
+        BACKUP_DIR     = "/home/administrator/Local-DB-Backups"
+        SCRIPT_DIR     = "scripts"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                echo "Cloning repository..."
+                git url: "${GIT_REPO}", branch: "${BRANCH}"
+            }
+        }
+
+        stage('Run Health Check') {
+            steps {
+                echo "Running health checks..."
+                sh """
+                    chmod +x ${SCRIPT_DIR}/health-check.sh
+                    ./${SCRIPT_DIR}/health-check.sh
+                """
+            }
+        }
+
+        stage('Database Backup') {
+            steps {
+                echo "Running DB backup..."
+                sh """
+                    chmod +x ${SCRIPT_DIR}/db-backup.sh
+                    ./${SCRIPT_DIR}/db-backup.sh
+                """
+            }
+        }
+
+        stage('Upload Backup Files') {
+            steps {
+                echo "Uploading backup files..."
+                sh """
+                    mkdir -p ${UPLOAD_DIR}
+                    cp -r ${BACKUP_DIR}/* ${UPLOAD_DIR}/
+                """
+            }
+        }
+
+        stage('Verify Backups (Checksum)') {
+            steps {
+                echo "Verifying backups..."
+                sh """
+                    chmod +x ${SCRIPT_DIR}/checksum.sh
+
+                    # Get all new backup gz files from upload location
+                    find ${UPLOAD_DIR} -type f -name "*.gz" | while read file; do
+                        ${SCRIPT_DIR}/checksum.sh "$file"
+                    done
+                """
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo "✅ BACKUP PIPELINE SUCCESSFUL"
+        }
+        failure {
+            echo "❌ BACKUP PIPELINE FAILED"
+        }
+    }
+}
