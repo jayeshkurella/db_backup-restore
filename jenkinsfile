@@ -8,8 +8,8 @@ pipeline {
     environment {
         GIT_REPO       = "https://github.com/jayeshkurella/db_backup-restore.git"
         BRANCH         = "master"
-        UPLOAD_DIR     = "/mnt/central-backup"
-        BACKUP_DIR     = "/home/administrator/Local-DB-Backups"
+        UPLOAD_DIR     = "/var/lib/jenkins/workspace/backup/upload-backup"
+        BACKUP_DIR     = "/var/lib/jenkins/workspace/backup/Local-DB-Backups"
         SCRIPT_DIR     = "scripts"
     }
 
