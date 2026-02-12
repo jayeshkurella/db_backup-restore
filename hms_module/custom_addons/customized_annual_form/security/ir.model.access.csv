@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_food_item_user,access_food_item_user,model_food_item,base.group_user,1,1,1,1
-access_hms_annual_evaluation_user,hms.annual.evaluation user access,model_hms_annual_evaluation,base.group_user,1,1,1,1
-access_hms_doctor_patient,hms.patient,model_hms_patient,customized_annual_form.group_hms_doctor,1,1,0,0
-access_physician_admin,Admin Access,customized_annual_form.model_hms_physician,customized_annual_form.physician_all_acceess,1,1,1,1
-access_physician_admin,Physician Admin Access,customized_annual_form.model_hms_physician,base.group_system,1,1,1,1
-acess_patient_doctor_group,acess_patient_doctor_group,model_hms_patient,customized_annual_form.group_patient_hms_doctor,1,0,0,0
