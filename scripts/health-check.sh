@@ -16,8 +16,8 @@ else
     exit 1
 fi
 
-# 2️⃣ Check DB connectivity (Force TCP connection)
-if psql -h localhost -U postgres -d postgres -c '\q' 2>> "$LOG_FILE"; then
+# 2️⃣ Check DB connectivity (TCP + password)
+if PGPASSWORD='postgres' psql -h localhost -U postgres -d postgres -c '\q' 2>> "$LOG_FILE"; then
     echo "Database connectivity OK." >> "$LOG_FILE"
 else
     echo "ERROR: Cannot connect to PostgreSQL!" | tee -a "$LOG_FILE"
@@ -34,4 +34,22 @@ if [ ! -d "$BACKUP_DIR" ]; then
 fi
 
 # 4️⃣ Check disk space
-FREE_SPACE=_
+FREE_SPACE=$(df -m "$BACKUP_DIR" | awk 'NR==2 {print $4}')
+
+if [ "$FREE_SPACE" -lt "$MIN_DISK_FREE_MB" ]; then
+    echo "ERROR: Low disk space! Only ${FREE_SPACE}MB available." | tee -a "$LOG_FILE"
+    exit 1
+else
+    echo "Disk space OK: ${FREE_SPACE}MB available." >> "$LOG_FILE"
+fi
+
+# 5️⃣ Check backup directory writable
+if [ -w "$BACKUP_DIR" ]; then
+    echo "Backup directory is writable." >> "$LOG_FILE"
+else
+    echo "ERROR: Backup directory is NOT writable!" | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+echo "Health Check PASSED." >> "$LOG_FILE"
+exit 0
