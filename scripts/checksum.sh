@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FILE="$1"
-LOG_FILE="/home/administrator/scripts/checksum.log"
+LOG_FILE="/var/lib/jenkins/workspace/backup/checksum.log"
 
 echo "==============================" >> "$LOG_FILE"
 echo "Checksum Verification Started: $(date)" >> "$LOG_FILE"
