@@ -11,6 +11,9 @@ pipeline {
         UPLOAD_DIR     = "/var/lib/jenkins/workspace/backup/upload-backup"
         BACKUP_DIR     = "/var/lib/jenkins/workspace/backup/Local-DB-Backups"
         SCRIPT_DIR     = "scripts"
+        DB_USER        = "postgres"
+        DB_PASSWORD    = "postgres"   // PostgreSQL password
+        DB_HOST        = "localhost"
     }
 
     stages {
@@ -27,7 +30,7 @@ pipeline {
                 echo "Running health checks..."
                 sh """
                     chmod +x ${SCRIPT_DIR}/health-check.sh
-                    ./${SCRIPT_DIR}/health-check.sh
+                    DB_USER=${DB_USER} DB_PASSWORD=${DB_PASSWORD} DB_HOST=${DB_HOST} ./${SCRIPT_DIR}/health-check.sh
                 """
             }
         }
@@ -37,7 +40,7 @@ pipeline {
                 echo "Running DB backup..."
                 sh """
                     chmod +x ${SCRIPT_DIR}/db-backup.sh
-                    ./${SCRIPT_DIR}/db-backup.sh
+                    DB_USER=${DB_USER} DB_PASSWORD=${DB_PASSWORD} DB_HOST=${DB_HOST} BACKUP_DIR=${BACKUP_DIR} LOG_FILE=${BACKUP_DIR}/backup_log.txt ./${SCRIPT_DIR}/db-backup.sh
                 """
             }
         }
@@ -58,9 +61,8 @@ pipeline {
                 sh """
                     chmod +x ${SCRIPT_DIR}/checksum.sh
 
-                    # Get all new backup gz files from upload location
-                    find ${UPLOAD_DIR} -type f -name "*.gz" | while read file; do
-                        ${SCRIPT_DIR}/checksum.sh "$file"
+                    for file in \$(find ${UPLOAD_DIR} -type f -name "*.gz"); do
+                        ${SCRIPT_DIR}/checksum.sh "\$file"
                     done
                 """
             }
