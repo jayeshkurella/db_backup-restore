@@ -1,7 +1,7 @@
 #!/bin/bash
 
-LOG_FILE="/home/administrator/scripts/health_check.log"
-BACKUP_DIR="/home/administrator/Local-DB-Backups"
+LOG_FILE="/var/lib/jenkins/workspace/backup/health_check.log"
+BACKUP_DIR="/var/lib/jenkins/workspace/backup/Local-DB-Backups"
 MIN_DISK_FREE_MB=500   # Minimum free space required
 
 echo "==============================" >> "$LOG_FILE"
