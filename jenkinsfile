@@ -10,9 +10,10 @@ pipeline {
         BRANCH         = "master"
         UPLOAD_DIR     = "/var/lib/jenkins/workspace/backup/upload-backup"
         BACKUP_DIR     = "/var/lib/jenkins/workspace/backup/Local-DB-Backups"
+        FINAL_DIR      = "/var/lib/jenkins/workspace/backup/final-zip"
         SCRIPT_DIR     = "scripts"
         DB_USER        = "postgres"
-        DB_PASSWORD    = "postgres"   // PostgreSQL password
+        DB_PASSWORD    = "postgres"
         DB_HOST        = "localhost"
     }
 
@@ -64,6 +65,22 @@ pipeline {
                     for file in \$(find ${UPLOAD_DIR} -type f -name "*.gz"); do
                         ${SCRIPT_DIR}/checksum.sh "\$file"
                     done
+                """
+            }
+        }
+
+        stage('Create Single ZIP Archive') {
+            steps {
+                echo "Creating consolidated ZIP file..."
+                sh """
+                    mkdir -p ${FINAL_DIR}
+
+                    TIMESTAMP=\$(date +%Y%m%d_%H%M%S)
+                    FINAL_ZIP=${FINAL_DIR}/all_databases_backup_\${TIMESTAMP}.zip
+
+                    zip -r \${FINAL_ZIP} ${UPLOAD_DIR}
+
+                    echo "ZIP created at: \${FINAL_ZIP}"
                 """
             }
         }
